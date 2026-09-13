@@ -31,7 +31,7 @@ const [models, ownership, sharedCache, serverCache, gridLimits, gridBlocks, grou
 
 assert.match(models, /XmlElement\("IgnoredByNpc"\)[\s\S]*public bool IgnoredByNpc;/);
 
-assert.match(ownership, /private bool IsNpcGroup\(\)[\s\S]*return GridDictionary\.Keys\.Any\(grid => grid != null && grid\.IsNpcSpawnedGrid\);/);
+assert.match(ownership, /private bool IsNpcGroup\(\)[\s\S]*return GridDictionary\.Keys\.Any\(grid => grid\.IsNpcGrid\(\)\);/);
 assert.doesNotMatch(ownership, /mainGrid\?\.IsNpcSpawnedGrid\s*\?\?/);
 assert.match(ownership, /return Session\.Config\.IgnoreAiFactions && IsNpcGroup\(\);/);
 assert.match(ownership, /return limit == null \|\| !limit\.IgnoredByNpc \|\| !IsNpcGroupThreadSafe\(\);/);
@@ -67,7 +67,7 @@ assert.match(configurator, /data-action="limit-ignore-npc"/);
 assert.equal((configurator.match(/ignoredByNpc: boolOf\(limitNode, "IgnoredByNpc", false\)/g) || []).length, 2);
 assert.match(configurator, /<IgnoredByNpc>\$\{Boolean\(limit\.ignoredByNpc\)\}<\/IgnoredByNpc>/);
 assert.match(configurator, /selectedCore\.blockLimits\[limitIndex\]\.ignoredByNpc = inputElement\.checked;/);
-assert.match(readme, /`IgnoredByNpc`[\s\S]*NPC-spawned/);
+assert.match(readme, /`IgnoredByNpc`[\s\S]*recognized as NPC/);
 assert.match(apiUsage, /BlockLimitData\.IgnoredByNpc[\s\S]*API v4\.3/);
 
 console.log("NPC-ignored block-limit contract checks passed.");

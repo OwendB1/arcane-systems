@@ -87,7 +87,7 @@ Root tag: `<ModConfig>`
 
 | Tag | Type | Meaning | Notes |
 | --- | --- | --- | --- |
-| `IgnoreAiFactions` | `bool` | Ignores NPC-spawned grids for core placement/enforcement. | Does not replace `IgnoredFactionTags`; it is a separate skip path. |
+| `IgnoreAiFactions` | `bool` | Ignores grids recognized as NPCs for core placement/enforcement. | Uses the game's NPC-spawned flag or an NPC identity in `BigOwners`, unless any big owner is a player. Does not replace `IgnoredFactionTags`; it is a separate skip path. |
 | `IgnoredFactionTags` | `List<string>` | Faction tags to skip for enforcement and punishment. | Useful for admin, event, or NPC factions. |
 | `SelectedNoCoreUniqueName` | `string` | Chooses which loaded no-core profile governs coreless grids. | Required; must match a loaded content-pack no-core `UniqueName`. |
 | `DebugMode` | `bool` | Enables debug-oriented behavior. | Also changes some player-count checks to count identities more aggressively. |
@@ -365,7 +365,7 @@ Each entry uses `<BlockLimit>`.
 | `CrossConnectorPunishment` | `bool` | Pulls blocks from connected no-core groups into this limit's bucket. | Only affects non-critical limits on this core. Manifest blacklist imports use all non-critical limits regardless of this flag. |
 | `PunishByNoFlyZone` | `bool` | Applies this limit's punishment inside no-fly zones. | Only used when the zone itself is not forcing everything off. |
 | `IsCriticalLimit` | `bool` | Exempts this limit from connector imports and total limited-block shutoff gates. | Minimum-block shutoff and both connector import paths skip this limit. Normal local overflow, directional checks, and no-fly-zone punishment still work normally. |
-| `IgnoredByNpc` | `bool` | Disables this limit while the active grid group is NPC-spawned. | Defaults to `false`. Counts remain tracked so enforcement becomes active when the grid is claimed, and projected merges involving a player group still evaluate the limit. |
+| `IgnoredByNpc` | `bool` | Disables this limit while the active grid group is recognized as NPC. | Defaults to `false`. Counts remain tracked so enforcement becomes active when the group no longer qualifies as NPC, and projected merges involving a non-NPC group still evaluate the limit. |
 | `PunishmentType` | `ShutOff`, `Damage`, `Delete`, `Explode`, `DeleteWithoutRefund` | Punishment for blocks in this limit when the limit is violated. | `Delete` refunds built components; `DeleteWithoutRefund` does not. Limited-block gate punishment always uses `ShutOff`, regardless of this setting. |
 | `AllowedDirections` | `List<DirectionType>` | Directional lock for this limit. | If set, mismatched blocks are punished even if count is under cap. Directions are relative to the main core and compare the matched `BlockType.PrimaryDirection` axis. Subgrid behavior is controlled by world setting `BlockDirectionalPlacementOnSubgrids`. |
 
@@ -387,7 +387,7 @@ not subtracted; an excluded block contributes nothing to this limit. Existing li
 keep their current behavior.
 
 NPC-only loadouts can share a player core profile by opting individual limits out while the group remains
-NPC-spawned:
+recognized as NPC:
 
 ```xml
 <BlockLimits>
@@ -399,8 +399,14 @@ NPC-spawned:
 </BlockLimits>
 ```
 
-The limit becomes active when the grid is no longer NPC-spawned. A projected merge is exempt only when
-every participating group is NPC-spawned, preventing a player group from importing the restricted blocks.
+A player in `BigOwners`, including an offline player, makes a grid non-NPC even when the game's
+`IsNpcSpawnedGrid` flag is set or other big owners are NPCs. Otherwise, a grid qualifies as NPC when
+that flag is set or any nonzero identity in `BigOwners` is an NPC. `SmallOwners` do not affect this
+check. This also recognizes NPC-owned MES grids without requiring a MES API integration. SCF does
+not change the game's flag. A mechanical group qualifies if any of its grids qualifies.
+
+The limit becomes active when no grid in the group qualifies as NPC. A projected merge is exempt only
+when every participating group qualifies as NPC, preventing a non-NPC group from importing the restricted blocks.
 
 Directional count caps share the normal limit's weighted points while keeping six independent buckets:
 

@@ -9,6 +9,26 @@ namespace ShipCoreFramework
 {
     internal static partial class Utils
     {
+        internal static bool IsNpcGrid(this IMyCubeGrid grid)
+        {
+            if (grid == null) return false;
+
+            var players = MyAPIGateway.Players;
+            if (players == null || grid.BigOwners == null) return grid.IsNpcSpawnedGrid;
+
+            var hasNpcOwner = false;
+            foreach (var ownerId in grid.BigOwners)
+            {
+                if (ownerId == 0) continue;
+                // Offline players retain Steam mappings and override both NPC owners and the vanilla flag.
+                if (players.TryGetSteamId(ownerId) != 0 && players.TryGetIdentityId(ownerId)?.IsBot != true)
+                    return false;
+                hasNpcOwner = true;
+            }
+
+            return hasNpcOwner || grid.IsNpcSpawnedGrid;
+        }
+
         internal static GroupComponent GetGroupComponent(this IMyTerminalBlock block)
         {
             var groupData = block?.CubeGrid.GetGridGroup(GridLinkTypeEnum.Mechanical);

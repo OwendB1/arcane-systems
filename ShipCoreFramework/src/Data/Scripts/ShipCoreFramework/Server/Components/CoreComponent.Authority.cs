@@ -11,7 +11,7 @@ namespace ShipCoreFramework
     {
         private bool InitAuthoritative()
         {
-            var isIgnoredNpcGrid = Session.Config.IgnoreAiFactions && CoreBlock.CubeGrid.IsNpcSpawnedGrid;
+            var isIgnoredNpcGrid = Session.Config.IgnoreAiFactions && CoreBlock.CubeGrid.IsNpcGrid();
             var builder = ResolvePlacementOwnerIdentityId();
             if (builder == 0 && !isIgnoredNpcGrid)
             {
