@@ -1381,7 +1381,7 @@ function directionBudgetInputs(coreIndex, limitIndex, limit) {
   const directions = [...new Set([...enabledBudgetDirections(limit), ...budgets.map((budget) => budget.direction)])];
   const fallback = Number(limit.maxCountPerDirection ?? -1);
   return `<label>Direction budgets</label>
-    <p class="muted">Blank inherits MaxCountPerDirection (${fallback < 0 ? "unlimited" : fallback}). Overrides plus inherited caps for enabled directions must fit MaxCount. Unlimited directions add no allocation; MaxCount still caps total usage.</p>
+    <p class="muted">Leave a direction budget empty to use MaxCountPerDirection (${fallback < 0 ? "unlimited" : fallback}). Overrides plus inherited caps for enabled directions must fit MaxCount. Unlimited directions add no allocation; MaxCount still caps total usage.</p>
     <div class="row wrap">${directions.map((direction) => {
       const budget = budgets.find((entry) => entry.direction === direction);
       return `<label class="inline">${escapeXml(direction || "Invalid direction")}
