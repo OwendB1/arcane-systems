@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { validateEditorConfig } from "../docs/configurator/validation.js";
+import { validateEditorConfig } from "../docs/scf-configurator/validation.js";
 
 const root = new URL("../", import.meta.url);
 const [app, html] = await Promise.all([
-  readFile(new URL("docs/configurator/app.js", root), "utf8"),
-  readFile(new URL("docs/configurator/index.html", root), "utf8")
+  readFile(new URL("docs/scf-configurator/app.js", root), "utf8"),
+  readFile(new URL("docs/scf-configurator/index.html", root), "utf8")
 ]);
 
 const validCore = {

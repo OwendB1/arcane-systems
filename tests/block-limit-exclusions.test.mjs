@@ -9,8 +9,8 @@ const [models, loading, validation, noFly, configurator, readme] = await Promise
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Config/ModConfig.Loading.cs"),
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Config/ModConfig.Validation.cs"),
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Server/Enforcement/NoFlyZoneEnforcement.cs"),
-  read("docs/configurator/app.js"),
-  read("README.md"),
+  read("docs/scf-configurator/app.js"),
+  read("docs/ship-core-framework.md"),
 ]);
 
 assert.match(models, /XmlElement\("ExcludedBlockGroups"\)/);

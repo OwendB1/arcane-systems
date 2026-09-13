@@ -16,7 +16,7 @@ const [connectors, limits, gridLimits, gridBlocks, upgrades, evaluation, bucket,
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Client/Components/GroupComponent.Replica.cs"),
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Shared/Components/GroupComponent.Limits.cs"),
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Session/Server/Session.ServerTick.cs"),
-  read("README.md"),
+  read("docs/ship-core-framework.md"),
 ]);
 
 assert.match(connectors, /ApplyConnectorLimitContributions/);

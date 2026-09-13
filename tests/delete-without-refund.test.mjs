@@ -11,9 +11,9 @@ const [models, worldSettings, blockActions, gridLimits, apiData, app, validation
     read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Server/Enforcement/Utils.BlockActions.cs"),
     read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Server/Components/GridComponent.Limits.cs"),
     read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/API/ApiData.cs"),
-    read("docs/configurator/app.js"),
-    read("docs/configurator/validation.js"),
-    read("README.md"),
+    read("docs/scf-configurator/app.js"),
+    read("docs/scf-configurator/validation.js"),
+    read("docs/ship-core-framework.md"),
   ]);
 
 assert.doesNotMatch(models, /DisableDeletePunishmentRefunds|RefundDeletePunishments/);

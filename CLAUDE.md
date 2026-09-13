@@ -19,8 +19,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Building and Testing
 
 ### Build Commands
-- Always run `dotnet build ShipCoreSystem.sln` before finalizing any code change. Treat build failures as blockers.
-- Run relevant automated tests as well; use `node --test tests/*.test.mjs docs/configurator/*.test.mjs` for the full contract suite.
+- Always run `dotnet build arcane-systems.sln` before finalizing any code change. Treat build failures as blockers.
+- Run relevant automated tests as well; use `node --test tests/*.test.mjs docs/scf-configurator/*.test.mjs` for the full contract suite.
 - In-game integration is still required to validate runtime behavior that compilation and contract tests cannot exercise.
 
 ### Important Build Notes

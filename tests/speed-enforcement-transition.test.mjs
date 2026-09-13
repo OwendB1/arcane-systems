@@ -28,8 +28,8 @@ const [enforcement, lifecycle, abilities, speedState, state, sessionRun, config,
     read("Session/Client/Session.ClientTick.cs"),
     read("Server/Modifiers/CubeGridModifiers.Authority.cs"),
     read("Client/UI/Commands.Presentation.cs"),
-    readFile(new URL("../docs/configurator/app.js", import.meta.url), "utf8"),
-    readFile(new URL("../README.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/scf-configurator/app.js", import.meta.url), "utf8"),
+    readFile(new URL("../docs/ship-core-framework.md", import.meta.url), "utf8"),
   ]);
 
 const mechanicalGroupScan = sessionRun.indexOf("Parallel.ForEach(initialMechanicalGroups");

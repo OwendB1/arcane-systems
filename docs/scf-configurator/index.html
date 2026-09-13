@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SE Ship Core XML Configurator</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header>
+    <h1>SE Ship Core XML Configurator</h1>
+    <p>Build and renovate Ship Core XML files.</p>
+  </header>
+
+  <main>
+    <details class="panel" open>
+      <summary class="panel-summary"><h2>1) Open or Import Existing Configuration (optional)</h2></summary>
+      <div class="panel-content">
+      <section class="card preferred-option" aria-labelledby="preferredFolderHeading">
+        <h3 id="preferredFolderHeading">Update in place <span class="preferred-badge">Preferred</span></h3>
+        <p class="muted">Open a mod root or <code>Data</code> folder to load it directly into the editor. When finished, use <strong>Update Open Folder</strong> under Generated XML to write changes back in place.</p>
+        <div class="row wrap">
+          <button id="openUpdateFolder" class="button-green">Open Mod/Data Folder</button>
+          <span id="updateFolderStatus" class="muted">No update folder selected.</span>
+        </div>
+      </section>
+
+      <details id="manualUploadOptions" class="card upload-subsection">
+        <summary>Manual file uploads and legacy migration</summary>
+        <div class="upload-subsection-content">
+          <p class="muted">Use these fallback options when folder access is unavailable. Recognized tags are loaded into the editor; unknown tags are ignored.</p>
+          <div class="row wrap file-upload-row">
+            <label class="file-label">Groups XML
+              <input id="groupsXmlFile" type="file" accept=".xml" />
+            </label>
+            <label class="file-label">Manifest XML
+              <input id="manifestXmlFile" type="file" accept=".xml" />
+            </label>
+            <label class="file-label">No Core XML
+              <input id="noCoreXmlFile" type="file" accept=".xml" />
+            </label>
+            <label class="file-label">ShipCore / UpgradeModule XML files
+              <input id="coreXmlFiles" type="file" accept=".xml" multiple />
+            </label>
+            <label class="file-label">Upload Folder
+              <input id="folderUpload" type="file" webkitdirectory multiple />
+            </label>
+            <label class="file-label">Upload ZIP
+              <input id="zipUpload" type="file" accept=".zip" />
+            </label>
+            <label class="file-label">Upgrade Module SBCs
+              <input id="upgradeModuleSbcFiles" type="file" accept=".sbc" multiple />
+            </label>
+          </div>
+          <div class="row wrap">
+            <button id="loadUploadedXml">Load Uploaded XML</button>
+          </div>
+
+          <h3>Migrate Legacy GridClass ModConfig</h3>
+          <p class="muted">Load an older <code>&lt;ModConfig&gt;</code> file (with <code>DefaultGridClass</code> and <code>GridClasses</code>) and auto-populate no-core, cores, and block groups.</p>
+          <div class="row wrap file-upload-row">
+            <label class="file-label">Legacy ModConfig XML
+              <input id="legacyModConfigFile" type="file" accept=".xml" />
+            </label>
+            <label class="file-label">Limit merge mode
+              <select id="legacyLimitMergeMode">
+                <option value="strict">Strict (TypeId + SubtypeId + CountWeight)</option>
+                <option value="typesOnly">Block types only (ignore CountWeight)</option>
+              </select>
+            </label>
+          </div>
+          <div class="row wrap">
+            <button id="loadLegacyModConfig">Migrate Legacy ModConfig</button>
+          </div>
+        </div>
+      </details>
+
+      <div class="row wrap editor-reset-actions">
+        <button id="resetEditor">Reset Editor</button>
+        <button id="resetDraftStorage">Clear Autosave Draft</button>
+      </div>
+      <pre id="importStatus" class="code-block"></pre>
+      </div>
+    </details>
+
+    <details class="panel" open>
+      <summary class="panel-summary"><h2>2) Reusable Block Groups</h2></summary>
+      <div class="panel-content">
+      <div class="menu-controls">
+        <button id="addGroup">Add Block Group</button>
+        <select id="selectedGroup" aria-label="Selected Group"></select>
+      </div>
+      <div id="blockGroups"></div>
+      </div>
+    </details>
+
+    <details class="panel" open>
+      <summary class="panel-summary"><h2>3) Manifest Groups</h2></summary>
+      <div class="panel-content">
+      <p class="muted">Manifest groups define shared core caps in <code>ShipCoreConfig_Manifest.xml</code>. Assign ship cores to groups and configure connector blacklist subtype entries here.</p>
+      <div class="menu-controls">
+        <button id="addManifestGroup">Add Manifest Group</button>
+        <select id="selectedManifestGroup" aria-label="Selected Manifest Group"></select>
+      </div>
+      <div id="manifestGroups"></div>
+      </div>
+    </details>
+
+    <details class="panel" open>
+      <summary class="panel-summary"><h2>4) Ship Cores</h2></summary>
+      <div class="panel-content">
+      <div class="menu-controls">
+        <button id="addCore">Add Ship Core</button>
+        <select id="selectedCore" aria-label="Selected Core"></select>
+      </div>
+      <div id="shipCores"></div>
+      </div>
+    </details>
+
+
+    <details class="panel" open>
+      <summary class="panel-summary"><h2>5) Upgrade Modules</h2></summary>
+      <div class="panel-content">
+      <div class="menu-controls">
+        <button id="addUpgradeModule">Add Upgrade Module</button>
+        <select id="selectedUpgradeModule" aria-label="Selected Upgrade Module"></select>
+      </div>
+      <div id="upgradeModules"></div>
+      </div>
+    </details>
+
+    <details class="panel" open>
+      <summary class="panel-summary"><h2>6) Generated XML</h2></summary>
+      <div class="panel-content">
+      <p class="muted">Generated XML previews update automatically as you edit.</p>
+      <h3>Framework Validation</h3>
+      <pre id="validationStatus" class="code-block validation-status" aria-live="polite"></pre>
+      <div class="row wrap">
+        <button hidden="hidden" id="generateXml">Generate</button>
+        <button id="updateSelectedFolder" class="button-green" disabled>Update Open Folder (Preferred)</button>
+        <button id="downloadAllFiles">Download all files (.zip)</button>
+        <button id="downloadNoCore">Download ShipCoreConfig_No_Core.xml</button>
+        <button id="downloadGroups">Download ShipCoreConfig_Groups.xml</button>
+        <button id="downloadManifest">Download ShipCoreConfig_Manifest.xml</button>
+        <button id="downloadCores">Download all ShipCore XMLs (.zip)</button>
+      </div>
+      <h3>ShipCoreConfig_No_Core.xml</h3>
+      <pre id="noCoreXml" class="code-block"></pre>
+      <h3>ShipCoreConfig_Groups.xml</h3>
+      <pre id="groupsXml" class="code-block"></pre>
+      <h3>ShipCoreConfig_Manifest.xml</h3>
+      <pre id="manifestXml" class="code-block"></pre>
+      <h3>ShipCore XML Files</h3>
+      <pre id="coresXml" class="code-block"></pre>
+      </div>
+    </details>
+  </main>
+
+  <script type="module" src="./app.js?v=1018"></script>
+</body>
+</html>

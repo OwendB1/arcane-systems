@@ -21,9 +21,9 @@ const [models, validation, bucket, gridLimits, gridBlocks, groupLimits, merge, e
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Client/UI/CoreStatusHud.cs"),
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/API/ApiData.cs"),
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/API/ModAPI.cs"),
-  read("docs/configurator/app.js"),
-  read("docs/configurator/validation.js"),
-  read("README.md"),
+  read("docs/scf-configurator/app.js"),
+  read("docs/scf-configurator/validation.js"),
+  read("docs/ship-core-framework.md"),
 ]);
 
 assert.match(models, /XmlElement\("MaxCountPerDirection"\)[\s\S]*= -1f/);

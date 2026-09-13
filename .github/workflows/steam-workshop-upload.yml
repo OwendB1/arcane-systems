@@ -125,7 +125,7 @@ jobs:
           printf '[mdk]\nbinarypath = %s\n' "$GITHUB_WORKSPACE/ds64" > ShipCoreFramework/ShipCoreFramework.mdk.local.ini
 
       - name: Build solution with MDK analyzers
-        run: dotnet build ShipCoreSystem.sln --configuration Release
+        run: dotnet build arcane-systems.sln --configuration Release
 
   upload:
     needs: build

@@ -12,8 +12,8 @@ const [models, validation, groupLimits, gridLimits, evaluation, api, configurato
     read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Server/Components/GridComponent.Limits.cs"),
     read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/Shared/Limits/LimitEvaluation.cs"),
     read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/API/ApiData.cs"),
-    read("docs/configurator/app.js"),
-    read("README.md"),
+    read("docs/scf-configurator/app.js"),
+    read("docs/ship-core-framework.md"),
   ]);
 
 assert.match(models, /XmlElement\("BlockGroups"\)[\s\S]*BlockGroupReference\[\]/);

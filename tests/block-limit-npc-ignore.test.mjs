@@ -24,8 +24,8 @@ const [models, ownership, sharedCache, serverCache, gridLimits, gridBlocks, grou
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/API/ApiData.cs"),
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/API/ModAPI.cs"),
   read("ShipCoreFramework/src/Data/Scripts/ShipCoreFramework/API/Client/ModAPI.ReplicaQueries.cs"),
-  read("docs/configurator/app.js"),
-  read("README.md"),
+  read("docs/scf-configurator/app.js"),
+  read("docs/ship-core-framework.md"),
   read("ShipCoreFramework/src/API_USAGE.md"),
 ]);
 

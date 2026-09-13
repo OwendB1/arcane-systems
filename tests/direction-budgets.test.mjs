@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import { enabledBudgetDirections, validateDirectionBudgets, validateEditorConfig } from "../docs/configurator/validation.js";
+import { enabledBudgetDirections, validateDirectionBudgets, validateEditorConfig } from "../docs/scf-configurator/validation.js";
 
 const limit = {
   maxCount: 100,
