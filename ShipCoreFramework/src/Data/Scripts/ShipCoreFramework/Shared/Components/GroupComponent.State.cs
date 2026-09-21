@@ -79,8 +79,8 @@ namespace ShipCoreFramework
 
         private int _gridInitializationDepth;
 
-        internal float ActiveDefenseDuration => ShipCore.ActiveDefenseModifiers.Duration;
-        internal float ActiveDefenseCoolDown => ShipCore.ActiveDefenseModifiers.Cooldown;
+        internal float ActiveDefenseDuration => GetActiveDefenseModifiers().Duration;
+        internal float ActiveDefenseCoolDown => GetActiveDefenseModifiers().Cooldown;
         internal bool IsInitializingGrids => _gridInitializationDepth > 0;
     }
 }

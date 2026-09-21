@@ -1,0 +1,129 @@
+{
+  "Success": true,
+  "Data": {
+    "gets": [
+      {
+        "index": 0,
+        "success": true,
+        "data": {
+          "blocks": [
+            {
+              "gridId": 112654773447552351,
+              "min": [
+                0,
+                1,
+                1
+              ],
+              "blockType": "MyMedicalRoom",
+              "customName": "Corner Medical Room",
+              "isFunctional": true,
+              "isWorking": true
+            },
+            {
+              "gridId": 112654773447552351,
+              "min": [
+                2,
+                -2,
+                9
+              ],
+              "blockType": "MyReactor",
+              "customName": "Large Reactor",
+              "isFunctional": true,
+              "isWorking": true
+            },
+            {
+              "gridId": 112654773447552351,
+              "min": [
+                3,
+                1,
+                4
+              ],
+              "blockType": "MyGravityGenerator",
+              "customName": "Gravity Generator",
+              "isFunctional": true,
+              "isWorking": true
+            },
+            {
+              "gridId": 112654773447552351,
+              "min": [
+                8,
+                2,
+                4
+              ],
+              "blockType": "MyReactor",
+              "customName": "Arcane Power Reactor \u2014 Prototype",
+              "isFunctional": true,
+              "isWorking": false
+            },
+            {
+              "gridId": 112654773447552351,
+              "min": [
+                3,
+                3,
+                7
+              ],
+              "blockType": "MyRadioAntenna",
+              "customName": "Antenna",
+              "isFunctional": true,
+              "isWorking": true
+            },
+            {
+              "gridId": 112654773447552351,
+              "min": [
+                8,
+                3,
+                1
+              ],
+              "blockType": "MyInteriorLight",
+              "customName": "Corner Light",
+              "isFunctional": true,
+              "isWorking": true
+            },
+            {
+              "gridId": 112654773447552351,
+              "min": [
+                8,
+                1,
+                1
+              ],
+              "blockType": "MyUpgradeModule",
+              "customName": "Arcane Advanced Containment Controller",
+              "isFunctional": true,
+              "isWorking": true
+            },
+            {
+              "gridId": 112654773447552351,
+              "min": [
+                8,
+                1,
+                7
+              ],
+              "blockType": "MyUpgradeModule",
+              "customName": "Arcane Advanced Containment Controller 3",
+              "isFunctional": true,
+              "isWorking": true
+            },
+            {
+              "gridId": 112654773447552351,
+              "min": [
+                4,
+                1,
+                4
+              ],
+              "blockType": "MyCockpit",
+              "customName": "Control Seat",
+              "isFunctional": true,
+              "isWorking": true
+            }
+          ],
+          "total": 9,
+          "offset": 0,
+          "limit": 500
+        }
+      }
+    ],
+    "sets": [],
+    "calls": []
+  },
+  "Error": null
+}

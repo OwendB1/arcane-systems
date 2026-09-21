@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>6</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Mal.Mdk2.ModAnalyzers" Version="2.1.15" PrivateAssets="all" />
+    <PackageReference Include="Mal.Mdk2.References" Version="2.2.7" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

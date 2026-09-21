@@ -1,0 +1,17 @@
+{
+  "src/Data/Scripts/ArcanePower/TabletLink.cs": {
+    "mtime": 1789572597.5332599,
+    "ast_hash": "a9d29b13b842e6f139ed871194f63d89",
+    "semantic_hash": "a9d29b13b842e6f139ed871194f63d89"
+  },
+  "tools/compile_mod.py": {
+    "mtime": 1789572572.1448379,
+    "ast_hash": "346a1bc95f3d7d53f63b2dcc82753eef",
+    "semantic_hash": "346a1bc95f3d7d53f63b2dcc82753eef"
+  },
+  "COMPILATION.md": {
+    "mtime": 1789572660.3668342,
+    "ast_hash": "f4a6f0e96b2be6cd3b2fa05deb9b369b",
+    "semantic_hash": "f4a6f0e96b2be6cd3b2fa05deb9b369b"
+  }
+}

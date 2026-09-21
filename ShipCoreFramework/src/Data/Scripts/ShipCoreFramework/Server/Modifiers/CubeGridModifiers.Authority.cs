@@ -42,6 +42,8 @@ namespace ShipCoreFramework
                 return new GridModifiers();
 
             if (groupComponent.PunishModifiers) return Session.Config.SelectedNoCore.Modifiers;
+            GridModifiers overrideModifiers = groupComponent.GetGridModifiersOverride();
+            if (overrideModifiers != null) return Clone(overrideModifiers);
             ShipCore shipCore = groupComponent.ShipCore;
 
             GridModifiers modifiers = Clone(shipCore.Modifiers);
@@ -96,6 +98,9 @@ namespace ShipCoreFramework
             if (groupComponent == null || groupComponent.Deactivated ||
                 groupComponent.IsIgnoredByAiOrFactionTagThreadSafe())
                 return new SpeedModifiers();
+
+            SpeedModifiers overrideModifiers = groupComponent.GetSpeedModifiersOverride();
+            if (overrideModifiers != null) return Clone(overrideModifiers);
 
             ShipCore shipCore = groupComponent.ShipCore;
             SpeedModifiers modifiers = Clone(shipCore.SpeedModifiers);

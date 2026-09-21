@@ -1,0 +1,53 @@
+{
+  "controllers": [
+    {
+      "model": "ArcanePower_AdvancedContainmentController",
+      "centre_blender_m": [
+        7.5,
+        0,
+        -2.5
+      ],
+      "rotation_z_radians": -1.5707963267948966
+    },
+    {
+      "model": "ArcanePower_ContainmentController",
+      "centre_blender_m": [
+        -7.5,
+        0,
+        -2.5
+      ],
+      "rotation_z_radians": 1.5707963267948966
+    }
+  ],
+  "duct_centre_blender_m": [
+    0,
+    0,
+    5
+  ],
+  "outlet_centre_blender_m": [
+    0,
+    0,
+    7.5
+  ],
+  "collection": "AP mounted hardware (not exported)",
+  "source_instances": true,
+  "socket_lip_radius_axis_m": 6.43,
+  "pack_face_radius_axis_m": 6.455,
+  "socket_face_setback_m": 0.025,
+  "pack_width_m": 1.6,
+  "socket_widest_width_m": 2.3,
+  "socket_lip_outer_width_m": 2.0,
+  "pack_and_port_centre_z_m": -2.33,
+  "pack_local_z_offset_m": 0.17,
+  "white_panel_z_extent_m": [
+    -3.07,
+    -1.59
+  ],
+  "socket_top_bottom_margin_m": 0.09,
+  "surface_fixes": [
+    "Recessed external vent service panels/rails",
+    "Barrel backing clearance",
+    "Roof panel seats"
+  ],
+  "scope": "Blender authoring and mounted inspection; no game calls"
+}

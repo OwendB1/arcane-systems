@@ -1,0 +1,57 @@
+{
+  "timestamp_utc": "2026-09-15T23:00:06.815194+00:00",
+  "models": [
+    {
+      "model": "ArcanePower_Plasma.mwm",
+      "bytes": 262572,
+      "sha256": "b1fcf6188b83f5089ebabc2ca6b7e95e3d6d4e95b051cb3e09e1e957a6eedbec",
+      "hkt_bytes": 19297,
+      "hkt_embedded": true
+    },
+    {
+      "model": "ArcanePower_Tile1.mwm",
+      "bytes": 36512,
+      "sha256": "e517f1e52fc69f31842140082ef261bfea03367b4f46c8df26cef8132972937a",
+      "hkt_bytes": 13915,
+      "hkt_embedded": true
+    },
+    {
+      "model": "ArcanePower_Tile2.mwm",
+      "bytes": 36552,
+      "sha256": "269a831182e2d456a1abec3ca7184aff9f46fd108caa647649e1606bf01cf457",
+      "hkt_bytes": 13927,
+      "hkt_embedded": true
+    },
+    {
+      "model": "ArcanePower_Ring1.mwm",
+      "bytes": 262572,
+      "sha256": "ff4c23250b02c87fca064147300a5592eaa005ca5f883dba03fc5f6eb561db93",
+      "hkt_bytes": 30328,
+      "hkt_embedded": true
+    },
+    {
+      "model": "ArcanePower_Ring2.mwm",
+      "bytes": 262572,
+      "sha256": "3331dd7d991f3e5f538c6de0369e8187262943fd50834b25246c0b163ef585dc",
+      "hkt_bytes": 30360,
+      "hkt_embedded": true
+    },
+    {
+      "model": "ArcanePower_Ring3.mwm",
+      "bytes": 262572,
+      "sha256": "56f4d3565db3739933212f9af2ee39c6e055e830028fadbee2941ef2f4623438",
+      "hkt_bytes": 30360,
+      "hkt_embedded": true
+    },
+    {
+      "model": "ArcanePower_Ring4.mwm",
+      "bytes": 262572,
+      "sha256": "a2174b06027d9f8f218d804d2a6bf4fdedaee027d5f92b0abae59bdc10feb7e6",
+      "hkt_bytes": 30360,
+      "hkt_embedded": true
+    }
+  ],
+  "regression_checks_run": false,
+  "game_reloaded": false,
+  "evidence": "Seven SEUT scene exports returned FINISHED; native MWM logs have no build errors. First export attempt failed on collision UVs and was corrected."
+}

@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "scope": "Offline authored geometry and generated BSL contract; game motion untested",
+  "subparts": 89,
+  "rings": 4,
+  "leaves": 4,
+  "tiles": 80,
+  "tile_models": 2,
+  "batches": 20,
+  "batch_size": 4,
+  "tile_thickness_m": 0.045,
+  "field_outer_radius_m": 0.8999005217118036,
+  "ring_sweep_bounds_m": [
+    [
+      1.0459683709445855,
+      1.135891802524007
+    ],
+    [
+      1.2458129237703768,
+      1.335758294545843
+    ],
+    [
+      1.4457004513757046,
+      1.535659530169162
+    ],
+    [
+      1.6456152791012728,
+      1.7355835263287518
+    ]
+  ],
+  "minimum_inter_ring_gap_m": 0.10992112124636977,
+  "floor_clearance_m": 0.06441646175031934,
+  "all_orientations_ring_clearance": "Disjoint radial shells, invariant under any rotation about their common centre",
+  "limitations": [
+    "Flight-path housing checks are bounds only; no exhaustive mesh collision test.",
+    "Does not prove BSL parsing, SE dummy rotations, actual timing, save/load or multiplayer."
+  ]
+}

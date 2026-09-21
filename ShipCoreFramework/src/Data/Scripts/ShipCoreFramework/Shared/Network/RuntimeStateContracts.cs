@@ -90,5 +90,7 @@ namespace ShipCoreFramework
         [ProtoMember(56)] internal int EffectiveFactionCoreLimit;
         [ProtoMember(57)] internal bool SpeedRampDownActive;
         [ProtoMember(58)] internal float SpeedRampDownTarget;
+        [ProtoMember(59)] internal GridDefenseModifiersData PassiveDefenseModifiers;
+        [ProtoMember(60)] internal GridDefenseModifiersData ActiveDefenseModifiers;
     }
 }

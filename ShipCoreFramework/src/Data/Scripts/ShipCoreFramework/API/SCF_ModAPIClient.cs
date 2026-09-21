@@ -630,5 +630,43 @@ namespace ShipCoreFramework
                 MyTuple.Create(gridId, modifier));
         }
 
+        /// <summary>
+        /// Overrides effective grid modifiers. Pass null to restore the core/upgrade profile.
+        /// </summary>
+        public ApiReadResult<bool> TrySetGridModifiersOverrideForGroup(long gridId, GridModifiersData modifiers)
+        {
+            return InvokeCommand(ApiMethodId.SetGridModifiersOverrideForGroup,
+                MyTuple.Create(gridId, modifiers));
+        }
+
+        /// <summary>
+        /// Overrides effective speed modifiers. Pass null to restore the core/upgrade profile.
+        /// </summary>
+        public ApiReadResult<bool> TrySetSpeedModifiersOverrideForGroup(long gridId, SpeedModifiersData modifiers)
+        {
+            return InvokeCommand(ApiMethodId.SetSpeedModifiersOverrideForGroup,
+                MyTuple.Create(gridId, modifiers));
+        }
+
+        /// <summary>
+        /// Overrides effective passive defense modifiers. Pass null to restore the core/upgrade profile.
+        /// </summary>
+        public ApiReadResult<bool> TrySetPassiveDefenseModifiersOverrideForGroup(long gridId,
+            GridDefenseModifiersData modifiers)
+        {
+            return InvokeCommand(ApiMethodId.SetPassiveDefenseModifiersOverrideForGroup,
+                MyTuple.Create(gridId, modifiers));
+        }
+
+        /// <summary>
+        /// Overrides effective active defense modifiers. Pass null to restore the core/upgrade profile.
+        /// </summary>
+        public ApiReadResult<bool> TrySetActiveDefenseModifiersOverrideForGroup(long gridId,
+            GridDefenseModifiersData modifiers)
+        {
+            return InvokeCommand(ApiMethodId.SetActiveDefenseModifiersOverrideForGroup,
+                MyTuple.Create(gridId, modifiers));
+        }
+
     }
 }

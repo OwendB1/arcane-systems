@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_ReactorDefinition">
+      <Id>
+        <TypeId>Reactor</TypeId>
+        <SubtypeId>ArcanePower_ReactorPrototype</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Power Reactor — Prototype</DisplayName>
+      <Icon>Textures\GUI\Icons\Cubes\nuclear_reactor.dds</Icon>
+      <Description>Arcane Fuel I: 10 GW with two rings. Fuel II: 100 GW with three rings. Fuel III: 1 TW with four rings. Two containment controllers required. Venting ejects containment through the conveyor-connected top hatch, damages the reactor/modules, and leaves the reactor off.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="5" y="3" z="5" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/ArcanePower_ReactorPrototype.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="50" />
+        <Component Subtype="Construction" Count="40" />
+        <Component Subtype="MetalGrid" Count="4" />
+        <Component Subtype="LargeTube" Count="8" />
+        <Component Subtype="Reactor" Count="100" />
+        <Component Subtype="Motor" Count="6" />
+        <Component Subtype="Computer" Count="25" />
+        <Component Subtype="SteelPlate" Count="30" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_ReactorPrototype</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
+      <MaxPowerOutput>10000</MaxPowerOutput>
+      <InventorySize>
+        <X>2</X>
+        <Y>2</Y>
+        <Z>2</Z>
+      </InventorySize>
+      <InventoryFillFactorMin>0.0005</InventoryFillFactorMin>
+      <InventoryFillFactorMax>0.001</InventoryFillFactorMax>
+      <FuelPullAmountFromConveyorInMinutes>10.0</FuelPullAmountFromConveyorInMinutes>
+      <FuelInfos />
+      <PrimarySound>ShipLrgNuclearSm</PrimarySound>
+      <DamageEffectName>Damage_Reactor_Damaged</DamageEffectName>
+      <DamagedSound>ParticleReactor</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>100</PCU>
+      <IsAirTight>false</IsAirTight>
+      <TieredUpdateTimes>
+        <unsignedInt>900</unsignedInt>
+        <unsignedInt>1800</unsignedInt>
+        <unsignedInt>3600</unsignedInt>
+      </TieredUpdateTimes>
+      <TargetingGroups>
+        <string>PowerSystems</string>
+      </TargetingGroups>
+      <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
+      <MountPoints>
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="5" EndY="5" />
+        <MountPoint Side="Top" StartX="1.2916" EndX="3.7084" StartY="0.3160" EndY="0.6280" />
+        <MountPoint Side="Top" StartX="0.8491" EndX="4.1509" StartY="0.6280" EndY="0.9400" />
+        <MountPoint Side="Top" StartX="0.5516" EndX="4.4484" StartY="0.9400" EndY="1.2520" />
+        <MountPoint Side="Top" StartX="0.3384" EndX="4.6616" StartY="1.2520" EndY="1.5640" />
+        <MountPoint Side="Top" StartX="0.1861" EndX="4.8139" StartY="1.5640" EndY="1.8760" />
+        <MountPoint Side="Top" StartX="0.0833" EndX="4.9167" StartY="1.8760" EndY="2.1880" />
+        <MountPoint Side="Top" StartX="0.0236" EndX="4.9764" StartY="2.1880" EndY="2.5000" />
+        <MountPoint Side="Top" StartX="0.0236" EndX="4.9764" StartY="2.5000" EndY="2.8120" />
+        <MountPoint Side="Top" StartX="0.0833" EndX="4.9167" StartY="2.8120" EndY="3.1240" />
+        <MountPoint Side="Top" StartX="0.1861" EndX="4.8139" StartY="3.1240" EndY="3.4360" />
+        <MountPoint Side="Top" StartX="0.3384" EndX="4.6616" StartY="3.4360" EndY="3.7480" />
+        <MountPoint Side="Top" StartX="0.5516" EndX="4.4484" StartY="3.7480" EndY="4.0600" />
+        <MountPoint Side="Top" StartX="0.8491" EndX="4.1509" StartY="4.0600" EndY="4.3720" />
+        <MountPoint Side="Top" StartX="1.2916" EndX="3.7084" StartY="4.3720" EndY="4.6840" />
+        <MountPoint Side="Front" StartX="2" EndX="3" StartY="0" EndY="1" />
+        <MountPoint Side="Back" StartX="2" EndX="3" StartY="0" EndY="1" />
+        <MountPoint Side="Left" StartX="2" EndX="3" StartY="0" EndY="1" />
+        <MountPoint Side="Right" StartX="2" EndX="3" StartY="0" EndY="1" />
+      </MountPoints>
+    </Definition>
+  </CubeBlocks>
+</Definitions>

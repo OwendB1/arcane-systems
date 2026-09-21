@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions>
+  <ResourceDistributionGroups>
+    <DistributionGroup>
+      <Id><TypeId>MyObjectBuilder_ResourceDistributionGroup</TypeId><SubtypeId>ArcaneContainment</SubtypeId></Id>
+      <IsSource>false</IsSource>
+      <Priority>2</Priority>
+      <IsAdaptible>true</IsAdaptible>
+    </DistributionGroup>
+  </ResourceDistributionGroups>
+</Definitions>

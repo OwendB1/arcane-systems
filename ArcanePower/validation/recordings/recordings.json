@@ -1,0 +1,52 @@
+{
+  "recordings": [
+    {
+      "file": "reactor-startup-shutdown.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 3440,
+          "height": 1440,
+          "r_frame_rate": "60/1"
+        },
+        {
+          "codec_name": "opus",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "62.466500",
+        "size": "12370792"
+      }
+    },
+    {
+      "file": "reactor-vent.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "codec_name": "h264",
+          "width": 3440,
+          "height": 1440,
+          "r_frame_rate": "60/1"
+        },
+        {
+          "codec_name": "opus",
+          "r_frame_rate": "0/0"
+        }
+      ],
+      "format": {
+        "duration": "23.526500",
+        "size": "3426436"
+      }
+    }
+  ],
+  "monitor": "DP-4 (primary)",
+  "tool": "GPU Screen Recorder",
+  "camera": "Spectator; cockpit toolbar D1 on/off, D2 vent",
+  "loaded_model_revision": "lab_c05a1c7be62e",
+  "scope": "Before external hardware/tile pass; visual low-load startup/shutdown and vent ejection. Existing ceiling blocks obscure the roof hatch.",
+  "repair": "repair.json confirms all three repaired after reload and resave"
+}

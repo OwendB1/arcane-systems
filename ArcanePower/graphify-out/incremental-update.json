@@ -1,0 +1,55 @@
+{
+  "scope": "Corpus whitelist; Graphify content-hash incremental detection and build_merge replace-on-source re-extraction. Host semantic extraction, no agents.",
+  "changed_files": {
+    "code": [
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.cs",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/tools/prepare_lab.py",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/tune_chamber_glass.py",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Motion.cs",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Fuel.cs",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Tiles.cs",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.VentRoute.cs",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/build_external_hardware.py",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/render_hardware_icons.py"
+    ],
+    "document": [
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/LEARNINGS.md",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/README.md",
+      "/home/owendb/Documents/GitHub/arcane-systems/docs/arcane-power-plan.md",
+      "/home/owendb/Documents/GitHub/arcane-systems/docs/arcane-power-remaining-work.md",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/validation/recordings/recordings.json",
+      "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/validation/recordings/repair.json"
+    ]
+  },
+  "deleted_files": [],
+  "old_nodes": 306,
+  "old_edges": 649,
+  "new_nodes": 342,
+  "new_edges": 737,
+  "summary": "36 new nodes, 95 new edges, 7 edges removed",
+  "new_external_imports": [
+    "system_text",
+    "system_collections_generic",
+    "sandbox_common_objectbuilders",
+    "sandbox_modapi",
+    "vrage_game_components",
+    "vrage_objectbuilders",
+    "vrage_modapi",
+    "vrage_game_modapi",
+    "vrage_utils",
+    "vrage_game_entity",
+    "vragemath",
+    "hashlib",
+    "json",
+    "shutil",
+    "uuid",
+    "system",
+    "protobuf",
+    "sandbox_game_entitycomponents",
+    "sandbox_game_entities",
+    "vrage",
+    "vrage_game",
+    "vrage_game_modapi_ingame"
+  ],
+  "validation_limit": "Graph source indexing only. No game calls, regression suites or video analysis. Recordings belong to prior revision; latest45file deployment not game-loaded."
+}

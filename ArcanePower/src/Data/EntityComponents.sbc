@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityComponents>
+    <EntityComponent xsi:type="MyObjectBuilder_ModStorageComponentDefinition">
+      <Id><TypeId>ModStorageComponent</TypeId><SubtypeId>ArcanePowerMotionState</SubtypeId></Id>
+      <RegisteredStorageGuids><guid>d85a5399-b527-45ac-bcc0-aa1c442b2710</guid></RegisteredStorageGuids>
+    </EntityComponent>
+  </EntityComponents>
+</Definitions>

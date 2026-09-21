@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "native_conveyor_meshes": 4,
+  "native_upgrade_meshes": 2,
+  "tiles": 80,
+  "batches_of_four": 20,
+  "ring_frames_checked": 480,
+  "ring_radial_max_m": 2.6277392589073685,
+  "ring_z_range_m": [
+    0.9350000619888306,
+    8.444177627563477
+  ],
+  "limits": "Base mesh vertices only; not evaluated bevel geometry or exhaustive inter-object collision. Blender prototype; no SE export/in-game validation."
+}

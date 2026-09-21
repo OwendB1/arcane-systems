@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions>
+  <Blueprints>
+    <Blueprint>
+      <Id>
+        <TypeId>BlueprintDefinition</TypeId>
+        <SubtypeId>ArcaneOreToFuelI</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Fuel I</DisplayName>
+      <Icon>Textures/GUI/Icons/ingot/uranium_ingot.dds</Icon>
+      <BaseProductionTimeInSeconds>4</BaseProductionTimeInSeconds>
+      <Prerequisites>
+        <Item Amount="1" TypeId="Ore" SubtypeId="ArcaneOre" />
+      </Prerequisites>
+      <Result Amount="0.01" TypeId="Ingot" SubtypeId="ArcaneFuelI" />
+    </Blueprint>
+    <Blueprint>
+      <Id>
+        <TypeId>BlueprintDefinition</TypeId>
+        <SubtypeId>ArcaneFuelIToII</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Fuel II</DisplayName>
+      <Icon>Textures/GUI/Icons/ingot/uranium_ingot.dds</Icon>
+      <BaseProductionTimeInSeconds>12</BaseProductionTimeInSeconds>
+      <Prerequisites>
+        <Item Amount="1" TypeId="Ingot" SubtypeId="ArcaneFuelI" />
+      </Prerequisites>
+      <Result Amount="0.1" TypeId="Ingot" SubtypeId="ArcaneFuelII" />
+    </Blueprint>
+    <Blueprint>
+      <Id>
+        <TypeId>BlueprintDefinition</TypeId>
+        <SubtypeId>ArcaneFuelIIToIII</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Fuel III</DisplayName>
+      <Icon>Textures/GUI/Icons/ingot/uranium_ingot.dds</Icon>
+      <BaseProductionTimeInSeconds>24</BaseProductionTimeInSeconds>
+      <Prerequisites>
+        <Item Amount="1" TypeId="Ingot" SubtypeId="ArcaneFuelII" />
+      </Prerequisites>
+      <Result Amount="0.1" TypeId="Ingot" SubtypeId="ArcaneFuelIII" />
+    </Blueprint>
+  </Blueprints>
+  <BlueprintClassEntries>
+    <Entry Class="Ingots" BlueprintSubtypeId="ArcaneOreToFuelI" />
+    <Entry Class="Ingots" BlueprintSubtypeId="ArcaneFuelIToII" />
+    <Entry Class="Ingots" BlueprintSubtypeId="ArcaneFuelIIToIII" />
+  </BlueprintClassEntries>
+</Definitions>

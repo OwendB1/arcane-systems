@@ -103,6 +103,14 @@ namespace ShipCoreFramework
                 case ApiMethodId.GetGroupMass:
                     return argument => AuthorityRuntime(argument,
                         gridId => Success(GetAuthoritativeGroupMass(gridId)));
+                case ApiMethodId.SetGridModifiersOverrideForGroup:
+                    return ServerSetGridModifiersOverride;
+                case ApiMethodId.SetSpeedModifiersOverrideForGroup:
+                    return ServerSetSpeedModifiersOverride;
+                case ApiMethodId.SetPassiveDefenseModifiersOverrideForGroup:
+                    return ServerSetPassiveDefenseModifiersOverride;
+                case ApiMethodId.SetActiveDefenseModifiersOverrideForGroup:
+                    return ServerSetActiveDefenseModifiersOverride;
                 default:
                     return null;
             }
@@ -221,6 +229,42 @@ namespace ShipCoreFramework
                     ? Success(result.Item1)
                     : Failure(ApiReadStatusData.InvalidArgument);
             });
+        }
+
+        private static object ServerSetGridModifiersOverride(object argument)
+        {
+            if (!(argument is MyTuple<long, GridModifiersData>))
+                return Failure(ApiReadStatusData.InvalidArgument);
+            MyTuple<long, GridModifiersData> values = (MyTuple<long, GridModifiersData>)argument;
+            return AuthorityCommand(values.Item1,
+                gridId => SetGridModifiersOverrideForGroup(gridId, values.Item2));
+        }
+
+        private static object ServerSetSpeedModifiersOverride(object argument)
+        {
+            if (!(argument is MyTuple<long, SpeedModifiersData>))
+                return Failure(ApiReadStatusData.InvalidArgument);
+            MyTuple<long, SpeedModifiersData> values = (MyTuple<long, SpeedModifiersData>)argument;
+            return AuthorityCommand(values.Item1,
+                gridId => SetSpeedModifiersOverrideForGroup(gridId, values.Item2));
+        }
+
+        private static object ServerSetPassiveDefenseModifiersOverride(object argument)
+        {
+            if (!(argument is MyTuple<long, GridDefenseModifiersData>))
+                return Failure(ApiReadStatusData.InvalidArgument);
+            MyTuple<long, GridDefenseModifiersData> values = (MyTuple<long, GridDefenseModifiersData>)argument;
+            return AuthorityCommand(values.Item1,
+                gridId => SetPassiveDefenseModifiersOverrideForGroup(gridId, values.Item2));
+        }
+
+        private static object ServerSetActiveDefenseModifiersOverride(object argument)
+        {
+            if (!(argument is MyTuple<long, GridDefenseModifiersData>))
+                return Failure(ApiReadStatusData.InvalidArgument);
+            MyTuple<long, GridDefenseModifiersData> values = (MyTuple<long, GridDefenseModifiersData>)argument;
+            return AuthorityCommand(values.Item1,
+                gridId => SetActiveDefenseModifiersOverrideForGroup(gridId, values.Item2));
         }
     }
 }

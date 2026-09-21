@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <PhysicalItems>
+    <PhysicalItem xsi:type="MyObjectBuilder_ToolItemDefinition">
+      <Id Type="MyObjectBuilder_PhysicalGunObject" Subtype="ArcanePower_Tablet" />
+      <DisplayName>Arcane Reactor Tablet</DisplayName>
+      <Icon>Textures\GUI\Icons\ArcanePower\Tablet.dds</Icon>
+      <Description>Read-only reactor telemetry. Requires suit antenna enabled and an accessible bidirectional grid antenna link. Equip: left click selects a reachable reactor; right click changes page. Text HUD API enables the full live dashboard.</Description>
+      <Size>
+        <X>0.36</X>
+        <Y>0.26</Y>
+        <Z>0.062</Z>
+      </Size>
+      <Mass>1.4</Mass>
+      <Volume>3</Volume>
+      <Model>Models\Items\ArcanePower_Tablet.mwm</Model>
+      <PhysicalMaterial>Metal</PhysicalMaterial>
+      <HitDistance>0</HitDistance>
+      <ShowAmmoCount>false</ShowAmmoCount>
+      <DepositAllEnabled>false</DepositAllEnabled>
+      <PrimaryActions />
+      <SecondaryActions />
+    </PhysicalItem>
+  </PhysicalItems>
+  <HandItems>
+    <HandItem xsi:type="MyObjectBuilder_HandItemDefinition">
+      <Id Type="MyObjectBuilder_HandToolBase" Subtype="ArcanePower_Tablet" />
+      <PhysicalItemId Type="MyObjectBuilder_PhysicalGunObject" Subtype="ArcanePower_Tablet" />
+      <LeftHandOrientation>
+        <X>0.550798117</X>
+        <Y>0.570931121</Y>
+        <Z>0.365488078</Z>
+        <W>-0.486906104</W>
+      </LeftHandOrientation>
+      <RightHandOrientation>
+        <X>0.550798117</X>
+        <Y>-0.570931121</Y>
+        <Z>-0.365488078</Z>
+        <W>-0.486906104</W>
+      </RightHandOrientation>
+      <LeftHandPosition>
+        <X>0.162</X>
+        <Y>-0.015</Y>
+        <Z>0</Z>
+      </LeftHandPosition>
+      <RightHandPosition>
+        <X>-0.162</X>
+        <Y>-0.015</Y>
+        <Z>0</Z>
+      </RightHandPosition>
+      <ItemOrientation>
+        <X>0</X>
+        <Y>1</Y>
+        <Z>0</Z>
+        <W>0</W>
+      </ItemOrientation>
+      <ItemWalkingOrientation>
+        <X>0</X>
+        <Y>1</Y>
+        <Z>0</Z>
+        <W>0</W>
+      </ItemWalkingOrientation>
+      <ItemShootOrientation>
+        <X>0</X>
+        <Y>1</Y>
+        <Z>0</Z>
+        <W>0</W>
+      </ItemShootOrientation>
+      <ItemIronsightOrientation>
+        <X>0</X>
+        <Y>1</Y>
+        <Z>0</Z>
+        <W>0</W>
+      </ItemIronsightOrientation>
+      <ItemOrientation3rd>
+        <X>0</X>
+        <Y>1</Y>
+        <Z>0</Z>
+        <W>0</W>
+      </ItemOrientation3rd>
+      <ItemWalkingOrientation3rd>
+        <X>0</X>
+        <Y>1</Y>
+        <Z>0</Z>
+        <W>0</W>
+      </ItemWalkingOrientation3rd>
+      <ItemShootOrientation3rd>
+        <X>0</X>
+        <Y>1</Y>
+        <Z>0</Z>
+        <W>0</W>
+      </ItemShootOrientation3rd>
+      <ItemIronsightOrientation3rd>
+        <X>0</X>
+        <Y>1</Y>
+        <Z>0</Z>
+        <W>0</W>
+      </ItemIronsightOrientation3rd>
+      <ItemPosition>
+        <X>0</X>
+        <Y>-0.2</Y>
+        <Z>-0.3</Z>
+      </ItemPosition>
+      <ItemWalkingPosition>
+        <X>0</X>
+        <Y>-0.2</Y>
+        <Z>-0.3</Z>
+      </ItemWalkingPosition>
+      <ItemShootPosition>
+        <X>0</X>
+        <Y>-0.2</Y>
+        <Z>-0.3</Z>
+      </ItemShootPosition>
+      <ItemIronsightPosition>
+        <X>0</X>
+        <Y>-0.2</Y>
+        <Z>-0.3</Z>
+      </ItemIronsightPosition>
+      <ItemPosition3rd>
+        <X>0</X>
+        <Y>-0.2</Y>
+        <Z>-0.3</Z>
+      </ItemPosition3rd>
+      <ItemWalkingPosition3rd>
+        <X>0</X>
+        <Y>-0.2</Y>
+        <Z>-0.3</Z>
+      </ItemWalkingPosition3rd>
+      <ItemShootPosition3rd>
+        <X>0</X>
+        <Y>-0.2</Y>
+        <Z>-0.3</Z>
+      </ItemShootPosition3rd>
+      <ItemIronsightPosition3rd>
+        <X>0</X>
+        <Y>-0.2</Y>
+        <Z>-0.3</Z>
+      </ItemIronsightPosition3rd>
+      <ItemPositioning>TransformFromData</ItemPositioning>
+      <ItemPositioningWalk>TransformFromData</ItemPositioningWalk>
+      <ItemPositioningShoot>TransformFromData</ItemPositioningShoot>
+      <ItemPositioningIronsight>TransformFromData</ItemPositioningIronsight>
+      <ItemPositioning3rd>TransformFromData</ItemPositioning3rd>
+      <ItemPositioningWalk3rd>TransformFromData</ItemPositioningWalk3rd>
+      <ItemPositioningShoot3rd>TransformFromData</ItemPositioningShoot3rd>
+      <ItemPositioningIronsight3rd>TransformFromData</ItemPositioningIronsight3rd>
+      <BlendTime>0.15</BlendTime>
+      <ShootBlend>0.15</ShootBlend>
+      <XAmplitudeScale>0.1</XAmplitudeScale>
+      <YAmplitudeScale>0.1</YAmplitudeScale>
+      <ZAmplitudeScale>0</ZAmplitudeScale>
+      <RunMultiplier>1</RunMultiplier>
+      <AmplitudeMultiplier3rd>1</AmplitudeMultiplier3rd>
+      <SimulateLeftHand>true</SimulateLeftHand>
+      <SimulateRightHand>true</SimulateRightHand>
+      <FingersAnimation>HoldingTool</FingersAnimation>
+    </HandItem>
+  </HandItems>
+  <Blueprints>
+    <Blueprint>
+      <Id Type="MyObjectBuilder_BlueprintDefinition" Subtype="ArcanePower_Tablet" />
+      <DisplayName>Arcane Reactor Tablet</DisplayName>
+      <Icon>Textures\GUI\Icons\ArcanePower\Tablet.dds</Icon>
+      <Prerequisites>
+        <Item Amount="3" TypeId="Ingot" SubtypeId="Iron" />
+        <Item Amount="1" TypeId="Ingot" SubtypeId="Silicon" />
+        <Item Amount="0.5" TypeId="Ingot" SubtypeId="Nickel" />
+      </Prerequisites>
+      <Result Amount="1" TypeId="PhysicalGunObject" SubtypeId="ArcanePower_Tablet" />
+      <BaseProductionTimeInSeconds>12</BaseProductionTimeInSeconds>
+    </Blueprint>
+  </Blueprints>
+  <BlueprintClassEntries>
+    <Entry Class="BasicTools" BlueprintSubtypeId="ArcanePower_Tablet" />
+    <Entry Class="Tools" BlueprintSubtypeId="ArcanePower_Tablet" />
+    <Entry Class="EliteTools" BlueprintSubtypeId="ArcanePower_Tablet" />
+  </BlueprintClassEntries>
+</Definitions>

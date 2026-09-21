@@ -1,0 +1,332 @@
+{
+  "ArcanePower.csproj": {
+    "mtime": 1789327315.2715223,
+    "ast_hash": "400356be43cb182467477b0bc1c66702",
+    "semantic_hash": "400356be43cb182467477b0bc1c66702"
+  },
+  "assets/curve_chamber_glass.py": {
+    "mtime": 1789329547.3323698,
+    "ast_hash": "1539d46431bdaf21476117ff5188e00a",
+    "semantic_hash": "1539d46431bdaf21476117ff5188e00a"
+  },
+  "assets/export_prototype.py": {
+    "mtime": 1789330789.5060732,
+    "ast_hash": "a6dc72df07e00dee83525aa88861d175",
+    "semantic_hash": "a6dc72df07e00dee83525aa88861d175"
+  },
+  "assets/fit_three_cells.py": {
+    "mtime": 1789327471.758833,
+    "ast_hash": "12152f56578258ce1f77aa6f203e7034",
+    "semantic_hash": "12152f56578258ce1f77aa6f203e7034"
+  },
+  "assets/refine_interfaces.py": {
+    "mtime": 1789327315.2725222,
+    "ast_hash": "7347c2363aac24294041d9e07607de0c",
+    "semantic_hash": "7347c2363aac24294041d9e07607de0c"
+  },
+  "src/Data/Scripts/ArcanePower/Reactor.cs": {
+    "mtime": 1789572223.5595758,
+    "ast_hash": "18ba54ebdae08496118f91458fc1f96f",
+    "semantic_hash": "18ba54ebdae08496118f91458fc1f96f"
+  },
+  "tools/prepare_lab.py": {
+    "mtime": 1789513041.4782588,
+    "ast_hash": "2f72afda118e624facba43cc3604ca8b",
+    "semantic_hash": "2f72afda118e624facba43cc3604ca8b"
+  },
+  "tools/remote_lab.py": {
+    "mtime": 1789326771.8848815,
+    "ast_hash": "460e42ea172dcb65897cfbd39ad54291",
+    "semantic_hash": "460e42ea172dcb65897cfbd39ad54291"
+  },
+  "LEARNINGS.md": {
+    "mtime": 1789343999.820029,
+    "ast_hash": "30598d9d83dfcdf3de191d341b37d6cf",
+    "semantic_hash": "30598d9d83dfcdf3de191d341b37d6cf"
+  },
+  "README.md": {
+    "mtime": 1789343924.5209596,
+    "ast_hash": "1d13c7961b73074918dcc215f42e8ce2",
+    "semantic_hash": "1d13c7961b73074918dcc215f42e8ce2"
+  },
+  "assets/four_inventory_ports.py": {
+    "mtime": 1789328581.7687836,
+    "ast_hash": "60306cfa9ea19cf482b6a00549d0caa5",
+    "semantic_hash": "60306cfa9ea19cf482b6a00549d0caa5"
+  },
+  "assets/integrate_base_upgrades.py": {
+    "mtime": 1789329044.8958778,
+    "ast_hash": "de306d97f782fa6bd9f894aa24f016f4",
+    "semantic_hash": "de306d97f782fa6bd9f894aa24f016f4"
+  },
+  "assets/flush_roof.py": {
+    "mtime": 1789328704.647686,
+    "ast_hash": "ed731df9546b3973553cf5da7f0b58de",
+    "semantic_hash": "ed731df9546b3973553cf5da7f0b58de"
+  },
+  "assets/widen_housings.py": {
+    "mtime": 1789330601.4040034,
+    "ast_hash": "c1199754e11fc189b8c64e030828d528",
+    "semantic_hash": "c1199754e11fc189b8c64e030828d528"
+  },
+  "tools/repair_seut_preview_textures.py": {
+    "mtime": 1789329170.8967268,
+    "ast_hash": "83651b856a3f07b6d274ad49e1f7f0bd",
+    "semantic_hash": "83651b856a3f07b6d274ad49e1f7f0bd"
+  },
+  "assets/check_prototype.py": {
+    "mtime": 1789330716.7282069,
+    "ast_hash": "70a0b2211177ae98b7c8bb8a8a10925a",
+    "semantic_hash": "70a0b2211177ae98b7c8bb8a8a10925a"
+  },
+  "assets/setup_preview.py": {
+    "mtime": 1789331322.2876809,
+    "ast_hash": "3501b67469e819fc71611b0fa794973c",
+    "semantic_hash": "3501b67469e819fc71611b0fa794973c"
+  },
+  "assets/round_containment_field.py": {
+    "mtime": 1789329757.7258651,
+    "ast_hash": "1b1a404e4c0068bf3be46e4b5eb00959",
+    "semantic_hash": "1b1a404e4c0068bf3be46e4b5eb00959"
+  },
+  "assets/remove_radial_trunks.py": {
+    "mtime": 1789329977.3932061,
+    "ast_hash": "a24f5c09d8b1d98f90d01e682c9260e8",
+    "semantic_hash": "a24f5c09d8b1d98f90d01e682c9260e8"
+  },
+  "assets/repair_surface_orientation.py": {
+    "mtime": 1789330263.2034452,
+    "ast_hash": "e126528a720f98c7880b24a10857c7a7",
+    "semantic_hash": "e126528a720f98c7880b24a10857c7a7"
+  },
+  "assets/integrate_supports.py": {
+    "mtime": 1789331028.8473449,
+    "ast_hash": "15bc875c31455addbacc42dd01d22124",
+    "semantic_hash": "15bc875c31455addbacc42dd01d22124"
+  },
+  "assets/build_deployable_chamber.py": {
+    "mtime": 1789336503.746552,
+    "ast_hash": "4a845cb2de66ff0803141939f27254a5",
+    "semantic_hash": "4a845cb2de66ff0803141939f27254a5"
+  },
+  "tools/build_animation.py": {
+    "mtime": 1789336347.840346,
+    "ast_hash": "3bd60053992bff2f8372ea785f5fd890",
+    "semantic_hash": "3bd60053992bff2f8372ea785f5fd890"
+  },
+  "assets/wrap_maintenance_panels.py": {
+    "mtime": 1789333482.9626133,
+    "ast_hash": "4abd55c3f6465f58206d98bc6335074d",
+    "semantic_hash": "4abd55c3f6465f58206d98bc6335074d"
+  },
+  "tools/check_animation.py": {
+    "mtime": 1789333574.8741121,
+    "ast_hash": "33219f811915a119ecfc6ec497e8fbe8",
+    "semantic_hash": "33219f811915a119ecfc6ec497e8fbe8"
+  },
+  "/home/owendb/Documents/GitHub/arcane-systems/docs/arcane-power-plan.md": {
+    "mtime": 1789343924.521463,
+    "ast_hash": "dd8b4089039761da24fa8be0cdd4e729",
+    "semantic_hash": "dd8b4089039761da24fa8be0cdd4e729"
+  },
+  "assets/seat_tiedown_handles.py": {
+    "mtime": 1789333925.9264004,
+    "ast_hash": "6db1997007ba2573b809cb391e7912ab",
+    "semantic_hash": "6db1997007ba2573b809cb391e7912ab"
+  },
+  "assets/tune_chamber_glass.py": {
+    "mtime": 1789341080.96771,
+    "ast_hash": "fbdc48d243d3b96c73ccefe72f042049",
+    "semantic_hash": "fbdc48d243d3b96c73ccefe72f042049"
+  },
+  "tools/check_appearance.py": {
+    "mtime": 1789334452.187838,
+    "ast_hash": "f6c115e68df10cb414fc06b09a0e0683",
+    "semantic_hash": "f6c115e68df10cb414fc06b09a0e0683"
+  },
+  "assets/build_vent_bell.py": {
+    "mtime": 1789334954.507698,
+    "ast_hash": "ef7ca67ec18d0188ad6ec362a69a5967",
+    "semantic_hash": "ef7ca67ec18d0188ad6ec362a69a5967"
+  },
+  "assets/highlight_inventory_hatches.py": {
+    "mtime": 1789339854.9497545,
+    "ast_hash": "3bda1a3f9ddaff723251381c0e518cfa",
+    "semantic_hash": "3bda1a3f9ddaff723251381c0e518cfa"
+  },
+  "src/Data/Scripts/ArcanePower/Reactor.Motion.cs": {
+    "mtime": 1789572336.068064,
+    "ast_hash": "33f0dfd8059474e6e2ced77121ce050a",
+    "semantic_hash": "33f0dfd8059474e6e2ced77121ce050a"
+  },
+  "src/Data/Scripts/ArcanePower/VentSession.cs": {
+    "mtime": 1789572223.5604072,
+    "ast_hash": "fbe44f94bf0c5f9e0dae5d53c21404eb",
+    "semantic_hash": "fbe44f94bf0c5f9e0dae5d53c21404eb"
+  },
+  "tools/build_animation_geometry.py": {
+    "mtime": 1789512856.7037704,
+    "ast_hash": "ff68e525b16893db7545bbb67883d304",
+    "semantic_hash": "ff68e525b16893db7545bbb67883d304"
+  },
+  "assets/build_intake_vanes.py": {
+    "mtime": 1789335959.0414124,
+    "ast_hash": "a31a9ae69cab27c653660d8326c89807",
+    "semantic_hash": "a31a9ae69cab27c653660d8326c89807"
+  },
+  "src/Data/Scripts/ArcanePower/Reactor.Fuel.cs": {
+    "mtime": 1789572223.560113,
+    "ast_hash": "791d1194277d9232ae52467239b37840",
+    "semantic_hash": "791d1194277d9232ae52467239b37840"
+  },
+  "assets/build_ejection_hatch.py": {
+    "mtime": 1789339854.9497545,
+    "ast_hash": "5d7ef37f91b4cae6385014a79bba7e0b",
+    "semantic_hash": "5d7ef37f91b4cae6385014a79bba7e0b"
+  },
+  "assets/build_ceiling_hatch.py": {
+    "mtime": 1789340712.6271768,
+    "ast_hash": "4de7594c8273ae406952d80ce0ea5e5c",
+    "semantic_hash": "4de7594c8273ae406952d80ce0ea5e5c"
+  },
+  "src/Data/Scripts/ArcanePower/Reactor.Tiles.cs": {
+    "mtime": 1789570529.9323509,
+    "ast_hash": "cecd6de0a75c347245692d43d746720b",
+    "semantic_hash": "cecd6de0a75c347245692d43d746720b"
+  },
+  "src/Data/Scripts/ArcanePower/Reactor.VentRoute.cs": {
+    "mtime": 1789513041.4780662,
+    "ast_hash": "e694a9ac55112eeeba04d920c87f35ce",
+    "semantic_hash": "e694a9ac55112eeeba04d920c87f35ce"
+  },
+  "assets/build_external_hardware.py": {
+    "mtime": 1789343060.1885033,
+    "ast_hash": "61713c60095569a7a04c13d54d52c32a",
+    "semantic_hash": "61713c60095569a7a04c13d54d52c32a"
+  },
+  "assets/render_hardware_icons.py": {
+    "mtime": 1789343369.0670447,
+    "ast_hash": "ecde3892d754d935693c734f7e460682",
+    "semantic_hash": "ecde3892d754d935693c734f7e460682"
+  },
+  "/home/owendb/Documents/GitHub/arcane-systems/docs/arcane-power-remaining-work.md": {
+    "mtime": 1789343999.820029,
+    "ast_hash": "c8c07725e1c9ac9215ca36d98153d40e",
+    "semantic_hash": "c8c07725e1c9ac9215ca36d98153d40e"
+  },
+  "validation/recordings/recordings.json": {
+    "mtime": 1789343574.6836805,
+    "ast_hash": "d7fb95d241906e242221e1576df4e8cf",
+    "semantic_hash": "d7fb95d241906e242221e1576df4e8cf"
+  },
+  "validation/recordings/repair.json": {
+    "mtime": 1789342708.6095695,
+    "ast_hash": "97282d435dcaaf6906a2f1958f4ed0cb",
+    "semantic_hash": "97282d435dcaaf6906a2f1958f4ed0cb"
+  },
+  "src/Data/Scripts/ArcanePower/ContainmentController.cs": {
+    "mtime": 1789508058.5628169,
+    "ast_hash": "5005b9697d8486bccf470d209a333ace",
+    "semantic_hash": "5005b9697d8486bccf470d209a333ace"
+  },
+  "src/Data/Scripts/ArcanePower/CoreHazards.cs": {
+    "mtime": 1789570529.932668,
+    "ast_hash": "b2675964a1f85f15c63a696bcf2b1540",
+    "semantic_hash": "b2675964a1f85f15c63a696bcf2b1540"
+  },
+  "src/Data/Scripts/ArcanePower/Reactor.Failure.cs": {
+    "mtime": 1789513185.6328192,
+    "ast_hash": "490b7c4a4810b8bb1fd4e84bee58b3df",
+    "semantic_hash": "490b7c4a4810b8bb1fd4e84bee58b3df"
+  },
+  "src/Data/Scripts/ArcanePower/Reactor.Power.cs": {
+    "mtime": 1789572223.5603,
+    "ast_hash": "019e800c0d791f2e1441c479be7656f2",
+    "semantic_hash": "019e800c0d791f2e1441c479be7656f2"
+  },
+  "assets/build_physical_plasma.py": {
+    "mtime": 1789512619.3490632,
+    "ast_hash": "acf969e54867f6d7eb4baf2e83b90758",
+    "semantic_hash": "acf969e54867f6d7eb4baf2e83b90758"
+  },
+  "assets/render_plasma_review.py": {
+    "mtime": 1789513041.4800267,
+    "ast_hash": "2c59df93b8acfa6d2aa37033148a8a9e",
+    "semantic_hash": "2c59df93b8acfa6d2aa37033148a8a9e"
+  },
+  "THERMAL-FAILURE.md": {
+    "mtime": 1789513573.240897,
+    "ast_hash": "62c753cd603ac011a325ed9e1ca36371",
+    "semantic_hash": "62c753cd603ac011a325ed9e1ca36371"
+  },
+  "src/Data/Scripts/ArcanePower/Reactor.Status.cs": {
+    "mtime": 1789572336.0683227,
+    "ast_hash": "b324602d08644d820f315e32f24fc161",
+    "semantic_hash": "b324602d08644d820f315e32f24fc161"
+  },
+  "src/Data/Scripts/ArcanePower/ReactorDashboard.cs": {
+    "mtime": 1789571846.4699204,
+    "ast_hash": "568ef46cba3975c826f382fef1bdfdde",
+    "semantic_hash": "568ef46cba3975c826f382fef1bdfdde"
+  },
+  "src/Data/Scripts/ArcanePower/ReactorLcd.cs": {
+    "mtime": 1789571076.9406254,
+    "ast_hash": "0a05483290692512906262b3bb83030e",
+    "semantic_hash": "0a05483290692512906262b3bb83030e"
+  },
+  "src/Data/Scripts/ArcanePower/ReactorTablet.cs": {
+    "mtime": 1789571846.470193,
+    "ast_hash": "88a80745691b58b884eee76befb967cf",
+    "semantic_hash": "88a80745691b58b884eee76befb967cf"
+  },
+  "src/Data/Scripts/ArcanePower/TabletLink.cs": {
+    "mtime": 1789572597.5332599,
+    "ast_hash": "a9d29b13b842e6f139ed871194f63d89",
+    "semantic_hash": "a9d29b13b842e6f139ed871194f63d89"
+  },
+  "assets/build_tablet.py": {
+    "mtime": 1789571223.3745863,
+    "ast_hash": "b4362c35e9945a9f04856e2a226d715f",
+    "semantic_hash": "b4362c35e9945a9f04856e2a226d715f"
+  },
+  "assets/refine_tablet.py": {
+    "mtime": 1789571420.8275678,
+    "ast_hash": "c538a9f13b85823ddb69badcd2fbebdc",
+    "semantic_hash": "c538a9f13b85823ddb69badcd2fbebdc"
+  },
+  "assets/export_tablet.py": {
+    "mtime": 1789571290.2277792,
+    "ast_hash": "6b015172d448930c7e5c5e49ac5e479f",
+    "semantic_hash": "6b015172d448930c7e5c5e49ac5e479f"
+  },
+  "assets/render_tablet.py": {
+    "mtime": 1789571574.2223816,
+    "ast_hash": "8d82a7399a80cc22e95ac433154a518e",
+    "semantic_hash": "8d82a7399a80cc22e95ac433154a518e"
+  },
+  "assets/build_tablet_definitions.py": {
+    "mtime": 1789571345.3108447,
+    "ast_hash": "820948516588751083aa0ae097bcb0a7",
+    "semantic_hash": "820948516588751083aa0ae097bcb0a7"
+  },
+  "STATUS-DISPLAYS.md": {
+    "mtime": 1789571694.477618,
+    "ast_hash": "9de7f4cee6bd9713d69ca9c1bc5ee44c",
+    "semantic_hash": "9de7f4cee6bd9713d69ca9c1bc5ee44c"
+  },
+  "REACTOR-PERSISTENCE.md": {
+    "mtime": 1789572336.0706797,
+    "ast_hash": "832b7fda905f23b544c8c6df927545d1",
+    "semantic_hash": "832b7fda905f23b544c8c6df927545d1"
+  },
+  "tools/compile_mod.py": {
+    "mtime": 1789572572.1448379,
+    "ast_hash": "346a1bc95f3d7d53f63b2dcc82753eef",
+    "semantic_hash": "346a1bc95f3d7d53f63b2dcc82753eef"
+  },
+  "COMPILATION.md": {
+    "mtime": 1789572660.3668342,
+    "ast_hash": "f4a6f0e96b2be6cd3b2fa05deb9b369b",
+    "semantic_hash": "f4a6f0e96b2be6cd3b2fa05deb9b369b"
+  }
+}

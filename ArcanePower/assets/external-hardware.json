@@ -1,0 +1,35 @@
+{
+  "vent_size_se": [
+    3,
+    1,
+    3
+  ],
+  "vent_meters": [
+    7.5,
+    2.5,
+    7.5
+  ],
+  "bore_radius_m": 1.86,
+  "outlet_leaf_drop_m": 0.3,
+  "outlet_leaf_slide_xy_m": 1.4,
+  "controller_size_se": [
+    1,
+    1,
+    1
+  ],
+  "controller_mating_blender": [
+    0,
+    -1.15,
+    0.17
+  ],
+  "controller_vertical_offset_m": 0.17,
+  "controller_pack_width_height_m": [
+    1.6,
+    1.0
+  ],
+  "controller_grid_centre_distance_m": 7.5,
+  "controller_skirt": "Mesh-sampled12mm mating seam; reduced depth within near-flush reactor socket surround; native anchors unchanged",
+  "controller_visible_projection_m": 0.26,
+  "tile_model": "ArcanePower_ContainmentTile",
+  "route": "Straight, same-grid and aligned with reactor Up; at most16 sections"
+}

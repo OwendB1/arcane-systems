@@ -58,7 +58,7 @@ assert.match(preview, /_results\[i\]\.Pass \|\| !IsDisplayable\(_results\[i\]\)/
 assert.match(statusHud, /ShouldShowOnHud/);
 assert.match(statusHud, /bool wroteHeader = false/);
 
-assert.match(apiData, /API_MINOR\s*=\s*5/);
+assert.match(apiData, /API_MINOR\s*=\s*6/);
 assert.match(apiData, /ProtoMember\(10\).*MaxCountPerDirection/);
 assert.match(apiData, /ProtoMember\(11\).*LimitVisibility/);
 assert.match(api, /MaxCountPerDirection = limit\.MaxCountPerDirection/);

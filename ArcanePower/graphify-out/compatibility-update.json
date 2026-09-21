@@ -1,0 +1,14 @@
+{
+  "scope": "Current runtime/authoring source replacement plus new compiler compatibility specification; historical document nodes retained as prior snapshots.",
+  "old_nodes": 540,
+  "new_nodes": 544,
+  "new_edges": 1159,
+  "files": [
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/TabletLink.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/tools/compile_mod.py",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/COMPILATION.md"
+  ],
+  "token_cost": "Host semantic usage unavailable; no external LLM calls.",
+  "regression_checks_run": false,
+  "game_reloaded": false
+}

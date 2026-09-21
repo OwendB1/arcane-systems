@@ -35,7 +35,7 @@ namespace ShipCoreFramework
         /// Increment when you add functionality in a backwards compatible way.
         /// Minor version changes remain compatible as long as the major version matches.
         /// </summary>
-        public const int API_MINOR = 5;
+        public const int API_MINOR = 6;
 
         /// <summary>
         /// Encoded API version (Major.Minor) packed into a single int.
@@ -329,6 +329,34 @@ namespace ShipCoreFramework
         /// Server only. Argument: long grid entity ID. Payload: float in kilograms.
         /// </summary>
         public const int GetGroupMass = 41;
+
+        /// <summary>
+        /// Overrides effective grid modifiers for a logical grid group.
+        /// Pass null to clear the override and restore the core/upgrade profile.
+        /// Server only. Argument: MyTuple&lt;long, GridModifiersData&gt;.
+        /// </summary>
+        public const int SetGridModifiersOverrideForGroup = 42;
+
+        /// <summary>
+        /// Overrides effective speed modifiers for a logical grid group.
+        /// Pass null to clear the override and restore the core/upgrade profile.
+        /// Server only. Argument: MyTuple&lt;long, SpeedModifiersData&gt;.
+        /// </summary>
+        public const int SetSpeedModifiersOverrideForGroup = 43;
+
+        /// <summary>
+        /// Overrides effective passive defense modifiers for a logical grid group.
+        /// Pass null to clear the override and restore the core/upgrade profile.
+        /// Server only. Argument: MyTuple&lt;long, GridDefenseModifiersData&gt;.
+        /// </summary>
+        public const int SetPassiveDefenseModifiersOverrideForGroup = 44;
+
+        /// <summary>
+        /// Overrides effective active defense modifiers for a logical grid group.
+        /// Pass null to clear the override and restore the core/upgrade profile.
+        /// Server only. Argument: MyTuple&lt;long, GridDefenseModifiersData&gt;.
+        /// </summary>
+        public const int SetActiveDefenseModifiersOverrideForGroup = 45;
     }
 
     // ===== Data Structures (DTOs) =====
@@ -616,7 +644,7 @@ namespace ShipCoreFramework
         [ProtoMember(8)] public float ThrusterEfficiency;
         [ProtoMember(9)] public float ThrusterForce;
     }
-    
+
     /// <summary>
     /// Speed modifiers data (movement/boost tuning).
     /// </summary>

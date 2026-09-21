@@ -1,0 +1,28 @@
+{
+  "Success": true,
+  "Data": {
+    "gets": [],
+    "sets": [],
+    "calls": [
+      {
+        "index": 0,
+        "success": true,
+        "data": {
+          "exists": true
+        }
+      },
+      {
+        "index": 1,
+        "success": true,
+        "data": {
+          "world": [
+            31.64285751789248,
+            11.789005739643471,
+            -25.80882068840947
+          ]
+        }
+      }
+    ]
+  },
+  "Error": null
+}
