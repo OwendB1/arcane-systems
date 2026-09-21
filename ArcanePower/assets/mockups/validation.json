@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "checks": [
+    "01 Gyroscopic reactors: 2/3/4 rings/controllers, animated transforms, vertical clearance at 4 poses",
+    "02 Column reactors: 2/3/4 rings/controllers, animated transforms, vertical clearance at 4 poses",
+    "Vent sequence: discharge hidden/open/hidden at start, flow, end",
+    "Compact scale study does not shrink the human reference"
+  ],
+  "limitations": "Geometric pose checks only; no exhaustive mesh collision, game export, particle, or runtime verification."
+}

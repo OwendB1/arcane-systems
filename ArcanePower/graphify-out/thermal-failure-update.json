@@ -1,0 +1,26 @@
+{
+  "scope": "Current runtime/authoring source replacement plus new thermal specification; historical document nodes retained as prior snapshots.",
+  "old_nodes": 342,
+  "new_nodes": 446,
+  "new_edges": 978,
+  "files": [
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/ContainmentController.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/CoreHazards.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Failure.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Fuel.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Motion.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Power.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Tiles.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.VentRoute.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/VentSession.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/build_physical_plasma.py",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/render_plasma_review.py",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/tools/prepare_lab.py",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/tools/build_animation_geometry.py",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/THERMAL-FAILURE.md"
+  ],
+  "token_cost": "Host semantic usage unavailable; no external LLM calls.",
+  "regression_checks_run": false,
+  "game_reloaded": false
+}

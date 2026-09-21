@@ -1,0 +1,96 @@
+[
+  {
+    "texture": "Textures/Models/Cubes/PaintedMetalDarker_cm.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/PaintedMetalDarker_cm_1e1f614f6075.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/AluminiumGlossy_ng.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/AluminiumGlossy_ng_508cd7dda036.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/AluminiumDull_ng.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/AluminiumDull_ng_e620c01e18d5.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Conveyor_ng.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/Conveyor_ng_f7352ae48282.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/EmissiveAtlas_add.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/EmissiveAtlas_add_cb5f065cbb90.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/EmissiveAtlas_ng.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/EmissiveAtlas_ng_199bdc963869.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/PaintedMetal_VeryDark_cm.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/PaintedMetal_VeryDark_cm_6346cb9e9a3b.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Atlas3_Colorable_ng.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/Atlas3_Colorable_ng_a9cf1f46d35b.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Atlas3_Colorable_add.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/Atlas3_Colorable_add_fb5dd488cff1.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Atlas3_alphamask.TIF",
+    "status": "no lost alpha"
+  },
+  {
+    "texture": "Textures/Models/Cubes/EmissiveAtlas_cm.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/EmissiveAtlas_cm_e17a34c19a7f.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Conveyor_cm.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/Conveyor_cm_76b92154b59c.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/PaintedMetalYellow_cm.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/PaintedMetalYellow_cm_85e091acabcd.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Aluminium_cm.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/Aluminium_cm_b7a0e3425fe8.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/PaintedMetalColorable_ng.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/PaintedMetalColorable_ng_fd86fbf928a4.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/PaintedMetalColorable_add.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/PaintedMetalColorable_add_5e9b7482c787.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Atlas3_Colorable_cm.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/Atlas3_Colorable_cm_7b04be139daf.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Conveyor_add.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/Conveyor_add_1a972a4d73dd.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/PaintedMetalColorable_cm.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/PaintedMetalColorable_cm_eb7a53208fbe.TIF"
+  }
+]

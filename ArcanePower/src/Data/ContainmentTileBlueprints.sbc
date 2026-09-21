@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions>
+  <Blueprints>
+    <Blueprint>
+      <Id>
+        <TypeId>BlueprintDefinition</TypeId>
+        <SubtypeId>ArcaneContainmentTiles</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Containment Tiles</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <BaseProductionTimeInSeconds>10</BaseProductionTimeInSeconds>
+      <Prerequisites>
+        <Item TypeId="Ingot" SubtypeId="Iron" Amount="2" />
+        <Item TypeId="Ingot" SubtypeId="Nickel" Amount=".1" />
+        <Item TypeId="Ingot" SubtypeId="Silicon" Amount=".2" />
+      </Prerequisites>
+      <Result TypeId="Component" SubtypeId="ArcaneContainmentTile" Amount="4" />
+    </Blueprint>
+  </Blueprints>
+  <BlueprintClassEntries>
+    <Entry Class="Components" BlueprintSubtypeId="ArcaneContainmentTiles" />
+  </BlueprintClassEntries>
+</Definitions>

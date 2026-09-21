@@ -54,7 +54,7 @@ assert.match(lcd, /if \(!group\.ShouldEvaluateBlockLimit\(limit\)\) continue;/);
 assert.match(runtime, /ProtoMember\(6\).*EvaluationDisabled/);
 assert.match(snapshot, /EvaluationDisabled = !ShouldEvaluateBlockLimit\(limit\)/);
 
-assert.match(apiData, /API_MINOR\s*=\s*5/);
+assert.match(apiData, /API_MINOR\s*=\s*6/);
 assert.match(apiData, /ProtoMember\(12\).*IgnoredByNpc/);
 assert.match(api, /IgnoredByNpc = limit\.IgnoredByNpc/);
 assert.match(api, /if \(!groupComponent\.ShouldEvaluateBlockLimit\(configuredLimit\)\) continue;/);

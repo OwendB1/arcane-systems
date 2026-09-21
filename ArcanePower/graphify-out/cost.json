@@ -1,0 +1,127 @@
+{
+  "runs": [
+    {
+      "date": "2026-09-13",
+      "files": 10,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-13",
+      "files": 17,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-13",
+      "files": 18,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-13",
+      "files": 20,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-13",
+      "files": 21,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-13",
+      "files": 26,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-13",
+      "files": 27,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-13",
+      "files": 29,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-13",
+      "files": 31,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-14",
+      "files": 35,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-14",
+      "files": 35,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-14",
+      "files": 35,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-14",
+      "files": 35,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-14",
+      "files": 38,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    },
+    {
+      "date": "2026-09-14",
+      "files": 45,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "measured": false,
+      "note": "Host tool exposes no subagent usage. Zeros are compatibility placeholders; token cost unknown."
+    }
+  ],
+  "total_input_tokens": 0,
+  "total_output_tokens": 0,
+  "token_usage_available": false
+}

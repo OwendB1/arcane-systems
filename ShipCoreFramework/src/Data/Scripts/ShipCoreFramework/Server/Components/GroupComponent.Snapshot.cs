@@ -159,6 +159,8 @@ namespace ShipCoreFramework
                 Limits = runtimeLimits.ToArray(),
                 Modifiers = ModAPI.ConvertToGridModifiersData(modifiers),
                 SpeedModifiers = ModAPI.ConvertToSpeedModifiersData(speedModifiers),
+                PassiveDefenseModifiers = ModAPI.ConvertToDefenseModifiersData(GetPassiveDefenseModifiers()),
+                ActiveDefenseModifiers = ModAPI.ConvertToDefenseModifiersData(GetActiveDefenseModifiers()),
                 BaseSpeed = baseSpeed,
                 EffectiveSpeed = effectiveSpeed,
                 SpeedSourceGridId = speedSourceGridId,

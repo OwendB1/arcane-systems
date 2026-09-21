@@ -19,7 +19,7 @@ const [models, worldSettings, blockActions, gridLimits, apiData, app, validation
 assert.doesNotMatch(models, /DisableDeletePunishmentRefunds|RefundDeletePunishments/);
 assert.doesNotMatch(worldSettings, /DisableDeletePunishmentRefunds|RefundDeletePunishments/);
 assert.match(models, /enum PunishmentType[\s\S]*Delete,[\s\S]*Explode,[\s\S]*DeleteWithoutRefund/);
-assert.match(apiData, /API_MINOR\s*=\s*5/);
+assert.match(apiData, /API_MINOR\s*=\s*6/);
 assert.match(apiData, /DeleteWithoutRefund = 4/);
 assert.match(blockActions, /RemoveAndRefund\(this IMySlimBlock block, bool refundComponents = true\)/);
 assert.match(blockActions, /RemoveAndRefund\(capturedBlock, refundComponents\)/);

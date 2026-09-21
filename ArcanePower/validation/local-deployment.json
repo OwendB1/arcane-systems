@@ -1,0 +1,452 @@
+{
+  "status": "symlinked",
+  "timestamp_utc": "2026-09-16T16:06:15.452395+00:00",
+  "target": "/home/owendb/.config/SpaceEngineers/Mods/ArcanePower-Prototype",
+  "models": [
+    "Models\\Cubes\\large\\ArcanePower_AdvancedContainmentController.mwm",
+    "Models\\Cubes\\large\\ArcanePower_BlastShield1.mwm",
+    "Models\\Cubes\\large\\ArcanePower_BlastShield2.mwm",
+    "Models\\Cubes\\large\\ArcanePower_BlastShield3.mwm",
+    "Models\\Cubes\\large\\ArcanePower_BlastShield4.mwm",
+    "Models\\Cubes\\large\\ArcanePower_BlastShield5.mwm",
+    "Models\\Cubes\\large\\ArcanePower_BlastShield6.mwm",
+    "Models\\Cubes\\large\\ArcanePower_ContainmentController.mwm",
+    "Models\\Cubes\\large\\ArcanePower_ContainmentTile.mwm",
+    "Models\\Cubes\\large\\ArcanePower_FloorLeaf.mwm",
+    "Models\\Cubes\\large\\ArcanePower_Plasma.mwm",
+    "Models\\Cubes\\large\\ArcanePower_ReactorPrototype.mwm",
+    "Models\\Cubes\\large\\ArcanePower_Ring1.mwm",
+    "Models\\Cubes\\large\\ArcanePower_Ring2.mwm",
+    "Models\\Cubes\\large\\ArcanePower_Ring3.mwm",
+    "Models\\Cubes\\large\\ArcanePower_Ring4.mwm",
+    "Models\\Cubes\\large\\ArcanePower_Tile1.mwm",
+    "Models\\Cubes\\large\\ArcanePower_Tile2.mwm",
+    "Models\\Cubes\\large\\ArcanePower_VentDuct.mwm",
+    "Models\\Cubes\\large\\ArcanePower_VentHatch.mwm",
+    "Models\\Cubes\\large\\ArcanePower_VentOutlet.mwm",
+    "Models\\Cubes\\large\\ArcanePower_VentVane.mwm",
+    "Models\\Items\\ArcanePower_Tablet.mwm"
+  ],
+  "game_reloaded": false,
+  "regression_checks_run": false,
+  "compilation": "python ArcanePower/tools/compile_mod.py: SE imports + MDK, zero warnings/errors; tablet-pose-hud-build.log",
+  "scope": "Fresh left grip mirror of current right grip in tablet-local coordinates; prior left-only rotations removed. Live source SBC edited, no game reload.",
+  "latest_changes": [
+    "Direct-script startup, normal shutdown, dual-axis gyroscopic rings, and finite vent cycle; no Animation Engine dependency",
+    "103 active subparts: 4 rings, 4 floor leaves, 80 tiles, plasma, 6 shield sleeves, 4 roof leaves and 4 inner ceiling leaves; obsolete 32 intake vane dummies removed",
+    "Paired four-leaf doors, 3.72m visual bore and lined connecting tube/pockets; centred top conveyor connection retained under custom hatch",
+    "Separate saved/synced gyro phases, perpendicular axes, distinct secondary rates and smooth two-axis shutdown braking",
+    "10-second output ramp after completed assembly; normal shutdown holds containment until heat <=15%, then brakes and dismantles",
+    "Actual fuel tiers I/II/III with native-conveyor inventory transfers and 10 GW / 100 GW / 1 TW rated outputs",
+    "Vent cuts power after shield closure, ejects containment and deployed rings, purges heat, closes and stays off until manual restart",
+    "Vent damage uses captured load and heat: reactor 1-15%, attached compatible modules 2-20% of maximum integrity, once per loaded vent",
+    "Neon emissives at 4x intensity; vent and incomplete pulse red/black, off red, starvation yellow, active fuel-tier colours",
+    "Load-scaled core bob/drift and irregular rotation; primary ring baseline 3x original, up to9x at full load",
+    "Sphere construction tier speeds 1x/1.5x/2x; mechanical sequences retain original timings",
+    "Glass baseline haze: ColorAdd RGBA .008/.009/.010/.025; existing native dirt and reflection settings retained",
+    "3x1x3 vent duct/outlet models and definitions; synchronized four-leaf outlet door with emissives",
+    "Selected 1.6m x1.0m standard/advanced piggyback packs with native upgrade detectors and 2.3m reactor socket surrounds",
+    "Thick triangular containment component, assembler recipe and five model-rendered icons",
+    "80 installed tiles reserved at startup, retained through shutdown, four-item maintenance batches dependent on tier/load/heat, consumed field discarded on vent; authoritative state saved/synced",
+    "Low-load spectator recordings of preceding reactor revision completed; reactor and both controllers repaired and verified after reload/resave",
+    "Native power sinks on physical containment controllers; adaptable priority-2 containment group",
+    "1/10/100MW upkeep, 90-second grid-charged shutdown reserve; startup waits for full precharge; blackout initiates shutdown, exhausted reserve pauses mechanisms",
+    "Explicit inventory whitelist and empty-slot tooltip accept Fuel I/II/III and containment tiles on server and clients",
+    "Saved/synced quartet maintenance launches from fixed dispensers into moving shell; normal shutdown completes an active replacement",
+    "Terminal power, reserve time, loose tile stock, restart shortfall and maintenance endurance information",
+    "Containment rotational amplitude raised from 0.75 to 6 degrees at idle, reaching 9.25 degrees at full load; translational wiggle/bob, motion frequencies and gyro rings unchanged.",
+    "Core now tumbles with slow continuous yaw/roll spin, broad unequal direction-reversing sweeps and smaller tilt adjustments. Reuses synchronized load-driven phase; brakes and realigns before dismantling. Positional wiggle/bob and rings unchanged.",
+    "Shared emissive intensity increased from4 to12 for reactor/subparts and vent outlet. One client-only 4.5m shadowless core light follows visible plasma, fuel/alarm colour, vent pulse and shutdown/ejection fades; removed on Close.",
+    "Heat-squared tile wear; exhausted replacement quartet limits output to 10% of captured load and raises burn to 10x that load.",
+    "125% supercritical threshold, irreversible saved fuse accelerated by peak heat; 5/20/100x large-warhead damage with cube-root radius.",
+    "Scripted launch hands off beyond outlet to physical spent rings/tiles and a physical plasma carrier; gravity and randomized launch/spin.",
+    "Generated fuel-tinted plasma texture, smooth sphere, open thick tile frames; seven freshly exported MWM/HKT models.",
+    "SCF-style LCD and equippable tablet share a grouped status report; tablet requires suit broadcast plus mutual native antenna link and player access; original item mesh/collision/material/icon/recipe exported.",
+    "Capture MotionState before grid snapshots; retain saved Enabled; prevent false containment/power shutdown during 120-frame native connection initialization.",
+    "Fully qualified the suit broadcast interface; compiler helper reproduces SE namespace imports with existing MDK analyzers.",
+    "Replaced copied mod folder with a live source symlink; prepare_lab.deploy now safely returns without copying or rewriting definitions through the link."
+  ],
+  "vent_runtime": "Straight same-grid vent chain up to 16 sections, aligned 3x1x3 duct/outlet blocks; terminal outlet leaves follow reactor Intake state. Ejection remains visual, without physical debris or obstacle damage; original reactor roof collider remains.",
+  "highlight_evidence": "Three retained inventory access mesh sections for two sides and bottom; top conveyor detector targets four VentHatch subparts. In-game highlight appearance unverified.",
+  "files_copied": 48,
+  "model_export": "Five updated scenes compiled to fresh MWM files; deployed hashes match. Existing SEUT W005 root-empty warnings and background bbox diagnostics remain. Five model icons re-rendered and converted to DDS; deployed bytes match.",
+  "latest_material_update": {
+    "file": "Data/TransparentMaterials.sbc",
+    "material": "ArcanePower_ClearChamber",
+    "color_add": [
+      0.008,
+      0.009,
+      0.01,
+      0.025
+    ],
+    "purpose": "Subtle cool-grey baseline haze independent of native dirt texture alpha",
+    "model_export_required": false,
+    "game_verified": false
+  },
+  "recordings": "recordings/recordings.json",
+  "repair": "recordings/repair.json",
+  "revision": "lab_06d121e6bcac",
+  "asset_export_evidence": "current-model-export.json",
+  "runtime_sha256": {
+    "Data/Scripts/ArcanePower/Reactor.cs": "b82bc98710d0d0187782dd53074204f63e1c8921b5f516dd66a656db16d53ee5",
+    "Data/Scripts/ArcanePower/AnimationGeometry.cs": "8fdffad982ef79036dc03d0f3c67768ebc93e4ce23f1d43b4080ffb6703a04d2",
+    "Data/Scripts/ArcanePower/Reactor.Motion.cs": "b6d86f9e8b2adcd2eba65fd5bed196805ecf06d9cd5866a426d6e2e0922e1e77",
+    "Data/Scripts/ArcanePower/VentSession.cs": "22353acbee3125d7c55875ab53ebed34c0d1c244222beb23d186f0ef813c7a22",
+    "Data/Scripts/ArcanePower/Reactor.Fuel.cs": "942f8edd6b57e4a632545cefe0b0f62694cc58afe03b71538b0b6c1b7d164881",
+    "Data/Scripts/ArcanePower/Reactor.Tiles.cs": "d5c551131cccfbda516ec6cbae16b370d08d0baf223675bd1c1b54ff34ff8e8a",
+    "Data/Scripts/ArcanePower/Reactor.VentRoute.cs": "75b3d4fbd857127efc38b04dada7aeb8adde1ef476348c860d86c775420b69cd",
+    "Data/Scripts/ArcanePower/ContainmentController.cs": "118cb0b52ad88c19c9c32346ffd4ce08be5385c8919b7b428b86f7ae30ad5e0b",
+    "Data/Scripts/ArcanePower/Reactor.Power.cs": "accfd74e3ddf148b1127c35ed5a6961e1729c44f0ebc35b5ca4a4e681d52b73e",
+    "Data/Scripts/ArcanePower/CoreHazards.cs": "545be9cbef4cbfd2c176555c91571e4d5c412e267550226e8cd534a161c72977",
+    "Data/Scripts/ArcanePower/Reactor.Failure.cs": "b914c2a43b8982a5a8f9ef3c540d36cd985313cf8ff6cc1b7b509f9e13b7d75b"
+  },
+  "texture_sha256": {
+    "ArcanePlasma_cm.dds": "997569611fb6ced609aaf45a73606d200ff14f9149e9b7bfe6e6ddac203dce95",
+    "ArcanePlasma_add.dds": "309e320d432322b364a85c0de43498d23d97ab5f63194424afe5491ac45df610",
+    "ArcanePlasma_ng.dds": "ea34d198149267b93b9ec4d3639a9d562b15736368f930e2b141221a8f00fc58"
+  },
+  "tablet_delivery_files": [
+    {
+      "path": "metadata.mod",
+      "sha256": "568258997f2586f7463422745bf4854bbabdc52fe68d2871d5f2aada49341589"
+    },
+    {
+      "path": "Data/PhysicalItems.sbc",
+      "sha256": "70f95028990c2e7070a3d22edd13f8668050a9bcd0e7bda744b5a3fbb643267b"
+    },
+    {
+      "path": "Data/Blueprints.sbc",
+      "sha256": "454513c3ccb44035c26fb0e51427967f85765aa6b71e0c82513c19e0d57562e9"
+    },
+    {
+      "path": "Data/BlockCategories.sbc",
+      "sha256": "367826148703e302a2765ab099f74001545f74daa17d321ea31ca762d63ff455"
+    },
+    {
+      "path": "Data/TransparentMaterials.sbc",
+      "sha256": "bd1066fb224a3ff224aca12f8da39cdc4642d7b10a20fae6dde1f51a0f17834f"
+    },
+    {
+      "path": "Data/EntityComponents.sbc",
+      "sha256": "e9928033463518840451355eadc73d9e133c13201382382671a3745bbf39d329"
+    },
+    {
+      "path": "Data/ContainmentTiles.sbc",
+      "sha256": "90916ffca20c8e8aede48230b2fd842cf82b03ad192a79cde10f594683a3a9f7"
+    },
+    {
+      "path": "Data/ContainmentTileBlueprints.sbc",
+      "sha256": "827e85985a47844e2852af3c9a06a0ea964502662b978390f98aeea7d7a939eb"
+    },
+    {
+      "path": "Data/ResourceDistributionGroups.sbc",
+      "sha256": "598c4cb9506ef63218eca88ae27cd43365c1cb1d759986f56250d4bda863137b"
+    },
+    {
+      "path": "Data/EjectedContainment.sbc",
+      "sha256": "1d34730a808e25df8bf9749e0b76b22710677628d6cdf1c9d95456a8cfd61542"
+    },
+    {
+      "path": "Data/Tablet.sbc",
+      "sha256": "f5b45c45c5d7b8135becebe86c7c616b78525be238e106181de6d989b81e6d15"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcanePlasma_cm.dds",
+      "sha256": "997569611fb6ced609aaf45a73606d200ff14f9149e9b7bfe6e6ddac203dce95"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcanePlasma_add.dds",
+      "sha256": "309e320d432322b364a85c0de43498d23d97ab5f63194424afe5491ac45df610"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcanePlasma_ng.dds",
+      "sha256": "ea34d198149267b93b9ec4d3639a9d562b15736368f930e2b141221a8f00fc58"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcaneTabletScreen_cm.dds",
+      "sha256": "12af75119f8ff69373656c0329b5c936c1d5e12cab1eb91379da67a9535bbf1b"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcaneTabletScreen_add.dds",
+      "sha256": "a9072b0f83662a070bdc9dc7d408fe875cbf80655408a4be516abb40af863ff1"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcaneTabletScreen_ng.dds",
+      "sha256": "a7032ef4f8665d151f5517ea848007f115dfd1273646eff5c7433f56814c3c89"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcaneTabletLight_cm.dds",
+      "sha256": "e079d965c4bc7d7516d5784321fa8e6fb3db6aebd06835cc5c73193cd039cb1d"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcaneTabletLight_add.dds",
+      "sha256": "309e320d432322b364a85c0de43498d23d97ab5f63194424afe5491ac45df610"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcaneTabletLight_ng.dds",
+      "sha256": "d39219830653b09eaed08ebb507ed14c3b048ba85efca998661f58c58f84e598"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcaneTabletCard_cm.dds",
+      "sha256": "170dbf292c03e87219d1ba5c04f6867c80a00e3f568e8f3d26ddfd3f44904cc0"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcaneTabletCard_add.dds",
+      "sha256": "a9072b0f83662a070bdc9dc7d408fe875cbf80655408a4be516abb40af863ff1"
+    },
+    {
+      "path": "Textures/Models/ArcanePower/ArcaneTabletCard_ng.dds",
+      "sha256": "96f1fba162ac9302774ffca34bab8c3d1167fe9d6f33fa493d3d30a1bb04e702"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcaneContainmentTile.dds",
+      "sha256": "fa5a7fe0bf77054ebfc2d8f6b0f03d9cd1af788247330a754d3c5d85ba15f5bf"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcaneContainmentController.dds",
+      "sha256": "54210904970681e196b3c0698aa36843b6a81bb53088d3ee59c24640d75e46bd"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcaneAdvancedContainmentController.dds",
+      "sha256": "340b25c466acde0c494593bf50dcb6531422e5163e6838e87b263169d8692d80"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcaneVentDuct.dds",
+      "sha256": "80c722c4a686f00d277186cf4e3248eb75ff4c7fc7d1fc8c087cedfbbedd69b6"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcaneVentOutlet.dds",
+      "sha256": "407933ae6900424587c1809789b23ed50de4ee8cd052279acecf4ecad6e8fa36"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Tablet.dds",
+      "sha256": "c90b2bfd9c67d13efcbf4cfb80c42dd5ab5d2e6722038a68823b83b93d58d212"
+    },
+    {
+      "path": "Models/Items/ArcanePower_Tablet.mwm",
+      "sha256": "511006aec74549dd247f91b1a5f22ed07c166e840039136901388bc6f95b8eb3"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_Ring1.mwm",
+      "sha256": "ff4c23250b02c87fca064147300a5592eaa005ca5f883dba03fc5f6eb561db93"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_Ring2.mwm",
+      "sha256": "3331dd7d991f3e5f538c6de0369e8187262943fd50834b25246c0b163ef585dc"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_ReactorPrototype.mwm",
+      "sha256": "860e5ccf22289b11a613f0b46892d94ad8cd9bb4c663659d4c10d2587c35f03b"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_ContainmentController.mwm",
+      "sha256": "09680323bf5c6eae11ee8a99138dae5c00bbe0017f99b7f09b2b570ac1db5f75"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_Ring3.mwm",
+      "sha256": "56f4d3565db3739933212f9af2ee39c6e055e830028fadbee2941ef2f4623438"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_Ring4.mwm",
+      "sha256": "a2174b06027d9f8f218d804d2a6bf4fdedaee027d5f92b0abae59bdc10feb7e6"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_FloorLeaf.mwm",
+      "sha256": "06b723eb65d7f8e043afa381eae44d4f8e183ae61db3192db1991c4ce7ae4f16"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_Tile1.mwm",
+      "sha256": "e517f1e52fc69f31842140082ef261bfea03367b4f46c8df26cef8132972937a"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_Tile2.mwm",
+      "sha256": "269a831182e2d456a1abec3ca7184aff9f46fd108caa647649e1606bf01cf457"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_Plasma.mwm",
+      "sha256": "b1fcf6188b83f5089ebabc2ca6b7e95e3d6d4e95b051cb3e09e1e957a6eedbec"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_BlastShield1.mwm",
+      "sha256": "bd43ba0ab3f8d6a6ab1c29a0a53fbf9f56375e775c68ec3b5597b592c112af9c"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_BlastShield2.mwm",
+      "sha256": "18842a96d2d7182df153f942c08f3ef8aee9ad70694efb8eb23e86bbcc3c0b4f"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_BlastShield3.mwm",
+      "sha256": "27289612f4b1fe47fd909a3a01490ba02a77ca58f99b0332fcd8ee65d304fd7b"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_BlastShield4.mwm",
+      "sha256": "3c10437724a8119168ce8375e764d72b10d2038ae4a3696806b2f1ef3f4d319d"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_BlastShield5.mwm",
+      "sha256": "54063f5251dee5ad059c9d58d521d7d245242ac03078c9ac7cbe63fed8e3986f"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_BlastShield6.mwm",
+      "sha256": "fec55c8dd680825aa17a1a52b9becd2071621d1c2455ce208053bbc81fd60c3f"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentVane.mwm",
+      "sha256": "fdf37a9fcc0d573ae719157d7c2c95abb7e0e5c3c4ec961da0c444721ad462c7"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentHatch.mwm",
+      "sha256": "2c88a4bf71d5bf0b59424698f03eca51c75454122aa251554393b0e26c25484c"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentDuct.mwm",
+      "sha256": "37cb60fe31ec34a97d22b8888d931ecd39b50114b7e133c52ce13f28dee07b0c"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentOutlet.mwm",
+      "sha256": "538fa50917bb4ae1f285f599530888f9cd388e852cc5d757a9d943464637bd30"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController.mwm",
+      "sha256": "ffade84b0154cd98331c8a043edc6beaffada29309688cb3be2c967255d6f346"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_ContainmentTile.mwm",
+      "sha256": "fea145648472798c8719b0f0f93c187cc1d8713f8eb22e110e19eac85d51bbf4"
+    },
+    {
+      "path": "Data/CubeBlocks/ArcanePower_ReactorPrototype.sbc",
+      "sha256": "bab895f8e2dfd2892e7e721c5c2bfda4cefc99c69c1ac2595a99d229900aefe4"
+    },
+    {
+      "path": "Data/CubeBlocks/ArcanePower_ContainmentController.sbc",
+      "sha256": "a9f8d9a239b53a334ef230dd8962ee02dfd7dabfc5bb716f15817ffa3eebbe76"
+    },
+    {
+      "path": "Data/CubeBlocks/ArcanePower_Vents.sbc",
+      "sha256": "6db0447247dbee7161525b3e1bb5780861f267acda14bf2860bcb87de064555a"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.cs",
+      "sha256": "0f6068a466cc88bbbe830ce2f4c7e1974139e0e48bdc2805797275b3da6701f3"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/AnimationGeometry.cs",
+      "sha256": "8fdffad982ef79036dc03d0f3c67768ebc93e4ce23f1d43b4080ffb6703a04d2"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.Motion.cs",
+      "sha256": "84a34c874c2970d81307aedb20ed8936b5cdf6274d2af1a664039ccb3bee2e48"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/VentSession.cs",
+      "sha256": "5f233bd698802752e321d21eb1990db8f2aa2f6c1a4f4f715bdd74f0335d0e83"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.Fuel.cs",
+      "sha256": "6930361360a8d8ebb87ef08372a195ffdf8eeda756e243321c703fa275dd0159"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.Tiles.cs",
+      "sha256": "cb409297ce31921703a241478e47f5a80bfffffc92b8577bb4380801ab502b56"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.VentRoute.cs",
+      "sha256": "75b3d4fbd857127efc38b04dada7aeb8adde1ef476348c860d86c775420b69cd"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/ContainmentController.cs",
+      "sha256": "118cb0b52ad88c19c9c32346ffd4ce08be5385c8919b7b428b86f7ae30ad5e0b"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.Power.cs",
+      "sha256": "d8dd6be62b3fe5b6fa5f52515276d03ae7a263318113f7e39272e755014ff167"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/CoreHazards.cs",
+      "sha256": "2ced4d5bec4b21b6c518b8e9ff0e06e62deabd683a541a75a840fc2c321a3a36"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.Failure.cs",
+      "sha256": "b914c2a43b8982a5a8f9ef3c540d36cd985313cf8ff6cc1b7b509f9e13b7d75b"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.Status.cs",
+      "sha256": "c7febb5f31778d4fcecd553c1461337c85d7b009d82c64ecfe3f9a34c601b149"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/ReactorDashboard.cs",
+      "sha256": "ead9e5e23bc96158aa6e7cecd6afb693d7e230cd8eca11881bdf8573d92e0e20"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/ReactorLcd.cs",
+      "sha256": "494498ac1005a5d3bb021033818db9091e6b51fa29d18e640e2b99dea268e1a7"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/HudAPIv2.cs",
+      "sha256": "bd9bd9ce639751e8fdc04275501f42277afb68cd81ad5b8e2d37b912652e6ca4"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/ReactorTablet.cs",
+      "sha256": "4c3bab031a766da485d6b1e02f68ebbc2fc702f72ac56392caa2b2854f6f8fdf"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/TabletLink.cs",
+      "sha256": "565402925e0e59de929b6659dcb4c51ac1a1031cf2196e5eae81069e3ea764d1"
+    }
+  ],
+  "persistence_delivery_files": [
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.cs",
+      "sha256": "0f6068a466cc88bbbe830ce2f4c7e1974139e0e48bdc2805797275b3da6701f3"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.Motion.cs",
+      "sha256": "84a34c874c2970d81307aedb20ed8936b5cdf6274d2af1a664039ccb3bee2e48"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.Fuel.cs",
+      "sha256": "6930361360a8d8ebb87ef08372a195ffdf8eeda756e243321c703fa275dd0159"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.Power.cs",
+      "sha256": "d8dd6be62b3fe5b6fa5f52515276d03ae7a263318113f7e39272e755014ff167"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/Reactor.Status.cs",
+      "sha256": "c7febb5f31778d4fcecd553c1461337c85d7b009d82c64ecfe3f9a34c601b149"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/VentSession.cs",
+      "sha256": "5f233bd698802752e321d21eb1990db8f2aa2f6c1a4f4f715bdd74f0335d0e83"
+    }
+  ],
+  "compatibility_fix": {
+    "path": "Data/Scripts/ArcanePower/TabletLink.cs",
+    "sha256": "565402925e0e59de929b6659dcb4c51ac1a1031cf2196e5eae81069e3ea764d1",
+    "reproduced_before_fix": true,
+    "game_reloaded": false,
+    "regression_checks_run": false
+  },
+  "tablet_pose_delivery": {
+    "path": "Data/Tablet.sbc",
+    "sha256": "f5b45c45c5d7b8135becebe86c7c616b78525be238e106181de6d989b81e6d15",
+    "deployment_mode": "live_source_symlink",
+    "game_reloaded": false,
+    "validation": "Only left-hand origin/orientation patched from current right-hand values; game pose review pending."
+  },
+  "tablet_pose_hud_delivery": [
+    {
+      "path": "Data/Tablet.sbc",
+      "sha256": "f5b45c45c5d7b8135becebe86c7c616b78525be238e106181de6d989b81e6d15"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/ReactorTablet.cs",
+      "sha256": "4c3bab031a766da485d6b1e02f68ebbc2fc702f72ac56392caa2b2854f6f8fdf"
+    }
+  ],
+  "deployment_mode": "live_source_symlink",
+  "source": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src",
+  "backup": "/home/owendb/.config/SpaceEngineers/ModBackups/ArcanePower-Prototype-before-symlink-20260916T155829813287Z",
+  "model_path_mode": "Repository definitions use stable model paths. Previous copied deployment and cache-version paths remain only in the backup."
+}

@@ -1,0 +1,10 @@
+{
+  "mode": "generate",
+  "tool": "image_gen.imagegen",
+  "source": "plasma-filaments-source.png",
+  "purpose": "Monochrome emissive colour texture for runtime cyan/amber/violet plasma sphere",
+  "prompt": "Create a production-ready seamless equirectangular 2:1 grayscale emissive plasma texture map. Bright branching electric arcs, tangled luminous filaments and molten wisps flow over charcoal voids. Edge-to-edge texture only: no orb silhouette, no hardware, no baked directional lighting, no text. Horizontal edges should join for wrapping around a sphere. Strong contrast with fine detail and some broad turbulent structure. The texture will be tinted cyan, amber or violet by the game shader.",
+  "prompt_note": "Recorded reconstruction of the generation brief; the exact tool request is in the session image-generation call.",
+  "technical_conversion": "Blender resized to 2048x1024 and packed CM alpha=0, ADD=(1,1,0,0), NG=(0.5,0.5,1,0); SEUT generated DDS. Technical maps use Non-Color data.",
+  "source_sha256": "5147950ae20cf71bc918a3cde777d06e50efb1da0e84fbbb538b72e5ea2f822f"
+}

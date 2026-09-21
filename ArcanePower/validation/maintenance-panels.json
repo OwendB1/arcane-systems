@@ -1,0 +1,102 @@
+{
+  "panels": [
+    {
+      "name": "SEUT / Maintenance Box.025",
+      "armor_panel": "Drum segmented armor.043",
+      "vertices": 169,
+      "maximum_reseat_m": 0.039669162505367506
+    },
+    {
+      "name": "SEUT / Maintenance Box.026",
+      "armor_panel": "Drum segmented armor.044",
+      "vertices": 169,
+      "maximum_reseat_m": 0.03966865260571526
+    },
+    {
+      "name": "SEUT / Maintenance Box.027",
+      "armor_panel": "Drum segmented armor.045",
+      "vertices": 169,
+      "maximum_reseat_m": 0.03966905025463977
+    },
+    {
+      "name": "SEUT / Maintenance Box.028",
+      "armor_panel": "Drum segmented armor.046",
+      "vertices": 169,
+      "maximum_reseat_m": 0.039669162505367506
+    },
+    {
+      "name": "SEUT / Maintenance Box.031",
+      "armor_panel": "Drum segmented armor.025",
+      "vertices": 169,
+      "maximum_reseat_m": 0.039669162505367506
+    },
+    {
+      "name": "SEUT / Maintenance Box.032",
+      "armor_panel": "Drum segmented armor.026",
+      "vertices": 169,
+      "maximum_reseat_m": 0.03966905025463977
+    },
+    {
+      "name": "SEUT / Maintenance Box.033",
+      "armor_panel": "Drum segmented armor.027",
+      "vertices": 169,
+      "maximum_reseat_m": 0.03966905025463977
+    },
+    {
+      "name": "SEUT / Maintenance Box.034",
+      "armor_panel": "Drum segmented armor.028",
+      "vertices": 169,
+      "maximum_reseat_m": 0.03966926925331393
+    },
+    {
+      "name": "SEUT / Maintenance Box.037",
+      "armor_panel": "Drum segmented armor.031",
+      "vertices": 169,
+      "maximum_reseat_m": 0.039669162505367506
+    },
+    {
+      "name": "SEUT / Maintenance Box.038",
+      "armor_panel": "Drum segmented armor.032",
+      "vertices": 169,
+      "maximum_reseat_m": 0.039668551725511036
+    },
+    {
+      "name": "SEUT / Maintenance Box.039",
+      "armor_panel": "Drum segmented armor.033",
+      "vertices": 169,
+      "maximum_reseat_m": 0.039668551725511036
+    },
+    {
+      "name": "SEUT / Maintenance Box.040",
+      "armor_panel": "Drum segmented armor.034",
+      "vertices": 169,
+      "maximum_reseat_m": 0.03966863022867392
+    },
+    {
+      "name": "SEUT / Maintenance Box.043",
+      "armor_panel": "Drum segmented armor.037",
+      "vertices": 169,
+      "maximum_reseat_m": 0.039669162505367506
+    },
+    {
+      "name": "SEUT / Maintenance Box.044",
+      "armor_panel": "Drum segmented armor.038",
+      "vertices": 169,
+      "maximum_reseat_m": 0.039668551725511036
+    },
+    {
+      "name": "SEUT / Maintenance Box.045",
+      "armor_panel": "Drum segmented armor.039",
+      "vertices": 169,
+      "maximum_reseat_m": 0.03966865260571526
+    },
+    {
+      "name": "SEUT / Maintenance Box.046",
+      "armor_panel": "Drum segmented armor.040",
+      "vertices": 169,
+      "maximum_reseat_m": 0.03966926925331393
+    }
+  ],
+  "clearance_m": 0.0015,
+  "scope": "Blender surface projection, native UVs retained"
+}

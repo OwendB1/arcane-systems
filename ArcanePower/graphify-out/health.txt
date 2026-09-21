@@ -1,0 +1,34 @@
+[graphify] MultiDiGraph edge-collapse diagnostic
+input: <in-memory>
+input_stage: provided JSON (normal graph.json is post-build)
+effective_directed: <direct-call>
+nodes: 342
+raw_edges: 737
+valid_candidate_edges: 737
+missing_endpoint_edges: 0
+dangling_endpoint_edges: 0
+self_loop_edges: 0
+exact_duplicate_edges: 0
+directed_unique_endpoint_pairs: 737
+directed_same_endpoint_collapsed_edges: 0
+undirected_unique_endpoint_pairs: 737
+undirected_same_endpoint_collapsed_edges: 0
+same_endpoint_group_count: 0
+relation_variant_groups: 0
+source_file_variant_groups: 0
+source_location_variant_groups: 0
+context_variant_groups: 0
+post_build_graph_type: Graph
+post_build_edges: 737
+producer_suppression_sites: 60
+producer_suppression_examples:
+  - L1952 seen_dyn_pairs arity=unknown
+  - L3496 seen_ids arity=unknown
+  - L3701 seen_swift_base arity=unknown
+  - L3736 seen_swift_base arity=unknown
+  - L4902 seen_call_pairs arity=2
+  - L4903 seen_indirect_pairs arity=2
+  - L4904 seen_dyn_import_pairs arity=2
+  - L4905 seen_static_ref_pairs arity=3
+note: normal graph.json is post-build; raw producer loss must be measured earlier.
+This is the post-merge graph structure. Per-source replace-on-re-extraction is recorded in incremental-update.json. No runtime checks were run.

@@ -103,6 +103,8 @@ namespace ShipCoreFramework
 
             _cachedActiveGridModifiers = nextModifiers;
             _cachedActiveSpeedModifiers = FromRuntimeData(state.SpeedModifiers);
+            _cachedPassiveDefenseModifiers = FromRuntimeData(state.PassiveDefenseModifiers);
+            _cachedActiveDefenseModifiers = FromRuntimeData(state.ActiveDefenseModifiers);
             _modifierStateCacheDirty = false;
             PublishRuntimeLimits(state.Limits);
             ApplyRuntimeCore(state.MainCoreBlockId);
@@ -410,6 +412,23 @@ namespace ShipCoreFramework
                 CruiseAccelerationThreshold = value.CruiseAccelerationThreshold,
                 FrictionCurve = FromRuntimeData(value.FrictionCurve),
                 AtmosphericFriction = FromRuntimeData(value.AtmosphericFriction)
+            };
+        }
+
+        private static GridDefenseModifiers FromRuntimeData(GridDefenseModifiersData value)
+        {
+            if (value == null) return new GridDefenseModifiers();
+            return new GridDefenseModifiers
+            {
+                Bullet = value.Bullet,
+                PostShield = value.PostShield,
+                Duration = value.Duration,
+                Cooldown = value.Cooldown,
+                Rocket = value.Rocket,
+                Explosion = value.Explosion,
+                Environment = value.Environment,
+                Energy = value.Energy,
+                Kinetic = value.Kinetic
             };
         }
     }

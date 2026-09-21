@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<Model Name="ArcanePower_Tablet">
+	<Parameter Name="RescaleFactor">1.0</Parameter>
+	<Parameter Name="Centered">false</Parameter>
+	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
+	<MaterialRef Name="PaintedMetal_Colorable"/>
+	<MaterialRef Name="PaintedMetal_Darker"/>
+	<MaterialRef Name="PaintedMetal_VeryDark"/>
+	<Material Name="ArcaneTabletScreen">
+		<Parameter Name="Technique">MESH</Parameter>
+		<Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/ArcaneTabletScreen_cm.dds</Parameter>
+		<Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/ArcaneTabletScreen_ng.dds</Parameter>
+		<Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/ArcaneTabletScreen_add.dds</Parameter>
+	</Material>
+	<MaterialRef Name="Metal_Dull"/>
+	<MaterialRef Name="Metal_Shiny"/>
+	<Material Name="ArcaneTabletLight">
+		<Parameter Name="Technique">MESH</Parameter>
+		<Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/ArcaneTabletLight_cm.dds</Parameter>
+		<Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/ArcaneTabletLight_ng.dds</Parameter>
+		<Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/ArcaneTabletLight_add.dds</Parameter>
+	</Material>
+	<Material Name="ArcaneTabletCard">
+		<Parameter Name="Technique">MESH</Parameter>
+		<Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/ArcaneTabletCard_cm.dds</Parameter>
+		<Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/ArcaneTabletCard_ng.dds</Parameter>
+		<Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/ArcaneTabletCard_add.dds</Parameter>
+	</Material>
+</Model>

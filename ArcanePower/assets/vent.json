@@ -1,0 +1,141 @@
+{
+  "stages": [
+    {
+      "name": "BlastShield1",
+      "scene": "ArcanePower_BlastShield1",
+      "inner_radius": 2.499,
+      "outer_radius": 2.5540000000000003,
+      "park_z": 2.48,
+      "height": 0.82,
+      "travel_m": 0.6408333333333334,
+      "deployed_bottom": 1.8391666666666666
+    },
+    {
+      "name": "BlastShield2",
+      "scene": "ArcanePower_BlastShield2",
+      "inner_radius": 2.384,
+      "outer_radius": 2.439,
+      "park_z": 2.505,
+      "height": 0.82,
+      "travel_m": 1.2816666666666667,
+      "deployed_bottom": 1.2233333333333332
+    },
+    {
+      "name": "BlastShield3",
+      "scene": "ArcanePower_BlastShield3",
+      "inner_radius": 2.269,
+      "outer_radius": 2.3240000000000003,
+      "park_z": 2.53,
+      "height": 0.82,
+      "travel_m": 1.9225,
+      "deployed_bottom": 0.6074999999999997
+    },
+    {
+      "name": "BlastShield4",
+      "scene": "ArcanePower_BlastShield4",
+      "inner_radius": 2.154,
+      "outer_radius": 2.209,
+      "park_z": 2.555,
+      "height": 0.82,
+      "travel_m": 2.5633333333333335,
+      "deployed_bottom": -0.008333333333333304
+    },
+    {
+      "name": "BlastShield5",
+      "scene": "ArcanePower_BlastShield5",
+      "inner_radius": 2.039,
+      "outer_radius": 2.0940000000000003,
+      "park_z": 2.58,
+      "height": 0.82,
+      "travel_m": 3.2041666666666666,
+      "deployed_bottom": -0.6241666666666665
+    },
+    {
+      "name": "BlastShield6",
+      "scene": "ArcanePower_BlastShield6",
+      "inner_radius": 1.924,
+      "outer_radius": 1.9789999999999999,
+      "park_z": 2.605,
+      "height": 0.82,
+      "travel_m": 3.845,
+      "deployed_bottom": -1.2400000000000002
+    }
+  ],
+  "floor_trace_outer_radius": 1.92,
+  "ceiling_pocket": [
+    1.91,
+    2.65,
+    2.3,
+    3.5
+  ],
+  "emissive_material": "Emissive",
+  "status": "Paired inner/outer four-leaf vent doors with lined connecting barrel and retraction pockets",
+  "intake": {
+    "count": 0,
+    "model": "ArcanePower_VentVane",
+    "pivot_radius": 1.5125,
+    "pivot_z": 2.49,
+    "angle_degrees": 80,
+    "axis": "subpart local X",
+    "radial_slide_m": 0.6,
+    "status": "Superseded by the four CeilingHatch leaves; shared Intake clock retained"
+  },
+  "hatch": {
+    "count": 4,
+    "model": "ArcanePower_VentHatch",
+    "bore_radius_m": 1.86,
+    "park_z": 3.58,
+    "drop_m": 0.3,
+    "slides": [
+      [
+        1.9500000476837158,
+        1.9500000476837158,
+        0.0
+      ],
+      [
+        -1.9499999284744263,
+        1.9500001668930054,
+        0.0
+      ],
+      [
+        -1.9500001668930054,
+        -1.9499999284744263,
+        0.0
+      ],
+      [
+        1.9500001668930054,
+        -1.9499999284744263,
+        0.0
+      ]
+    ]
+  },
+  "ceiling_hatch": {
+    "count": 4,
+    "model": "ArcanePower_VentHatch",
+    "park_z": 2.365,
+    "lift_m": 0.32,
+    "slides": [
+      [
+        -1.1920928955078125e-07,
+        1.9798989295959473,
+        0.0
+      ],
+      [
+        -1.9798989295959473,
+        -4.76837158203125e-07,
+        0.0
+      ],
+      [
+        -4.76837158203125e-07,
+        -1.9798989295959473,
+        0.0
+      ],
+      [
+        1.9798990488052368,
+        -1.0728836059570312e-06,
+        0.0
+      ]
+    ],
+    "bore_radius_m": 1.86
+  }
+}

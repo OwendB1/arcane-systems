@@ -1146,7 +1146,7 @@ namespace ShipCoreFramework
             };
         }
 
-        private static GridDefenseModifiersData ConvertToDefenseModifiersData(GridDefenseModifiers modifiers)
+        internal static GridDefenseModifiersData ConvertToDefenseModifiersData(GridDefenseModifiers modifiers)
         {
             if (modifiers == null)
             {
@@ -1165,6 +1165,101 @@ namespace ShipCoreFramework
             }
 
             return new GridDefenseModifiersData
+            {
+                Bullet = modifiers.Bullet,
+                PostShield = modifiers.PostShield,
+                Duration = modifiers.Duration,
+                Cooldown = modifiers.Cooldown,
+                Rocket = modifiers.Rocket,
+                Explosion = modifiers.Explosion,
+                Environment = modifiers.Environment,
+                Energy = modifiers.Energy,
+                Kinetic = modifiers.Kinetic
+            };
+        }
+
+        internal static GridModifiers ConvertFromGridModifiersData(GridModifiersData modifiers)
+        {
+            if (modifiers == null) return null;
+
+            return new GridModifiers
+            {
+                AssemblerSpeed = modifiers.AssemblerSpeed,
+                DrillHarvestMultiplier = modifiers.DrillHarvestMultiplier,
+                GyroEfficiency = modifiers.GyroEfficiency,
+                GyroForce = modifiers.GyroForce,
+                PowerProducersOutput = modifiers.PowerProducersOutput,
+                RefineEfficiency = modifiers.RefineEfficiency,
+                RefineSpeed = modifiers.RefineSpeed,
+                ThrusterEfficiency = modifiers.ThrusterEfficiency,
+                ThrusterForce = modifiers.ThrusterForce
+            };
+        }
+
+        internal static SpeedModifiers ConvertFromSpeedModifiersData(SpeedModifiersData modifiers)
+        {
+            if (modifiers == null) return null;
+
+            return new SpeedModifiers
+            {
+                MaxSpeed = modifiers.MaxSpeed,
+                MaxAngularVelocity = modifiers.MaxAngularVelocity,
+                MaxBoost = modifiers.MaxBoost,
+                BoostDuration = modifiers.BoostDuration,
+                BoostCoolDown = modifiers.BoostCoolDown,
+                MinimumFrictionSpeedAbsolute = modifiers.MinimumFrictionSpeedAbsolute,
+                MaximumFrictionSpeedAbsolute = modifiers.MaximumFrictionSpeedAbsolute,
+                MinimumFrictionSpeedModifier = modifiers.MinimumFrictionSpeedModifier,
+                MaximumFrictionSpeedModifier = modifiers.MaximumFrictionSpeedModifier,
+                MaximumFrictionDeceleration = modifiers.MaximumFrictionDeceleration,
+                CruiseFrictionMultiplier = modifiers.CruiseFrictionMultiplier,
+                CruiseAccelerationThreshold = modifiers.CruiseAccelerationThreshold,
+                FrictionCurve = ConvertFromFrictionCurveData(modifiers.FrictionCurve),
+                AtmosphericFriction = ConvertFromAtmosphericFrictionData(modifiers.AtmosphericFriction)
+            };
+        }
+
+        private static FrictionCurve ConvertFromFrictionCurveData(FrictionCurveSegmentData[] segments)
+        {
+            if (segments == null || segments.Length == 0) return null;
+
+            var result = new FrictionCurve { Segments = new FrictionCurveSegment[segments.Length] };
+            for (var i = 0; i < segments.Length; i++)
+            {
+                var segment = segments[i];
+                if (segment == null) continue;
+                result.Segments[i] = new FrictionCurveSegment
+                {
+                    StartSpeed = segment.StartSpeed,
+                    EndSpeed = segment.EndSpeed,
+                    StartDeceleration = segment.StartDeceleration,
+                    EndDeceleration = segment.EndDeceleration
+                };
+            }
+            return result;
+        }
+
+        private static AtmosphericFrictionSettings ConvertFromAtmosphericFrictionData(
+            AtmosphericFrictionData settings)
+        {
+            if (settings == null) return null;
+
+            return new AtmosphericFrictionSettings
+            {
+                Enabled = settings.Enabled,
+                FrictionCurve = ConvertFromFrictionCurveData(settings.FrictionCurve),
+                CruiseFrictionMultiplier = settings.CruiseFrictionMultiplier,
+                CruiseAccelerationThreshold = settings.CruiseAccelerationThreshold,
+                AirDensityThreshold = settings.AirDensityThreshold
+            };
+        }
+
+        internal static GridDefenseModifiers ConvertFromDefenseModifiersData(
+            GridDefenseModifiersData modifiers)
+        {
+            if (modifiers == null) return null;
+
+            return new GridDefenseModifiers
             {
                 Bullet = modifiers.Bullet,
                 PostShield = modifiers.PostShield,

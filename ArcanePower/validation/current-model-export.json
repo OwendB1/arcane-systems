@@ -1,0 +1,7 @@
+{
+  "latest_revision": "lab_64ff9a73f168",
+  "scope": "Seven plasma/tile/ring exports; main housing/controller/vent geometry retained from preceding delivery.",
+  "evidence": "physical-plasma-export.json",
+  "game_reloaded": false,
+  "regression_checks_run": false
+}

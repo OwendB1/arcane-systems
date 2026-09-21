@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions>
+  <CubeBlocks>
+    <Definition>
+      <Id>
+        <TypeId>Conveyor</TypeId>
+        <SubtypeId>ArcanePower_VentDuct</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Vent Duct</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneVentDuct.dds</Icon>
+      <Description>Stack matching vent sections above the reactor and finish with an Arcane Vent Outlet. The outlet opens during venting. Central connections also carry conveyor items.</Description>
+      <GuiVisible>true</GuiVisible>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="1" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/ArcanePower_VentDuct.mwm</Model>
+      <Components>
+        <Component Subtype="InteriorPlate" Count="10" />
+        <Component Subtype="Construction" Count="20" />
+        <Component Subtype="SmallTube" Count="20" />
+        <Component Subtype="Motor" Count="6" />
+        <Component Subtype="Construction" Count="10" />
+        <Component Subtype="InteriorPlate" Count="10" />
+      </Components>
+      <CriticalComponent Subtype="Motor" Index="0" />
+      <BlockPairName>ArcanePower_VentDuct</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>30</BuildTimeSeconds>
+      <DamageEffectName>Damage_HeavyMech_Damaged</DamageEffectName>
+      <DamagedSound>ParticleHeavyMech</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyed_Large</DestroyEffect>
+      <DestroySound>PoofExplosionCat3</DestroySound>
+      <PCU>25</PCU>
+      <IsAirTight>false</IsAirTight>
+      <Center x="1" y="0" z="1" />
+      <MountPoints>
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="3" EndY="0.65" />
+        <MountPoint Side="Top" StartX="0" StartY="2.35" EndX="3" EndY="3" />
+        <MountPoint Side="Top" StartX="0" StartY="0.65" EndX="0.65" EndY="2.35" />
+        <MountPoint Side="Top" StartX="2.35" StartY="0.65" EndX="3" EndY="2.35" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="3" EndY="0.65" />
+        <MountPoint Side="Bottom" StartX="0" StartY="2.35" EndX="3" EndY="3" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0.65" EndX="0.65" EndY="2.35" />
+        <MountPoint Side="Bottom" StartX="2.35" StartY="0.65" EndX="3" EndY="2.35" />
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="3" EndY="1" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="3" EndY="1" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="3" EndY="1" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="3" EndY="1" />
+      </MountPoints>
+    </Definition>
+    <Definition>
+      <Id>
+        <TypeId>Conveyor</TypeId>
+        <SubtypeId>ArcanePower_VentOutlet</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Vent Outlet</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneVentOutlet.dds</Icon>
+      <Description>Stack matching vent sections above the reactor and finish with an Arcane Vent Outlet. The outlet opens during venting. Central connections also carry conveyor items.</Description>
+      <GuiVisible>true</GuiVisible>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="1" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/ArcanePower_VentOutlet.mwm</Model>
+      <Components>
+        <Component Subtype="InteriorPlate" Count="10" />
+        <Component Subtype="Construction" Count="20" />
+        <Component Subtype="SmallTube" Count="20" />
+        <Component Subtype="Motor" Count="6" />
+        <Component Subtype="Construction" Count="10" />
+        <Component Subtype="InteriorPlate" Count="10" />
+      </Components>
+      <CriticalComponent Subtype="Motor" Index="0" />
+      <BlockPairName>ArcanePower_VentOutlet</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>30</BuildTimeSeconds>
+      <DamageEffectName>Damage_HeavyMech_Damaged</DamageEffectName>
+      <DamagedSound>ParticleHeavyMech</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyed_Large</DestroyEffect>
+      <DestroySound>PoofExplosionCat3</DestroySound>
+      <PCU>25</PCU>
+      <IsAirTight>false</IsAirTight>
+      <Center x="1" y="0" z="1" />
+      <MountPoints>
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="3" EndY="0.65" />
+        <MountPoint Side="Top" StartX="0" StartY="2.35" EndX="3" EndY="3" />
+        <MountPoint Side="Top" StartX="0" StartY="0.65" EndX="0.65" EndY="2.35" />
+        <MountPoint Side="Top" StartX="2.35" StartY="0.65" EndX="3" EndY="2.35" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="3" EndY="0.65" />
+        <MountPoint Side="Bottom" StartX="0" StartY="2.35" EndX="3" EndY="3" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0.65" EndX="0.65" EndY="2.35" />
+        <MountPoint Side="Bottom" StartX="2.35" StartY="0.65" EndX="3" EndY="2.35" />
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="3" EndY="1" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="3" EndY="1" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="3" EndY="1" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="3" EndY="1" />
+      </MountPoints>
+    </Definition>
+  </CubeBlocks>
+</Definitions>

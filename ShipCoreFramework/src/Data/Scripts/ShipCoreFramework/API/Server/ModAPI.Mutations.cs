@@ -160,5 +160,137 @@ namespace ShipCoreFramework
             groupComponent.SetMaximumFrictionSpeedModifierOverride(modifier);
             return MyTuple.Create(true, string.Empty);
         }
+
+        public static bool SetGridModifiersOverrideForGroup(long gridId, GridModifiersData modifiers)
+        {
+            if (!Session.IsServer) return false;
+            if (!IsValidGridModifiers(modifiers)) return false;
+
+            GroupComponent groupComponent;
+            if (!TryGetGroupComponent(gridId, out groupComponent)) return false;
+            groupComponent.SetGridModifiersOverride(ConvertFromGridModifiersData(modifiers));
+            return true;
+        }
+
+        public static bool SetSpeedModifiersOverrideForGroup(long gridId, SpeedModifiersData modifiers)
+        {
+            if (!Session.IsServer) return false;
+            if (!IsValidSpeedModifiers(modifiers)) return false;
+
+            GroupComponent groupComponent;
+            if (!TryGetGroupComponent(gridId, out groupComponent)) return false;
+            groupComponent.SetSpeedModifiersOverride(ConvertFromSpeedModifiersData(modifiers));
+            return true;
+        }
+
+        public static bool SetPassiveDefenseModifiersOverrideForGroup(long gridId,
+            GridDefenseModifiersData modifiers)
+        {
+            if (!Session.IsServer) return false;
+            if (!IsValidDefenseModifiers(modifiers)) return false;
+
+            GroupComponent groupComponent;
+            if (!TryGetGroupComponent(gridId, out groupComponent)) return false;
+            groupComponent.SetPassiveDefenseModifiersOverride(ConvertFromDefenseModifiersData(modifiers));
+            return true;
+        }
+
+        public static bool SetActiveDefenseModifiersOverrideForGroup(long gridId,
+            GridDefenseModifiersData modifiers)
+        {
+            if (!Session.IsServer) return false;
+            if (!IsValidDefenseModifiers(modifiers)) return false;
+
+            GroupComponent groupComponent;
+            if (!TryGetGroupComponent(gridId, out groupComponent)) return false;
+            groupComponent.SetActiveDefenseModifiersOverride(ConvertFromDefenseModifiersData(modifiers));
+            return true;
+        }
+
+        private static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }
+
+        private static bool IsValidGridModifiers(GridModifiersData modifiers)
+        {
+            if (modifiers == null) return true;
+            return IsValidGridValue(modifiers.AssemblerSpeed) &&
+                   IsValidGridValue(modifiers.DrillHarvestMultiplier) &&
+                   IsValidGridValue(modifiers.GyroEfficiency) &&
+                   IsValidGridValue(modifiers.GyroForce) &&
+                   IsValidGridValue(modifiers.PowerProducersOutput) &&
+                   IsValidGridValue(modifiers.RefineEfficiency) &&
+                   IsValidGridValue(modifiers.RefineSpeed) &&
+                   IsValidGridValue(modifiers.ThrusterEfficiency) &&
+                   IsValidGridValue(modifiers.ThrusterForce);
+        }
+
+        private static bool IsValidGridValue(float value)
+        {
+            return IsFinite(value) && value >= -1f;
+        }
+
+        private static bool IsValidSpeedModifiers(SpeedModifiersData modifiers)
+        {
+            if (modifiers == null) return true;
+            float[] values =
+            {
+                modifiers.MaxSpeed, modifiers.MaxAngularVelocity, modifiers.MaxBoost,
+                modifiers.BoostDuration, modifiers.BoostCoolDown,
+                modifiers.MinimumFrictionSpeedAbsolute, modifiers.MaximumFrictionSpeedAbsolute,
+                modifiers.MaximumFrictionDeceleration, modifiers.MinimumFrictionSpeedModifier,
+                modifiers.MaximumFrictionSpeedModifier, modifiers.CruiseFrictionMultiplier,
+                modifiers.CruiseAccelerationThreshold
+            };
+            foreach (float value in values)
+                if (!IsFinite(value) || value < 0f) return false;
+
+            if (modifiers.FrictionCurve != null)
+                foreach (FrictionCurveSegmentData segment in modifiers.FrictionCurve)
+                    if (segment == null || !IsFinite(segment.StartSpeed) || !IsFinite(segment.EndSpeed) ||
+                        !IsFinite(segment.StartDeceleration) || !IsFinite(segment.EndDeceleration) ||
+                        segment.StartSpeed < 0f || segment.EndSpeed < 0f ||
+                        segment.StartDeceleration < 0f || segment.EndDeceleration < 0f)
+                        return false;
+
+            AtmosphericFrictionData atmospheric = modifiers.AtmosphericFriction;
+            return atmospheric == null || IsValidAtmosphericFriction(atmospheric);
+        }
+
+        private static bool IsValidAtmosphericFriction(AtmosphericFrictionData settings)
+        {
+            float[] values =
+            {
+                settings.CruiseFrictionMultiplier,
+                settings.CruiseAccelerationThreshold,
+                settings.AirDensityThreshold
+            };
+            foreach (float value in values)
+                if (!IsFinite(value) || value < 0f) return false;
+
+            if (settings.FrictionCurve == null) return true;
+            foreach (FrictionCurveSegmentData segment in settings.FrictionCurve)
+                if (segment == null || !IsFinite(segment.StartSpeed) || !IsFinite(segment.EndSpeed) ||
+                    !IsFinite(segment.StartDeceleration) || !IsFinite(segment.EndDeceleration) ||
+                    segment.StartSpeed < 0f || segment.EndSpeed < 0f ||
+                    segment.StartDeceleration < 0f || segment.EndDeceleration < 0f)
+                    return false;
+            return true;
+        }
+
+        private static bool IsValidDefenseModifiers(GridDefenseModifiersData modifiers)
+        {
+            if (modifiers == null) return true;
+            float[] values =
+            {
+                modifiers.Bullet, modifiers.PostShield, modifiers.Duration, modifiers.Cooldown,
+                modifiers.Rocket, modifiers.Explosion, modifiers.Environment,
+                modifiers.Energy, modifiers.Kinetic
+            };
+            foreach (float value in values)
+                if (!IsFinite(value) || value < 0f) return false;
+            return true;
+        }
     }
 }

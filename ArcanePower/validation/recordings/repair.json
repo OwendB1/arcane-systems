@@ -1,0 +1,43 @@
+{
+  "changes": [
+    {
+      "entityId": "130821182287635223",
+      "subtype": "ArcanePower_ReactorPrototype",
+      "integrity_before": "0.98999995",
+      "build_before": "1"
+    },
+    {
+      "entityId": "86483501915819739",
+      "subtype": "ArcanePower_AdvancedContainmentController",
+      "integrity_before": "0.97999996",
+      "build_before": "0.99999994"
+    },
+    {
+      "entityId": "102605057432638905",
+      "subtype": "ArcanePower_AdvancedContainmentController",
+      "integrity_before": "0.97999996",
+      "build_before": "0.99999994"
+    }
+  ],
+  "method": "Saved targeted integrity restoration; sector cache backed up and removed for XML reload",
+  "restored_integrity": 1,
+  "other_blocks_changed": false,
+  "after_reload_and_resave": [
+    {
+      "id": "130821182287635223",
+      "integrity": "1",
+      "build": "1"
+    },
+    {
+      "id": "86483501915819739",
+      "integrity": "1",
+      "build": "1"
+    },
+    {
+      "id": "102605057432638905",
+      "integrity": "1",
+      "build": "1"
+    }
+  ],
+  "verified_all_full": true
+}

@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions>
+  <Components>
+    <Component>
+      <Id>
+        <TypeId>Component</TypeId>
+        <SubtypeId>ArcaneSpentTile1</SubtypeId>
+      </Id>
+      <DisplayName>Spent Arcane Tile 1</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <Mass>1</Mass>
+      <Volume>2</Volume>
+      <Model>Models/Cubes/large/ArcanePower_Tile1.mwm</Model>
+      <PhysicalMaterial>Metal</PhysicalMaterial>
+      <MaxIntegrity>30</MaxIntegrity>
+      <Health>25</Health>
+      <DropProbability>1</DropProbability>
+      <Description>Spent containment debris. Cannot replace fresh containment tiles or power a reactor.</Description>
+      <Size>
+        <X>0.54</X>
+        <Y>0.4</Y>
+        <Z>0.045</Z>
+      </Size>
+    </Component>
+    <Component>
+      <Id>
+        <TypeId>Component</TypeId>
+        <SubtypeId>ArcaneSpentTile2</SubtypeId>
+      </Id>
+      <DisplayName>Spent Arcane Tile 2</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <Mass>1</Mass>
+      <Volume>2</Volume>
+      <Model>Models/Cubes/large/ArcanePower_Tile2.mwm</Model>
+      <PhysicalMaterial>Metal</PhysicalMaterial>
+      <MaxIntegrity>30</MaxIntegrity>
+      <Health>25</Health>
+      <DropProbability>1</DropProbability>
+      <Description>Spent containment debris. Cannot replace fresh containment tiles or power a reactor.</Description>
+      <Size>
+        <X>0.54</X>
+        <Y>0.4</Y>
+        <Z>0.045</Z>
+      </Size>
+    </Component>
+    <Component>
+      <Id>
+        <TypeId>Component</TypeId>
+        <SubtypeId>ArcaneSpentRing1</SubtypeId>
+      </Id>
+      <DisplayName>Spent Arcane Ring 1</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <Mass>60</Mass>
+      <Volume>100</Volume>
+      <Model>Models/Cubes/large/ArcanePower_Ring1.mwm</Model>
+      <PhysicalMaterial>Metal</PhysicalMaterial>
+      <MaxIntegrity>30</MaxIntegrity>
+      <Health>25</Health>
+      <DropProbability>1</DropProbability>
+      <Description>Spent containment debris. Cannot replace fresh containment tiles or power a reactor.</Description>
+      <Size>
+        <X>2.27</X>
+        <Y>0.104</Y>
+        <Z>2.27</Z>
+      </Size>
+    </Component>
+    <Component>
+      <Id>
+        <TypeId>Component</TypeId>
+        <SubtypeId>ArcaneSpentRing2</SubtypeId>
+      </Id>
+      <DisplayName>Spent Arcane Ring 2</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <Mass>80</Mass>
+      <Volume>120</Volume>
+      <Model>Models/Cubes/large/ArcanePower_Ring2.mwm</Model>
+      <PhysicalMaterial>Metal</PhysicalMaterial>
+      <MaxIntegrity>30</MaxIntegrity>
+      <Health>25</Health>
+      <DropProbability>1</DropProbability>
+      <Description>Spent containment debris. Cannot replace fresh containment tiles or power a reactor.</Description>
+      <Size>
+        <X>2.67</X>
+        <Y>0.104</Y>
+        <Z>2.67</Z>
+      </Size>
+    </Component>
+    <Component>
+      <Id>
+        <TypeId>Component</TypeId>
+        <SubtypeId>ArcaneSpentRing3</SubtypeId>
+      </Id>
+      <DisplayName>Spent Arcane Ring 3</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <Mass>100</Mass>
+      <Volume>140</Volume>
+      <Model>Models/Cubes/large/ArcanePower_Ring3.mwm</Model>
+      <PhysicalMaterial>Metal</PhysicalMaterial>
+      <MaxIntegrity>30</MaxIntegrity>
+      <Health>25</Health>
+      <DropProbability>1</DropProbability>
+      <Description>Spent containment debris. Cannot replace fresh containment tiles or power a reactor.</Description>
+      <Size>
+        <X>3.0700000000000003</X>
+        <Y>0.104</Y>
+        <Z>3.0700000000000003</Z>
+      </Size>
+    </Component>
+    <Component>
+      <Id>
+        <TypeId>Component</TypeId>
+        <SubtypeId>ArcaneSpentRing4</SubtypeId>
+      </Id>
+      <DisplayName>Spent Arcane Ring 4</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <Mass>120</Mass>
+      <Volume>160</Volume>
+      <Model>Models/Cubes/large/ArcanePower_Ring4.mwm</Model>
+      <PhysicalMaterial>Metal</PhysicalMaterial>
+      <MaxIntegrity>30</MaxIntegrity>
+      <Health>25</Health>
+      <DropProbability>1</DropProbability>
+      <Description>Spent containment debris. Cannot replace fresh containment tiles or power a reactor.</Description>
+      <Size>
+        <X>3.47</X>
+        <Y>0.104</Y>
+        <Z>3.47</Z>
+      </Size>
+    </Component>
+  </Components>
+  <CubeBlocks>
+    <Definition>
+      <Id>
+        <TypeId>CubeBlock</TypeId>
+        <SubtypeId>ArcanePower_EjectedCore</SubtypeId>
+      </Id>
+      <DisplayName>Ejected Arcane Core</DisplayName>
+      <Public>false</Public>
+      <GuiVisible>false</GuiVisible>
+      <CubeSize>Small</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Model>Models/Cubes/large/ArcanePower_Plasma.mwm</Model>
+      <BlockPairName>ArcanePower_EjectedCore</BlockPairName>
+      <BuildTimeSeconds>1</BuildTimeSeconds>
+      <PCU>0</PCU>
+      <IsAirTight>false</IsAirTight>
+      <DestroyEffect />
+      <DestroySound />
+      <Size x="3" y="3" z="3" />
+      <Center x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <MountPoints />
+      <Components>
+        <Component Subtype="ArcaneSpentTile1" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="ArcaneSpentTile1" Index="0" />
+    </Definition>
+  </CubeBlocks>
+</Definitions>

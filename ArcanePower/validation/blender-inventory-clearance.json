@@ -1,0 +1,102 @@
+[
+  {
+    "side": 0,
+    "nearest_surface_samples": [
+      [
+        0.4639,
+        "Inventory access / side 0"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 0"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 0"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 0"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 0"
+      ]
+    ]
+  },
+  {
+    "side": 1,
+    "nearest_surface_samples": [
+      [
+        0.4639,
+        "Inventory access / side 1"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 1"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 1"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 1"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 1"
+      ]
+    ]
+  },
+  {
+    "side": 2,
+    "nearest_surface_samples": [
+      [
+        0.4639,
+        "Inventory access / side 2"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 2"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 2"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 2"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 2"
+      ]
+    ]
+  },
+  {
+    "side": 3,
+    "nearest_surface_samples": [
+      [
+        0.4639,
+        "Inventory access / side 3"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 3"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 3"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 3"
+      ],
+      [
+        0.4639,
+        "Inventory access / side 3"
+      ]
+    ]
+  }
+]

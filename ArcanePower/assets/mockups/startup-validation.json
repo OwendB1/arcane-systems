@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "tiles": 80,
+  "batch_size": 4,
+  "batches": 20,
+  "checks": [
+    "One tile per dispenser in each batch",
+    "Visible tile count at every batch completion",
+    "Final tile scale and shell position",
+    "No plasma ignition before assembly/tilt",
+    "Ring parked/raised positions and bay/cap bounds at 12 poses"
+  ],
+  "limitations": "Two-ring Blender study only. No exhaustive collision, SE export, inventory consumption, or multiplayer test."
+}

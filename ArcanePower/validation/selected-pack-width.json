@@ -1,0 +1,17 @@
+{
+  "selected_width_m": 1.6,
+  "socket_widest_width_m": 2.3,
+  "measurements": {
+    "ArcanePower_ContainmentController": {
+      "width_m": 1.6,
+      "height_m": 1.0
+    },
+    "ArcanePower_AdvancedContainmentController": {
+      "width_m": 1.6,
+      "height_m": 1.0
+    }
+  },
+  "changed_empty_transforms": [],
+  "scope": "Selected Blender source exported and locally deployed; in-game review pending",
+  "deployed_revision": "lab_06d121e6bcac"
+}

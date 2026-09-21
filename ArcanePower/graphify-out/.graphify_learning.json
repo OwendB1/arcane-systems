@@ -1,0 +1,198 @@
+{
+  "generated_at": "2026-09-13T23:57:25.764521+00:00",
+  "nodes": {
+    "arcanepower_learnings_curved_chamber_glass": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "Curved chamber glazing and housing seals",
+      "last": "2026-09-13T19:49:09.762257+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T19:49:09.762257+00:00",
+          "outcome": "useful",
+          "q": "Also, make sure to put glass around the reactor chamber itself in between the pillars. Also, upgrade modules can only be placed at coordinates that are the same as the game's grid system. Use $se-dev-game-code to understand it better. Record it as needed into the repository learnings for this new mod using $graphify"
+        }
+      ],
+      "score": 0.996024466,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_learnings_curved_support_integration": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "Curved pillar saddles and upgrade surrounds",
+      "last": "2026-09-13T20:32:01.190435+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T20:32:01.190435+00:00",
+          "outcome": "useful",
+          "q": "Why were the curved reactor supports hidden behind the glass, and what local evidence validates the support and preview fixes?"
+        }
+      ],
+      "score": 0.996709614,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_learnings_dummy_translation": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "Detector translation determines connection face",
+      "last": "2026-09-13T19:49:09.762257+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T19:49:09.762257+00:00",
+          "outcome": "useful",
+          "q": "Also, make sure to put glass around the reactor chamber itself in between the pillars. Also, upgrade modules can only be placed at coordinates that are the same as the game's grid system. Use $se-dev-game-code to understand it better. Record it as needed into the repository learnings for this new mod using $graphify"
+        }
+      ],
+      "score": 0.996024466,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_learnings_final_port_layout": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "Four conveyors and two base upgrade ports",
+      "last": "2026-09-13T20:05:25.147831+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T20:05:25.147831+00:00",
+          "outcome": "useful",
+          "q": "What do the latest Arcane Power housing, interface, glass-preview and spherical-field learnings establish?"
+        }
+      ],
+      "score": 0.996284298,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_learnings_glass_visibility_tuning": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "Glass visibility tuning after user report",
+      "last": "2026-09-13T21:24:31.527729+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T21:24:31.527729+00:00",
+          "outcome": "useful",
+          "q": "What changed for invisible glass and first-load emissives?"
+        }
+      ],
+      "score": 0.997549652,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_learnings_native_frame_cutters": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "Native chamfered conveyor-frame cutters",
+      "last": "2026-09-13T20:21:54.304736+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T20:21:54.304736+00:00",
+          "outcome": "useful",
+          "q": "What caused the inside-out reactor deck and conveyor-frame corner gaps, and how were the local fixes verified?"
+        }
+      ],
+      "score": 0.996547869,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_learnings_native_upgrade_matching": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "Native containment upgrade matching",
+      "last": "2026-09-13T19:49:09.762257+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T19:49:09.762257+00:00",
+          "outcome": "useful",
+          "q": "Also, make sure to put glass around the reactor chamber itself in between the pillars. Also, upgrade modules can only be placed at coordinates that are the same as the game's grid system. Use $se-dev-game-code to understand it better. Record it as needed into the repository learnings for this new mod using $graphify"
+        }
+      ],
+      "score": 0.996024466,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_learnings_opaque_preview_blending": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "Opaque supports hidden by accidental preview blending",
+      "last": "2026-09-13T20:32:01.190435+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T20:32:01.190435+00:00",
+          "outcome": "useful",
+          "q": "Why were the curved reactor supports hidden behind the glass, and what local evidence validates the support and preview fixes?"
+        }
+      ],
+      "score": 0.996709614,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_learnings_outward_surface_winding": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "Annulus winding repair and 87-solid migration",
+      "last": "2026-09-13T20:21:54.304736+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T20:21:54.304736+00:00",
+          "outcome": "useful",
+          "q": "What caused the inside-out reactor deck and conveyor-frame corner gaps, and how were the local fixes verified?"
+        }
+      ],
+      "score": 0.996547869,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_learnings_packed_alpha_preview_repair": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "SEUT RGB-to-RGBA packed-alpha preview repair",
+      "last": "2026-09-13T20:05:25.147831+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T20:05:25.147831+00:00",
+          "outcome": "useful",
+          "q": "What do the latest Arcane Power housing, interface, glass-preview and spherical-field learnings establish?"
+        }
+      ],
+      "score": 0.996284298,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_learnings_wrapped_maintenance_decals": {
+      "code_fingerprint": "5b59da6fdd265763ae990960aa3f7f8e234f17d881278fed7dc4024ebf5457e7",
+      "label": "Sixteen maintenance decals centered on intact armor panels",
+      "last": "2026-09-13T21:14:01.819597+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T21:14:01.819597+00:00",
+          "outcome": "useful",
+          "q": "What implements the Arcane Power startup and what has actually been validated?"
+        }
+      ],
+      "score": 0.997381683,
+      "source_file": "LEARNINGS.md",
+      "status": "tentative",
+      "uses": 1
+    },
+    "arcanepower_readme_reactor_interlock": {
+      "code_fingerprint": "f874657af176b931e1d9971201bb34653cb4f5fa423b016352a28f210673a3ca",
+      "label": "Separate controller-count and capacity interlock",
+      "last": "2026-09-13T21:14:01.819597+00:00",
+      "provenance": [
+        {
+          "date": "2026-09-13T21:14:01.819597+00:00",
+          "outcome": "useful",
+          "q": "What implements the Arcane Power startup and what has actually been validated?"
+        }
+      ],
+      "score": 0.997381683,
+      "source_file": "README.md",
+      "status": "tentative",
+      "uses": 1
+    }
+  },
+  "version": 1
+}

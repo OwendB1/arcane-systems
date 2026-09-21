@@ -1,0 +1,24 @@
+[
+  {
+    "event": "on",
+    "time": 1789342249.0347853,
+    "response": {
+      "Success": true,
+      "Data": {
+        "pressed": true
+      },
+      "Error": null
+    }
+  },
+  {
+    "event": "off",
+    "time": 1789342284.0393744,
+    "response": {
+      "Success": true,
+      "Data": {
+        "pressed": true
+      },
+      "Error": null
+    }
+  }
+]

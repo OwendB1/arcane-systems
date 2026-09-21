@@ -1,0 +1,79 @@
+{
+  "handles": [
+    {
+      "handle": "SEUT / Tiedown Handle.024",
+      "plate": "Deck removable plate.042"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.025",
+      "plate": "Deck removable plate.043"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.028",
+      "plate": "Deck removable plate.046"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.029",
+      "plate": "Deck removable plate.047"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.030",
+      "plate": "Deck removable plate.024"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.031",
+      "plate": "Deck removable plate.025"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.034",
+      "plate": "Deck removable plate.028"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.035",
+      "plate": "Deck removable plate.029"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.036",
+      "plate": "Deck removable plate.030"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.037",
+      "plate": "Deck removable plate.031"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.040",
+      "plate": "Deck removable plate.034"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.041",
+      "plate": "Deck removable plate.035"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.042",
+      "plate": "Deck removable plate.036"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.043",
+      "plate": "Deck removable plate.037"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.046",
+      "plate": "Deck removable plate.040"
+    },
+    {
+      "handle": "SEUT / Tiedown Handle.047",
+      "plate": "Deck removable plate.041"
+    }
+  ],
+  "removed_under_saddles": [
+    "SEUT / Tiedown Handle.026",
+    "SEUT / Tiedown Handle.027",
+    "SEUT / Tiedown Handle.032",
+    "SEUT / Tiedown Handle.033",
+    "SEUT / Tiedown Handle.038",
+    "SEUT / Tiedown Handle.039",
+    "SEUT / Tiedown Handle.044",
+    "SEUT / Tiedown Handle.045"
+  ],
+  "clearance_m": 0.0015
+}

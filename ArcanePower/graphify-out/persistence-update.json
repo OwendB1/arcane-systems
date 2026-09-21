@@ -1,0 +1,27 @@
+{
+  "scope": "Current runtime/authoring source replacement plus new restart persistence specification; historical document nodes retained as prior snapshots.",
+  "old_nodes": 533,
+  "new_nodes": 540,
+  "new_edges": 1154,
+  "files": [
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/ContainmentController.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/CoreHazards.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Failure.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Fuel.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Motion.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Power.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Status.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Tiles.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.VentRoute.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/Reactor.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/ReactorDashboard.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/ReactorLcd.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/ReactorTablet.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/TabletLink.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/src/Data/Scripts/ArcanePower/VentSession.cs",
+    "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/REACTOR-PERSISTENCE.md"
+  ],
+  "token_cost": "Host semantic usage unavailable; no external LLM calls.",
+  "regression_checks_run": false,
+  "game_reloaded": false
+}

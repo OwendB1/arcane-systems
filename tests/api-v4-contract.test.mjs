@@ -55,6 +55,10 @@ assert.match(
   /ClientReplicaMethodFactory\(methodId\)[\s\S]*clientRead == null[\s\S]*ServerMethodFactory\(methodId\)/,
 );
 assert.match(serverFactory, /case ApiMethodId\.SetFrictionEnabledForGroup/);
+assert.match(serverFactory, /case ApiMethodId\.SetGridModifiersOverrideForGroup/);
+assert.match(serverFactory, /case ApiMethodId\.SetSpeedModifiersOverrideForGroup/);
+assert.match(serverFactory, /case ApiMethodId\.SetPassiveDefenseModifiersOverrideForGroup/);
+assert.match(serverFactory, /case ApiMethodId\.SetActiveDefenseModifiersOverrideForGroup/);
 assert.match(serverFactory, /ApiCapabilityData\.RuntimeMutations/);
 
 assert.ok(

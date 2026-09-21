@@ -75,6 +75,18 @@ private void DisableFriction(long gridEntityId)
 }
 ```
 
+Server modifier profiles can override grid, speed, passive-defense, and active-defense values:
+
+```csharp
+_scf.TrySetGridModifiersOverrideForGroup(gridEntityId, gridModifiers);
+_scf.TrySetSpeedModifiersOverrideForGroup(gridEntityId, speedModifiers);
+_scf.TrySetPassiveDefenseModifiersOverrideForGroup(gridEntityId, passiveDefense);
+_scf.TrySetActiveDefenseModifiersOverrideForGroup(gridEntityId, activeDefense);
+```
+
+Pass `null` to any setter to restore that category's core/upgrade profile. Overrides are runtime-only,
+group-scoped, and remain authoritative through core and upgrade changes. Punishment gates still apply.
+
 Register only the wrapper appropriate to the consumer role. Dedicated servers publish only the
 server-local factory, remote clients publish only the client-replica factory, and listen hosts and
 single-player publish both. The client surface remains read-only when it is backed by local authority.

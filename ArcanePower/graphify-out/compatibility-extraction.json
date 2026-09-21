@@ -1,0 +1,257 @@
+{
+  "nodes": [
+    {
+      "id": "src_data_scripts_arcanepower_tabletlink",
+      "label": "TabletLink.cs",
+      "file_type": "code",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "csharp_namespace:1aeab2715dbfbb4d",
+      "label": "ArcanePower",
+      "file_type": "code",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L7",
+      "type": "namespace",
+      "metadata": {
+        "kind": "csharp_namespace",
+        "namespace": "ArcanePower"
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "src_data_scripts_arcanepower_tabletlink_arcanepower_tabletlink",
+      "label": "TabletLink",
+      "file_type": "code",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L9",
+      "metadata": {
+        "namespace": "ArcanePower",
+        "scope_chain": [
+          "s112"
+        ]
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "src_data_scripts_arcanepower_tabletlink_arcanepower_tabletlink_canread",
+      "label": ".CanRead()",
+      "file_type": "code",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L13",
+      "metadata": {
+        "namespace": "ArcanePower",
+        "scope_chain": [
+          "s112"
+        ]
+      },
+      "_origin": "ast"
+    },
+    {
+      "id": "reactor",
+      "label": "Reactor",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast"
+    },
+    {
+      "id": "tools_compile_mod",
+      "label": "compile_mod.py",
+      "file_type": "code",
+      "source_file": "tools/compile_mod.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "tools_compile_mod_main",
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "tools/compile_mod.py",
+      "source_location": "L20",
+      "_origin": "ast"
+    },
+    {
+      "id": "tools_compile_mod_rationale_1",
+      "label": "Compile mod sources with SE1's compatibility imports and the project's MDK analy",
+      "file_type": "rationale",
+      "source_file": "tools/compile_mod.py",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "arcanepower_compilation_current",
+      "label": "SE compatibility imports and MDK compilation",
+      "file_type": "document",
+      "source_file": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/COMPILATION.md",
+      "source_location": "1",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1,
+      "rationale": "SDK compiler versus native mod compatibility imports; reproduced ambiguity and qualified interface fix."
+    }
+  ],
+  "edges": [
+    {
+      "source": "src_data_scripts_arcanepower_tabletlink",
+      "target": "sandbox_game_entities",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L1",
+      "weight": 1.0,
+      "metadata": {
+        "using_kind": "namespace",
+        "target_fqn": "Sandbox.Game.Entities",
+        "scope_kind": "file"
+      }
+    },
+    {
+      "source": "src_data_scripts_arcanepower_tabletlink",
+      "target": "system_collections_generic",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "metadata": {
+        "using_kind": "namespace",
+        "target_fqn": "System.Collections.Generic",
+        "scope_kind": "file"
+      }
+    },
+    {
+      "source": "src_data_scripts_arcanepower_tabletlink",
+      "target": "vrage_game_modapi",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L3",
+      "weight": 1.0,
+      "metadata": {
+        "using_kind": "namespace",
+        "target_fqn": "VRage.Game.ModAPI",
+        "scope_kind": "file"
+      }
+    },
+    {
+      "source": "src_data_scripts_arcanepower_tabletlink",
+      "target": "sandbox_modapi",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L5",
+      "weight": 1.0,
+      "metadata": {
+        "using_kind": "namespace",
+        "target_fqn": "Sandbox.ModAPI",
+        "scope_kind": "file"
+      }
+    },
+    {
+      "source": "src_data_scripts_arcanepower_tabletlink",
+      "target": "csharp_namespace:1aeab2715dbfbb4d",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_data_scripts_arcanepower_tabletlink",
+      "target": "src_data_scripts_arcanepower_tabletlink_arcanepower_tabletlink",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "src_data_scripts_arcanepower_tabletlink_arcanepower_tabletlink",
+      "target": "src_data_scripts_arcanepower_tabletlink_arcanepower_tabletlink_canread",
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L13",
+      "weight": 1.0
+    },
+    {
+      "source": "src_data_scripts_arcanepower_tabletlink_arcanepower_tabletlink_canread",
+      "target": "reactor",
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "src/Data/Scripts/ArcanePower/TabletLink.cs",
+      "source_location": "L13",
+      "weight": 1.0,
+      "context": "parameter_type",
+      "metadata": {
+        "ref_token": "Reactor"
+      }
+    },
+    {
+      "source": "tools_compile_mod",
+      "target": "pathlib",
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/compile_mod.py",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "tools_compile_mod",
+      "target": "shutil",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/compile_mod.py",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "tools_compile_mod",
+      "target": "subprocess",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/compile_mod.py",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "tools_compile_mod",
+      "target": "tempfile",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/compile_mod.py",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "tools_compile_mod",
+      "target": "tools_compile_mod_main",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/compile_mod.py",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "tools_compile_mod_rationale_1",
+      "target": "tools_compile_mod",
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "tools/compile_mod.py",
+      "source_location": "L1",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

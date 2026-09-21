@@ -1,0 +1,21 @@
+{
+  "timestamp_utc": "2026-09-15T21:37:36.234197+00:00",
+  "model_revision": "lab_06d121e6bcac",
+  "build_log": "survival-power-build.log",
+  "files_match": true,
+  "runtime_sha256": {
+    "Data/Scripts/ArcanePower/AnimationGeometry.cs": "dad872eb1ecd295c600f493411648add9af6b6b705db8607810c6d69c7bd69e9",
+    "Data/Scripts/ArcanePower/ContainmentController.cs": "118cb0b52ad88c19c9c32346ffd4ce08be5385c8919b7b428b86f7ae30ad5e0b",
+    "Data/Scripts/ArcanePower/Reactor.Fuel.cs": "1e24e8644bcc5bd11c8a24f5f8d13f9d3749e6bbf27165d4fd259395eb0e28dd",
+    "Data/Scripts/ArcanePower/Reactor.Motion.cs": "882a0f7d525a4ced1a5e7e63cbca1f444e0002fbb4584f2b6ed6be2ba6506ba0",
+    "Data/Scripts/ArcanePower/Reactor.Power.cs": "accfd74e3ddf148b1127c35ed5a6961e1729c44f0ebc35b5ca4a4e681d52b73e",
+    "Data/Scripts/ArcanePower/Reactor.Tiles.cs": "916b4c0321d190cb1386d42a7002f46178770860660fe821d2aa83e214d94ef2",
+    "Data/Scripts/ArcanePower/Reactor.VentRoute.cs": "da041145c6456292689e1ec138f020e3d1fe4b36c22af9293280cd083881f517",
+    "Data/Scripts/ArcanePower/Reactor.cs": "72776c36a0e05579fe622fbc1524be4764b5f7534402c0942187f89dbfc444af",
+    "Data/Scripts/ArcanePower/VentSession.cs": "22353acbee3125d7c55875ab53ebed34c0d1c244222beb23d186f0ef813c7a22",
+    "Data/ResourceDistributionGroups.sbc": "e75fb9e681d56befb3602282616ccb5da03b42a301dfb4a691ae74a7ebfb886b"
+  },
+  "regression_checks_run": false,
+  "game_reloaded": false,
+  "game_validation": "Pending: power distribution/priority, UI, lifecycle/save/network behavior, maintenance ring clearance"
+}
