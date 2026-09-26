@@ -123,6 +123,7 @@ jobs:
       - name: Configure MDK references
         run: |
           printf '[mdk]\nbinarypath = %s\n' "$GITHUB_WORKSPACE/ds64" > ShipCoreFramework/ShipCoreFramework.mdk.local.ini
+          printf '[mdk]\nbinarypath = %s\n' "$GITHUB_WORKSPACE/ds64" > ArcanePower/ArcanePower.mdk.local.ini
 
       - name: Build solution with MDK analyzers
         run: dotnet build arcane-systems.sln --configuration Release
