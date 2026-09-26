@@ -152,8 +152,8 @@ namespace ShipCoreFramework
             var scrollOffset = UpdateManualScroll(layout, contentBottomRight.Y, hasCursorHit);
             var scroll = new Vector2(0f, scrollOffset);
             var frame = Surface.DrawFrame();
-            Surface.ScriptBackgroundColor = Color.Black;
-            Surface.ScriptForegroundColor = Color.White;
+            frame.Add(new MySprite(SpriteType.TEXTURE, "SquareSimple", Surface.TextureSize * 0.5f,
+                Surface.TextureSize, Color.Black));
             EmitSprites(frame, layout, sprites, scroll);
             RenderScrollIndicator(frame, layout, contentBottomRight.Y, scrollOffset);
 
