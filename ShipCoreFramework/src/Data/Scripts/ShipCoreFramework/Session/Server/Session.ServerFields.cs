@@ -8,8 +8,10 @@ namespace ShipCoreFramework
     public partial class Session
     {
         private static NexusAPI _myNexusApi;
-        private bool _startedNexus;
-        private bool _serverRuntimeDataLoaded;
+        private static bool _startedNexus;
+        private static bool _serverRuntimeDataLoaded;
+        private static bool _sessionReady;
+        private static bool _serverReadyDataLoaded;
         private int _serverSimulationBatchRunning;
 
         internal static bool HasStarted;

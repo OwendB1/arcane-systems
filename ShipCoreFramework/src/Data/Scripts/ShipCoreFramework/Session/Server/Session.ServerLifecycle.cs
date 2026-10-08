@@ -22,31 +22,50 @@ namespace ShipCoreFramework
             HasStarted = false;
             _startedNexus = false;
             _serverRuntimeDataLoaded = false;
+            _sessionReady = false;
+            _serverReadyDataLoaded = false;
             Interlocked.Exchange(ref _serverSimulationBatchRunning, 0);
             MyAPIGateway.Multiplayer.RegisterSecureMessageHandler(CommandsSyncId, Commands.ServerMessageHandler);
+            MyAPIGateway.Session.OnSessionReady += SessionReady;
+            _myNexusApi = new NexusAPI(OnNexusEnabled);
 
-            if (Config.SelectedNoCore != null)
-            {
-                _serverRuntimeDataLoaded = true;
-                _myNexusApi = new NexusAPI(OnNexusEnabled);
-                ApplyConfigToDefinitions();
-
-                MyAPIGateway.Session.OnSessionReady += SessionReady;
-                MyAPIGateway.Session.Factions.FactionStateChanged += FactionStateChanged;
-                MyAPIGateway.Session.Factions.FactionCreated += FactionCreated;
-                MyAPIGateway.Session.Factions.FactionEdited += FactionEdited;
-            }
+            InitializeServerRuntimeData();
             Utils.Log("Ship Cores: Awaiting Commands From Clients", 1);
             Config.SaveConfig(broadcast: false);
+        }
+
+        private static void InitializeServerRuntimeData()
+        {
+            if (!IsServer || _serverRuntimeDataLoaded || Config?.SelectedNoCore == null) return;
+
+            ApplyConfigToDefinitions();
+            MyAPIGateway.Session.Factions.FactionStateChanged += FactionStateChanged;
+            MyAPIGateway.Session.Factions.FactionCreated += FactionCreated;
+            MyAPIGateway.Session.Factions.FactionEdited += FactionEdited;
+            _serverRuntimeDataLoaded = true;
+            if (_myNexusApi.Enabled)
+                OnNexusEnabled();
+            if (_sessionReady)
+                InitializeServerReadyData();
+        }
+
+        internal static void ApplyServerConfig()
+        {
+            ModAPI.MarkConfigReady(!RuntimeInitialized);
+            if (TryInitializeRuntime()) return;
+
+            ApplyConfigToDefinitions();
+            RefreshGroupsAfterConfigChanged();
+            BroadcastConfigToClients();
         }
 
         private void UnloadServerData()
         {
             MyAPIGateway.Multiplayer.UnregisterSecureMessageHandler(CommandsSyncId, Commands.ServerMessageHandler);
+            MyAPIGateway.Session.OnSessionReady -= SessionReady;
 
             if (_serverRuntimeDataLoaded)
             {
-                MyAPIGateway.Session.OnSessionReady -= SessionReady;
                 MyAPIGateway.Session.Factions.FactionStateChanged -= FactionStateChanged;
                 MyAPIGateway.Session.Factions.FactionCreated -= FactionCreated;
                 MyAPIGateway.Session.Factions.FactionEdited -= FactionEdited;
@@ -54,8 +73,6 @@ namespace ShipCoreFramework
 
                 UntrackAllPhysicalGridGroups();
                 LimitsNexusSync.Stop();
-                if (_myNexusApi != null)
-                    _myNexusApi.Unload();
 
                 ResetRuntimeStateSync();
                 PerFactionManager.Reset();
@@ -63,9 +80,13 @@ namespace ShipCoreFramework
                 PerManifestGroupManager.Reset();
             }
 
+            if (_myNexusApi != null)
+                _myNexusApi.Unload();
             _myNexusApi = null;
             _startedNexus = false;
             _serverRuntimeDataLoaded = false;
+            _sessionReady = false;
+            _serverReadyDataLoaded = false;
             Config.SaveConfig(broadcast: false);
         }
     }
