@@ -5,9 +5,9 @@ namespace ShipCoreFramework
 {
     public partial class ModConfig
     {
-        internal void SaveConfig(bool showInChat = false, bool broadcast = true)
+        internal bool SaveConfig(bool showInChat = false, bool broadcast = true)
         {
-            if (!Session.IsServer) return;
+            if (!Session.IsServer) return false;
 
             try
             {
@@ -20,13 +20,12 @@ namespace ShipCoreFramework
                 RemoveLegacySandboxSettings(showInChat);
 
                 if (broadcast && Session.MpActive) Session.BroadcastConfigToClients();
+                return true;
             }
             catch (Exception e)
             {
                 Utils.Log($"Save Error: {e}");
-                var globalConfigWriter = MyAPIGateway.Utilities.WriteFileInWorldStorage("Error.txt", typeof(ModConfig));
-                globalConfigWriter.Write(e);
-                globalConfigWriter.Close();
+                return false;
             }
         }
 

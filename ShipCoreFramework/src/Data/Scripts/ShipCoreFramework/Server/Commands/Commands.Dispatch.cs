@@ -12,6 +12,12 @@ namespace ShipCoreFramework
     {
         private static void ServerCommandSwitch(long playerId, string messageText)
         {
+            if (Session.IsShuttingDown) return;
+            if (!Session.IsGameThread)
+            {
+                MyAPIGateway.Utilities.InvokeOnGameThread(() => ServerCommandSwitch(playerId, messageText));
+                return;
+            }
             var allArgs = messageText.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             if (allArgs.Length < 2) return;

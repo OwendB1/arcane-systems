@@ -6,10 +6,10 @@ namespace ShipCoreFramework
 {
     public partial class Session
     {
-        private void OnNexusEnabled()
+        private static void OnNexusEnabled()
         {
             if (_startedNexus) return;
-            if (!IsServer) return;
+            if (!IsServer || !_serverRuntimeDataLoaded) return;
             _startedNexus = true;
             LimitsNexusSync.Start(_myNexusApi);
             LimitsNexusSync.BroadcastSnapshot();

@@ -83,13 +83,14 @@ namespace ShipCoreFramework
             }
 
             if (Session.IsServer && SelectedNoCore == null &&
-                string.Equals(SelectedNoCoreUniqueName, RetiredDefaultNoCoreUniqueName,
-                    StringComparison.OrdinalIgnoreCase) &&
+                (string.IsNullOrWhiteSpace(SelectedNoCoreUniqueName) ||
+                 string.Equals(SelectedNoCoreUniqueName, RetiredDefaultNoCoreUniqueName,
+                     StringComparison.OrdinalIgnoreCase)) &&
                 NoCoreConfigs.Count == 1 &&
                 !string.IsNullOrWhiteSpace(NoCoreConfigs[0]?.UniqueName))
             {
                 SelectedNoCore = NoCoreConfigs[0];
-                Utils.Log($"Migrated retired no-core selection to '{SelectedNoCore.UniqueName}'.", 1,
+                Utils.Log($"Automatically selected sole no-core profile '{SelectedNoCore.UniqueName}'.", 1,
                     "Config Validation");
             }
 
@@ -111,11 +112,11 @@ namespace ShipCoreFramework
             if (NoCoreConfigs.Count == 0)
                 return "No content-pack no-core profiles were loaded. Ship Core Framework cannot start.";
             if (string.IsNullOrWhiteSpace(SelectedNoCoreUniqueName))
-                return "No content-pack no-core profile is selected. Use /core listnocores and /core select <name>, then reload the world.";
+                return "No content-pack no-core profile is selected. Use /core listnocores and /core select <name>.";
             if (string.Equals(SelectedNoCoreUniqueName, RetiredDefaultNoCoreUniqueName,
                     StringComparison.OrdinalIgnoreCase))
-                return "The retired built-in no-core profile is still selected. Use /core listnocores and /core select <name>, then reload the world.";
-            return $"Selected no-core profile '{SelectedNoCoreUniqueName}' was not loaded. Restore its content pack or select another profile, then reload the world.";
+                return "The retired built-in no-core profile is still selected. Use /core listnocores and /core select <name>.";
+            return $"Selected no-core profile '{SelectedNoCoreUniqueName}' was not loaded. Restore its content pack and use /core reloadconfig, or select another profile.";
         }
 
         private void NormalizeNoCoreConfigs()

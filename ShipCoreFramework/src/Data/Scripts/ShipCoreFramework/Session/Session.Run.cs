@@ -21,6 +21,8 @@ namespace ShipCoreFramework
         internal static bool TryInitializeRuntime()
         {
             if (_runtimeInitialized || Config?.SelectedNoCore == null) return false;
+            if (IsServer)
+                InitializeServerRuntimeData();
             _runtimeInitialized = true;
             MyAPIGateway.GridGroups.OnGridGroupCreated += GridGroupsOnOnGridGroupCreated;
             MyAPIGateway.GridGroups.OnGridGroupDestroyed += GridGroupsOnOnGridGroupDestroyed;

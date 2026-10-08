@@ -44,15 +44,21 @@ The framework reads configuration from several XML entry points.
 Load behavior:
 
 - `SelectedNoCoreUniqueName` picks one loaded no-core profile by `UniqueName`.
+- When no profile has been selected and exactly one content-pack no-core profile is loaded, the
+  server selects it before runtime initialization and persists the choice during startup. SCF
+  works on the first world load without a manual save or reload. With multiple profiles, use
+  `/core select <name>` to save and apply a choice immediately.
 - SCF has no built-in no-core fallback. If the selected profile is missing or invalid, runtime
-  initialization stays disabled while admin commands remain available to select a profile for the
-  next world load.
+  initialization stays disabled while admin commands remain available. `/core select <name>`
+  saves the selection and initializes SCF, including a scan of existing grid groups, without
+  a world save, reload, or restart. Later selections refresh the running mod and connected clients.
 - Worlds that still select the retired `DEFAULT-NO-CORE-ALL-GRID-TYPES` profile automatically
   migrate when exactly one content-pack profile is loaded. If several are loaded, use
-  `/core select <name>` to choose one, then reload the world.
+  `/core select <name>` to save and apply a choice immediately.
 - The server synchronizes authoritative world settings with a revision.
 - Clients retry initial synchronization every five seconds until it succeeds. Configuration changes
-  and `/core reloadconfig` broadcast a new revision immediately.
+  and `/core reloadconfig` broadcast a new revision immediately. Reloading a valid configuration
+  also initializes SCF if it was waiting for a no-core selection.
 - Manifest groups are global across all loaded manifest files.
 - Duplicate core names, subtype IDs, manifest group names, and upgrade module `TypeId`/`SubtypeId` pairs are rejected during load.
 
@@ -84,7 +90,7 @@ Root tag: `<ModConfig>`
 | --- | --- | --- | --- |
 | `IgnoreAiFactions` | `bool` | Ignores grids recognized as NPCs for core placement/enforcement. | Uses the game's NPC-spawned flag or an NPC identity in `BigOwners`, unless any big owner is a player. Does not replace `IgnoredFactionTags`; it is a separate skip path. |
 | `IgnoredFactionTags` | `List<string>` | Faction tags to skip for enforcement and punishment. | Useful for admin, event, or NPC factions. |
-| `SelectedNoCoreUniqueName` | `string` | Chooses which loaded no-core profile governs coreless grids. | Required; must match a loaded content-pack no-core `UniqueName`. |
+| `SelectedNoCoreUniqueName` | `string` | Chooses which loaded no-core profile governs coreless grids. | Auto-selected when empty and exactly one profile is loaded; otherwise must match a loaded content-pack no-core `UniqueName`. |
 | `DebugMode` | `bool` | Enables debug-oriented behavior. | Also changes some player-count checks to count identities more aggressively. |
 | `CombatLogging` | `bool` | Enables combat logging behavior exposed by the framework. | Runtime toggle also exists through commands. |
 | `CombatLoggingBroadcastRangeMeters` | `double` | Maximum distance from a combat-log event at which players receive its notification. | Default is `20000` (20 km). |

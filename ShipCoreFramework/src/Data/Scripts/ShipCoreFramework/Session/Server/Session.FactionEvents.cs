@@ -64,10 +64,17 @@ namespace ShipCoreFramework
 
         private static void SessionReady()
         {
-            if (Config.SelectedNoCore == null || !IsServer) return;
+            _sessionReady = true;
+            InitializeServerReadyData();
+        }
+
+        private static void InitializeServerReadyData()
+        {
+            if (!IsServer || !_serverRuntimeDataLoaded || _serverReadyDataLoaded) return;
             PerFactionManager.InitializeIdentityCache();
             MyAPIGateway.Session.DamageSystem.RegisterBeforeDamageHandler(-100, CubeGridModifiers.GridCoreDamageHandler);
             MyExplosions.OnExplosion += CubeGridModifiers.HandleLightningExplosions;
+            _serverReadyDataLoaded = true;
         }
 
         private static bool IsRelevantFactionStateChange(MyFactionStateChange action)

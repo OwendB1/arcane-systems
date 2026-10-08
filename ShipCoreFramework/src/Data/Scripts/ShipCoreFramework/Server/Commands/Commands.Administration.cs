@@ -27,15 +27,7 @@ namespace ShipCoreFramework
                 }
 
                 Session.Config = loadedConfig;
-                if (!Session.RuntimeInitialized)
-                {
-                    ModAPI.MarkConfigReady(true);
-                    return "Config loaded with a valid no-core profile. Reload the world to start Ship Core Framework.";
-                }
-
-                Session.ApplyConfigToDefinitions();
-                Session.RefreshGroupsAfterConfigChanged();
-                Session.BroadcastConfigToClients();
+                Session.ApplyServerConfig();
             }
             else
                 Session.Config = loadedConfig;
@@ -207,12 +199,14 @@ namespace ShipCoreFramework
                 return $"No 'no core' config found matching '{key}'. Use /core listnocores.";
             }
 
-            var runtimeWasConfigured = Session.Config.SelectedNoCore != null;
             Session.Config.SelectedNoCoreUniqueName = found.UniqueName ?? string.Empty;
-            Session.Config.ResolveSelectedNoCore();
-            Session.RefreshGroupsAfterConfigChanged();
-            Session.Config.SaveConfig(true, runtimeWasConfigured);
-            return $"Selected 'no core' config: {found.UniqueName} ({found.SubtypeId}). Please save the world and reload the save file afterwards.";
+            if (!Session.Config.ResolveSelectedNoCore())
+                return Session.Config.GetNoCoreConfigurationError();
+
+            var saved = Session.Config.SaveConfig(broadcast: false);
+            Session.ApplyServerConfig();
+            return $"Selected and applied 'no core' config: {found.UniqueName} ({found.SubtypeId}). " +
+                   (saved ? "Selection saved; no world reload is needed." : "Selection could not be saved; check the server log.");
         }
 
         private static string SetWorldSpeed(string[] args)
