@@ -21,6 +21,11 @@ on:
       sbmi_profile:
         required: true
         type: string
+      preview_file:
+        description: Preview filename relative to src_dir
+        required: false
+        type: string
+        default: thumb.png
     secrets:
       STEAM_USERNAME:
         required: true
@@ -128,8 +133,12 @@ jobs:
       - name: Build solution with MDK analyzers
         run: dotnet build arcane-systems.sln --configuration Release
 
+      - name: Validate Workshop publishing metadata
+        run: node tests/workshop-publishing.test.mjs
+
   upload:
     needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
 
     steps:
@@ -174,7 +183,7 @@ jobs:
 
           cp "$PROFILE_FILE" "$STAGING/modinfo.sbmi"
 
-          THUMBNAIL_FILE="$STAGING/thumb.png"
+          THUMBNAIL_FILE="$STAGING/${{ inputs.preview_file }}"
           if [ ! -f "$THUMBNAIL_FILE" ]; then
             echo "Expected Workshop thumbnail not found: $THUMBNAIL_FILE"
             exit 1

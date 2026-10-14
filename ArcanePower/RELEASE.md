@@ -1,4 +1,31 @@
-# Arcane Power 0.2 alpha — unpublished package
+# Arcane Power — Workshop publishing
+
+Workshop item: [3819727962](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962).
+The publishing source of truth is `workshop/title.txt`, `workshop/version.txt`,
+`workshop/description.bbcode`, `src/modinfo.sbmi.main` and `src/thumb.gif`.
+The title is generated as **Arcane Power (1.0.0)** from the two text files.
+The animated preview uses the 480×270 GIF below 1 MB.
+
+`.github/workflows/arcane-power-workshop-upload.yml` calls the existing shared
+Steam uploader. Pull requests build and validate metadata without publishing;
+relevant pushes to `main` and manual dispatch build and then update this item.
+There is one Power item, so its profile is always `main`. The repository's
+existing `STEAM_USERNAME` and `STEAM_CONFIG_VDF` secrets are reused. Other mods
+retain their PNG thumbnails and existing main/beta behavior.
+
+Blueprint gallery images live in `workshop/images/` and are uploaded through
+Steam's gallery editor. Upload the same filenames to replace images without
+adding duplicates. SteamCMD handles the primary preview, not these gallery
+uploads. Rebuild the original-model illustrations with:
+
+```sh
+blender -b ArcanePower/assets/arcane-energy-core.blend --python ArcanePower/assets/render_workshop_blueprints.py
+python3 ArcanePower/tools/compose_workshop_blueprints.py
+```
+
+The render scripts use temporary scenes and do not save the authoring blends.
+
+## Local alpha package
 
 This development package adds the compact modular Energy Core and three
 construction stages for every public block. It includes the current reactor,
@@ -35,9 +62,5 @@ before survival testing. The package is ready for alpha testing, **not certified
 for public release**. Multiplayer, final saved-charge reload, rated-load balance,
 mixed-mod gameplay and complete mining-to-generation survival remain open.
 
-Suggested Workshop title: **Arcane Power (Alpha)**. Description: Large-grid
-arcane reactors, tiered fuels and containment, physical vent hardware, telemetry,
-and expandable native battery storage. Construction stages support welding and
-grinding. Experimental prototype; consult setup instructions and known limits.
-
-No Workshop item has been created or updated.
+The local ZIP remains a separate development artifact; CI uploads the current
+`src` tree with the selected metadata profile and animated preview.

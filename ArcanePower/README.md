@@ -1,5 +1,8 @@
 # Arcane Power prototype
 
+[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962)
+· [Publishing workflow and gallery sources](RELEASE.md)
+
 Arcane Power is an SE1 reactor, fuel-processing and energy-storage mod in development. The current large-grid reactor fits **5×5×3 cells** (SE `Size=(5,3,5)`). Its rounded housing has three native-size conveyor access hatches plus a centered top conveyor connection behind the vent hatch, two base upgrade sockets and curved chamber glass. This is an engineering slice of the [mod plan](../docs/arcane-power-plan.md), not the finished progression.
 
 ## Construction and Energy Core delivery — 11 October 2026

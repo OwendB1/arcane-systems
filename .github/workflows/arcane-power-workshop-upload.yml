@@ -1,0 +1,35 @@
+name: Upload Arcane Power to Steam Workshop
+
+permissions:
+  contents: read
+
+concurrency:
+  group: steam-workshop-upload
+  cancel-in-progress: false
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ArcanePower/**
+      - .github/workflows/arcane-power-workshop-upload.yml
+      - .github/workflows/steam-workshop-upload.yml
+      - tests/workshop-publishing.test.mjs
+  pull_request:
+    paths:
+      - ArcanePower/**
+      - .github/workflows/arcane-power-workshop-upload.yml
+      - .github/workflows/steam-workshop-upload.yml
+      - tests/workshop-publishing.test.mjs
+  workflow_dispatch:
+
+jobs:
+  upload:
+    uses: ./.github/workflows/steam-workshop-upload.yml
+    with:
+      mod_dir: ArcanePower
+      src_dir: ArcanePower/src
+      workshop_dir: ArcanePower/workshop
+      sbmi_profile: main
+      preview_file: thumb.gif
+    secrets: inherit
