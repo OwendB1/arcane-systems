@@ -3,7 +3,7 @@
 Workshop item: [3819727962](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962).
 The publishing source of truth is `workshop/title.txt`, `workshop/version.txt`,
 `workshop/description.bbcode`, `src/modinfo.sbmi.main` and `src/thumb.gif`.
-The title is generated as **Arcane Power (1.0.0)** from the two text files.
+The title is generated as **Arcane Power (0.1.0)** from the two text files.
 The animated preview uses the 480×270 GIF below 1 MB.
 
 `.github/workflows/arcane-power-workshop-upload.yml` calls the existing shared
@@ -27,14 +27,16 @@ The render scripts use temporary scenes and do not save the authoring blends.
 
 ## Local alpha package
 
-This development package adds the compact modular Energy Core and three
+This development package includes the 3×3×3 Energy Core, full-block 1×3×1
+upgrade pillars and three
 construction stages for every public block. It includes the current reactor,
 fuel/voxel art, containment hardware, vents, LCD and tablet implementations.
 
 The 13 October runtime pass closes construction-stage startup/generation gaps,
 restricts cold-start reserve requests to eligible reactors, revokes removed storage
 module allocations immediately and finishes offline/distant storage visuals.
-The native shared menu includes all twelve Power blocks.
+The native shared menu includes all twelve Power blocks. Earlier compact banks
+retain their original hidden definitions and assets, preserving existing saves.
 
 Build the runtime ZIP from the repository root:
 
@@ -45,7 +47,7 @@ python3 ArcanePower/tools/check_energy_core.py
 python3 ArcanePower/tools/package_release.py
 ```
 
-The output is `.cache/release/ArcanePower-0.2-alpha.zip` under ArcanePower.
+The output is `.cache/release/ArcanePower-0.1.0.zip` under ArcanePower.
 Extract its contents into a local mod directory and enable it in an experimental
 SE1 world. The local development symlink already exposes `src` on the next world
 load. Do not load both the extracted package and the development copy together.
@@ -59,7 +61,7 @@ are not required by players. Prototype ratings and recipes may change.
 Read [Energy Core setup and test limits](ENERGY-STORAGE.md), the
 [reactor instructions](README.md), and the [remaining work](../docs/arcane-power-remaining-work.md)
 before survival testing. The package is ready for alpha testing, **not certified
-for public release**. Multiplayer, final saved-charge reload, rated-load balance,
+for public release**. Multiplayer, rated-load balance,
 mixed-mod gameplay and complete mining-to-generation survival remain open.
 
 The local ZIP remains a separate development artifact; CI uploads the current

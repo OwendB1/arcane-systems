@@ -21,8 +21,8 @@ for source in scenes:
  core=source.name=='ArcanePower_EnergyCore'
  groups=[(cols['main'][0],folder/(source.name+'.png'))]
  groups += [(c,previews/(source.name+'_BS'+str(c.seut.type_index)+'.png')) for c in (cols['bs'] or []) if any(o.type=='MESH' for o in c.objects)]
- cam.location=(10,16,9) if core else (4,-7,4)
- cam.rotation_euler=(-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=11 if core else 3.8
+ cam.location=(-10,-16,9) if core else (-4,7,4)
+ cam.rotation_euler=(-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=11 if core else 8.5
  for col,path in groups:
   copies=[];collections=[col]
   if core and col==cols['main'][0]:collections.append(COLS.get_collections(bpy.data.scenes['ArcanePower_EnergyRotor'])['main'][0])
@@ -30,6 +30,9 @@ for source in scenes:
    for mesh in collection.objects:
     if mesh.type!='MESH':continue
     obj=bpy.data.objects.new('Render mesh',mesh.data);review.collection.objects.link(obj);obj.matrix_world=mesh.matrix_world.copy();copies.append(obj)
+    if core and collection!=col:
+     dummy=next(o for o in col.objects if o.name.startswith('subpart_EnergyRotor'))
+     obj.matrix_world=dummy.matrix_world @ obj.matrix_world
   bpy.context.window.scene=review;review.render.filepath=str(path);bpy.ops.render.render(write_still=True)
   for obj in copies:bpy.data.objects.remove(obj,do_unlink=True)
  print('RENDERED',source.name,flush=True)

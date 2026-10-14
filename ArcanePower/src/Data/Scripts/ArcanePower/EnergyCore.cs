@@ -21,7 +21,8 @@ namespace ArcanePower
     // Fixed native battery capacities; never edit a shared block definition or
     // move charge between blocks. The bank only allocates transfer limits.
     [MyEntityComponentDescriptor(typeof(MyObjectBuilder_BatteryBlock), false,
-        "ArcanePower_EnergyCore", "ArcanePower_EnergyCapacity", "ArcanePower_EnergyCapacityAdvanced")]
+        "ArcanePower_EnergyCore", "ArcanePower_EnergyCapacity", "ArcanePower_EnergyCapacityAdvanced",
+        "ArcanePower_EnergyCore_Pillar", "ArcanePower_EnergyCapacity_Pillar", "ArcanePower_EnergyCapacityAdvanced_Pillar")]
     public sealed class EnergyCore : MyGameLogicComponent
     {
         internal const string CoreSubtype = "ArcanePower_EnergyCore";
@@ -41,12 +42,30 @@ namespace ArcanePower
         private string status = "Connecting storage";
         private Matrix rotorRest;
         private MyEntitySubpart rotor;
-        private bool IsController { get { return block.BlockDefinition.SubtypeName == CoreSubtype; } }
+        private bool IsController { get { return BaseSubtype(block) == CoreSubtype; } }
+
+        private static bool IsPillar(IMyCubeBlock candidate)
+        {
+            return candidate.BlockDefinition.SubtypeName.EndsWith("_Pillar", StringComparison.Ordinal);
+        }
+
+        private static string BaseSubtype(IMyCubeBlock candidate)
+        {
+            string name = candidate.BlockDefinition.SubtypeName;
+            return IsPillar(candidate) ? name.Substring(0, name.Length - 7) : name;
+        }
 
         public override void Init(MyObjectBuilder_EntityBase builder)
         {
             battery = (MyBatteryBlock)Entity;
             block = (IMyBatteryBlock)Entity;
+            // Native socket compatibility/connection feedback. Bank limits remain
+            // owned by UpdateBank, including socket roles and ownership checks.
+            if (IsController)
+            {
+                block.AddUpgradeValue("ArcaneEnergyTransfer", 0f);
+                block.AddUpgradeValue("ArcaneEnergyStabilizer", 0f);
+            }
             block.AppendingCustomInfo += AppendInfo;
             NeedsUpdate = MyEntityUpdateEnum.BEFORE_NEXT_FRAME;
         }
@@ -86,6 +105,8 @@ namespace ArcanePower
             var terminal = module as IMyTerminalBlock;
             if (!Healthy(module) || module.Position != position
                 || Base6Directions.GetIntVector(module.Orientation.Forward) != -direction
+                || IsPillar(module) != IsPillar(block)
+                || (IsPillar(block) && module.Orientation.Up != block.Orientation.Up)
                 || terminal == null || !terminal.HasPlayerAccess(block.OwnerId)) return null;
             return module;
         }
@@ -93,7 +114,7 @@ namespace ArcanePower
         private static int Tier(IMyCubeBlock module, string name)
         {
             if (module == null) return 0;
-            string subtype = module.BlockDefinition.SubtypeName;
+            string subtype = BaseSubtype(module);
             return subtype == name ? 1 : subtype == name + "Advanced" ? 2 : 0;
         }
 
@@ -102,7 +123,8 @@ namespace ArcanePower
             var direction = Base6Directions.GetIntVector(block.Orientation.Forward);
             var slim = block.CubeGrid.GetCubeBlock(block.Position + direction * 2);
             var candidate = slim == null ? null : slim.FatBlock;
-            if (!Healthy(candidate) || candidate.BlockDefinition.SubtypeName != CoreSubtype
+            if (!Healthy(candidate) || BaseSubtype(candidate) != CoreSubtype
+                || IsPillar(candidate) != IsPillar(block)
                 || candidate.Position != block.Position + direction * 2) return null;
             return candidate.GameLogic.GetAs<EnergyCore>();
         }
@@ -146,7 +168,7 @@ namespace ArcanePower
             Vector3I forward = Base6Directions.GetIntVector(block.Orientation.Forward);
             Vector3I right;
             Vector3I.Cross(ref forward, ref up, out right);
-            int stabilizer = Tier(Socket(up), "ArcanePower_EnergyStabilizer");
+            int stabilizer = Tier(Socket(IsPillar(block) ? forward : up), "ArcanePower_EnergyStabilizer");
             int transferTier = Tier(Socket(-forward), "ArcanePower_EnergyTransfer");
             transferTier = Math.Min(transferTier, stabilizer);
             transfer = transferTier == 2 ? 1000000 : transferTier == 1 ? 100000 : 10000;

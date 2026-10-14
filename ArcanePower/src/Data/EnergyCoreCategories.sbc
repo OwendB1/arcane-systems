@@ -9,13 +9,13 @@
       <DisplayName>Arcane Systems</DisplayName>
       <Name>ArcaneSystems</Name>
       <ItemIds>
-        <string>BatteryBlock/ArcanePower_EnergyCore</string>
-        <string>BatteryBlock/ArcanePower_EnergyCapacity</string>
-        <string>BatteryBlock/ArcanePower_EnergyCapacityAdvanced</string>
-        <string>UpgradeModule/ArcanePower_EnergyTransfer</string>
-        <string>UpgradeModule/ArcanePower_EnergyTransferAdvanced</string>
-        <string>UpgradeModule/ArcanePower_EnergyStabilizer</string>
-        <string>UpgradeModule/ArcanePower_EnergyStabilizerAdvanced</string>
+        <string>BatteryBlock/ArcanePower_EnergyCore_Pillar</string>
+        <string>BatteryBlock/ArcanePower_EnergyCapacity_Pillar</string>
+        <string>BatteryBlock/ArcanePower_EnergyCapacityAdvanced_Pillar</string>
+        <string>UpgradeModule/ArcanePower_EnergyTransfer_Pillar</string>
+        <string>UpgradeModule/ArcanePower_EnergyTransferAdvanced_Pillar</string>
+        <string>UpgradeModule/ArcanePower_EnergyStabilizer_Pillar</string>
+        <string>UpgradeModule/ArcanePower_EnergyStabilizerAdvanced_Pillar</string>
       </ItemIds>
     </Category>
   </CategoryClasses>

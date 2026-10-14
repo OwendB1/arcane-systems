@@ -1,16 +1,18 @@
 """Create a separate, disposable survival validation world; never edit the user's lab."""
-import uuid
+import uuid,sys
 from pathlib import Path
 import xml.etree.ElementTree as E
 from prepare_lab import GAME,USER,ROOT,save,set_text,XSI
-WORLD=USER/'Saves/76561198074076521/Arcane Energy - Validation'
+PILLARS='--pillars' in sys.argv
+LABEL='Arcane Energy Three-Cell Pillars - Validation' if PILLARS else 'Arcane Energy - Validation'
+WORLD=USER/'Saves/76561198074076521'/LABEL
 KEY='f6e09e9a-76ef-4d21-9ef1-31e5cd759881'
 
 def main():
  if WORLD.exists():raise RuntimeError('Preserving existing validation world: '+str(WORLD))
  template=GAME/'Content/CustomWorlds/Empty World'
  checkpoint=E.parse(template/'Sandbox.sbc').getroot()
- for path,value in {'SessionName':'Arcane Energy - Validation','WorldId':str(uuid.uuid4()),'Description':'Disposable native construction and energy bank validation. Original lab untouched.',
+ for path,value in {'SessionName':LABEL,'WorldId':str(uuid.uuid4()),'Description':'Disposable native construction and energy bank validation. Original lab untouched.',
   'Settings/GameMode':'Survival','Settings/OnlineMode':'OFFLINE','Settings/EnableCopyPaste':'true','Settings/EnableSpectator':'true','Settings/EnableResearch':'false','Settings/EnableEconomy':'false',
   'Settings/EnableEncounters':'false','Settings/CargoShipsEnabled':'false','Settings/EnableDrones':'false','Settings/AutoSaveInMinutes':0}.items():set_text(checkpoint,path,value)
  mods=checkpoint.find('Mods')
@@ -27,6 +29,7 @@ def main():
  blocks=E.SubElement(grid,'CubeBlocks');next_id=880000000001000
  def block(kind,name,pos,forward='Forward',up='Up',build=1,stored=None,identity=True):
   nonlocal next_id
+  if PILLARS and name.startswith('ArcanePower_Energy'):name+='_Pillar'
   next_id+=1;b=E.SubElement(blocks,'MyObjectBuilder_CubeBlock',{'{'+XSI+'}type':'MyObjectBuilder_'+kind})
   for path,value in {'SubtypeName':name,'EntityId':next_id,'BuildPercent':build,'IntegrityPercent':build,'Owner':0,'ShareMode':'All','Enabled':'true','CustomName':name+' '+str(next_id)}.items():set_text(b,path,value)
   E.SubElement(b,'Min',x=str(pos[0]),y=str(pos[1]),z=str(pos[2]));E.SubElement(b,'BlockOrientation',Forward=forward,Up=up)
@@ -41,10 +44,11 @@ def main():
  for x in range(-5,19):
   for z in range(-4,5):block('CubeBlock','LargeBlockArmorBlock',(x,0,z))
  block('BatteryBlock','ArcanePower_EnergyCore',(-1,1,-1),stored=500)
- block('BatteryBlock','ArcanePower_EnergyCapacity',(-2,2,0),'Right',stored=5000)
- block('BatteryBlock','ArcanePower_EnergyCapacityAdvanced',(2,2,0),'Left',stored=50000)
- block('UpgradeModule','ArcanePower_EnergyTransferAdvanced',(0,2,2))
- block('UpgradeModule','ArcanePower_EnergyStabilizerAdvanced',(0,4,0),'Down','Forward')
+ block('BatteryBlock','ArcanePower_EnergyCapacity',(-2,1 if PILLARS else 2,0),'Right',stored=5000)
+ block('BatteryBlock','ArcanePower_EnergyCapacityAdvanced',(2,1 if PILLARS else 2,0),'Left',stored=50000)
+ block('UpgradeModule','ArcanePower_EnergyTransferAdvanced',(0,1 if PILLARS else 2,2))
+ if PILLARS:block('UpgradeModule','ArcanePower_EnergyStabilizerAdvanced',(0,1,-2),'Backward','Up')
+ else:block('UpgradeModule','ArcanePower_EnergyStabilizerAdvanced',(0,4,0),'Down','Forward')
  # Independent copied core must discard the serialized charge on its new ID.
  block('BatteryBlock','ArcanePower_EnergyCore',(7,1,-1),stored=500,identity=False)
  # A native battery in Recharge provides a steady demand without custom power code.
@@ -53,7 +57,7 @@ def main():
  from prepare_energy_core import BLOCKS
  for row,name in enumerate(BLOCKS):
   kind='BatteryBlock' if BLOCKS[name][1] else 'UpgradeModule'
-  for col,ratio in enumerate((.1,.35,.65,1)):
+  for col,ratio in enumerate((.1,.5,.85,1)):
    block(kind,name,(-3+col*5,1,10+row*5),build=ratio,stored=0 if kind=='BatteryBlock' else None)
  WORLD.mkdir(parents=True)
  save(checkpoint,WORLD/'Sandbox.sbc');save(sector,WORLD/'SANDBOX_0_0_0_.sbs')

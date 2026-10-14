@@ -76,19 +76,21 @@ note(d, 848, 706, 'B', 'COMPLETE THE ROUTE', ['1-15 aligned ducts, then one term
 im.save(OUT/'hardware-blueprint.png', optimize=True)
 
 im, d = plate('03', 'ENERGY CORE / MODULAR STORAGE', 'NATIVE BATTERY STORAGE  //  CAPACITY  //  TRANSFER  //  STABILIZATION')
-model(im, 'energy-core', (38, 181, 700, 575))
-text(d, (100, 775), '3 x 3 x 3 LARGE GRID  /  1,000 MWh  /  10 GW BASE', 17, CYAN)
+model(im, 'energy-bank', (38, 181, 700, 550))
+text(d, (70, 745), 'ASSEMBLED BANK / NATIVE SE UPGRADE SOCKETS', 17, GOLD)
+text(d, (70, 777), 'CORE: 3 x 3 x 3 LG / 1,000 MWh / 10 GW BASE', 17, CYAN)
+text(d, (70, 806), 'GLAZING OMITTED TO SHOW INTERNAL ASSEMBLY', 14, MUTED)
 d.line((770, 185, 770, 805), fill='#315a70', width=2)
 for i, (name, title, line1, line2) in enumerate([
     ('capacity', 'CAPACITY', 'Side sockets', '+100,000 MWh each'),
     ('transfer', 'TRANSFER', 'Rear socket', '1 TW ceiling'),
-    ('stabilizer', 'STABILIZER', 'Top socket', 'Enables expansions')]):
+    ('stabilizer', 'STABILIZER', 'Front socket', 'Enables expansions')]):
     x=805+i*250
-    model(im, name, (x, 240, 230, 265))
+    model(im, name, (x, 225, 230, 295))
     text(d, (x+6, 539), title, 24, INK, True)
     text(d, (x+6, 577), line1, 16, CYAN)
     text(d, (x+6, 606), line2, 16, MUTED)
-text(d, (813, 191), 'ADVANCED MODULES SHOWN', 18, GOLD)
+text(d, (813, 191), '1 x 3 x 1 LG / ADVANCED PILLARS', 18, GOLD)
 note(d, 812, 690, '01', 'KEEP A RESERVE', ['Auto / Recharge / Discharge', 'Emergency support for eligible reactors', 'Each physical battery retains its own charge'])
 im.save(OUT/'energy-blueprint.png', optimize=True)
 print('Wrote three 1600x900 Workshop blueprint plates to', OUT)

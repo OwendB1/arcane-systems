@@ -86,6 +86,21 @@ class EnergyCore {
     if((side.X*side.X+side.Y*side.Y+side.Z*side.Z)==0)continue;
     Need((side.X*side.X+side.Y*side.Y+side.Z*side.Z)==1 && side!=-side,"unique rotated side sockets");
    }
+  // Full-height pillars must remain upright in the core's local frame.
+  foreach(Base6Directions.Direction f in Enum.GetValues(typeof(Base6Directions.Direction)))
+   foreach(Base6Directions.Direction u in Enum.GetValues(typeof(Base6Directions.Direction))){
+    var fv=Base6Directions.GetIntVector(f);var uv=Base6Directions.GetIntVector(u);Vector3I side;Vector3I.Cross(ref fv,ref uv,out side);
+    if(side==Vector3I.Zero)continue;
+    var g=new Grid();var pc=Cell(g,Vector3I.Zero,CoreSubtype+"_Pillar",1000,f);pc.block.Orientation.Up=u;
+    var cap=Cell(g,side*2,"ArcanePower_EnergyCapacityAdvanced_Pillar",100000,Base6Directions.GetDirection(-side));cap.block.Orientation.Up=u;
+    var st=Module(g,fv*2,"ArcanePower_EnergyStabilizerAdvanced_Pillar",Base6Directions.GetDirection(-fv));st.Orientation.Up=u;
+    var tr=Module(g,-fv*2,"ArcanePower_EnergyTransferAdvanced_Pillar",f);tr.Orientation.Up=u;
+    pc.UpdateBank();Need(pc.cells.Count==2,"upright rotated pillar bank");Near(pc.capacity,101000,"pillar capacity");Near(pc.transfer,1000000,"pillar transfer");
+    Need(cap.FindController()==pc,"pillar reverse controller lookup");
+    cap.block.Orientation.Up=Base6Directions.GetDirection(-uv);pc.UpdateBank();Need(pc.cells.Count==1,"upside-down pillar rejected");cap.block.Orientation.Up=u;
+    cap.block.BlockDefinition.SubtypeName="ArcanePower_EnergyCapacityAdvanced";pc.UpdateBank();Need(pc.cells.Count==1,"compact and pillar banks cannot mix");cap.block.BlockDefinition.SubtypeName+="_Pillar";
+    g.Blocks.Remove(fv*2);st.Position=uv*2;g.Blocks[st.Position]=new Slim{FatBlock=st};pc.UpdateBank();Need(pc.cells.Count==1,"pillar stabilizer belongs on front, not roof");
+   }
   Console.WriteLine("PASS energy bank: tiers, allocation, native clamp, reserve boundary, emergency/modes, orientation, access, construction, detach/split, charge preservation");
  }
 }

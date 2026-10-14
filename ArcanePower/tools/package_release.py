@@ -63,14 +63,17 @@ def main():
     entries = []
     output = ROOT/'.cache/release'
     output.mkdir(parents=True, exist_ok=True)
-    archive = output/'ArcanePower-0.2-alpha.zip'
+    version = (ROOT/'workshop/version.txt').read_text().strip()
+    if ET.parse(MOD/'metadata.mod').findtext('ModVersion') != version:
+        raise ValueError('Mod metadata and Workshop version must match')
+    archive = output/('ArcanePower-'+version+'.zip')
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as package:
         for path in sorted(files):
             relative = path.relative_to(MOD).as_posix()
             data = path.read_bytes()
             package.writestr(relative, data)
             entries.append(dict(path=relative, bytes=len(data), sha256=hashlib.sha256(data).hexdigest()))
-    manifest = dict(version='0.2-alpha', published=False, archive=archive.name,
+    manifest = dict(version=version, published=False, archive=archive.name,
         sha256=hashlib.sha256(archive.read_bytes()).hexdigest(), bytes=archive.stat().st_size,
         files=entries, native_assets=sorted(native))
     (ROOT/'validation/release-manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')

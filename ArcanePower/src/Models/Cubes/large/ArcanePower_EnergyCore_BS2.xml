@@ -6,5 +6,8 @@
 	<MaterialRef Name="Construction"/>
 	<MaterialRef Name="Metal_Dull"/>
 	<MaterialRef Name="Metal_Shiny"/>
+	<MaterialRef Name="PaintedMetal_Yellow"/>
+	<MaterialRef Name="Conveyor"/>
+	<MaterialRef Name="PaintedMetal_Colorable"/>
 	<MaterialRef Name="PaintedMetal_Darker"/>
 </Model>

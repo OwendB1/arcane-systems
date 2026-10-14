@@ -1,15 +1,28 @@
 # Arcane Energy Core
 
-The accepted compact installation uses a **3×3×3 large-grid core**, with separate
-one-cell capacity, transfer and stabilizer modules. The seven blocks have models,
+The pillar installation uses a **3×3×3 large-grid core**, with separate
+**1×3×1 large-grid capacity, transfer and stabilizer pillars**. The modules retain
+a full-block footprint, with curved backs fitted around the chamber. The seven blocks have models,
 icons and three construction stages each. [Model and stage sheet](validation/energy-core-stages.png).
+
+The storage family shares the reactor's segmented round housings, machined
+collars, clear curved chamber glass and recessed service hardware. All four core
+faces and the six module variants use the original, unscaled SE upgrade port.
+The [storage blueprint](workshop/images/energy-blueprint.png) shows a mounted bank.
 
 ## Placement and provisional balance
 
 Place modules at the center of the corresponding core face, two grid cells from
 the core's center. Each module's connector/Forward face must point toward the
-core. Modules must be fully welded, functional, enabled, accessible to the core
+core, and its Up direction must match the core. All pillars stand upright; the
+stabilizer occupies the front socket. Modules must be fully welded, functional, enabled, accessible to the core
 owner and on the same physical grid. Connector-linked grids do not form a bank.
+
+Native `detector_upgrade` sockets mate at the grid faces. Transfer and stabilizer
+blocks advertise native upgrade compatibility with the Energy Core. Capacity
+modules remain batteries; the bank's existing placement, access and tier checks
+still control all allocations. Native connection feedback alone does not bypass
+the required socket role or stabilizer tier.
 
 | Block | Position | Capacity or capability |
 | --- | --- | --- |
@@ -18,14 +31,21 @@ owner and on the same physical grid. Connector-linked grids do not form a bank.
 | Advanced Capacity Module | Left/right; up to two | +100,000 MWh each |
 | Transfer Module | Rear; one | 100 GW bank transfer |
 | Advanced Transfer Module | Rear; one | 1 TW bank transfer |
-| Stabilizer | Top; one | Supports standard modules |
-| Advanced Stabilizer | Top; one | Supports standard and advanced modules |
+| Stabilizer | Front; one | Supports standard modules |
+| Advanced Stabilizer | Front; one | Supports standard and advanced modules |
 
 The bare core operates without a stabilizer. Both capacity sockets may use the
 same tier or mixed tiers. Losing the stabilizer disables unsupported expansions;
 losing the transfer module restores the base transfer ceiling. Component costs,
 capacity, PCU and transfer ratings are provisional. Ratings align with the
 reactor's 10/100/1,000 GW tiers; they are not final survival balance.
+
+## Existing compact banks
+
+Previously placed 3×3×3 cores and one-cell modules retain their original geometry,
+sockets, capacities and stored charge. Their definitions are hidden from the build
+menu; new construction uses the pillar family. Compact banks still use a top
+stabilizer. Compact and pillar modules cannot be mixed.
 
 ## Native energy accounting
 
@@ -89,9 +109,29 @@ The 12 October art revision replaces the original thin outlines and solid
 intermediate boxes with vanilla-inspired channel frames, diagonal bracing,
 mounted cells/transformers/coils and partial armor. The last Energy Core stage
 shows a static, unpowered central assembly; the finished block retains its
-existing animation and materials. Main models and collision bytes are unchanged.
+existing animation and materials. The 14 October refinement replaces the storage
+main models and carries their native sockets and machinery into the build stages.
+Standard and advanced modules have different cell, bus or winding arrangements.
+The reactor models and collision geometry are unchanged.
 
 ## Verification and remaining release work
+
+The three-cell pillar revision passed native model/socket and all 21 stage checks,
+plus placement policy checks across all 24 cardinal orientations. The isolated
+pillar world verified both native upgrade connections, 111,000 MWh mixed capacity,
+a 1 TW ceiling, the 12 MW test load and front-stabilizer disable/re-enable. The
+original compact save also reloaded with its geometry, connections and charge
+preserved. See [pillar evidence](validation/energy-pillars.json), the
+[live bank](validation/energy-pillars-live.png) and the updated blueprint above.
+
+
+The 14 October refinement passed native socket/mating and model-bound checks for
+all seven finished models, plus embedded collision checks for all 21 build stages.
+In the isolated survival world, both native upgrade modules report one connection;
+the mixed bank retains 111,000 MWh capacity, a 1 TW ceiling and supplies the native
+12 MW test load. Stabilizer disable/re-enable and saved-charge reload also passed.
+See [refinement evidence](validation/energy-refinement.json) and the
+[in-game view](validation/energy-refined-live.png). This remains a single-client check.
 
 The SE compatibility build passes with zero warnings/errors. Focused policy
 checks cover tiers, total transfer allocation, native output resets, reserve
@@ -110,8 +150,8 @@ expansions and retained their energy. A deliberately mismatched copied identity
 reset to zero charge. The subsequent save contains the updated native charge and
 matching identity markers. [Evidence](validation/energy-runtime.json).
 
-Final reload of that newly saved charge was not completed: the client connection
-closed. A separate dedicated-server launch stopped before loading mods because
+The interrupted saved-charge reload was completed on 14 October; all three cells
+retained their saved energy. A separate dedicated-server launch stopped before loading mods because
 the Wine environment lacks the required C++ redistributable. Dedicated operation,
 two-client replication/late join, live ownership changes, splits/merges,
 projection/grinding, sustained rated load, emergency contention and distance

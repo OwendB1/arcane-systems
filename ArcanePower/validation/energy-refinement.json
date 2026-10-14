@@ -1,0 +1,77 @@
+{
+  "date": "2026-10-14",
+  "version": "0.1.0",
+  "model_family": "energy_109d27f880a0",
+  "compatibility_build": {
+    "warnings": 0,
+    "errors": 0
+  },
+  "exported_models": 7,
+  "construction_models": 21,
+  "checks": [
+    "native MWM socket count, face-center cell, forward axis, mating depth, bounds and native socket material",
+    "all 21 construction models: geometry, construction material, no animated dummies and embedded collision",
+    "bank policy checks: tiers, allocation, reserve, ownership, orientation, disabled/incomplete hardware, disconnect and charge preservation",
+    "15 existing reactor/hardware construction models and model transitions",
+    "native combined block categories",
+    "Workshop metadata and executable VDF generator",
+    "package dependencies, ZIP CRCs and every file hash"
+  ],
+  "live_world": "Arcane Energy - Validation",
+  "live_native_socket_connections": [
+    "native_socket tick=120 subtype=ArcanePower_EnergyTransferAdvanced connections=1",
+    "native_socket tick=120 subtype=ArcanePower_EnergyStabilizerAdvanced connections=1",
+    "native_socket tick=240 subtype=ArcanePower_EnergyTransferAdvanced connections=1",
+    "native_socket tick=240 subtype=ArcanePower_EnergyStabilizerAdvanced connections=1",
+    "native_socket tick=360 subtype=ArcanePower_EnergyTransferAdvanced connections=1",
+    "native_socket tick=360 subtype=ArcanePower_EnergyStabilizerAdvanced connections=1",
+    "native_socket tick=480 subtype=ArcanePower_EnergyTransferAdvanced connections=1",
+    "native_socket tick=480 subtype=ArcanePower_EnergyStabilizerAdvanced connections=1",
+    "native_socket tick=600 subtype=ArcanePower_EnergyTransferAdvanced connections=1",
+    "native_socket tick=600 subtype=ArcanePower_EnergyStabilizerAdvanced connections=1",
+    "native_socket tick=720 subtype=ArcanePower_EnergyTransferAdvanced connections=1",
+    "native_socket tick=720 subtype=ArcanePower_EnergyStabilizerAdvanced connections=1"
+  ],
+  "live_bank": {
+    "capacity_mwh": 111000,
+    "ceiling_mw": 1000000,
+    "native_load_mw": 12,
+    "stabilizer_disable_reenable_passed": true
+  },
+  "saved_charge_reload": [
+    {
+      "entity_id": "880000000001217",
+      "saved_mwh": 499.98123,
+      "loaded_mwh": 499.9812
+    },
+    {
+      "entity_id": "880000000001218",
+      "saved_mwh": 4999.983,
+      "loaded_mwh": 4999.9824
+    },
+    {
+      "entity_id": "880000000001219",
+      "saved_mwh": 49999.863,
+      "loaded_mwh": 49999.86
+    }
+  ],
+  "screenshot": "energy-refined-live.png",
+  "package": {
+    "files": 216,
+    "bytes": 49624295,
+    "sha256": "ae8a38cbda0ee22a8fea047e89de0425917a283a60cdcd34ccd60f06fdba3b35"
+  },
+  "source_sha256": {
+    "assets/arcane-energy-core.blend": "5f9422d91276272efae6ea6f5cea6be6533f91ce7829aab40992e5f80fd1b2a2",
+    "assets/build_energy_core.py": "4efa00f78973aa411027e88598fff5f9aa0f2fe52eaf6165f8034b41c7ee6204",
+    "assets/build_construction_stages.py": "6cbe2aa924273fa8bb44bbe2649a1beca2ac091cdd1d9fae61b852cec191eef3",
+    "src/Data/Scripts/ArcanePower/EnergyCore.cs": "bba7b937267efd5f58e883090a17eb3b232494ff5f2ec3550b77c63d09448f6c",
+    "src/Data/CubeBlocks/ArcanePower_EnergyCore.sbc": "35e38623c0f2de03ab921a2ee6edd12c365193dec446ff4f2913d8e33dfcb4fa",
+    "workshop/images/energy-blueprint.png": "e54e6917f154793c0016e48ae0bd08abcd7b546e87e47d2d250f3f231c519619"
+  },
+  "limits": [
+    "Offline single-client validation; dedicated and late join not exercised",
+    "Rated-load balance and live welding/grinding not exercised",
+    "Changes are local; Workshop publishing has not been triggered"
+  ]
+}

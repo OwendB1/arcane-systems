@@ -63,7 +63,7 @@ def geometry(source, transform=Matrix.Identity(4), reactor=False):
         pose = transform @ obj.matrix_world
         if obj.type == 'MESH':
             # The cutaway removes glazing, exposing the authored interior.
-            if obj.name.startswith('Curved chamber / pane') or any(m and ('glass' in m.name.lower()) for m in obj.data.materials):
+            if obj.name.startswith(('Curved chamber / pane','Energy / chamber glazing')) or any(m and ('glass' in m.name.lower()) for m in obj.data.materials):
                 continue
             yield obj, pose
         elif obj.name.startswith('subpart_') and obj.get('file') in bpy.data.scenes:
@@ -86,15 +86,24 @@ jobs = [
     ('advanced-controller', 'ArcanePower_AdvancedContainmentController', (5, 12, 6)),
     ('duct', 'ArcanePower_VentDuct', (8, -12, 10)),
     ('outlet', 'ArcanePower_VentOutlet', (8, -12, 10)),
-    ('energy-core', 'ArcanePower_EnergyCore', (10, 16, 9)),
-    ('capacity', 'ArcanePower_EnergyCapacityAdvanced', (4, -7, 4)),
-    ('transfer', 'ArcanePower_EnergyTransferAdvanced', (4, -7, 4)),
-    ('stabilizer', 'ArcanePower_EnergyStabilizerAdvanced', (4, -7, 4)),
+    ('energy-core', 'ArcanePower_EnergyCore', (-10, -16, 9)),
+    ('energy-bank', 'ArcanePower_EnergyCore', (-10, -16, 10)),
+    ('capacity', 'ArcanePower_EnergyCapacityAdvanced', (-4, 7, 4)),
+    ('transfer', 'ArcanePower_EnergyTransferAdvanced', (-4, 7, 4)),
+    ('stabilizer', 'ArcanePower_EnergyStabilizerAdvanced', (-4, 7, 4)),
 ]
 for label, name, direction in jobs:
     if '--' in sys.argv and label not in sys.argv[sys.argv.index('--')+1:]: continue
     objects = []
     parts = list(geometry(bpy.data.scenes[name], reactor=label == 'reactor'))
+    if label == 'energy-bank':
+        for subtype, position, axis, angle in (
+            ('CapacityAdvanced', (5,0,0), 'Z', -math.pi/2),
+            ('CapacityAdvanced', (-5,0,0), 'Z', math.pi/2),
+            ('TransferAdvanced', (0,5,0), 'Z', 0),
+            ('StabilizerAdvanced', (0,-5,0), 'Z', math.pi)):
+            pose=Matrix.Translation(position) @ Matrix.Rotation(angle,4,axis)
+            parts.extend(geometry(bpy.data.scenes['ArcanePower_Energy'+subtype],pose))
     bpy.context.window.scene = scene
     points = [pose @ v.co for original, pose in parts for v in original.data.vertices]
     center = Vector([(min(p[i] for p in points) + max(p[i] for p in points)) / 2 for i in range(3)])

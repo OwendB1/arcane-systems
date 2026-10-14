@@ -5,15 +5,16 @@
 
 Arcane Power is an SE1 reactor, fuel-processing and energy-storage mod in development. The current large-grid reactor fits **5×5×3 cells** (SE `Size=(5,3,5)`). Its rounded housing has three native-size conveyor access hatches plus a centered top conveyor connection behind the vent hatch, two base upgrade sockets and curved chamber glass. This is an engineering slice of the [mod plan](../docs/arcane-power-plan.md), not the finished progression.
 
-## Construction and Energy Core delivery — 11 October 2026
+## Construction and Energy Core delivery — updated 14 October 2026
 
 All twelve public blocks now have **three native construction stages**, 36 models
 for welding/grinding. The existing collisions remain as accepted. Native imports,
 stage bounds, construction materials, embedded collisions and reactor model
 transitions pass their focused checks.
 
-The **compact 3×3×3 Energy Core** is implemented with two side capacity sockets,
-a rear transfer socket and a top stabilizer. Standard/advanced expansions provide
+The **3×3×3 Energy Core** uses full-block **1×3×1 upgrade pillars**, with two side
+capacity sockets, a rear transfer socket and a front stabilizer. Pillars face the
+core and share its Up direction. Existing compact banks retain their geometry and charge. Standard/advanced expansions provide
 fixed native storage and 10/100/1,000 GW bank transfer tiers. It includes native
 charge modes, emergency reserve controls, charge-dependent glow, slow rotation,
 icons and construction models. [Setup, ratings and validation](ENERGY-STORAGE.md)
@@ -21,7 +22,7 @@ icons and construction models. [Setup, ratings and validation](ENERGY-STORAGE.md
 
 The isolated survival test verified native output allocation, stabilizer
 disconnect/reconnect and copied-charge reset. Updated charge and identity markers
-were saved; final reload remains unverified after the client connection closed.
+were saved; the 14 October reload confirmed that all three cells retained their charge.
 The dedicated launch was blocked by its missing C++ runtime before mod loading.
 The compatibility build and focused checks pass. Multiplayer, high-load balance
 and the other [release gates](../docs/arcane-power-remaining-work.md) remain open.

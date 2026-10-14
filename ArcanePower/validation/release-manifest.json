@@ -1,9 +1,9 @@
 {
-  "version": "0.2-alpha",
+  "version": "0.1.0",
   "published": false,
-  "archive": "ArcanePower-0.2-alpha.zip",
-  "sha256": "a6038696815182faadcb7c42a3843c132e5ece4b93e1b20eb0d96cd9433fc3e7",
-  "bytes": 46916388,
+  "archive": "ArcanePower-0.1.0.zip",
+  "sha256": "ceae3bce6318c5eda3e55b5cb3ce953ab5bc40292974991eb9227646db6f2e2a",
+  "bytes": 57158939,
   "files": [
     {
       "path": "Audio/ArcanePower/Assembly.wav",
@@ -102,8 +102,13 @@
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_EnergyCore.sbc",
-      "bytes": 21716,
-      "sha256": "a5deb78aca9663190cd8aaeea51719114dddcfcc8313d85316b4e9d0383b9be6"
+      "bytes": 23070,
+      "sha256": "9ed72dd0fc0d7f99e552210604c99870fb2233e30868ae84b6f1294eb627f784"
+    },
+    {
+      "path": "Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc",
+      "bytes": 23482,
+      "sha256": "35dab062c843e0f84a48842aa6ddefaf2eed1237243d72e230ec4b8819d11eae"
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_ReactorPrototype.sbc",
@@ -127,8 +132,8 @@
     },
     {
       "path": "Data/EnergyCoreCategories.sbc",
-      "bytes": 971,
-      "sha256": "66f5b299eb3a01bd94825d29f29f5feb1dc290f34221d783b1e3e95c7a5d2685"
+      "bytes": 1020,
+      "sha256": "e7f516bb8285bf72ecd29f363721d5b5910bb4bc45e3e49761eb7d55fdb24a3e"
     },
     {
       "path": "Data/EntityComponents.sbc",
@@ -162,8 +167,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/EnergyCore.cs",
-      "bytes": 14531,
-      "sha256": "21379eaf856123f145e9448fdc8d40f4bd9745be45082d11af0703caba12ab5f"
+      "bytes": 15616,
+      "sha256": "72188268e68a7a6529908595170e57cd14656853e76a00928e40fa984dd7a0f3"
     },
     {
       "path": "Data/Scripts/ArcanePower/HudAPIv2.cs",
@@ -426,149 +431,294 @@
       "sha256": "2abe99e31535d85f9332aec6c6ca52c988711b8883af200bafe6648579126f52"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacity.mwm",
-      "bytes": 262572,
-      "sha256": "9c080863f230138c2b964c1d723de53c68b7f8ed13fc377c394527ab8d06fa11"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacityAdvanced.mwm",
-      "bytes": 262572,
-      "sha256": "386453700217a6129f4bf0ac50ae6ddc2c3707e4a1cd0ee74d6b4236f23a7932"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacityAdvanced_BS1.mwm",
-      "bytes": 65964,
-      "sha256": "bd6b116437afe0305849935e176680f04bd9204de92cb565cd7001b53a4734fe"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacityAdvanced_BS2.mwm",
-      "bytes": 262572,
-      "sha256": "a20a4fa9b83653e7a659d8c04077866b4f8d961e24a3f27d7f5c11b618da4172"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacityAdvanced_BS3.mwm",
-      "bytes": 262572,
-      "sha256": "92ffe46f07347783e1a6dbbea476f31ebfd55f2f6981a99f3279b2f89cee666b"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacity_BS1.mwm",
-      "bytes": 65964,
-      "sha256": "1263df81446a24e8934e1dc8422135db3c058594770b8db27416458dfa9404d7"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacity_BS2.mwm",
-      "bytes": 262572,
-      "sha256": "b8cab48d8bbaba20f5669c9210eea518cfdfc7ff3cf3ce677a4a654475b86db5"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacity_BS3.mwm",
-      "bytes": 262572,
-      "sha256": "14aed0e0b5570198a914291f2df285e4b5454272d19c9db39a41be0c8f574938"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCore.mwm",
-      "bytes": 524716,
-      "sha256": "42c61b048ab5f618822920d9b66cd041e1d1a3142993aa6c878f59a5ab0bc985"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCore_BS1.mwm",
-      "bytes": 262572,
-      "sha256": "64129afc3406ac9369aff5027faa7aa5dc295d721e12ef780ffd9b4c163d071e"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCore_BS2.mwm",
-      "bytes": 524716,
-      "sha256": "efd746fb9fe856132d949cc547cb85e41d0c51f6f462aa9dd73e2d1cae15c156"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCore_BS3.mwm",
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCapacity.mwm",
       "bytes": 1049004,
-      "sha256": "f76067b1d70c4f6f788fe4d1aac49e55fa7440376e05becbbe3c72b5da5a142f"
+      "sha256": "2f14aef1f8c32079db06063383bbc85e8263990c73f73973ad6086d4758057d4"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyRotor.mwm",
-      "bytes": 262572,
-      "sha256": "f919b4fc74d03edf2a8b87dc6d9c1cebf3943d7b3037ce4054b0e5b73f4187f5"
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCapacityAdvanced.mwm",
+      "bytes": 1049004,
+      "sha256": "8d9d30c014dd4143545d94619631025722b227899761a0c264f9fc269dcf440d"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizer.mwm",
-      "bytes": 262572,
-      "sha256": "09fcb34a75b487476d5b35a7bb926020b42ffafbf37718be42c033ee4ec6489a"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizerAdvanced.mwm",
-      "bytes": 262572,
-      "sha256": "476057f77e892030cd0dac46d484dd8a7e44177531603535f36b22935abd16f8"
-    },
-    {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizerAdvanced_BS1.mwm",
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCapacityAdvanced_BS1.mwm",
       "bytes": 65964,
-      "sha256": "c44c5d99099a980224d35bf80035c08f36d7175f98ad08fd3850b35f6ffb46e8"
+      "sha256": "1683f6ce5b986c7d5e8499df3040834c0df0cb9537df82290f7ef8be3c3b667e"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizerAdvanced_BS2.mwm",
-      "bytes": 131500,
-      "sha256": "ec9d4a2f5ff50eb0f844ddf0abb89e39e6caa71d5740d4d59456a1c6b7596496"
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCapacityAdvanced_BS2.mwm",
+      "bytes": 1049004,
+      "sha256": "525fffa79cf8abf8c15ba91ec8cf5f982237078445b915579cd9dec9b09aec51"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizerAdvanced_BS3.mwm",
-      "bytes": 131500,
-      "sha256": "7a5d5ade0da4c94a2515e547d42c4182443e6483e72399dcf435ffa301b11473"
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCapacityAdvanced_BS3.mwm",
+      "bytes": 1049004,
+      "sha256": "faf6e6b1bf3fa9a823a17d42be813507613518f0a0aff45a1a6b7af00fafddd4"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizer_BS1.mwm",
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCapacity_BS1.mwm",
       "bytes": 65964,
-      "sha256": "2e484ee783d77c145a4907d5fb875df6ff87a89aa82824350c222ee68a120741"
+      "sha256": "fadee01f2ab9b8b3a42f46b4eb2b535dcd3fbe0027016c72a745b34ce406e94f"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizer_BS2.mwm",
-      "bytes": 131500,
-      "sha256": "4ee1cf315f475a6aa132e87f5e60026cd3f143ca0c4fcc0867413f2a361d3c1a"
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCapacity_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "92fbf7033af54080c5cf01965f31f256df40ba837683262f18c6ce135303780e"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizer_BS3.mwm",
-      "bytes": 131500,
-      "sha256": "1c25f1a2c0e160da11a1b7b9382a5d7a4e5bd8b84cf9c0f05ac692d1ec08cb80"
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCapacity_BS3.mwm",
+      "bytes": 1049004,
+      "sha256": "4a513a203a6a2f4b3267d920458331799bc6fe3690309434c370e3d95cba807d"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransfer.mwm",
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCore.mwm",
+      "bytes": 2097580,
+      "sha256": "6eb36c9d902f1677ea5e77e5fffe4e5126cf2107e66214fed48178da7e110a9a"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCore_BS1.mwm",
       "bytes": 262572,
-      "sha256": "19a735a5c971c6d1a3df4a93c37fefe0d343a89704f31265386e21cca8385c3f"
+      "sha256": "b0e7e03162ece746e330a10d53634c3aa67ab50fbc099c4d6be9531ec8be64fd"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransferAdvanced.mwm",
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCore_BS2.mwm",
+      "bytes": 2097580,
+      "sha256": "ce3179fa5d98009a0341ed1ca26b0733713c6150ed22eba9d344747112883467"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCore_BS3.mwm",
+      "bytes": 2097580,
+      "sha256": "a5eeb65d4b0fc7e26635466796457c76c4999feca6375a3eb81ef9218a629b4c"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyRotor.mwm",
       "bytes": 262572,
-      "sha256": "0ff17a6b09991aa8ec9add01fc6f137bee6ecf34315bd6e36f80dc168d05422a"
+      "sha256": "9053f72bcf5f61ba107d420e66a63a8533e15f6aca918c4d0b64c1fd14088a1e"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransferAdvanced_BS1.mwm",
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyStabilizer.mwm",
+      "bytes": 524716,
+      "sha256": "89b976c1e74ce07fa7c5932987e99b35399f2899b18b0830315616c6a69902e1"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyStabilizerAdvanced.mwm",
+      "bytes": 524716,
+      "sha256": "f36f419282f2d188664529b87d9b89b1853f9b47145061df694915d516fe5871"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyStabilizerAdvanced_BS1.mwm",
       "bytes": 65964,
-      "sha256": "b23c5656706f0d1ed237c69af3ff80128c45a811006c221312c2170a144963d0"
+      "sha256": "61b9d3f4623bacb6e0babc644bea19de8f6cc6965dd4fcac4485b4023a889c44"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransferAdvanced_BS2.mwm",
-      "bytes": 131500,
-      "sha256": "61fa034a8ccbf17e14a5468f69ccaaa4c347737614371ce0c5f968668130e55a"
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyStabilizerAdvanced_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "a77c932658d5d003c18f92662b271bdd30357850c6c783a4a0fd57632598ab87"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransferAdvanced_BS3.mwm",
-      "bytes": 131500,
-      "sha256": "b5483420bafd42b2b76febf99f4da133b9f7ffe1a8d4c2248453a498d129567c"
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyStabilizerAdvanced_BS3.mwm",
+      "bytes": 524716,
+      "sha256": "f7bf68b9030e8b51a9365c1b893267bc4c2306db96b1829f9d59334010d15703"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransfer_BS1.mwm",
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyStabilizer_BS1.mwm",
       "bytes": 65964,
-      "sha256": "40812c12982ad31fb0f2efb946309631a92363a6e9eb391c474a35b28bafcee5"
+      "sha256": "4748499f9c677278983d544f91e3a30f3be636425ca89a30f3e604436e1a02d3"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransfer_BS2.mwm",
-      "bytes": 131500,
-      "sha256": "9a123c027bf497004896097bfab492158fb5f3e711cb587942312806bc07e22c"
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyStabilizer_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "6ca9dd5d429cd2f20eaad3e45ec910523541fd2a0e18cdf786c1e4a84749d1c6"
     },
     {
-      "path": "Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransfer_BS3.mwm",
-      "bytes": 131500,
-      "sha256": "973459b36f92ffb0e8ee578053ef21c3e1bbfbe14cab2f816894aa334980b334"
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyStabilizer_BS3.mwm",
+      "bytes": 524716,
+      "sha256": "207688d768a4ea8393f9e7612e4aa5b48dbcba6158099673f3b266d93053b425"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyTransfer.mwm",
+      "bytes": 524716,
+      "sha256": "789b62ef234a61014beb21cfc51f2e7a1e66d31a2b72047aa0248c48ae875f81"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyTransferAdvanced.mwm",
+      "bytes": 524716,
+      "sha256": "5b08a634b4477b8e84df8bfabdb79fe0ed900619e9973fbfc3a46f8ac091a7e4"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyTransferAdvanced_BS1.mwm",
+      "bytes": 65964,
+      "sha256": "27b637d833b5d964ad91f512aedfe659c71a06040a480eed67941bf4008a5909"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyTransferAdvanced_BS2.mwm",
+      "bytes": 262572,
+      "sha256": "ca9ea534874bd02e867e8bddc10787001b41c027d71754b674b7c0420feb888f"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyTransferAdvanced_BS3.mwm",
+      "bytes": 524716,
+      "sha256": "c893968c1dce5ca4405510735d2fc8a20ff229f9697eaf9bcaadc24f63cc636c"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyTransfer_BS1.mwm",
+      "bytes": 65964,
+      "sha256": "8961d20e789c733523889ec5601cb05284e50859b062b06dc73ec544f27681fa"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyTransfer_BS2.mwm",
+      "bytes": 262572,
+      "sha256": "287e1d64f26a475c08a98cead62decb54059381afa9225f0ca59c354cce150fa"
+    },
+    {
+      "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyTransfer_BS3.mwm",
+      "bytes": 524716,
+      "sha256": "ec2392dbc8a996e911a3c933a9b240910f526a43574693cc038108f7c15877e9"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacity.mwm",
+      "bytes": 2097580,
+      "sha256": "fcbd28beffe7e270602e8c2c7e27ad5ec1cc39b5a31c61d48af7d5862f149753"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacityAdvanced.mwm",
+      "bytes": 2097580,
+      "sha256": "c3e4d78704d212221e62bfc103b141046041fb2405f9f80cbd2959ff652f9ba0"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacityAdvanced_BS1.mwm",
+      "bytes": 65964,
+      "sha256": "44eecedfeebfbda4c0ba9c0afe10c4b8b521e479482addb9daaef93348b89c1e"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacityAdvanced_BS2.mwm",
+      "bytes": 2097580,
+      "sha256": "5ef3eea35764cd7402200580c96b558aaa71c3e30e941ed5a7f457f31ef00794"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacityAdvanced_BS3.mwm",
+      "bytes": 2097580,
+      "sha256": "6e59db28a195d8e40678e250e0cd12b35b9912c21a93dd459055cfc16e1ed57e"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacity_BS1.mwm",
+      "bytes": 65964,
+      "sha256": "38e50f3823467ca90df93016f0a4cc3dbebfc8fefed06cf74c4d102ed079be20"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacity_BS2.mwm",
+      "bytes": 1049004,
+      "sha256": "0fca42caaee42aad588793e9682a8b4bec4894ec5cf95dc3233574b84b8640d3"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacity_BS3.mwm",
+      "bytes": 2097580,
+      "sha256": "2b8ef32127b39cb7514308da23bdbf5acff4db5bd88a00d6404d3b66dc36ae3c"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCore.mwm",
+      "bytes": 2097580,
+      "sha256": "445399faa7d9433c726ff296f2a2c440a75ae217cf2242503510ef4e80021acd"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCore_BS1.mwm",
+      "bytes": 262572,
+      "sha256": "d152269c76f3a63990947d30e2d3ce3f097048ecb86dfd3530c89421fc4d463f"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCore_BS2.mwm",
+      "bytes": 2097580,
+      "sha256": "9dc8ae69d08e2a741dfb59c2f60228b188aac4987e6e4436ee0398a65fde391d"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCore_BS3.mwm",
+      "bytes": 2097580,
+      "sha256": "236cdbddb5d1e370da29452d5a0d01647ae56dc34122f5663782ac5dde2b98db"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyRotor.mwm",
+      "bytes": 262572,
+      "sha256": "df9b1072723b790bbf66dc7f05c3c97ff21814915af2447aee3e1963423dda46"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizer.mwm",
+      "bytes": 1049004,
+      "sha256": "63093a3b3d417fe2bd71f6fe745e00965eff03e2c1019c565ab50c1150839f1d"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizerAdvanced.mwm",
+      "bytes": 1049004,
+      "sha256": "5115f31cae95c3841059247197f175c793f2c317c805cb9073b602c9f415b26e"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizerAdvanced_BS1.mwm",
+      "bytes": 65964,
+      "sha256": "1f0d6becd2626fe2994396929b9a0fa8aa8c3339748df63a9f862cb93effa177"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizerAdvanced_BS2.mwm",
+      "bytes": 1049004,
+      "sha256": "d717005ce6bbadd44023fa5674da93f949bc3c9511ce3196607c152e16cab7d2"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizerAdvanced_BS3.mwm",
+      "bytes": 1049004,
+      "sha256": "99bff3d7314b1235c9bd6234c7dde449fd7f99aa9b1d82b3c14223ec87dbe124"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizer_BS1.mwm",
+      "bytes": 65964,
+      "sha256": "4c13c64077161f433d33423012809a3787754e73651ebe0d085c18f41568dcc9"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizer_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "52dffb8dccacf7843b5260412c14169a9680f09d4768aa7604ad058c7a556b62"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizer_BS3.mwm",
+      "bytes": 1049004,
+      "sha256": "dac4b546b399a7faefeb1e1f1802f1860242b9d75cefe6d033e56a4ffceed48f"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransfer.mwm",
+      "bytes": 1049004,
+      "sha256": "d2ffefb5907b11c5e41f162beba813201dd8e0567dfe202ebddc514ada6b9dd8"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransferAdvanced.mwm",
+      "bytes": 1049004,
+      "sha256": "e7bc90f2da095ca60fe411ba7e07b98d3524912eed24a2e4701fc112c2ec1aca"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransferAdvanced_BS1.mwm",
+      "bytes": 65964,
+      "sha256": "18f2877e33a81e200122a9ff97e4ee003b51a5eeb88109e0a6e4132cd7f9bb71"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransferAdvanced_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "eb3ef4e4694ddb5f3ed22383fe3d6cdb6fb1df1393d1abf9b49f41f62d1a157c"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransferAdvanced_BS3.mwm",
+      "bytes": 1049004,
+      "sha256": "c2c66ef8e925c204e6da2790c8e5dde9610d84f18fcd0af97b51a58124a4919d"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransfer_BS1.mwm",
+      "bytes": 65964,
+      "sha256": "612a93c74f4b18e768820ec295c30b15c0cf160ea1e917422306b844a9d8b6be"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransfer_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "9695216fdd5d12ad19600f854ac7e4557159bfc3e6ff708ae20d7cae61278746"
+    },
+    {
+      "path": "Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransfer_BS3.mwm",
+      "bytes": 1049004,
+      "sha256": "c8677ebc5f5bf2b1c390ed8432aef56c53f9c4a653073e423d637be6b5d9691b"
     },
     {
       "path": "Models/Cubes/large/reactor_b7cfc3f033a9/ArcanePower_BlastShield1.mwm",
@@ -773,37 +923,72 @@
     {
       "path": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCapacity.dds",
       "bytes": 349700,
-      "sha256": "77a7548ccb2c582ab041ae5d76b04c728a657d045d3443af0467225fcc5b1acd"
+      "sha256": "cfa8d44b9e567b5c2d89cce0fa00d2d3019b5b01c690705f55a2e136dcfdcf14"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCapacityAdvanced.dds",
       "bytes": 349700,
-      "sha256": "689ea044d89c0be552a5f8ba1b9f98388624fa8a38c98aaceb790045afcc7cec"
+      "sha256": "1c6188468d22febec47ec618a01a01e7af90e290d01228068962ac695ed0e8ea"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCore.dds",
       "bytes": 349700,
-      "sha256": "be70643b6623b48f77357c7318f3c494286d7fffa6d5557f66cc4a1e17bcc135"
+      "sha256": "34e0afe938e55db77c32d7f2f9460f39ee7d7ab2f7e5165b9700f30639b01411"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyStabilizer.dds",
       "bytes": 349700,
-      "sha256": "9385b37235759209aba6c971983017f3d3906cd75bafabce876389974b30aaa5"
+      "sha256": "a2a72856a2dfda318afe77495560e7c416172a4ea3aac58fe4c08e66d7eec437"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyStabilizerAdvanced.dds",
       "bytes": 349700,
-      "sha256": "c1cfd69b493d5ca2aa6deb947a3a2b3f5d1849afa9f138881007274f5e04b691"
+      "sha256": "b22173a177b09bdf62e5eb4118b55cf675313c1305adc8e804e0ddb826e851cc"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyTransfer.dds",
       "bytes": 349700,
-      "sha256": "c15851cf6206b42c2dc1d70925f3965c6be4e844f4b7a3fe8cd64a434ac4b64c"
+      "sha256": "0413c928eb7e979808a52d91cdb640193c3cc8e9129d53ba55ce17ba2f5df61b"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyTransferAdvanced.dds",
       "bytes": 349700,
-      "sha256": "9e59ddd60001a21523ea8b883a1e08b3610b24c8d3696631f70bce0af0c5898e"
+      "sha256": "f7ab5f10cd8bd5cc7b50f9005ba11d445850fd3011c0f3db6c75ab1b1bbb19f8"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyCapacity.dds",
+      "bytes": 349700,
+      "sha256": "fef49a52de21b1077c01d793cbbba0911d1bd7489be3ca184998d6560aa4c828"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyCapacityAdvanced.dds",
+      "bytes": 349700,
+      "sha256": "6f02af7c88222a892628e280a65a438d15a3577d46dd14ca701171a254eb1406"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyCore.dds",
+      "bytes": 349700,
+      "sha256": "423052e44d155f395ef77279e388e97af7c04a19d26cb869df3cfe93bc62666f"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyStabilizer.dds",
+      "bytes": 349700,
+      "sha256": "9d55cc03b245e0306fe051598fdaae4c2e2bb450853902dad3b46cf6b4424854"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyStabilizerAdvanced.dds",
+      "bytes": 349700,
+      "sha256": "1821e63135555f9031391384d01c5f3f8903e04f855940922dc838db31adb383"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyTransfer.dds",
+      "bytes": 349700,
+      "sha256": "5dd3a17749a7e0f8eb5f9197c247cf0d10a76488c133bba4544dc1e896d22873"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyTransferAdvanced.dds",
+      "bytes": 349700,
+      "sha256": "7717082c06de3b5d4b0b474c63fed5bc267ebc69ca304fe517f7857f4e5e8683"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Tablet.dds",
@@ -1082,8 +1267,8 @@
     },
     {
       "path": "metadata.mod",
-      "bytes": 110,
-      "sha256": "f9d5f86031802bbe31871a1d4f63665499c0eda752212dca58c65f30886e38fc"
+      "bytes": 200,
+      "sha256": "29d9c10c74f32345269d2eb1e1e9c6f8199f59d974d186d766c32a7c8ede5c5a"
     }
   ],
   "native_assets": [
@@ -1101,6 +1286,10 @@
     "Textures/Models/Cubes/Conveyor_add.dds",
     "Textures/Models/Cubes/Conveyor_cm.dds",
     "Textures/Models/Cubes/Conveyor_ng.dds",
+    "Textures/Models/Cubes/Decals_Atlas_A_01_alphamask.dds",
+    "Textures/Models/Cubes/Decals_Atlas_A_01_cm.dds",
+    "Textures/Models/Cubes/Decals_Atlas_A_01_ng.dds",
+    "Textures/Models/Cubes/Decals_Atlas_A_02_add.dds",
     "Textures/Models/Cubes/EmissiveAtlas_add.dds",
     "Textures/Models/Cubes/EmissiveAtlas_cm.dds",
     "Textures/Models/Cubes/EmissiveAtlas_ng.dds",
@@ -1110,6 +1299,9 @@
     "Textures/Models/Cubes/PaintedMetalDarker_cm.dds",
     "Textures/Models/Cubes/PaintedMetalYellow_cm.dds",
     "Textures/Models/Cubes/PaintedMetal_VeryDark_cm.dds",
+    "Textures/Models/Cubes/terminal_panel_add.dds",
+    "Textures/Models/Cubes/terminal_panel_cm.dds",
+    "Textures/Models/Cubes/terminal_panel_ng.dds",
     "Textures/Particles/SquareWindowDirtInside_ca.dds",
     "Textures/Voxels/Cobalt_01_ForAxisXZ_add.dds",
     "Textures/Voxels/Cobalt_01_ForAxisXZ_cm.dds",

@@ -179,33 +179,13 @@ def energy_equipment(p, name):
                 p.beam((2.1*math.cos(a),2.1*math.sin(a),z*2.79),
                        (2.65*math.cos(a),2.65*math.sin(a),z*3.43),.16)
         return
-    p.box((0,0,-.95),(1.92,1.55,.12))
-    if 'Capacity' in name:
-        advanced=name.endswith('Advanced')
-        for x in (-.58,0,.58) if advanced else (-.46,.46):
-            radius=.25 if advanced else .34
-            p.pipe((x,0,-.86),(x,0,.86),radius,'Metal_Dull',16)
-            p.pipe((x,0,-.92),(x,0,-.80),radius*.6)
-            for z in (-.68,0,.68): p.pipe((x,0,z-.05),(x,0,z+.05),radius+.04,'Construction',16)
-            for z in (-.93,.93):
-                p.pipe((x,0,z*.91),(x,0,z),.055,'Metal_Shiny')
-                p.pipe((x,0,z),(x,-.5,z),.055,'Metal_Shiny')
-        for z in (-.93,.93): p.box((0,-.5,z),(1.75,.13,.12),'Metal_Shiny')
-    elif 'Transfer' in name:
-        for x in (-.45,.45):
-            p.box((x,0,0),(.5,.62,1.65),'PaintedMetal_VeryDark')
-            for z in (-.65,-.43,-.21,.01,.23,.45,.67): p.box((x,-.02,z),(.65,.75,.08),'Metal_Dull')
-        p.box((0,-.53,-.75),(1.6,.12,.17),'Metal_Shiny')
-        p.box((0,.50,.78),(1.6,.12,.17),'Metal_Shiny')
-    else:
-        for i in range(16):
-            a,b=i*math.tau/16,(i+1)*math.tau/16
-            p.beam((.64*math.cos(a),0,.64*math.sin(a)),(.64*math.cos(b),0,.64*math.sin(b)),.20,'Metal_Shiny',False)
-        for x in (-.66,.66): p.beam((x,0,-.9),(x,0,.9),.12)
-        p.box((0,-.13,-.86),(1.7,.72,.22),'PaintedMetal_VeryDark')
-        for x in (-.6,-.3,0,.3,.6): p.box((x,-.53,-.85),(.14,.12,.14),'Metal_Dull')
-    p.box((0,.82,0),(1.82,.07,1.86),'PaintedMetal_VeryDark')
-    for x in (-.73,0,.73): p.pipe((x,.65,-.84),(x,.65,.84),.035)
+    # Full-height bus and service equipment behind the repeated front bays.
+    for x in (-.72,.72):p.pipe((x,.50,-3.28),(x,.50,3.28),.07,'Metal_Shiny')
+    for z in (-2.3,0,2.3):
+        p.box((0,.30,z),(1.6,.22,1.84),'PaintedMetal_VeryDark')
+        p.box((0,.10,z-.8),(1.7,.36,.12),'Construction')
+        for x in (-.55,0,.55):
+            p.pipe((x,.18,z-.7),(x,.18,z+.7),.035,'Metal_Shiny')
 
 
 def service_opening(point):
@@ -230,13 +210,16 @@ def copy_part(source, collection, cut=None):
     clean_mesh(mesh)
     obj=bpy.data.objects.new('Build / '+source.name,mesh)
     collection.objects.link(obj); obj.matrix_world=source.matrix_world.copy()
+    return obj
 
 
 def installed_parts(name, meshes, collection, stage):
     if stage == 1: return
+    authored=meshes[0].parent.matrix_world.inverted() if name in ENERGY else None
     for obj in meshes:
         n=obj.name
         center=obj.matrix_world @ (sum((Vector(v) for v in obj.bound_box),Vector())/8)
+        if authored is not None:center=authored @ center
         cut=None
         if name == NAMES[0]:
             internals=n.startswith(('Structural','Spine bolted','Coolant riser','Pipe ',
@@ -264,15 +247,17 @@ def installed_parts(name, meshes, collection, stage):
                 elif center.y < -1.9 or center.x < -2.7: continue
         elif name==ENERGY[0]:
             if n.startswith(('Energy / pillar','Energy / frame rail','Energy / fill indicator')): continue
-            if n.startswith('Energy / octagonal housing'):
-                if stage==2: continue
-                cut=service_opening
-            elif obj.get('build_stage',3)>stage: continue
+            if obj.get('build_stage',3)>stage: continue
+            if n.startswith('Energy / machinery drum'):
+                cut=lambda point:service_opening(authored @ point)
+            elif stage==3 and obj.get('build_stage',3)==3 and service_opening(center): continue
         else:
-            # Replace the solid main chassis with separate partial sheets.
-            if stage==2 and not n.startswith('Module / connector'): continue
-            if stage==3 and not n.startswith(('Module / connector','Module / cell window','Module / transfer heatsink','Module / field vane')): continue
-            if stage==3 and not n.startswith('Module / connector') and center.x > -.15: continue
+            if n.startswith('Module / frame') or obj.get('build_stage',3)>stage: continue
+            # Half-fitted endcaps and one installed side distinguish partial
+            # armor from the equipment stage while leaving real welding access.
+            if n.startswith('Module / armored endcap'):
+                cut=lambda point:(authored @ point).x < -.15
+            elif obj.get('build_stage',3)==3 and center.x < -.15: continue
         copy_part(obj,collection,cut=cut)
 
 
@@ -312,25 +297,30 @@ def build_stages(scene):
                 p.box((-.755,-1.19,.17),(.055,.26,.88),'PaintedMetal_Colorable')
         elif name==ENERGY[0]:
             for z in (-3.43,3.43):
-                p.ring(3.46,z,.24,8); p.ring(2.18,z,.18,16)
+                p.ring(3.46,z,.24,16); p.ring(2.18,z,.18,16)
                 for i in range(8):
                     a=i*math.tau/8
                     p.beam((2.18*math.cos(a),2.18*math.sin(a),z),(3.46*math.cos(a),3.46*math.sin(a),z),.18)
             rectangular_frame(p,(-2.65,-2.65,-3.43),(2.65,2.65,3.43),.30,front=1)
             if stage>1: energy_equipment(p,name)
         else:
-            rectangular_frame(p,(-1.02,-1.02,-1.02),(1.02,1.02,1.02),.17)
+            rectangular_frame(p,(-1.02,-1.02,-3.60),(1.02,1.02,3.60),.17)
+            for z in (-1.25,1.25):
+                for y in (-1.02,1.02):p.beam((-1.02,y,z),(1.02,y,z),.14)
             if stage>1: energy_equipment(p,name)
-            if stage==3:
-                for pos,size in (((-.57,-1.04,0),(1.03,.10,1.98)),((0,0,1.045),(1.98,1.98,.09)),((1.045,.33,0),(.09,1.32,1.98))):
-                    p.box(pos,size,'PaintedMetal_Colorable')
-                p.box((-.57,-1.10,.83),(.8,.025,.06),'Metal_Dull')
-                p.box((-.57,-1.10,-.83),(.8,.025,.06),'Metal_Dull')
-        p.finish(); installed_parts(name,meshes,collection,stage)
+        p.finish()
+        if name in ENERGY:
+            # Respect the energy author's root orientation when rebuilding from
+            # the saved .blend as well as during initial procedural authoring.
+            root=next(o for o in cols['main'][0].objects if o.parent is None)
+            for obj in collection.objects:obj.matrix_world=root.matrix_world @ obj.matrix_world
+        installed_parts(name,meshes,collection,stage)
         if name==ENERGY[0] and stage==3 and 'ArcanePower_EnergyRotor' in bpy.data.scenes:
             rotor=COLS.get_collections(bpy.data.scenes['ArcanePower_EnergyRotor'])['main'][0]
             for obj in rotor.objects:
-                if obj.type=='MESH': copy_part(obj,collection)
+                if obj.type=='MESH':
+                    copy=copy_part(obj,collection)
+                    copy.matrix_world=root.matrix_world @ copy.matrix_world
         report.append({'stage':stage,'meshes':sum(o.type=='MESH' for o in collection.objects),
                        'triangles':sum(len(p.vertices)-2 for o in collection.objects if o.type=='MESH' for p in o.data.polygons)})
         collection.hide_render=True

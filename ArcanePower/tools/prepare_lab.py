@@ -165,7 +165,9 @@ def definitions():
     save(root,MOD/'Data/BlockCategories.sbc')
     external_hardware_definitions()
     refresh_build_stages()
-    (MOD/'metadata.mod').write_text('<?xml version="1.0"?><ModMetadata><Name>Arcane Power — Prototype</Name><Version>0.1</Version></ModMetadata>\n')
+    metadata=E.Element('ModMetadata')
+    set_text(metadata,'ModVersion',(ROOT/'workshop/version.txt').read_text().strip())
+    save(metadata,MOD/'metadata.mod')
 
 
 def external_hardware_definitions():
