@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Model Name="ArcaneHelionOre">
+  <Parameter Name="RescaleFactor">1.0</Parameter>
+  <Parameter Name="Centered">false</Parameter>
+  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
+  <Material Name="ArcaneHelion">
+    <Parameter Name="Technique">MESH</Parameter>
+    <Parameter Name="ColorMetalTexture">Textures/Voxels/ArcanePower/ArcaneHelion_cm.dds</Parameter>
+    <Parameter Name="NormalGlossTexture">Textures/Voxels/ArcanePower/ArcaneHelion_ng.dds</Parameter>
+    <Parameter Name="AddMapsTexture">Textures/Voxels/ArcanePower/ArcaneHelion_add.dds</Parameter>
+  </Material>
+</Model>

@@ -374,13 +374,6 @@ ShipCoreFramework/Bin64
 
 *.ini
 
-graphify-out/cache/
-graphify-out/cost.json
-
-graphify-out/memory/
-
-graphify-out/reflections/
-
-graphify-out/.graphify_learning.json
-
-ArcanePower/graphify-out/cache/
+# Generated Graphify output in every project, including nested projects.
+graphify-out/
+ArcanePower/.cache/

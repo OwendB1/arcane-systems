@@ -1,0 +1,176 @@
+{
+  "scope": "Native Havok load and world ray contacts, exported shape bounds, exact embedded HKT; no live character walk test",
+  "shapes": [
+    {
+      "name": "AP collision / glass 07",
+      "game_min": [
+        -4.94375,
+        -1.4,
+        8.673617379884035e-18
+      ],
+      "game_max": [
+        -3.4411640000000006,
+        2.96,
+        3.491618
+      ],
+      "convex_radius_m": 0.01,
+      "maximum_bounds_error_m": 0.004318155319213979
+    },
+    {
+      "name": "AP collision / glass 06",
+      "game_min": [
+        -4.9437489999999995,
+        -1.4000010000000003,
+        -3.491618
+      ],
+      "game_max": [
+        -3.4411650000000003,
+        2.960003,
+        -8.673617379884035e-18
+      ],
+      "convex_radius_m": 0.01,
+      "maximum_bounds_error_m": 0.004318155319213979
+    },
+    {
+      "name": "AP collision / glass 05",
+      "game_min": [
+        -3.491618,
+        -1.4,
+        -4.943752
+      ],
+      "game_max": [
+        -8.673617379884035e-18,
+        2.96,
+        -3.4411640000000006
+      ],
+      "convex_radius_m": 0.01,
+      "maximum_bounds_error_m": 0.004318155319213979
+    },
+    {
+      "name": "AP collision / glass 04",
+      "game_min": [
+        8.673617379884035e-18,
+        -1.4,
+        -4.94375
+      ],
+      "game_max": [
+        3.491618,
+        2.96,
+        -3.4411640000000006
+      ],
+      "convex_radius_m": 0.01,
+      "maximum_bounds_error_m": 0.004318155319213979
+    },
+    {
+      "name": "AP collision / glass 03",
+      "game_min": [
+        3.4411640000000006,
+        -1.4000010000000003,
+        -3.491618
+      ],
+      "game_max": [
+        4.94375,
+        2.960003,
+        -8.673617379884035e-18
+      ],
+      "convex_radius_m": 0.01,
+      "maximum_bounds_error_m": 0.004318155319213979
+    },
+    {
+      "name": "AP collision / glass 02",
+      "game_min": [
+        3.4411650000000003,
+        -1.4000010000000003,
+        8.673617379884035e-18
+      ],
+      "game_max": [
+        4.9437489999999995,
+        2.960003,
+        3.491618
+      ],
+      "convex_radius_m": 0.01,
+      "maximum_bounds_error_m": 0.004318155319213979
+    },
+    {
+      "name": "AP collision / glass 01",
+      "game_min": [
+        8.673617379884035e-18,
+        -1.4,
+        3.4411640000000006
+      ],
+      "game_max": [
+        3.491618,
+        2.96,
+        4.943752
+      ],
+      "convex_radius_m": 0.01,
+      "maximum_bounds_error_m": 0.004318155319213979
+    },
+    {
+      "name": "AP collision / glass 00",
+      "game_min": [
+        -3.491618,
+        -1.4,
+        3.4411640000000006
+      ],
+      "game_max": [
+        -8.673617379884035e-18,
+        2.96,
+        4.943752
+      ],
+      "convex_radius_m": 0.01,
+      "maximum_bounds_error_m": 0.004318155319213979
+    },
+    {
+      "name": "AP collision / roof platform",
+      "game_min": [
+        -6.239987999999999,
+        2.8224180000000003,
+        -6.239987999999999
+      ],
+      "game_max": [
+        6.239987999999999,
+        3.7499999999999996,
+        6.239987999999999
+      ],
+      "convex_radius_m": 0.01,
+      "maximum_bounds_error_m": 1.224795532284162e-05
+    },
+    {
+      "name": "AP collision / base and platform",
+      "game_min": [
+        -6.239987999999999,
+        -3.750002,
+        -6.239987999999999
+      ],
+      "game_max": [
+        6.239987999999999,
+        -1.26,
+        6.239987999999999
+      ],
+      "convex_radius_m": 0.01,
+      "maximum_bounds_error_m": 1.224795532284162e-05
+    }
+  ],
+  "mwm_sha256": "29d9f5dd68afa4f7ba081079ac7e8a646d624983678069737b557a679589f12f",
+  "hkt_sha256": "8c0de890fb73ed91936b4bc9c4b7876cdaa2b23a0926076e0a251e0aa1e9ffc8",
+  "hkt_embedded": true,
+  "local_mod_is_source_symlink": true,
+  "game_reloaded": false,
+  "compiler": "SEUT/Havok succeeded; MwmBuilder succeeded with trace listeners disabled in a temporary tool copy after the default Wine .NET listener threw OutOfMemoryException. Visual-mesh degenerate triangle warnings remain.",
+  "native_mwm_import": {
+    "unchanged_dummies": 110,
+    "unchanged_visual_bounds": true,
+    "embedded_havok_bytes": 161136
+  },
+  "native_havok_world": {
+    "loaded_shapes": 10,
+    "base_side_contacts": 128,
+    "deck_contacts": 768,
+    "roof_contacts": 768,
+    "passed": true,
+    "check": "tools/check_reactor_havok.py"
+  },
+  "runtime_model": "Models/Cubes/large/ArcanePower_ReactorPrototype_r29d9f5dd68af.mwm",
+  "cache_fix": "Revision-specific model path; current game process loaded old path before the corrected export. Native world unload retains model cache unless memory-limit settings request unloading."
+}

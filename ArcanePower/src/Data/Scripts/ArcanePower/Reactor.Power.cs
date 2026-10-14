@@ -8,15 +8,28 @@ namespace ArcanePower
 {
     public sealed partial class Reactor
     {
+        private bool CanPrepareContainment
+        {
+            get { return CanOperate && reactor.Enabled && previousControllers >= 2
+                && HasIntactControllers() && HasUsableFuel(); }
+        }
+
+        internal bool NeedsStorageSupport
+        {
+            get { return motionInitialized && initializationFrames == 0 && !Entity.Closed && (Motion.Vent != VentPhase.Idle
+                || Motion.Core == CorePhase.Cooling || Motion.Core == CorePhase.Stopping
+                || Motion.Core == CorePhase.Starting
+                || (Motion.Core == CorePhase.Off && CanPrepareContainment)); }
+        }
         private readonly List<ContainmentController> powerControllers = new List<ContainmentController>(2);
-        private float ContainmentMW { get { return PowerMW[Motion.Profile - 2] * .0001f; } }
+        private float ContainmentMW { get { return PowerMW[Motion.FuelTier - 1] * .0001f; } }
         private double ReserveCapacityMJ { get { return ContainmentMW * 90.0; } }
 
         private void UpdatePower()
         {
             bool server = MyAPIGateway.Multiplayer.IsServer;
             bool active = Motion.Core != CorePhase.Off || Motion.Vent != VentPhase.Idle;
-            bool preparing = reactor.Enabled && reactor.IsFunctional && previousControllers >= 2 && HasUsableFuel();
+            bool preparing = CanPrepareContainment;
             float operating = active || preparing ? ContainmentMW : 0;
             float charging = preparing && Motion.Vent == VentPhase.Idle
                 ? (float)Math.Min(ContainmentMW * 3, Math.Max(0, ReserveCapacityMJ - Motion.ReserveMJ) * 60) : 0;

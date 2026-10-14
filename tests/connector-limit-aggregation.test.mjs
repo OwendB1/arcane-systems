@@ -40,7 +40,7 @@ assert.match(bucket, /HashSet<IMySlimBlock> ConnectorMembers/);
 assert.match(limits, /connectorOver = connectorTotal - connectorCapacity/);
 assert.match(limits, /candidate\.Key, PunishmentType\.ShutOff/);
 assert.match(limits, /alreadyShutOffConnectorWeight \+= weight/);
-assert.match(limits, /if \(!functionalBlock\.Enabled\)/);
+assert.match(limits, /!functionalBlock\.Enabled && !ConnectorShutOffOwners\.ContainsKey\(functionalBlock\)/);
 assert.match(limits, /PunishLimitedBlocks = IsMinimumBlocksLimitedBlockGateTriggered\(\)/);
 assert.match(gridLimits, /TotalWeight - groupBucket\.ConnectorWeight/);
 assert.match(evaluation, /bucket\.TotalWeight - bucket\.ConnectorWeight/);

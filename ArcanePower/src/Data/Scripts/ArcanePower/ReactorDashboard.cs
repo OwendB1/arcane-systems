@@ -5,10 +5,12 @@ using VRageMath;
 
 namespace ArcanePower
 {
-    // One layout feeds both native LCD sprites and the equipped tablet overlay.
+    // Native block LCDs and the handheld screen share telemetry and sprite helpers.
     internal static class ReactorDashboard
     {
         internal static readonly string[] Pages = { "Overview", "Power", "Containment", "Supplies", "Vent" };
+        internal const float TabletWidth = 640;
+        internal const float TabletHeight = TabletWidth * .174f / .270f;
         internal static Color Tone(string tone)
         {
             switch (tone)
@@ -42,7 +44,7 @@ namespace ArcanePower
                     if (row.Section == null)
                     { Wrapped(sprites, row.Value, 22, y, .48f, Tone(row.Tone), 63); y += 36; }
                 // Keep alert space reserved; cards and page body never jump around.
-                Card(sprites, "OUTPUT / T" + report.Tier, report.Value("Output"), 22, 196, report.Load, "cyan");
+                Card(sprites, "OUTPUT / " + report.Fuel.ToUpperInvariant(), report.Value("Output"), 22, 196, report.Load, "cyan");
                 Card(sprites, "HEAT / CRITICAL AT 125%", report.Value("Heat"), 330, 196, report.Heat / 1.25, report.Heat >= 1 ? "red" : "yellow");
                 Card(sprites, "EMERGENCY RESERVE", report.Value("Reserve"), 22, 285, report.Reserve, report.Reserve < .2 ? "red" : "green");
                 Card(sprites, "SPARE CONTAINMENT TILES", report.Value("Spare tiles"), 330, 285, -1, "cyan");
@@ -50,8 +52,8 @@ namespace ArcanePower
                 Text(sprites, Pages[page].ToUpperInvariant(), 22, 397, .62f, Tone("cyan"));
                 string[] labels = page == 0 ? new[] { "Net", "Field", "Fuel stock", "Vent" }
                     : page == 1 ? new[] { "Net", "Ramp", "Containment", "Fuel burn", "Fuel remaining" }
-                    : page == 2 ? new[] { "Controllers", "Field", "Reserve energy", "Quartet wear", "Replacing", "Dismantle at" }
-                    : page == 3 ? new[] { "Fuel stock", "Fuel remaining", "Tile demand", "Tile reserve", "Startup tiles", "Conveyors" }
+                    : page == 2 ? new[] { "Controllers", "Field", "Reserve energy", "Tile grade", "Replacing", "Dismantle at" }
+                    : page == 3 ? new[] { "Fuel stock", "Fuel remaining", "Tile demand", "Tile reserve", "Tile stock", "Conveyors" }
                     : new[] { "Vent", "Route", "Doors" };
                 y = 432;
                 foreach (var label in labels)
@@ -72,6 +74,51 @@ namespace ArcanePower
             Text(sprites, Clip(footer, 68), 22, 617, .43f, Tone("muted"));
             return sprites;
         }
+        internal static List<MySprite> DrawTablet(StatusReport report, int page, string message)
+        {
+            var sprites = new List<MySprite>();
+            Rect(sprites, 0, 0, TabletWidth, TabletHeight, new Color(8, 10, 13));
+            Rect(sprites, 0, 0, TabletWidth, 78, new Color(18, 24, 31));
+            Text(sprites, "ARCANE / " + Pages[page].ToUpperInvariant(), 18, 12, .7f, Tone("cyan"));
+            Text(sprites, report == null ? "REACTOR TABLET" : Clip(report.Name, 38), 18, 42, .74f, Tone("white"));
+            if (report == null)
+            {
+                Text(sprites, "DISCONNECTED", 18, 96, .8f, Tone("yellow"));
+                Wrapped(sprites, message, 18, 144, .65f, Tone("muted"), 46);
+            }
+            else
+            {
+                Text(sprites, Clip(report.State, 48), 18, 88, .62f, Tone(report.Tone));
+                float y = 118;
+                foreach (var row in report.Rows)
+                    if (row.Section == null)
+                    { Text(sprites, Clip(row.Value, 72), 18, y, .42f, Tone(row.Tone)); y += 22; }
+                string[] labels = page == 0 ? new[] { "Output", "Heat", "Reserve", "Fuel stock", "Spare tiles", "Vent" }
+                    : page == 1 ? new[] { "Output", "Net", "Ramp", "Containment", "Fuel efficiency", "Fuel burn", "Fuel remaining" }
+                    : page == 2 ? new[] { "Security mode", "Integrity", "Controllers", "Field", "Reserve energy", "Tile grade", "Quartet wear", "Replacing", "Dismantle at" }
+                    : page == 3 ? new[] { "Fuel efficiency", "Fuel stock", "Fuel burn", "Fuel remaining", "Spare tiles", "Tile demand", "Tile reserve", "Tile stock", "Startup tiles", "Conveyors" }
+                    : new[] { "Vent", "Route", "Doors", "Security mode", "Integrity" };
+                var rows = new List<StatusRow>();
+                foreach (string label in labels)
+                    foreach (var row in report.Rows)
+                        if (row.Label == label) { rows.Add(row); break; }
+                float spacing = Math.Min(34, (TabletHeight - 44 - y) / Math.Max(1, rows.Count));
+                float rowFont = Math.Min(.57f, (spacing - 3) / 37);
+                for (int i = 0; i < rows.Count; i++)
+                {
+                    var row = rows[i];
+                    Rect(sprites, 12, y - 1, 616, spacing - 2, i % 2 == 0 ? new Color(16, 20, 26) : new Color(22, 27, 34));
+                    Text(sprites, row.Label, 18, y, Math.Min(.5f, rowFont), Tone("muted"));
+                    float font = Math.Min(rowFont, 442f / (Math.Max(1, row.Value.Length) * 20));
+                    Text(sprites, row.Value, 180, y, font, Tone(row.Tone));
+                    y += spacing;
+                }
+            }
+            Rect(sprites, 0, TabletHeight - 30, TabletWidth, 30, new Color(18, 24, 31));
+            Text(sprites, "LMB: reactor   RMB: page   / READ ONLY", 18, TabletHeight - 23, .54f, Tone("muted"));
+            return sprites;
+        }
+
         private static void Card(List<MySprite> s, string label, string value, float x, float y, double progress, string tone)
         {
             Rect(s,x,y,288,77,new Color(24,30,38)); Rect(s,x,y,3,77,Tone(tone));

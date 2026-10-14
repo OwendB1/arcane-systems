@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Animations>
+    <Animation>
+      <Id Type="AnimationDefinition" Subtype="ArcaneTabletGrip" />
+      <AnimationModel>Models/Characters/Animations/ArcaneTabletGrip.mwm</AnimationModel>
+      <ClipIndex>0</ClipIndex>
+      <Loop>true</Loop>
+      <InfluenceArea>LeftFingers RightFingers</InfluenceArea>
+      <Public>false</Public>
+    </Animation>
+  </Animations>
+  <Definition xsi:type="AnimationControllerDefinition">
+    <Id Type="MyObjectBuilder_AnimationControllerDefinition" Subtype="Default_Astronaut" />
+    <Layers>
+      <Layer>
+        <Name>ArcaneTabletFingers</Name>
+        <Mode>Replace</Mode>
+        <StateMachine>SMArcaneTabletFingers</StateMachine>
+        <InitialSMNode>Inactive</InitialSMNode>
+        <BoneMask>SE_RigL_Thumb_1 SE_RigL_Thumb_2 SE_RigL_Thumb_3 SE_RigL_Index_1 SE_RigL_Index_2 SE_RigL_Index_3 SE_RigL_Middle_1 SE_RigL_Middle_2 SE_RigL_Middle_3 SE_RigL_Ring_1 SE_RigL_Ring_2 SE_RigL_Ring_3 SE_RigL_Little_1 SE_RigL_Little_2 SE_RigL_Little_3 SE_RigR_Thumb_1 SE_RigR_Thumb_2 SE_RigR_Thumb_3 SE_RigR_Index_1 SE_RigR_Index_2 SE_RigR_Index_3 SE_RigR_Middle_1 SE_RigR_Middle_2 SE_RigR_Middle_3 SE_RigR_Ring_1 SE_RigR_Ring_2 SE_RigR_Ring_3 SE_RigR_Little_1 SE_RigR_Little_2 SE_RigR_Little_3</BoneMask>
+      </Layer>
+    </Layers>
+    <StateMachines>
+      <StateMachine>
+        <Name>SMArcaneTabletFingers</Name>
+        <Nodes>
+          <Node>
+            <Name>Inactive</Name>
+            <Type>PassThrough</Type>
+          </Node>
+          <Node>
+            <Name>Grip</Name>
+            <Type>Normal</Type>
+            <AnimationTree>
+              <Child xsi:type="MyObjectBuilder_AnimationTreeNodeTrack">
+                <PathToModel>Models/Characters/Animations/ArcaneTabletGrip.mwm</PathToModel>
+                <AnimationName>ArcaneTabletGrip</AnimationName>
+                <Loop>true</Loop>
+                <Speed>1</Speed>
+                <Interpolate>true</Interpolate>
+              </Child>
+            </AnimationTree>
+          </Node>
+        </Nodes>
+        <Transitions>
+          <Transition From="Inactive" To="Grip" TimeInSec="0.15" Sync="Restart" Curve="Smooth">
+            <Conditions>
+              <Conjunction>
+                <Condition Lhs="arcanepower_tablet" Op="Equal" Rhs="1" />
+              </Conjunction>
+            </Conditions>
+          </Transition>
+          <Transition From="Grip" To="Inactive" TimeInSec="0.15" Sync="Restart" Curve="Smooth">
+            <Conditions>
+              <Conjunction>
+                <Condition Lhs="arcanepower_tablet" Op="Equal" Rhs="0" />
+              </Conjunction>
+            </Conditions>
+          </Transition>
+        </Transitions>
+      </StateMachine>
+    </StateMachines>
+  </Definition>
+  <Definition xsi:type="AnimationControllerDefinition">
+    <Id Type="MyObjectBuilder_AnimationControllerDefinition" Subtype="Default_Astronaut_Female" />
+    <Layers>
+      <Layer>
+        <Name>ArcaneTabletFingers</Name>
+        <Mode>Replace</Mode>
+        <StateMachine>SMArcaneTabletFingers</StateMachine>
+        <InitialSMNode>Inactive</InitialSMNode>
+        <BoneMask>SE_RigL_Thumb_1 SE_RigL_Thumb_2 SE_RigL_Thumb_3 SE_RigL_Index_1 SE_RigL_Index_2 SE_RigL_Index_3 SE_RigL_Middle_1 SE_RigL_Middle_2 SE_RigL_Middle_3 SE_RigL_Ring_1 SE_RigL_Ring_2 SE_RigL_Ring_3 SE_RigL_Little_1 SE_RigL_Little_2 SE_RigL_Little_3 SE_RigR_Thumb_1 SE_RigR_Thumb_2 SE_RigR_Thumb_3 SE_RigR_Index_1 SE_RigR_Index_2 SE_RigR_Index_3 SE_RigR_Middle_1 SE_RigR_Middle_2 SE_RigR_Middle_3 SE_RigR_Ring_1 SE_RigR_Ring_2 SE_RigR_Ring_3 SE_RigR_Little_1 SE_RigR_Little_2 SE_RigR_Little_3</BoneMask>
+      </Layer>
+    </Layers>
+    <StateMachines>
+      <StateMachine>
+        <Name>SMArcaneTabletFingers</Name>
+        <Nodes>
+          <Node>
+            <Name>Inactive</Name>
+            <Type>PassThrough</Type>
+          </Node>
+          <Node>
+            <Name>Grip</Name>
+            <Type>Normal</Type>
+            <AnimationTree>
+              <Child xsi:type="MyObjectBuilder_AnimationTreeNodeTrack">
+                <PathToModel>Models/Characters/Animations/ArcaneTabletGrip.mwm</PathToModel>
+                <AnimationName>ArcaneTabletGrip</AnimationName>
+                <Loop>true</Loop>
+                <Speed>1</Speed>
+                <Interpolate>true</Interpolate>
+              </Child>
+            </AnimationTree>
+          </Node>
+        </Nodes>
+        <Transitions>
+          <Transition From="Inactive" To="Grip" TimeInSec="0.15" Sync="Restart" Curve="Smooth">
+            <Conditions>
+              <Conjunction>
+                <Condition Lhs="arcanepower_tablet" Op="Equal" Rhs="1" />
+              </Conjunction>
+            </Conditions>
+          </Transition>
+          <Transition From="Grip" To="Inactive" TimeInSec="0.15" Sync="Restart" Curve="Smooth">
+            <Conditions>
+              <Conjunction>
+                <Condition Lhs="arcanepower_tablet" Op="Equal" Rhs="0" />
+              </Conjunction>
+            </Conditions>
+          </Transition>
+        </Transitions>
+      </StateMachine>
+    </StateMachines>
+  </Definition>
+</Definitions>

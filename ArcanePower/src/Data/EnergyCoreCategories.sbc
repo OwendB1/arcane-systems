@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CategoryClasses>
+    <Category xsi:type="MyObjectBuilder_GuiBlockCategoryDefinition">
+      <Id>
+        <TypeId>GuiBlockCategoryDefinition</TypeId>
+        <SubtypeId>ArcaneSystems_Energy</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Systems</DisplayName>
+      <Name>ArcaneSystems</Name>
+      <ItemIds>
+        <string>BatteryBlock/ArcanePower_EnergyCore</string>
+        <string>BatteryBlock/ArcanePower_EnergyCapacity</string>
+        <string>BatteryBlock/ArcanePower_EnergyCapacityAdvanced</string>
+        <string>UpgradeModule/ArcanePower_EnergyTransfer</string>
+        <string>UpgradeModule/ArcanePower_EnergyTransferAdvanced</string>
+        <string>UpgradeModule/ArcanePower_EnergyStabilizer</string>
+        <string>UpgradeModule/ArcanePower_EnergyStabilizerAdvanced</string>
+      </ItemIds>
+    </Category>
+  </CategoryClasses>
+</Definitions>

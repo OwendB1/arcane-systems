@@ -1,0 +1,24 @@
+{
+  "scope": "Connected vent lamps and tile/deck/hatch mechanical audio, including retraction",
+  "checks": {
+    "focused_acceptance": "tools/check_mechanism_feedback.py passed",
+    "mod_compatibility_build": "passed: 0 warnings, 0 errors",
+    "audio": "tools/check_audio.py passed: twenty-one cues sharing thirteen mono 44.1kHz 16-bit PCM assets, fade/seam, headroom and DC checks",
+    "native_vent_preset": "all native states red; both vent definitions reference it",
+    "reload_and_retraction": "tools/check_reload_retraction.py passed: legacy/current XML restoration, deferred vent interlock, retained safety checks, reverse quartet timing and replay suppression",
+    "hum_pitch": "tools/check_hum_pitch.py passed: equal-power native pitch bands, load bounds, falling demand, voice fades and shared asset references"
+  },
+  "cues": {
+    "TileDispense": "c57024d01ad165f398987e29940f1cf95cddb68694610f978c980147606faa34",
+    "TileLatch": "9d20d07489591f1b51bcaf94f2ab13e4b80e8a6aefd644bcd85d66765bb76811",
+    "DeckMotion": "aebb01543c94ac4f344eefec313f3c4026180ade61f4d3e500c60567226313dd",
+    "HatchMotion": "375e003881c95bf1d75286915a92ab52da3568e6de09969ccf798f4aab42b143",
+    "TileRetract": "9063efcb1dfa9c318fc7083e6124ac88894a17b06321057b04bf6a8ccfbcec1f"
+  },
+  "preview": "audio/reactor-mechanisms.wav",
+  "regression_suites_run": false,
+  "game_reloaded": false,
+  "live_multiplayer_checked": false,
+  "limitations": "Levels/spatial falloff and realistic-sound behavior still need in-game audition; lamp changes can take ten frames locally plus replicated readiness latency.",
+  "sound_revision": "Brighter field harmonics and geared actuators; crisp dispense attack; damped 115/230 Hz latch thunk with brief catch click; geared retraction pull and dispenser catch"
+}

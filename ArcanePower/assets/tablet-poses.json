@@ -1,0 +1,101 @@
+{
+  "LeftHandPosition": [
+    0.20724602,
+    -0.0677112937,
+    -0.111660846
+  ],
+  "LeftHandOrientation": [
+    0.418567508,
+    0.431930035,
+    -0.580624222,
+    0.548737823
+  ],
+  "RightHandPosition": [
+    -0.20724602,
+    -0.0677112937,
+    -0.111660846
+  ],
+  "RightHandOrientation": [
+    -0.58062319,
+    0.548738879,
+    0.418568955,
+    0.43192868
+  ],
+  "ItemPosition": [
+    -2.17316573e-15,
+    -0.0353720412,
+    -0.300000012
+  ],
+  "ItemOrientation": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "ItemWalkingPosition": [
+    0.0,
+    -0.2,
+    -0.3
+  ],
+  "ItemWalkingOrientation": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "ItemShootPosition": [
+    0.0,
+    -0.2,
+    -0.3
+  ],
+  "ItemShootOrientation": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "ItemIronsightPosition": [
+    0.0,
+    -0.2,
+    -0.3
+  ],
+  "ItemIronsightOrientation": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "ItemPosition3rd": [
+    0.0,
+    -0.2,
+    -0.3
+  ],
+  "ItemOrientation3rd": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "ItemWalkingPosition3rd": [
+    0.0,
+    -0.2,
+    -0.3
+  ],
+  "ItemWalkingOrientation3rd": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ],
+  "ItemShootPosition3rd": [
+    0.0,
+    -0.2,
+    -0.3
+  ],
+  "ItemShootOrientation3rd": [
+    0.0,
+    1.0,
+    0.0,
+    0.0
+  ]
+}

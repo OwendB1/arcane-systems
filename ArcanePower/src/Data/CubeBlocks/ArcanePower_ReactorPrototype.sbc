@@ -6,14 +6,14 @@
         <TypeId>Reactor</TypeId>
         <SubtypeId>ArcanePower_ReactorPrototype</SubtypeId>
       </Id>
-      <DisplayName>Arcane Power Reactor — Prototype</DisplayName>
-      <Icon>Textures\GUI\Icons\Cubes\nuclear_reactor.dds</Icon>
-      <Description>Arcane Fuel I: 10 GW with two rings. Fuel II: 100 GW with three rings. Fuel III: 1 TW with four rings. Two containment controllers required. Venting ejects containment through the conveyor-connected top hatch, damages the reactor/modules, and leaves the reactor off.</Description>
+      <DisplayName>Arcane Reactor</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneReactor.dds</Icon>
+      <Description>Aether: 10 GW. Helion: 100 GW. Empyrean: 1 TW. Two working containment controllers required; their installation tier sets two/three/four rings, 1x/1.5x/2x tile deployment and 80%/90%/99% fuel efficiency. Venting ejects containment through the conveyor-connected top hatch, damages the reactor/modules, and leaves the reactor off. Automatic core ejection at 60% remaining integrity requires intact controllers and vents. Security mode selects shutdown or warning on vent loss after startup.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="3" z="5" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/ArcanePower_ReactorPrototype.mwm</Model>
+      <Model>Models/Cubes/large/reactor_b7cfc3f033a9/ArcanePower_ReactorPrototype.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="50" />
         <Component Subtype="Construction" Count="40" />
@@ -32,14 +32,14 @@
       <MaxPowerOutput>10000</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
-        <Y>2</Y>
-        <Z>2</Z>
+        <Y>1</Y>
+        <Z>1</Z>
       </InventorySize>
       <InventoryFillFactorMin>0.0005</InventoryFillFactorMin>
       <InventoryFillFactorMax>0.001</InventoryFillFactorMax>
       <FuelPullAmountFromConveyorInMinutes>10.0</FuelPullAmountFromConveyorInMinutes>
       <FuelInfos />
-      <PrimarySound>ShipLrgNuclearSm</PrimarySound>
+      <PrimarySound />
       <DamageEffectName>Damage_Reactor_Damaged</DamageEffectName>
       <DamagedSound>ParticleReactor</DamagedSound>
       <EmissiveColorPreset>Default</EmissiveColorPreset>
@@ -77,6 +77,11 @@
         <MountPoint Side="Left" StartX="2" EndX="3" StartY="0" EndY="1" />
         <MountPoint Side="Right" StartX="2" EndX="3" StartY="0" EndY="1" />
       </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_ReactorPrototype_BS1_r80c64fdcdba2.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_ReactorPrototype_BS2_r82b53f5b0110.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_ReactorPrototype_BS3_r3744f24aa666.mwm" />
+      </BuildProgressModels>
     </Definition>
   </CubeBlocks>
 </Definitions>

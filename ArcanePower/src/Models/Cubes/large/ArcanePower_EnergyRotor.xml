@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<Model Name="ArcanePower_EnergyRotor">
+	<Parameter Name="RescaleFactor">1.0</Parameter>
+	<Parameter Name="Centered">false</Parameter>
+	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
+	<Material Name="EnergyGlow">
+		<Parameter Name="Technique">MESH</Parameter>
+		<Parameter Name="ColorMetalTexture">Textures/Models/Cubes/EmissiveAtlas_cm.dds</Parameter>
+		<Parameter Name="NormalGlossTexture">Textures/Models/Cubes/EmissiveAtlas_ng.dds</Parameter>
+		<Parameter Name="AddMapsTexture">Textures/Models/Cubes/EmissiveAtlas_add.dds</Parameter>
+	</Material>
+	<MaterialRef Name="Metal_Shiny"/>
+</Model>

@@ -31,5 +31,6 @@
   "controller_skirt": "Mesh-sampled12mm mating seam; reduced depth within near-flush reactor socket surround; native anchors unchanged",
   "controller_visible_projection_m": 0.26,
   "tile_model": "ArcanePower_ContainmentTile",
-  "route": "Straight, same-grid and aligned with reactor Up; at most16 sections"
+  "route": "Required for startup/running: 1-15 fully built VentDuct tubes then one VentOutlet, straight, same-grid and aligned with reactor Up; at most 16 sections",
+  "collision": "Eight baked convex sectors per tube/outlet, 0.01m margin; open central bore"
 }

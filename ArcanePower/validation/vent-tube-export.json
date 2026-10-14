@@ -1,0 +1,127 @@
+{
+  "scope": "Exported vent tube/outlet/shared hatch, native MWM dummy and collision verification; no live game run",
+  "models": {
+    "ArcanePower_VentDuct": {
+      "sha256": "f1e48dd8a383c144dd89278369413b0e3a25a9d4871fc7d3f377590973df2e77",
+      "hkt_sha256": "1088906348d2aa4b0a297e5f1f8362f35b59c68437879286fc20b88fd3842029",
+      "hkt_embedded_bytes": 30186,
+      "shapes": [
+        {
+          "name": "Collision / Vent collision segment 7",
+          "maximum_bounds_error_m": 0.001795494094848582,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 6",
+          "maximum_bounds_error_m": 0.004966692359924307,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 5",
+          "maximum_bounds_error_m": 0.001795494094848582,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 4",
+          "maximum_bounds_error_m": 0.004966692359924307,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 3",
+          "maximum_bounds_error_m": 0.001795494094848582,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 2",
+          "maximum_bounds_error_m": 0.004966692359924307,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 1",
+          "maximum_bounds_error_m": 0.001795494094848582,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 0",
+          "maximum_bounds_error_m": 0.004966692359924307,
+          "convex_radius_m": 0.01
+        }
+      ],
+      "native_mwm_import": "PASS native MWM importer: 3 unchanged dummies, unchanged visual bounds, 30186 bytes of matching Havok collision"
+    },
+    "ArcanePower_VentOutlet": {
+      "sha256": "f79f07e1c586c8c6d692975d6f1a70f084383f16c4105f501c0a3f6192ee91aa",
+      "hkt_sha256": "6a2965c24189bce7e51f2f56ee47437111560039e3332b89fda6ab3495464af4",
+      "hkt_embedded_bytes": 30218,
+      "shapes": [
+        {
+          "name": "Collision / Vent collision segment 7.001",
+          "maximum_bounds_error_m": 0.001795494094848582,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 6.001",
+          "maximum_bounds_error_m": 0.004966692359924307,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 5.001",
+          "maximum_bounds_error_m": 0.001795494094848582,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 4.001",
+          "maximum_bounds_error_m": 0.004966692359924307,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 3.001",
+          "maximum_bounds_error_m": 0.001795494094848582,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 2.001",
+          "maximum_bounds_error_m": 0.004966692359924307,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 1.001",
+          "maximum_bounds_error_m": 0.001795494094848582,
+          "convex_radius_m": 0.01
+        },
+        {
+          "name": "Collision / Vent collision segment 0.001",
+          "maximum_bounds_error_m": 0.004966692359924307,
+          "convex_radius_m": 0.01
+        }
+      ],
+      "native_mwm_import": "PASS native MWM importer: 7 unchanged dummies, unchanged visual bounds, 30218 bytes of matching Havok collision"
+    },
+    "ArcanePower_VentHatch": {
+      "sha256": "7c4391a9e9e4fe4e8d357d6f8e2bf9cb683e3caf171c0485516de779fe26e04a",
+      "native_mwm_import": "PASS native MWM importer: 1 unchanged dummies, unchanged visual bounds, 0 bytes of matching Havok collision"
+    }
+  },
+  "compiler": "SEUT FBX/Havok plus MwmBuilder with trace listeners disabled in temporary tool copy (Wine default listener fails).",
+  "required_installation": {
+    "first_tube_centre_m": 5,
+    "section_spacing_m": 2.5,
+    "required_ducts": [
+      1,
+      15
+    ],
+    "outlets": 1,
+    "same_grid": true,
+    "aligned_up": true
+  },
+  "checks": {
+    "focused_route_interlock": "passed",
+    "blender_model": "passed",
+    "mod_compatibility_build": "passed; zero warnings/errors",
+    "regression_suites_run": false
+  },
+  "game_reloaded": false,
+  "live_multiplayer_checked": false,
+  "local_mod_is_source_symlink": true,
+  "limits": "Moving shutters have no dynamic collision. Core transit is scripted until outlet handoff. No arbitrary obstruction scan beyond the terminal outlet."
+}

@@ -3,7 +3,7 @@
   <EntityComponents>
     <EntityComponent xsi:type="MyObjectBuilder_ModStorageComponentDefinition">
       <Id><TypeId>ModStorageComponent</TypeId><SubtypeId>ArcanePowerMotionState</SubtypeId></Id>
-      <RegisteredStorageGuids><guid>d85a5399-b527-45ac-bcc0-aa1c442b2710</guid></RegisteredStorageGuids>
+      <RegisteredStorageGuids><guid>d85a5399-b527-45ac-bcc0-aa1c442b2710</guid><guid>f6e09e9a-76ef-4d21-9ef1-31e5cd759881</guid></RegisteredStorageGuids>
     </EntityComponent>
   </EntityComponents>
 </Definitions>

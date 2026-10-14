@@ -22,8 +22,8 @@ namespace ArcanePower
         private int initializationFrames = 120;
         private bool motionInitialized;
         private float previousControllers = -1;
-        private int rings = 2;
-        private int previousRings;
+        private int controllerRingCapacity = 2;
+        private int previousFuelTier;
         private MyEntitySubpart previousRing;
         private int appearanceRefresh;
         private ReactorStatus previousStatus;
@@ -54,6 +54,7 @@ namespace ArcanePower
 
         public override void UpdateBeforeSimulation()
         {
+            RefreshRestPoses();
             if (initializationFrames > 0)
             {
                 if (--initializationFrames > 0)
@@ -61,6 +62,7 @@ namespace ArcanePower
                     CheckContainment();
                     if (initializationFrames <= 2)
                     {
+                        CheckVentRoute();
                         UpdateFuel();
                         UpdatePower();
                     }
@@ -70,17 +72,21 @@ namespace ArcanePower
                         DrawVentOutlet();
                     }
                     UpdateAppearance();
+                    UpdateSound();
                     return;
                 }
             }
             // Native module connection events update the value. The enabled guard also
             // catches manual/toolbar attempts to start without the two controllers.
             CheckContainment();
+            CheckVentRoute();
+            UpdateSafety();
             UpdateFuel();
             UpdatePower();
             UpdateTiles();
             UpdateMotion();
             UpdateAppearance();
+            UpdateSound();
         }
 
         private void CheckContainment()
@@ -89,13 +95,25 @@ namespace ArcanePower
             reactor.UpgradeValues.TryGetValue("ArcaneControllerCount", out controllers);
             reactor.UpgradeValues.TryGetValue("ArcaneContainment", out capacity);
             int available = System.Math.Max(2, System.Math.Min(4, (int)capacity));
-            if (MyAPIGateway.Multiplayer.IsServer && initializationFrames == 0 && controllers < 2f && reactor.Enabled)
-                reactor.Enabled = false;
-            // Changing installed containment hardware requires a fresh deployment.
-            if (MyAPIGateway.Multiplayer.IsServer && initializationFrames == 0 && previousControllers >= 0 && (available != rings || Motion.Profile > available) && reactor.Enabled)
-                reactor.Enabled = false;
-            if (controllers == previousControllers && available == rings) return;
-            rings = available;
+            if (MyAPIGateway.Multiplayer.IsServer && initializationFrames == 0)
+            {
+                // Old saves did not store controller-derived ring capacity.
+                // Adopt it once, after native socket connections have settled.
+                if (restoreLegacyHardware)
+                {
+                    Motion.RingCount = available;
+                    restoreLegacyHardware = false;
+                }
+                // Hardware stays latched through cooldown, dismantling and ejection.
+                // Compare restored hardware too, after native connections settle.
+                bool deployed = Motion.Core != CorePhase.Off || Motion.Vent != VentPhase.Idle;
+                if (reactor.Enabled && (controllers < 2f || Motion.FuelTier + 1 > available
+                    || (deployed && available != Motion.RingCount)))
+                    reactor.Enabled = false;
+                if (!deployed && controllers >= 2f) Motion.RingCount = available;
+            }
+            if (controllers == previousControllers && available == controllerRingCapacity) return;
+            controllerRingCapacity = available;
             previousControllers = controllers;
             reactor.RefreshCustomInfo();
             MyLog.Default.WriteLineAndConsole("ArcanePower: reactor " + reactor.EntityId + " containment sockets=" + controllers);
@@ -113,30 +131,24 @@ namespace ArcanePower
             // Subparts can exist before their render objects are ready on world
             // load. Retry once per second even when the entity/state is unchanged;
             // this also restores colours after a later render-object recreation.
-            Color color = venting || Motion.Critical ? Color.Red : Motion.Status == ReactorStatus.Active ? FuelColors[Motion.Profile - 2]
+            Color color = venting || Motion.Critical ? Color.Red : Motion.Status == ReactorStatus.Active ? FuelColors[Motion.FuelTier - 1]
                 : Motion.Status == ReactorStatus.OutOfFuel ? Color.Yellow : Color.Red;
             float intensity = EmissiveIntensity * (incomplete ? .5f + .5f * (float)System.Math.Cos(pulseTick * System.Math.PI / 60) : 1f);
-            if (incomplete || previousRing != first || previousRings != Motion.Profile || previousStatus != Motion.Status || --appearanceRefresh <= 0)
+            if (incomplete || previousRing != first || previousFuelTier != Motion.FuelTier || previousStatus != Motion.Status || --appearanceRefresh <= 0)
             {
                 appearanceRefresh = 60;
                 previousRing = first;
-                previousRings = Motion.Profile;
+                previousFuelTier = Motion.FuelTier;
                 previousStatus = Motion.Status;
                 entity.SetEmissiveParts("Emissive", color, intensity);
                 entity.SetEmissivePartsForSubparts("Emissive", color, intensity);
             }
-            if (Motion.Core == CorePhase.Stopping)
-            {
-                MyEntitySubpart plasma;
-                if (entity.Subparts.TryGetValue("Plasma", out plasma))
-                    plasma.SetEmissiveParts("Emissive", color, intensity * (1 - Span(Motion.StopTick, 0, 60)));
-            }
             MyEntitySubpart orb;
-            float coreFade = Motion.Core == CorePhase.Stopping ? 1 - Span(Motion.StopTick, 0, 60) : 1;
-            Color fuelColor = FuelColors[Motion.Profile - 2];
+            float coreScale = PlasmaScale(Motion.CoreTick + Motion.CoreSubtick);
+            Color fuelColor = FuelColors[Motion.FuelTier - 1];
             if (entity.Subparts.TryGetValue("Plasma", out orb))
-                orb.SetEmissiveParts("ArcanePlasma", fuelColor, 18 * coreFade * (.9f + .1f * (float)System.Math.Sin(pulseTick * .13)));
-            UpdateCoreGlow(entity, fuelColor, EmissiveIntensity);
+                orb.SetEmissiveParts("ArcanePlasma", fuelColor, 0);
+            UpdateCoreGlow(entity, fuelColor, coreScale);
         }
 
         private void UpdateCoreGlow(MyEntity entity, Color color, float emissivity)
@@ -157,18 +169,16 @@ namespace ArcanePower
                 coreGlow.GlareOn = false;
             }
             if (coreGlow == null) return;
-            float fade = Motion.Core == CorePhase.Stopping ? 1 - Span(Motion.StopTick, 0, 60) : 1;
-
-            coreGlow.LightOn = visible && fade > 0 && emissivity > .01f;
+            coreGlow.LightOn = visible && emissivity > .001f;
             coreGlow.Color = color;
-            coreGlow.Intensity = 2.5f * emissivity / EmissiveIntensity * fade;
+            coreGlow.Intensity = 2.5f * emissivity;
             if (visible) coreGlow.Position = plasma.WorldMatrix.Translation;
             coreGlow.UpdateLight();
         }
 
         private void UpdateStatus()
         {
-            if (!reactor.IsFunctional || reactor.SlimBlock.BuildLevelRatio < 1f || previousControllers < 2f || Motion.TileStarved || Motion.PowerPaused)
+            if (!reactor.IsFunctional || reactor.SlimBlock.BuildLevelRatio < 1f || previousControllers < 2f || !CanOperate || Motion.TileStarved || Motion.PowerPaused)
             {
                 Motion.Status = ReactorStatus.Incomplete;
                 return;
@@ -189,6 +199,7 @@ namespace ArcanePower
 
         public override void Close()
         {
+            CloseSound();
             if (coreGlow != null)
             {
                 MyLights.RemoveLight(coreGlow);

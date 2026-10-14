@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Model Name="ArcaneEmpyreanOre">
+  <Parameter Name="RescaleFactor">1.0</Parameter>
+  <Parameter Name="Centered">false</Parameter>
+  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
+  <Material Name="ArcaneEmpyrean">
+    <Parameter Name="Technique">MESH</Parameter>
+    <Parameter Name="ColorMetalTexture">Textures/Voxels/ArcanePower/ArcaneEmpyrean_cm.dds</Parameter>
+    <Parameter Name="NormalGlossTexture">Textures/Voxels/ArcanePower/ArcaneEmpyrean_ng.dds</Parameter>
+    <Parameter Name="AddMapsTexture">Textures/Voxels/ArcanePower/ArcaneEmpyrean_add.dds</Parameter>
+  </Material>
+</Model>

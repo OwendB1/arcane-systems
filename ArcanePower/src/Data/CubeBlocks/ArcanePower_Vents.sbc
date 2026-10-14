@@ -8,7 +8,7 @@
       </Id>
       <DisplayName>Arcane Vent Duct</DisplayName>
       <Icon>Textures/GUI/Icons/ArcaneVentDuct.dds</Icon>
-      <Description>Stack matching vent sections above the reactor and finish with an Arcane Vent Outlet. The outlet opens during venting. Central connections also carry conveyor items.</Description>
+      <Description>Required reactor vent route: stack 1-15 Arcane Vent Duct tubes directly above the centered roof hatch, then one Arcane Vent Outlet. Fully weld every section; align their top faces with reactor Up on the same grid. Keep the outlet clear. Missing or damaged sections prevent startup and shut down a running reactor. Central ports also carry conveyor items.</Description>
       <GuiVisible>true</GuiVisible>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
@@ -29,7 +29,7 @@
       <BuildTimeSeconds>30</BuildTimeSeconds>
       <DamageEffectName>Damage_HeavyMech_Damaged</DamageEffectName>
       <DamagedSound>ParticleHeavyMech</DamagedSound>
-      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <EmissiveColorPreset>ArcaneVentDisconnected</EmissiveColorPreset>
       <DestroyEffect>BlockDestroyed_Large</DestroyEffect>
       <DestroySound>PoofExplosionCat3</DestroySound>
       <PCU>25</PCU>
@@ -49,6 +49,11 @@
         <MountPoint Side="Left" StartX="0" StartY="0" EndX="3" EndY="1" />
         <MountPoint Side="Right" StartX="0" StartY="0" EndX="3" EndY="1" />
       </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_VentDuct_BS1_r89bdaa1d0dfb.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_VentDuct_BS2_rb8f82aee2535.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_VentDuct_BS3_r2078e033ae36.mwm" />
+      </BuildProgressModels>
     </Definition>
     <Definition>
       <Id>
@@ -57,7 +62,7 @@
       </Id>
       <DisplayName>Arcane Vent Outlet</DisplayName>
       <Icon>Textures/GUI/Icons/ArcaneVentOutlet.dds</Icon>
-      <Description>Stack matching vent sections above the reactor and finish with an Arcane Vent Outlet. The outlet opens during venting. Central connections also carry conveyor items.</Description>
+      <Description>Required reactor vent route: stack 1-15 Arcane Vent Duct tubes directly above the centered roof hatch, then one Arcane Vent Outlet. Fully weld every section; align their top faces with reactor Up on the same grid. Keep the outlet clear. Missing or damaged sections prevent startup and shut down a running reactor. Central ports also carry conveyor items.</Description>
       <GuiVisible>true</GuiVisible>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
@@ -78,7 +83,7 @@
       <BuildTimeSeconds>30</BuildTimeSeconds>
       <DamageEffectName>Damage_HeavyMech_Damaged</DamageEffectName>
       <DamagedSound>ParticleHeavyMech</DamagedSound>
-      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <EmissiveColorPreset>ArcaneVentDisconnected</EmissiveColorPreset>
       <DestroyEffect>BlockDestroyed_Large</DestroyEffect>
       <DestroySound>PoofExplosionCat3</DestroySound>
       <PCU>25</PCU>
@@ -98,6 +103,11 @@
         <MountPoint Side="Left" StartX="0" StartY="0" EndX="3" EndY="1" />
         <MountPoint Side="Right" StartX="0" StartY="0" EndX="3" EndY="1" />
       </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_VentOutlet_BS1_reff662b918b3.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_VentOutlet_BS2_r1989c0db1011.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_VentOutlet_BS3_r2abe99e31535.mwm" />
+      </BuildProgressModels>
     </Definition>
   </CubeBlocks>
 </Definitions>

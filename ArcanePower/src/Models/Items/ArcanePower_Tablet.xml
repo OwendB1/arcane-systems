@@ -20,10 +20,4 @@
 		<Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/ArcaneTabletLight_ng.dds</Parameter>
 		<Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/ArcaneTabletLight_add.dds</Parameter>
 	</Material>
-	<Material Name="ArcaneTabletCard">
-		<Parameter Name="Technique">MESH</Parameter>
-		<Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/ArcaneTabletCard_cm.dds</Parameter>
-		<Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/ArcaneTabletCard_ng.dds</Parameter>
-		<Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/ArcaneTabletCard_add.dds</Parameter>
-	</Material>
 </Model>

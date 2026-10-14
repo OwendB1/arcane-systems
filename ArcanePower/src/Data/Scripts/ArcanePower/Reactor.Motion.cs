@@ -30,7 +30,7 @@ namespace ArcanePower
         [ProtoMember(9)] public bool Requested;
         [ProtoMember(10)] public bool Paused;
         [ProtoMember(11)] public long Sequence;
-        [ProtoMember(12)] public int Profile = 2;
+        [ProtoMember(12)] public int FuelTier = 1;
         [ProtoMember(13)] public float Load;
         [ProtoMember(14)] public float TargetLoad;
         [ProtoMember(15)] public double SpinPhase = -1;
@@ -65,25 +65,38 @@ namespace ArcanePower
         [ProtoMember(44)] public float CriticalSeconds;
         [ProtoMember(45)] public bool PayloadReleased;
         [ProtoMember(46)] public bool? Enabled;
+        [ProtoMember(47)] public bool VentReady;
+        [ProtoMember(48)] public int VentDucts;
+        [ProtoMember(49, OverwriteList = true)] public int[] TileGrades = new int[20];
+        [ProtoMember(50)] public int RingCount = 2;
+        [ProtoMember(51), System.ComponentModel.DefaultValue(true)] public bool SecurityMode = true;
+        [ProtoMember(52)] public bool ControllersReady;
+
+        // XML-only compatibility with saves made before fuel and hardware tiers
+        // were separated. Never write the obsolete field into new saves/packets.
+        [System.Xml.Serialization.XmlElement("Profile")]
+        public int? LegacyProfile;
+        public bool ShouldSerializeLegacyProfile() { return false; }
     }
 
     public sealed partial class Reactor
     {
+        private const float CooldownHeat = .15f;
+        private const int PlasmaStartTick = 1038; // Last quartet has latched.
         internal static readonly Guid MotionStorage = new Guid("d85a5399-b527-45ac-bcc0-aa1c442b2710");
         internal MotionState Motion = new MotionState();
         private readonly Dictionary<string, Matrix> restPoses = new Dictionary<string, Matrix>();
+        private IMyModel restModel;
         private int networkTick;
         private bool receivedState;
+        private bool restoreLegacyHardware;
         internal long Id { get { return Entity.EntityId; } }
         internal IMyReactor Block { get { return reactor; } }
 
         private void InitializeMotion()
         {
             Motion.EntityId = Id;
-            var dummies = new Dictionary<string, IMyModelDummy>();
-            reactor.Model.GetDummies(dummies);
-            foreach (var pair in dummies)
-                if (pair.Key.StartsWith("subpart_")) restPoses[pair.Key.Substring(8)] = pair.Value.Matrix;
+            RefreshRestPoses();
             if (MyAPIGateway.Multiplayer.IsServer && Entity.Storage != null)
             {
                 string saved;
@@ -92,13 +105,7 @@ namespace ArcanePower
                     try
                     {
                         var state = MyAPIGateway.Utilities.SerializeFromXML<MotionState>(saved);
-                        // A pasted/projected copy receives a new entity ID: it must not
-                        // inherit another reactor's installed consumables or vent cycle.
-                        if (Valid(state) && state.EntityId == Id)
-                        {
-                            Motion = state;
-                            if (state.Enabled.HasValue) reactor.Enabled = state.Enabled.Value;
-                        }
+                        RestoreMotionState(state);
                     }
                     catch (Exception error)
                     {
@@ -121,25 +128,67 @@ namespace ArcanePower
             VentSession.Add(this);
         }
 
+        private void RefreshRestPoses()
+        {
+            // Welding/grinding replaces the native model. Construction stages
+            // have no moving subparts; acquire the completed model's rest poses
+            // without resetting saved motion, fuel or installed containment.
+            var model = reactor.Model;
+            if (model == restModel) return;
+            restModel = model;
+            restPoses.Clear();
+            if (model == null) return;
+            var dummies = new Dictionary<string, IMyModelDummy>();
+            model.GetDummies(dummies);
+            foreach (var pair in dummies)
+                if (pair.Key.StartsWith("subpart_")) restPoses[pair.Key.Substring(8)] = pair.Value.Matrix;
+        }
+
+        private void RestoreMotionState(MotionState state)
+        {
+            if (state == null) return;
+            if (state.LegacyProfile.HasValue)
+            {
+                state.FuelTier = state.LegacyProfile.Value;
+                state.RingCount = state.FuelTier + 1;
+            }
+            // A pasted/projected copy must not inherit installed consumables.
+            if (state.EntityId != Id) return;
+            if (!Valid(state))
+            {
+                VRage.Utils.MyLog.Default.WriteLineAndConsole("ArcanePower: cannot restore reactor " + Id
+                    + ": invalid saved motion state (fuel remainder=" + state.FuelDebt + ")");
+                return;
+            }
+            Motion = state;
+            restoreLegacyHardware = state.LegacyProfile.HasValue;
+            if (state.Enabled.HasValue) reactor.Enabled = state.Enabled.Value;
+        }
+
         internal static bool Valid(MotionState state)
         {
+            // Native withdrawals round to the nearest millionth, leaving up to
+            // half a quantum of credit. Keep it, with tolerance for double arithmetic.
             return state != null && state.Core >= CorePhase.Off && state.Core <= CorePhase.Cooling
                 && state.Vent >= VentPhase.Idle && state.Vent <= VentPhase.Ejecting
                 && state.CoreTick >= 0 && state.CoreTick <= 2000000000 && state.StopTick >= 0 && state.StopTick <= 1260
                 && state.StopSpinAge >= 0 && state.StopSpinAge <= 2000000000
                 && state.Shield >= 0 && state.Shield <= 1 && state.Intake >= 0 && state.Intake <= 1
-                && state.Profile >= 2 && state.Profile <= 4
+                && state.FuelTier >= 1 && state.FuelTier <= 3
+                && state.RingCount >= 2 && state.RingCount <= 4
                 && state.Load >= 0 && state.Load <= 1 && state.TargetLoad >= 0 && state.TargetLoad <= 1
                 && state.SpinPhase >= -1 && state.SpinPhase < 36000 && state.SpinRate >= 0 && state.SpinRate <= 9
                 && state.SecondaryPhase >= 0 && state.SecondaryPhase < 36000
                 && state.SecondaryRate >= 0 && state.SecondaryRate <= 9
-                && state.InstalledTiles >= 0 && state.InstalledTiles <= 80
+                && state.InstalledTiles >= 0 && state.InstalledTiles <= 80 && state.InstalledTiles % 4 == 0
+                && ValidTileGrades(state.TileGrades)
                 && state.TileWear >= 0 && state.TileWear <= 1 && state.VentOutletId >= 0
                 && state.ReserveMJ >= 0 && state.ReserveMJ <= 9000
                 && state.PowerDemandMW >= 0 && state.PowerDemandMW <= 400
                 && state.PowerInputMW >= 0 && state.PowerInputMW <= 400.01f
                 && state.MaintenanceBatch >= 0 && state.MaintenanceBatch < 20
                 && state.MaintenanceTick >= -1 && state.MaintenanceTick <= 90
+                && state.VentDucts >= 0 && state.VentDucts <= 15
                 && state.EjectionTravel >= 18 && state.EjectionTravel <= 70
                 && state.PowerRamp >= 0 && state.PowerRamp <= 1
                 && state.CoreSubtick >= 0 && state.CoreSubtick < 1
@@ -147,7 +196,8 @@ namespace ArcanePower
                 && state.StarvedLoad >= 0 && state.StarvedLoad <= 1
                 && state.CriticalSeconds >= 0 && state.CriticalSeconds <= 45
                 && state.Heat >= 0 && state.Heat <= 4 && state.VentLoad >= 0 && state.VentLoad <= 1
-                && state.VentHeat >= 0 && state.VentHeat <= 4 && state.FuelDebt >= 0 && state.FuelDebt < 1
+                && state.VentHeat >= 0 && state.VentHeat <= 4
+                && state.FuelDebt >= -(double)VRage.MyFixedPoint.SmallestPossibleValue * .5 - 1e-12 && state.FuelDebt < 1
                 && state.Status >= ReactorStatus.ShutOff && state.Status <= ReactorStatus.Active;
         }
 
@@ -165,9 +215,10 @@ namespace ArcanePower
             // Ejection is a finite committed cycle: another toolbar click must
             // not reverse a hatch onto a core which is still passing through it.
             if (!MyAPIGateway.Multiplayer.IsServer || !open || Motion.Vent != VentPhase.Idle) return;
+            if (!HasIntactControllers()) return;
             if (!restPoses.ContainsKey("VentHatch4")) return;
             RefreshVentRoute();
-            if (ventRouteIncomplete) { reactor.RefreshCustomInfo(); return; }
+            if (!Motion.VentReady) { PublishMotion(); return; }
             Motion.PayloadReleased = false;
             Motion.Requested = true;
             Motion.EjectTick = 0;
@@ -182,7 +233,7 @@ namespace ArcanePower
         private void BeginShutdown()
         {
             if (Motion.Core == CorePhase.Off || Motion.Core == CorePhase.Stopping || Motion.Core == CorePhase.Cooling) return;
-            if (Motion.Core == CorePhase.Running && (Motion.Heat > .15f || Motion.MaintenanceTick >= 0))
+            if (Motion.Core == CorePhase.Running && (Motion.Heat > CooldownHeat || Motion.MaintenanceTick >= 0))
             {
                 Motion.Core = CorePhase.Cooling;
                 return;
@@ -207,9 +258,11 @@ namespace ArcanePower
             var oldStatus = Motion.Status;
             if (server)
             {
-                Motion.Paused = !reactor.IsFunctional || Motion.PowerPaused;
-                if (Motion.Vent == VentPhase.Idle && networkTick % 60 == 0) RefreshVentRoute();
-                if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && reactor.Enabled && HasUsableFuel() && Motion.PowerReady && !PrepareTiles())
+                // A broken route freezes the committed launch, never its heat/fuse.
+                bool ejecting = Motion.Vent != VentPhase.Idle && !Motion.PayloadReleased;
+                Motion.Paused = Motion.PowerPaused || (Motion.Vent == VentPhase.Idle && !reactor.IsFunctional)
+                    || (ejecting && (!Motion.ControllersReady || !Motion.VentReady));
+                if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && reactor.Enabled && Motion.VentReady && HasUsableFuel() && Motion.PowerReady && !PrepareTiles())
                     reactor.Enabled = false;
                 UpdateStatus();
                 Motion.TargetLoad = reactor.MaxOutput > 0
@@ -218,10 +271,11 @@ namespace ArcanePower
                 bool ventPowerCut = Motion.Vent != VentPhase.Idle && Motion.Vent != VentPhase.ShieldClosing;
                 if (ventPowerCut || ((Motion.Core == CorePhase.Stopping || Motion.Core == CorePhase.Cooling) && Motion.Vent == VentPhase.Idle))
                     reactor.Enabled = false;
-                if ((!reactor.Enabled || !reactor.IsFunctional || !HasUsableFuel()) && Motion.Vent == VentPhase.Idle) BeginShutdown();
-                else if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && Motion.PowerReady)
+                if ((!reactor.Enabled || !reactor.IsFunctional || !CanOperate || !HasUsableFuel()) && Motion.Vent == VentPhase.Idle) BeginShutdown();
+                else if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && Motion.VentReady && Motion.PowerReady)
                 {
                     Motion.PayloadReleased = false;
+                    Motion.RingCount = controllerRingCapacity;
                     Motion.Core = CorePhase.Starting;
                     Motion.CoreTick = 0;
                     Motion.CoreSubtick = 0;
@@ -268,7 +322,7 @@ namespace ArcanePower
             bool coreCanAdvance = Motion.Vent == VentPhase.Idle || Motion.Vent == VentPhase.ShieldClosing;
             if (coreCanAdvance && Motion.MaintenanceTick >= 0)
             {
-                Motion.MaintenanceTick += Motion.Profile * .5f;
+                Motion.MaintenanceTick += Motion.RingCount * .5f;
                 if (Motion.MaintenanceTick >= 90)
                 {
                     Motion.MaintenanceTick = -1;
@@ -291,7 +345,7 @@ namespace ArcanePower
                     // Only accelerate sphere construction: quartet spacing and
                     // flight share the same authored clock. Keep fractional
                     // poses so Tier 2's 1.5x rate does not alternate visible speeds.
-                    float age = Math.Min(1038, Motion.CoreTick + Motion.CoreSubtick + Motion.Profile * .5f);
+                    float age = Math.Min(1038, Motion.CoreTick + Motion.CoreSubtick + Motion.RingCount * .5f);
                     Motion.CoreTick = (int)age;
                     Motion.CoreSubtick = age - Motion.CoreTick;
                 }
@@ -305,7 +359,7 @@ namespace ArcanePower
                 Motion.CoreTick++;
                 Motion.SpinRate += (3f * (.1f + .9f * Math.Min(1, Motion.Heat)) - Motion.SpinRate) / 60f;
                 AdvanceSpin();
-                if (Motion.Heat <= .15f && Motion.MaintenanceTick < 0) BeginDismantling();
+                if (Motion.Heat <= CooldownHeat && Motion.MaintenanceTick < 0) BeginDismantling();
             }
             else if (coreCanAdvance && Motion.Core == CorePhase.Stopping)
             {
@@ -345,11 +399,7 @@ namespace ArcanePower
                         Motion.EjectTick = 119;
                     if (Motion.EjectTick >= 120)
                     {
-                        Motion.InstalledTiles = 0;
-                        Motion.TileWear = 0;
-                        Motion.TileStarved = false;
-                        Motion.StarvedLoad = 0;
-                        Motion.MaintenanceTick = -1;
+                        DiscardTiles();
                         Motion.Vent = VentPhase.IntakeClosing;
                     }
                     break;
@@ -416,7 +466,7 @@ namespace ArcanePower
 
         internal void SaveMotion()
         {
-            if (!motionInitialized || reactor == null || MyAPIGateway.Multiplayer == null || MyAPIGateway.Utilities == null || !MyAPIGateway.Multiplayer.IsServer) return;
+            if (!motionInitialized || restoreLegacyHardware || reactor == null || MyAPIGateway.Multiplayer == null || MyAPIGateway.Utilities == null || !MyAPIGateway.Multiplayer.IsServer) return;
             if (Entity.Storage == null) Entity.Storage = new MyModStorageComponent();
             Motion.Enabled = reactor.Enabled;
             Entity.Storage[MotionStorage] = MyAPIGateway.Utilities.SerializeToXML(Motion);
@@ -583,16 +633,26 @@ namespace ArcanePower
             return pose;
         }
 
-        private Matrix PayloadPlasmaPose(float age, Matrix fieldRotation)
+        private float PlasmaScale(float age)
+        {
+            if (Motion.Core == CorePhase.Off || Motion.PayloadReleased) return 0;
+            float scale = Span(age, PlasmaStartTick, 1170);
+            // A partial startup reverses its growth at the current authored age.
+            // A running core shrinks during braking, before tiles disassemble.
+            if (Motion.Core == CorePhase.Stopping && Motion.StopSpinAge >= 1170)
+                scale *= 1 - Span(Motion.StopTick, 0, 90);
+            return scale;
+        }
+
+        private Matrix PayloadPlasmaPose(float age)
         {
             Matrix plasma = Rest("Plasma");
-            float scale = Motion.Core == CorePhase.Stopping ? 1 - Span(Motion.StopTick, 0, 60) : Span(age, 1160, 1170);
+            float scale = PlasmaScale(age);
             Vector3 position = plasma.Translation;
             plasma.Translation = Vector3.Zero;
             plasma *= Matrix.CreateScale(Math.Max(.001f, scale));
-            plasma *= fieldRotation;
-            plasma.Translation = Vector3.Transform(position - AnimationGeometry.Center, fieldRotation)
-                + AnimationGeometry.Center + ContainmentOffset(age) + EjectionOffset();
+            // The core shares the field's drift/bob, but keeps its own rest orientation.
+            plasma.Translation = position + ContainmentOffset(age) + EjectionOffset();
             return plasma;
         }
 
@@ -611,7 +671,7 @@ namespace ArcanePower
                 Part(name, floor);
                 name = "Ring" + (i + 1);
                 Matrix ring = PayloadRingPose(i, age);
-                Part(name, ring, i < Motion.Profile && alive > 0);
+                Part(name, ring, i < Motion.RingCount && alive > 0);
             }
             foreach (var tile in AnimationGeometry.Tiles)
             {
@@ -619,8 +679,8 @@ namespace ArcanePower
                 Matrix pose = PayloadTilePose(tile, age, fieldRotation);
                 Part(tile.Name, pose, t >= 0 && alive > 0);
             }
-            Matrix plasma = PayloadPlasmaPose(age, fieldRotation);
-            Part("Plasma", plasma, age >= 1160 && (Motion.Core != CorePhase.Stopping || Motion.StopTick < 60) && alive > 0);
+            Matrix plasma = PayloadPlasmaPose(age);
+            Part("Plasma", plasma, PlasmaScale(age) > 0);
             for (int i = 0; i < 6; i++)
             {
                 string name = "BlastShield" + (i + 1);

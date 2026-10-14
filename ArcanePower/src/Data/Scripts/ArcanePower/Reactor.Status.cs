@@ -12,11 +12,12 @@ namespace ArcanePower
         // LCD, tablet and native terminal text share live values and warning priority.
         internal StatusReport ReadStatus(bool detailed)
         {
-            var text = new StatusReport { Name = reactor.CustomName, Tier = Motion.Profile - 1, Heat = Motion.Heat, Reserve = Motion.ReserveMJ / ReserveCapacityMJ, Load = Motion.Load };
+            var text = new StatusReport { Name = reactor.CustomName, Fuel = FuelNames[Motion.FuelTier - 1], Heat = Motion.Heat, Reserve = Motion.ReserveMJ / ReserveCapacityMJ, Load = Motion.Load };
             bool creative = MyAPIGateway.Session.CreativeMode;
-            double fuel = (double)reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.Profile - 2]));
-            double tiles = (double)reactor.GetInventory().GetItemAmount(TileType);
-            int needed = 80 - Motion.InstalledTiles + (Motion.TileWear >= 1 ? 4 : 0);
+            double fuel = (double)reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1]));
+            int[] tileStock = SpareTileQuartets();
+            double tiles = (tileStock[0] + tileStock[1] + tileStock[2]) * 4;
+            int needed = NeededTileQuartets() * 4;
             string action;
             string tone;
             string status = OperatingStatus(out action, out tone);
@@ -29,7 +30,7 @@ namespace ArcanePower
                     + "  /  detonation ~" + Number(fuse, "0.0") + " s");
 
             Section(text, "POWER");
-            Row(text, "Output", Power(reactor.CurrentOutput) + " / " + Power(PowerMW[Motion.Profile - 2]));
+            Row(text, "Output", Power(reactor.CurrentOutput) + " / " + Power(PowerMW[Motion.FuelTier - 1]));
             Row(text, "Net", Power(reactor.CurrentOutput - Motion.PowerInputMW));
             if (detailed)
             {
@@ -38,15 +39,20 @@ namespace ArcanePower
             }
 
             Section(text, "CONTAINMENT");
+            Row(text, "Security mode", Motion.SecurityMode ? "On / vent loss shuts down" : "Off / vent loss warns", Motion.SecurityMode ? "white" : "yellow");
+            Row(text, "Integrity", Percent(reactor.SlimBlock.Integrity / reactor.SlimBlock.MaxIntegrity) + " / auto eject at 60%", NeedsAutoEjection ? "red" : "white");
             Row(text, "Heat", Percent(Motion.Heat) + " / critical 125%", Motion.Critical || Motion.Heat >= 1 ? "red" : Motion.Heat >= .85f ? "yellow" : "white");
             Row(text, "Reserve", Number(Motion.ReserveMJ / ContainmentMW, "0") + " / 90 s", Motion.PowerPaused ? "red" : !Motion.PowerReady ? "yellow" : "white");
-            Row(text, "Field", Motion.InstalledTiles + " / 80 tiles   " + Motion.Profile + " rings");
+            Row(text, "Field", Motion.InstalledTiles + " / 80 tiles   " + Motion.RingCount + " rings");
             if (detailed)
             {
-                Row(text, "Controllers", Number(Math.Max(0, previousControllers), "0") + " / 2 required   Capacity " + rings + " rings",
-                    previousControllers < 2 || Motion.Profile > rings ? "red" : "white");
+                Row(text, "Controllers", Number(Math.Max(0, previousControllers), "0") + " / 2 required   Capacity " + controllerRingCapacity + " rings",
+                    previousControllers < 2 || Motion.FuelTier + 1 > controllerRingCapacity ? "red" : "white");
                 Row(text, "Reserve energy", Number(Motion.ReserveMJ / 3600, "0.000") + " / "
                     + Number(ReserveCapacityMJ / 3600, "0.000") + " MWh");
+                Row(text, "Tile grade", Motion.InstalledTiles > 0
+                    ? TileNames[InstalledTileGrade(Motion.MaintenanceBatch)] + " / " + Percent(Motion.TileWear) + " wear"
+                    : "No installed tiles");
                 Row(text, "Quartet wear", Percent(Motion.TileWear));
                 if (Motion.MaintenanceTick >= 0)
                     Row(text, "Replacing", "quartet " + (Motion.MaintenanceBatch + 1) + " / 20", "cyan");
@@ -55,28 +61,31 @@ namespace ArcanePower
             }
 
             Section(text, "SUPPLIES & VENT");
-            Row(text, "Fuel stock", creative ? "Creative supply" : Number(fuel, "0.###") + " units", !creative && fuel <= 0 ? "yellow" : "white");
+            Row(text, "Fuel efficiency", Percent(FuelEfficiency) + "   Controller tier " + (Motion.RingCount - 1));
+            Row(text, "Fuel stock", creative ? "Creative supply" : Number(fuel, "0.###") + " canisters", !creative && fuel <= 0 ? "yellow" : "white");
             Row(text, "Spare tiles", creative ? "Creative supply" : Number(tiles, "0")
                 + (needed > tiles ? "   Need " + Number(needed - tiles, "0") + " more" : ""), !creative && tiles < Math.Max(4, needed) ? "yellow" : "white");
-            Row(text, "Vent", VentStatus(), ventRouteIncomplete ? "yellow" : "white");
+            Row(text, "Vent", VentStatus(), !Motion.VentReady ? "yellow" : "white");
             if (detailed)
             {
                 double burn = creative ? 0 : FuelUnitsPerMinute();
-                Row(text, "Fuel burn", creative ? "None (creative)" : Number(burn, "0.###") + " units/min");
+                Row(text, "Fuel burn", creative ? "None (creative)" : Number(burn, "0.####") + " canisters/min");
                 Row(text, "Fuel remaining", creative ? "Unlimited" : burn > .000001 ? Duration(fuel / burn * 60) + " at current burn" : "Not burning");
-                Row(text, "Tile demand", creative ? "None (creative)" : Number(TileWearRate() * 4, "0.0") + " / min at this load/heat");
+                Row(text, "Tile demand", creative ? "None (creative)" : Number(TileWearRate() * 4, "0.###") + " / min at this load/heat");
                 if (!creative && !Motion.TileStarved && Motion.InstalledTiles == 80)
-                    Row(text, "Tile reserve", Duration((Math.Floor(tiles / 4) + 1 - Motion.TileWear) / TileWearRate() * 60) + " at this load/heat");
+                    Row(text, "Tile reserve", Duration(TileReserveSeconds()) + " at this load/heat");
+                Row(text, "Tile stock", "Standard " + tileStock[0] * 4 + " / Reinforced " + tileStock[1] * 4 + " / Advanced " + tileStock[2] * 4);
                 Row(text, "Startup tiles", needed + " needed   " + Number(Math.Max(0, needed - tiles), "0") + " missing");
                 Row(text, "Conveyors", reactor.UseConveyorSystem ? "Automatic supply enabled" : "Automatic supply disabled");
-                Row(text, "Route", ventRouteIncomplete ? "Incomplete / misaligned" : Motion.VentOutletId == 0 ? "Direct roof outlet" : "External outlet connected",
-                    ventRouteIncomplete ? "yellow" : "white");
+                Row(text, "Route", !Motion.VentReady ? "Missing / unfinished / misaligned" : Motion.VentDucts + " tube(s) + outlet connected",
+                    !Motion.VentReady ? "yellow" : "white");
                 if (Motion.Vent != VentPhase.Idle)
                     Row(text, "Doors", "shield " + Percent(Motion.Shield) + "   intake " + Percent(Motion.Intake));
                 if (Motion.TileStarved && Motion.TileWear >= 1)
                     Line(text, "red", "Tile failure: 10% output / 10x fuel at pre-failure load.");
                 Line(text, "muted", "Net = output minus containment and reserve charging.");
-                Line(text, "muted", "Supply estimates exclude conveyor deliveries.");
+                Line(text, "muted", "Tiles install in same-grade sets of four; loose leftovers are excluded.");
+                Line(text, "muted", "Supply estimates exclude conveyor deliveries and replacement animation time.");
                 Line(text, "muted", "Venting ejects the core; restart manually afterwards.");
             }
             return text;
@@ -88,24 +97,39 @@ namespace ArcanePower
             if (!receivedState) { tone = "yellow"; return "WAITING FOR REACTOR STATE"; }
             if (Motion.Critical)
             {
-                tone = "red"; action = "Eject the core to move the blast away.";
+                tone = "red"; action = !Motion.ControllersReady ? "Repair both controllers urgently; core cannot eject."
+                    : Motion.VentReady ? "Eject the core to move the blast away." : "Repair the vent route urgently; core cannot eject.";
                 return "SUPERCRITICAL  /  ~" + Number(Motion.CriticalSeconds, "0.0") + " s";
             }
             if (Motion.TileStarved && Motion.TileWear >= 1 && !Motion.PayloadReleased)
             { tone = "red"; action = "Replace 4 tiles or eject before 125% heat."; return "TILE FAILURE  /  RUNAWAY HEAT"; }
             if (initializationFrames > 0)
             { tone = "cyan"; action = "Restoring saved state while grid connections initialize."; return "RECONNECTING CONTAINMENT"; }
-            if (!reactor.IsFunctional || reactor.SlimBlock.BuildLevelRatio < 1)
-            { tone = "red"; action = "Complete or repair the reactor."; return "REACTOR INCOMPLETE"; }
             if (Motion.PowerPaused)
             { tone = "red"; action = "Restore containment power; reserve exhausted."; return "MECHANISMS PAUSED"; }
+            if (Motion.Vent != VentPhase.Idle && !Motion.PayloadReleased && !Motion.ControllersReady)
+            { tone = "red"; action = "Restore both fully built, functional controllers; heat and fuse continue."; return "CONTROLLERS BROKEN / EJECTION PAUSED"; }
+            if (!Motion.VentReady && Motion.Vent != VentPhase.Idle && !Motion.PayloadReleased)
+            { tone = "red"; action = "Restore the original tube stack and outlet; heat and fuse continue."; return "VENT ROUTE BROKEN / EJECTION PAUSED"; }
             if (Motion.Vent != VentPhase.Idle)
             { tone = "yellow"; action = "Reactor stays off after this cycle."; return "VENTING  /  " + VentStatus().ToUpperInvariant(); }
-            if (previousControllers < 2 || Motion.Profile > rings)
+            if (NeedsAutoEjection && !Motion.ControllersReady)
+            { tone = "red"; action = "Restore both fully built, functional controllers to auto eject."; return "AUTO EJECTION BLOCKED / CONTROLLERS"; }
+            if (NeedsAutoEjection && !Motion.VentReady)
+            { tone = "red"; action = "Repair the complete vent route to auto eject."; return "AUTO EJECTION BLOCKED / VENTS"; }
+            if (!reactor.IsFunctional || reactor.SlimBlock.BuildLevelRatio < 1)
+            { tone = "red"; action = "Complete or repair the reactor."; return "REACTOR INCOMPLETE"; }
+            if (previousControllers < 2 || Motion.FuelTier + 1 > controllerRingCapacity)
             { tone = "red"; action = "Attach two compatible, working controllers."; return "CONTAINMENT INCOMPLETE"; }
             if (Motion.Core == CorePhase.Cooling)
             { tone = "yellow"; action = "Holding the shell until heat falls to 15%."; return "COOLING DOWN"; }
             if (Motion.Core == CorePhase.Stopping) { tone = "yellow"; return "DISMANTLING CONTAINMENT"; }
+            if (!Motion.VentReady)
+            {
+                if (!Motion.SecurityMode && Motion.Core == CorePhase.Running && reactor.Enabled)
+                { tone = "yellow"; action = "Repair vents; ejection is unavailable. Security mode is off."; return "RUNNING / VENT ROUTE BROKEN"; }
+                tone = "red"; action = "Build 1-15 aligned vent tubes above the roof, then an outlet. Weld fully and switch on."; return "VENT TUBE / OUTLET REQUIRED";
+            }
             if (!HasUsableFuel()) { tone = "yellow"; action = "Load compatible refined fuel."; return "OUT OF FUEL"; }
             if (Motion.TileStarved) { tone = "yellow"; action = "Supply startup tiles, then switch on."; return "STARTUP TILES REQUIRED"; }
             if (Motion.Core == CorePhase.Off && reactor.Enabled && !Motion.PowerReady)
@@ -119,6 +143,7 @@ namespace ArcanePower
 
         private string VentStatus()
         {
+            if (!Motion.VentReady) return Motion.Vent != VentPhase.Idle && !Motion.PayloadReleased ? "Route broken / paused" : "Tube + outlet required";
             switch (Motion.Vent)
             {
                 case VentPhase.ShieldClosing: return "Closing shield";
@@ -127,7 +152,7 @@ namespace ArcanePower
                 case VentPhase.IntakeClosing: return "Closing hatch";
                 case VentPhase.ShieldOpening: return "Retracting shield";
                 case VentPhase.Open: return "Intake open";
-                default: return ventRouteIncomplete ? "Route incomplete" : "Ready";
+                default: return "Ready";
             }
         }
 
@@ -161,7 +186,7 @@ namespace ArcanePower
     internal sealed class StatusReport
     {
         internal string Name, State, Tone, Section;
-        internal int Tier;
+        internal string Fuel;
         internal double Heat, Reserve, Load;
         internal readonly List<StatusRow> Rows = new List<StatusRow>();
 
@@ -173,7 +198,7 @@ namespace ArcanePower
 
         internal string Text()
         {
-            var text = new StringBuilder("ARCANE POWER / FUEL " + Tier + "\n" + State + "\n");
+            var text = new StringBuilder("ARCANE POWER / " + Fuel.ToUpperInvariant() + " FUEL\n" + State + "\n");
             string section = null;
             foreach (var row in Rows)
             {

@@ -43,6 +43,7 @@ namespace ArcanePower
         private static CoreHazards instance;
         private List<CoreHazard> cores = new List<CoreHazard>();
         private readonly Dictionary<long, MyLight> lights = new Dictionary<long, MyLight>();
+        private readonly Dictionary<long, MyEntity3DSoundEmitter> coreSounds = new Dictionary<long, MyEntity3DSoundEmitter>();
         private readonly List<long> unusedLights = new List<long>();
         private int tick;
         private bool ready;
@@ -191,10 +192,13 @@ namespace ArcanePower
             float damage = (warhead == null ? 15000 : warhead.WarheadExplosionDamage) * multiplier;
             double radius = (warhead == null ? 22.4415 : warhead.ExplosionRadius) * Math.Pow(multiplier, 1.0 / 3);
             var explosion = new MyExplosionInfo(0, damage, new BoundingSphereD(core.Position, radius),
-                MyExplosionTypeEnum.WARHEAD_EXPLOSION_50, true)
+                MyExplosionTypeEnum.CUSTOM, true)
             {
                 OriginEntity = core.SourceId, Velocity = core.Velocity,
                 StrengthImpulse = 1.2f, ObjectsRemoveDelayInMiliseconds = 40,
+                CustomSound = new MySoundPair("ArcaneReactorExplosion"),
+                CustomEffect = "Explosion_Warhead_50",
+                ParticleScale = (float)Math.Pow(multiplier, 1.0 / 3),
                 IgnoreFriendlyFireSetting = false
             };
             IMyEntity source;
@@ -238,8 +242,7 @@ namespace ArcanePower
                 if (model == null) continue;
                 Color color = Reactor.FuelColors[core.Tier - 1];
                 float fade = core.Critical ? 1 : MathHelper.Clamp(core.Decay / 5, 0, 1);
-                float flicker = .9f + .1f * (float)Math.Sin(tick * .13);
-                model.SetEmissiveParts("ArcanePlasma", color, 18 * fade * flicker);
+                model.SetEmissiveParts("ArcanePlasma", color, 0);
                 MyLight light;
                 if (!lights.TryGetValue(core.CarrierId, out light))
                 {
@@ -251,9 +254,34 @@ namespace ArcanePower
                 }
                 unusedLights.Remove(core.CarrierId);
                 light.LightOn = true; light.Position = entity.WorldMatrix.Translation;
-                light.Color = color; light.Intensity = 3 * fade * flicker; light.UpdateLight();
+                light.Color = color; light.Intensity = 3 * fade; light.UpdateLight();
+                var camera = MyAPIGateway.Session.Camera;
+                MyEntity3DSoundEmitter sound;
+                bool audible = camera != null && Vector3D.DistanceSquared(camera.Position, entity.WorldMatrix.Translation) < 160 * 160;
+                if (audible)
+                {
+                    if (!coreSounds.TryGetValue(core.CarrierId, out sound))
+                    {
+                        sound = new MyEntity3DSoundEmitter((MyEntity)entity);
+                        sound.CustomVolume = (core.Critical ? .6f : .35f) * fade;
+                        sound.PlaySound(new MySoundPair(core.Critical ? "ArcaneReactorInstability" : "ArcaneReactorResonance"));
+                        coreSounds.Add(core.CarrierId, sound);
+                    }
+                    sound.CustomVolume = (core.Critical ? .6f : .35f) * fade;
+                    if (tick % 10 == 0) sound.Update();
+                }
+                else if (coreSounds.TryGetValue(core.CarrierId, out sound))
+                {
+                    sound.StopSound(true);
+                    coreSounds.Remove(core.CarrierId);
+                }
             }
-            foreach (long id in unusedLights) { MyLights.RemoveLight(lights[id]); lights.Remove(id); }
+            foreach (long id in unusedLights)
+            {
+                MyLights.RemoveLight(lights[id]); lights.Remove(id);
+                MyEntity3DSoundEmitter sound;
+                if (coreSounds.TryGetValue(id, out sound)) { sound.StopSound(true); coreSounds.Remove(id); }
+            }
         }
 
         private void Broadcast()
@@ -290,6 +318,8 @@ namespace ArcanePower
         {
             if (ready) MyAPIGateway.Multiplayer.UnregisterSecureMessageHandler(Channel, Receive);
             foreach (var light in lights.Values) MyLights.RemoveLight(light);
+            foreach (var sound in coreSounds.Values) sound.StopSound(true);
+            coreSounds.Clear();
             lights.Clear(); cores.Clear(); ready = false; instance = null;
         }
     }

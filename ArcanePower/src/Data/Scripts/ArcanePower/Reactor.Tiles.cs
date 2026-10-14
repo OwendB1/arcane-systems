@@ -12,22 +12,94 @@ namespace ArcanePower
 {
     public sealed partial class Reactor
     {
-        private static readonly MyItemType TileType = MyItemType.MakeComponent("ArcaneContainmentTile");
+        private static readonly string[] TileSubtypes = {
+            "ArcaneContainmentTile", "ArcaneReinforcedContainmentTile", "ArcaneAdvancedContainmentTile"
+        };
+        private static readonly string[] TileNames = { "Standard", "Reinforced", "Advanced" };
+        private static readonly float[] TileLifetimes = { 1, 10, 100 };
+        private static readonly MyItemType[] TileTypes = {
+            MyItemType.MakeComponent(TileSubtypes[0]), MyItemType.MakeComponent(TileSubtypes[1]),
+            MyItemType.MakeComponent(TileSubtypes[2])
+        };
+
+        private static bool ValidTileGrades(int[] grades)
+        {
+            if (grades == null || grades.Length != 20) return false;
+            foreach (int grade in grades) if (grade < 0 || grade >= TileTypes.Length) return false;
+            return true;
+        }
+
+        private int InstalledTileGrade(int batch)
+        {
+            return Motion.TileGrades[batch];
+        }
+
+        private int[] SpareTileQuartets()
+        {
+            var inventory = reactor.GetInventory();
+            var stock = new int[TileTypes.Length];
+            for (int grade = 0; grade < stock.Length; grade++)
+                stock[grade] = (int)((double)inventory.GetItemAmount(TileTypes[grade]) / 4);
+            return stock;
+        }
+
+        private static int BestTileGrade(int[] stock)
+        {
+            for (int grade = stock.Length - 1; grade >= 0; grade--)
+                if (stock[grade] > 0) return grade;
+            return -1;
+        }
+
+        private int NeededTileQuartets()
+        {
+            return (80 - Motion.InstalledTiles + 3) / 4
+                + (Motion.InstalledTiles > 0 && Motion.TileWear >= 1 ? 1 : 0);
+        }
+
+        private void DiscardTiles()
+        {
+            Motion.InstalledTiles = 0;
+            Array.Clear(Motion.TileGrades, 0, Motion.TileGrades.Length);
+            Motion.TileWear = 0;
+            Motion.TileStarved = false;
+            Motion.StarvedLoad = 0;
+            Motion.MaintenanceTick = -1;
+        }
+
+        private void ConsumeTileQuartets(int[] counts)
+        {
+            if (MyAPIGateway.Session.CreativeMode) return;
+            for (int grade = 0; grade < counts.Length; grade++)
+                if (counts[grade] > 0)
+                    reactor.GetInventory().RemoveItemsOfType((MyFixedPoint)(counts[grade] * 4),
+                        new MyObjectBuilder_Component { SubtypeName = TileSubtypes[grade] });
+        }
 
         private bool PrepareTiles()
         {
-            int needed = 80 - Motion.InstalledTiles + (Motion.TileWear >= 1 ? 4 : 0);
-            var inventory = reactor.GetInventory();
-            if (!MyAPIGateway.Session.CreativeMode && inventory.GetItemAmount(TileType) < needed)
+            bool creative = MyAPIGateway.Session.CreativeMode;
+            int[] stock = creative ? new[] { 20, 0, 0 } : SpareTileQuartets();
+            int[] grades = (int[])Motion.TileGrades.Clone();
+            int[] consumed = new int[TileTypes.Length];
+            int missing = (80 - Motion.InstalledTiles + 3) / 4;
+            int needed = NeededTileQuartets();
+            // Plan the complete reservation before removing anything. Each quartet
+            // shares one grade; different quartets may use different grades.
+            for (int i = 0; i < needed; i++)
             {
-                Motion.TileStarved = true;
-                return false;
+                int grade = BestTileGrade(stock);
+                if (grade < 0) { Motion.TileStarved = true; return false; }
+                stock[grade]--;
+                consumed[grade]++;
+                int batch = i < missing ? 20 - missing + i : Motion.MaintenanceBatch;
+                grades[batch] = grade;
             }
-            if (!MyAPIGateway.Session.CreativeMode && needed > 0)
-                inventory.RemoveItemsOfType((MyFixedPoint)needed, new MyObjectBuilder_Component { SubtypeName = "ArcaneContainmentTile" });
+            ConsumeTileQuartets(consumed);
+            Motion.TileGrades = grades;
             Motion.InstalledTiles = 80;
             if (Motion.TileWear >= 1) Motion.TileWear = 0;
             Motion.TileStarved = false;
+            Motion.StarvedLoad = 0;
             SaveMotion();
             return true;
         }
@@ -43,39 +115,66 @@ namespace ArcanePower
                 return;
             }
             // A failed maintenance quartet can be replaced during cooling too.
-            if (Motion.TileWear >= 1 && Motion.MaintenanceTick < 0 && Motion.Vent == VentPhase.Idle
-                && (MyAPIGateway.Session.CreativeMode || reactor.GetInventory().GetItemAmount(TileType) >= 4))
+            if (Motion.InstalledTiles == 80 && Motion.TileWear >= 1 && Motion.MaintenanceTick < 0
+                && Motion.Vent == VentPhase.Idle)
             {
-                if (!MyAPIGateway.Session.CreativeMode)
-                    reactor.GetInventory().RemoveItemsOfType((MyFixedPoint)4,
-                        new MyObjectBuilder_Component { SubtypeName = "ArcaneContainmentTile" });
-                Motion.TileWear = 0;
-                Motion.TileStarved = false;
-                Motion.StarvedLoad = 0;
-                Motion.MaintenanceTick = 0;
-                RefreshFuelCapacity();
-                PublishMotion();
+                int grade = MyAPIGateway.Session.CreativeMode ? 0 : BestTileGrade(SpareTileQuartets());
+                if (grade >= 0)
+                {
+                    var consumed = new int[TileTypes.Length];
+                    consumed[grade] = 1;
+                    ConsumeTileQuartets(consumed);
+                    Motion.TileGrades[Motion.MaintenanceBatch] = grade;
+                    Motion.TileWear = 0;
+                    Motion.TileStarved = false;
+                    Motion.StarvedLoad = 0;
+                    Motion.MaintenanceTick = 0;
+                    RefreshFuelCapacity();
+                    PublishMotion();
+                }
             }
             if (Motion.Core != CorePhase.Running || !reactor.Enabled || !reactor.IsFunctional || Motion.PowerPaused
                 || (Motion.Vent != VentPhase.Idle && Motion.Vent != VentPhase.ShieldClosing)
-                || MyAPIGateway.Session.CreativeMode || Motion.TileStarved) return;
+                || MyAPIGateway.Session.CreativeMode || Motion.TileStarved || Motion.MaintenanceTick >= 0) return;
             Motion.TileWear = Math.Min(1, Motion.TileWear + TileWearRate() / 3600f);
-            if (Motion.TileWear < 1 || Motion.MaintenanceTick >= 0) return;
-            // The last quartet has worn out. Latch its operating load before
-            // lowering electrical output, otherwise the failure would save fuel.
-            if (reactor.GetInventory().GetItemAmount(TileType) < 4)
+            if (Motion.TileWear < 1) return;
+            // Latch the operating load before failed maintenance lowers output.
+            if (BestTileGrade(SpareTileQuartets()) < 0)
             {
-                Motion.StarvedLoad = MathHelper.Clamp(reactor.CurrentOutput / PowerMW[Motion.Profile - 2], 0, 1);
+                Motion.StarvedLoad = MathHelper.Clamp(reactor.CurrentOutput / PowerMW[Motion.FuelTier - 1], 0, 1);
                 Motion.TileStarved = true;
                 RefreshFuelCapacity();
                 PublishMotion();
             }
         }
 
-        private float TileWearRate()
+        private float BaseTileWearRate()
         {
             // Quartets/minute: quadratic thermal wear is 4x at 100% heat.
-            return (1 << (Motion.Profile - 2)) * (.2f + .8f * Motion.Load) * (1 + 3 * Motion.Heat * Motion.Heat);
+            return (1 << (Motion.FuelTier - 1)) * (.2f + .8f * Motion.Load) * (1 + 3 * Motion.Heat * Motion.Heat);
+        }
+
+        private float TileWearRate()
+        {
+            return BaseTileWearRate() / TileLifetimes[InstalledTileGrade(Motion.MaintenanceBatch)];
+        }
+
+        private double TileReserveSeconds()
+        {
+            // Installed quartets are serviced in order. Forecast until loose stock
+            // is exhausted, using each installed and replacement quartet's grade.
+            int[] stock = SpareTileQuartets();
+            int[] grades = (int[])Motion.TileGrades.Clone();
+            int batch = Motion.MaintenanceTick >= 0 ? (Motion.MaintenanceBatch + 1) % 20 : Motion.MaintenanceBatch;
+            double life = (Motion.MaintenanceTick >= 0 ? 1 : 1 - Motion.TileWear) * TileLifetimes[grades[batch]];
+            for (int grade = BestTileGrade(stock); grade >= 0; grade = BestTileGrade(stock))
+            {
+                stock[grade]--;
+                grades[batch] = grade;
+                batch = (batch + 1) % 20;
+                life += TileLifetimes[grades[batch]];
+            }
+            return life / BaseTileWearRate() * 60;
         }
 
         private Matrix MaintenancePose(TilePose tile, Matrix installed)
@@ -103,15 +202,21 @@ namespace ArcanePower
 
         private void PullTiles(VRage.Game.ModAPI.IMyInventory source, VRage.Game.ModAPI.IMyInventory inventory)
         {
-            MyFixedPoint wanted = (MyFixedPoint)160 - inventory.GetItemAmount(TileType);
-            if (wanted <= 0 || !source.CanTransferItemTo(inventory, TileType)) return;
-            transferItems.Clear();
-            source.GetItems(transferItems, item => item.Type == TileType);
-            foreach (var item in transferItems)
+            // Keep one shell reserve of each supplied grade (480 L total). A full Standard
+            // reserve must not prevent conveyor delivery of better tiles.
+            for (int grade = TileTypes.Length - 1; grade >= 0; grade--)
             {
-                inventory.TransferItemFrom(source, item, MyFixedPoint.Min(wanted, item.Amount));
-                wanted = (MyFixedPoint)160 - inventory.GetItemAmount(TileType);
-                if (wanted <= 0) break;
+                MyItemType type = TileTypes[grade];
+                MyFixedPoint wanted = (MyFixedPoint)80 - inventory.GetItemAmount(type);
+                if (wanted <= 0 || !source.CanTransferItemTo(inventory, type)) continue;
+                transferItems.Clear();
+                source.GetItems(transferItems, item => item.Type == type);
+                foreach (var item in transferItems)
+                {
+                    inventory.TransferItemFrom(source, item, MyFixedPoint.Min(wanted, item.Amount));
+                    wanted = (MyFixedPoint)80 - inventory.GetItemAmount(type);
+                    if (wanted <= 0) break;
+                }
             }
         }
     }

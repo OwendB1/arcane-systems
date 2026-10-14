@@ -572,6 +572,10 @@ namespace ShipCoreFramework
 
         private void CleanAuthoritativeStateBeforeGridCleanup()
         {
+            if (Session.IsGameThread || Session.IsShuttingDown)
+                RestoreConnectorShutOffBlocks(null);
+            else
+                MyAPIGateway.Utilities.InvokeOnGameThread(() => RestoreConnectorShutOffBlocks(null));
             try
             {
                 if (MainCoreComponent != null)

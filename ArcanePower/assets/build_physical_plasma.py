@@ -65,7 +65,9 @@ pixels.reshape((-1,4))[:,3]=0
 def packed(name,w,h,data):
     result=bpy.data.images.new(name,width=w,height=h,alpha=True)
     if name.endswith(('_ng','_add')): result.colorspace_settings.name='Non-Color'
-    result.pixels.foreach_set(data); result.filepath_raw=str(folder/(name+'.tga')); result.file_format='TARGA'; result.save()
+    # PNG retains all-zero packed alpha; legacy TGA conversion made this metallic.
+    result.alpha_mode='CHANNEL_PACKED'
+    result.pixels.foreach_set(data); result.filepath_raw=str(folder/(name+'.png')); result.file_format='PNG'; result.save()
     return result
 cm=packed('ArcanePlasma_cm',2048,1024,pixels)
 add=packed('ArcanePlasma_add',4,4,[1,1,0,0]*16)

@@ -6,7 +6,7 @@
         <TypeId>Component</TypeId>
         <SubtypeId>ArcaneContainmentTile</SubtypeId>
       </Id>
-      <DisplayName>Arcane Containment Tile</DisplayName>
+      <DisplayName>Standard Containment Tile</DisplayName>
       <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
       <Size>
         <X>0.54</X>
@@ -20,7 +20,49 @@
       <MaxIntegrity>30</MaxIntegrity>
       <DropProbability>0.5</DropProbability>
       <Health>18</Health>
-      <Description>Replaceable triangular containment cartridge. Eighty installed tiles form a shell; four-tile maintenance batches wear with fuel tier, load and heat. Normal shutdown retains installed tiles; venting discards them.</Description>
+      <Description>Self-controlling platinum-lined containment with superconducting coils, onboard computers and quartet sensing. Compatible with Aether, Helion and Empyrean. 1x Standard lifetime and crafting cost. Install in same-grade quartets; the shell holds 80 tiles. Normal shutdown retains tiles; venting discards them.</Description>
+    </Component>
+    <Component>
+      <Id>
+        <TypeId>Component</TypeId>
+        <SubtypeId>ArcaneReinforcedContainmentTile</SubtypeId>
+      </Id>
+      <DisplayName>Reinforced Containment Tile</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <Size>
+        <X>0.54</X>
+        <Y>0.4</Y>
+        <Z>0.045</Z>
+      </Size>
+      <Mass>1</Mass>
+      <Volume>2</Volume>
+      <Model>Models/Cubes/large/ArcanePower_ContainmentTile.mwm</Model>
+      <PhysicalMaterial>Metal</PhysicalMaterial>
+      <MaxIntegrity>30</MaxIntegrity>
+      <DropProbability>0.5</DropProbability>
+      <Health>18</Health>
+      <Description>Self-controlling platinum-lined containment with superconducting coils, onboard computers and quartet sensing. Compatible with Aether, Helion and Empyrean. 10x Standard lifetime and crafting cost. Install in same-grade quartets; the shell holds 80 tiles. Normal shutdown retains tiles; venting discards them.</Description>
+    </Component>
+    <Component>
+      <Id>
+        <TypeId>Component</TypeId>
+        <SubtypeId>ArcaneAdvancedContainmentTile</SubtypeId>
+      </Id>
+      <DisplayName>Advanced Containment Tile</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <Size>
+        <X>0.54</X>
+        <Y>0.4</Y>
+        <Z>0.045</Z>
+      </Size>
+      <Mass>1</Mass>
+      <Volume>2</Volume>
+      <Model>Models/Cubes/large/ArcanePower_ContainmentTile.mwm</Model>
+      <PhysicalMaterial>Metal</PhysicalMaterial>
+      <MaxIntegrity>30</MaxIntegrity>
+      <DropProbability>0.5</DropProbability>
+      <Health>18</Health>
+      <Description>Self-controlling platinum-lined containment with superconducting coils, onboard computers and quartet sensing. Compatible with Aether, Helion and Empyrean. 100x Standard lifetime and crafting cost. Install in same-grade quartets; the shell holds 80 tiles. Normal shutdown retains tiles; venting discards them.</Description>
     </Component>
   </Components>
 </Definitions>

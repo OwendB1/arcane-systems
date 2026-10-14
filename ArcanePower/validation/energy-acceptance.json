@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-11",
+  "compatibility_build": {
+    "warnings": 0,
+    "errors": 0
+  },
+  "focused_checks": {
+    "controller_tiers": 0,
+    "tile_tiers": 0,
+    "fuel_progression": 0,
+    "vent_route": 0,
+    "reload_retraction": 0,
+    "sound_cooldown": 0,
+    "hum_pitch": 0,
+    "mechanism_feedback": 0,
+    "core_feedback": 0,
+    "audio": 0,
+    "tablet_screen": 0,
+    "fuel_assets": 0,
+    "energy_core": 0
+  },
+  "native_construction_models": 36,
+  "live_evidence": "energy-runtime.json",
+  "package_files": 216,
+  "package_bytes": 46916388,
+  "package_sha256": "a6038696815182faadcb7c42a3843c132e5ece4b93e1b20eb0d96cd9433fc3e7",
+  "package_integrity": "all manifest hashes and ZIP CRCs passed",
+  "unverified": [
+    "final saved-charge reload",
+    "dedicated/multiplayer and late join",
+    "live projection, ownership and grid split/merge",
+    "sustained rated demand and balance",
+    "distance performance",
+    "combined-mod gameplay"
+  ],
+  "asset_revision_date": "2026-10-12",
+  "construction_evidence": "construction-art-review.json",
+  "runtime_revision_date": "2026-10-13",
+  "runtime_hardening": {
+    "compatibility_build": {
+      "warnings": 0,
+      "errors": 0
+    },
+    "checks": {
+      "energy_core": 0,
+      "vent_route": 0,
+      "controller_tiers": 0,
+      "reload_retraction": 0,
+      "arcane_categories": 0
+    },
+    "coverage": [
+      "cold-start eligibility for reserve release",
+      "full-build startup and generation interlocks",
+      "damaged-core cooldown/ejection support",
+      "same-update module allocation revocation",
+      "native output reset guards",
+      "server-only mode changes",
+      "native shared category merge: 12 Power and 36 combined blocks"
+    ],
+    "source_sha256": {
+      "src/Data/Scripts/ArcanePower/EnergyCore.cs": "21379eaf856123f145e9448fdc8d40f4bd9745be45082d11af0703caba12ab5f",
+      "src/Data/Scripts/ArcanePower/Reactor.Power.cs": "37c50cb821623a4f8164721265e4c1b7fa59d008eadad1c529687a737775ddd0",
+      "src/Data/Scripts/ArcanePower/Reactor.Safety.cs": "8ca51f968ad266844c27495c7f0e1baef9bb1fe8138bde35afa2274564053568"
+    },
+    "live_validation": "Not run: local game remote connection refused. Prior live evidence remains energy-runtime.json.",
+    "visual_validation": "Compilation only for offline/300 m rendering changes; in-game review pending."
+  }
+}

@@ -12,7 +12,11 @@ namespace ArcanePower
     public sealed partial class Reactor
     {
         private static readonly string[] Fuels = { "ArcaneFuelI", "ArcaneFuelII", "ArcaneFuelIII" };
+        private static readonly string[] FuelNames = { "Aether", "Helion", "Empyrean" };
         private static readonly float[] PowerMW = { 10000f, 100000f, 1000000f };
+        private const float FuelUnitsPerCanister = 10f;
+        private static readonly float[] ControllerEfficiencies = { .80f, .90f, .99f };
+        private float FuelEfficiency { get { return ControllerEfficiencies[Motion.RingCount - 2]; } }
         private MyReactor nativeReactor;
         private readonly List<IMyTerminalBlock> fuelSources = new List<IMyTerminalBlock>();
         private readonly List<MyInventoryItem> transferItems = new List<MyInventoryItem>();
@@ -23,15 +27,18 @@ namespace ArcanePower
             // SE creates the empty-slot tooltip once from native FuelInfos. Merely
             // adding IDs leaves that tooltip describing the original empty filter.
             var constraint = new Sandbox.Game.MyInventoryConstraint(
-                "Accepts Arcane Fuel I, Arcane Fuel II, Arcane Fuel III and Arcane Containment Tiles.\n"
+                "Accepts " + string.Join(", ", FuelNames) + " fuels and Standard, Reinforced or Advanced Containment Tiles.\n"
                 + "Refine ore before loading. Fuel use depends on attached containment controllers.");
             foreach (string fuel in Fuels)
                 constraint.Add(new MyDefinitionId(typeof(MyObjectBuilder_Ingot), fuel));
-            constraint.Add(new MyDefinitionId(typeof(MyObjectBuilder_Component), "ArcaneContainmentTile"));
+            foreach (string tile in TileSubtypes)
+                constraint.Add(new MyDefinitionId(typeof(MyObjectBuilder_Component), tile));
             nativeReactor.BlockDefinition.InventoryConstraint = constraint;
-            ((Sandbox.Game.MyInventory)reactor.GetInventory()).Constraint = constraint;
+            var inventory = (Sandbox.Game.MyInventory)reactor.GetInventory();
+            inventory.Constraint = constraint;
+            inventory.MaxVolume = (MyFixedPoint)(2f * MyAPIGateway.Session.BlocksInventorySizeMultiplier);
             ((VRage.Game.Entity.MyInventoryBase)reactor.GetInventory()).ContentsChanged += FuelChanged;
-            reactor.PowerOutputMultiplier = PowerMW[Motion.Profile - 2] / PowerMW[0];
+            reactor.PowerOutputMultiplier = PowerMW[Motion.FuelTier - 1] / PowerMW[0];
             RefreshFuelCapacity();
         }
 
@@ -42,8 +49,8 @@ namespace ArcanePower
 
         private bool HasUsableFuel()
         {
-            return Motion.Profile <= rings && (MyAPIGateway.Session.CreativeMode
-                || reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.Profile - 2])) > 0);
+            return Motion.FuelTier + 1 <= controllerRingCapacity && (MyAPIGateway.Session.CreativeMode
+                || reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1])) > 0);
         }
 
         private void RefreshFuelCapacity()
@@ -52,23 +59,24 @@ namespace ArcanePower
             // Native inventory callbacks otherwise treat the empty FuelInfos
             // list as unlimited capacity. Our callback runs after theirs.
             float units = MyAPIGateway.Session.CreativeMode ? 1f
-                : (float)reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.Profile - 2]));
+                : (float)reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1]));
             // Native capacity uses MW-seconds / 3600, including its per-frame
-            // output cap. One selected fuel unit stores sixty seconds of output.
-            float rating = PowerMW[Motion.Profile - 2];
-            bool generating = initializationFrames <= 2 && Motion.Core == CorePhase.Running && reactor.Enabled && !Motion.PowerPaused
+            // output cap. Each canister stores 10 minutes at its ideal rating;
+            // controller efficiency determines the usable fraction.
+            float rating = PowerMW[Motion.FuelTier - 1];
+            bool generating = CanOperate && initializationFrames <= 2 && Motion.Core == CorePhase.Running && reactor.Enabled && !Motion.PowerPaused
                 && (Motion.Vent == VentPhase.Idle || Motion.Vent == VentPhase.ShieldClosing);
             // Native source caps MW to Capacity * 3600 * 60. Keep the tier's
             // rated MaxOutput while the available electrical output ramps up.
-            nativeReactor.Capacity = Motion.Profile <= rings && generating
-                ? System.Math.Min(units * rating / (Motion.TileStarved ? 6000f : 60f), rating * (Motion.TileStarved ? Math.Min(Motion.PowerRamp, Motion.StarvedLoad * .1f) : Motion.PowerRamp) / 216000f) : 0;
+            nativeReactor.Capacity = Motion.FuelTier + 1 <= controllerRingCapacity && generating
+                ? System.Math.Min(units * FuelUnitsPerCanister * rating * FuelEfficiency / (Motion.TileStarved ? 6000f : 60f), rating * (Motion.TileStarved ? Math.Min(Motion.PowerRamp, Motion.StarvedLoad * .1f) : Motion.PowerRamp) / 216000f) : 0;
         }
 
         private double FuelUnitsPerMinute()
         {
             bool failed = Motion.TileStarved && Motion.Core == CorePhase.Running && reactor.Enabled
                 && !Motion.PowerPaused && (Motion.Vent == VentPhase.Idle || Motion.Vent == VentPhase.ShieldClosing);
-            return failed ? Motion.StarvedLoad * 10.0 : reactor.CurrentOutput / (double)PowerMW[Motion.Profile - 2];
+            return (failed ? Motion.StarvedLoad * 10.0 : reactor.CurrentOutput / (double)PowerMW[Motion.FuelTier - 1]) / (FuelEfficiency * FuelUnitsPerCanister);
         }
 
         private void UpdateFuel()
@@ -76,7 +84,7 @@ namespace ArcanePower
             if (nativeReactor == null) return;
             if (!MyAPIGateway.Multiplayer.IsServer)
             {
-                float clientMultiplier = PowerMW[Motion.Profile - 2] / PowerMW[0];
+                float clientMultiplier = PowerMW[Motion.FuelTier - 1] / PowerMW[0];
                 if (reactor.PowerOutputMultiplier != clientMultiplier) reactor.PowerOutputMultiplier = clientMultiplier;
                 return;
             }
@@ -85,16 +93,17 @@ namespace ArcanePower
             {
                 int selected = -1;
                 for (int i = 0; i < Fuels.Length; i++)
-                    if (i + 2 <= rings && inventory.GetItemAmount(MyItemType.MakeIngot(Fuels[i])) > 0) selected = i;
-                if (selected >= 0) Motion.Profile = selected + 2;
-                else if (Motion.Profile > rings) Motion.Profile = rings;
+                    if (i + 2 <= controllerRingCapacity && inventory.GetItemAmount(MyItemType.MakeIngot(Fuels[i])) > 0) selected = i;
+                if (selected >= 0) Motion.FuelTier = selected + 1;
+                else if (Motion.FuelTier + 1 > controllerRingCapacity) Motion.FuelTier = controllerRingCapacity - 1;
             }
-            float multiplier = PowerMW[Motion.Profile - 2] / PowerMW[0];
+            float multiplier = PowerMW[Motion.FuelTier - 1] / PowerMW[0];
             if (reactor.PowerOutputMultiplier != multiplier) reactor.PowerOutputMultiplier = multiplier;
-            if (initializationFrames == 0 && Motion.Profile > rings) reactor.Enabled = false;
+            if (initializationFrames == 0 && Motion.FuelTier + 1 > controllerRingCapacity) reactor.Enabled = false;
 
-            // Initial balance: one unit/minute at full tier-rated load. Fractional
-            // debt avoids fixed-point rounding loss at low demand and is saved.
+            // Ideal burn is one canister/10 minutes at full rated load, divided by
+            // controller efficiency. The saved signed remainder retains debt or
+            // rounding credit, avoiding fixed-point rounding loss at low demand.
             bool starvedBurn = Motion.TileStarved && Motion.Core == CorePhase.Running && reactor.Enabled
                 && !Motion.PowerPaused && (Motion.Vent == VentPhase.Idle || Motion.Vent == VentPhase.ShieldClosing);
             if (!MyAPIGateway.Session.CreativeMode && (reactor.CurrentOutput > 0 || starvedBurn))
@@ -103,7 +112,7 @@ namespace ArcanePower
                 MyFixedPoint amount = (MyFixedPoint)Motion.FuelDebt;
                 if (amount > 0)
                 {
-                    string fuel = Fuels[Motion.Profile - 2];
+                    string fuel = Fuels[Motion.FuelTier - 1];
                     amount = MyFixedPoint.Min(amount, inventory.GetItemAmount(MyItemType.MakeIngot(fuel)));
                     if (amount > 0)
                     {
@@ -129,7 +138,7 @@ namespace ArcanePower
                     {
                         var source = block.GetInventory(slot);
                         PullTiles(source, inventory);
-                        for (int i = 0; i <= rings - 2; i++)
+                        for (int i = 0; i <= controllerRingCapacity - 2; i++)
                         {
                             MyItemType type = MyItemType.MakeIngot(Fuels[i]);
                             MyFixedPoint wanted = (MyFixedPoint)10 - inventory.GetItemAmount(type);
@@ -147,5 +156,7 @@ namespace ArcanePower
                 }
             }
         }
+
+
     }
 }

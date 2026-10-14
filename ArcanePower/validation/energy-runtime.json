@@ -1,0 +1,89 @@
+{
+  "world": "Arcane Energy - Validation",
+  "date": "2026-10-11",
+  "mode": "offline survival",
+  "live_passed": [
+    "mixed-tier bank capacity 111000 MWh",
+    "1 TW total source ceiling",
+    "native 12 MW load supplied",
+    "stabilizer disable isolates expansions",
+    "re-enable reconnects expansions",
+    "isolated charge retained",
+    "copied identity charge reset",
+    "save contains updated native charge and identity markers"
+  ],
+  "live_probe": [
+    "tick=120 id=880000000001217 subtype=ArcanePower_EnergyCore position=[X:0, Y:2, Z:0] stored=499.99994 capacity=1000 input=0 output=0.10810811 maxinput=9009.009 maxoutput=9009.009 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | Bank: 55,500.0 / 111,000.0 MWh | Transfer ceiling: 1,000,000 MW | Capacity modules: 2 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 9,009 / 9,009 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=120 id=880000000001218 subtype=ArcanePower_EnergyCapacity position=[X:-2, Y:2, Z:0] stored=4999.9995 capacity=10000 input=0 output=1.0810812 maxinput=90090.09 maxoutput=90090.09 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | This cell input/output limits: 90,090 / 90,090 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=120 id=880000000001219 subtype=ArcanePower_EnergyCapacityAdvanced position=[X:2, Y:2, Z:0] stored=49999.996 capacity=100000 input=0 output=10.810811 maxinput=900900.9 maxoutput=900900.9 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | This cell input/output limits: 900,901 / 900,901 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=120 id=880000000001222 subtype=ArcanePower_EnergyCore position=[X:8, Y:2, Z:0] stored=0 capacity=1000 input=0 output=0 maxinput=10000 maxoutput=0 mode=Auto info= | ARCANE ENERGY STORAGE | Reserve held; emergency support available | Bank: 0.0 / 1,000.0 MWh | Transfer ceiling: 10,000 MW | Capacity modules: 0 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 10,000 / 0 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=120 id=880000000001223 subtype=LargeBlockBatteryBlock position=[X:4, Y:1, Z:0] stored=0.004666667 capacity=3 input=12 output=0 maxinput=12 maxoutput=0 mode=Recharge info=",
+    "tick=240 id=880000000001217 subtype=ArcanePower_EnergyCore position=[X:0, Y:2, Z:0] stored=499.99988 capacity=1000 input=0 output=0.10810811 maxinput=9009.009 maxoutput=9009.009 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | Bank: 55,500.0 / 111,000.0 MWh | Transfer ceiling: 1,000,000 MW | Capacity modules: 2 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 9,009 / 9,009 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=240 id=880000000001218 subtype=ArcanePower_EnergyCapacity position=[X:-2, Y:2, Z:0] stored=4999.999 capacity=10000 input=0 output=1.0810812 maxinput=90090.09 maxoutput=90090.09 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | This cell input/output limits: 90,090 / 90,090 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=240 id=880000000001219 subtype=ArcanePower_EnergyCapacityAdvanced position=[X:2, Y:2, Z:0] stored=49999.992 capacity=100000 input=0 output=10.810811 maxinput=900900.9 maxoutput=900900.9 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | This cell input/output limits: 900,901 / 900,901 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=240 id=880000000001222 subtype=ArcanePower_EnergyCore position=[X:8, Y:2, Z:0] stored=0 capacity=1000 input=0 output=0 maxinput=10000 maxoutput=0 mode=Auto info= | ARCANE ENERGY STORAGE | Reserve held; emergency support available | Bank: 0.0 / 1,000.0 MWh | Transfer ceiling: 10,000 MW | Capacity modules: 0 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 10,000 / 0 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=240 id=880000000001223 subtype=LargeBlockBatteryBlock position=[X:4, Y:1, Z:0] stored=0.009111112 capacity=3 input=12 output=0 maxinput=12 maxoutput=0 mode=Recharge info=",
+    "tick=360 id=880000000001217 subtype=ArcanePower_EnergyCore position=[X:0, Y:2, Z:0] stored=499.99432 capacity=1000 input=0 output=12.000001 maxinput=10000 maxoutput=10000 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | Bank: 500.0 / 1,000.0 MWh | Transfer ceiling: 10,000 MW | Capacity modules: 0 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 10,000 / 10,000 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=360 id=880000000001218 subtype=ArcanePower_EnergyCapacity position=[X:-2, Y:2, Z:0] stored=4999.999 capacity=10000 input=0 output=0 maxinput=0 maxoutput=0 mode=Auto info= | ARCANE ENERGY STORAGE | Disconnected or unsupported capacity module | This cell input/output limits: 0 / 0 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=360 id=880000000001219 subtype=ArcanePower_EnergyCapacityAdvanced position=[X:2, Y:2, Z:0] stored=49999.992 capacity=100000 input=0 output=0 maxinput=0 maxoutput=0 mode=Auto info= | ARCANE ENERGY STORAGE | Disconnected or unsupported capacity module | This cell input/output limits: 0 / 0 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=360 id=880000000001222 subtype=ArcanePower_EnergyCore position=[X:8, Y:2, Z:0] stored=0 capacity=1000 input=0 output=0 maxinput=10000 maxoutput=0 mode=Auto info= | ARCANE ENERGY STORAGE | Reserve held; emergency support available | Bank: 0.0 / 1,000.0 MWh | Transfer ceiling: 10,000 MW | Capacity modules: 0 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 10,000 / 0 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=360 id=880000000001223 subtype=LargeBlockBatteryBlock position=[X:4, Y:1, Z:0] stored=0.013555557 capacity=3 input=12 output=0 maxinput=12 maxoutput=0 mode=Recharge info=",
+    "tick=480 id=880000000001217 subtype=ArcanePower_EnergyCore position=[X:0, Y:2, Z:0] stored=499.98877 capacity=1000 input=0 output=12.000001 maxinput=10000 maxoutput=10000 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | Bank: 500.0 / 1,000.0 MWh | Transfer ceiling: 10,000 MW | Capacity modules: 0 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 10,000 / 10,000 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=480 id=880000000001218 subtype=ArcanePower_EnergyCapacity position=[X:-2, Y:2, Z:0] stored=4999.999 capacity=10000 input=0 output=0 maxinput=0 maxoutput=0 mode=Auto info= | ARCANE ENERGY STORAGE | Disconnected or unsupported capacity module | This cell input/output limits: 0 / 0 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=480 id=880000000001219 subtype=ArcanePower_EnergyCapacityAdvanced position=[X:2, Y:2, Z:0] stored=49999.992 capacity=100000 input=0 output=0 maxinput=0 maxoutput=0 mode=Auto info= | ARCANE ENERGY STORAGE | Disconnected or unsupported capacity module | This cell input/output limits: 0 / 0 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=480 id=880000000001222 subtype=ArcanePower_EnergyCore position=[X:8, Y:2, Z:0] stored=0 capacity=1000 input=0 output=0 maxinput=10000 maxoutput=0 mode=Auto info= | ARCANE ENERGY STORAGE | Reserve held; emergency support available | Bank: 0.0 / 1,000.0 MWh | Transfer ceiling: 10,000 MW | Capacity modules: 0 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 10,000 / 0 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=480 id=880000000001223 subtype=LargeBlockBatteryBlock position=[X:4, Y:1, Z:0] stored=0.018000001 capacity=3 input=12 output=0 maxinput=12 maxoutput=0 mode=Recharge info=",
+    "tick=600 id=880000000001217 subtype=ArcanePower_EnergyCore position=[X:0, Y:2, Z:0] stored=499.9887 capacity=1000 input=0 output=0.10810811 maxinput=9009.009 maxoutput=9009.009 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | Bank: 55,500.0 / 111,000.0 MWh | Transfer ceiling: 1,000,000 MW | Capacity modules: 2 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 9,009 / 9,009 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=600 id=880000000001218 subtype=ArcanePower_EnergyCapacity position=[X:-2, Y:2, Z:0] stored=4999.9985 capacity=10000 input=0 output=1.0810812 maxinput=90090.09 maxoutput=90090.09 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | This cell input/output limits: 90,090 / 90,090 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=600 id=880000000001219 subtype=ArcanePower_EnergyCapacityAdvanced position=[X:2, Y:2, Z:0] stored=49999.99 capacity=100000 input=0 output=10.810811 maxinput=900900.9 maxoutput=900900.9 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | This cell input/output limits: 900,901 / 900,901 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=600 id=880000000001222 subtype=ArcanePower_EnergyCore position=[X:8, Y:2, Z:0] stored=0 capacity=1000 input=0 output=0 maxinput=10000 maxoutput=0 mode=Auto info= | ARCANE ENERGY STORAGE | Reserve held; emergency support available | Bank: 0.0 / 1,000.0 MWh | Transfer ceiling: 10,000 MW | Capacity modules: 0 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 10,000 / 0 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=600 id=880000000001223 subtype=LargeBlockBatteryBlock position=[X:4, Y:1, Z:0] stored=0.022444446 capacity=3 input=12 output=0 maxinput=12 maxoutput=0 mode=Recharge info=",
+    "tick=720 id=880000000001217 subtype=ArcanePower_EnergyCore position=[X:0, Y:2, Z:0] stored=499.9886 capacity=1000 input=0 output=0.10810811 maxinput=9009.009 maxoutput=9009.009 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | Bank: 55,500.0 / 111,000.0 MWh | Transfer ceiling: 1,000,000 MW | Capacity modules: 2 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 9,009 / 9,009 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=720 id=880000000001218 subtype=ArcanePower_EnergyCapacity position=[X:-2, Y:2, Z:0] stored=4999.9976 capacity=10000 input=0 output=1.0810812 maxinput=90090.09 maxoutput=90090.09 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | This cell input/output limits: 90,090 / 90,090 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=720 id=880000000001219 subtype=ArcanePower_EnergyCapacityAdvanced position=[X:2, Y:2, Z:0] stored=49999.98 capacity=100000 input=0 output=10.810811 maxinput=900900.9 maxoutput=900900.9 mode=Auto info= | ARCANE ENERGY STORAGE | Storage online | This cell input/output limits: 900,901 / 900,901 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=720 id=880000000001222 subtype=ArcanePower_EnergyCore position=[X:8, Y:2, Z:0] stored=0 capacity=1000 input=0 output=0 maxinput=10000 maxoutput=0 mode=Auto info= | ARCANE ENERGY STORAGE | Reserve held; emergency support available | Bank: 0.0 / 1,000.0 MWh | Transfer ceiling: 10,000 MW | Capacity modules: 0 / 2 | Reserve: 10%; emergency support on | Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto. | Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true | This cell input/output limits: 10,000 / 0 MW | Capacity stays in its physical battery. New/projected/copied blocks start empty.",
+    "tick=720 id=880000000001223 subtype=LargeBlockBatteryBlock position=[X:4, Y:1, Z:0] stored=0.031333335 capacity=3 input=12 output=0 maxinput=12 maxoutput=0 mode=Recharge info=",
+    "complete"
+  ],
+  "saved_cells": [
+    {
+      "entity_id": "880000000001217",
+      "subtype": "ArcanePower_EnergyCore",
+      "stored_mwh": 499.98123,
+      "identity_marker": "880000000001217"
+    },
+    {
+      "entity_id": "880000000001218",
+      "subtype": "ArcanePower_EnergyCapacity",
+      "stored_mwh": 4999.983,
+      "identity_marker": "880000000001218"
+    },
+    {
+      "entity_id": "880000000001219",
+      "subtype": "ArcanePower_EnergyCapacityAdvanced",
+      "stored_mwh": 49999.863,
+      "identity_marker": "880000000001219"
+    },
+    {
+      "entity_id": "880000000001222",
+      "subtype": "ArcanePower_EnergyCore",
+      "stored_mwh": 0.0,
+      "identity_marker": "880000000001222"
+    }
+  ],
+  "limits": [
+    "Final reload of freshly saved charge not completed: client connection closed",
+    "Rated demand/charge efficiency not measured at high throughput",
+    "Actual projection, grinding, ownership changes and grid splits not exercised",
+    "Two-client multiplayer, late join and distance performance unverified"
+  ],
+  "dedicated": {
+    "status": "blocked before mod loading",
+    "error": "Please install latest C++ redistributable package for 2015-2019 x64",
+    "log": "2026-10-11 23:52:56.702 - Thread:   1 ->  Log Started\n2026-10-11 23:52:56.702 - Thread:   1 ->  Timezone (local - UTC): 2h\n2026-10-11 23:52:56.702 - Thread:   1 ->  App Version: 01_210_014\n2026-10-11 23:52:56.711 - Thread:   1 ->  Is official: True [NO][IS][NAMP]\n2026-10-11 23:52:56.712 - Thread:   1 ->  Branch / Sandbox: DedicatedServer\n2026-10-11 23:52:56.712 - Thread:   1 ->  Client Build Number: 0\n2026-10-11 23:52:56.712 - Thread:   1 ->  Server Build Number: 0\n2026-10-11 23:52:56.712 - Thread:   1 ->  Environment.ProcessorCount: 16\n2026-10-11 23:52:56.715 - Thread:   1 ->  Environment.OSVersion: Microsoft Windows 7 Professional (Microsoft Windows NT 6.1.7601 Service Pack 1)\n2026-10-11 23:52:56.715 - Thread:   1 ->  Environment.CommandLine: \"Z:\\home\\owendb\\.local\\share\\Steam\\steamapps\\common\\SpaceEngineersDedicatedServer\\DedicatedServer64\\SpaceEngineersDedicated.exe\" -console -path Z:\\home\\owendb\\Documents\\GitHub\\arcane-systems\\ArcanePower\\.cache\\dedicated-validation -ip 127.0.0.1 -port 28716\n2026-10-11 23:52:56.715 - Thread:   1 ->  Environment.Is64BitProcess: True\n2026-10-11 23:52:56.715 - Thread:   1 ->  Environment.Is64BitOperatingSystem: True\n2026-10-11 23:52:56.715 - Thread:   1 ->  Environment.Version: .NET Framework 4.8.3761.0\n2026-10-11 23:52:56.716 - Thread:   1 ->  Environment.CurrentDirectory: Z:\\home\\owendb\\Documents\\GitHub\\arcane-systems\n2026-10-11 23:52:56.716 - Thread:   1 ->  CPU Info: AMD Ryzen 7 7800X3D 8-Core Processor\n2026-10-11 23:52:56.716 - Thread:   1 ->  Default Culture: \n2026-10-11 23:52:56.716 - Thread:   1 ->  Default UI Culture: \n2026-10-11 23:52:56.728 - Thread:   1 ->  Error: Please install latest C++ redistributable package for 2015-2019 x64\n2026-10-11 23:52:56.728 - Thread:   1 ->  Log Closed\n"
+  },
+  "setup_notes": [
+    "Initial Windows-style path on Linux allowed load but failed save; reloaded native Linux path and save succeeded.",
+    "Original Prototype Lab was not modified."
+  ]
+}

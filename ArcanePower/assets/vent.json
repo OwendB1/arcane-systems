@@ -69,7 +69,7 @@
     3.5
   ],
   "emissive_material": "Emissive",
-  "status": "Paired inner/outer four-leaf vent doors with lined connecting barrel and retraction pockets",
+  "status": "Roof hatch connects to required external route: 1-15 aligned VentDuct tubes and one VentOutlet",
   "intake": {
     "count": 0,
     "model": "ArcanePower_VentVane",

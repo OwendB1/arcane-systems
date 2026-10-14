@@ -51,7 +51,7 @@ namespace ArcanePower
             {
                 Vector3D position = CoreWorldPosition();
                 Vector3 velocity = reactor.CubeGrid.Physics == null ? Vector3.Zero : reactor.CubeGrid.Physics.GetVelocityAtPoint(position);
-                core = CoreHazards.Arm(Id, Motion.Profile - 1, Motion.Heat, position, velocity);
+                core = CoreHazards.Arm(Id, Motion.FuelTier, Motion.Heat, position, velocity);
                 if (core != null && Motion.Critical)
                     core.Fuse = Math.Min(core.Fuse, Motion.CriticalSeconds
                         * (1 + 4 * Math.Max(0, Motion.Heat - CoreHazards.SupercriticalHeat)));
@@ -66,11 +66,7 @@ namespace ArcanePower
             Motion.CoreTick = 0;
             Motion.CoreSubtick = 0;
             Motion.PowerRamp = 0;
-            Motion.InstalledTiles = 0;
-            Motion.TileWear = 0;
-            Motion.TileStarved = false;
-            Motion.StarvedLoad = 0;
-            Motion.MaintenanceTick = -1;
+            DiscardTiles();
             Motion.PayloadReleased = true;
             Motion.Critical = false;
             Motion.CriticalSeconds = 0;
@@ -81,34 +77,34 @@ namespace ArcanePower
 
         private void TryReleasePayload()
         {
-            if (Motion.Vent != VentPhase.Ejecting || !Motion.VentHadPayload || Motion.PayloadReleased) return;
+            if (Motion.Vent != VentPhase.Ejecting || !Motion.VentHadPayload || Motion.PayloadReleased || !Motion.VentReady) return;
+            if (!HasIntactControllers()) return;
             // Keep the authored launch through the housing/duct. Hand off only
             // once the largest hoop is fully beyond the open outlet plane.
-            double outletHeight = 3.75;
             IMyEntity outlet;
-            if (Motion.VentOutletId != 0 && MyAPIGateway.Entities.TryGetEntityById(Motion.VentOutletId, out outlet))
-                outletHeight = Vector3D.Dot(outlet.WorldMatrix.Translation - Entity.WorldMatrix.Translation,
-                    Entity.WorldMatrix.Up) + 1.25;
+            if (Motion.VentOutletId == 0 || !MyAPIGateway.Entities.TryGetEntityById(Motion.VentOutletId, out outlet)
+                || outlet.Closed) return;
+            double outletHeight = Vector3D.Dot(outlet.WorldMatrix.Translation - Entity.WorldMatrix.Translation,
+                Entity.WorldMatrix.Up) + 1.25;
             float age = Motion.CoreTick + Motion.CoreSubtick;
             float ringY = MathHelper.Lerp(Rest("Ring1").Translation.Y, AnimationGeometry.Center.Y, Span(age, 90, 210));
             if (ringY + EjectionOffset().Y < outletHeight + 1.94) return;
             Matrix rotation = ContainmentRotation(age);
-            bool plasma = age >= 1160 && (Motion.Core != CorePhase.Stopping || Motion.StopTick < 60);
+            bool plasma = PlasmaScale(age) > 0;
             if (plasma || Motion.Critical)
             {
                 UpdateCriticalCore();
-                MatrixD world = WorldPose(PayloadPlasmaPose(age, rotation));
-                if (!CoreHazards.Release(Id, Motion.Profile - 1, Motion.Heat, world,
+                MatrixD world = WorldPose(PayloadPlasmaPose(age));
+                if (!CoreHazards.Release(Id, Motion.FuelTier, Motion.Heat, world,
                     LaunchVelocity(world.Translation, .8f), RandomVector(1.3f))) return;
             }
             // Persist the one-way handoff before scheduling asynchronous debris.
             Motion.PayloadReleased = true;
             Motion.Critical = false;
             Motion.CriticalSeconds = 0;
-            Motion.InstalledTiles = 0;
-            Motion.MaintenanceTick = -1;
+            DiscardTiles();
             SaveMotion();
-            for (int i = 0; i < Motion.Profile; i++)
+            for (int i = 0; i < Motion.RingCount; i++)
                 SpawnSpent("ArcaneSpentRing" + (i + 1), WorldPose(PayloadRingPose(i, age)), 1.5f);
             foreach (var tile in AnimationGeometry.Tiles)
             {

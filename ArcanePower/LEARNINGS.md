@@ -430,3 +430,118 @@ Keep source generator in that same space to avoid mixing head-relative and
 item-relative corrections. Patch only the left-hand fields in the live source SBC
 so independent manual tuning survives. This is an iteration, not a verified final
 IK pose; the game still applies each hand target through the held item WorldMatrix.
+
+### Baked reactor collision and walkable platforms — 9 October 2026
+
+The user could enter the base/roof and hit an invisible barrier before reaching
+the glass. Inspecting the shipped HKT showed that six legacy housing shapes had
+origin-centred vertices and depended on rigid-body translations/rotations. The
+glass was baked already. Always bake placement into collision vertices: the
+game loads collision shapes, not the authored Blender rigid-body scene. Source
+world bounds alone failed to catch this distinction.
+
+`build_reactor_collision.py` now builds ten identity-transform convex meshes:
+continuous base from -3.75 to -1.26m, roof from 2.8224 to 3.75m, and eight curved
+glass sections at radius 4.944m. This also removes the four rectangular base
+blocks' protruding corners and missing central platform. Eight panes reduce
+inward convex filling while preserving the ten-body exporter limit. Moving
+floor/roof hatch collision remains a separate unfinished feature.
+
+Focused source probes passed 768 base/768 roof/128 glass contacts and 384 clear
+ledge probes; the glass surface error is 1.49mm. Converted the generated HKT to
+XML with the installed Havok writer and compared shape-local bounds (including
+the 10mm convex radius) against the source: maximum error 4.32mm. The native game
+MWM importer verifies 110 unchanged dummies, unchanged visible bounds and exactly
+161136 bytes of embedded new collision. The local mod symlink exposes the new
+MWM on reload; character movement in-game remains untested.
+
+The tool prefix initially stalled in Wine's update; restarting only that prefix
+unblocked it. MwmBuilder then hit a .NET default Trace listener OutOfMemoryException
+even for the small collision FBX. A temporary compiler copy with an exe.config
+that clears trace listeners compiled successfully. No installed addon/tool config
+was changed. Existing visual-mesh degenerate-triangle warnings remain. As before,
+SEUT reporting FINISHED alone is insufficient: inspect MwmBuilder/Havok logs and
+verify the actual embedded HKT.
+
+
+## Packed alpha and invisible plasma — 10 October 2026
+
+The installed texconv interprets an entirely zero alpha channel in legacy TGA
+as missing/opaque. Fuel ADD maps therefore acquired a full paint mask, washing
+out their tier colours. The plasma CM became almost fully metallic (254–255),
+while its ADD paint mask and NG gloss became opaque too. Native
+`Lighting/Utils.hlsli:SurfaceAlbedo` multiplies base colour by `(1 - metalness)`;
+`Lighting/LightDir.hlsl` uses that albedo for emission. Fully metallic plasma
+therefore emits essentially nothing even at full utilization.
+
+Convert packed TGA through lossless RGBA PNG before texconv; shared implementation
+is `tools/texture_conversion.py`. Read the actual DDS alpha afterward, allowing
+up to 4/255 BC7 endpoint error. The core's CM/NG/ADD PNG sources and Blender image
+bindings now preserve their intended zero alpha. `build_physical_plasma.py`
+also authors channel-packed PNG for future exports.
+
+The native emissive G-buffer is R8G8B8A8_UNorm. Scripted emission above one clips,
+so core response now spans 0.01–0.95 rather than 0.01–24, retaining squared
+load/heat response and bounded pulses. Chamber/ejected-core lights use that
+normalized response. Fuel cartridge glow uses a 0.25 packed mask (previously
+0.85), with 1.5× geometry. Restart the client to clear cached textures/models;
+these corrections have offline shader/channel checks, not live visual evidence.
+
+The next screenshot still showed a dark core. Logs showed the same client process
+started before the correction and only world reloads afterward. Native
+`MyFileTextureManager.OnUnloadData()` is empty: reloading a world does not clear
+the texture cache. Replacing DDS bytes at the same filename is insufficient.
+Parent-only MWM revisioning also leaves relative subpart paths unchanged.
+
+`compile_plasma_material.py` now hashes the converted DDS set into a fresh texture
+directory and recompiles the existing plasma FBX/HKT with those bindings.
+`prepare_lab.refresh_reactor_model()` hashes/copies the canonical finished model
+family into a fresh directory and updates both reactor and ejected-core models.
+Construction stages keep their separate revision scheme. Existing filenames and
+subpart keys within the family remain intact. Native importer acceptance verified
+16 reachable models, 110 parent dummies, fresh material bindings, byte-identical
+parent geometry, and unchanged plasma bounds/counts/collision. Decoded revised
+DDS channels retain zero metalness/gloss/paint mask within BC7 tolerance and a
+full emission mask. No live world was reloaded; actual appearance is unverified.
+
+## Gradual brightness and solar surface — 10 October 2026
+
+The user confirmed that corrected plasma now glows and does dim, but its change
+was not gradual enough. `max(load, heat)` concealed falling demand behind stored
+heat; the squared response and fast load pulse also obscured intermediate levels.
+Load now contributes 0.84 of emission, heat at most 0.10, plus a 0.01 floor. Visual
+emission follows this target with a 180-tick exponential response; ordinary pulses
+are limited to 0.93–1 at eight/sixteen-second periods. Critical flicker remains.
+Ejected cores use heat as their remaining energy source and share the surface.
+
+Native `MyRenderComponentBase.UpdateRenderTextureChanges` accepts a material-keyed
+`MyTextureChange` dictionary. `ExtensionsFileName` overrides ADD alone; null CM/NG
+fields retain the model bindings (`MyLodInstance`). Shared immutable dictionaries
+avoid per-update allocations and mutation of queued render messages. Surface maps
+are swapped at six Hz, only on visible cores within 120 m; dedicated servers never
+enter the draw paths. This uses existing whitelisted APIs, no custom shader.
+
+`assets/build_plasma_surface.py` bakes 96 spherical procedural ADD masks (256×128,
+about 4 MiB including mip chains) with evolving umbra/penumbra and bright regions.
+Spherical coordinates remove longitude/pole seams; periodic functions close the
+16-second loop. Generated DDS paths are content-hashed and emitted to the shared
+runtime constants. Source-loop continuity and decoded zero paint masks pass;
+focused C# checks verify gradual, monotonic rise/fall and hot-core load response.
+The compatibility/MDK build passes with zero warnings/errors. Preview is authored
+data only; no live reload, visual confirmation or regression suite was performed.
+
+
+## Original dark material selected again — 10 October 2026
+
+The user preferred the first dark texture without reactive plasma and requested
+reversion. Restored all three original delivered DDS files byte-for-byte from
+Git, removed the solar texture-swap runtime/generator/frames and the load/heat
+brightness functions, and set surface emission to zero for both contained and
+ejected cores. Chamber lighting is steady in the fuel colour with only the
+existing growth/shrink envelope; ejected lights fade with decay. Gameplay, fuel
+assets, sounds and core geometry/motion are preserved.
+
+The plasma compiler now versions the existing DDS bytes instead of automatically
+reconverting PNG authoring maps, so cache refresh cannot silently undo the chosen
+look. New model/texture paths force a fresh load on the next world reload. Earlier
+reactive/solar notes above describe superseded experiments, not current behavior.

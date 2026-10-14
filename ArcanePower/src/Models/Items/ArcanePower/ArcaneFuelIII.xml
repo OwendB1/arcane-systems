@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Model Name="ArcaneFuelIII">
+  <Parameter Name="RescaleFactor">1.0</Parameter>
+  <Parameter Name="Centered">false</Parameter>
+  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
+  <Material Name="ArcaneEmpyreanCrystal">
+    <Parameter Name="Technique">MESH</Parameter>
+    <Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/Fuels/ArcaneEmpyreanCrystal_cm.dds</Parameter>
+    <Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/Fuels/ArcaneEmpyreanCrystal_ng.dds</Parameter>
+    <Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/Fuels/ArcaneEmpyreanCrystal_add.dds</Parameter>
+  </Material>
+  <Material Name="ArcaneEmpyreanFuelLight">
+    <Parameter Name="Technique">MESH</Parameter>
+    <Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/Fuels/ArcaneEmpyreanFuelLight_cm.dds</Parameter>
+    <Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/Fuels/ArcaneEmpyreanFuelLight_ng.dds</Parameter>
+    <Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/Fuels/ArcaneEmpyreanFuelLight_add.dds</Parameter>
+  </Material>
+  <Material Name="ArcaneFuelCeramic">
+    <Parameter Name="Technique">MESH</Parameter>
+    <Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/Fuels/ArcaneFuelCeramic_cm.dds</Parameter>
+    <Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/Fuels/ArcaneFuelCeramic_ng.dds</Parameter>
+    <Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/Fuels/ArcaneFuelCeramic_add.dds</Parameter>
+  </Material>
+  <Material Name="ArcaneFuelSteel">
+    <Parameter Name="Technique">MESH</Parameter>
+    <Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/Fuels/ArcaneFuelSteel_cm.dds</Parameter>
+    <Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/Fuels/ArcaneFuelSteel_ng.dds</Parameter>
+    <Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/Fuels/ArcaneFuelSteel_add.dds</Parameter>
+  </Material>
+</Model>

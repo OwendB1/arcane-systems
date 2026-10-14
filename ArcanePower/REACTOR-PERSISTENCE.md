@@ -3,7 +3,7 @@
 World saves and save-and-exit capture reactor state inside the block's registered
 `MyModStorageComponent`. `MotionState` preserves startup/cooldown/dismantle/vent
 phase and progress, deployed rings and both gyro phases, heat/load/ramp, selected
-fuel and fractional consumption debt, installed tiles/wear/replacement progress,
+fuel and signed fractional consumption remainder, installed tiles/wear/replacement progress,
 emergency reserve, ejection handoff and damage flags, and critical status/countdown.
 The native inventory is saved by SE. Critical/ejected core records also retain
 their existing server-owned world-storage ledger.
@@ -58,9 +58,40 @@ not hot-reloaded by copying scripts to the local mod directory.
   in UpdateBeforeSimulation100 after grid registration.
 - `ContainmentController.Request`: reports the previously distributed interval.
 - `EntityComponents.sbc`: registers the existing ArcanePowerMotionState GUID.
+- `VRage.Library/VRage/MyFixedPoint.cs`: double conversion rounds inventory
+  amounts to the nearest millionth, rather than truncating them.
 
-Compiled against the installed SE assemblies and MDK whitelist with zero warnings
-or errors. No regression suites, world reload, or in-game verification performed.
-Next requested game review should save/reload while running, partway through
-startup/cooldown/vent/replacement, and after manual/vent shutdown; compare state,
-stock and reserve and verify genuine disconnected-hardware shutdown still works.
+## Fuel rounding restore failure (2026-10-09)
+
+The Prototype Lab save contained an enabled, running reactor with
+`FuelDebt=-2.288216908615642E-07`. A rounded-up native fuel withdrawal leaves a
+small negative remainder: credit to carry into subsequent ticks. The validator
+required a nonnegative value, silently rejecting the entire motion snapshot and
+replacing it with defaults. That also rejected running-state network updates
+whenever they carried a negative remainder.
+
+Validation now permits credit down to half the native inventory quantum, with
+`1e-12` tolerance for double arithmetic. Consumption and the saved credit remain
+unchanged; clamping credit to zero would accumulate excess consumption. Larger
+negative values, NaN, infinities and remainders at or above one remain invalid.
+Invalid snapshots for the same entity now produce a restore diagnostic; copied
+entities still cannot inherit the original reactor's state.
+
+Offline verification:
+
+- `tools/check_reload_retraction.py` uses the affected world's complete motion
+  XML in `tools/fixtures/reactor-running-rounding.xml`. It verifies enabled/running
+  restore, all saved fields unchanged, connection initialization, manual-off
+  preservation, validation boundaries, diagnostics and copied-entity rejection.
+  Existing reload/interlock and teardown checks also pass. Engine interactions
+  use doubles; this does not simulate actual power distribution after loading.
+- `tools/check_controller_tiers.py` now uses the installed native `MyFixedPoint`
+  instead of the incorrect floor-based test double. It verifies every snapshot
+  and accumulated fuel accounting over 300,000 ticks across five loads and all
+  controller tiers, including 150 XML round trips with negative credit and a
+  protobuf round trip. Existing fuel/controller checks also pass.
+- `tools/compile_mod.py` passes against installed SE assemblies and the MDK
+  whitelist with zero warnings or errors.
+
+A fresh in-game world reload remains to be verified. The running game must reload
+the mod scripts to apply this fix. No live world files were modified.

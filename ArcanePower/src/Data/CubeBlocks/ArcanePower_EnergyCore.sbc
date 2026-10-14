@@ -1,0 +1,372 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_BatteryBlockDefinition">
+      <Id>
+        <TypeId>BatteryBlock</TypeId>
+        <SubtypeId>ArcanePower_EnergyCore</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Energy Core</DisplayName>
+      <Description>Compact 3x3x3 storage controller. Side sockets: capacity; rear: transfer; top: stabilizer. Modules must face the core. Base 1,000 MWh / 10 GW; capacities add 10,000 or 100,000 MWh. Transfer modules raise the bank ceiling to 100 GW / 1 TW. Standard/advanced stabilizers support matching or lower tier modules. Native Auto/Recharge/Discharge. Starts empty; 90% charge efficiency. Default 10% emergency reserve; Custom Data [ArcaneEnergyCore] ReservePercent=10, EmergencySupport=true. Recharge switches visibly to Auto for reactor startup/cooldown/venting and stays Auto.</Description>
+      <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCore.dds</Icon>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Model>Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCore.mwm</Model>
+      <BlockPairName>ArcanePower_EnergyCore</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>180</BuildTimeSeconds>
+      <PCU>100</PCU>
+      <IsAirTight>false</IsAirTight>
+      <Public>true</Public>
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>PoofExplosionCat3</DestroySound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <Size x="3" y="3" z="3" />
+      <Center x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Components>
+        <Component Subtype="SteelPlate" Count="1000" />
+        <Component Subtype="Construction" Count="500" />
+        <Component Subtype="PowerCell" Count="1200" />
+        <Component Subtype="Superconductor" Count="1000" />
+        <Component Subtype="Computer" Count="200" />
+        <Component Subtype="Motor" Count="80" />
+        <Component Subtype="SteelPlate" Count="200" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCore_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCore_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCore_BS3.mwm" />
+      </BuildProgressModels>
+      <MountPoints>
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="3" EndY="3" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="3" EndY="3" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="3" EndY="3" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="3" EndY="3" />
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="3" EndY="3" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="3" EndY="3" />
+      </MountPoints>
+      <ResourceSourceGroup>Battery</ResourceSourceGroup>
+      <MaxPowerOutput>1000000</MaxPowerOutput>
+      <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
+      <RequiredPowerInput>1000000</RequiredPowerInput>
+      <AdaptibleInput>true</AdaptibleInput>
+      <MaxStoredPower>1000</MaxStoredPower>
+      <InitialStoredPowerRatio>0</InitialStoredPowerRatio>
+      <RechargeMultiplier>0.9</RechargeMultiplier>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_BatteryBlockDefinition">
+      <Id>
+        <TypeId>BatteryBlock</TypeId>
+        <SubtypeId>ArcanePower_EnergyCapacity</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Capacity Module</DisplayName>
+      <Description>Attach to a side-center Energy Core socket, with the connector/forward face toward the core. Requires a matching or stronger top stabilizer. Stores 10000 MWh in this block; removal retains its charge, destruction loses it, new/projected/copied blocks start empty. The core sets bank transfer limits and charge mode.</Description>
+      <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCapacity.dds</Icon>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Model>Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacity.mwm</Model>
+      <BlockPairName>ArcanePower_EnergyCapacity</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>60</BuildTimeSeconds>
+      <PCU>25</PCU>
+      <IsAirTight>false</IsAirTight>
+      <Public>true</Public>
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>PoofExplosionCat3</DestroySound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <Size x="1" y="1" z="1" />
+      <Center x="0" y="0" z="0" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Components>
+        <Component Subtype="SteelPlate" Count="100" />
+        <Component Subtype="Construction" Count="100" />
+        <Component Subtype="PowerCell" Count="1500" />
+        <Component Subtype="Superconductor" Count="1000" />
+        <Component Subtype="Computer" Count="100" />
+        <Component Subtype="Motor" Count="20" />
+        <Component Subtype="SteelPlate" Count="50" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacity_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacity_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacity_BS3.mwm" />
+      </BuildProgressModels>
+      <MountPoints>
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+      <ResourceSourceGroup>Battery</ResourceSourceGroup>
+      <MaxPowerOutput>1000000</MaxPowerOutput>
+      <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
+      <RequiredPowerInput>1000000</RequiredPowerInput>
+      <AdaptibleInput>true</AdaptibleInput>
+      <MaxStoredPower>10000</MaxStoredPower>
+      <InitialStoredPowerRatio>0</InitialStoredPowerRatio>
+      <RechargeMultiplier>0.9</RechargeMultiplier>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_BatteryBlockDefinition">
+      <Id>
+        <TypeId>BatteryBlock</TypeId>
+        <SubtypeId>ArcanePower_EnergyCapacityAdvanced</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Advanced Capacity Module</DisplayName>
+      <Description>Attach to a side-center Energy Core socket, with the connector/forward face toward the core. Requires a matching or stronger top stabilizer. Stores 100000 MWh in this block; removal retains its charge, destruction loses it, new/projected/copied blocks start empty. The core sets bank transfer limits and charge mode.</Description>
+      <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCapacityAdvanced.dds</Icon>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Model>Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacityAdvanced.mwm</Model>
+      <BlockPairName>ArcanePower_EnergyCapacityAdvanced</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>600</BuildTimeSeconds>
+      <PCU>25</PCU>
+      <IsAirTight>false</IsAirTight>
+      <Public>true</Public>
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>PoofExplosionCat3</DestroySound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <Size x="1" y="1" z="1" />
+      <Center x="0" y="0" z="0" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Components>
+        <Component Subtype="SteelPlate" Count="1000" />
+        <Component Subtype="Construction" Count="1000" />
+        <Component Subtype="PowerCell" Count="15000" />
+        <Component Subtype="Superconductor" Count="10000" />
+        <Component Subtype="Computer" Count="1000" />
+        <Component Subtype="Motor" Count="200" />
+        <Component Subtype="SteelPlate" Count="500" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacityAdvanced_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacityAdvanced_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyCapacityAdvanced_BS3.mwm" />
+      </BuildProgressModels>
+      <MountPoints>
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+      <ResourceSourceGroup>Battery</ResourceSourceGroup>
+      <MaxPowerOutput>1000000</MaxPowerOutput>
+      <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
+      <RequiredPowerInput>1000000</RequiredPowerInput>
+      <AdaptibleInput>true</AdaptibleInput>
+      <MaxStoredPower>100000</MaxStoredPower>
+      <InitialStoredPowerRatio>0</InitialStoredPowerRatio>
+      <RechargeMultiplier>0.9</RechargeMultiplier>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_EnergyTransfer</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Transfer Module</DisplayName>
+      <Description>Attach to the rear-center Energy Core socket, with the connector/forward face toward the core. Raises bank charge/discharge ceiling to 100 GW. Requires matching or stronger top stabilizer; does not add capacity.</Description>
+      <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyTransfer.dds</Icon>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Model>Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransfer.mwm</Model>
+      <BlockPairName>ArcanePower_EnergyTransfer</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>60</BuildTimeSeconds>
+      <PCU>25</PCU>
+      <IsAirTight>false</IsAirTight>
+      <Public>true</Public>
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>PoofExplosionCat3</DestroySound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <Size x="1" y="1" z="1" />
+      <Center x="0" y="0" z="0" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Components>
+        <Component Subtype="SteelPlate" Count="100" />
+        <Component Subtype="Construction" Count="100" />
+        <Component Subtype="Superconductor" Count="300" />
+        <Component Subtype="Computer" Count="100" />
+        <Component Subtype="Motor" Count="20" />
+        <Component Subtype="SteelPlate" Count="50" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransfer_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransfer_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransfer_BS3.mwm" />
+      </BuildProgressModels>
+      <MountPoints>
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+      <Upgrades />
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_EnergyTransferAdvanced</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Advanced Transfer Module</DisplayName>
+      <Description>Attach to the rear-center Energy Core socket, with the connector/forward face toward the core. Raises bank charge/discharge ceiling to 1 TW. Requires matching or stronger top stabilizer; does not add capacity.</Description>
+      <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyTransferAdvanced.dds</Icon>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Model>Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransferAdvanced.mwm</Model>
+      <BlockPairName>ArcanePower_EnergyTransferAdvanced</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>600</BuildTimeSeconds>
+      <PCU>25</PCU>
+      <IsAirTight>false</IsAirTight>
+      <Public>true</Public>
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>PoofExplosionCat3</DestroySound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <Size x="1" y="1" z="1" />
+      <Center x="0" y="0" z="0" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Components>
+        <Component Subtype="SteelPlate" Count="1000" />
+        <Component Subtype="Construction" Count="1000" />
+        <Component Subtype="Superconductor" Count="3000" />
+        <Component Subtype="Computer" Count="1000" />
+        <Component Subtype="Motor" Count="200" />
+        <Component Subtype="SteelPlate" Count="500" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransferAdvanced_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransferAdvanced_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyTransferAdvanced_BS3.mwm" />
+      </BuildProgressModels>
+      <MountPoints>
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+      <Upgrades />
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_EnergyStabilizer</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Stabilizer</DisplayName>
+      <Description>Attach to the top-center Energy Core socket, connector/forward face toward the core. Supports standard capacity and transfer modules. Loss disables unsupported modules without deleting stored charge.</Description>
+      <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyStabilizer.dds</Icon>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Model>Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizer.mwm</Model>
+      <BlockPairName>ArcanePower_EnergyStabilizer</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>60</BuildTimeSeconds>
+      <PCU>25</PCU>
+      <IsAirTight>false</IsAirTight>
+      <Public>true</Public>
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>PoofExplosionCat3</DestroySound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <Size x="1" y="1" z="1" />
+      <Center x="0" y="0" z="0" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Components>
+        <Component Subtype="SteelPlate" Count="100" />
+        <Component Subtype="Construction" Count="100" />
+        <Component Subtype="Superconductor" Count="300" />
+        <Component Subtype="Computer" Count="100" />
+        <Component Subtype="Motor" Count="20" />
+        <Component Subtype="SteelPlate" Count="50" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizer_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizer_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizer_BS3.mwm" />
+      </BuildProgressModels>
+      <MountPoints>
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+      <Upgrades />
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_EnergyStabilizerAdvanced</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Advanced Stabilizer</DisplayName>
+      <Description>Attach to the top-center Energy Core socket, connector/forward face toward the core. Supports both standard and advanced capacity and transfer modules. Loss disables unsupported modules without deleting stored charge.</Description>
+      <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyStabilizerAdvanced.dds</Icon>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Model>Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizerAdvanced.mwm</Model>
+      <BlockPairName>ArcanePower_EnergyStabilizerAdvanced</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>600</BuildTimeSeconds>
+      <PCU>25</PCU>
+      <IsAirTight>false</IsAirTight>
+      <Public>true</Public>
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>PoofExplosionCat3</DestroySound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <Size x="1" y="1" z="1" />
+      <Center x="0" y="0" z="0" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Components>
+        <Component Subtype="SteelPlate" Count="1000" />
+        <Component Subtype="Construction" Count="1000" />
+        <Component Subtype="Superconductor" Count="3000" />
+        <Component Subtype="Computer" Count="1000" />
+        <Component Subtype="Motor" Count="200" />
+        <Component Subtype="SteelPlate" Count="500" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizerAdvanced_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizerAdvanced_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_654df00b2c10/ArcanePower_EnergyStabilizerAdvanced_BS3.mwm" />
+      </BuildProgressModels>
+      <MountPoints>
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+      <Upgrades />
+    </Definition>
+  </CubeBlocks>
+</Definitions>

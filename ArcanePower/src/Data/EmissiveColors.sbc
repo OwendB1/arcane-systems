@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions>
+  <EmissiveColorStatePresets>
+    <EmissiveColorStatePreset>
+      <Id>
+        <TypeId>MyObjectBuilder_EmissiveColorStatePresetDefinition</TypeId>
+        <SubtypeId>ArcaneVentDisconnected</SubtypeId>
+      </Id>
+      <EmissiveStates>
+        <EmissiveState StateName="Working" EmissiveColorName="Red" DisplayColorName="White" Emissivity="1" />
+        <EmissiveState StateName="Disabled" EmissiveColorName="Red" DisplayColorName="White" Emissivity="1" />
+        <EmissiveState StateName="Damaged" EmissiveColorName="Red" DisplayColorName="White" Emissivity="1" />
+        <EmissiveState StateName="Warning" EmissiveColorName="Red" DisplayColorName="White" Emissivity="1" />
+      </EmissiveStates>
+    </EmissiveColorStatePreset>
+  </EmissiveColorStatePresets>
+</Definitions>

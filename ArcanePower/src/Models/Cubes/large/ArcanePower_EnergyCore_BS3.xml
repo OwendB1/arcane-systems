@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<Model Name="ArcanePower_EnergyCore">
+	<Parameter Name="RescaleFactor">1.0</Parameter>
+	<Parameter Name="Centered">false</Parameter>
+	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
+	<MaterialRef Name="Construction"/>
+	<MaterialRef Name="Metal_Dull"/>
+	<MaterialRef Name="Metal_Shiny"/>
+	<MaterialRef Name="PaintedMetal_Darker"/>
+	<MaterialRef Name="PaintedMetal_Colorable"/>
+</Model>

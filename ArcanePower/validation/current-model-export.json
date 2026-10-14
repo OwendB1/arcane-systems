@@ -1,7 +1,8 @@
 {
-  "latest_revision": "lab_64ff9a73f168",
-  "scope": "Seven plasma/tile/ring exports; main housing/controller/vent geometry retained from preceding delivery.",
-  "evidence": "physical-plasma-export.json",
+  "latest_revision": "vent_f1e48dd8a383",
+  "scope": "VentDuct, VentOutlet and shared VentHatch re-exported; reactor collision revision retained.",
+  "evidence": "vent-tube-export.json",
   "game_reloaded": false,
-  "regression_checks_run": false
+  "regression_checks_run": false,
+  "previous_revision": "collision_29d9f5dd68af"
 }

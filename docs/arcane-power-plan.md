@@ -28,18 +28,18 @@ Arcane Power should operate independently of Ship Core Framework. Later, add its
 
 **Fuel and containment proposal**
 
-Working names deliberately remain descriptive until the fiction and palette are agreed.
+Accepted fuel names: **Aether → Helion → Empyrean**, retaining the cyan/amber/violet palette. Controller installations determine the two/three/four-ring progression and tile deployment speed independently of fuel. Ore names are Aetherite, Helionite and Empyrite; refined ingredients are Aether, Helion and Empyrean Concentrate. The mod is in alpha; changes need no backward-compatibility layer.
 
-| Fuel | Proposed processing | Required external hardware | Active rings | Candidate emissive |
+| Fuel | Proposed processing | Minimum external hardware | Minimum controller rings | Candidate emissive |
 | --- | --- | --- | --- | --- |
-| I: Stabilized fuel | New base ore → refined material → fuel cartridge | Two standard containment controllers | 2 | Cyan |
-| II: Energized fuel | Base material + a second, rarer ore-derived catalyst → energized cartridge | One standard + one advanced controller | 3 | Amber |
-| III: Exotic fuel | Earlier materials + a third, rare ore-derived additive → exotic cartridge | Two advanced controllers | 4 | Violet |
+| I: Aether | New base ore → refined material → fuel cartridge | Two standard containment controllers | 2 | Cyan |
+| II: Helion | Base material + a second, rarer ore-derived catalyst → energized cartridge | One standard + one advanced controller | 3 | Amber |
+| III: Empyrean | Earlier materials + a third, rare ore-derived additive → exotic cartridge | Two advanced controllers | 4 | Violet |
 
-**Current implementation boundary:** actual Fuel I/II/III are selected and consumed at 10,000/100,000/1,000,000 MW. The highest compatible fuel present is chosen only Off/Idle at zero output, then locked through operation/shutdown. Initial balance burns one selected fuel unit per minute at full rated load; current higher-fuel recipes convert one lower unit to 0.1 higher at base 12/24-second times. Native FuelInfos remains empty because entries are concurrent inputs, not alternatives; the mod maintains selected-fuel capacity and public conveyor transfers. Ore distribution and startup-energy accounting remain unfinished; tile reservation and maintenance consumption are now implemented but await survival validation. Two functional controllers are required separately from ring capacity.
+**Current implementation boundary:** actual Aether/Helion/Empyrean fuels are selected and consumed at 10,000/100,000/1,000,000 MW. The highest compatible fuel present is chosen only Off/Idle at zero output, then locked through operation/shutdown. Controller tiers (two standard / mixed / two advanced) deploy 2/3/4 rings at 1×/1.5×/2× tile rates for every compatible fuel. They provide 80%/90%/99% fuel efficiency: ideal one-canister/10-minutes full-load burn is divided by efficiency; deployed hardware is held through shutdown/ejection and saved/synchronized; refining now produces Aether/Helion/Empyrean concentrates at 0.1%/0.01%/0.001% base yield, and assembler recipes require the preceding fuel plus the matching rare concentrate for higher tiers. Native FuelInfos remains empty because entries are concurrent inputs, not alternatives; the mod maintains selected-fuel capacity and public conveyor transfers. Native weighted asteroid ore distribution and grid-funded startup are implemented but await in-game balance validation; tile reservation and maintenance consumption are now implemented but await survival validation. Two functional controllers are required separately from ring capacity.
 
 
-Three new ores are a proposed progression, not a requirement for three entirely separate production chains. Higher tiers should increase useful output and energy per cartridge while demanding rarer inputs, more startup energy, and stronger containment. Establish values through an energy budget covering refining, fuel preparation, reactor output, containment consumption, and storage losses. Account for world assembler/refinery multipliers so an apparently expensive recipe does not become trivial under common server settings.
+Three asteroid ores form the cumulative progression: Aetherite → Aether Concentrate → Aether; Helionite → Helion Concentrate, combined with Aether → Helion; Empyrite → Empyrean Concentrate, combined with Helion → Empyrean. Higher tiers should increase useful output and energy per cartridge while demanding rarer inputs, more startup energy, and stronger containment. Establish values through an energy budget covering refining, fuel preparation, reactor output, containment consumption, and storage losses. Account for world assembler/refinery multipliers so an apparently expensive recipe does not become trivial under common server settings.
 
 Begin with standard refinery/assembler recipes where the game supports the required item types. Add a dedicated fuel processor only if special processing behaviour or presentation warrants another block. Prototype the reactor fuel representation early: native fuel support, per-instance output control, inventory filtering, and scripted consumption must agree before recipes and balance are finalized.
 
@@ -49,7 +49,7 @@ Represent moving rings as reactor model subparts, with external modules controll
 
 Keep the solid central island fixed and open the annular ring-storage bay around it. Four annular leaves drop 0.32 m and slide outward 1 m. Rings park horizontally below the deck, rise through this annular opening, and later tilt into their operating planes. Reserve that opening and full deployment volume in both mesh and static collision design. No ring should visibly pass through a solid floor, service panel, dispenser, or neighbouring block.
 
-New ore work includes voxel materials, mined item definitions, refining recipes, icons, and distribution. Test ore availability separately on supported planets and procedural asteroids. Document effects on existing saves and already-generated terrain. Custom planet compatibility needs an explicit strategy rather than assuming every planet automatically gains the new ores.
+Ore voxel materials, mined items, dense concentrates, native refining/assembler recipes and weighted asteroid distribution are implemented. Original cyan/amber/violet ore, concentrate and cartridge models/icons and matching near/far voxel textures now replace native placeholders; [artwork and export details](../ArcanePower/README.md#fuel-artwork). In-game appearance remains unverified. Test ore availability separately on supported planets and procedural asteroids. Document effects on existing saves and already-generated terrain. Custom planet compatibility needs an explicit strategy rather than assuming every planet automatically gains the new ores.
 
 **Reactor behaviour**
 
@@ -57,7 +57,7 @@ Use a readable operating sequence: off/parked → preflight and containment powe
 
 **Containment shell assembly and consumable tiles**
 
-Four dispenser heads build the low-poly inner sphere by placing four triangular facets per batch. The initial visual prototype uses one 80-triangle shell, assembled in twenty batches. The current implementation reserves eighty inventory tiles for a new shell, retaining installed material across normal shutdown; venting discards that reserve. This ratio remains a balance value. Higher fuels retain their required 2/3/4 rings; any change in shell count or tessellation requires a separate visual/performance decision.
+Four dispenser heads build the low-poly inner sphere by placing four triangular facets per batch. The initial visual prototype uses one 80-triangle shell, assembled in twenty batches. The current implementation reserves eighty inventory tiles for a new shell, retaining installed material across normal shutdown; venting discards that reserve. This ratio remains a balance value. Controller installations deploy 2/3/4 rings independently of compatible fuel; any change in shell count or tessellation requires a separate visual/performance decision.
 
 Keep rings horizontal during assembly to leave the dispenser paths clear, then tilt and spin them after the last tile is installed. Ignition is gated on actual completion and hardware readiness. The current model includes all four rings and twenty four-tile batches under direct C# control. Its nominal field radius is 0.88 m, tile thickness 0.045 m, and ring radii are 1.09/1.29/1.49/1.69 m. The geometry manifest reports a minimum inter-ring radial-shell gap of about 0.1099 m and floor clearance of about 0.0644 m; validate the actual engine motion and repeated interruptions for all three hardware profiles. Native output stays at zero during startup and ramps over ten seconds after assembly reaches Running.
 
@@ -70,7 +70,19 @@ Implemented prototype item: a crafted **Containment Tile**, supplied through the
 - Low reserves produce a resupply warning and an estimated operating reserve. Failure to replenish degrades containment and triggers the configured shutdown/vent response while recovery remains possible. A visual missing panel reflects an authoritative state change; a hidden or delayed animation cannot itself cause damage.
 - Conveyor disconnection is survivable while local stocks last. Expose tile stock, installed condition, replenishment state, and blocked input on the terminal. Fuel and tiles remain separate resources and separate inventory accounting.
 
-The implementation tracks aggregate installed material/condition; flying subparts are visual, not inventory entities. Clients animate triangle subparts from those authoritative states. Test partial startup, stock removal mid-assembly, missed updates, save/load, grinding, blueprint/projector rebuilding, interrupted replacement, and late join for duplication or reset exploits. Initial balance uses 2 iron + 0.1 nickel + 0.2 silicon for four tiles in ten base seconds, one tile per facet, 1/2/4 maintenance quartets per minute at full tier load before heat adjustment, and total installed-shell loss on vent. These values remain tunable; quartet replacement animation and reserve estimates are now implemented, pending in-game review.
+The implementation tracks aggregate installed material/condition; flying subparts are visual, not inventory entities. Clients animate triangle subparts from those authoritative states. Test partial startup, stock removal mid-assembly, missed updates, save/load, grinding, blueprint/projector rebuilding, interrupted replacement, and late join for duplication or reset exploits. Current balance uses 20 iron + 8 cobalt + 4 silver + 2 platinum ingots, 4 superconductors + 4 computers + 1 detector component + 4 metal grids for four tiles in ten base seconds, one tile per facet, 1/2/4 maintenance quartets per minute at full tier load before heat adjustment, and total installed-shell loss on vent. These values remain tunable; quartet replacement animation and reserve estimates are now implemented, pending in-game review.
+
+Accepted fuel packaging: an empty Aether containment canister costs 100 iron,
+40 cobalt, 10 silver and 5 platinum ingots, plus 10 superconductors, 4 computers
+and 4 metal grids. Fill it with 10 kg Aether concentrate; higher tiers upgrade
+the previous filled canister with 10 kg of their own concentrate. Each canister
+stores 10 old fuel units, yielding 8/9/9.9 full-load minutes at controller
+80%/90%/99% efficiency. Filling/upgrading consumes exactly one whole container
+regardless of assembler efficiency; consumed fuel does not refund a container.
+Concentrates retain their extremely low volumes and rare-ore yields. Canister
+external volume is 24 L, with shell and cumulative payload mass accounted for.
+
+Accepted tile progression: **Standard → Reinforced → Advanced**, with **1×/10×/100× lifetime, material cost and base crafting time**. Every grade supports every fuel. Same-grade quartets may be mixed across the shell; startup and maintenance select the highest available grade. Installed grades persist through normal shutdown and saves, and are lost on venting. Tile grades are initialized explicitly; stock upgrades only through paid replacement. The reactor holds 2,000 L; automatic stocking targets 80 loose tiles per supplied grade. Definitions, accounting and mixed-grade telemetry are implemented, with offline checks and compatibility compilation passing; in-game review remains outstanding.
 
 The maintenance cost must add a logistics decision without routine busywork. A healthy reactor should replenish automatically from supplied stock; visual replacement frequency can be reduced at distance without changing material consumption.
 
@@ -108,21 +120,35 @@ Animate warning indicators, shutter opening, increasing glow, fuel-tinted plasma
 
 Create an Arcane Energy Core as a second major machine: a visible energy centre with attached stabilizers, capacity modules, and transfer modules. Give it the same panels and fittings, with calmer motion than the reactor. Stored-energy fraction controls the visible core intensity and fill indicators; charging and discharging have distinct effects.
 
+**Accepted and implemented 11 October 2026:** compact 3×3×3 large-grid core, two
+side capacity sockets, rear transfer socket and top stabilizer. Standard/advanced
+one-cell modules use provisional ratings matched to the reactor tiers. Seven
+models, icons, native construction stages and charge/flow visuals are delivered.
+See [the implementation and remaining tests](../ArcanePower/ENERGY-STORAGE.md).
+
 Its explicit role is to store energy, not generate it. It supplies containment startup before ignition, absorbs surplus reactor generation, bridges weapon/shield/industrial demand spikes, and sustains containment during shutdown, cooling, and emergency venting. This allows a ship to size its reactor for sustained demand and its battery for short peaks and reserve endurance.
 
 Prototype one controller with two expansion levels. Capacity modules increase stored MWh; transfer modules control maximum charge/discharge MW; stabilizers maintain the supported storage configuration. Keep those limits separate so capacity upgrades do not imply unlimited output. A full battery can still lack sufficient discharge power for weapons and containment together; high discharge power can still exhaust a small reserve quickly. Provide normal Auto, Recharge, and Discharge behaviour, and let the battery supply reactor startup and emergency containment through the grid power system. Define emergency behaviour when Recharge mode would prevent reserve delivery, and make any automatic mode change visible. Do not assume the grid will reserve energy for containment over competing consumers; verify resource priority and load-shedding behaviour in the power prototype.
 
 Vanilla batteries remain valid for startup and backup. The Arcane Energy Core earns its place through expandable high capacity, configurable transfer capability, and physical stabilizer/module placement. It is the preferred large-installation storage option, not an arbitrary prerequisite for reactor ignition.
 
-Prefer native battery behaviour where it meets the design. Verify whether a single block can safely change capacity per instance; otherwise evaluate fixed-capacity battery modules contributing their actual native storage, with the central core presenting the aggregate. Avoid changes to shared definitions that accidentally alter every battery of that subtype.
+The implementation uses fixed-capacity native batteries contributing their actual
+storage, with the central core presenting the aggregate and allocating transfer
+limits. Native battery maximum capacity has no suitable per-instance public
+setter. Shared definitions are never mutated.
 
-Capacity removal must never create energy. A planned removal can require discharging to the remaining capacity; destruction needs a defined excess-energy loss or vent rule. Save/load, blueprints, projection construction, and grid splits must preserve correct accounting. Wireless pylons and enormous remote storage networks are later options, not assumed requirements.
+Capacity removal never transfers charge: the detached physical battery retains
+its own energy with transfer disabled, while destruction loses that battery's
+energy. New/copied/projected entity IDs start empty. Save/load and grid splits
+retain each surviving battery's charge. Remaining live validation is tracked in
+the implementation notes. Wireless pylons and remote storage networks remain
+later options.
 
 **Animation ownership: direct mod runtime accepted**
 
 Animation Engine provided useful reference material for subpart interpolation and event-driven motion. Its inspected V2 libraries lacked a general bridge for arbitrary reactor state, and the terminal component was a stub. The user approved migrating all existing motion into Arcane Power itself. Earlier AE parser/VM results remain historical study material; the mod no longer ships BSL or requires AE in newly created test worlds. The current running world's mod list remains unchanged.
 
-[Reactor.Motion.cs](../ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Motion.cs) owns all matrices and visibility. Core phases are Off, Starting, Running, Cooling and Stopping: only sphere assembly accelerates by profile (1×/1.5×/2×), giving complete startup durations of 1,170/931/811 ticks; normal shutdown holds an assembled hot core in Cooling until heat<=15%, then brakes both ring axes for 90 ticks with a 60-tick plasma fade and reverses deployment at the original 1× speed. Available output ramps over 600 ticks after Running, with zero startup output. Interrupted startup reverses from its current fractional age.
+[Reactor.Motion.cs](../ArcanePower/src/Data/Scripts/ArcanePower/Reactor.Motion.cs) owns all matrices and visibility. Core phases are Off, Starting, Running, Cooling and Stopping: only sphere assembly accelerates by controller installation tier (1×/1.5×/2×), giving complete startup durations of 1,170/931/811 ticks; normal shutdown holds an assembled hot core in Cooling until heat<=15%, then brakes both ring axes for 90 ticks with a 60-tick plasma fade and reverses deployment at the original 1× speed. Available output ramps over 600 ticks after Running, with zero startup output. Interrupted startup reverses from its current fractional age.
 
 The committed ejection cycle closes the shield for 240 ticks, opens the intake/hatch for 90, ejects for 120, closes the intake for 90 and retracts the shield for 240. Native generation is cut only after full shield closure. The cycle ends automatically Off, requiring a manual restart with a fresh field. Heat follows load with a 60-second heating response, cools over a 30-second response and is purged during ejection. A payload vent applies one synchronized damage event: 15% reactor and 20% connected compatible module maximum integrity at 100% load/heat, with greater damage above 100% heat. Discharge now hands off to native physical spent rings/tiles and a plasma carrier beyond the outlet; moving-door collision and obstruction handling remain later work.
 
@@ -174,7 +200,7 @@ Include demand spikes, full storage during generation, charge/discharge rate lim
 - Accepted battery role: startup, surplus capture, peak demand, and emergency containment, with distinct capacity and transfer limits and vanilla battery compatibility. Refine the attached module layout and stabilizer requirements.
 - Venting: controllable reactor exhaust is required; refine the proposed straight duct/outlet layout, regulated/automatic/emergency modes, capacity progression, and plume hazard dimensions.
 - Containment tiles: initial component, recipe, 80-tile reserve, maintenance batches and vent loss are implemented. Visible quartet replacement and reserve estimates are implemented; refine balance and validate the paths and accounting.
-- Progression: the proposed three-ore cumulative recipes, final material names, and fuel colours.
+- Accepted fuel names: Aether, Helion and Empyrean, with cyan/amber/violet colours. Aetherite/Helionite/Empyrite refine to matching concentrates at progressively lower yields; higher fuels require the preceding fuel and their own rare concentrate. Native asteroid distribution and dense material volumes are implemented; balance remains provisional.
 
 Inspiration references: [AutoMcD’s MA Plasma Reactor](https://steamcommunity.com/sharedfiles/filedetails/?id=2847666099), [Draconic Evolution](https://www.curseforge.com/minecraft/mc-mods/draconic-evolution), and the three supplied images. These guide the design; Arcane Power’s assets and balance will be its own.
 
@@ -191,3 +217,17 @@ antenna connection to the reactor grid; it grants no remote control or terminal
 access. Model, collision, material maps, icon and crafting recipe are exported.
 Text HUD API provides the card overlay; native live text is the fallback.
 [Setup and remaining game review](../ArcanePower/STATUS-DISPLAYS.md).
+
+
+### Rare asteroid ores — implemented definitions, 9 October 2026
+
+Deposit weights are 5/2/1 against uniformly scaled vanilla weights of at least
+100; mining ratios are 0.1/0.03/0.01; base refining yields are 0.1%/0.01%/0.001%.
+Raw ore is 0.37 L/kg; concentrates/fuels are 0.01/0.005/0.001 L/kg. All ingredients
+remain mass-based. Native refinery/assembler efficiency multipliers apply. These
+settings deliberately require more exploration, mined volume and processing for
+each tier and are provisional pending survival balance. These are current alpha definitions, without save migration support. Native procedural asteroids can regenerate different deposits
+under the new material definitions; no terrain or saves were rewritten. Definition
+checks passed; actual discovery, production and multiplayer need game review.
+
+Current damage response: auto-ejection at 60% remaining reactor integrity requires both fully built, functional controllers and the intact vent route. Security mode defaults on and shuts down on route loss after startup; off permits continued generation with a warning. Startup requires the route in either mode. Committed ejection pauses on controller/vent loss, retaining heat and critical timers; repair resumes it. This is implemented and requires in-game validation.

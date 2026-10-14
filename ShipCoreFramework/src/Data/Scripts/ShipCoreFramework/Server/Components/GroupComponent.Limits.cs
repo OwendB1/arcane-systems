@@ -115,12 +115,15 @@ namespace ShipCoreFramework
             internal readonly IMySlimBlock Block;
             internal readonly PunishmentType Harm;
             internal readonly BlockLimit Limit;
+            internal readonly bool ConnectorPunishment;
 
-            internal PendingBlockPunishment(IMySlimBlock block, PunishmentType harm, BlockLimit limit)
+            internal PendingBlockPunishment(IMySlimBlock block, PunishmentType harm, BlockLimit limit,
+                bool connectorPunishment = false)
             {
                 Block = block;
                 Harm = harm;
                 Limit = limit;
+                ConnectorPunishment = connectorPunishment;
             }
         }
 
@@ -582,11 +585,16 @@ namespace ShipCoreFramework
                 return;
             }
             if (IsLimitPunishmentDeferred()) return;
-            if (IsCoreRecoveryGraceActive()) return;
-            if (Deactivated || IsIgnoredGroup()) return;
+            if (IsCoreRecoveryGraceActive() || Deactivated || IsIgnoredGroup())
+            {
+                RestoreConnectorShutOffBlocks(null);
+                return;
+            }
 
             if (!connectorOnly) RefreshPunishmentFlags();
+            forceShutOffPunishment |= ShouldForceLimitedBlocksOff();
 
+            var generation = GetLimitGeneration();
             var directionReferenceBlock = connectorOnly ? null : GetDirectionLockReferenceBlock();
             var pendingPunishments = new List<PendingBlockPunishment>();
             foreach (var kv in Limits)
@@ -620,9 +628,11 @@ namespace ShipCoreFramework
                     foreach (var block in membersCopy)
                     {
                         if (block == null || block.IsMovedBySplit || block.CubeGrid == null) continue;
+                        if (connectorOnly && !connectorMembersCopy.Contains(block)) continue;
                         if (limit.GetWeight(GridComponent.KeyOf(block)) <= 0d) continue;
 
-                        pendingPunishments.Add(new PendingBlockPunishment(block, PunishmentType.ShutOff, limit));
+                        pendingPunishments.Add(new PendingBlockPunishment(block, PunishmentType.ShutOff, limit,
+                            connectorMembersCopy.Contains(block)));
                     }
 
                     continue;
@@ -651,15 +661,12 @@ namespace ShipCoreFramework
                     if (weight <= 0d) continue;
                     if (isConnectorMember)
                     {
-                        if (connectorOnly)
+                        var functionalBlock = block.FatBlock as IMyFunctionalBlock;
+                        if (functionalBlock == null) continue;
+                        if (!functionalBlock.Enabled && !ConnectorShutOffOwners.ContainsKey(functionalBlock))
                         {
-                            var functionalBlock = block.FatBlock as IMyFunctionalBlock;
-                            if (functionalBlock == null) continue;
-                            if (!functionalBlock.Enabled)
-                            {
-                                alreadyShutOffConnectorWeight += weight;
-                                continue;
-                            }
+                            alreadyShutOffConnectorWeight += weight;
+                            continue;
                         }
 
                         connectorCandidates.Add(new KeyValuePair<IMySlimBlock, double>(block, weight));
@@ -739,7 +746,7 @@ namespace ShipCoreFramework
                     if (candidate.Key == null) continue;
 
                     pendingPunishments.Add(new PendingBlockPunishment(candidate.Key, PunishmentType.ShutOff,
-                        limit));
+                        limit, true));
                     connectorOver -= candidate.Value;
                 }
             }
@@ -748,7 +755,7 @@ namespace ShipCoreFramework
                 Utils.Log("EnforceGroupPunishment: queued " + pendingPunishments.Count +
                           " block punishments for group " + GetGroupKey() +
                           ", forceShutOff=" + forceShutOffPunishment + ".", 1);
-            ExecutePendingPunishments(pendingPunishments);
+            ExecutePendingPunishments(pendingPunishments, generation);
         }
 
         private static int ComparePunishmentCandidates(KeyValuePair<IMySlimBlock, double> left,
@@ -813,16 +820,18 @@ namespace ShipCoreFramework
         }
 
         // EnforceGroupPunishment keeps selection on the game thread because it reads live block state.
-        private void ExecutePendingPunishments(List<PendingBlockPunishment> punishments)
+        private void ExecutePendingPunishments(List<PendingBlockPunishment> punishments, int generation)
         {
-            if (punishments == null || punishments.Count == 0) return;
+            if (punishments == null) return;
 
             var representativeGridId = GetRepresentativeGridId();
             MyAPIGateway.Utilities.InvokeOnGameThread(() =>
             {
                 if (_closing || Session.IsShuttingDown) return;
+                if (generation != GetLimitGeneration()) return;
                 if (IsLimitPunishmentDeferred()) return;
 
+                var stillPunished = new HashSet<IMyFunctionalBlock>();
                 var appliedPunishments = 0;
                 foreach (var punishment in punishments)
                 {
@@ -831,9 +840,21 @@ namespace ShipCoreFramework
                     if (block == null || block.IsMovedBySplit || block.CubeGrid == null) continue;
                     if (block.CubeGrid.MarkedForClose || block.CubeGrid.Closed) continue;
 
+                    if (punishment.ConnectorPunishment)
+                    {
+                        var functionalBlock = block.FatBlock as IMyFunctionalBlock;
+                        if (functionalBlock != null)
+                        {
+                            TrackConnectorShutOff(functionalBlock);
+                            stillPunished.Add(functionalBlock);
+                            if (!functionalBlock.Enabled) continue;
+                        }
+                    }
                     block.WhackABlock(punishment.Harm);
                     appliedPunishments++;
                 }
+
+                RestoreConnectorShutOffBlocks(stillPunished);
 
                 if (appliedPunishments > 0 && MyGroup != null)
                 {

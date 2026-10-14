@@ -152,6 +152,7 @@ Blacklist behavior:
 - The winning group's main core checks its blacklist against the losing group's main core `SubtypeId`.
 - If matched, blocks from the losing group count against every matching non-critical limit on the winning group.
 - Imported blocks beyond the winning group's remaining limit capacity are shut off; local overflow keeps its configured punishment type.
+- Connector punishment remembers which enabled blocks it shuts off and turns them back on when disconnecting or a limit refresh clears the restriction. Blocks that were already off stay off; another connector punishment or the block's own limits can keep a block off. This tracking lasts for the current world session.
 - If priority and block count both match, neither side outranks the other for blacklist punishment.
 
 ### Manifest upgrade-module entries

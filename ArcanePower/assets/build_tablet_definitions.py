@@ -2,6 +2,10 @@
 from pathlib import Path
 import xml.etree.ElementTree as E
 import math
+import json
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from tablet_pose_data import TAGS, validate
 ROOT=Path(__file__).resolve().parents[1]
 root=E.Element('Definitions',{'xmlns:xsi':'http://www.w3.org/2001/XMLSchema-instance','xmlns:xsd':'http://www.w3.org/2001/XMLSchema'})
 def add(parent,tag,text=None,**attrs):
@@ -52,4 +56,17 @@ for sub,num in [('Iron',3),('Silicon',1),('Nickel',.5)]:add(pre,'Item',Amount=st
 add(blueprint,'Result',Amount='1',TypeId='PhysicalGunObject',SubtypeId='ArcanePower_Tablet');add(blueprint,'BaseProductionTimeInSeconds',12)
 classes=add(root,'BlueprintClassEntries')
 for cls in ['BasicTools','Tools','EliteTools']:add(classes,'Entry',Class=cls,BlueprintSubtypeId='ArcanePower_Tablet')
+# Preserve transforms designed in the external grip editor across regeneration.
+pose_source = ROOT / 'assets/tablet-poses.json'
+if pose_source.exists():
+    authored = json.loads(pose_source.read_text())
+    for tag in TAGS:
+        values = validate(tag, authored[tag])
+        for axis, value in zip('XYZW', values):
+            hand.find(tag + '/' + axis).text = format(value, '.9g')
+# Finger poses are exported to a native MWM by the grip editor, not wrist XML.
+if (ROOT / 'assets/tablet-fingers.json').exists():
+    if not (ROOT / 'src/Models/Characters/Animations/ArcaneTabletGrip.mwm').exists() or not (ROOT / 'src/Data/TabletFingers.sbc').exists():
+        raise ValueError("Finger poses exist without exported animation assets. Export from the grip editor.")
+    hand.find('FingersAnimation').text = 'ArcaneTabletGrip'
 E.indent(root);E.ElementTree(root).write(ROOT/'src/Data/Tablet.sbc',encoding='utf-8',xml_declaration=True)
