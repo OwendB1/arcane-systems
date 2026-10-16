@@ -37,10 +37,50 @@ def audit():
 
     moving = [o for o in col.objects if o.type == 'MESH' and o.get('thermal_motion_group')]
     covers = [o for o in moving if o.get('thermal_cover')]
+    bodies = [o for o in moving if o.get('thermal_rounded_manifold')]
+    connectors = [o for o in moving if o.get('thermal_moving_connector')]
+    tails = [o for o in moving if o.get('thermal_extending_connector')]
     static = [o for o in col.objects if o.type == 'MESH' and not o.get('thermal_motion_group')]
     static_data = {o.name: geometry(o) for o in static}
+    backings = [o for o in static if o.get('thermal_controller_backing')]
+    backing_samples = 0
+    if len(backings) != 2:
+        fail('both controller recesses restored', len(backings))
+    for backing in backings:
+        side = backing['thermal_controller_backing']
+        tree = static_data[backing.name][0]
+        for iy in range(-6, 7):
+            y = iy*.11
+            for z in (-3.18, -3.10, -3., -2.9, -2.75, -2.6, -2.45, -2.33,
+                      -2.2, -2.05, -1.9, -1.82):
+                if abs(y) < .31 and abs(z+2.33) < .31:
+                    continue
+                radius = 6.124 if z < -3.07 else 6.158
+                expected_x = side*math.sqrt(radius*radius-y*y)
+                hit = tree.ray_cast(Vector((side*8, y, z)), Vector((-side, 0, 0)), 3)[0]
+                backing_samples += 1
+                if hit is None or abs(hit.x-expected_x) > .002:
+                    fail('continuous curved controller backing and lower notch', [side, y, z])
+        native = next(o for o in static if o.get('reactor_source_name') ==
+                      'Base upgrade / native socket '+str(1 if side > 0 else 3))
+        source = bpy.data.objects[native['reactor_source_name']]
+        if native.data != source.data or any(abs(a-b) > 1e-6 for ra, rb in
+                zip(native.matrix_world, source.matrix_world) for a, b in zip(ra, rb)):
+            fail('unmodified native controller connector', native.name)
     if len(covers) != 8 or len(motion) != 4:
         fail('four bays / eight curved leaves', [len(motion), len(covers)])
+    if len(bodies) != 4 or len(connectors) != 4 or len(tails) != 4:
+        fail('four rounded manifolds / four complete connectors', [len(bodies), len(connectors), len(tails)])
+    for obj in bodies+connectors+tails:
+        ident = obj.get('thermal_rounded_manifold') or obj.get('thermal_moving_connector') or obj['thermal_extending_connector']
+        carriage = next(row['carriage'] for row in motion if row['id'] == ident)
+        if not obj.parent or obj.parent.name != carriage or obj.get('thermal_motion_group') != carriage:
+            fail('casting and connector follow pipe carriage', obj.name)
+        bm = bmesh.new()
+        bm.from_mesh(obj.data)
+        if any(not e.is_manifold for e in bm.edges) or bm.calc_volume(signed=True) <= 0:
+            fail('closed positive manifold solid', obj.name)
+        bm.free()
     for cover in covers:
         if not cover.get('uncut_original_checkpoint') or not cover.get('native_uv_preserved'):
             fail('original curved geometry and UV source', cover.name)
@@ -62,9 +102,30 @@ def audit():
                 point = Vector((side*8, y+radius*math.cos(a), z+sign*.46+radius*math.sin(a)))
                 if not any(t.ray_cast(point, Vector((-side, 0, 0)), 4)[0] is not None for t in relevant):
                     fail('pipes fully hidden by closed original armor', [row['id'], sign, i])
+        # The shared casting is wider than a pipe nose. Test its full projected
+        # silhouette as well as the two original circular heads.
+        for obj in bodies+connectors+tails:
+            ident = obj.get('thermal_rounded_manifold') or obj.get('thermal_moving_connector') or obj.get('thermal_extending_connector')
+            if ident != row['id']:
+                continue
+            for vertex in obj.data.vertices:
+                point = obj.matrix_world@vertex.co
+                point.x = side*8
+                if not any(t.ray_cast(point, Vector((-side, 0, 0)), 4)[0] is not None for t in relevant):
+                    fail('rounded assembly hidden behind closed armor', obj.name)
+        body = next(o for o in bodies if o['thermal_rounded_manifold'] == row['id'])
+        casting = geometry(body)[0]
+        for sign in (-1, 1):
+            for i in range(17):
+                a = i*math.tau/16
+                radius = 0 if i == 16 else .22
+                start = Vector((side*8, y+radius*math.cos(a), z+sign*.46+radius*math.sin(a)))
+                if casting.ray_cast(start, Vector((-side, 0, 0)), 5)[0] is not None:
+                    fail('isolated open manifold bores', [row['id'], sign, i])
     # Include stage boundaries and mid-travel positions. No pose may rely on
     # clipping the cover through a neighbouring panel or the controller bay.
-    for value in (0, .05, .10, .15, .20, .25, .30, .35, .40, .45, .50, .65, .80, 1):
+    values = sorted(set([i/40 for i in range(41)]+[.149, .151, .399, .401, .449, .451]))
+    for value in values:
         T['pose'](value)
         data = {o.name: geometry(o) for o in moving}
         tested = 0
@@ -91,9 +152,20 @@ def audit():
                 fail('carriage position', [value, row['id']])
             if value < .45 and abs(carriage.matrix_world.translation.x-row['stowed_face'][0]) > 1e-5:
                 fail('covers clear before pipe deployment', [value, row['id']])
+            if value == 1:
+                connector = next(o for o in connectors if o['thermal_moving_connector'] == row['id'])
+                tail = next(o for o in tails if o['thermal_extending_connector'] == row['id'])
+                tail_points = [tail.matrix_world@v.co for v in tail.data.vertices]
+                points = [connector.matrix_world@v.co for v in connector.data.vertices]+tail_points
+                if min(math.hypot(p.x, p.y) for p in points) >= 6.10:
+                    fail('deployed connector reaches inside curved housing', row['id'])
+                if min(abs(p.x) for p in tail_points) >= 4.29:
+                    fail('deployed connector remains engaged through bulkhead guide', row['id'])
         pose_rows.append({'deployment': value, 'broadphase_pairs_checked': tested})
     T['pose'](old_pose)
     report = {'status': 'passed' if not failures else 'failed', 'bays': 4, 'curved_leaves': len(covers),
+              'controller_backings': len(backings), 'controller_backing_samples': backing_samples,
+              'rounded_manifolds': len(bodies), 'moving_connectors': len(connectors), 'extending_tails': len(tails),
               'closed_nose_occlusion_samples': 264, 'poses': pose_rows, 'failures': failures,
               'limits': 'Authored geometry and mechanical preview; native subparts/runtime are not installed.'}
     (M['OUT']/'curved-manifold-audit.json').write_text(json.dumps(report, indent=2)+'\n')

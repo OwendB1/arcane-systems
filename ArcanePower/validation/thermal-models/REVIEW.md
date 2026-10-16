@@ -1,55 +1,74 @@
-# Curved reactor manifold repair — 16 October 2026
+# Rounded reactor manifolds and controller backing — 16 October 2026
 
-Current model source: `assets/arcane-thermal-models.blend`, scene
-`ArcanePower_Thermal_ReactorHousing`. Rebuilt from maintained Python, saved and
-reopened in the existing official-MCP Blender 5.2.1 LTS window.
+Maintained source: `assets/build_reactor_thermal_manifolds.py`; output:
+`assets/arcane-thermal-models.blend`, scene `ArcanePower_Thermal_ReactorHousing`.
+Official Blender MCP, live Blender 5.2.1 LTS. Previous accepted state is preserved
+in `assets/arcane-thermal-before-rounded-manifolds.blend`.
 
-The rejected flat external cassettes are retained only in
-`assets/arcane-thermal-flat-manifold-baseline.blend` and the rejected evidence
-folder. This repair reuses the exact uncut lower armor profile from the preserved
-pre-exterior-detail checkpoint, splits each sector into two closed leaves and
-retains its native UVs. Four bays flank the two existing controller sockets.
+Four rounded twin-bore castings now unite each pair of deployed pipe heads.
+Each has a tapered rounded rear connector that reaches inside the curved shell,
+travels with the pipe carriage and retracts through a small bulkhead guide. Its
+extending neck stays engaged in that guide throughout deployment. The preview
+uses native axial scaling for this neck; game subpart integration must reproduce
+that motion rather than assume Blender drivers export automatically.
+Native SEUT materials, metric UVs, captive studs and a supported PRIMARY marking
+finish the casting. Hot and return remain separate through-bores.
 
-Closed: all pipe heads are hidden behind the original curved profile. Open:
-leaves inset 0.36 m then slide 0.125 rad sideways under the neighbouring armor;
-two-stage pressure tubes then extend 1.65 m. The original collars, foundation,
-controller receivers, glass, pillars, ring-well liner and ejection interface stay
-unchanged. A real one-cell transition handles the 170 mm difference between the
-native band height and the normal pipe lattice.
+The original curved covers still close over the whole assembly. They inset
+0.36 m and slide 0.155 rad under neighboring armor before the pipe carriages
+extend 1.41 m. Deployed faces remain at X=±6.25 m, Y=±2.5 m, Z=−2.33 m, with
+the existing 170 mm grid-height adapter. Original controller sockets and the
+5×5×3 Blender-cell envelope are preserved.
 
 Refinement findings and repairs:
 
-1. Flat housings broke the drum silhouette: replaced with original armor.
-2. Existing service cuts left holes in reused panels: restored the exact uncut
-   profile before splitting, rather than leaving an empty hatch opening.
-3. Legacy detail provenance was being renamed with live references: provenance
-   now stays tied to the original object; the gate rejects self-references.
-4. Door corners and long pipes clipped the drum/ring well during travel: opened
-   internal side pockets and used two telescoping stages outside the ring well.
-5. Coincident annular caps caused jagged shading: staggered the end planes.
-6. An internal radial cap became nonmanifold after boolean welding: removed
-   that interior face without changing solid volume. New cut UVs are reprojected;
-   UV validation ignores numerical slivers below 0.01 mm².
-7. Old decals would float over the new opening: replaced with supported native
-   warning marks which travel on the actual armor leaves. Internal studs seat on
-   the real pressure bulkhead; hot/return bands are material faces, not overlays.
+1. A shared casting needs more room than the old two circular bores: cut a real
+   internal travel pocket behind the original armor.
+2. The first rear shoulder overlapped the intermediate sleeves and fixed glands:
+   shortened the shoulder and fitted the connector neck between the glands.
+3. A 14-position check missed a brief door collision during extension: expanded
+   the gate to 47 positions, including motion boundaries, and widened sideways
+   cover travel and its internal storage pocket.
+4. New boolean walls inherited collapsed UVs: reproject only those faces while
+   preserving accepted exterior UVs.
+5. Close review found an undersized rear connector and coincident bore surfaces:
+   extended the connector into the shell through a supported guide and offset
+   the casting bore by 2 mm from the adjoining pipe interiors.
+6. A rigid long guide tail entered the protected ring-well liner: replaced it
+   with an extending neck anchored outside the liner. The guide remains engaged
+   without cutting or moving the liner.
 
 Evidence:
 
-- 48 actual UI images: four bays, closed seams, both pipe heads and their roots,
-  each at 1.8, 2.4 and 3.0 m. Fixed target/lens/light per triplet; metadata in
-  `ui-reviews.json`. Contact sheets: `curved-contact-0.jpg` through `-7.jpg`.
-- Transition UI images show inset, sideways opening and telescopic extension.
-- `curved-manifold-audit.json`: all 14 sampled deployment positions clear fixed
-  geometry and other moving groups; 264 samples confirm closed nose occlusion.
-- `audit.json`: 31 main sources pass solids, dimensions, native materials/UVs,
-  supported details and sockets; two actual grid assemblies pass 108 mating
-  joints. Original reactor, battery and concept source hashes are unchanged.
-- `reload.json`: focused and full model gates pass after save/reopen.
-- Python compilation, grid-routing self-check, thermal balance self-check and
-  `dotnet build arcane-systems.sln` pass (zero build warnings/errors).
+- `rounded-manifold-review-plan.json`: 48 close UI views, four bays, upper/lower
+  heads, the bridge and rear joints at 1.8/2.4/3.0 m. Target/lens/light stay fixed
+  within each triplet; actual view metadata is in `ui-reviews.json`.
+- `rounded-contact-LA.jpg`, `-LB.jpg`, `-RA.jpg`, `-RB.jpg`: close-review sheets.
+- Eight sampled motion UI views, closed/open final views and a whole-assembly
+  view supplement the closeups. Earlier failure evidence is in `rounded-pass1/`.
+- `curved-manifold-audit.json`: 47 sampled positions clear other moving groups
+  and fixed geometry; original covers occlude the nose discs and full casting /
+  connector silhouettes. Four castings and connectors are closed positive
+  solids, share the pipe carriages and keep both bores open. Deployed connector
+  roots reach inside the shell.
+- `audit.json`: all 31 main sources and the two grid assemblies pass geometry,
+  native material/UV, supported-detail and socket gates. The accepted reactor,
+  battery and concept source hashes are unchanged.
+- `reload.json`: saved-file consistency and validation results.
 
-These are model and rig proofs. New native collision/subpart exports, in-game
-animation and standalone/Brayton gameplay switching are not installed. Other
-machine detail and texture loops remain at their base-model stage during this
-focused repair. No LOD/build-stage, Workshop, gallery or publication work done.
+Controller backing correction (revision 4): the inherited conveyor-sized recess
+behind each controller receiver is now filled to the curved drum/armor profile,
+including the notch below the receiver. Only the 0.60 m native-port aperture
+remains. The earlier partial lower infills were replaced by continuous closed
+solids fitted directly to the original opening edges. Native yellow ports and
+their transforms remain unchanged. The focused audit samples both restored
+surfaces and retains all 47 motion checks. `controller-backing-review-plan.json`
+and `controller-*-*.png` record front, lower, side and chamber UI checks at
+1.8/2.4/3.0 m; the chamber views confirm the retained inner wall. Before editing,
+the accepted source was preserved in
+`assets/arcane-thermal-before-controller-backing.blend`.
+
+This pass is modeling and a mechanical preview rig. Native subpart exports and
+in-game animation/mode switching remain pending. Other models retain their base
+state while this requested manifold refinement is completed. Workshop/gallery
+publication remains paused.

@@ -207,10 +207,17 @@ The reactor variant preserves its 5×5×3 Blender-cell envelope and original
 controller receivers, collars, glass, pillars and ring well. Four pairs of compact
 primary pipe heads sit behind four original curved armor sectors, beside both
 controller bays. Each sector is split into two solid leaves with its native UVs;
-the leaves inset 0.36 m and slide 0.125 rad around the drum under neighbouring
-armor. Two-stage telescopes then extend 1.65 m. Standalone state fully hides the
-pipes; Brayton state exposes them. This is a saved mechanical rig, not installed
-mode-switching/runtime animation.
+the leaves inset 0.36 m and slide 0.155 rad around the drum under neighbouring
+armor. Two-stage telescopes then extend 1.41 m. A rounded twin-bore casting joins
+each pair of heads; a tapered rounded connector travels with it and seats inside
+the curved housing when deployed. The connector passes through a small internal
+bulkhead guide, while the hot and return bores stay separate. Standalone state
+fully hides the assembly; Brayton state exposes it. This is a saved mechanical
+rig, not installed mode-switching/runtime animation.
+
+The old conveyor-sized recess behind each controller receiver has been filled
+back to the curved housing, including its lower notch. The small native yellow
+connector retains its geometry and position within a fitted 0.60 m aperture.
 
 The original lower band centres at Z=−2.33 m, 0.17 m above the nearby grid-cell
 centre. A real 1×1×1 primary transition moves its inlet down to the pipe kit's
@@ -222,7 +229,7 @@ The flat external cassettes were rejected and remain only in an undo checkpoint.
 The accepted original reactor/battery files remain unchanged. The new variant
 is maintained by `build_reactor_thermal_manifolds.py`. The focused
 [curved-cover audit](validation/thermal-models/curved-manifold-audit.json) checks
-closed-pipe occlusion, split solids and 14 deployment positions; close review
+closed-assembly occlusion, separate open bores, split solids and 47 deployment positions; close review
 uses 1.8/2.4/3.0 m actual UI views. Native collision/subpart export and in-game
 switching remain later integration gates.
 

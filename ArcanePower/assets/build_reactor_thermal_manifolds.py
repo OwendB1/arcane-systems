@@ -16,11 +16,96 @@ from mathutils import Matrix, Vector
 from mathutils.bvhtree import BVHTree
 
 ROOT = Path(__file__).resolve().parents[1]
-STOW_X, DEPLOY_X = 4.60, 6.25
+STOW_X, DEPLOY_X = 4.84, 6.25
 STROKE = DEPLOY_X-STOW_X
 CENTRE_Z = -2.33
 INSET = .36
-SLIDE = .125
+SLIDE = .155
+
+
+def rounded_manifold(p, ident, side, y):
+    """Twin isolated bores in a curved casting, with a moving rear connector.
+
+    The 1.466 m capsule fits the original armor opening. Chamfered end rings
+    keep the housing edges crisp; only the functional capsule is smooth.
+    """
+    count = 24
+    outline = []
+    for sign in (1, -1):
+        for i in range(count+1):
+            a = i*math.pi/count+(0 if sign > 0 else math.pi)
+            outline.append((.42*math.cos(a), sign*.46+.273*math.sin(a)))
+    verts = []
+    profile = ((-.29, .96), (-.27, 1.), (-.15, 1.), (-.13, .96))
+    for x, scale in profile:
+        # Chamfer the capsule's perimeter without moving the bore centres.
+        for dy, dz in outline:
+            centre = .46 if dz > 0 else -.46
+            verts.append((side*(STOW_X+x), y+dy*scale,
+                          CENTRE_Z+centre+(dz-centre)*scale))
+    n = len(outline)
+    faces = [tuple(reversed(range(n))), tuple(range(3*n, 4*n))]
+    for k in range(3):
+        faces.extend((k*n+j, k*n+(j+1)%n, (k+1)*n+(j+1)%n, (k+1)*n+j)
+                     for j in range(n))
+    body = p.mesh(ident+' rounded twin-bore manifold', verts, faces, 'Metal_Dull')
+    for sign in (-1, 1):
+        z = CENTRE_Z+sign*.46
+        bore = p.cylinder('temporary rounded manifold bore',
+                          (side*(STOW_X-.50), y, z), (side*STOW_X, y, z), .232, sides=40)
+        bpy.context.view_layer.objects.active = body
+        mod = body.modifiers.new('Isolated primary through bore', 'BOOLEAN')
+        mod.operation, mod.solver, mod.object = 'DIFFERENCE', 'EXACT', bore
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+        bpy.data.objects.remove(bore, do_unlink=True)
+    # The stock metric UV helper also covers the new through-bore surfaces.
+    from runpy import run_path
+    run_path(str(ROOT/'assets/build_thermal_concepts.py'))['uv'](body)
+    body.data.materials.append(p.native['PaintedMetal_Darker'])
+    for face in body.data.polygons:
+        face.use_smooth = abs(face.normal.x) < .01 and abs(face.normal.z) > .01
+        face.material_index = int(abs(face.normal.x) < .01)
+    body['thermal_rounded_manifold'] = ident
+    body['isolated_bore_radius_m'] = .232
+    # A compact rounded bridge fills the gap between the casting and the
+    # curved shell. A separate extending tail remains in the bulkhead guide;
+    # its native axial-scale preview avoids entering the protected ring well.
+    connector_verts = []
+    for x, ry, rz in ((-.395, .16, .060), (-.355, .25, .155), (-.20, .25, .155)):
+        for i in range(32):
+            a = i*math.tau/32
+            connector_verts.append((side*(STOW_X+x), y+ry*math.cos(a),
+                                    CENTRE_Z+rz*math.sin(a)))
+    connector_faces = [tuple(reversed(range(32))), tuple(range(64, 96))]
+    for k in range(2):
+        connector_faces.extend((k*32+j, k*32+(j+1)%32,
+                                (k+1)*32+(j+1)%32, (k+1)*32+j) for j in range(32))
+    connector = p.mesh(ident+' rounded moving housing connector', connector_verts,
+                       connector_faces, 'PaintedMetal_Darker')
+    for face in connector.data.polygons[2:]:
+        face.use_smooth = True
+    connector['thermal_moving_connector'] = ident
+    connector['thermal_manifold_body'] = body.name
+    anchor = Vector((side*(STOW_X-.72), y, CENTRE_Z))
+    tail = p.cylinder(ident+' extending connector tail', anchor,
+                      (side*(STOW_X-.375), y, CENTRE_Z), .060, 'PaintedMetal_Darker', 32)
+    for vertex in tail.data.vertices:
+        vertex.co -= anchor
+        vertex.co.y *= .16/.060
+    tail.location = anchor
+    tail['thermal_extending_connector'] = ident
+    tail['runtime_scale_axis'] = 'local X; fixed guide anchor'
+    tail['runtime_scale_deployed'] = 1+STROKE/.345
+    face_x = side*(STOW_X-.13)
+    for dy in (-.32, .32):
+        for dz in (-.10, .10):
+            p.bolt(ident+' manifold captive stud', (face_x, y+dy, CENTRE_Z+dz),
+                   (side, 0, 0), body, .018)
+    label = p.label(body, 'PRIMARY', (face_x+side*.0015, y, CENTRE_Z),
+                    (0, side, 0), (0, 0, 1), .055)
+    label.data.materials.clear()
+    label.data.materials.append(p.native['PaintedMetal_VeryDark'])
+    return body, connector
 
 
 def build(p):
@@ -132,9 +217,15 @@ def build(p):
             bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
             bm.to_mesh(obj.data)
             bm.free()
-            if not obj.get('reactor_source_name'):
-                layer = obj.data.uv_layers.active
-                for face in obj.data.polygons:
+            layer = obj.data.uv_layers.active
+            obj.data.calc_loop_triangles()
+            # Boolean pocket walls can inherit a collapsed edge of the old
+            # UVs. Repair those faces only, preserving accepted exterior UVs.
+            collapsed = {t.polygon_index for t in obj.data.loop_triangles if t.area > 1e-8
+                         and abs((layer.data[t.loops[1]].uv-layer.data[t.loops[0]].uv).cross(
+                             layer.data[t.loops[2]].uv-layer.data[t.loops[0]].uv)) < 1e-11}
+            for face in obj.data.polygons:
+                if not obj.get('reactor_source_name') or face.index in collapsed:
                     axes = [i for i in range(3) if i != max(range(3), key=lambda j: abs(face.normal[j]))]
                     for li in face.loop_indices:
                         point = obj.data.vertices[obj.data.loops[li].vertex_index].co
@@ -192,6 +283,34 @@ def build(p):
         return obj
 
     drum = [o for o in p.col.objects if o.type == 'MESH' and o.get('reactor_source_name', '').startswith('Lower machinery drum')]
+    # Fill the old 1.42 m conveyor opening directly, including its exposed
+    # lower notch. The skin follows the drum/armor step and meets the original
+    # aperture edges; avoid coplanar boolean subtraction against that armor.
+    for obj in list(p.col.objects):
+        if obj.get('reactor_source_name', '').startswith('AP upgrade socket / lower armor infill'):
+            bpy.data.objects.remove(obj, do_unlink=True)
+    for side in (-1, 1):
+        count = 32
+        verts = []
+        for i in range(count+1):
+            y = -.71+1.42*i/count
+            inner = side*math.sqrt(6.00**2-y*y)
+            drum_x = side*math.sqrt(6.124**2-y*y)
+            armor_x = side*math.sqrt(6.158**2-y*y)
+            verts.extend(((inner, y, -3.21), (drum_x, y, -3.21),
+                          (drum_x, y, -3.07), (armor_x, y, -3.07),
+                          (armor_x, y, -1.79), (inner, y, -1.79)))
+        faces = [tuple(reversed(range(6))), tuple(range(count*6, count*6+6))]
+        for i in range(count):
+            faces.extend((i*6+j, i*6+(j+1)%6, (i+1)*6+(j+1)%6, (i+1)*6+j)
+                         for j in range(6))
+        backing = p.mesh('restored controller backing '+str(side), verts, faces,
+                         'PaintedMetal_Colorable')
+        aperture = p.box('temporary native controller aperture', (side*6.10, 0, CENTRE_Z),
+                         (1., .60, .60), chamfer=.04)
+        cut(aperture, [backing])
+        backing['thermal_controller_backing'] = side
+        backing['native_socket_preserved'] = True
     motion = []
     for side, y, original, angle in bays:
         ident = ('R' if side > 0 else 'L')+('A' if y < 0 else 'B')
@@ -199,14 +318,24 @@ def build(p):
         # collars/foundation, neighbouring armor and controller seat survive.
         window = sector('temporary original armor opening', angle, .117, 5.45, 6.30, -3.075, -1.585)
         cut(window, drum)
-        storage = sector('temporary side storage pocket', angle, .252, 5.55, 6.005, -3.075, -1.585)
+        storage = sector('temporary side storage pocket', angle, .292, 5.55, 6.005, -3.075, -1.585)
         cut(storage, drum)
+        # The original twin bores do not clear the new shared casting. Give
+        # its full travel a real internal pocket, behind the unchanged armor.
+        pocket = p.box('temporary rounded casting travel pocket',
+                       (side*5.365, y, CENTRE_Z), (1.89, .88, 1.49), chamfer=0)
+        cut(pocket, drum)
         bpy.data.objects.remove(copies[original], do_unlink=True)
         for z0, z1 in ((-3.145, -3.080), (-1.580, -1.515)):
-            rail = sector(ident+' hidden curved guide channel', angle, .252, 5.55, 6.10, z0, z1)
+            rail = sector(ident+' hidden curved guide channel', angle, .292, 5.55, 6.10, z0, z1)
             rail['thermal_fixed_support'] = True
         rear = p.box(ident+' internal pressure bulkhead', (side*4.35, y, CENTRE_Z),
                      (.12, 1.24, 1.68), 'PaintedMetal_Darker', .018)
+        guide = p.cylinder('temporary moving connector guide',
+                           (side*3.95, y, CENTRE_Z), (side*5.10, y, CENTRE_Z), .080, sides=32)
+        for vertex in guide.data.vertices:
+            vertex.co.y = y+(vertex.co.y-y)*2.25
+        cut(guide, [rear]+drum)
         for sign in (-1, 1):
             z = CENTRE_Z+sign*.46
             bore = p.cylinder('temporary sleeve bore', (side*3.10, y, z), (side*5.10, y, z), .335, sides=40)
@@ -220,7 +349,7 @@ def build(p):
             for dz in (-.72, .72):
                 p.bolt(ident+' captive bulkhead stud', (side*4.408, y+dy, CENTRE_Z+dz),
                        (side, 0, 0), rear, .025)
-        p.label(rear, 'PRIMARY', (side*4.412, y, CENTRE_Z), (0, side, 0), (0, 0, 1), .070)
+        p.label(rear, 'PRIMARY', (side*4.412, y+side*.40, CENTRE_Z), (0, side, 0), (0, 0, 1), .055)
         intermediate = bpy.data.objects.new('Thermal manifold '+ident+' / intermediate sleeve', None)
         p.col.objects.link(intermediate)
         intermediate.location = (side*4.50, y, CENTRE_Z)
@@ -244,16 +373,24 @@ def build(p):
         for sign in (-1, 1):
             z = CENTRE_Z+sign*.46
             stem = p.tube(ident+' sliding '+('H' if sign > 0 else 'C')+' primary stem',
-                [(side*x, y, z) for x in (STOW_X-1.15, STOW_X-.14, STOW_X-.11, STOW_X-.075)],
+                [(side*x, y, z) for x in (STOW_X-1.15, STOW_X-.26)],
                 .265, 'Metal_Dull', .035, 40)
             stem['thermal_pressure_part'] = True
-            stem.data.materials.append(p.native['PaintedMetal_Yellow' if sign > 0 else 'PaintedMetal_Clean'])
-            for face in stem.data.polygons:
-                if STOW_X-.14 < abs(face.center.x) < STOW_X-.11 and face.normal.dot(Vector((0, face.center.y-y, face.center.z-z))) > 0:
+            neck = p.tube(ident+' manifold outlet '+('H' if sign > 0 else 'C'),
+                [(side*x, y, z) for x in (STOW_X-.15, STOW_X-.11, STOW_X-.09, STOW_X-.075)],
+                .265, 'Metal_Dull', .035, 40)
+            neck.data.materials.append(p.native['PaintedMetal_Yellow' if sign > 0 else 'PaintedMetal_Clean'])
+            for face in neck.data.polygons:
+                if STOW_X-.11 < abs(face.center.x) < STOW_X-.09 and abs(face.normal.x) < .01:
                     face.material_index = 1
             p.tube(ident+' compact sealing nose', ((side*(STOW_X-.08), y, z), (side*STOW_X, y, z)),
                    .273, 'Metal_Dull', .038, 40)
+        rounded_manifold(p, ident, side, y)
         joint_parent(set(p.col.objects)-before, carriage)
+        tail = next(o for o in carriage.children if o.get('thermal_extending_connector') == ident)
+        travel = 'max(0,min(1,(deploy-.45)/.55))'
+        driver(tail, 'location', 0, f'{-side*.72}-{side*STROKE}*{travel}')
+        driver(tail, 'scale', 0, f'1+{STROKE/.345}*{travel}')
         driver(carriage, 'location', 0, f'{side*STOW_X}+{side*STROKE}*max(0,min(1,(deploy-.45)/.55))')
         port = {'id': 'primary '+ident, 'type': 'PRIMARY', 'position': [side*DEPLOY_X, y, CENTRE_Z],
                 'normal': [side, 0, 0], 'hot_axis': [0, 0, 1], 'cell_offset': [0, 0, .17],
@@ -293,7 +430,7 @@ def build(p):
         motion.append(row)
     p.col['manifold_motion'] = json.dumps(motion)
     p.col['manifold_retired_details'] = json.dumps(removed)
-    p.scene['thermal_manifold_revision'] = 2
+    p.scene['thermal_manifold_revision'] = 4
     p.scene['thermal_manifold_state_order'] = 'isolate -> retract pipes -> slide armor closed -> seat; reverse to expose'
     for obj in p.col.objects:
         if not obj.parent and obj.type != 'EMPTY':

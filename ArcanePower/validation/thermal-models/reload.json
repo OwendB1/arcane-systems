@@ -1,5 +1,6 @@
 {
   "file": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/arcane-thermal-models.blend",
+  "revision": 4,
   "main_gate": {
     "status": "passed",
     "models": 31,
@@ -22,7 +23,7 @@
     "status": "passed",
     "failure_count": 0,
     "failures": [],
-    "poses": 14
+    "poses": 47
   },
   "saved_reload": true
 }

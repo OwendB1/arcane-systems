@@ -2,63 +2,200 @@
   "status": "passed",
   "bays": 4,
   "curved_leaves": 8,
+  "controller_backings": 2,
+  "controller_backing_samples": 262,
+  "rounded_manifolds": 4,
+  "moving_connectors": 4,
+  "extending_tails": 4,
   "closed_nose_occlusion_samples": 264,
   "poses": [
     {
-      "deployment": 0,
-      "broadphase_pairs_checked": 116
+      "deployment": 0.0,
+      "broadphase_pairs_checked": 164
+    },
+    {
+      "deployment": 0.025,
+      "broadphase_pairs_checked": 164
     },
     {
       "deployment": 0.05,
-      "broadphase_pairs_checked": 116
+      "broadphase_pairs_checked": 164
+    },
+    {
+      "deployment": 0.075,
+      "broadphase_pairs_checked": 164
     },
     {
       "deployment": 0.1,
-      "broadphase_pairs_checked": 116
+      "broadphase_pairs_checked": 164
+    },
+    {
+      "deployment": 0.125,
+      "broadphase_pairs_checked": 164
+    },
+    {
+      "deployment": 0.149,
+      "broadphase_pairs_checked": 164
     },
     {
       "deployment": 0.15,
-      "broadphase_pairs_checked": 116
+      "broadphase_pairs_checked": 164
+    },
+    {
+      "deployment": 0.151,
+      "broadphase_pairs_checked": 164
+    },
+    {
+      "deployment": 0.175,
+      "broadphase_pairs_checked": 160
     },
     {
       "deployment": 0.2,
-      "broadphase_pairs_checked": 112
+      "broadphase_pairs_checked": 160
+    },
+    {
+      "deployment": 0.225,
+      "broadphase_pairs_checked": 168
     },
     {
       "deployment": 0.25,
-      "broadphase_pairs_checked": 112
+      "broadphase_pairs_checked": 168
+    },
+    {
+      "deployment": 0.275,
+      "broadphase_pairs_checked": 180
     },
     {
       "deployment": 0.3,
-      "broadphase_pairs_checked": 116
+      "broadphase_pairs_checked": 200
+    },
+    {
+      "deployment": 0.325,
+      "broadphase_pairs_checked": 220
     },
     {
       "deployment": 0.35,
-      "broadphase_pairs_checked": 138
+      "broadphase_pairs_checked": 208
+    },
+    {
+      "deployment": 0.375,
+      "broadphase_pairs_checked": 206
+    },
+    {
+      "deployment": 0.399,
+      "broadphase_pairs_checked": 204
     },
     {
       "deployment": 0.4,
-      "broadphase_pairs_checked": 148
+      "broadphase_pairs_checked": 204
+    },
+    {
+      "deployment": 0.401,
+      "broadphase_pairs_checked": 204
+    },
+    {
+      "deployment": 0.425,
+      "broadphase_pairs_checked": 204
+    },
+    {
+      "deployment": 0.449,
+      "broadphase_pairs_checked": 204
     },
     {
       "deployment": 0.45,
-      "broadphase_pairs_checked": 148
+      "broadphase_pairs_checked": 204
+    },
+    {
+      "deployment": 0.451,
+      "broadphase_pairs_checked": 204
+    },
+    {
+      "deployment": 0.475,
+      "broadphase_pairs_checked": 188
     },
     {
       "deployment": 0.5,
-      "broadphase_pairs_checked": 148
+      "broadphase_pairs_checked": 188
+    },
+    {
+      "deployment": 0.525,
+      "broadphase_pairs_checked": 188
+    },
+    {
+      "deployment": 0.55,
+      "broadphase_pairs_checked": 188
+    },
+    {
+      "deployment": 0.575,
+      "broadphase_pairs_checked": 188
+    },
+    {
+      "deployment": 0.6,
+      "broadphase_pairs_checked": 188
+    },
+    {
+      "deployment": 0.625,
+      "broadphase_pairs_checked": 188
     },
     {
       "deployment": 0.65,
-      "broadphase_pairs_checked": 140
+      "broadphase_pairs_checked": 188
+    },
+    {
+      "deployment": 0.675,
+      "broadphase_pairs_checked": 188
+    },
+    {
+      "deployment": 0.7,
+      "broadphase_pairs_checked": 188
+    },
+    {
+      "deployment": 0.725,
+      "broadphase_pairs_checked": 172
+    },
+    {
+      "deployment": 0.75,
+      "broadphase_pairs_checked": 156
+    },
+    {
+      "deployment": 0.775,
+      "broadphase_pairs_checked": 156
     },
     {
       "deployment": 0.8,
-      "broadphase_pairs_checked": 108
+      "broadphase_pairs_checked": 156
     },
     {
-      "deployment": 1,
-      "broadphase_pairs_checked": 100
+      "deployment": 0.825,
+      "broadphase_pairs_checked": 156
+    },
+    {
+      "deployment": 0.85,
+      "broadphase_pairs_checked": 156
+    },
+    {
+      "deployment": 0.875,
+      "broadphase_pairs_checked": 156
+    },
+    {
+      "deployment": 0.9,
+      "broadphase_pairs_checked": 156
+    },
+    {
+      "deployment": 0.925,
+      "broadphase_pairs_checked": 156
+    },
+    {
+      "deployment": 0.95,
+      "broadphase_pairs_checked": 156
+    },
+    {
+      "deployment": 0.975,
+      "broadphase_pairs_checked": 156
+    },
+    {
+      "deployment": 1.0,
+      "broadphase_pairs_checked": 148
     }
   ],
   "failures": [],

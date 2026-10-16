@@ -75,11 +75,11 @@
     },
     "Reactor housing": {
       "phase": "base",
-      "meshes": 1596,
-      "triangles": 125326,
-      "fasteners": 16,
+      "meshes": 1632,
+      "triangles": 132858,
+      "fasteners": 32,
       "decals": 8,
-      "markings": 4,
+      "markings": 8,
       "ports": 4
     },
     "PRIMARY / Straight": {
