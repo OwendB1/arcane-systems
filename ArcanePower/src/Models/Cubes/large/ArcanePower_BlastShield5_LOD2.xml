@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<Model Name="ArcanePower_BlastShield5">
+	<Parameter Name="RescaleFactor">1.0</Parameter>
+	<Parameter Name="Centered">false</Parameter>
+	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
+	<MaterialRef Name="PaintedMetal_Darker"/>
+	<MaterialRef Name="Metal_Dull"/>
+	<MaterialRef Name="PaintedMetal_Colorable"/>
+	<MaterialRef Name="Emissive"/>
+</Model>

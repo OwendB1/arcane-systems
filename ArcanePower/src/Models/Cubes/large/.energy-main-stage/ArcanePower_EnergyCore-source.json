@@ -1,0 +1,18 @@
+{
+  "collections": [
+    "ArcanePower_EnergyCore",
+    "ArcanePower_EnergyCore_LOD1",
+    "ArcanePower_EnergyCore_LOD2"
+  ],
+  "triangles": 69406,
+  "collection_triangles": {
+    "ArcanePower_EnergyCore": 69406,
+    "ArcanePower_EnergyCore_LOD1": 41208,
+    "ArcanePower_EnergyCore_LOD2": 25986
+  },
+  "authored_triangles": 69406,
+  "triangulation_adjustments": [],
+  "target": "Models/Cubes/large",
+  "collision": "Models/Cubes/large/ArcanePower_EnergyCore.hkt",
+  "collision_model": "Models/Cubes/large/ArcanePower_EnergyCore.mwm"
+}

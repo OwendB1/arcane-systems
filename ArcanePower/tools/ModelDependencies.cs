@@ -15,7 +15,7 @@ class ModelDependencies
         var importer = new MyModelImporter();
         using (var reader = new BinaryReader(File.OpenRead(path)))
             typeof(MyModelImporter).GetMethod("LoadTagData", BindingFlags.Instance | BindingFlags.NonPublic)
-                .Invoke(importer, new object[] { reader, new[] { "Dummies", "MeshParts" } });
+                .Invoke(importer, new object[] { reader, new[] { "Dummies", "MeshParts", "LODs" } });
         var tags = importer.GetTagData();
         Console.WriteLine("MODEL\t" + path);
         object value;
@@ -29,6 +29,20 @@ class ModelDependencies
                 if (dummy.Key.StartsWith("subpart_"))
                     Walk(Path.Combine(Path.GetDirectoryName(path),
                         ((string)dummy.Value.CustomData["file"]).Replace('\\', '/') + ".mwm"));
+        if (tags.TryGetValue("LODs", out value))
+            foreach (var lod in (MyLODDescriptor[])value)
+            {
+                // Match native GetModelAbsoluteFilePath: LODs start at mod root.
+                int models = path.IndexOf("/Models/", StringComparison.OrdinalIgnoreCase);
+                if (models < 0) throw new Exception("Cannot resolve LOD outside Models: " + path);
+                string relative = lod.Model.Replace('\\', '/');
+                if (!relative.EndsWith(".mwm", StringComparison.OrdinalIgnoreCase)) relative += ".mwm";
+                string root = path.Substring(0, models + 1);
+                string resolved = Path.GetFullPath(Path.Combine(root, relative));
+                if (!resolved.StartsWith(root, StringComparison.Ordinal) || relative.Contains("/.") || Path.IsPathRooted(relative))
+                    throw new Exception("Invalid/staging LOD reference: " + relative);
+                Walk(resolved);
+            }
     }
     static void Main(string[] args) { foreach (var path in args) Walk(path); }
 }

@@ -1,0 +1,66 @@
+{
+  "status": "passed",
+  "bays": 4,
+  "curved_leaves": 8,
+  "closed_nose_occlusion_samples": 264,
+  "poses": [
+    {
+      "deployment": 0,
+      "broadphase_pairs_checked": 116
+    },
+    {
+      "deployment": 0.05,
+      "broadphase_pairs_checked": 116
+    },
+    {
+      "deployment": 0.1,
+      "broadphase_pairs_checked": 116
+    },
+    {
+      "deployment": 0.15,
+      "broadphase_pairs_checked": 116
+    },
+    {
+      "deployment": 0.2,
+      "broadphase_pairs_checked": 112
+    },
+    {
+      "deployment": 0.25,
+      "broadphase_pairs_checked": 112
+    },
+    {
+      "deployment": 0.3,
+      "broadphase_pairs_checked": 116
+    },
+    {
+      "deployment": 0.35,
+      "broadphase_pairs_checked": 138
+    },
+    {
+      "deployment": 0.4,
+      "broadphase_pairs_checked": 148
+    },
+    {
+      "deployment": 0.45,
+      "broadphase_pairs_checked": 148
+    },
+    {
+      "deployment": 0.5,
+      "broadphase_pairs_checked": 148
+    },
+    {
+      "deployment": 0.65,
+      "broadphase_pairs_checked": 140
+    },
+    {
+      "deployment": 0.8,
+      "broadphase_pairs_checked": 108
+    },
+    {
+      "deployment": 1,
+      "broadphase_pairs_checked": 100
+    }
+  ],
+  "failures": [],
+  "limits": "Authored geometry and mechanical preview; native subparts/runtime are not installed."
+}

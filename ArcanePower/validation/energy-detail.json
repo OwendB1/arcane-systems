@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-14",
+  "version": "0.1.0",
+  "model_family": "energy_dd74c3341ab1",
+  "geometry": {
+    "core_cells": [
+      3,
+      3,
+      3
+    ],
+    "module_cells": [
+      1,
+      3,
+      1
+    ],
+    "dock_seam_m": 0.04,
+    "native_upgrade_ports": "Original unscaled SE library asset; center mouth unobstructed",
+    "reused_reactor_ring_sha256": {
+      "ArcanePower_Ring3.mwm": "56f4d3565db3739933212f9af2ee39c6e055e830028fadbee2941ef2f4623438",
+      "ArcanePower_Ring4.mwm": "a2174b06027d9f8f218d804d2a6bf4fdedaee027d5f92b0abae59bdc10feb7e6"
+    },
+    "radial_bounds_m": {
+      "ArcanePower_EnergyRotor": {
+        "inner_radius": 1.149998713057255,
+        "outer_radius": 1.1500005084858165
+      },
+      "ArcanePower_Ring3": {
+        "inner_radius": 1.4457004513757046,
+        "outer_radius": 1.535659530169162
+      },
+      "ArcanePower_Ring4": {
+        "inner_radius": 1.6456152791012728,
+        "outer_radius": 1.7355835263287518
+      }
+    }
+  },
+  "motion": {
+    "shared_helper": "RingMotion.cs",
+    "reactor_ring_indices": [
+      2,
+      3
+    ],
+    "online_rate_degrees_per_tick": [
+      0.35,
+      2
+    ],
+    "rate_smoothing_frames": 60,
+    "phase_wrap_degrees": 36000,
+    "regression": "Previous reactor startup, axial/secondary rotation and shutdown settling transforms preserved"
+  },
+  "glow": {
+    "material": "EnergyGlow with continuous EnergyField packed maps",
+    "sphere_emissivity_online": [
+      0.015,
+      0.25
+    ],
+    "sphere_emissivity_offline": 0,
+    "state_colors": "cyan charging / amber discharge / blue idle; sphere tint and HDR range tuned separately from indicator lamps"
+  },
+  "compatibility_build": {
+    "warnings": 0,
+    "errors": 0
+  },
+  "checks": [
+    "Shared ring transform regression and seamless phase wraps",
+    "Seven finished models: native sockets, bounds and grid mating",
+    "21 construction stages: materials and embedded collision",
+    "Bank policy and hidden compact definitions preserved",
+    "Workshop publishing checks",
+    "Package dependencies, CRCs and all 259 file hashes"
+  ],
+  "live": {
+    "world": "Arcane Energy Three-Cell Pillars - Validation",
+    "reload_start": "2026-10-14 20:31:41",
+    "ring_motion": {
+      "1": {
+        "samples": 6,
+        "first": "ring tick=120 index=1 right={X:0.7791304 Y:0.5915393 Z:-0.20745328} up={X:-0.58671135 Y:0.5716023 Z:-0.57362056}",
+        "last": "ring tick=720 index=1 right={X:0.48622832 Y:0.80139065 Z:-0.34836045} up={X:-0.7154484 Y:0.13620536 Z:-0.6852603}"
+      },
+      "2": {
+        "samples": 6,
+        "first": "ring tick=120 index=2 right={X:0.6000769 Y:-0.703345 Z:0.38106886} up={X:0.69290376 Y:0.21896797 Z:-0.686977}",
+        "last": "ring tick=720 index=2 right={X:0.70715827 Y:-0.69552183 Z:0.12718712} up={X:0.6509564 Y:0.5702107 Z:-0.50111425}"
+      }
+    },
+    "native_connections": [
+      "native_socket tick=720 subtype=ArcanePower_EnergyTransferAdvanced_Pillar connections=1",
+      "native_socket tick=720 subtype=ArcanePower_EnergyStabilizerAdvanced_Pillar connections=1"
+    ],
+    "capacity_mwh": 111000,
+    "transfer_ceiling_mw": 1000000,
+    "stabilizer_disable_reenable": true,
+    "load_note": "Earlier run supplied 12 MW; final run load battery full, so final output is zero.",
+    "screenshot": "energy-detail-live.png",
+    "paused": false,
+    "errors_after_final_reload": []
+  },
+  "package": {
+    "archive": "ArcanePower-0.1.0.zip",
+    "sha256": "421fb0cf17822bdce3eb145818d2ab8c207a480e700e849b398e4e967441ed60",
+    "bytes": 59477548,
+    "files": 259,
+    "crc": "passed",
+    "per_file_hashes": "passed"
+  },
+  "source_sha256": {
+    "assets/arcane-energy-core.blend": "145f78ecefe25d757e68009de9782117e0fb6cd767cd9082ee06e609f7f32d8c",
+    "assets/build_energy_core.py": "ac9548d00f74427c366e1373b8eb0045448da0916b29c03f38c2381a74350e67",
+    "src/Data/Scripts/ArcanePower/EnergyCore.cs": "99aeb3474a6c260668ff9b9ff448d51d398f17db6c3379b45f01e2f65ff01d91",
+    "src/Data/Scripts/ArcanePower/RingMotion.cs": "f3680f0a43d911224fd3031cad06d3568f9d46ec82fa8fe92d17fc48ca90a910",
+    "src/Data/Scripts/ArcanePower/Reactor.Motion.cs": "933c50caf4e6d631ef0a5415afec419c2c98390a8ea2321caea860ff6e52da89",
+    "src/Data/CubeBlocks/ArcanePower_EnergyCore.sbc": "d2857ca6a8b3f0392090ee3a3cac7ed2ad1b106de571f7f1f525ce75eac81361",
+    "workshop/images/energy-blueprint.png": "255fde193f4f66d4c5f3dc35f6c0e2b4edb6125f40bb8a44f2b7b5b36a5b6393"
+  },
+  "limits": [
+    "Single-client validation; dedicated and multiplayer not exercised",
+    "Rated-load balance and live welding/grinding not exercised",
+    "Local changes only; unpublished"
+  ]
+}

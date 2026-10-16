@@ -1,0 +1,254 @@
+{
+  "self_check": {
+    "reference_design_cases": 24,
+    "modular_and_environment_checks": "passed",
+    "monotonic_dispatch_and_expansion": "passed",
+    "invalid_input_and_temperature_checks": "passed",
+    "status": "passed"
+  },
+  "standalone": {
+    "mode": "standalone",
+    "offered_heat_mw": 100,
+    "net_mw": 20.0,
+    "rejected_mw": 80.0,
+    "net_efficiency": 0.2
+  },
+  "plant": {
+    "stage": "exotic",
+    "offered_heat_mw": 100,
+    "accepted_heat_mw": 100,
+    "unaccepted_heat_mw": 0,
+    "gross_mw": 83.0,
+    "auxiliary_mw": 5.0,
+    "net_mw": 78.0,
+    "rejected_mw": 22.0,
+    "net_efficiency": 0.78,
+    "hot_c": 2200,
+    "cold_c": 45,
+    "recovery_ratio": 6.0,
+    "equipment_efficiency_ceiling": 0.78,
+    "duty_trains": 1,
+    "standby_trains": 0,
+    "duty_heaters": 1,
+    "standby_heaters": 0,
+    "installed": {
+      "heaters": 1,
+      "trains": 1,
+      "recuperators": 6,
+      "coolers": 1
+    },
+    "available_cooling_mw": 60,
+    "bottlenecks": [
+      "heat supply",
+      "heater capacity",
+      "train capacity",
+      "dispatched bank"
+    ],
+    "single_module_loss_net_mw": {
+      "heaters": 0.0,
+      "trains": 0.0,
+      "recuperators": 77.5,
+      "coolers": 0.0
+    },
+    "guaranteed_single_module_loss_net_mw": 0.0
+  },
+  "examples": {
+    "starter": {
+      "stage": "base",
+      "offered_heat_mw": 100,
+      "accepted_heat_mw": 100,
+      "unaccepted_heat_mw": 0,
+      "gross_mw": 48.00000000000001,
+      "auxiliary_mw": 8.0,
+      "net_mw": 40.00000000000001,
+      "rejected_mw": 59.99999999999999,
+      "net_efficiency": 0.4,
+      "hot_c": 650,
+      "cold_c": 45,
+      "recovery_ratio": 1.0,
+      "equipment_efficiency_ceiling": 0.55,
+      "duty_trains": 1,
+      "standby_trains": 0,
+      "duty_heaters": 1,
+      "standby_heaters": 0,
+      "installed": {
+        "heaters": 1,
+        "trains": 1,
+        "recuperators": 1,
+        "coolers": 1
+      },
+      "available_cooling_mw": 60,
+      "bottlenecks": [
+        "heat supply",
+        "heater capacity",
+        "train capacity",
+        "dispatched bank",
+        "recovery capacity",
+        "cooling capacity"
+      ],
+      "single_module_loss_net_mw": {
+        "heaters": 0.0,
+        "trains": 0.0,
+        "recuperators": 0.0,
+        "coolers": 0.0
+      },
+      "guaranteed_single_module_loss_net_mw": 0.0
+    },
+    "more_recovery": {
+      "stage": "base",
+      "offered_heat_mw": 100,
+      "accepted_heat_mw": 100,
+      "unaccepted_heat_mw": 0,
+      "gross_mw": 63.0,
+      "auxiliary_mw": 8.0,
+      "net_mw": 55.0,
+      "rejected_mw": 45.0,
+      "net_efficiency": 0.55,
+      "hot_c": 650,
+      "cold_c": 45,
+      "recovery_ratio": 2.0,
+      "equipment_efficiency_ceiling": 0.55,
+      "duty_trains": 1,
+      "standby_trains": 0,
+      "duty_heaters": 1,
+      "standby_heaters": 0,
+      "installed": {
+        "heaters": 1,
+        "trains": 1,
+        "recuperators": 2,
+        "coolers": 1
+      },
+      "available_cooling_mw": 60,
+      "bottlenecks": [
+        "heat supply",
+        "heater capacity",
+        "train capacity",
+        "dispatched bank"
+      ],
+      "single_module_loss_net_mw": {
+        "heaters": 0.0,
+        "trains": 0.0,
+        "recuperators": 40.00000000000001,
+        "coolers": 0.0
+      },
+      "guaranteed_single_module_loss_net_mw": 0.0
+    },
+    "premium_recovery": {
+      "stage": "exotic",
+      "offered_heat_mw": 100,
+      "accepted_heat_mw": 100,
+      "unaccepted_heat_mw": 0,
+      "gross_mw": 83.0,
+      "auxiliary_mw": 5.0,
+      "net_mw": 78.0,
+      "rejected_mw": 22.0,
+      "net_efficiency": 0.78,
+      "hot_c": 2200,
+      "cold_c": 45,
+      "recovery_ratio": 6.0,
+      "equipment_efficiency_ceiling": 0.78,
+      "duty_trains": 1,
+      "standby_trains": 0,
+      "duty_heaters": 1,
+      "standby_heaters": 0,
+      "installed": {
+        "heaters": 1,
+        "trains": 1,
+        "recuperators": 6,
+        "coolers": 1
+      },
+      "available_cooling_mw": 60,
+      "bottlenecks": [
+        "heat supply",
+        "heater capacity",
+        "train capacity",
+        "dispatched bank"
+      ],
+      "single_module_loss_net_mw": {
+        "heaters": 0.0,
+        "trains": 0.0,
+        "recuperators": 77.5,
+        "coolers": 0.0
+      },
+      "guaranteed_single_module_loss_net_mw": 0.0
+    },
+    "parallel": {
+      "stage": "base",
+      "offered_heat_mw": 200,
+      "accepted_heat_mw": 200,
+      "unaccepted_heat_mw": 0,
+      "gross_mw": 96.00000000000001,
+      "auxiliary_mw": 16.0,
+      "net_mw": 80.00000000000001,
+      "rejected_mw": 119.99999999999999,
+      "net_efficiency": 0.4,
+      "hot_c": 650,
+      "cold_c": 45,
+      "recovery_ratio": 1.0,
+      "equipment_efficiency_ceiling": 0.55,
+      "duty_trains": 2,
+      "standby_trains": 0,
+      "duty_heaters": 2,
+      "standby_heaters": 0,
+      "installed": {
+        "heaters": 2,
+        "trains": 2,
+        "recuperators": 2,
+        "coolers": 2
+      },
+      "available_cooling_mw": 120,
+      "bottlenecks": [
+        "heat supply",
+        "heater capacity",
+        "train capacity",
+        "dispatched bank",
+        "recovery capacity",
+        "cooling capacity"
+      ],
+      "single_module_loss_net_mw": {
+        "heaters": 55.0,
+        "trains": 55.0,
+        "recuperators": 40.00000000000001,
+        "coolers": 55.0
+      },
+      "guaranteed_single_module_loss_net_mw": 40.00000000000001
+    },
+    "redundant": {
+      "stage": "base",
+      "offered_heat_mw": 200,
+      "accepted_heat_mw": 200,
+      "unaccepted_heat_mw": 0,
+      "gross_mw": 119.4314575050762,
+      "auxiliary_mw": 16.0,
+      "net_mw": 103.4314575050762,
+      "rejected_mw": 96.5685424949238,
+      "net_efficiency": 0.517157287525381,
+      "hot_c": 650,
+      "cold_c": 45,
+      "recovery_ratio": 1.5,
+      "equipment_efficiency_ceiling": 0.55,
+      "duty_trains": 2,
+      "standby_trains": 1,
+      "duty_heaters": 2,
+      "standby_heaters": 1,
+      "installed": {
+        "heaters": 3,
+        "trains": 3,
+        "recuperators": 3,
+        "coolers": 3
+      },
+      "available_cooling_mw": 180,
+      "bottlenecks": [
+        "heat supply",
+        "dispatched bank"
+      ],
+      "single_module_loss_net_mw": {
+        "heaters": 103.4314575050762,
+        "trains": 103.4314575050762,
+        "recuperators": 80.00000000000001,
+        "coolers": 103.4314575050762
+      },
+      "guaranteed_single_module_loss_net_mw": 80.00000000000001
+    }
+  }
+}

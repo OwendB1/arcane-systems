@@ -1,0 +1,41 @@
+{
+  "method": "Matched live viewport, flat-background contrast mask; visual support, not exact geometry measurement",
+  "rows": [
+    {
+      "scene": "ReactorPrototype",
+      "level": 1,
+      "foreground_iou": 0.9829408108294772,
+      "mean_rgb_difference_on_union": 2.5927895572898683
+    },
+    {
+      "scene": "ReactorPrototype",
+      "level": 2,
+      "foreground_iou": 0.9640479360852197,
+      "mean_rgb_difference_on_union": 5.21988459831336
+    },
+    {
+      "scene": "ContainmentController",
+      "level": 1,
+      "foreground_iou": 0.8774647887323944,
+      "mean_rgb_difference_on_union": 5.338497652582159
+    },
+    {
+      "scene": "ContainmentController",
+      "level": 2,
+      "foreground_iou": 0.7164179104477612,
+      "mean_rgb_difference_on_union": 13.873134328358208
+    },
+    {
+      "scene": "AdvancedContainmentController",
+      "level": 1,
+      "foreground_iou": 0.8863636363636364,
+      "mean_rgb_difference_on_union": 4.018686868686869
+    },
+    {
+      "scene": "AdvancedContainmentController",
+      "level": 2,
+      "foreground_iou": 0.7851239669421488,
+      "mean_rgb_difference_on_union": 13.28099173553719
+    }
+  ]
+}

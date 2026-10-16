@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Model Name="ArcanePower_ReactorPrototype">
+  <Parameter Name="RescaleFactor">1.0</Parameter>
+  <Parameter Name="Centered">false</Parameter>
+  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
+  <MaterialRef Name="PaintedMetal_Darker" />
+  <MaterialRef Name="Metal_Dull" />
+  <MaterialRef Name="PaintedMetal_Colorable" />
+  <MaterialRef Name="PaintedMetalScratched_Colorable" />
+  <MaterialRef Name="PaintedMetalScratched_Darker" />
+  <MaterialRef Name="Atlas3_Colorable" />
+  <MaterialRef Name="Metal_Shiny" />
+  <MaterialRef Name="Emissive" />
+  <MaterialRef Name="PaintedMetal_VeryDark" />
+  <MaterialRef Name="PaintedMetal_Yellow" />
+  <MaterialRef Name="Conveyor" />
+  <Material Name="ArcanePower_ClearChamber">
+    <Parameter Name="Technique">GLASS</Parameter>
+  </Material>
+  <MaterialRef Name="BlackMattePlastic" />
+  <MaterialRef Name="TextAtlas" />
+  <MaterialRef Name="Atlas2" />
+  <MaterialRef Name="PanelingColorable" />
+  <LOD Distance="75">
+    <Model>Models/Cubes/large/ArcanePower_ReactorPrototype_LOD1_rf34cfdc93284.mwm</Model>
+  </LOD>
+  <LOD Distance="150">
+    <Model>Models/Cubes/large/ArcanePower_ReactorPrototype_LOD2_rc6bfb403b600.mwm</Model>
+  </LOD>
+</Model>

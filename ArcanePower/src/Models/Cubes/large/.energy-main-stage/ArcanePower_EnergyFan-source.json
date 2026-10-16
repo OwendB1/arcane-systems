@@ -1,0 +1,14 @@
+{
+  "collections": [
+    "ArcanePower_EnergyFan"
+  ],
+  "triangles": 220,
+  "collection_triangles": {
+    "ArcanePower_EnergyFan": 220
+  },
+  "authored_triangles": 220,
+  "triangulation_adjustments": [],
+  "target": "Models/Cubes/large",
+  "collision": null,
+  "collision_model": "Models/Cubes/large/ArcanePower_EnergyFan.mwm"
+}

@@ -1,0 +1,18 @@
+{
+  "collections": [
+    "ArcanePower_EnergyStabilizer",
+    "ArcanePower_EnergyStabilizer_LOD1",
+    "ArcanePower_EnergyStabilizer_LOD2"
+  ],
+  "triangles": 20114,
+  "collection_triangles": {
+    "ArcanePower_EnergyStabilizer": 20114,
+    "ArcanePower_EnergyStabilizer_LOD1": 12856,
+    "ArcanePower_EnergyStabilizer_LOD2": 10504
+  },
+  "authored_triangles": 20114,
+  "triangulation_adjustments": [],
+  "target": "Models/Cubes/large",
+  "collision": "Models/Cubes/large/ArcanePower_EnergyStabilizer.hkt",
+  "collision_model": "Models/Cubes/large/ArcanePower_EnergyStabilizer.mwm"
+}

@@ -1,0 +1,292 @@
+{
+  "ArcanePower_AdvancedContainmentController": {
+    "main_triangles": 3868,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 35,
+        "triangles": 1792
+      },
+      {
+        "level": 2,
+        "distance_m": 90,
+        "triangles": 1692
+      }
+    ]
+  },
+  "ArcanePower_BlastShield1": {
+    "main_triangles": 4736,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 3350
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 2432
+      }
+    ]
+  },
+  "ArcanePower_BlastShield2": {
+    "main_triangles": 4736,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 3350
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 2432
+      }
+    ]
+  },
+  "ArcanePower_BlastShield3": {
+    "main_triangles": 4736,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 3350
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 2432
+      }
+    ]
+  },
+  "ArcanePower_BlastShield4": {
+    "main_triangles": 4736,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 3350
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 2432
+      }
+    ]
+  },
+  "ArcanePower_BlastShield5": {
+    "main_triangles": 4736,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 3350
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 2432
+      }
+    ]
+  },
+  "ArcanePower_BlastShield6": {
+    "main_triangles": 4736,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 3350
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 2432
+      }
+    ]
+  },
+  "ArcanePower_ContainmentController": {
+    "main_triangles": 2292,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 35,
+        "triangles": 1424
+      },
+      {
+        "level": 2,
+        "distance_m": 90,
+        "triangles": 1064
+      }
+    ]
+  },
+  "ArcanePower_ContainmentTile": {
+    "lods": [],
+    "reason": "Already small; keep exact main"
+  },
+  "ArcanePower_FloorLeaf": {
+    "main_triangles": 520,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 35,
+        "triangles": 284
+      },
+      {
+        "level": 2,
+        "distance_m": 90,
+        "triangles": 128
+      }
+    ]
+  },
+  "ArcanePower_Plasma": {
+    "lods": [],
+    "reason": "Keep exact driven field silhouette"
+  },
+  "ArcanePower_ReactorPrototype": {
+    "main_triangles": 105014,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 65505
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 47363
+      }
+    ]
+  },
+  "ArcanePower_Ring1": {
+    "main_triangles": 2688,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 35,
+        "triangles": 2226
+      },
+      {
+        "level": 2,
+        "distance_m": 90,
+        "triangles": 1920
+      }
+    ]
+  },
+  "ArcanePower_Ring2": {
+    "main_triangles": 2688,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 35,
+        "triangles": 2226
+      },
+      {
+        "level": 2,
+        "distance_m": 90,
+        "triangles": 1920
+      }
+    ]
+  },
+  "ArcanePower_Ring3": {
+    "main_triangles": 2688,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 2226
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 1920
+      }
+    ]
+  },
+  "ArcanePower_Ring4": {
+    "main_triangles": 2688,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 2226
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 1920
+      }
+    ]
+  },
+  "ArcanePower_Tablet": {
+    "main_triangles": 5300,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 35,
+        "triangles": 714
+      },
+      {
+        "level": 2,
+        "distance_m": 90,
+        "triangles": 184
+      }
+    ]
+  },
+  "ArcanePower_Tile1": {
+    "lods": [],
+    "reason": "Already small; keep exact main"
+  },
+  "ArcanePower_Tile2": {
+    "lods": [],
+    "reason": "Already small; keep exact main"
+  },
+  "ArcanePower_VentDuct": {
+    "main_triangles": 6420,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 4318
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 2944
+      }
+    ]
+  },
+  "ArcanePower_VentHatch": {
+    "main_triangles": 1692,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 35,
+        "triangles": 1160
+      },
+      {
+        "level": 2,
+        "distance_m": 90,
+        "triangles": 808
+      }
+    ]
+  },
+  "ArcanePower_VentOutlet": {
+    "main_triangles": 6420,
+    "lods": [
+      {
+        "level": 1,
+        "distance_m": 75,
+        "triangles": 4318
+      },
+      {
+        "level": 2,
+        "distance_m": 150,
+        "triangles": 2944
+      }
+    ]
+  },
+  "ArcanePower_VentVane": {
+    "lods": [],
+    "reason": "Already small; keep exact main"
+  }
+}

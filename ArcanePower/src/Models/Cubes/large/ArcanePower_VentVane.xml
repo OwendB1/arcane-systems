@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Model Name="ArcanePower_VentVane">
+  <Parameter Name="RescaleFactor">1.0</Parameter>
+  <Parameter Name="Centered">false</Parameter>
+  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
+  <MaterialRef Name="PaintedMetal_Darker" />
+  <MaterialRef Name="Emissive" />
+</Model>

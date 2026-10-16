@@ -1,0 +1,47 @@
+{
+  "ArcanePower_ReactorPrototype_BS1": {
+    "triangles": 6368,
+    "block": "ArcanePower_ReactorPrototype",
+    "stage": 1
+  },
+  "ArcanePower_ReactorPrototype_BS2": {
+    "triangles": 29852,
+    "block": "ArcanePower_ReactorPrototype",
+    "stage": 2
+  },
+  "ArcanePower_ReactorPrototype_BS3": {
+    "triangles": 90985,
+    "block": "ArcanePower_ReactorPrototype",
+    "stage": 3
+  },
+  "ArcanePower_ContainmentController_BS1": {
+    "triangles": 776,
+    "block": "ArcanePower_ContainmentController",
+    "stage": 1
+  },
+  "ArcanePower_ContainmentController_BS2": {
+    "triangles": 1240,
+    "block": "ArcanePower_ContainmentController",
+    "stage": 2
+  },
+  "ArcanePower_ContainmentController_BS3": {
+    "triangles": 2566,
+    "block": "ArcanePower_ContainmentController",
+    "stage": 3
+  },
+  "ArcanePower_AdvancedContainmentController_BS1": {
+    "triangles": 776,
+    "block": "ArcanePower_AdvancedContainmentController",
+    "stage": 1
+  },
+  "ArcanePower_AdvancedContainmentController_BS2": {
+    "triangles": 2238,
+    "block": "ArcanePower_AdvancedContainmentController",
+    "stage": 2
+  },
+  "ArcanePower_AdvancedContainmentController_BS3": {
+    "triangles": 3860,
+    "block": "ArcanePower_AdvancedContainmentController",
+    "stage": 3
+  }
+}

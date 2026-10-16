@@ -5,125 +5,124 @@
       {
         "stage": 1,
         "meshes": 1,
-        "triangles": 608
+        "triangles": 1392
       },
       {
         "stage": 2,
-        "meshes": 21,
-        "triangles": 8992
+        "meshes": 298,
+        "triangles": 13768
       },
       {
         "stage": 3,
-        "meshes": 31,
-        "triangles": 9596
+        "meshes": 536,
+        "triangles": 20116
       }
     ],
     "ArcanePower_EnergyCapacityAdvanced": [
       {
         "stage": 1,
         "meshes": 1,
-        "triangles": 608
+        "triangles": 1392
       },
       {
         "stage": 2,
-        "meshes": 25,
-        "triangles": 12648
+        "meshes": 421,
+        "triangles": 18592
       },
       {
         "stage": 3,
-        "meshes": 35,
-        "triangles": 13252
+        "meshes": 659,
+        "triangles": 24940
       }
     ],
     "ArcanePower_EnergyCore": [
       {
         "stage": 1,
         "meshes": 1,
-        "triangles": 2400
+        "triangles": 9856
       },
       {
         "stage": 2,
-        "meshes": 68,
-        "triangles": 18190
+        "meshes": 284,
+        "triangles": 33672
       },
       {
         "stage": 3,
-        "meshes": 163,
-        "triangles": 31342
+        "meshes": 1001,
+        "triangles": 77640
       }
     ],
     "ArcanePower_EnergyStabilizer": [
       {
         "stage": 1,
         "meshes": 1,
-        "triangles": 608
+        "triangles": 1392
       },
       {
         "stage": 2,
-        "meshes": 16,
-        "triangles": 4148
+        "meshes": 131,
+        "triangles": 7086
       },
       {
         "stage": 3,
-        "meshes": 27,
-        "triangles": 4860
+        "meshes": 413,
+        "triangles": 17074
       }
     ],
     "ArcanePower_EnergyStabilizerAdvanced": [
       {
         "stage": 1,
         "meshes": 1,
-        "triangles": 608
+        "triangles": 1392
       },
       {
         "stage": 2,
-        "meshes": 17,
-        "triangles": 5172
+        "meshes": 131,
+        "triangles": 7086
       },
       {
         "stage": 3,
-        "meshes": 28,
-        "triangles": 5884
+        "meshes": 416,
+        "triangles": 18226
       }
     ],
     "ArcanePower_EnergyTransfer": [
       {
         "stage": 1,
         "meshes": 1,
-        "triangles": 608
+        "triangles": 1392
       },
       {
         "stage": 2,
-        "meshes": 20,
-        "triangles": 2628
+        "meshes": 238,
+        "triangles": 10480
       },
       {
         "stage": 3,
-        "meshes": 32,
-        "triangles": 3448
+        "meshes": 484,
+        "triangles": 16844
       }
     ],
     "ArcanePower_EnergyTransferAdvanced": [
       {
         "stage": 1,
         "meshes": 1,
-        "triangles": 608
+        "triangles": 1392
       },
       {
         "stage": 2,
-        "meshes": 20,
-        "triangles": 2628
+        "meshes": 283,
+        "triangles": 12112
       },
       {
         "stage": 3,
-        "meshes": 33,
-        "triangles": 3556
+        "meshes": 529,
+        "triangles": 18476
       }
     ]
   },
   "exported": true,
   "live_game_checked": false,
   "native_model_import_passed": true,
-  "live_stage_fixtures_loaded": true,
-  "live_welding_grinding_exercised": false
+  "revision": "Models/Cubes/large/energy_87c3644f9849"
 }

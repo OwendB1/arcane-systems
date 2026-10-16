@@ -7,7 +7,7 @@
         <SubtypeId>ArcanePower_EnergyCore</SubtypeId>
       </Id>
       <DisplayName>Arcane Energy Core (legacy compact)</DisplayName>
-      <Description>Preserved compact block for existing saves. New construction uses the three-cell pillar installation. Compact 3x3x3 storage controller. Side sockets: capacity; rear: transfer; top: stabilizer. Modules must face the core. Base 1,000 MWh / 10 GW; capacities add 10,000 or 100,000 MWh. Transfer modules raise the bank ceiling to 100 GW / 1 TW. Standard/advanced stabilizers support matching or lower tier modules. Native Auto/Recharge/Discharge. Starts empty; 90% charge efficiency. Default 10% emergency reserve; Custom Data [ArcaneEnergyCore] ReservePercent=10, EmergencySupport=true. Recharge switches visibly to Auto for reactor startup/cooldown/venting and stays Auto.</Description>
+      <Description>Preserved compact block for existing saves. New construction uses the three-cell pillar installation. Compact 3x3x3 storage controller. Side sockets: capacity; rear: transfer; top: stabilizer. Modules must face the core. Base 1,000 MWh / 10 GW; capacities add 10,000 or 100,000 MWh. Transfer modules raise the bank ceiling to 100 GW / 1 TW. Standard/advanced stabilizers support matching or lower tier modules. Native Auto/Recharge/Discharge. Starts empty; 90% charge efficiency. Default 10% emergency reserve; Custom Data [ArcaneEnergyCore] ReservePercent=10, EmergencySupport=true. Recharge switches visibly to Auto for reactor startup/cooldown/venting and stays Auto. Stored-charge upkeep rises with fill; stabilizers reduce loss. Terminal/toolbar: surge one jump drive in 5-10 seconds at 90% efficiency, or double discharge for 10 seconds. Shared recovery; reserve protected. Passive loss continues while disabled or detached.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyCore.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
@@ -50,7 +50,7 @@
         <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="3" EndY="3" />
       </MountPoints>
       <ResourceSourceGroup>Battery</ResourceSourceGroup>
-      <MaxPowerOutput>1000000</MaxPowerOutput>
+      <MaxPowerOutput>2000000</MaxPowerOutput>
       <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
       <RequiredPowerInput>1000000</RequiredPowerInput>
       <AdaptibleInput>true</AdaptibleInput>
@@ -107,7 +107,7 @@
         <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
       <ResourceSourceGroup>Battery</ResourceSourceGroup>
-      <MaxPowerOutput>1000000</MaxPowerOutput>
+      <MaxPowerOutput>2000000</MaxPowerOutput>
       <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
       <RequiredPowerInput>1000000</RequiredPowerInput>
       <AdaptibleInput>true</AdaptibleInput>
@@ -164,7 +164,7 @@
         <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
       <ResourceSourceGroup>Battery</ResourceSourceGroup>
-      <MaxPowerOutput>1000000</MaxPowerOutput>
+      <MaxPowerOutput>2000000</MaxPowerOutput>
       <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
       <RequiredPowerInput>1000000</RequiredPowerInput>
       <AdaptibleInput>true</AdaptibleInput>

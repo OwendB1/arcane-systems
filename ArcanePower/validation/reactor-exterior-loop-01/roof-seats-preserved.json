@@ -1,0 +1,28 @@
+{
+  "roof_seats": [
+    {
+      "name": "Reactor exterior / fitted pillar roof seat",
+      "unchanged_geometry_uv_materials_transform": true,
+      "appended_parent_name": "ArcanePower_ReactorPrototype root.002",
+      "live_parent_name": "ArcanePower_ReactorPrototype root"
+    },
+    {
+      "name": "Reactor exterior / fitted pillar roof seat.001",
+      "unchanged_geometry_uv_materials_transform": true,
+      "appended_parent_name": "ArcanePower_ReactorPrototype root.002",
+      "live_parent_name": "ArcanePower_ReactorPrototype root"
+    },
+    {
+      "name": "Reactor exterior / fitted pillar roof seat.002",
+      "unchanged_geometry_uv_materials_transform": true,
+      "appended_parent_name": "ArcanePower_ReactorPrototype root.002",
+      "live_parent_name": "ArcanePower_ReactorPrototype root"
+    },
+    {
+      "name": "Reactor exterior / fitted pillar roof seat.003",
+      "unchanged_geometry_uv_materials_transform": true,
+      "appended_parent_name": "ArcanePower_ReactorPrototype root.002",
+      "live_parent_name": "ArcanePower_ReactorPrototype root"
+    }
+  ]
+}

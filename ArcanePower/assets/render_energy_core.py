@@ -1,11 +1,14 @@
 """Render storage icons and construction previews from arcane-energy-core.blend."""
-import bpy,importlib,math
+import bpy,importlib,json,math
 from pathlib import Path
-from mathutils import Vector
+from mathutils import Matrix,Vector
 ROOT=Path(__file__).resolve().parents[1]
 COLS=importlib.import_module('space-engineers-utilities.seut_collections')
-scenes=[s for s in bpy.data.scenes if s.name.startswith('ArcanePower_Energy') and s.name!='ArcanePower_EnergyRotor']
+RINGS=json.loads((ROOT/'assets/deployment.json').read_text())['rings']
+scenes=[s for s in bpy.data.scenes if s.name.startswith('ArcanePower_Energy') and s.seut.sceneType=='mainScene']
+if globals().get('RENDER_NAMES'):scenes=[s for s in scenes if s.name in RENDER_NAMES]
 review=bpy.data.scenes.new('Energy review');review.render.engine='CYCLES';review.cycles.samples=24;review.cycles.use_denoising=True
+review.view_layers[0].name='SEUT'
 review.render.resolution_x=review.render.resolution_y=512;review.render.resolution_percentage=100;review.render.film_transparent=True
 review.render.image_settings.file_format='PNG';review.render.image_settings.color_mode='RGBA'
 review.world=bpy.data.worlds.new('Energy studio');review.world.use_nodes=True
@@ -19,20 +22,24 @@ previews=ROOT/'validation/energy';previews.mkdir(parents=True,exist_ok=True)
 for source in scenes:
  bpy.context.window.scene=source;bpy.context.view_layer.update();cols=COLS.get_collections(source)
  core=source.name=='ArcanePower_EnergyCore'
- groups=[(cols['main'][0],folder/(source.name+'.png'))]
+ groups=[] if globals().get('STAGES_ONLY',False) else [(cols['main'][0],folder/(source.name+'.png'))]
  groups += [(c,previews/(source.name+'_BS'+str(c.seut.type_index)+'.png')) for c in (cols['bs'] or []) if any(o.type=='MESH' for o in c.objects)]
  cam.location=(-10,-16,9) if core else (-4,7,4)
  cam.rotation_euler=(-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=11 if core else 8.5
  for col,path in groups:
-  copies=[];collections=[col]
-  if core and col==cols['main'][0]:collections.append(COLS.get_collections(bpy.data.scenes['ArcanePower_EnergyRotor'])['main'][0])
-  for collection in collections:
+  copies=[];collections=[(col,Matrix.Identity(4))]
+  if core and col==cols['main'][0]:
+   for dummy in col.objects:
+    if not dummy.name.startswith('subpart_') or dummy.get('file') not in bpy.data.scenes:continue
+    pose=dummy.matrix_world.copy()
+    if dummy.name.startswith('subpart_EnergyRing'):
+     spec=RINGS[int(dummy.name[-1])+1]
+     pose=pose @ Matrix.Rotation(math.radians(spec['tilt_degrees']),4,Vector(spec['axis']))
+    collections.append((COLS.get_collections(bpy.data.scenes[dummy['file']])['main'][0],pose))
+  for collection,pose in collections:
    for mesh in collection.objects:
     if mesh.type!='MESH':continue
-    obj=bpy.data.objects.new('Render mesh',mesh.data);review.collection.objects.link(obj);obj.matrix_world=mesh.matrix_world.copy();copies.append(obj)
-    if core and collection!=col:
-     dummy=next(o for o in col.objects if o.name.startswith('subpart_EnergyRotor'))
-     obj.matrix_world=dummy.matrix_world @ obj.matrix_world
-  bpy.context.window.scene=review;review.render.filepath=str(path);bpy.ops.render.render(write_still=True)
+    obj=bpy.data.objects.new('Render mesh',mesh.data);review.collection.objects.link(obj);obj.matrix_world=pose @ mesh.matrix_world;copies.append(obj)
+  bpy.context.window.scene=review;review.seut.paint_color=(.8,.8,.8);review.render.filepath=str(path);bpy.ops.render.render(write_still=True)
   for obj in copies:bpy.data.objects.remove(obj,do_unlink=True)
  print('RENDERED',source.name,flush=True)

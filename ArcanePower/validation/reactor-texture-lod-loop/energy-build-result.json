@@ -1,0 +1,135 @@
+{
+  "baseline": {
+    "protected_main_collision_objects": 5210,
+    "retired_derived_entries": 5831
+  },
+  "lods": {
+    "ArcanePower_EnergyCapacity": {
+      "main_triangles": 23838,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 15120
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 10674
+        }
+      ]
+    },
+    "ArcanePower_EnergyCapacityAdvanced": {
+      "main_triangles": 28706,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 18092
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 12050
+        }
+      ]
+    },
+    "ArcanePower_EnergyCore": {
+      "main_triangles": 69406,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 41208
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 25986
+        }
+      ]
+    },
+    "ArcanePower_EnergyFan": {
+      "lods": [],
+      "reason": "Already small; keep exact main"
+    },
+    "ArcanePower_EnergyRotor": {
+      "lods": [],
+      "reason": "Keep exact driven field silhouette"
+    },
+    "ArcanePower_EnergyStabilizer": {
+      "main_triangles": 20114,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 12856
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 10504
+        }
+      ]
+    },
+    "ArcanePower_EnergyStabilizerAdvanced": {
+      "main_triangles": 21310,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 13530
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 10836
+        }
+      ]
+    },
+    "ArcanePower_EnergyTransfer": {
+      "main_triangles": 20452,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 13500
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 11334
+        }
+      ]
+    },
+    "ArcanePower_EnergyTransferAdvanced": {
+      "main_triangles": 22128,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 14732
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 12302
+        }
+      ]
+    }
+  },
+  "checks": {
+    "audit_derived_models.py": {
+      "passed": true,
+      "failures": []
+    },
+    "audit_energy_geometry.py": {
+      "passed": true,
+      "failures": []
+    },
+    "audit_energy_construction.py": {
+      "passed": true,
+      "failures": []
+    }
+  }
+}

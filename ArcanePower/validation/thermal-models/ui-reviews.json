@@ -1,0 +1,1218 @@
+{
+  "ui-base-lineup.png": {
+    "image": "ui-base-lineup.png",
+    "scene": "Thermal production / Main model lineup",
+    "target": [
+      0.0,
+      8.0,
+      2.0
+    ],
+    "eye": [
+      44.31293487548828,
+      -36.312931060791016,
+      37.450347900390625
+    ],
+    "distance_m": 71.9999949137368,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-reactor-before-manifolds.png": {
+    "image": "ui-reactor-before-manifolds.png",
+    "scene": "ArcanePower_ReactorPrototype",
+    "target": [
+      5.900000095367432,
+      0.0,
+      -2.299999952316284
+    ],
+    "eye": [
+      14.283435821533203,
+      -2.095858573913574,
+      0.21503111720085144
+    ],
+    "distance_m": 9.000000529819049,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-manifolds-stowed-base.png": {
+    "image": "ui-manifolds-stowed-base.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.900000095367432,
+      0.0,
+      -2.450000047683716
+    ],
+    "eye": [
+      14.596972465515137,
+      -1.30454683303833,
+      -0.5366653203964233
+    ],
+    "distance_m": 9.000000761614873,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-manifolds-deployed-base.png": {
+    "image": "ui-manifolds-deployed-base.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.900000095367432,
+      0.0,
+      -2.450000047683716
+    ],
+    "eye": [
+      14.596972465515137,
+      -1.30454683303833,
+      -0.5366653203964233
+    ],
+    "distance_m": 9.000000761614873,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-manifold-neck-base-3m.png": {
+    "image": "ui-manifold-neck-base-3m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      -2.5,
+      -2.5
+    ],
+    "eye": [
+      9.18469524383545,
+      -2.9402036666870117,
+      -2.05979585647583
+    ],
+    "distance_m": 2.999999210238353,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-curved-manifolds-closed-pass1.png": {
+    "image": "ui-curved-manifolds-closed-pass1.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.800000190734863,
+      0.0,
+      -2.3299999237060547
+    ],
+    "eye": [
+      14.5647554397583,
+      -1.051770806312561,
+      -0.577048122882843
+    ],
+    "distance_m": 9.000000006622738,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-curved-manifolds-open-pass1.png": {
+    "image": "ui-curved-manifolds-open-pass1.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.800000190734863,
+      0.0,
+      -2.3299999237060547
+    ],
+    "eye": [
+      14.5647554397583,
+      -1.051770806312561,
+      -0.577048122882843
+    ],
+    "distance_m": 9.000000006622738,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-curved-manifolds-closed-pass2.png": {
+    "image": "ui-curved-manifolds-closed-pass2.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.800000190734863,
+      0.0,
+      -2.3299999237060547
+    ],
+    "eye": [
+      14.5647554397583,
+      -1.051770806312561,
+      -0.577048122882843
+    ],
+    "distance_m": 9.000000006622738,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-curved-cover-closed-3m.png": {
+    "image": "ui-curved-cover-closed-3m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.579999923706055,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      8.434683799743652,
+      -3.3564047813415527,
+      -1.9874380826950073
+    ],
+    "distance_m": 2.9999997019767615,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-curved-pipes-open-3m.png": {
+    "image": "ui-curved-pipes-open-3m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.0,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      8.854684829711914,
+      -3.356405019760132,
+      -1.9874379634857178
+    ],
+    "distance_m": 3.000000579903467,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-closed-seam-1.8m.png": {
+    "image": "curved-LA-closed-seam-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.681859016418457,
+      -2.3535032272338867,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -7.336589336395264,
+      -3.0389151573181152,
+      -2.150893449783325
+    ],
+    "distance_m": 1.8000003089507155,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-closed-seam-2.4m.png": {
+    "image": "curved-LA-closed-seam-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.681859016418457,
+      -2.3535032272338867,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -7.8881659507751465,
+      -3.267385721206665,
+      -2.091191053390503
+    ],
+    "distance_m": 2.4000002362765254,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-closed-seam-3.0m.png": {
+    "image": "curved-LA-closed-seam-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.681859016418457,
+      -2.3535032272338867,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -8.439743041992188,
+      -3.495856285095215,
+      -2.0314888954162598
+    ],
+    "distance_m": 3.0000005774199408,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-open-upper-1.8m.png": {
+    "image": "curved-LA-open-upper-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      -2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      -8.021444320678711,
+      -2.765716314315796,
+      -1.692855954170227
+    ],
+    "distance_m": 1.800000057493646,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-open-upper-2.4m.png": {
+    "image": "curved-LA-open-upper-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      -2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      -8.611926078796387,
+      -2.8542888164520264,
+      -1.63380765914917
+    ],
+    "distance_m": 2.400000462122217,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-open-upper-3.0m.png": {
+    "image": "curved-LA-open-upper-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      -2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      -9.202406883239746,
+      -2.9428608417510986,
+      -1.574759602546692
+    ],
+    "distance_m": 2.9999998174607696,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-open-lower-1.8m.png": {
+    "image": "curved-LA-open-lower-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      -2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      -8.026960372924805,
+      -2.7665436267852783,
+      -2.8966176509857178
+    ],
+    "distance_m": 1.8000002993787907,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-open-lower-2.4m.png": {
+    "image": "curved-LA-open-lower-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      -2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      -8.619279861450195,
+      -2.855391502380371,
+      -2.932156801223755
+    ],
+    "distance_m": 2.3999997776001587,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-open-lower-3.0m.png": {
+    "image": "curved-LA-open-lower-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      -2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      -9.211599349975586,
+      -2.944239377975464,
+      -2.967695951461792
+    ],
+    "distance_m": 2.9999991618095656,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-open-root-1.8m.png": {
+    "image": "curved-LA-open-root-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.099999904632568,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -6.592299461364746,
+      -3.4699947834014893,
+      -2.0613856315612793
+    ],
+    "distance_m": 1.8000004351966385,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-open-root-2.4m.png": {
+    "image": "curved-LA-open-root-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.099999904632568,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -7.089733123779297,
+      -3.7933266162872314,
+      -1.971847653388977
+    ],
+    "distance_m": 2.400001050407458,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LA-open-root-3.0m.png": {
+    "image": "curved-LA-open-root-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.099999904632568,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -7.587165355682373,
+      -4.1166582107543945,
+      -1.8823094367980957
+    ],
+    "distance_m": 3.0000003899136924,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-closed-seam-1.8m.png": {
+    "image": "curved-LB-closed-seam-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.681859016418457,
+      2.353503465652466,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -7.336589336395264,
+      3.0389151573181152,
+      -2.150893211364746
+    ],
+    "distance_m": 1.80000024168854,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-closed-seam-2.4m.png": {
+    "image": "curved-LB-closed-seam-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.681859016418457,
+      2.353503465652466,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -7.888165473937988,
+      3.267385482788086,
+      -2.091191053390503
+    ],
+    "distance_m": 2.3999996526476988,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-closed-seam-3.0m.png": {
+    "image": "curved-LB-closed-seam-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.681859016418457,
+      2.353503465652466,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -8.439742088317871,
+      3.4958558082580566,
+      -2.0314888954162598
+    ],
+    "distance_m": 2.9999994250634754,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-open-upper-1.8m.png": {
+    "image": "curved-LB-open-upper-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      -8.021443367004395,
+      2.765716552734375,
+      -1.6928555965423584
+    ],
+    "distance_m": 1.7999992006767007,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-open-upper-2.4m.png": {
+    "image": "curved-LB-open-upper-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      -8.611924171447754,
+      2.8542888164520264,
+      -1.63380765914917
+    ],
+    "distance_m": 2.3999985746414203,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-open-upper-3.0m.png": {
+    "image": "curved-LB-open-upper-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      -9.20240592956543,
+      2.942861318588257,
+      -1.5747594833374023
+    ],
+    "distance_m": 2.9999989445008963,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-open-lower-1.8m.png": {
+    "image": "curved-LB-open-lower-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      -8.026960372924805,
+      2.7665443420410156,
+      -2.8966176509857178
+    ],
+    "distance_m": 1.8000004049286618,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-open-lower-2.4m.png": {
+    "image": "curved-LB-open-lower-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      -8.619280815124512,
+      2.8553924560546875,
+      -2.932157039642334
+    ],
+    "distance_m": 2.4000008253379237,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-open-lower-3.0m.png": {
+    "image": "curved-LB-open-lower-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -6.25,
+      2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      -9.211599349975586,
+      2.9442405700683594,
+      -2.967696189880371
+    ],
+    "distance_m": 2.999999351799418,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-open-root-1.8m.png": {
+    "image": "curved-LB-open-root-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.099999904632568,
+      2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -6.592299461364746,
+      3.4699950218200684,
+      -2.0613858699798584
+    ],
+    "distance_m": 1.8000005324680812,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-open-root-2.4m.png": {
+    "image": "curved-LB-open-root-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.099999904632568,
+      2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -7.0897321701049805,
+      3.7933263778686523,
+      -1.9718481302261353
+    ],
+    "distance_m": 2.4000000601013496,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-LB-open-root-3.0m.png": {
+    "image": "curved-LB-open-root-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      -5.099999904632568,
+      2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      -7.587165355682373,
+      4.1166582107543945,
+      -1.882310152053833
+    ],
+    "distance_m": 3.0000002831220494,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-closed-seam-1.8m.png": {
+    "image": "curved-RA-closed-seam-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.681859016418457,
+      -2.353503465652466,
+      -2.3299999237060547
+    ],
+    "eye": [
+      7.336589336395264,
+      -3.0389156341552734,
+      -2.150893211364746
+    ],
+    "distance_m": 1.8000004238138096,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-closed-seam-2.4m.png": {
+    "image": "curved-RA-closed-seam-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.681859016418457,
+      -2.353503465652466,
+      -2.3299999237060547
+    ],
+    "eye": [
+      7.8881659507751465,
+      -3.2673861980438232,
+      -2.091191053390503
+    ],
+    "distance_m": 2.4000003231999556,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-closed-seam-3.0m.png": {
+    "image": "curved-RA-closed-seam-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.681859016418457,
+      -2.353503465652466,
+      -2.3299999237060547
+    ],
+    "eye": [
+      8.439743041992188,
+      -3.495856761932373,
+      -2.0314888954162598
+    ],
+    "distance_m": 3.0000006767609944,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-open-upper-1.8m.png": {
+    "image": "curved-RA-open-upper-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      -2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      8.021444320678711,
+      -2.765716314315796,
+      -1.692855954170227
+    ],
+    "distance_m": 1.800000057493646,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-open-upper-2.4m.png": {
+    "image": "curved-RA-open-upper-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      -2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      8.611926078796387,
+      -2.8542888164520264,
+      -1.63380765914917
+    ],
+    "distance_m": 2.400000462122217,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-open-upper-3.0m.png": {
+    "image": "curved-RA-open-upper-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      -2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      9.202406883239746,
+      -2.9428608417510986,
+      -1.574759602546692
+    ],
+    "distance_m": 2.9999998174607696,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-open-lower-1.8m.png": {
+    "image": "curved-RA-open-lower-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      -2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      8.026960372924805,
+      -2.7665436267852783,
+      -2.8966176509857178
+    ],
+    "distance_m": 1.8000002993787907,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-open-lower-2.4m.png": {
+    "image": "curved-RA-open-lower-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      -2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      8.619279861450195,
+      -2.855391502380371,
+      -2.932156801223755
+    ],
+    "distance_m": 2.3999997776001587,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-open-lower-3.0m.png": {
+    "image": "curved-RA-open-lower-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      -2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      9.211599349975586,
+      -2.944239377975464,
+      -2.967695951461792
+    ],
+    "distance_m": 2.9999991618095656,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-open-root-1.8m.png": {
+    "image": "curved-RA-open-root-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.099999904632568,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      6.592299461364746,
+      -3.4699947834014893,
+      -2.0613856315612793
+    ],
+    "distance_m": 1.8000004351966385,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-open-root-2.4m.png": {
+    "image": "curved-RA-open-root-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.099999904632568,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      7.089733123779297,
+      -3.7933266162872314,
+      -1.971847653388977
+    ],
+    "distance_m": 2.400001050407458,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-open-root-3.0m.png": {
+    "image": "curved-RA-open-root-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.099999904632568,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      7.587165355682373,
+      -4.1166582107543945,
+      -1.8823094367980957
+    ],
+    "distance_m": 3.0000003899136924,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-closed-seam-1.8m.png": {
+    "image": "curved-RB-closed-seam-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.681859016418457,
+      2.3535029888153076,
+      -2.3299999237060547
+    ],
+    "eye": [
+      7.336589336395264,
+      3.038914680480957,
+      -2.150893211364746
+    ],
+    "distance_m": 1.80000024168854,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-closed-seam-2.4m.png": {
+    "image": "curved-RB-closed-seam-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.681859016418457,
+      2.3535029888153076,
+      -2.3299999237060547
+    ],
+    "eye": [
+      7.888165473937988,
+      3.2673850059509277,
+      -2.091191053390503
+    ],
+    "distance_m": 2.3999996526476988,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-closed-seam-3.0m.png": {
+    "image": "curved-RB-closed-seam-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.681859016418457,
+      2.3535029888153076,
+      -2.3299999237060547
+    ],
+    "eye": [
+      8.439742088317871,
+      3.4958553314208984,
+      -2.0314888954162598
+    ],
+    "distance_m": 2.9999994250634754,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-open-upper-1.8m.png": {
+    "image": "curved-RB-open-upper-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      8.021443367004395,
+      2.765716552734375,
+      -1.6928555965423584
+    ],
+    "distance_m": 1.7999992006767007,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-open-upper-2.4m.png": {
+    "image": "curved-RB-open-upper-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      8.611924171447754,
+      2.8542888164520264,
+      -1.63380765914917
+    ],
+    "distance_m": 2.3999985746414203,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-open-upper-3.0m.png": {
+    "image": "curved-RB-open-upper-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      2.5,
+      -1.8700000047683716
+    ],
+    "eye": [
+      9.20240592956543,
+      2.942861318588257,
+      -1.5747594833374023
+    ],
+    "distance_m": 2.9999989445008963,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-open-lower-1.8m.png": {
+    "image": "curved-RB-open-lower-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      8.026960372924805,
+      2.7665443420410156,
+      -2.8966176509857178
+    ],
+    "distance_m": 1.8000004049286618,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-open-lower-2.4m.png": {
+    "image": "curved-RB-open-lower-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      8.619280815124512,
+      2.8553924560546875,
+      -2.932157039642334
+    ],
+    "distance_m": 2.4000008253379237,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-open-lower-3.0m.png": {
+    "image": "curved-RB-open-lower-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      6.25,
+      2.5,
+      -2.7899999618530273
+    ],
+    "eye": [
+      9.211599349975586,
+      2.9442405700683594,
+      -2.967696189880371
+    ],
+    "distance_m": 2.999999351799418,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-open-root-1.8m.png": {
+    "image": "curved-RB-open-root-1.8m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.099999904632568,
+      2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      6.592299461364746,
+      3.4699950218200684,
+      -2.0613858699798584
+    ],
+    "distance_m": 1.8000005324680812,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-open-root-2.4m.png": {
+    "image": "curved-RB-open-root-2.4m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.099999904632568,
+      2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      7.0897321701049805,
+      3.7933263778686523,
+      -1.9718481302261353
+    ],
+    "distance_m": 2.4000000601013496,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RB-open-root-3.0m.png": {
+    "image": "curved-RB-open-root-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.099999904632568,
+      2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      7.587165355682373,
+      4.1166582107543945,
+      -1.882310152053833
+    ],
+    "distance_m": 3.0000002831220494,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-inset-transition-3.0m.png": {
+    "image": "curved-RA-inset-transition-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.699999809265137,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      8.621585845947266,
+      -3.0843162536621094,
+      -1.97940993309021
+    ],
+    "distance_m": 3.000000562518782,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-side-slide-transition-3.0m.png": {
+    "image": "curved-RA-side-slide-transition-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.699999809265137,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      8.621585845947266,
+      -3.0843162536621094,
+      -1.97940993309021
+    ],
+    "distance_m": 3.000000562518782,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-pipe-transition-3.0m.png": {
+    "image": "curved-RA-pipe-transition-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.699999809265137,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      8.621585845947266,
+      -3.0843162536621094,
+      -1.97940993309021
+    ],
+    "distance_m": 3.000000562518782,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "curved-RA-retracted-pipes-clean-3.0m.png": {
+    "image": "curved-RA-retracted-pipes-clean-3.0m.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.699999809265137,
+      -2.5,
+      -2.3299999237060547
+    ],
+    "eye": [
+      8.621585845947266,
+      -3.0843162536621094,
+      -1.97940993309021
+    ],
+    "distance_m": 3.000000562518782,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-curved-manifolds-open-final.png": {
+    "image": "ui-curved-manifolds-open-final.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.800000190734863,
+      0.0,
+      -2.3299999237060547
+    ],
+    "eye": [
+      14.5647554397583,
+      -1.051770806312561,
+      -0.577048122882843
+    ],
+    "distance_m": 9.000000006622738,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  },
+  "ui-curved-manifolds-closed-final.png": {
+    "image": "ui-curved-manifolds-closed-final.png",
+    "scene": "ArcanePower_Thermal_ReactorHousing",
+    "target": [
+      5.800000190734863,
+      0.0,
+      -2.3299999237060547
+    ],
+    "eye": [
+      14.5647554397583,
+      -1.051770806312561,
+      -0.577048122882843
+    ],
+    "distance_m": 9.000000006622738,
+    "lens_mm": 48.0,
+    "studio_light": "studio.exr",
+    "light_rotation": 0.5,
+    "light_intensity": 0.800000011920929
+  }
+}

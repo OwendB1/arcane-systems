@@ -13,7 +13,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="3" z="5" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/reactor_b7cfc3f033a9/ArcanePower_ReactorPrototype.mwm</Model>
+      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_ReactorPrototype.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="50" />
         <Component Subtype="Construction" Count="40" />
@@ -78,9 +78,9 @@
         <MountPoint Side="Right" StartX="2" EndX="3" StartY="0" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_ReactorPrototype_BS1_r80c64fdcdba2.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_ReactorPrototype_BS2_r82b53f5b0110.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_ReactorPrototype_BS3_r3744f24aa666.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_ReactorPrototype_BS1_rdf3bdc01e236.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_ReactorPrototype_BS2_rd26fc9c21bb3.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_ReactorPrototype_BS3_rdb2b1be6460b.mwm" />
       </BuildProgressModels>
     </Definition>
   </CubeBlocks>

@@ -1,10 +1,16 @@
-<?xml version="1.0" ?>
+<?xml version='1.0' encoding='utf-8'?>
 <Model Name="ArcanePower_BlastShield6">
-	<Parameter Name="RescaleFactor">1.0</Parameter>
-	<Parameter Name="Centered">false</Parameter>
-	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
-	<MaterialRef Name="PaintedMetal_Darker"/>
-	<MaterialRef Name="Metal_Dull"/>
-	<MaterialRef Name="PaintedMetal_Colorable"/>
-	<MaterialRef Name="Emissive"/>
+  <Parameter Name="RescaleFactor">1.0</Parameter>
+  <Parameter Name="Centered">false</Parameter>
+  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
+  <MaterialRef Name="PaintedMetal_Darker" />
+  <MaterialRef Name="Metal_Dull" />
+  <MaterialRef Name="PaintedMetal_Colorable" />
+  <MaterialRef Name="Emissive" />
+  <LOD Distance="75">
+    <Model>Models/Cubes/large/ArcanePower_BlastShield6_LOD1_r9e53eab1a070.mwm</Model>
+  </LOD>
+  <LOD Distance="150">
+    <Model>Models/Cubes/large/ArcanePower_BlastShield6_LOD2_r07560fb7d9d0.mwm</Model>
+  </LOD>
 </Model>

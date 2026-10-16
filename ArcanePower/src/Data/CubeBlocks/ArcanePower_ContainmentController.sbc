@@ -13,7 +13,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/ArcanePower_ContainmentController.mwm</Model>
+      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_ContainmentController.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="80" />
         <Component Subtype="Construction" Count="40" />
@@ -54,9 +54,9 @@
         <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_ContainmentController_BS1_rc314b78f383b.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_ContainmentController_BS2_r0c18d7dcf11a.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_ContainmentController_BS3_r8fb8541f03b3.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_ContainmentController_BS1_r7d89d01ce5d5.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_ContainmentController_BS2_rd5c7cb9cb554.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_ContainmentController_BS3_r79942c45e395.mwm" />
       </BuildProgressModels>
     </Definition>
     <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
@@ -71,7 +71,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/ArcanePower_AdvancedContainmentController.mwm</Model>
+      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_AdvancedContainmentController.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="80" />
         <Component Subtype="Construction" Count="40" />
@@ -112,9 +112,9 @@
         <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS1_r810b83cd8cc3.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS2_r62dd4be43ece.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS3_rb0f988ff3b4d.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS1_r824172364e5f.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS2_r19385e8accdd.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS3_raf14008023e6.mwm" />
       </BuildProgressModels>
     </Definition>
   </CubeBlocks>

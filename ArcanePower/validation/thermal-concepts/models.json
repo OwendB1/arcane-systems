@@ -1,0 +1,598 @@
+{
+  "Brayton train": {
+    "model": "Brayton train",
+    "cells": [
+      5,
+      3,
+      2
+    ],
+    "meshes": 148,
+    "ports": [
+      {
+        "id": "CO2 leg -1",
+        "type": "CO2_HP",
+        "position": [
+          -2.5,
+          -3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "CO2 leg 1",
+        "type": "CO2_LP",
+        "position": [
+          -2.5,
+          3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Primary heater": {
+    "model": "Primary heater",
+    "cells": [
+      3,
+      3,
+      3
+    ],
+    "meshes": 76,
+    "ports": [
+      {
+        "id": "primary",
+        "type": "PRIMARY",
+        "position": [
+          -3.75,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "CO2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          -3.75,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Recuperator": {
+    "model": "Recuperator",
+    "cells": [
+      3,
+      2,
+      3
+    ],
+    "meshes": 116,
+    "ports": [
+      {
+        "id": "high-pressure -1",
+        "type": "CO2_HP",
+        "position": [
+          -3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "low-pressure -1",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "high-pressure 1",
+        "type": "CO2_HP",
+        "position": [
+          3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "low-pressure 1",
+        "type": "CO2_LP",
+        "position": [
+          3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Duplex straight": {
+    "model": "Duplex straight",
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "meshes": 30,
+    "ports": [
+      {
+        "id": "west",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "east",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Duplex elbow": {
+    "model": "Duplex elbow",
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "meshes": 25,
+    "ports": [
+      {
+        "id": "west",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "north",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Atmospheric cooler": {
+    "model": "Atmospheric cooler",
+    "cells": [
+      3,
+      2,
+      3
+    ],
+    "meshes": 126,
+    "ports": [
+      {
+        "id": "CO2",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Space radiator": {
+    "model": "Space radiator",
+    "cells": [
+      3,
+      2,
+      3
+    ],
+    "meshes": 148,
+    "ports": [
+      {
+        "id": "CO2",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Brayton train upgraded": {
+    "model": "Brayton train upgraded",
+    "cells": [
+      5,
+      3,
+      2
+    ],
+    "meshes": 159,
+    "ports": [
+      {
+        "id": "CO2 leg -1",
+        "type": "CO2_HP",
+        "position": [
+          -2.5,
+          -3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "CO2 leg 1",
+        "type": "CO2_LP",
+        "position": [
+          -2.5,
+          3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Primary heater upgraded": {
+    "model": "Primary heater upgraded",
+    "cells": [
+      3,
+      3,
+      3
+    ],
+    "meshes": 100,
+    "ports": [
+      {
+        "id": "primary",
+        "type": "PRIMARY",
+        "position": [
+          -3.75,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "CO2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          -3.75,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Recuperator upgraded": {
+    "model": "Recuperator upgraded",
+    "cells": [
+      3,
+      2,
+      3
+    ],
+    "meshes": 160,
+    "ports": [
+      {
+        "id": "high-pressure -1",
+        "type": "CO2_HP",
+        "position": [
+          -3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "low-pressure -1",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "high-pressure 1",
+        "type": "CO2_HP",
+        "position": [
+          3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "low-pressure 1",
+        "type": "CO2_LP",
+        "position": [
+          3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Duplex tee": {
+    "model": "Duplex tee",
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "meshes": 39,
+    "ports": [
+      {
+        "id": "west",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "east",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "north",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  }
+}

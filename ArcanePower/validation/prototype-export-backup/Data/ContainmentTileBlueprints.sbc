@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions>
+  <Blueprints>
+    <Blueprint>
+      <Id>
+        <TypeId>BlueprintDefinition</TypeId>
+        <SubtypeId>ArcaneContainmentTiles</SubtypeId>
+      </Id>
+      <DisplayName>Standard Containment Tiles</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <BaseProductionTimeInSeconds>10</BaseProductionTimeInSeconds>
+      <Prerequisites>
+        <Item TypeId="Ingot" SubtypeId="Iron" Amount="20" />
+        <Item TypeId="Ingot" SubtypeId="Cobalt" Amount="8" />
+        <Item TypeId="Ingot" SubtypeId="Silver" Amount="4" />
+        <Item TypeId="Ingot" SubtypeId="Platinum" Amount="2" />
+        <Item TypeId="Component" SubtypeId="Superconductor" Amount="4" />
+        <Item TypeId="Component" SubtypeId="Computer" Amount="4" />
+        <Item TypeId="Component" SubtypeId="Detector" Amount="1" />
+        <Item TypeId="Component" SubtypeId="MetalGrid" Amount="4" />
+      </Prerequisites>
+      <Result TypeId="Component" SubtypeId="ArcaneContainmentTile" Amount="4" />
+    </Blueprint>
+    <Blueprint>
+      <Id>
+        <TypeId>BlueprintDefinition</TypeId>
+        <SubtypeId>ArcaneReinforcedContainmentTiles</SubtypeId>
+      </Id>
+      <DisplayName>Reinforced Containment Tiles</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <BaseProductionTimeInSeconds>100</BaseProductionTimeInSeconds>
+      <Prerequisites>
+        <Item TypeId="Ingot" SubtypeId="Iron" Amount="200" />
+        <Item TypeId="Ingot" SubtypeId="Cobalt" Amount="80" />
+        <Item TypeId="Ingot" SubtypeId="Silver" Amount="40" />
+        <Item TypeId="Ingot" SubtypeId="Platinum" Amount="20" />
+        <Item TypeId="Component" SubtypeId="Superconductor" Amount="40" />
+        <Item TypeId="Component" SubtypeId="Computer" Amount="40" />
+        <Item TypeId="Component" SubtypeId="Detector" Amount="10" />
+        <Item TypeId="Component" SubtypeId="MetalGrid" Amount="40" />
+      </Prerequisites>
+      <Result TypeId="Component" SubtypeId="ArcaneReinforcedContainmentTile" Amount="4" />
+    </Blueprint>
+    <Blueprint>
+      <Id>
+        <TypeId>BlueprintDefinition</TypeId>
+        <SubtypeId>ArcaneAdvancedContainmentTiles</SubtypeId>
+      </Id>
+      <DisplayName>Advanced Containment Tiles</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
+      <BaseProductionTimeInSeconds>1000</BaseProductionTimeInSeconds>
+      <Prerequisites>
+        <Item TypeId="Ingot" SubtypeId="Iron" Amount="2000" />
+        <Item TypeId="Ingot" SubtypeId="Cobalt" Amount="800" />
+        <Item TypeId="Ingot" SubtypeId="Silver" Amount="400" />
+        <Item TypeId="Ingot" SubtypeId="Platinum" Amount="200" />
+        <Item TypeId="Component" SubtypeId="Superconductor" Amount="400" />
+        <Item TypeId="Component" SubtypeId="Computer" Amount="400" />
+        <Item TypeId="Component" SubtypeId="Detector" Amount="100" />
+        <Item TypeId="Component" SubtypeId="MetalGrid" Amount="400" />
+      </Prerequisites>
+      <Result TypeId="Component" SubtypeId="ArcaneAdvancedContainmentTile" Amount="4" />
+    </Blueprint>
+  </Blueprints>
+  <BlueprintClassEntries>
+    <Entry Class="Components" BlueprintSubtypeId="ArcaneContainmentTiles" />
+    <Entry Class="Components" BlueprintSubtypeId="ArcaneReinforcedContainmentTiles" />
+    <Entry Class="Components" BlueprintSubtypeId="ArcaneAdvancedContainmentTiles" />
+  </BlueprintClassEntries>
+</Definitions>

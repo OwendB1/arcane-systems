@@ -18,8 +18,24 @@ public class EnergyValidation:MySessionComponentBase {
    var upgrade=slim.FatBlock as IMyUpgradeModule;
    if(upgrade!=null && upgrade.Position.Z<=5)
     MyLog.Default.WriteLineAndConsole("ENERGY_VALIDATION native_socket tick="+tick+" subtype="+upgrade.BlockDefinition.SubtypeName+" connections="+upgrade.Connections);
+   if(upgrade!=null && upgrade.BlockDefinition.SubtypeName.Contains("EnergyStabilizer")){
+    var model=(VRage.Game.Entity.MyEntity)upgrade;
+    for(int i=1;i<=3;i++){
+     VRage.Game.Entity.MyEntitySubpart fan;
+     if(model.Subparts.TryGetValue("EnergyFan"+i,out fan))
+      MyLog.Default.WriteLineAndConsole("ENERGY_VALIDATION fan tick="+tick+" index="+i+" entity="+fan.EntityId+" pivot="+fan.PositionComp.LocalMatrixRef.Translation+" right="+fan.PositionComp.LocalMatrixRef.Right+" up="+fan.PositionComp.LocalMatrixRef.Up);
+    }
+   }
    var b=slim.FatBlock as IMyBatteryBlock;if(b==null)continue;
    if(b.Position.Z>5)continue;
+   if(b.EntityId==880000000001217){
+    var model=(VRage.Game.Entity.MyEntity)b;
+    for(int i=1;i<=2;i++){
+     VRage.Game.Entity.MyEntitySubpart ring;
+     if(model.Subparts.TryGetValue("EnergyRing"+i,out ring))
+      MyLog.Default.WriteLineAndConsole("ENERGY_VALIDATION ring tick="+tick+" index="+i+" right="+ring.PositionComp.LocalMatrixRef.Right+" up="+ring.PositionComp.LocalMatrixRef.Up);
+    }
+   }
    b.RefreshCustomInfo();
    MyLog.Default.WriteLineAndConsole("ENERGY_VALIDATION tick="+tick+" id="+b.EntityId+" subtype="+b.BlockDefinition.SubtypeName+" position="+b.Position+" stored="+b.CurrentStoredPower+" capacity="+b.MaxStoredPower+" input="+b.CurrentInput+" output="+b.CurrentOutput+" maxinput="+b.MaxInput+" maxoutput="+b.MaxOutput+" mode="+b.ChargeMode+" info="+b.CustomInfo.Replace("\n"," | "));
   }

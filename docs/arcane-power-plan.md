@@ -1,5 +1,11 @@
 Arcane Power — implementation plan, revision 0.9
 
+16 October thermal model update: [modular sCO₂ Brayton](../ArcanePower/THERMAL-POWER.md)
+supports 20% standalone or starts at 40% net with Brayton, with diminishing-return heat recovery reaching 78% behind
+hot-end capability gates. Parallel machines add power capacity and redundancy;
+space radiators and atmospheric fan coolers have different environment behavior.
+This remains a proposal; production reactors still generate electricity directly.
+
 Updated 15 September 2026. Implementation and export prototyping have started. Names, production recipes, final power values, and failure severity below remain proposals unless identified as accepted or implemented.
 
 Accepted direction after initial refinement: the general scope and delivery sequence, sustained electrical generation with meaningful startup/cooldown, and an expandable battery that handles surplus output, peak demand, startup, and emergency containment. Controllable reactor venting is also in scope. Its detailed hardware, operating modes, and balance below are proposals to refine.
@@ -131,6 +137,16 @@ Its explicit role is to store energy, not generate it. It supplies containment s
 Prototype one controller with two expansion levels. Capacity modules increase stored MWh; transfer modules control maximum charge/discharge MW; stabilizers maintain the supported storage configuration. Keep those limits separate so capacity upgrades do not imply unlimited output. A full battery can still lack sufficient discharge power for weapons and containment together; high discharge power can still exhaust a small reserve quickly. Provide normal Auto, Recharge, and Discharge behaviour, and let the battery supply reactor startup and emergency containment through the grid power system. Define emergency behaviour when Recharge mode would prevent reserve delivery, and make any automatic mode change visible. Do not assume the grid will reserve energy for containment over competing consumers; verify resource priority and load-shedding behaviour in the power prototype.
 
 Vanilla batteries remain valid for startup and backup. The Arcane Energy Core earns its place through expandable high capacity, configurable transfer capability, and physical stabilizer/module placement. It is the preferred large-installation storage option, not an arbitrary prerequisite for reactor ignition.
+
+**Accepted and implemented 14 October 2026, pending live validation:** stored-energy
+upkeep rises with cell fill and applies even to disabled/detached cells. Stabilizers
+reduce upkeep and ability recovery. A direct energy-bank surge fills one accessible
+same-grid jump drive over a nominal 10/7.5/5 seconds by transfer tier, spending actual
+charge at approximately 90% efficiency while preserving reserve and normal jump
+rules. A ten-second burst doubles grid discharge, sharing bank recovery with surge;
+drive-owned recovery prevents bank swapping. Reactor support takes priority.
+Terminal reserve controls, ability actions, saved state and server-authorized
+commands are implemented. See [gameplay details and provisional values](../ArcanePower/ENERGY-STORAGE.md#gameplay-loop--implemented-14-october-provisional-balance).
 
 The implementation uses fixed-capacity native batteries contributing their actual
 storage, with the central core presenting the aggregate and allocating transfer

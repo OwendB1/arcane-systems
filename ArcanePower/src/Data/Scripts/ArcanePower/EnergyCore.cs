@@ -19,11 +19,11 @@ using ChargeMode = Sandbox.ModAPI.Ingame.ChargeMode;
 namespace ArcanePower
 {
     // Fixed native battery capacities; never edit a shared block definition or
-    // move charge between blocks. The bank only allocates transfer limits.
+    // move charge between storage blocks. Surges debit the physical cells.
     [MyEntityComponentDescriptor(typeof(MyObjectBuilder_BatteryBlock), false,
         "ArcanePower_EnergyCore", "ArcanePower_EnergyCapacity", "ArcanePower_EnergyCapacityAdvanced",
         "ArcanePower_EnergyCore_Pillar", "ArcanePower_EnergyCapacity_Pillar", "ArcanePower_EnergyCapacityAdvanced_Pillar")]
-    public sealed class EnergyCore : MyGameLogicComponent
+    public sealed partial class EnergyCore : MyGameLogicComponent
     {
         internal const string CoreSubtype = "ArcanePower_EnergyCore";
         private static readonly Guid IdentityKey = new Guid("f6e09e9a-76ef-4d21-9ef1-31e5cd759881");
@@ -42,6 +42,20 @@ namespace ArcanePower
         private string status = "Connecting storage";
         private Matrix rotorRest;
         private MyEntitySubpart rotor;
+        private readonly MyEntitySubpart[] rings = new MyEntitySubpart[2];
+        private readonly Matrix[] ringRest = new Matrix[2];
+        private double ringPhase, secondaryPhase;
+        private long ringAge;
+        private float ringRate;
+        private float fieldPhase;
+        internal Color VisualColor
+        {
+            get
+            {
+                return block.CurrentInput > block.CurrentOutput + .01f ? new Color(40, 185, 255)
+                    : block.CurrentOutput > .01f ? new Color(255, 145, 40) : new Color(100, 120, 200);
+            }
+        }
         private bool IsController { get { return BaseSubtype(block) == CoreSubtype; } }
 
         private static bool IsPillar(IMyCubeBlock candidate)
@@ -78,14 +92,20 @@ namespace ArcanePower
             if (MyAPIGateway.Multiplayer.IsServer)
             {
                 string id;
-                if (Entity.Storage == null || !Entity.Storage.TryGetValue(IdentityKey, out id)
-                    || id != Entity.EntityId.ToString(CultureInfo.InvariantCulture))
+                bool original = Entity.Storage != null && Entity.Storage.TryGetValue(IdentityKey, out id)
+                    && id == Entity.EntityId.ToString(CultureInfo.InvariantCulture);
+                if (!original)
                     battery.CurrentStoredPower = 0;
                 if (Entity.Storage == null) Entity.Storage = new MyModStorageComponent();
                 Entity.Storage[IdentityKey] = Entity.EntityId.ToString(CultureInfo.InvariantCulture);
+                InitializeGameplay(original);
             }
             battery.SourceComp.MaxOutputChanged += ClampNativeOutput;
+            // Direct upkeep/surge debits do not clear the native private "full"
+            // flag. Base input demand on actual charge through the public sink.
+            battery.ResourceSink.SetRequiredInputFuncByType(Electricity, RequiredInput);
             initialized = true;
+            EnergySession.Add(this);
             ApplyLimits(0, 0);
             NeedsUpdate = MyEntityUpdateEnum.EACH_FRAME;
         }
@@ -109,6 +129,22 @@ namespace ArcanePower
                 || (IsPillar(block) && module.Orientation.Up != block.Orientation.Up)
                 || terminal == null || !terminal.HasPlayerAccess(block.OwnerId)) return null;
             return module;
+        }
+
+        internal bool IsModuleRunning(IMyCubeBlock module)
+        {
+            if (!initialized || !IsController || !Healthy(block) || !Healthy(module)) return false;
+            var direction = Base6Directions.GetIntVector(IsPillar(block) ? block.Orientation.Forward : block.Orientation.Up);
+            if (Tier(module, "ArcanePower_EnergyTransfer") > 0)
+            {
+                if (Tier(Socket(direction), "ArcanePower_EnergyStabilizer") == 0) return false;
+                direction = -Base6Directions.GetIntVector(block.Orientation.Forward);
+            }
+            else if (Tier(module, "ArcanePower_EnergyStabilizer") == 0) return false;
+            if (Socket(direction) != module) return false;
+            foreach (var cell in cells)
+                if (Healthy(cell.block) && (cell.StoredEnergy > 0 || cell.block.CurrentInput > 0)) return true;
+            return false;
         }
 
         private static int Tier(IMyCubeBlock module, string name)
@@ -142,7 +178,15 @@ namespace ArcanePower
                     if (controller == null || !controller.cells.Contains(this))
                         Disconnect();
                 }
+                UpdateUpkeep();
+                if (IsController) UpdateSurge();
                 block.RefreshCustomInfo();
+            }
+            UpdateRecovery();
+            if (tick % 60 == 1 && MyAPIGateway.Multiplayer.IsServer)
+            {
+                SaveGameplay();
+                EnergySession.Broadcast(this);
             }
             if (!MyAPIGateway.Utilities.IsDedicated) Draw();
         }
@@ -171,6 +215,8 @@ namespace ArcanePower
             int stabilizer = Tier(Socket(IsPillar(block) ? forward : up), "ArcanePower_EnergyStabilizer");
             int transferTier = Tier(Socket(-forward), "ArcanePower_EnergyTransfer");
             transferTier = Math.Min(transferTier, stabilizer);
+            stabilizationTier = Healthy(block) ? stabilizer : 0;
+            surgeDuration = 600 - transferTier * 150;
             transfer = transferTier == 2 ? 1000000 : transferTier == 1 ? 100000 : 10000;
             foreach (var direction in new[] { right, -right })
             {
@@ -184,7 +230,7 @@ namespace ArcanePower
             foreach (var cell in previousCells)
                 if (!cell.block.Closed && !cells.Contains(cell)) cell.Disconnect();
             stored = 0; capacity = 0;
-            foreach (var cell in cells) { stored += cell.block.CurrentStoredPower; capacity += cell.block.MaxStoredPower; }
+            foreach (var cell in cells) { stored += cell.StoredEnergy; capacity += cell.block.MaxStoredPower; }
             if (tick % 100 == 1)
             {
                 reactors.Clear();
@@ -208,10 +254,11 @@ namespace ArcanePower
             {
                 if (MyAPIGateway.Multiplayer.IsServer && cell != this) cell.block.ChargeMode = block.ChargeMode;
                 float share = capacity > 0 ? transfer * cell.block.MaxStoredPower / capacity : 0;
+                cell.upkeepTier = stabilizationTier;
                 float protectedEnergy = emergency ? 0 : reserve * cell.block.MaxStoredPower;
                 // Native batteries account every 100 ticks. Bound each interval
                 // by energy above reserve instead of overshooting a threshold.
-                float output = Math.Min(share, Math.Max(0, cell.block.CurrentStoredPower - protectedEnergy) * 2160);
+                float output = Math.Min(share * (gameplay.BurstTicks > 0 && !emergency ? 2 : 1), Math.Max(0, cell.StoredEnergy - protectedEnergy) * 2160);
                 cell.status = status;
                 cell.ApplyLimits(Healthy(block) ? share : 0, Healthy(block) ? output : 0);
             }
@@ -220,6 +267,7 @@ namespace ArcanePower
         private void Disconnect()
         {
             status = "Disconnected or unsupported capacity module";
+            upkeepTier = 0;
             ApplyLimits(0, 0);
         }
 
@@ -236,6 +284,12 @@ namespace ArcanePower
             changingLimit = false;
         }
 
+        private float RequiredInput()
+        {
+            if (!Healthy(block) || block.ChargeMode == ChargeMode.Discharge) return 0;
+            return Math.Min(inputLimit, Math.Max(0, block.MaxStoredPower - StoredEnergy) * 2160f + block.CurrentOutput);
+        }
+
         private void ClampNativeOutput(MyDefinitionId resource, float previous, MyResourceSourceComponent source)
         {
             if (changingLimit || resource != Electricity) return;
@@ -248,21 +302,44 @@ namespace ArcanePower
             changingLimit = false;
         }
 
+        internal static Matrix StoredFieldPose(Matrix rest, float fraction, float phase)
+        {
+            // Radius grows from an 18% seed to the authored chamber-safe size.
+            // Rebuild from rest each frame: never scale the pivot or accumulate size.
+            Matrix pose = Matrix.CreateScale(.18f + .82f * MathHelper.Clamp(fraction, 0, 1))
+                * Matrix.CreateRotationY(phase) * rest;
+            pose.Translation = rest.Translation;
+            return pose;
+        }
+
         private void Draw()
         {
+            bool online = Healthy(block) && inputLimit > 0;
+            if (online) fieldPhase = (fieldPhase + MathHelper.TwoPi / 7200f) % MathHelper.TwoPi;
+            // Cosmetic phases advance even outside the rendering range. Match
+            // the reactor's smooth rate changes and seamless phase wrapping.
+            float flow = Math.Max(inputLimit > 0 ? block.CurrentInput / inputLimit : 0,
+                outputLimit > 0 ? block.CurrentOutput / outputLimit : 0);
+            float targetRate = online ? .35f + 1.65f * MathHelper.Clamp(flow, 0, 1) : 0;
+            ringRate += (targetRate - ringRate) / 60f;
+            // Keep modulation time independent of the short cosmetic tick wrap.
+            ringAge++;
+            ringPhase = (ringPhase + ringRate) % 36000;
+            secondaryPhase = (secondaryPhase + RingMotion.SecondaryRate(ringRate, ringAge)) % 36000;
             var camera = MyAPIGateway.Session.Camera;
             if (camera == null || Vector3D.DistanceSquared(camera.Position, Entity.GetPosition()) > 300 * 300) return;
             var model = (MyEntity)Entity;
-            bool online = Healthy(block) && inputLimit > 0;
             float fraction = IsController ? (capacity > 0 ? stored / capacity : 0)
-                : block.CurrentStoredPower / Math.Max(1, block.MaxStoredPower);
+                : StoredEnergy / Math.Max(1, block.MaxStoredPower);
             fraction = MathHelper.Clamp(fraction, 0, 1);
-            Color color = block.CurrentInput > block.CurrentOutput + .01f ? new Color(40, 185, 255)
-                : block.CurrentOutput > .01f ? new Color(255, 145, 40) : new Color(100, 120, 200);
+            bool charging = block.CurrentInput > block.CurrentOutput + .01f;
+            bool discharging = block.CurrentOutput > .01f;
+            Color color = VisualColor;
             float glow = online ? .05f + .7f * fraction : 0;
             if (tick % 10 == 1)
             {
                 model.SetEmissiveParts("EnergyGlow", color, glow);
+                model.SetEmissiveParts("EnergyStatus", color, online ? .35f : 0);
                 for (int i = 1; i <= 4; i++)
                     model.SetEmissiveParts("EnergyFill" + i, color, online ? (fraction >= i / 4f ? .6f : .01f) : 0);
             }
@@ -270,13 +347,22 @@ namespace ArcanePower
             if (model.Subparts.TryGetValue("EnergyRotor", out part))
             {
                 if (part != rotor) { rotor = part; rotorRest = part.PositionComp.LocalMatrixRef; }
-                if (online)
-                {
-                    Matrix pose = Matrix.CreateRotationY(tick * MathHelper.TwoPi / 7200f) * rotorRest;
-                    pose.Translation = rotorRest.Translation;
-                    part.PositionComp.SetLocalMatrix(ref pose);
-                }
-                if (tick % 10 == 1) part.SetEmissiveParts("EnergyGlow", color, glow);
+                Matrix pose = StoredFieldPose(rotorRest, fraction, fieldPhase);
+                part.PositionComp.SetLocalMatrix(ref pose);
+                // The continuous field covers far more area than the lamp atlas.
+                // Keep its HDR contribution low enough to retain the state tint.
+                Color fieldColor = charging ? new Color(4, 70, 100)
+                    : discharging ? new Color(100, 30, 4) : new Color(4, 18, 100);
+                if (tick % 10 == 1) part.SetEmissiveParts("EnergyGlow", fieldColor, online ? .015f + .235f * fraction : 0);
+            }
+            for (int i = 0; i < rings.Length; i++)
+            {
+                if (!model.Subparts.TryGetValue("EnergyRing" + (i + 1), out part)) continue;
+                if (part != rings[i]) { rings[i] = part; ringRest[i] = part.PositionComp.LocalMatrixRef; }
+                Matrix pose = RingMotion.Orientation(ringRest[i], i + 2, 1, ringPhase, secondaryPhase);
+                pose.Translation = ringRest[i].Translation;
+                part.PositionComp.SetLocalMatrix(ref pose);
+                if (tick % 10 == 1) part.SetEmissiveParts("Emissive", color, online ? .25f + .45f * fraction : 0);
             }
         }
 
@@ -290,13 +376,18 @@ namespace ArcanePower
                 text.Append("Reserve: ").Append((reserve * 100).ToString("N0")).Append("%; emergency support ").Append(emergencyEnabled ? "on" : "off").Append('\n');
                 text.Append("Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto.\n");
                 text.Append("Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true\n");
+                AppendGameplayInfo(text);
             }
+            text.Append("This cell upkeep: ").Append(upkeepMW.ToString("N1")).Append(" MW equivalent (stored charge loss)\n");
             text.Append("This cell input/output limits: ").Append(inputLimit.ToString("N0")).Append(" / ").Append(outputLimit.ToString("N0")).Append(" MW\n");
             text.Append("Capacity stays in its physical battery. New/projected/copied blocks start empty.");
         }
 
         public override void Close()
         {
+            ReleaseDrive();
+            SaveGameplay();
+            EnergySession.Remove(this);
             if (block != null) block.AppendingCustomInfo -= AppendInfo;
             if (battery != null && initialized) battery.SourceComp.MaxOutputChanged -= ClampNativeOutput;
         }

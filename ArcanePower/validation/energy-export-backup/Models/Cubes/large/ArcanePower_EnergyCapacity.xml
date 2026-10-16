@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<Model Name="ArcanePower_EnergyCapacity">
+	<Parameter Name="RescaleFactor">1.0</Parameter>
+	<Parameter Name="Centered">false</Parameter>
+	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
+	<MaterialRef Name="Metal_Dull"/>
+	<MaterialRef Name="PaintedMetal_Colorable"/>
+	<MaterialRef Name="Metal_Shiny"/>
+	<MaterialRef Name="PaintedMetal_Darker"/>
+	<MaterialRef Name="PaintedMetal_Yellow"/>
+	<MaterialRef Name="Conveyor"/>
+	<MaterialRef Name="PaintedMetal_VeryDark"/>
+	<Material Name="EnergyFill1">
+		<Parameter Name="Technique">MESH</Parameter>
+		<Parameter Name="ColorMetalTexture">Textures/Models/Cubes/EmissiveAtlas_cm.dds</Parameter>
+		<Parameter Name="NormalGlossTexture">Textures/Models/Cubes/EmissiveAtlas_ng.dds</Parameter>
+		<Parameter Name="AddMapsTexture">Textures/Models/Cubes/EmissiveAtlas_add.dds</Parameter>
+	</Material>
+	<Material Name="EnergyFill2">
+		<Parameter Name="Technique">MESH</Parameter>
+		<Parameter Name="ColorMetalTexture">Textures/Models/Cubes/EmissiveAtlas_cm.dds</Parameter>
+		<Parameter Name="NormalGlossTexture">Textures/Models/Cubes/EmissiveAtlas_ng.dds</Parameter>
+		<Parameter Name="AddMapsTexture">Textures/Models/Cubes/EmissiveAtlas_add.dds</Parameter>
+	</Material>
+	<Material Name="EnergyFill3">
+		<Parameter Name="Technique">MESH</Parameter>
+		<Parameter Name="ColorMetalTexture">Textures/Models/Cubes/EmissiveAtlas_cm.dds</Parameter>
+		<Parameter Name="NormalGlossTexture">Textures/Models/Cubes/EmissiveAtlas_ng.dds</Parameter>
+		<Parameter Name="AddMapsTexture">Textures/Models/Cubes/EmissiveAtlas_add.dds</Parameter>
+	</Material>
+	<Material Name="EnergyFill4">
+		<Parameter Name="Technique">MESH</Parameter>
+		<Parameter Name="ColorMetalTexture">Textures/Models/Cubes/EmissiveAtlas_cm.dds</Parameter>
+		<Parameter Name="NormalGlossTexture">Textures/Models/Cubes/EmissiveAtlas_ng.dds</Parameter>
+		<Parameter Name="AddMapsTexture">Textures/Models/Cubes/EmissiveAtlas_add.dds</Parameter>
+	</Material>
+	<Material Name="EnergyStatus">
+		<Parameter Name="Technique">MESH</Parameter>
+		<Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/Energy/EnergyField_cm.dds</Parameter>
+		<Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/Energy/EnergyField_ng.dds</Parameter>
+		<Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/Energy/EnergyField_add.dds</Parameter>
+	</Material>
+	<MaterialRef Name="Decals"/>
+	<MaterialRef Name="Terminal"/>
+	<MaterialRef Name="Atlas3_Colorable"/>
+	<MaterialRef Name="Atlas2"/>
+	<MaterialRef Name="BlackMattePlastic"/>
+	<MaterialRef Name="TextAtlas"/>
+</Model>

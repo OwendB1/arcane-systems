@@ -11,5 +11,11 @@
 	<MaterialRef Name="PaintedMetal_Darker"/>
 	<MaterialRef Name="PaintedMetal_Yellow"/>
 	<MaterialRef Name="Conveyor"/>
+	<MaterialRef Name="PaintedMetalScratched_Colorable"/>
+	<MaterialRef Name="PaintedMetalScratched_Darker"/>
+	<MaterialRef Name="BlackMattePlastic"/>
+	<MaterialRef Name="TextAtlas"/>
 	<MaterialRef Name="Atlas3_Colorable"/>
+	<MaterialRef Name="PanelingColorable"/>
+	<MaterialRef Name="Atlas2"/>
 </Model>

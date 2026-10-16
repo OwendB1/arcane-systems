@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<Model Name="ArcanePower_ContainmentController">
+	<Parameter Name="RescaleFactor">1.0</Parameter>
+	<Parameter Name="Centered">false</Parameter>
+	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
+	<MaterialRef Name="PaintedMetal_Colorable"/>
+	<MaterialRef Name="PaintedMetal_VeryDark"/>
+	<MaterialRef Name="PaintedMetal_Darker"/>
+	<MaterialRef Name="Metal_Dull"/>
+	<MaterialRef Name="Emissive"/>
+</Model>

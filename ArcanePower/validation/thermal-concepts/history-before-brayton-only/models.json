@@ -1,0 +1,402 @@
+{
+  "Brayton train": {
+    "model": "Brayton train",
+    "cells": [
+      5,
+      3,
+      2
+    ],
+    "meshes": 148,
+    "ports": [
+      {
+        "id": "CO2 leg -1",
+        "type": "CO2_HP",
+        "position": [
+          -2.5,
+          -3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "CO2 leg 1",
+        "type": "CO2_LP",
+        "position": [
+          -2.5,
+          3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "MHD converter": {
+    "model": "MHD converter",
+    "cells": [
+      5,
+      3,
+      3
+    ],
+    "meshes": 214,
+    "ports": [
+      {
+        "id": "primary -1",
+        "type": "PRIMARY",
+        "position": [
+          -6.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "primary 1",
+        "type": "PRIMARY",
+        "position": [
+          6.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "magnet utility",
+        "type": "COLD_UTILITY",
+        "position": [
+          0.0,
+          3.75,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Primary heater": {
+    "model": "Primary heater",
+    "cells": [
+      3,
+      3,
+      3
+    ],
+    "meshes": 76,
+    "ports": [
+      {
+        "id": "primary",
+        "type": "PRIMARY",
+        "position": [
+          -3.75,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "CO2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          -3.75,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Recuperator": {
+    "model": "Recuperator",
+    "cells": [
+      3,
+      2,
+      3
+    ],
+    "meshes": 116,
+    "ports": [
+      {
+        "id": "high-pressure -1",
+        "type": "CO2_HP",
+        "position": [
+          -3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "low-pressure -1",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "high-pressure 1",
+        "type": "CO2_HP",
+        "position": [
+          3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "low-pressure 1",
+        "type": "CO2_LP",
+        "position": [
+          3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Heat rejector": {
+    "model": "Heat rejector",
+    "cells": [
+      3,
+      2,
+      3
+    ],
+    "meshes": 141,
+    "ports": [
+      {
+        "id": "CO2",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "magnet utility",
+        "type": "COLD_UTILITY",
+        "position": [
+          0.0,
+          2.5,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Duplex straight": {
+    "model": "Duplex straight",
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "meshes": 30,
+    "ports": [
+      {
+        "id": "west",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "east",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "Duplex elbow": {
+    "model": "Duplex elbow",
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "meshes": 25,
+    "ports": [
+      {
+        "id": "west",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "id": "north",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ]
+      }
+    ]
+  }
+}

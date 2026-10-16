@@ -4,10 +4,12 @@
 	<Parameter Name="Centered">false</Parameter>
 	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
 	<MaterialRef Name="Construction"/>
+	<MaterialRef Name="Atlas3_Colorable"/>
+	<MaterialRef Name="PaintedMetal_Darker"/>
 	<MaterialRef Name="Metal_Shiny"/>
-	<MaterialRef Name="PaintedMetal_VeryDark"/>
 	<MaterialRef Name="PaintedMetal_Yellow"/>
 	<MaterialRef Name="Conveyor"/>
+	<MaterialRef Name="PaintedMetal_VeryDark"/>
+	<MaterialRef Name="Metal_Dull"/>
 	<MaterialRef Name="PaintedMetal_Colorable"/>
-	<MaterialRef Name="PaintedMetal_Darker"/>
 </Model>

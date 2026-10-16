@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Model Name="ArcanePower_EnergyTransfer">
+  <Parameter Name="RescaleFactor">1.0</Parameter>
+  <Parameter Name="Centered">false</Parameter>
+  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
+  <MaterialRef Name="Metal_Dull" />
+  <MaterialRef Name="PaintedMetal_Colorable" />
+  <MaterialRef Name="Metal_Shiny" />
+  <MaterialRef Name="PaintedMetal_Darker" />
+  <MaterialRef Name="PaintedMetal_Yellow" />
+  <MaterialRef Name="Conveyor" />
+  <MaterialRef Name="PaintedMetalScratched_Colorable" />
+  <MaterialRef Name="PaintedMetal_VeryDark" />
+  <Material Name="EnergyStatus">
+    <Parameter Name="Technique">MESH</Parameter>
+    <Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/Energy/EnergyField_cm.dds</Parameter>
+    <Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/Energy/EnergyField_ng.dds</Parameter>
+    <Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/Energy/EnergyField_add.dds</Parameter>
+  </Material>
+  <MaterialRef Name="Decals" />
+  <MaterialRef Name="Terminal" />
+  <MaterialRef Name="PaintedMetalScratched_Darker" />
+  <MaterialRef Name="Atlas3_Colorable" />
+  <MaterialRef Name="BlackMattePlastic" />
+  <MaterialRef Name="TextAtlas" />
+  <MaterialRef Name="PanelingColorable" />
+  <MaterialRef Name="Atlas2" />
+  <LOD Distance="75">
+    <Model>Models/Cubes/large/ArcanePower_EnergyTransfer_LOD1_r1e543b974253.mwm</Model>
+  </LOD>
+  <LOD Distance="150">
+    <Model>Models/Cubes/large/ArcanePower_EnergyTransfer_LOD2_re286c68f0130.mwm</Model>
+  </LOD>
+</Model>

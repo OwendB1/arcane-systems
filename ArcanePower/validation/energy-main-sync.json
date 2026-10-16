@@ -1,0 +1,54 @@
+{
+  "main_models_synced": [
+    "ArcanePower_EnergyCapacity",
+    "ArcanePower_EnergyCapacityAdvanced",
+    "ArcanePower_EnergyCore",
+    "ArcanePower_EnergyStabilizer",
+    "ArcanePower_EnergyStabilizerAdvanced",
+    "ArcanePower_EnergyTransfer",
+    "ArcanePower_EnergyTransferAdvanced"
+  ],
+  "geometry_audit": true,
+  "checkpoint": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/arcane-energy-core-before-form-detail.blend",
+  "protected_geometry_unchanged": true,
+  "protected_geometry_sha256": "0a87e0040242bf279ffac8a3260d564b589fa25a034323e4de2a89ea13100cd9",
+  "review_scenes_imported": false,
+  "inventory": {
+    "ArcanePower_EnergyCapacity": {
+      "meshes": 682,
+      "triangles": 23814
+    },
+    "ArcanePower_EnergyCapacityAdvanced": {
+      "meshes": 806,
+      "triangles": 28682
+    },
+    "ArcanePower_EnergyCore": {
+      "meshes": 1059,
+      "triangles": 69366
+    },
+    "ArcanePower_EnergyFan": {
+      "meshes": 7,
+      "triangles": 220
+    },
+    "ArcanePower_EnergyRotor": {
+      "meshes": 1,
+      "triangles": 3968
+    },
+    "ArcanePower_EnergyStabilizer": {
+      "meshes": 545,
+      "triangles": 20090
+    },
+    "ArcanePower_EnergyStabilizerAdvanced": {
+      "meshes": 549,
+      "triangles": 21286
+    },
+    "ArcanePower_EnergyTransfer": {
+      "meshes": 636,
+      "triangles": 20428
+    },
+    "ArcanePower_EnergyTransferAdvanced": {
+      "meshes": 682,
+      "triangles": 22104
+    }
+  }
+}

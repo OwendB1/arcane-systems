@@ -1,0 +1,11 @@
+{
+  "reloaded_production_passed": true,
+  "main_models": 7,
+  "review_scenes": false,
+  "label_materials": [
+    "BlackMattePlastic"
+  ],
+  "native_label_revision": 1,
+  "drum_service_seating_revision": 3,
+  "dock_root_revision": 1
+}

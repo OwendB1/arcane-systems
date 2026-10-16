@@ -7,11 +7,11 @@
         <SubtypeId>ArcanePower_EnergyCore_Pillar</SubtypeId>
       </Id>
       <DisplayName>Arcane Energy Core</DisplayName>
-      <Description>3x3x3 storage controller. Upright 1x3x1 pillars: sides capacity; rear transfer; front stabilizer. Align module Up with core Up and its connector/forward face toward the core. Base 1,000 MWh / 10 GW; capacities add 10,000 or 100,000 MWh. Transfer modules raise the bank ceiling to 100 GW / 1 TW. Standard/advanced stabilizers support matching or lower tier modules. Native Auto/Recharge/Discharge. Starts empty; 90% charge efficiency. Default 10% emergency reserve; Custom Data [ArcaneEnergyCore] ReservePercent=10, EmergencySupport=true. Recharge switches visibly to Auto for reactor startup/cooldown/venting and stays Auto.</Description>
+      <Description>3x3x3 storage controller. Upright 1x3x1 pillars: sides capacity; rear transfer; front stabilizer. Align module Up with core Up and its connector/forward face toward the core. Base 1,000 MWh / 10 GW; capacities add 10,000 or 100,000 MWh. Transfer modules raise the bank ceiling to 100 GW / 1 TW. Standard/advanced stabilizers support matching or lower tier modules. Native Auto/Recharge/Discharge. Starts empty; 90% charge efficiency. Default 10% emergency reserve; Custom Data [ArcaneEnergyCore] ReservePercent=10, EmergencySupport=true. Recharge switches visibly to Auto for reactor startup/cooldown/venting and stays Auto. Stored-charge upkeep rises with fill; stabilizers reduce loss. Terminal/toolbar: surge one jump drive in 5-10 seconds at 90% efficiency, or double discharge for 10 seconds. Shared recovery; reserve protected. Passive loss continues while disabled or detached.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCore.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
-      <Model>Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCore.mwm</Model>
+      <Model>Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCore.mwm</Model>
       <BlockPairName>ArcanePower_EnergyCore_Pillar</BlockPairName>
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>180</BuildTimeSeconds>
@@ -37,9 +37,9 @@
       </Components>
       <CriticalComponent Subtype="Computer" Index="0" />
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCore_BS1.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCore_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCore_BS3.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCore_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCore_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCore_BS3.mwm" />
       </BuildProgressModels>
       <MountPoints>
         <MountPoint Side="Front" StartX="0" StartY="0" EndX="3" EndY="3" />
@@ -50,7 +50,7 @@
         <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="3" EndY="3" />
       </MountPoints>
       <ResourceSourceGroup>Battery</ResourceSourceGroup>
-      <MaxPowerOutput>1000000</MaxPowerOutput>
+      <MaxPowerOutput>2000000</MaxPowerOutput>
       <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
       <RequiredPowerInput>1000000</RequiredPowerInput>
       <AdaptibleInput>true</AdaptibleInput>
@@ -68,7 +68,7 @@
       <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCapacity.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
-      <Model>Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacity.mwm</Model>
+      <Model>Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCapacity.mwm</Model>
       <BlockPairName>ArcanePower_EnergyCapacity_Pillar</BlockPairName>
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>60</BuildTimeSeconds>
@@ -94,9 +94,9 @@
       </Components>
       <CriticalComponent Subtype="Computer" Index="0" />
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacity_BS1.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacity_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacity_BS3.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCapacity_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCapacity_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCapacity_BS3.mwm" />
       </BuildProgressModels>
       <MountPoints>
         <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="3" />
@@ -107,7 +107,7 @@
         <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
       <ResourceSourceGroup>Battery</ResourceSourceGroup>
-      <MaxPowerOutput>1000000</MaxPowerOutput>
+      <MaxPowerOutput>2000000</MaxPowerOutput>
       <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
       <RequiredPowerInput>1000000</RequiredPowerInput>
       <AdaptibleInput>true</AdaptibleInput>
@@ -125,7 +125,7 @@
       <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCapacityAdvanced.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
-      <Model>Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacityAdvanced.mwm</Model>
+      <Model>Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCapacityAdvanced.mwm</Model>
       <BlockPairName>ArcanePower_EnergyCapacityAdvanced_Pillar</BlockPairName>
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>600</BuildTimeSeconds>
@@ -151,9 +151,9 @@
       </Components>
       <CriticalComponent Subtype="Computer" Index="0" />
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacityAdvanced_BS1.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacityAdvanced_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyCapacityAdvanced_BS3.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCapacityAdvanced_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCapacityAdvanced_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyCapacityAdvanced_BS3.mwm" />
       </BuildProgressModels>
       <MountPoints>
         <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="3" />
@@ -164,7 +164,7 @@
         <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
       <ResourceSourceGroup>Battery</ResourceSourceGroup>
-      <MaxPowerOutput>1000000</MaxPowerOutput>
+      <MaxPowerOutput>2000000</MaxPowerOutput>
       <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
       <RequiredPowerInput>1000000</RequiredPowerInput>
       <AdaptibleInput>true</AdaptibleInput>
@@ -182,7 +182,7 @@
       <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyTransfer.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
-      <Model>Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransfer.mwm</Model>
+      <Model>Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyTransfer.mwm</Model>
       <BlockPairName>ArcanePower_EnergyTransfer_Pillar</BlockPairName>
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>60</BuildTimeSeconds>
@@ -207,9 +207,9 @@
       </Components>
       <CriticalComponent Subtype="Computer" Index="0" />
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransfer_BS1.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransfer_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransfer_BS3.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyTransfer_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyTransfer_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyTransfer_BS3.mwm" />
       </BuildProgressModels>
       <MountPoints>
         <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="3" />
@@ -237,7 +237,7 @@
       <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyTransferAdvanced.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
-      <Model>Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransferAdvanced.mwm</Model>
+      <Model>Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyTransferAdvanced.mwm</Model>
       <BlockPairName>ArcanePower_EnergyTransferAdvanced_Pillar</BlockPairName>
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>600</BuildTimeSeconds>
@@ -262,9 +262,9 @@
       </Components>
       <CriticalComponent Subtype="Computer" Index="0" />
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransferAdvanced_BS1.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransferAdvanced_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyTransferAdvanced_BS3.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyTransferAdvanced_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyTransferAdvanced_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyTransferAdvanced_BS3.mwm" />
       </BuildProgressModels>
       <MountPoints>
         <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="3" />
@@ -292,7 +292,7 @@
       <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyStabilizer.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
-      <Model>Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizer.mwm</Model>
+      <Model>Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyStabilizer.mwm</Model>
       <BlockPairName>ArcanePower_EnergyStabilizer_Pillar</BlockPairName>
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>60</BuildTimeSeconds>
@@ -317,9 +317,9 @@
       </Components>
       <CriticalComponent Subtype="Computer" Index="0" />
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizer_BS1.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizer_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizer_BS3.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyStabilizer_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyStabilizer_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyStabilizer_BS3.mwm" />
       </BuildProgressModels>
       <MountPoints>
         <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="3" />
@@ -347,7 +347,7 @@
       <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyStabilizerAdvanced.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
-      <Model>Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizerAdvanced.mwm</Model>
+      <Model>Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyStabilizerAdvanced.mwm</Model>
       <BlockPairName>ArcanePower_EnergyStabilizerAdvanced_Pillar</BlockPairName>
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>600</BuildTimeSeconds>
@@ -372,9 +372,9 @@
       </Components>
       <CriticalComponent Subtype="Computer" Index="0" />
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizerAdvanced_BS1.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizerAdvanced_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_839518c92310/ArcanePower_EnergyStabilizerAdvanced_BS3.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyStabilizerAdvanced_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyStabilizerAdvanced_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/energy_f197b0b01b73/ArcanePower_EnergyStabilizerAdvanced_BS3.mwm" />
       </BuildProgressModels>
       <MountPoints>
         <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="3" />

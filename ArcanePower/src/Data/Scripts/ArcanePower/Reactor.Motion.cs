@@ -429,8 +429,7 @@ namespace ArcanePower
         private void AdvanceSpin()
         {
             Motion.SpinPhase = (Motion.SpinPhase + Motion.SpinRate) % 36000;
-            Motion.SecondaryRate = Motion.SpinRate * (float)(.65 + .20 * Math.Sin(Motion.CoreTick / 137.0)
-                + .15 * Math.Sin(Motion.CoreTick / 311.0));
+            Motion.SecondaryRate = RingMotion.SecondaryRate(Motion.SpinRate, Motion.CoreTick);
             Motion.SecondaryPhase = (Motion.SecondaryPhase + Motion.SecondaryRate) % 36000;
         }
 
@@ -495,24 +494,8 @@ namespace ArcanePower
 
         private Matrix RingOrientation(int index, float age)
         {
-            var spec = AnimationGeometry.Rings[index];
-            Matrix pose = Rest("Ring" + (index + 1));
-            pose.Translation = Vector3.Zero;
-            pose *= Matrix.CreateFromAxisAngle(spec.Axis, MathHelper.ToRadians(spec.Tilt) * Span(age, 1060, 1150));
-            double spin = age > 1170 ? Motion.SpinPhase * (double)spec.Speed % 360.0 : 0;
-            pose *= Matrix.CreateFromAxisAngle(spec.Axis, MathHelper.ToRadians((float)spin));
-            if (age > 1170) pose *= SecondaryRotation(index, Motion.SecondaryPhase, 1);
-            return pose;
-        }
-
-        private Matrix SecondaryRotation(int index, double phase, float settle)
-        {
-            Vector3 axis = Vector3.Normalize(Vector3.Cross(AnimationGeometry.Rings[index].Axis, Vector3.Up));
-            // Hundredth-degree rates keep phase wrapping seamless, with separate
-            // axes/rates for each concentric hoop and no frame-random jitter.
-            double speed = (.07 + .02 * index) * (index % 2 == 0 ? -1 : 1);
-            float angle = MathHelper.WrapAngle(MathHelper.ToRadians((float)(phase * speed % 360)));
-            return Matrix.CreateFromAxisAngle(axis, angle * settle);
+            return RingMotion.Orientation(Rest("Ring" + (index + 1)), index, Span(age, 1060, 1150),
+                age > 1170 ? Motion.SpinPhase : 0, age > 1170 ? Motion.SecondaryPhase : 0);
         }
 
         private Matrix ShutdownRingOrientation(int index)
@@ -536,7 +519,7 @@ namespace ArcanePower
             float brake = Math.Min(90, Motion.StopTick);
             double secondary = Motion.SecondaryPhase;
             if (Motion.StopSpinAge >= 1170) secondary += Motion.SecondaryRate * (brake - brake * brake / 180f);
-            pose *= SecondaryRotation(index, secondary, Motion.StopTick >= 90 ? settle : 1);
+            pose *= RingMotion.SecondaryRotation(index, secondary, Motion.StopTick >= 90 ? settle : 1);
             return pose;
         }
 

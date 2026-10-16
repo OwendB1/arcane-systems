@@ -1,0 +1,65 @@
+[
+  {
+    "image": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/validation/energy-loop-03/ArcanePower_EnergyCore-main.png",
+    "target": [
+      -0.3,
+      0.15,
+      -0.1
+    ],
+    "distance_m": 16
+  },
+  {
+    "image": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/validation/energy-loop-03/ArcanePower_EnergyCapacity-main.png",
+    "target": [
+      -0.3,
+      0.15,
+      -0.1
+    ],
+    "distance_m": 10
+  },
+  {
+    "image": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/validation/energy-loop-03/ArcanePower_EnergyTransfer-main.png",
+    "target": [
+      -0.3,
+      0.15,
+      -0.1
+    ],
+    "distance_m": 10
+  },
+  {
+    "image": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/validation/energy-loop-03/ArcanePower_EnergyStabilizer-main.png",
+    "target": [
+      -0.3,
+      0.15,
+      -0.1
+    ],
+    "distance_m": 10
+  },
+  {
+    "image": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/validation/energy-loop-03/ArcanePower_EnergyCapacityAdvanced-main.png",
+    "target": [
+      -0.3,
+      0.15,
+      -0.1
+    ],
+    "distance_m": 10
+  },
+  {
+    "image": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/validation/energy-loop-03/ArcanePower_EnergyTransferAdvanced-main.png",
+    "target": [
+      -0.3,
+      0.15,
+      -0.1
+    ],
+    "distance_m": 10
+  },
+  {
+    "image": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/validation/energy-loop-03/ArcanePower_EnergyStabilizerAdvanced-main.png",
+    "target": [
+      -0.3,
+      0.15,
+      -0.1
+    ],
+    "distance_m": 10
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "failures": [],
+  "surfaces": 110,
+  "decals": 133,
+  "preserved_geometry_objects": 3065,
+  "marking_support_samples": 2345,
+  "uv_tiles_per_m": 0.8,
+  "native_materials_only": true,
+  "live_game_checked": false
+}

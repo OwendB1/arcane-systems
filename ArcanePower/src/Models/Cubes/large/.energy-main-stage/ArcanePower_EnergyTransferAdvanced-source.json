@@ -1,0 +1,18 @@
+{
+  "collections": [
+    "ArcanePower_EnergyTransferAdvanced",
+    "ArcanePower_EnergyTransferAdvanced_LOD1",
+    "ArcanePower_EnergyTransferAdvanced_LOD2"
+  ],
+  "triangles": 22128,
+  "collection_triangles": {
+    "ArcanePower_EnergyTransferAdvanced": 22128,
+    "ArcanePower_EnergyTransferAdvanced_LOD1": 14732,
+    "ArcanePower_EnergyTransferAdvanced_LOD2": 12302
+  },
+  "authored_triangles": 22128,
+  "triangulation_adjustments": [],
+  "target": "Models/Cubes/large",
+  "collision": "Models/Cubes/large/ArcanePower_EnergyTransferAdvanced.hkt",
+  "collision_model": "Models/Cubes/large/ArcanePower_EnergyTransferAdvanced.mwm"
+}

@@ -1,0 +1,53 @@
+{
+  "ArcanePower_ReactorPrototype": [
+    {
+      "stage": 1,
+      "meshes": 1,
+      "triangles": 6368
+    },
+    {
+      "stage": 2,
+      "meshes": 447,
+      "triangles": 29852
+    },
+    {
+      "stage": 3,
+      "meshes": 1208,
+      "triangles": 90985
+    }
+  ],
+  "ArcanePower_ContainmentController": [
+    {
+      "stage": 1,
+      "meshes": 1,
+      "triangles": 776
+    },
+    {
+      "stage": 2,
+      "meshes": 25,
+      "triangles": 1240
+    },
+    {
+      "stage": 3,
+      "meshes": 62,
+      "triangles": 2566
+    }
+  ],
+  "ArcanePower_AdvancedContainmentController": [
+    {
+      "stage": 1,
+      "meshes": 1,
+      "triangles": 776
+    },
+    {
+      "stage": 2,
+      "meshes": 69,
+      "triangles": 2238
+    },
+    {
+      "stage": 3,
+      "meshes": 111,
+      "triangles": 3860
+    }
+  ]
+}

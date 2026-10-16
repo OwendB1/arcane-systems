@@ -5,6 +5,11 @@
 	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
 	<MaterialRef Name="Construction"/>
 	<MaterialRef Name="PaintedMetal_VeryDark"/>
-	<MaterialRef Name="Metal_Dull"/>
+	<MaterialRef Name="PaintedMetal_Darker"/>
 	<MaterialRef Name="Metal_Shiny"/>
+	<MaterialRef Name="Metal_Dull"/>
+	<MaterialRef Name="Atlas3_Colorable"/>
+	<MaterialRef Name="PaintedMetalScratched_Darker"/>
+	<MaterialRef Name="Atlas2"/>
+	<MaterialRef Name="PanelingColorable"/>
 </Model>

@@ -1,0 +1,27 @@
+{
+  "schema": "animation_contact_sheet_report.v1",
+  "frames": [
+    "ArcanePower/validation/energy-close/fan-01.png",
+    "ArcanePower/validation/energy-close/fan-05.png",
+    "ArcanePower/validation/energy-close/fan-09.png",
+    "ArcanePower/validation/energy-close/fan-13.png"
+  ],
+  "frame_diff": [
+    {
+      "from": "fan-01.png",
+      "to": "fan-05.png",
+      "mean_rgb_diff": 0.6198424242424242
+    },
+    {
+      "from": "fan-05.png",
+      "to": "fan-09.png",
+      "mean_rgb_diff": 0.6251919191919192
+    },
+    {
+      "from": "fan-09.png",
+      "to": "fan-13.png",
+      "mean_rgb_diff": 0.6099020202020201
+    }
+  ],
+  "warnings": []
+}

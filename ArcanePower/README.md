@@ -5,12 +5,22 @@
 
 Arcane Power is an SE1 reactor, fuel-processing and energy-storage mod in development. The current large-grid reactor fits **5×5×3 cells** (SE `Size=(5,3,5)`). Its rounded housing has three native-size conveyor access hatches plus a centered top conveyor connection behind the vent hatch, two base upgrade sockets and curved chamber glass. This is an engineering slice of the [mod plan](../docs/arcane-power-plan.md), not the finished progression.
 
-## Construction and Energy Core delivery — updated 14 October 2026
+## Construction and Energy Core delivery — updated 15 October 2026
 
 All twelve public blocks now have **three native construction stages**, 36 models
 for welding/grinding. The existing collisions remain as accepted. Native imports,
 stage bounds, construction materials, embedded collisions and reactor model
 transitions pass their focused checks.
+
+The latest art refresh adds native SE exterior seams, restrained wear and service
+markings to the reactor. Reactor/controller construction stages now use the current
+assemblies, including supported cartridge rails. Battery stages already matched
+their mains and retain their validated bytes. Fifty distance meshes now follow the
+current main models, with immutable native LOD references included in packaging.
+The actual Blender UI was reviewed at 1.8, 2.4 and 3.0 m; the finished reactor is
+left open. [Delivery checks](validation/current-model-export.json) ·
+[Live UI view](validation/reactor-texture-lod-loop/ui-final-reactor.png).
+This art refresh has not been reloaded in-game or published to Workshop.
 
 The **3×3×3 Energy Core** uses full-block **1×3×1 upgrade pillars**, with two side
 capacity sockets, a rear transfer socket and a front stabilizer. Pillars face the
@@ -336,7 +346,73 @@ across the visual hatch openings. MwmBuilder still reports degenerate triangles
 in the visual mesh; export succeeded after bypassing a Wine/.NET trace-listener
 failure in a temporary copy of the compiler.
 
+## Reactor exterior review — 15 October 2026
+
+The saved [prototype](assets/arcane-power-prototype.blend) now has varied lower
+service bays, a continuous upper cooling belt and detailed chamfered pillars.
+Accepted pillar proportions and roof seats are retained. Lower feet use stepped
+shoes inset within the perimeter collar. Status emitters sit in real recesses,
+with separate backing and lamp depths. Fixed dispensers have pitched cheeks and
+curved retainers joining them to the ceiling and glass surround.
+
+[Live review](assets/review_reactor_exterior.py) records 1.8, 2.4 and 3.0 m views
+at a fixed focal length and lighting. [Feet](validation/reactor-exterior-loop-01/review-feet.jpg),
+[status lamps](validation/reactor-exterior-loop-01/review-status.jpg),
+[upper band/seats](validation/reactor-exterior-loop-01/review-upper.jpg) and
+[chamber/dispenser mounts](validation/reactor-exterior-loop-01/review-chamber.jpg)
+were inspected. The [geometry audit](validation/reactor-exterior-loop-01/geometry.json)
+checks solid winding, native materials/UVs, lamp separation, supported screws,
+feet and mounts, and clear dispensing paths. Original dispensers, native
+interfaces, chamber, moving parts, collision and derived art remain unchanged.
+This exterior art is saved in Blender and exported into the local mod family
+`reactor_787f4951767a`. [Native export proof](validation/prototype-main-export.json)
+covers the reactor, both controllers, vents, moving subparts, containment tile
+and tablet: 23 models, evaluated triangle counts, texture dependencies, exact
+accepted collision and unchanged native detector/subpart poses. In-game review
+is pending. LOD and reactor/controller construction redesign remain deferred.
+
+## Controller detail review — 15 October 2026
+
+The shared [native texture pass](assets/detail_native_textures.py) now covers
+reactor, controllers, battery and all six battery modules. It uses metric UVs,
+different texture origins per panel, restrained wear on narrow edges, native
+weld/pressed seams and supported isolation/lift markings. Standard module
+warnings use yellow; advanced module warnings use white. Broad panels stay clean.
+The existing game materials provide paint masks, normal/gloss maps and decals;
+no custom replacement game textures are needed. Battery construction copies
+inherit the finished surfaces when their backing is installed.
+[Texture audit](validation/native-texture-detail/energy-audit.json) preserves
+geometry, dummies, collision, LODs and powered materials while checking decal
+backing and visibility. [Close view](validation/native-texture-detail/capacity-1.8m.png).
+
+The standard controller now has a broad removable service cassette, release
+handle, side latches and passive cooling bank. The advanced version has paired
+power cartridges, seated heat spreaders, connected bus hardware and extra side
+cooling. Both use native SEUT materials and atlas fasteners, chamfered receivers,
+recessed tier lamps and detailed top/side surfaces. Their curved backs, native
+mating anchors, collision and construction stages are preserved.
+Receiver lips now stand 6 mm clear of casing faces, with at least 4.5 mm cover
+clearance. Narrower status carriers avoid their receiver shoulders. All 14 rims
+have solid backing; fan/vent supports and native anchors are unchanged.
+
+[Front comparison](validation/controller-detail-loop-01/review-front.jpg) and
+[installed review](validation/controller-detail-loop-01/review-mounted.jpg)
+cover 1.8, 2.4 and 3.0 m. The [focused audit](assets/audit_controller_details.py)
+checks solids, UVs, bounds, visible/seated fasteners, cooling and bus support,
+and protected geometry. [Refinement source](assets/refine_controller_details.py)
+is called by the hardware generator. Both repaired controllers are exported and
+connected through fresh model paths in the local mod. In-game inspection and
+derived-model redesign remain deferred.
+
 ## Construction stages — 9 October 2026
+
+**Battery update, 15 October:** all 21 storage stages now follow the current main
+models, with three mating stations, current equipment and static fan blades.
+Partial armor installs whole sides/decks and their fittings. Glazing and powered
+visuals wait until completion. Native import, bounds, materials, texture paths,
+exact collision and definition checks pass. The active family is
+`energy_87c3644f9849`. [Export proof](validation/energy-construction-update/native-export.json).
+Further LOD work and reactor/controller construction redesign remain deferred.
 
 **Art revision, 12 October:** all 36 stages now follow the vanilla large battery's
 construction language: broad open channel steel, diagonal webs and corner knees,

@@ -3,7 +3,7 @@
 blender -b ArcanePower/assets/arcane-energy-core.blend --python ArcanePower/assets/render_workshop_blueprints.py
 Then: python3 ArcanePower/tools/compose_workshop_blueprints.py
 """
-import bpy, bmesh, importlib, math, sys
+import bpy, bmesh, importlib, json, math, sys
 from pathlib import Path
 from mathutils import Matrix, Vector
 
@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / '.cache/workshop-blueprints'
 OUT.mkdir(parents=True, exist_ok=True)
 COLS = importlib.import_module('space-engineers-utilities.seut_collections')
+RINGS = json.loads((ROOT / 'assets/deployment.json').read_text())['rings']
 with bpy.data.libraries.load(str(ROOT / 'assets/arcane-power-prototype.blend'), link=False) as (source, target):
     target.scenes = [name for name in source.scenes if name.startswith('ArcanePower_') and name not in bpy.data.scenes]
 scene = bpy.data.scenes.new('Workshop blueprint render')
@@ -67,6 +68,9 @@ def geometry(source, transform=Matrix.Identity(4), reactor=False):
                 continue
             yield obj, pose
         elif obj.name.startswith('subpart_') and obj.get('file') in bpy.data.scenes:
+            if obj.name.startswith('subpart_EnergyRing'):
+                spec = RINGS[int(obj.name[-1])+1]
+                pose = pose @ Matrix.Rotation(math.radians(spec['tilt_degrees']),4,Vector(spec['axis']))
             if reactor and any(name in obj.name for name in ('Tile', 'Plasma', 'BlastShield')):
                 continue
             if reactor and obj.name.startswith('subpart_Ring'):

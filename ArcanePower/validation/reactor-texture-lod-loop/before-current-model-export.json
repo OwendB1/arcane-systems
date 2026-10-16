@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "scope": "Native texture detail on reactor, controllers, battery and six modules; current model set and battery stages connected locally",
+  "main_models": 32,
+  "battery_construction_models": 21,
+  "reactor_revision": "Models/Cubes/large/reactor_787f4951767a",
+  "battery_revision": "Models/Cubes/large/energy_87c3644f9849",
+  "textured_surfaces": 268,
+  "supported_native_decals": 129,
+  "marking_backing_and_visibility_samples": 645,
+  "preserved_geometry_objects": 14708,
+  "review_assemblies_verified_after_reload": 11,
+  "runtime_dependencies_resolved": true,
+  "runtime_package_files": 256,
+  "local_mod": "/home/owendb/.config/SpaceEngineers/Mods/ArcanePower-Prototype",
+  "evidence": [
+    "prototype-main-export.json",
+    "energy-main-export.json",
+    "energy-construction-update/native-export.json",
+    "native-texture-detail/prototype-audit.json",
+    "native-texture-detail/energy-audit.json",
+    "native-texture-detail/review-reload.json",
+    "release-manifest.json"
+  ],
+  "game_reloaded": false,
+  "workshop_published": false
+}

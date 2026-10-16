@@ -1,0 +1,55 @@
+[
+  {
+    "texture": "Textures/Models/Cubes/PaintedMetalScratchedDarker_cm.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/PaintedMetalScratchedDarker_cm_935d1bf498b6.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Decals_Atlas_A_01_alphamask.TIF",
+    "status": "no lost alpha"
+  },
+  {
+    "texture": "Textures/Models/Cubes/PaintedMetalScratchedColorable_cm.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/PaintedMetalScratchedColorable_cm_e060e2f1b36c.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/PaintedMetalScratchedColorable_add.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/PaintedMetalScratchedColorable_add_5e9b7482c787.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Atlas2_ng.TIF",
+    "status": "no lost alpha"
+  },
+  {
+    "texture": "Textures/Models/Cubes/PaintedMetalScratchedColorable_ng.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/PaintedMetalScratchedColorable_ng_b97af23114f5.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Atlas2_cm.TIF",
+    "status": "no lost alpha"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Atlas2_alphamask.TIF",
+    "status": "no lost alpha"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Atlas2_add.TIF",
+    "status": "no lost alpha"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Decals_Atlas_A_01_add.TIF",
+    "status": "restored RGBA from native DDS",
+    "backup": "/home/owendb/.cache/arcane-power/seut-texture-backups/Textures/Models/Cubes/Decals_Atlas_A_01_add_7202fa66c918.TIF"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Decals_Atlas_A_01_ng.TIF",
+    "status": "no lost alpha"
+  },
+  {
+    "texture": "Textures/Models/Cubes/Decals_Atlas_A_01_cm.TIF",
+    "status": "no lost alpha"
+  }
+]

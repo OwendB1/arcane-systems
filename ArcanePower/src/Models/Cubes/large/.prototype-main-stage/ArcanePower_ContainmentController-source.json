@@ -1,0 +1,18 @@
+{
+  "collections": [
+    "ArcanePower_ContainmentController",
+    "ArcanePower_ContainmentController_LOD1",
+    "ArcanePower_ContainmentController_LOD2"
+  ],
+  "triangles": 2292,
+  "collection_triangles": {
+    "ArcanePower_ContainmentController": 2292,
+    "ArcanePower_ContainmentController_LOD1": 1424,
+    "ArcanePower_ContainmentController_LOD2": 1064
+  },
+  "authored_triangles": 2292,
+  "triangulation_adjustments": [],
+  "target": "Models/Cubes/large",
+  "collision": "Models/Cubes/large/ArcanePower_ContainmentController.hkt",
+  "collision_model": "Models/Cubes/large/ArcanePower_ContainmentController.mwm"
+}

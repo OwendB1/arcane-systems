@@ -1,0 +1,27 @@
+{
+  "self_check": {
+    "balance_cases": 12,
+    "invalid_inputs_rejected": 3,
+    "status": "passed"
+  },
+  "base": {
+    "primary_mw": 100,
+    "mhd_gross_mw": 0,
+    "mhd_aux_mw": 0,
+    "brayton_heat_mw": 100,
+    "brayton_gross_mw": 48.0,
+    "brayton_aux_mw": 8.0,
+    "net_mw": 40.0,
+    "rejected_mw": 60.0
+  },
+  "advanced": {
+    "primary_mw": 100,
+    "mhd_gross_mw": 24.0,
+    "mhd_aux_mw": 4.0,
+    "brayton_heat_mw": 76.0,
+    "brayton_gross_mw": 36.48,
+    "brayton_aux_mw": 6.08,
+    "net_mw": 50.4,
+    "rejected_mw": 49.6
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "collections": [
+    "ArcanePower_Tile1"
+  ],
+  "triangles": 48,
+  "collection_triangles": {
+    "ArcanePower_Tile1": 48
+  },
+  "authored_triangles": 48,
+  "triangulation_adjustments": [],
+  "target": "Models/Cubes/large",
+  "collision": "Models/Cubes/large/ArcanePower_Tile1.hkt",
+  "collision_model": "Models/Cubes/large/ArcanePower_Tile1.mwm"
+}

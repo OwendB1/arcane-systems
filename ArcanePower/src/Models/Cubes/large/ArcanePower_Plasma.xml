@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Model Name="ArcanePower_Plasma">
-	<Parameter Name="RescaleFactor">1.0</Parameter>
-	<Parameter Name="Centered">false</Parameter>
-	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
-	<Material Name="ArcanePlasma">
-		<Parameter Name="Technique">MESH</Parameter>
-		<Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/plasma_b6054aac6c5b/ArcanePlasma_cm.dds</Parameter>
-		<Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/plasma_b6054aac6c5b/ArcanePlasma_ng.dds</Parameter>
-		<Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/plasma_b6054aac6c5b/ArcanePlasma_add.dds</Parameter>
-	</Material>
+  <Parameter Name="RescaleFactor">1.0</Parameter>
+  <Parameter Name="Centered">false</Parameter>
+  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
+  <Material Name="ArcanePlasma">
+    <Parameter Name="Technique">MESH</Parameter>
+    <Parameter Name="ColorMetalTexture">Textures/Models/ArcanePower/plasma_b6054aac6c5b/ArcanePlasma_cm.dds</Parameter>
+    <Parameter Name="NormalGlossTexture">Textures/Models/ArcanePower/plasma_b6054aac6c5b/ArcanePlasma_ng.dds</Parameter>
+    <Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/plasma_b6054aac6c5b/ArcanePlasma_add.dds</Parameter>
+  </Material>
 </Model>

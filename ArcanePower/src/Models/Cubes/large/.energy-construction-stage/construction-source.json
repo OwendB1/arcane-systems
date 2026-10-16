@@ -1,0 +1,107 @@
+{
+  "ArcanePower_EnergyCore_BS1": {
+    "triangles": 9856,
+    "block": "ArcanePower_EnergyCore",
+    "stage": 1
+  },
+  "ArcanePower_EnergyCore_BS2": {
+    "triangles": 33672,
+    "block": "ArcanePower_EnergyCore",
+    "stage": 2
+  },
+  "ArcanePower_EnergyCore_BS3": {
+    "triangles": 77680,
+    "block": "ArcanePower_EnergyCore",
+    "stage": 3
+  },
+  "ArcanePower_EnergyCapacity_BS1": {
+    "triangles": 1392,
+    "block": "ArcanePower_EnergyCapacity",
+    "stage": 1
+  },
+  "ArcanePower_EnergyCapacity_BS2": {
+    "triangles": 13768,
+    "block": "ArcanePower_EnergyCapacity",
+    "stage": 2
+  },
+  "ArcanePower_EnergyCapacity_BS3": {
+    "triangles": 20128,
+    "block": "ArcanePower_EnergyCapacity",
+    "stage": 3
+  },
+  "ArcanePower_EnergyCapacityAdvanced_BS1": {
+    "triangles": 1392,
+    "block": "ArcanePower_EnergyCapacityAdvanced",
+    "stage": 1
+  },
+  "ArcanePower_EnergyCapacityAdvanced_BS2": {
+    "triangles": 18592,
+    "block": "ArcanePower_EnergyCapacityAdvanced",
+    "stage": 2
+  },
+  "ArcanePower_EnergyCapacityAdvanced_BS3": {
+    "triangles": 24952,
+    "block": "ArcanePower_EnergyCapacityAdvanced",
+    "stage": 3
+  },
+  "ArcanePower_EnergyTransfer_BS1": {
+    "triangles": 1392,
+    "block": "ArcanePower_EnergyTransfer",
+    "stage": 1
+  },
+  "ArcanePower_EnergyTransfer_BS2": {
+    "triangles": 10480,
+    "block": "ArcanePower_EnergyTransfer",
+    "stage": 2
+  },
+  "ArcanePower_EnergyTransfer_BS3": {
+    "triangles": 16856,
+    "block": "ArcanePower_EnergyTransfer",
+    "stage": 3
+  },
+  "ArcanePower_EnergyTransferAdvanced_BS1": {
+    "triangles": 1392,
+    "block": "ArcanePower_EnergyTransferAdvanced",
+    "stage": 1
+  },
+  "ArcanePower_EnergyTransferAdvanced_BS2": {
+    "triangles": 12112,
+    "block": "ArcanePower_EnergyTransferAdvanced",
+    "stage": 2
+  },
+  "ArcanePower_EnergyTransferAdvanced_BS3": {
+    "triangles": 18488,
+    "block": "ArcanePower_EnergyTransferAdvanced",
+    "stage": 3
+  },
+  "ArcanePower_EnergyStabilizer_BS1": {
+    "triangles": 1392,
+    "block": "ArcanePower_EnergyStabilizer",
+    "stage": 1
+  },
+  "ArcanePower_EnergyStabilizer_BS2": {
+    "triangles": 7086,
+    "block": "ArcanePower_EnergyStabilizer",
+    "stage": 2
+  },
+  "ArcanePower_EnergyStabilizer_BS3": {
+    "triangles": 17086,
+    "block": "ArcanePower_EnergyStabilizer",
+    "stage": 3
+  },
+  "ArcanePower_EnergyStabilizerAdvanced_BS1": {
+    "triangles": 1392,
+    "block": "ArcanePower_EnergyStabilizerAdvanced",
+    "stage": 1
+  },
+  "ArcanePower_EnergyStabilizerAdvanced_BS2": {
+    "triangles": 7086,
+    "block": "ArcanePower_EnergyStabilizerAdvanced",
+    "stage": 2
+  },
+  "ArcanePower_EnergyStabilizerAdvanced_BS3": {
+    "triangles": 18238,
+    "block": "ArcanePower_EnergyStabilizerAdvanced",
+    "stage": 3
+  }
+}

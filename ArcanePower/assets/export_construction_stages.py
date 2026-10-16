@@ -1,5 +1,6 @@
 """Run in the authored Blender project, then tools/compile_construction_stages.py."""
 import importlib
+import json
 import sys
 from pathlib import Path
 import bpy
@@ -25,22 +26,28 @@ def stage_layer(layer, collection):
             return found
 
 
-area = next(a for a in bpy.context.screen.areas if a.type == 'VIEW_3D')
-for name in NAMES+ENERGY:
-    if name not in bpy.data.scenes: continue
-    scene = bpy.data.scenes[name]
-    bpy.context.window.scene = scene
-    with bpy.context.temp_override(area=area, region=next(r for r in area.regions if r.type == 'WINDOW')):
-        for collection in collections.get_collections(scene)['bs']:
-            hidden = collection.hide_render
-            layer = stage_layer(bpy.context.view_layer.layer_collection, collection)
-            hidden_viewport = layer.hide_viewport
-            layer.hide_viewport = False
-            collection.hide_render = False
-            try:
-                result = export.export_collection(Reporter(), bpy.context, collection)
-            finally:
-                collection.hide_render = hidden
-                layer.hide_viewport = hidden_viewport
-            if any('FINISHED' not in status for status in result):
-                raise RuntimeError('Stage export failed: '+collection.name)
+def main(names=NAMES+ENERGY, output=None):
+    if bpy.app.background:
+        importlib.import_module('space-engineers-utilities.seut_errors').show_popup_report=lambda *args:print('SEUT',args,flush=True)
+    area=next(a for a in bpy.context.screen.areas if a.type=='VIEW_3D');path=Path(output)/'construction-source.json' if output else None
+    rows=json.loads(path.read_text()) if path and path.exists() else {}
+    for name in names:
+        if name not in bpy.data.scenes:continue
+        scene=bpy.data.scenes[name];bpy.context.window.scene=scene;bpy.context.view_layer.update()
+        previous=scene.seut.export_exportPath
+        if output:scene.seut.export_exportPath=str(output)
+        try:
+            with bpy.context.temp_override(area=area,region=next(r for r in area.regions if r.type=='WINDOW')):
+                for collection in collections.get_collections(scene)['bs']:
+                    hidden=collection.hide_render;layer=stage_layer(bpy.context.view_layer.layer_collection,collection);hidden_viewport=layer.hide_viewport
+                    layer.hide_viewport=False;collection.hide_render=False;bpy.context.view_layer.update()
+                    try:statuses=export.export_collection(Reporter(),bpy.context,collection)
+                    finally:collection.hide_render=hidden;layer.hide_viewport=hidden_viewport
+                    if any('FINISHED' not in status for status in statuses):raise RuntimeError('Stage export failed: '+collection.name)
+                    rows[export.get_col_filename(collection)]={'triangles':sum(len(p.vertices)-2 for o in collection.objects if o.type=='MESH' for p in o.data.polygons),'block':name,'stage':collection.seut.type_index}
+        finally:scene.seut.export_exportPath=previous
+    if path:path.write_text(json.dumps(rows,indent=2)+'\n')
+    return rows
+
+
+if __name__=='__main__':result=main(globals().get('EXPORT_NAMES',NAMES+ENERGY),globals().get('EXPORT_DIRECTORY'))

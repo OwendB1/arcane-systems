@@ -1,0 +1,69 @@
+{
+  "file": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/arcane-thermal-concepts.blend",
+  "scene": "Thermal / Advanced plant",
+  "status": "passed",
+  "models": {
+    "Brayton train": {
+      "meshes": 148,
+      "ports": 2,
+      "backed_fasteners": 84,
+      "backed_native_decals": 1,
+      "backed_markings": 7
+    },
+    "Duplex elbow": {
+      "meshes": 25,
+      "ports": 2,
+      "backed_fasteners": 8,
+      "backed_native_decals": 0,
+      "backed_markings": 6
+    },
+    "Duplex straight": {
+      "meshes": 30,
+      "ports": 2,
+      "backed_fasteners": 8,
+      "backed_native_decals": 0,
+      "backed_markings": 6
+    },
+    "Heat rejector": {
+      "meshes": 141,
+      "ports": 2,
+      "backed_fasteners": 8,
+      "backed_native_decals": 0,
+      "backed_markings": 7
+    },
+    "MHD converter": {
+      "meshes": 214,
+      "ports": 3,
+      "backed_fasteners": 68,
+      "backed_native_decals": 1,
+      "backed_markings": 11
+    },
+    "Primary heater": {
+      "meshes": 76,
+      "ports": 2,
+      "backed_fasteners": 16,
+      "backed_native_decals": 2,
+      "backed_markings": 8
+    },
+    "Recuperator": {
+      "meshes": 116,
+      "ports": 4,
+      "backed_fasteners": 16,
+      "backed_native_decals": 0,
+      "backed_markings": 14
+    }
+  },
+  "layouts": {
+    "Thermal / Base plant": {
+      "component_instances": 6,
+      "typed_connections": 5,
+      "isolated_ports": 1
+    },
+    "Thermal / Advanced plant": {
+      "component_instances": 7,
+      "typed_connections": 7,
+      "isolated_ports": 0
+    }
+  },
+  "production_unchanged": true
+}

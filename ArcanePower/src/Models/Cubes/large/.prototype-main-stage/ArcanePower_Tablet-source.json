@@ -1,0 +1,18 @@
+{
+  "collections": [
+    "ArcanePower_Tablet",
+    "ArcanePower_Tablet_LOD1",
+    "ArcanePower_Tablet_LOD2"
+  ],
+  "triangles": 5300,
+  "collection_triangles": {
+    "ArcanePower_Tablet": 5300,
+    "ArcanePower_Tablet_LOD1": 714,
+    "ArcanePower_Tablet_LOD2": 184
+  },
+  "authored_triangles": 5300,
+  "triangulation_adjustments": [],
+  "target": "Models/Items",
+  "collision": "Models/Items/ArcanePower_Tablet.hkt",
+  "collision_model": "Models/Items/ArcanePower_Tablet.mwm"
+}

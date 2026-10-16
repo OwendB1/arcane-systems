@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CategoryClasses>
+    <Category xsi:type="MyObjectBuilder_GuiBlockCategoryDefinition">
+      <Id>
+        <TypeId>GuiBlockCategoryDefinition</TypeId>
+        <SubtypeId>ArcaneSystems_Power</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Systems</DisplayName>
+      <Name>ArcaneSystems</Name>
+      <ItemIds>
+        <string>Conveyor/ArcanePower_VentDuct</string>
+        <string>Conveyor/ArcanePower_VentOutlet</string>
+        <string>Reactor/ArcanePower_ReactorPrototype</string>
+        <string>UpgradeModule/ArcanePower_AdvancedContainmentController</string>
+        <string>UpgradeModule/ArcanePower_ContainmentController</string>
+      </ItemIds>
+    </Category>
+  </CategoryClasses>
+</Definitions>

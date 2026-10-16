@@ -1,0 +1,18 @@
+{
+  "collections": [
+    "ArcanePower_VentHatch",
+    "ArcanePower_VentHatch_LOD1",
+    "ArcanePower_VentHatch_LOD2"
+  ],
+  "triangles": 1692,
+  "collection_triangles": {
+    "ArcanePower_VentHatch": 1692,
+    "ArcanePower_VentHatch_LOD1": 1160,
+    "ArcanePower_VentHatch_LOD2": 808
+  },
+  "authored_triangles": 1692,
+  "triangulation_adjustments": [],
+  "target": "Models/Cubes/large",
+  "collision": null,
+  "collision_model": "Models/Cubes/large/ArcanePower_VentHatch.mwm"
+}

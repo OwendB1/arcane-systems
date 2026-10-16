@@ -1,0 +1,188 @@
+{
+  "passed": true,
+  "failures": [],
+  "protected_objects_unchanged": 5118,
+  "source": {
+    "ArcanePower_EnergyCore": [
+      {
+        "stage": 1,
+        "meshes": 1,
+        "triangles": 9856,
+        "source_components": 0,
+        "static_subparts": {}
+      },
+      {
+        "stage": 2,
+        "meshes": 284,
+        "triangles": 33672,
+        "source_components": 282,
+        "static_subparts": {}
+      },
+      {
+        "stage": 3,
+        "meshes": 1021,
+        "triangles": 77680,
+        "source_components": 1019,
+        "static_subparts": {
+          "subpart_EnergyRing1": 33,
+          "subpart_EnergyRing2": 33
+        }
+      }
+    ],
+    "ArcanePower_EnergyCapacity": [
+      {
+        "stage": 1,
+        "meshes": 1,
+        "triangles": 1392,
+        "source_components": 0,
+        "static_subparts": {}
+      },
+      {
+        "stage": 2,
+        "meshes": 298,
+        "triangles": 13768,
+        "source_components": 297,
+        "static_subparts": {}
+      },
+      {
+        "stage": 3,
+        "meshes": 542,
+        "triangles": 20128,
+        "source_components": 541,
+        "static_subparts": {}
+      }
+    ],
+    "ArcanePower_EnergyCapacityAdvanced": [
+      {
+        "stage": 1,
+        "meshes": 1,
+        "triangles": 1392,
+        "source_components": 0,
+        "static_subparts": {}
+      },
+      {
+        "stage": 2,
+        "meshes": 421,
+        "triangles": 18592,
+        "source_components": 420,
+        "static_subparts": {}
+      },
+      {
+        "stage": 3,
+        "meshes": 665,
+        "triangles": 24952,
+        "source_components": 664,
+        "static_subparts": {}
+      }
+    ],
+    "ArcanePower_EnergyTransfer": [
+      {
+        "stage": 1,
+        "meshes": 1,
+        "triangles": 1392,
+        "source_components": 0,
+        "static_subparts": {}
+      },
+      {
+        "stage": 2,
+        "meshes": 238,
+        "triangles": 10480,
+        "source_components": 237,
+        "static_subparts": {}
+      },
+      {
+        "stage": 3,
+        "meshes": 490,
+        "triangles": 16856,
+        "source_components": 489,
+        "static_subparts": {}
+      }
+    ],
+    "ArcanePower_EnergyTransferAdvanced": [
+      {
+        "stage": 1,
+        "meshes": 1,
+        "triangles": 1392,
+        "source_components": 0,
+        "static_subparts": {}
+      },
+      {
+        "stage": 2,
+        "meshes": 283,
+        "triangles": 12112,
+        "source_components": 282,
+        "static_subparts": {}
+      },
+      {
+        "stage": 3,
+        "meshes": 535,
+        "triangles": 18488,
+        "source_components": 534,
+        "static_subparts": {}
+      }
+    ],
+    "ArcanePower_EnergyStabilizer": [
+      {
+        "stage": 1,
+        "meshes": 1,
+        "triangles": 1392,
+        "source_components": 0,
+        "static_subparts": {}
+      },
+      {
+        "stage": 2,
+        "meshes": 131,
+        "triangles": 7086,
+        "source_components": 116,
+        "static_subparts": {
+          "subpart_EnergyFan1": 7,
+          "subpart_EnergyFan2": 7,
+          "subpart_EnergyFan3": 7
+        }
+      },
+      {
+        "stage": 3,
+        "meshes": 419,
+        "triangles": 17086,
+        "source_components": 404,
+        "static_subparts": {
+          "subpart_EnergyFan1": 7,
+          "subpart_EnergyFan2": 7,
+          "subpart_EnergyFan3": 7
+        }
+      }
+    ],
+    "ArcanePower_EnergyStabilizerAdvanced": [
+      {
+        "stage": 1,
+        "meshes": 1,
+        "triangles": 1392,
+        "source_components": 0,
+        "static_subparts": {}
+      },
+      {
+        "stage": 2,
+        "meshes": 131,
+        "triangles": 7086,
+        "source_components": 116,
+        "static_subparts": {
+          "subpart_EnergyFan1.001": 7,
+          "subpart_EnergyFan2.001": 7,
+          "subpart_EnergyFan3.001": 7
+        }
+      },
+      {
+        "stage": 3,
+        "meshes": 422,
+        "triangles": 18238,
+        "source_components": 407,
+        "static_subparts": {
+          "subpart_EnergyFan1.001": 7,
+          "subpart_EnergyFan2.001": 7,
+          "subpart_EnergyFan3.001": 7
+        }
+      }
+    ]
+  },
+  "live_game_checked": false
+}

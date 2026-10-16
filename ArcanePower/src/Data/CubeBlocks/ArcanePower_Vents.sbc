@@ -14,7 +14,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="1" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/ArcanePower_VentDuct.mwm</Model>
+      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_VentDuct.mwm</Model>
       <Components>
         <Component Subtype="InteriorPlate" Count="10" />
         <Component Subtype="Construction" Count="20" />
@@ -68,7 +68,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="1" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/ArcanePower_VentOutlet.mwm</Model>
+      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_VentOutlet.mwm</Model>
       <Components>
         <Component Subtype="InteriorPlate" Count="10" />
         <Component Subtype="Construction" Count="20" />

@@ -1,0 +1,37 @@
+{
+  "backend": "blender_official",
+  "blender_version": "5.2.1 LTS",
+  "production": "assets/arcane-energy-core.blend",
+  "live_review": "assets/arcane-energy-core-review.blend",
+  "review_scene": "Battery / assembled review",
+  "checkpoints": [
+    "assets/arcane-energy-core-before-corner-removal.blend",
+    "assets/arcane-energy-core-review-before-corner-removal.blend"
+  ],
+  "changes": {
+    "corner_pillars_removed": 4,
+    "pillar_shoulders_removed": 8,
+    "pillar_clamps_removed": 8,
+    "glass_coverage_degrees": 360,
+    "glass_radius_m": 2.78,
+    "inner_dock_radius_m": 2.15,
+    "crossmember_sidewall_clearance_m": 0.01,
+    "swept_ring_clearance_m": 0.414416,
+    "core_collision_hulls": 6,
+    "module_box_bevel_segments": 1,
+    "module_endcaps": "flat outer faces with clipped corners"
+  },
+  "validation": {
+    "native_models_passed": 7,
+    "construction_stages_passed": 21,
+    "packaged_bytes_match_validated_exports": true,
+    "non_model_definitions_unchanged": true,
+    "live_game_checked": false,
+    "workshop_published": false
+  },
+  "model_revision": "Models/Cubes/large/energy_ad3e2c8f1717",
+  "evidence": [
+    "validation/energy-corner-refinement.png",
+    "validation/energy-corner-native-checks.log"
+  ]
+}

@@ -1,10 +1,16 @@
-<?xml version="1.0" ?>
+<?xml version='1.0' encoding='utf-8'?>
 <Model Name="ArcanePower_VentOutlet">
-	<Parameter Name="RescaleFactor">1.0</Parameter>
-	<Parameter Name="Centered">false</Parameter>
-	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
-	<MaterialRef Name="PaintedMetal_Darker"/>
-	<MaterialRef Name="Metal_Dull"/>
-	<MaterialRef Name="Emissive"/>
-	<MaterialRef Name="PaintedMetal_VeryDark"/>
+  <Parameter Name="RescaleFactor">1.0</Parameter>
+  <Parameter Name="Centered">false</Parameter>
+  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
+  <MaterialRef Name="PaintedMetal_Darker" />
+  <MaterialRef Name="Metal_Dull" />
+  <MaterialRef Name="Emissive" />
+  <MaterialRef Name="PaintedMetal_VeryDark" />
+  <LOD Distance="75">
+    <Model>Models/Cubes/large/ArcanePower_VentOutlet_LOD1_re0d1a6b908d4.mwm</Model>
+  </LOD>
+  <LOD Distance="150">
+    <Model>Models/Cubes/large/ArcanePower_VentOutlet_LOD2_r254ffc63ba12.mwm</Model>
+  </LOD>
 </Model>

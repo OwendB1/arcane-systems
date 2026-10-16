@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Model Name="ArcanePower_Ring1">
+  <Parameter Name="RescaleFactor">1.0</Parameter>
+  <Parameter Name="Centered">false</Parameter>
+  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
+  <MaterialRef Name="Metal_Dull" />
+  <MaterialRef Name="Emissive" />
+  <LOD Distance="35">
+    <Model>Models/Cubes/large/ArcanePower_Ring1_LOD1_rde7b116fc96c.mwm</Model>
+  </LOD>
+  <LOD Distance="90">
+    <Model>Models/Cubes/large/ArcanePower_Ring1_LOD2_rca710f5e3f9f.mwm</Model>
+  </LOD>
+</Model>

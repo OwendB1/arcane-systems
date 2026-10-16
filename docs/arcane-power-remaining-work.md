@@ -1,11 +1,85 @@
 # Arcane Power — remaining implementation work
 
-Updated 13 October 2026 after construction/storage runtime hardening.
+Updated 16 October 2026 after the curved manifold repair.
 The current status below supersedes the historical delivery notes that follow;
 the [full plan](arcane-power-plan.md) retains the wider design direction.
 
 ## Current status
 
+- **Reactor manifold repair, 16 October:** original curved lower armor now splits
+  and slides under adjacent panels, hiding two-stage primary pipe heads in
+  standalone mode. Four bays flank the two native controller slots. A one-cell
+  transition mates the native band height to the standard pipe lattice. The
+  mechanical preview passes 14 sampled positions and close UI review at
+  1.8/2.4/3.0 m. Original production sources remain protected. Native moving
+  subparts/collision and gameplay switching are pending; other model refinement
+  is held until this repair is reviewed. Standalone/Brayton balance targets are
+  now 20% / up to 78% net. [Current source](../ArcanePower/assets/arcane-thermal-models.blend).
+
+- **Modular Brayton study, 15 October:** standalone generation targets 20% net; sCO₂ Brayton starts at 40% net,
+  with additional recuperators reaching 78% behind hot-end limits. Parallel
+  heaters/trains/cooling add capacity and automatic standby; executable examples
+  report bottlenecks and worst single-module loss output. Distinct atmospheric
+  fan cooler and two-sided space radiator replace the combined cooler. The former
+  topping converter is removed from the active design/models. Editable premium
+  hardware, branching conduit and a three-train bank accompany the four
+  environment/grade layout studies. Thermal runtime and native exports remain future work; the extraction geometry
+  is superseded by the current curved-panel manifold variant. [Design and models](../ArcanePower/THERMAL-POWER.md).
+
+- **Native texture detail, 15 October:** reactor, both controllers, battery and
+  all six modules now use finer metric UVs, varied panel origins, restrained
+  edge scuffs, native weld seams and supported warning markings. Battery stage
+  surfaces match their installed backing. Geometry, native interfaces, collision,
+  LODs and driven materials are preserved. New native MWMs are connected locally;
+  fresh-load review verifies all eleven battery preview assemblies. In-game
+  inspection remains pending. [Preview](../ArcanePower/validation/native-texture-detail/capacity-1.8m.png).
+- **Controller main-model detail, 15 October:** standard now has a broad service
+  cassette and passive cooling bank; advanced has paired power cartridges,
+  connected buses, seated heat spreaders and extra cooling. Both have native
+  atlas fasteners, recessed tier indicators and top/side detail. Curved adapters,
+  mating anchors, collision and construction art are preserved. Mounted and
+  standalone views were inspected at 1.8, 2.4 and 3.0 m; controller and reactor
+  geometry gates pass. Receiver rims now clear the casing by 6 mm, and covers
+  clear their lower shoulders by at least 4.5 mm. Saved art is exported and
+  connected to the local mod; game review remains pending.
+  [Comparison](../ArcanePower/validation/controller-detail-loop-01/review-front.jpg).
+- **Reactor exterior review, 15 October:** saved main housing now has varied
+  lower service bays, a continuous upper cooling belt, and detailed chamfered
+  pillars. Accepted pillar proportions and roof seats are retained. Lower feet
+  are stepped and inset within the supporting collar. Coplanar status parts now
+  use real recesses and separated backing/emitter depths. New pitched dispenser
+  surrounds meet the ceiling and curved glass retainer. Live views at 1.8, 2.4
+  and 3.0 m were inspected; geometry/support/clearance checks pass. Protected
+  dispensers, interfaces, chamber, moving parts, collision and derived art remain
+  unchanged. Native export passes for all 23 prototype models, connected through
+  fresh local paths under `reactor_787f4951767a` (tablet uses its item revision).
+  Game inspection remains pending; LOD and reactor/controller construction
+  redesign remain deferred.
+  [Review evidence](../ArcanePower/validation/reactor-exterior-loop-01/distance-review.json).
+  [Native export](../ArcanePower/validation/prototype-main-export.json).
+- **Battery main-model review, 15 October:** seven finished authoring models now
+  have recessed service doors/intakes, seated emissive strips, module-specific
+  retention/cooling/fan hardware and detailed drum access panels. Further loops
+  add faceted lifting decks, split cell clamps, flat fan guards, plated terminal
+  straps, connected coolant returns/valves and supported motor wiring. Review
+  offsets are repaired and verified after reload; collision and derived geometry
+  remain unchanged. Stored charge
+  drives field size through the existing battery visual path. Main geometry
+  audit and focused runtime checks pass; compatibility compilation has zero
+  warnings/errors. Docks now have closed clipped receivers, opaque native-port
+  backs and compact tapered housings. Both drums now have chamfered saddles that
+  seat into the curved armor and dock cheeks. Removed 48 redundant drum bolts
+  and broad gasket plates; service doors/louvers sit in supported recesses, with
+  48 captive screws retained on actual doors. Armor seams narrowed to 14.4 mm. Native SEUT
+  structural textures and dark label stock replace custom label material;
+  local preview packed channels are repaired. Latest art is saved in both Blender
+  files and exported into local model family `energy_87c3644f9849`. Native imports,
+  sockets, dependencies, collision preservation and saved assembly poses pass.
+  This art revision still awaits a game reload/live inspection. User explicitly
+  deferred further LOD work. The newly requested battery construction update is
+  exported; reactor/controller construction redesign remains deferred.
+  [Mounted detail](../ArcanePower/validation/energy-core-loop-05/mounted-root-top.png)
+  and [export evidence](../ArcanePower/validation/energy-main-export.json).
 - **Construction complete:** three native welding/grinding stages for all twelve
   public blocks (36 models). Native imports, bounds, construction materials,
   embedded collisions and reactor model transitions pass. Damage integrity is
@@ -13,11 +87,21 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   by the user; further collision redesign is not a prerequisite.
   The 12 October revision replaces thin outline frames with channel steel and
   diagonal webs, exposes distinct equipment in stage two, and leaves deliberate
-  service openings through stage three. Finished block art is unchanged.
+  service openings through stage three. The 15 October battery update rebuilds
+  21 stages from current mains: three mating stations, current seated equipment,
+  static fan blades and whole side/deck armor assemblies. Native import, material,
+  bounds, collision and active-definition gates pass; 1.8/2.4/3.0 m views inspected.
+  [Battery stage proof](../ArcanePower/validation/energy-construction-update/native-export.json).
 - **Energy Core implemented:** accepted compact 3×3×3 controller plus standard/
   advanced capacity, transfer and stabilizer modules, fixed native batteries,
   charge modes, emergency reserve, icons and charge/flow visuals.
   [Configuration and provisional ratings](../ArcanePower/ENERGY-STORAGE.md).
+- **Battery gameplay implemented 14 October, awaiting live validation:** quadratic
+  stored-charge upkeep, stabilizer reductions, direct jump-drive surge, ten-second
+  burst discharge, shared bank/drive recovery, terminal reserve controls and saved/
+  server-authorized operation state. Focused policy proof is separate from the
+  earlier live storage results. Validate actual native energy accounting and
+  multiplayer/late join for these mechanics before release.
 - **Initial hardening complete:** zero-warning compatibility build, focused
   reactor/storage checks and live isolated survival checks for 111,000 MWh mixed
   capacity, 1 TW source ceiling, a native 12 MW load, stabilizer disconnect/

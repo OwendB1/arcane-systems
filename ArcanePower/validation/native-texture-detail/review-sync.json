@@ -1,0 +1,16 @@
+{
+  "audit": {
+    "Battery / assembled review / ArcanePower_EnergyCapacity / 0": 1.7484558156866115e-07,
+    "Battery / reactor comparison / ArcanePower_EnergyCapacity / 0": 1.7484558156866115e-07,
+    "Battery / assembled review / ArcanePower_EnergyCapacityAdvanced / 0": 1.1920928955078125e-07,
+    "Battery / reactor comparison / ArcanePower_EnergyCapacityAdvanced / 0": 1.1920928955078125e-07,
+    "Battery / assembled review / ArcanePower_EnergyCore / 0": 2.384185791015625e-07,
+    "Battery / individual detail review / ArcanePower_EnergyCore / 0": 2.384185791015625e-07,
+    "Battery / reactor comparison / ArcanePower_EnergyCore / 0": 2.384185791015625e-07,
+    "Battery / assembled review / ArcanePower_EnergyStabilizerAdvanced / 0": 1.5099580252808664e-07,
+    "Battery / reactor comparison / ArcanePower_EnergyStabilizerAdvanced / 0": 9.5367431640625e-07,
+    "Battery / assembled review / ArcanePower_EnergyTransferAdvanced / 0": 1.5099580252808664e-07,
+    "Battery / reactor comparison / ArcanePower_EnergyTransferAdvanced / 0": 1.5099580252808664e-07
+  },
+  "source": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/arcane-energy-core.blend"
+}

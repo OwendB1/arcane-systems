@@ -120,6 +120,7 @@ for obj in col.objects:
 reactor_surface=BVHTree.FromPolygons(verts,faces)
 for name,advanced in [('ArcanePower_ContainmentController',False),('ArcanePower_AdvancedContainmentController',True)]:
  s,main,hkt,parent=scene_parts(name);bpy.context.window.scene=s
+ if 'controller_detail_revision' in s:del s['controller_detail_revision']
  # Compact piggyback pack:1.60m wide x1.00m high, versus the0.68m native port.
  # Its grid anchor remains unchanged; the visible pack hugs the mating face.
  def rounded_rect(w,h,c):
@@ -176,6 +177,9 @@ for name,advanced in [('ArcanePower_ContainmentController',False),('ArcanePower_
  s['ap_envelope']='1x1x1 native grid anchor; compact1.60x1.00m pack with curved mating back and socket recess'
  s['ap_grid_centre_distance_m']=7.5;s['ap_visible_projection_m']=.26
  s['ap_fit']='Piggyback power pack;12mm sampled back seam, cavity for native0.68m upgrade port'
+
+import runpy
+runpy.run_path(str(ROOT/'assets/refine_controller_details.py'),run_name='__main__')
 
 s,main,hkt,parent=scene_parts('ArcanePower_ContainmentTile','item')
 s.seut.export_exportPath=str(ROOT/'src/Models/Cubes/large')

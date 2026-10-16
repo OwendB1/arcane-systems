@@ -1,0 +1,18 @@
+{
+  "interior_unchanged": true,
+  "meshes": 138,
+  "sha256": "655b6235be08c58cd445f31563bf8ecd63c4c555025784b489386e77eacf3e50",
+  "baseline": "assets/arcane-energy-core-before-flush-service.blend",
+  "prefixes": [
+    "Energy / chamber glazing",
+    "Energy / glazing retainer",
+    "Energy / inner collar",
+    "Energy / containment seat",
+    "Energy / induction winding",
+    "Energy / coolant riser",
+    "Energy / coolant retaining shoe",
+    "Energy / coolant shoe screw",
+    "Energy / pole injector",
+    "Energy / collar status"
+  ]
+}

@@ -1,5 +1,5 @@
 """Focused storage acceptance using the shipped policy methods and native models."""
-import os,re,subprocess,tempfile,xml.etree.ElementTree as ET
+import os,re,subprocess,sys,tempfile,xml.etree.ElementTree as ET
 from pathlib import Path
 from prepare_lab import ROOT,MOD,GAME
 from prepare_energy_core import BLOCKS
@@ -12,16 +12,44 @@ def method(source,name):
  return source[start:end]+'\n'
 
 source=(MOD/'Data/Scripts/ArcanePower/EnergyCore.cs').read_text()
-methods=''.join(method(source,n) for n in ('IsPillar','BaseSubtype','Healthy','Socket','Tier','FindController','UpdateBank','Disconnect','ApplyLimits','ClampNativeOutput'))
-harness=(ROOT/'tools/EnergyCoreProbe.cs').read_text().replace('// METHODS',methods)
+methods=''.join(method(source,n) for n in ('IsPillar','BaseSubtype','Healthy','Socket','IsModuleRunning','StoredFieldPose','Tier','FindController','UpdateBank','Disconnect','ApplyLimits','RequiredInput','ClampNativeOutput'))
+gameplay=(MOD/'Data/Scripts/ArcanePower/EnergyCore.Gameplay.cs').read_text()
+policy=gameplay.split('    // The drive owns')[0]
+gameplay_methods=''.join(method(policy,n) for n in ('InitializeGameplay','UpkeepPower','UpdateUpkeep','ReceiveGameplay','SaveGameplay','EligibleDrive','GetJumpDrives','RequestSurge','RequestBurst','RecoveryDuration','AvailableEnergy','SpendableEnergy','DebitEnergy','UpdateSurge','EndSurge','ReleaseDrive','UpdateRecovery'))
+state=gameplay[gameplay.index('    public sealed class EnergyGameplayState'):gameplay.index('    public sealed partial class EnergyCore')]
+state=re.sub(r'\[ProtoMember\(\d+\)\] ', '', state)
+drive=gameplay[gameplay.index('    public sealed class JumpDriveSurge'):].rsplit('}',1)[0]
+drive=drive.replace('public sealed class JumpDriveSurge','sealed class JumpDriveSurge')
+harness=(ROOT/'tools/EnergyCoreProbe.cs').read_text().replace('// METHODS',methods).replace('// GAMEPLAY METHODS',gameplay_methods)+'\n'+state+drive
 game=GAME/'Bin64'
+if '--policy-only' not in sys.argv:
+ with tempfile.TemporaryDirectory(prefix='arcane-ring-motion-') as directory:
+  exe=Path(directory)/'Rings.exe'
+  subprocess.run(['mcs','-out:'+str(exe),'-r:/usr/lib/mono/4.5/Facades/netstandard.dll',
+   '-r:'+str(game/'VRage.Math.dll'),'-r:'+str(game/'VRage.Library.dll'),str(ROOT/'tools/RingMotionProbe.cs'),
+   *[str(MOD/'Data/Scripts/ArcanePower'/name) for name in ('AnimationGeometry.cs','RingMotion.cs')]],check=True)
+  subprocess.run(['mono',str(exe)],check=True,env={**os.environ,'MONO_PATH':str(game)})
+ with tempfile.TemporaryDirectory(prefix='arcane-energy-fan-') as directory:
+  exe=Path(directory)/'Fan.exe'
+  subprocess.run(['mcs','-out:'+str(exe),'-r:/usr/lib/mono/4.5/Facades/netstandard.dll',
+   '-r:'+str(game/'VRage.Math.dll'),'-r:'+str(game/'VRage.Library.dll'),str(ROOT/'tools/EnergyFanProbe.cs'),
+   str(MOD/'Data/Scripts/ArcanePower/EnergyModule.cs')],check=True)
+  subprocess.run(['mono',str(exe)],check=True,env={**os.environ,'MONO_PATH':str(game)})
 with tempfile.TemporaryDirectory(prefix='arcane-energy-check-') as directory:
  cs=Path(directory)/'Check.cs';cs.write_text(harness);exe=cs.with_suffix('.exe')
  subprocess.run(['mcs','-out:'+str(exe),'-r:/usr/lib/mono/4.5/Facades/netstandard.dll',
                  '-r:'+str(game/'VRage.Math.dll'),'-r:'+str(game/'VRage.Library.dll'),str(cs)],check=True)
  subprocess.run(['mono',str(exe)],check=True,env={**os.environ,'MONO_PATH':str(game)})
 path=MOD/'Data/CubeBlocks/ArcanePower_EnergyCore.sbc'
-if path.exists():
+for filename in ('ArcanePower_EnergyCore.sbc','ArcanePower_EnergyCoreLegacy.sbc'):
+ for block in ET.parse(MOD/'Data/CubeBlocks'/filename).findall('CubeBlocks/Definition'):
+  if block.find('MaxStoredPower') is not None:
+   assert float(block.findtext('MaxPowerOutput'))==2000000
+   assert float(block.findtext('RequiredPowerInput'))==1000000
+guids={g.text for g in ET.parse(MOD/'Data/EntityComponents.sbc').findall('.//guid')}
+assert {'f2451ae5-ea04-47b8-a5f5-59f75583cdb4','619d89c8-88c2-46f5-bdb1-1f60d7b3f00e'}<=guids
+print('PASS burst-capable native definitions and registered bank/drive recovery storage')
+if path.exists() and '--policy-only' not in sys.argv:
  definitions=ET.parse(path).findall('CubeBlocks/Definition')
  assert len(definitions)==7
  for block in definitions:
@@ -29,6 +57,11 @@ if path.exists():
   name=subtype.removesuffix('_Pillar');assert name in BLOCKS
   assert block.find('Size').attrib==dict(x='3' if name=='ArcanePower_EnergyCore' else '1',y='3',z='3' if name=='ArcanePower_EnergyCore' else '1')
   assert (MOD/block.findtext('Model')).exists()
+  if name=='ArcanePower_EnergyCore':
+   for ring in ('ArcanePower_Ring3.mwm','ArcanePower_Ring4.mwm'):
+    assert (MOD/block.findtext('Model')).with_name(ring).read_bytes()==(MOD/'Models/Cubes/large'/ring).read_bytes()
+  if 'EnergyStabilizer' in name:
+   assert (MOD/block.findtext('Model')).with_name('ArcanePower_EnergyFan.mwm').read_bytes()==(MOD/'Models/Cubes/large/ArcanePower_EnergyFan.mwm').read_bytes()
   assert (MOD/block.findtext('Icon')).exists()
   assert len(block.findall('BuildProgressModels/Model'))==3
   for stage in block.findall('BuildProgressModels/Model'):assert (MOD/stage.get('File')).exists()

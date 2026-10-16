@@ -1,0 +1,18 @@
+{
+  "collections": [
+    "ArcanePower_EnergyCapacity",
+    "ArcanePower_EnergyCapacity_LOD1",
+    "ArcanePower_EnergyCapacity_LOD2"
+  ],
+  "triangles": 23838,
+  "collection_triangles": {
+    "ArcanePower_EnergyCapacity": 23838,
+    "ArcanePower_EnergyCapacity_LOD1": 15120,
+    "ArcanePower_EnergyCapacity_LOD2": 10674
+  },
+  "authored_triangles": 23838,
+  "triangulation_adjustments": [],
+  "target": "Models/Cubes/large",
+  "collision": "Models/Cubes/large/ArcanePower_EnergyCapacity.hkt",
+  "collision_model": "Models/Cubes/large/ArcanePower_EnergyCapacity.mwm"
+}

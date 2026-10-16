@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "files": [
+    {
+      "file": "arcane-power-prototype.blend",
+      "controllers_passed": true,
+      "reactor_passed": true,
+      "repeat_adds_no_objects": true,
+      "variant_mesh_counts": [
+        75,
+        125
+      ]
+    },
+    {
+      "file": "arcane-power-exterior-work-in-progress.blend",
+      "controllers_passed": true,
+      "reactor_passed": true,
+      "repeat_adds_no_objects": true,
+      "variant_mesh_counts": [
+        75,
+        125
+      ]
+    }
+  ]
+}

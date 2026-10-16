@@ -1,0 +1,2113 @@
+{
+  "Brayton train": {
+    "subtype": "ArcanePower_Thermal_BraytonTrain",
+    "cells_blender": [
+      5,
+      3,
+      2
+    ],
+    "cells_se": [
+      5,
+      2,
+      3
+    ],
+    "metres_blender": [
+      12.5,
+      7.5,
+      5.0
+    ],
+    "phase": "base",
+    "meshes": 152,
+    "triangles": 12658,
+    "ports": [
+      {
+        "id": "CO2 leg -1",
+        "type": "CO2_HP",
+        "position": [
+          -2.5,
+          -3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "CO2 leg 1",
+        "type": "CO2_LP",
+        "position": [
+          -2.5,
+          3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Brayton train upgraded": {
+    "subtype": "ArcanePower_Thermal_BraytonTrainUpgraded",
+    "cells_blender": [
+      5,
+      3,
+      2
+    ],
+    "cells_se": [
+      5,
+      2,
+      3
+    ],
+    "metres_blender": [
+      12.5,
+      7.5,
+      5.0
+    ],
+    "phase": "base",
+    "meshes": 163,
+    "triangles": 13046,
+    "ports": [
+      {
+        "id": "CO2 leg -1",
+        "type": "CO2_HP",
+        "position": [
+          -2.5,
+          -3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "CO2 leg 1",
+        "type": "CO2_LP",
+        "position": [
+          -2.5,
+          3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Primary heater": {
+    "subtype": "ArcanePower_Thermal_PrimaryHeater",
+    "cells_blender": [
+      3,
+      3,
+      3
+    ],
+    "cells_se": [
+      3,
+      3,
+      3
+    ],
+    "metres_blender": [
+      7.5,
+      7.5,
+      7.5
+    ],
+    "phase": "base",
+    "meshes": 80,
+    "triangles": 9964,
+    "ports": [
+      {
+        "id": "primary",
+        "type": "PRIMARY",
+        "position": [
+          -3.75,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "CO2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          -3.75,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Primary heater upgraded": {
+    "subtype": "ArcanePower_Thermal_PrimaryHeaterUpgraded",
+    "cells_blender": [
+      3,
+      3,
+      3
+    ],
+    "cells_se": [
+      3,
+      3,
+      3
+    ],
+    "metres_blender": [
+      7.5,
+      7.5,
+      7.5
+    ],
+    "phase": "base",
+    "meshes": 104,
+    "triangles": 10828,
+    "ports": [
+      {
+        "id": "primary",
+        "type": "PRIMARY",
+        "position": [
+          -3.75,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "CO2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          -3.75,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Recuperator": {
+    "subtype": "ArcanePower_Thermal_Recuperator",
+    "cells_blender": [
+      3,
+      2,
+      3
+    ],
+    "cells_se": [
+      3,
+      3,
+      2
+    ],
+    "metres_blender": [
+      7.5,
+      5.0,
+      7.5
+    ],
+    "phase": "base",
+    "meshes": 124,
+    "triangles": 12464,
+    "ports": [
+      {
+        "id": "high-pressure -1",
+        "type": "CO2_HP",
+        "position": [
+          -3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "low-pressure -1",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "high-pressure 1",
+        "type": "CO2_HP",
+        "position": [
+          3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "low-pressure 1",
+        "type": "CO2_LP",
+        "position": [
+          3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Recuperator upgraded": {
+    "subtype": "ArcanePower_Thermal_RecuperatorUpgraded",
+    "cells_blender": [
+      3,
+      2,
+      3
+    ],
+    "cells_se": [
+      3,
+      3,
+      2
+    ],
+    "metres_blender": [
+      7.5,
+      5.0,
+      7.5
+    ],
+    "phase": "base",
+    "meshes": 168,
+    "triangles": 14016,
+    "ports": [
+      {
+        "id": "high-pressure -1",
+        "type": "CO2_HP",
+        "position": [
+          -3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "low-pressure -1",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "high-pressure 1",
+        "type": "CO2_HP",
+        "position": [
+          3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "low-pressure 1",
+        "type": "CO2_LP",
+        "position": [
+          3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Atmospheric cooler": {
+    "subtype": "ArcanePower_Thermal_AtmosphericCooler",
+    "cells_blender": [
+      3,
+      2,
+      3
+    ],
+    "cells_se": [
+      3,
+      3,
+      2
+    ],
+    "metres_blender": [
+      7.5,
+      5.0,
+      7.5
+    ],
+    "phase": "base",
+    "meshes": 128,
+    "triangles": 9768,
+    "ports": [
+      {
+        "id": "CO2",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Space radiator": {
+    "subtype": "ArcanePower_Thermal_SpaceRadiator",
+    "cells_blender": [
+      3,
+      2,
+      3
+    ],
+    "cells_se": [
+      3,
+      3,
+      2
+    ],
+    "metres_blender": [
+      7.5,
+      5.0,
+      7.5
+    ],
+    "phase": "base",
+    "meshes": 150,
+    "triangles": 8640,
+    "ports": [
+      {
+        "id": "CO2",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Straight": {
+    "subtype": "ArcanePower_Thermal_PrimaryStraight",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 4284,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Elbow": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbow",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 9660,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Riser": {
+    "subtype": "ArcanePower_Thermal_PrimaryRiser",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 12732,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Tee": {
+    "subtype": "ArcanePower_Thermal_PrimaryTee",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 54,
+    "triangles": 6776,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Cross": {
+    "subtype": "ArcanePower_Thermal_PrimaryCross",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 69,
+    "triangles": 9268,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 4",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Roll adapter": {
+    "subtype": "ArcanePower_Thermal_PrimaryRollAdapter",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 16316,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / End cap": {
+    "subtype": "ArcanePower_Thermal_PrimaryEndCap",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 26,
+    "triangles": 2800,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Straight": {
+    "subtype": "ArcanePower_Thermal_CO2HpStraight",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 4284,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Elbow": {
+    "subtype": "ArcanePower_Thermal_CO2HpElbow",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 9660,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Riser": {
+    "subtype": "ArcanePower_Thermal_CO2HpRiser",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 12732,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Tee": {
+    "subtype": "ArcanePower_Thermal_CO2HpTee",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 54,
+    "triangles": 6776,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Cross": {
+    "subtype": "ArcanePower_Thermal_CO2HpCross",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 69,
+    "triangles": 9268,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 4",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Roll adapter": {
+    "subtype": "ArcanePower_Thermal_CO2HpRollAdapter",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 16316,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / End cap": {
+    "subtype": "ArcanePower_Thermal_CO2HpEndCap",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 26,
+    "triangles": 2800,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Straight": {
+    "subtype": "ArcanePower_Thermal_CO2LpStraight",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 4284,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Elbow": {
+    "subtype": "ArcanePower_Thermal_CO2LpElbow",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 9660,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Riser": {
+    "subtype": "ArcanePower_Thermal_CO2LpRiser",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 12732,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Tee": {
+    "subtype": "ArcanePower_Thermal_CO2LpTee",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 54,
+    "triangles": 6776,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Cross": {
+    "subtype": "ArcanePower_Thermal_CO2LpCross",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 69,
+    "triangles": 9268,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 4",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Roll adapter": {
+    "subtype": "ArcanePower_Thermal_CO2LpRollAdapter",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 16316,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / End cap": {
+    "subtype": "ArcanePower_Thermal_CO2LpEndCap",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 26,
+    "triangles": 2800,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Reactor housing": {
+    "subtype": "ArcanePower_Thermal_ReactorHousing",
+    "cells_blender": [
+      5,
+      5,
+      3
+    ],
+    "cells_se": [
+      5,
+      3,
+      5
+    ],
+    "metres_blender": [
+      12.5,
+      12.5,
+      7.5
+    ],
+    "phase": "base",
+    "meshes": 1596,
+    "triangles": 125326,
+    "ports": [
+      {
+        "id": "primary LA",
+        "type": "PRIMARY",
+        "position": [
+          -6.25,
+          -2.5,
+          -2.33
+        ],
+        "normal": [
+          -1,
+          0,
+          0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "adapter": "PRIMARY / Reactor adapter"
+      },
+      {
+        "id": "primary LB",
+        "type": "PRIMARY",
+        "position": [
+          -6.25,
+          2.5,
+          -2.33
+        ],
+        "normal": [
+          -1,
+          0,
+          0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "adapter": "PRIMARY / Reactor adapter"
+      },
+      {
+        "id": "primary RA",
+        "type": "PRIMARY",
+        "position": [
+          6.25,
+          -2.5,
+          -2.33
+        ],
+        "normal": [
+          1,
+          0,
+          0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "adapter": "PRIMARY / Reactor adapter"
+      },
+      {
+        "id": "primary RB",
+        "type": "PRIMARY",
+        "position": [
+          6.25,
+          2.5,
+          -2.33
+        ],
+        "normal": [
+          1,
+          0,
+          0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "adapter": "PRIMARY / Reactor adapter"
+      }
+    ]
+  },
+  "PRIMARY / Reactor adapter": {
+    "subtype": "ArcanePower_Thermal_PrimaryReactorAdapter",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "base",
+    "meshes": 39,
+    "triangles": 5308,
+    "ports": [
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "reactor inlet",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.17000000178813934
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "reactor_transition": true
+      }
+    ]
+  }
+}

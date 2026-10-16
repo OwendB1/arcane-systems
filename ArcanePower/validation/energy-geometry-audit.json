@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "failures": [],
+  "inventory": {
+    "ArcanePower_EnergyCapacity": {
+      "meshes": 694,
+      "triangles": 23838
+    },
+    "ArcanePower_EnergyCapacityAdvanced": {
+      "meshes": 818,
+      "triangles": 28706
+    },
+    "ArcanePower_EnergyCore": {
+      "meshes": 1079,
+      "triangles": 69406
+    },
+    "ArcanePower_EnergyFan": {
+      "meshes": 7,
+      "triangles": 220
+    },
+    "ArcanePower_EnergyRotor": {
+      "meshes": 1,
+      "triangles": 3968
+    },
+    "ArcanePower_EnergyStabilizer": {
+      "meshes": 557,
+      "triangles": 20114
+    },
+    "ArcanePower_EnergyStabilizerAdvanced": {
+      "meshes": 561,
+      "triangles": 21310
+    },
+    "ArcanePower_EnergyTransfer": {
+      "meshes": 648,
+      "triangles": 20452
+    },
+    "ArcanePower_EnergyTransferAdvanced": {
+      "meshes": 694,
+      "triangles": 22128
+    }
+  },
+  "measurements": {
+    "ArcanePower_EnergyCapacity_socket_backing_rays": 75,
+    "module_lift_socket_clearance_m": 0.05500006675720215,
+    "ArcanePower_EnergyCapacityAdvanced_socket_backing_rays": 75,
+    "ArcanePower_EnergyCore_socket_backing_rays": 300,
+    "service_panel_ledge_support_samples": 144,
+    "service_screw_seating_samples": 48,
+    "service_louver_end_support_samples": 192,
+    "service_aperture_clearance_samples": 216,
+    "drum_armor_seam_width_m": [
+      0.014440009072296043,
+      0.014440030998241577
+    ],
+    "service_door_inset_m": 0.003,
+    "service_pocket_depth_m": 0.061,
+    "dock_root_armor_seating_samples": 64,
+    "dock_root_cheek_seating_samples": 16,
+    "dock_root_face_reveal_m": 0.01,
+    "injector_ring_radial_clearance_m": 0.024416436806635522,
+    "dock_inner_width_fraction": 0.58,
+    "glass_into_drum_m": 0.04999995231628418,
+    "collar_into_drum_m": 0.009999990463256836,
+    "dock_inner_radius_m": 2.6999992707446765,
+    "dock_through_glass_m": 0.08000072925532331,
+    "ArcanePower_EnergyStabilizer_socket_backing_rays": 75,
+    "flat_guard_blade_clearance_m": 0.09299990847706796,
+    "fan_grille_clearance_m": 0.054999947100877744,
+    "fan_backplane_clearance_m": 0.11099996477365492,
+    "ArcanePower_EnergyStabilizerAdvanced_socket_backing_rays": 75,
+    "ArcanePower_EnergyTransfer_socket_backing_rays": 75,
+    "ArcanePower_EnergyTransferAdvanced_socket_backing_rays": 75
+  },
+  "live_game_checked": false
+}

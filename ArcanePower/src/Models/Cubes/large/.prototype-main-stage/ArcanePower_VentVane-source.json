@@ -1,0 +1,14 @@
+{
+  "collections": [
+    "ArcanePower_VentVane"
+  ],
+  "triangles": 104,
+  "collection_triangles": {
+    "ArcanePower_VentVane": 104
+  },
+  "authored_triangles": 104,
+  "triangulation_adjustments": [],
+  "target": "Models/Cubes/large",
+  "collision": null,
+  "collision_model": "Models/Cubes/large/ArcanePower_VentVane.mwm"
+}
