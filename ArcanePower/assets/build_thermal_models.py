@@ -91,6 +91,26 @@ class Parts(BUILD['Parts']):
         collision.seut.ref_col = self.col
         self.ports = []
 
+    def box(self, label, p, size, mat='PaintedMetal_Darker', chamfer=.025):
+        # The concept helper's broad edge breaks read as roundovers at game
+        # scale. Production housings have a narrow, flat machining chamfer.
+        width = chamfer if self.name == 'Reactor housing' else min(chamfer, .003, min(size)*.04)
+        obj = super().box(label, p, size, mat, width)
+        if self.name != 'Reactor housing':
+            obj['thermal_chamfer_m'] = width
+            obj['thermal_chamfer_segments'] = 1 if width else 0
+            for face in obj.data.polygons:
+                face.use_smooth = False
+        return obj
+
+    def cylinder(self, label, a, b, radius, mat='Metal_Dull', sides=32):
+        obj = super().cylinder(label, a, b, radius, mat, sides)
+        if self.name != 'Reactor housing' and sides <= 8:
+            for face in obj.data.polygons:
+                face.use_smooth = False
+            obj['thermal_faceted_hardware'] = True
+        return obj
+
     def tube(self, label, path, radius, mat='Metal_Dull', wall=.045, sides=24):
         """Parallel-transport rings avoid the old vertical-frame discontinuity."""
         path = [Vector(p) for p in path]
@@ -169,6 +189,13 @@ def record(name):
            'meshes': sum(o.type == 'MESH' for o in col.objects),
            'triangles': sum(len(f.vertices)-2 for o in col.objects if o.type == 'MESH' for f in o.data.polygons),
            'ports': json.loads(col['ports'])}
+    if s.get('thermal_visibility_revision'):
+        row['visibility_revision'] = s['thermal_visibility_revision']
+        row['transparent_pressure_tubes'] = sum(bool(o.get('thermal_pressure_glass')) for o in col.objects)
+        row['rotors'] = [{'subpart': o['native_subpart'], 'pivot_blender': list(o.location)}
+                         for o in col.objects if o.type == 'EMPTY' and o.get('native_subpart')]
+    if s.get('thermal_flow_revision'):
+        row['flow_revision'] = s['thermal_flow_revision']
     path = OUT/'models.json'
     rows = json.loads(path.read_text()) if path.exists() else {}
     rows[name] = row
@@ -280,12 +307,17 @@ def build_base(name):
             BUILD['upgraded'](p, fn)
         else:
             fn(p)
-    return p.finish()
+    row = p.finish()
+    if name == 'Reactor housing':
+        runpy.run_path(str(ROOT/'assets/refine_thermal_flow.py'))['apply'](name)
+        row = record(name)
+    return row
 
 
 def rebuild_base(name):
     scene, col = scene_for(name), main_for(name)
-    assert scene.get('thermal_model') == name and scene['thermal_phase'] == 'base'
+    assert scene.get('thermal_model') == name and scene['thermal_phase'] in ('base', 'geometry', 'textures')
+    phase = scene['thermal_phase']
     users = [o for o in bpy.data.objects if o.instance_collection == col]
     collections = list(scene.collection.children_recursive)
     bpy.context.window.scene = bpy.data.scenes['Thermal production / Main model lineup']
@@ -297,6 +329,11 @@ def rebuild_base(name):
     row = build_base(name)
     for obj in users:
         obj.instance_collection = main_for(name)
+    if phase != 'base':
+        refine = runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))
+        row = refine['geometry'](name)
+        if phase == 'textures':
+            row = refine['textures'](name)
     return row
 
 

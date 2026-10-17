@@ -30,8 +30,26 @@ namespace ArcanePower
                     + "  /  detonation ~" + Number(fuse, "0.0") + " s");
 
             Section(text, "POWER");
-            Row(text, "Output", Power(reactor.CurrentOutput) + " / " + Power(PowerMW[Motion.FuelTier - 1]));
-            Row(text, "Net", Power(reactor.CurrentOutput - Motion.PowerInputMW));
+            double output = ThermalVariant && Motion.Thermal != null ? Motion.Thermal.NetOutputMW : reactor.CurrentOutput;
+            Row(text, "Output", Power(output) + " / " + Power(ThermalVariant && Motion.Thermal != null ? Motion.Thermal.SupportedMW : PowerMW[Motion.FuelTier - 1]));
+            Row(text, "Net", Power(output - Motion.PowerInputMW - (ThermalVariant && Motion.Thermal != null ? Motion.Thermal.StartupMW : 0)));
+            if (ThermalVariant && Motion.Thermal != null)
+            {
+                var thermal = Motion.Thermal;
+                Section(text, "THERMAL PLANT");
+                Row(text, "Conversion mode", thermal.Mode + (thermal.Settled ? "" : " -> " + thermal.Requested + " / shutdown, drain, move, restart"));
+                Row(text, "Manifolds", Percent(thermal.Deployment) + " deployed");
+                Row(text, "Conversion efficiency", Percent(thermal.Efficiency));
+                Row(text, "Reaction heat", Power(thermal.ProducedMW) + " / " + Power(ThermalHeatMW));
+                Row(text, "Trapped housing heat", Number(thermal.Store.HotMJ + thermal.Store.WasteMJ, "0.0") + " MJ");
+                Row(text, "Duty / standby", thermal.DutyTrains + " / " + thermal.StandbyTrains);
+                Row(text, "Recovery capacity", Number(thermal.RecoveryRatio, "0.00") + " x dispatched design flow");
+                Row(text, "Startup / cooldown draw", Power(thermal.StartupMW));
+                Line(text, thermalRestoreFault || thermal.Faulted ? "red" : "muted", thermal.Diagnostic);
+                Line(text, "muted", "Setup: PRIMARY -> heater; HP -> recovery -> train; LP -> recovery -> cooling. Match H/C; cap unused sockets.");
+                Line(text, "muted", "Construction guide: aim at thermal blocks or select them in build mode. Verify build, then deployment, cooling and startup power.");
+                Section(text, "POWER");
+            }
             if (detailed)
             {
                 Row(text, "Ramp", Percent(Motion.PowerRamp) + "   Reaction load " + Percent(Motion.Load));

@@ -135,6 +135,7 @@
         <SubtypeId>ArcanePower_EjectedCore</SubtypeId>
       </Id>
       <DisplayName>Ejected Arcane Core</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneReactor.dds</Icon>
       <Public>false</Public>
       <GuiVisible>false</GuiVisible>
       <CubeSize>Small</CubeSize>

@@ -19,7 +19,7 @@ namespace ArcanePower
             get { return motionInitialized && initializationFrames == 0 && !Entity.Closed && (Motion.Vent != VentPhase.Idle
                 || Motion.Core == CorePhase.Cooling || Motion.Core == CorePhase.Stopping
                 || Motion.Core == CorePhase.Starting
-                || (Motion.Core == CorePhase.Off && CanPrepareContainment)); }
+                || (Motion.Core == CorePhase.Off && CanPrepareContainment) || ThermalNeedsPowerSupport); }
         }
         private readonly List<ContainmentController> powerControllers = new List<ContainmentController>(2);
         private float ContainmentMW { get { return PowerMW[Motion.FuelTier - 1] * .0001f; } }
@@ -28,7 +28,8 @@ namespace ArcanePower
         private void UpdatePower()
         {
             bool server = MyAPIGateway.Multiplayer.IsServer;
-            bool active = Motion.Core != CorePhase.Off || Motion.Vent != VentPhase.Idle;
+            bool active = Motion.Core != CorePhase.Off || Motion.Vent != VentPhase.Idle
+                || (ThermalVariant && Motion.Thermal != null && !Motion.Thermal.Settled);
             bool preparing = CanPrepareContainment;
             float operating = active || preparing ? ContainmentMW : 0;
             float charging = preparing && Motion.Vent == VentPhase.Idle

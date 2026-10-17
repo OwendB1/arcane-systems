@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-17",
+  "status": "passed",
+  "removed_categories": {
+    "generated reviews and logs": {
+      "files": 343,
+      "bytes": 871768466
+    },
+    "temporary inspection inventories": {
+      "files": 2,
+      "bytes": 190836
+    },
+    "temporary caches": {
+      "files": 180,
+      "bytes": 403011733
+    },
+    "generated export intermediates": {
+      "files": 1038,
+      "bytes": 718187164
+    },
+    "compiler logs": {
+      "files": 65,
+      "bytes": 147934
+    },
+    "superseded native revisions": {
+      "files": 492,
+      "bytes": 671901026
+    },
+    "Python bytecode": {
+      "files": 82,
+      "bytes": 1756731
+    },
+    "temporary asset scripts and references": {
+      "files": 214,
+      "bytes": 6140360758
+    }
+  },
+  "repository_bytes": 2666963890,
+  "temporary_directory_bytes": 6140360758,
+  "protected_runtime_files": 694,
+  "protected_blend_files": 94,
+  "retained_collision_inputs": 124,
+  "release_archive_retained": ".cache/release/ArcanePower-0.1.0.zip",
+  "runtime_hashes_unchanged": true,
+  "all_protected_files_unchanged": 1122,
+  "removed_files": 2416,
+  "delivery_check": "passed",
+  "runtime_contract_check": "passed",
+  "temporary_cleanup_script_removed": true
+}

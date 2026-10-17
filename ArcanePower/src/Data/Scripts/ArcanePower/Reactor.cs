@@ -13,7 +13,7 @@ using Sandbox.Game.Lights;
 
 namespace ArcanePower
 {
-    [MyEntityComponentDescriptor(typeof(MyObjectBuilder_Reactor), false, "ArcanePower_ReactorPrototype")]
+    [MyEntityComponentDescriptor(typeof(MyObjectBuilder_Reactor), false, "ArcanePower_ReactorPrototype", "ArcanePower_Thermal_ReactorHousing")]
     public sealed partial class Reactor : MyGameLogicComponent
     {
         private IMyReactor reactor;
@@ -50,6 +50,7 @@ namespace ArcanePower
             InitializeMotion();
             CheckContainment();
             InitializeFuel();
+            InitializeThermalRuntime();
         }
 
         public override void UpdateBeforeSimulation()
@@ -83,6 +84,7 @@ namespace ArcanePower
             UpdateSafety();
             UpdateFuel();
             UpdatePower();
+            UpdateThermalMode();
             UpdateTiles();
             UpdateMotion();
             UpdateAppearance();

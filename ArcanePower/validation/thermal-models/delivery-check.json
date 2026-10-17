@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "blocks": 31,
+  "construction_models": 93,
+  "lod_models": 174,
+  "validated_meshes": 322,
+  "definitions_and_package_match": true,
+  "co2_supply": "Integrated reactor commissioning",
+  "runtime_scripts": 40,
+  "runtime_definitions": 23,
+  "archive_entries_verified": 694,
+  "code_and_definitions_packaged": true,
+  "all_block_definitions": 51,
+  "dedicated_thermal_icons": 31,
+  "native_import": true,
+  "live_game_validation": "not_run",
+  "uniform_native_glass_textures": true
+}

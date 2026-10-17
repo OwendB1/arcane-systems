@@ -1,0 +1,9 @@
+{
+  "revision": 2,
+  "coordinate_map": "SE = (-Blender X, Blender Z, Blender Y)",
+  "export": "Root subpart meshes are shaft-local; identity rotation dummies at the specified pivots. Exclude rotor meshes from the static main.",
+  "rotors": [
+    {"id": "turbine", "subpart": "Thermal_TurbineRotor", "pivot_blender": [-1.35, 0, 0.45], "rotor_rows": 6, "blades_per_row": 64, "stator_rows": 6, "vanes_per_row": 68},
+    {"id": "compressor", "subpart": "Thermal_CompressorRotor", "pivot_blender": [-4.25, 0, 0.45], "rotor_rows": 6, "blades_per_row": 56, "stator_rows": 7, "vanes_per_row": 60}
+  ]
+}

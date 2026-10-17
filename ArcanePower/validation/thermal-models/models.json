@@ -16,9 +16,9 @@
       7.5,
       5.0
     ],
-    "phase": "base",
-    "meshes": 152,
-    "triangles": 12658,
+    "phase": "textures",
+    "meshes": 424,
+    "triangles": 157971,
     "ports": [
       {
         "id": "CO2 leg -1",
@@ -58,7 +58,28 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 4,
+    "rotors": [
+      {
+        "subpart": "Thermal_TurbineRotor",
+        "pivot_blender": [
+          -1.350000023841858,
+          0.0,
+          0.44999998807907104
+        ]
+      },
+      {
+        "subpart": "Thermal_CompressorRotor",
+        "pivot_blender": [
+          -4.25,
+          0.0,
+          0.44999998807907104
+        ]
+      }
+    ],
+    "flow_revision": 1
   },
   "Brayton train upgraded": {
     "subtype": "ArcanePower_Thermal_BraytonTrainUpgraded",
@@ -77,9 +98,9 @@
       7.5,
       5.0
     ],
-    "phase": "base",
-    "meshes": 163,
-    "triangles": 13046,
+    "phase": "textures",
+    "meshes": 442,
+    "triangles": 158883,
     "ports": [
       {
         "id": "CO2 leg -1",
@@ -119,7 +140,28 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 4,
+    "rotors": [
+      {
+        "subpart": "Thermal_TurbineRotor",
+        "pivot_blender": [
+          -1.350000023841858,
+          0.0,
+          0.44999998807907104
+        ]
+      },
+      {
+        "subpart": "Thermal_CompressorRotor",
+        "pivot_blender": [
+          -4.25,
+          0.0,
+          0.44999998807907104
+        ]
+      }
+    ],
+    "flow_revision": 1
   },
   "Primary heater": {
     "subtype": "ArcanePower_Thermal_PrimaryHeater",
@@ -138,9 +180,9 @@
       7.5,
       7.5
     ],
-    "phase": "base",
-    "meshes": 80,
-    "triangles": 9964,
+    "phase": "textures",
+    "meshes": 248,
+    "triangles": 29740,
     "ports": [
       {
         "id": "primary",
@@ -180,7 +222,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 12,
+    "rotors": [],
+    "flow_revision": 1
   },
   "Primary heater upgraded": {
     "subtype": "ArcanePower_Thermal_PrimaryHeaterUpgraded",
@@ -199,9 +245,9 @@
       7.5,
       7.5
     ],
-    "phase": "base",
-    "meshes": 104,
-    "triangles": 10828,
+    "phase": "textures",
+    "meshes": 286,
+    "triangles": 31632,
     "ports": [
       {
         "id": "primary",
@@ -241,7 +287,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 12,
+    "rotors": [],
+    "flow_revision": 1
   },
   "Recuperator": {
     "subtype": "ArcanePower_Thermal_Recuperator",
@@ -260,9 +310,9 @@
       5.0,
       7.5
     ],
-    "phase": "base",
-    "meshes": 124,
-    "triangles": 12464,
+    "phase": "textures",
+    "meshes": 314,
+    "triangles": 33546,
     "ports": [
       {
         "id": "high-pressure -1",
@@ -340,7 +390,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 8,
+    "rotors": [],
+    "flow_revision": 1
   },
   "Recuperator upgraded": {
     "subtype": "ArcanePower_Thermal_RecuperatorUpgraded",
@@ -359,9 +413,9 @@
       5.0,
       7.5
     ],
-    "phase": "base",
-    "meshes": 168,
-    "triangles": 14016,
+    "phase": "textures",
+    "meshes": 394,
+    "triangles": 35562,
     "ports": [
       {
         "id": "high-pressure -1",
@@ -439,7 +493,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 8,
+    "rotors": [],
+    "flow_revision": 1
   },
   "Atmospheric cooler": {
     "subtype": "ArcanePower_Thermal_AtmosphericCooler",
@@ -458,9 +516,9 @@
       5.0,
       7.5
     ],
-    "phase": "base",
-    "meshes": 128,
-    "triangles": 9768,
+    "phase": "textures",
+    "meshes": 263,
+    "triangles": 16480,
     "ports": [
       {
         "id": "CO2",
@@ -481,7 +539,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "Space radiator": {
     "subtype": "ArcanePower_Thermal_SpaceRadiator",
@@ -500,9 +562,9 @@
       5.0,
       7.5
     ],
-    "phase": "base",
-    "meshes": 150,
-    "triangles": 8640,
+    "phase": "textures",
+    "meshes": 243,
+    "triangles": 15087,
     "ports": [
       {
         "id": "CO2",
@@ -523,7 +585,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "PRIMARY / Straight": {
     "subtype": "ArcanePower_Thermal_PrimaryStraight",
@@ -542,9 +608,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 4284,
+    "phase": "textures",
+    "meshes": 77,
+    "triangles": 7662,
     "ports": [
       {
         "id": "socket 1",
@@ -584,7 +650,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "PRIMARY / Elbow": {
     "subtype": "ArcanePower_Thermal_PrimaryElbow",
@@ -603,9 +673,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 9660,
+    "phase": "textures",
+    "meshes": 77,
+    "triangles": 13550,
     "ports": [
       {
         "id": "socket 1",
@@ -645,7 +715,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "PRIMARY / Riser": {
     "subtype": "ArcanePower_Thermal_PrimaryRiser",
@@ -664,9 +738,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 12732,
+    "phase": "textures",
+    "meshes": 76,
+    "triangles": 16366,
     "ports": [
       {
         "id": "socket 1",
@@ -706,7 +780,11 @@
           0.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "PRIMARY / Tee": {
     "subtype": "ArcanePower_Thermal_PrimaryTee",
@@ -725,9 +803,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 54,
-    "triangles": 6776,
+    "phase": "textures",
+    "meshes": 101,
+    "triangles": 10753,
     "ports": [
       {
         "id": "socket 1",
@@ -786,7 +864,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "PRIMARY / Cross": {
     "subtype": "ArcanePower_Thermal_PrimaryCross",
@@ -805,9 +887,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 69,
-    "triangles": 9268,
+    "phase": "textures",
+    "meshes": 127,
+    "triangles": 14356,
     "ports": [
       {
         "id": "socket 1",
@@ -885,7 +967,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "PRIMARY / Roll adapter": {
     "subtype": "ArcanePower_Thermal_PrimaryRollAdapter",
@@ -904,9 +990,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 16316,
+    "phase": "textures",
+    "meshes": 79,
+    "triangles": 20206,
     "ports": [
       {
         "id": "socket 1",
@@ -946,7 +1032,11 @@
           0.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "PRIMARY / End cap": {
     "subtype": "ArcanePower_Thermal_PrimaryEndCap",
@@ -965,9 +1055,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 26,
-    "triangles": 2800,
+    "phase": "textures",
+    "meshes": 55,
+    "triangles": 5579,
     "ports": [
       {
         "id": "socket 1",
@@ -988,7 +1078,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_HP / Straight": {
     "subtype": "ArcanePower_Thermal_CO2HpStraight",
@@ -1007,9 +1101,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 4284,
+    "phase": "textures",
+    "meshes": 79,
+    "triangles": 8636,
     "ports": [
       {
         "id": "socket 1",
@@ -1049,7 +1143,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_HP / Elbow": {
     "subtype": "ArcanePower_Thermal_CO2HpElbow",
@@ -1068,9 +1166,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 9660,
+    "phase": "textures",
+    "meshes": 79,
+    "triangles": 14524,
     "ports": [
       {
         "id": "socket 1",
@@ -1110,7 +1208,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_HP / Riser": {
     "subtype": "ArcanePower_Thermal_CO2HpRiser",
@@ -1129,9 +1231,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 12732,
+    "phase": "textures",
+    "meshes": 78,
+    "triangles": 17340,
     "ports": [
       {
         "id": "socket 1",
@@ -1171,7 +1273,11 @@
           0.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_HP / Tee": {
     "subtype": "ArcanePower_Thermal_CO2HpTee",
@@ -1190,9 +1296,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 54,
-    "triangles": 6776,
+    "phase": "textures",
+    "meshes": 104,
+    "triangles": 12214,
     "ports": [
       {
         "id": "socket 1",
@@ -1251,7 +1357,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_HP / Cross": {
     "subtype": "ArcanePower_Thermal_CO2HpCross",
@@ -1270,9 +1380,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 69,
-    "triangles": 9268,
+    "phase": "textures",
+    "meshes": 131,
+    "triangles": 16304,
     "ports": [
       {
         "id": "socket 1",
@@ -1350,7 +1460,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_HP / Roll adapter": {
     "subtype": "ArcanePower_Thermal_CO2HpRollAdapter",
@@ -1369,9 +1483,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 16316,
+    "phase": "textures",
+    "meshes": 81,
+    "triangles": 21180,
     "ports": [
       {
         "id": "socket 1",
@@ -1411,7 +1525,11 @@
           0.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_HP / End cap": {
     "subtype": "ArcanePower_Thermal_CO2HpEndCap",
@@ -1430,9 +1548,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 26,
-    "triangles": 2800,
+    "phase": "textures",
+    "meshes": 56,
+    "triangles": 6066,
     "ports": [
       {
         "id": "socket 1",
@@ -1453,7 +1571,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_LP / Straight": {
     "subtype": "ArcanePower_Thermal_CO2LpStraight",
@@ -1472,9 +1594,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 4284,
+    "phase": "textures",
+    "meshes": 79,
+    "triangles": 8664,
     "ports": [
       {
         "id": "socket 1",
@@ -1514,7 +1636,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_LP / Elbow": {
     "subtype": "ArcanePower_Thermal_CO2LpElbow",
@@ -1533,9 +1659,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 9660,
+    "phase": "textures",
+    "meshes": 79,
+    "triangles": 14552,
     "ports": [
       {
         "id": "socket 1",
@@ -1575,7 +1701,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_LP / Riser": {
     "subtype": "ArcanePower_Thermal_CO2LpRiser",
@@ -1594,9 +1724,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 12732,
+    "phase": "textures",
+    "meshes": 78,
+    "triangles": 17368,
     "ports": [
       {
         "id": "socket 1",
@@ -1636,7 +1766,11 @@
           0.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_LP / Tee": {
     "subtype": "ArcanePower_Thermal_CO2LpTee",
@@ -1655,9 +1789,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 54,
-    "triangles": 6776,
+    "phase": "textures",
+    "meshes": 104,
+    "triangles": 12256,
     "ports": [
       {
         "id": "socket 1",
@@ -1716,7 +1850,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_LP / Cross": {
     "subtype": "ArcanePower_Thermal_CO2LpCross",
@@ -1735,9 +1873,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 69,
-    "triangles": 9268,
+    "phase": "textures",
+    "meshes": 131,
+    "triangles": 16360,
     "ports": [
       {
         "id": "socket 1",
@@ -1815,7 +1953,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_LP / Roll adapter": {
     "subtype": "ArcanePower_Thermal_CO2LpRollAdapter",
@@ -1834,9 +1976,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 16316,
+    "phase": "textures",
+    "meshes": 81,
+    "triangles": 21208,
     "ports": [
       {
         "id": "socket 1",
@@ -1876,7 +2018,11 @@
           0.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "CO2_LP / End cap": {
     "subtype": "ArcanePower_Thermal_CO2LpEndCap",
@@ -1895,9 +2041,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 26,
-    "triangles": 2800,
+    "phase": "textures",
+    "meshes": 56,
+    "triangles": 6080,
     "ports": [
       {
         "id": "socket 1",
@@ -1918,7 +2064,11 @@
           1.0
         ]
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   },
   "Reactor housing": {
     "subtype": "ArcanePower_Thermal_ReactorHousing",
@@ -1938,8 +2088,8 @@
       7.5
     ],
     "phase": "base",
-    "meshes": 1632,
-    "triangles": 132858,
+    "meshes": 1816,
+    "triangles": 208026,
     "ports": [
       {
         "id": "primary LA",
@@ -2041,7 +2191,8 @@
         ],
         "adapter": "PRIMARY / Reactor adapter"
       }
-    ]
+    ],
+    "flow_revision": 1
   },
   "PRIMARY / Reactor adapter": {
     "subtype": "ArcanePower_Thermal_PrimaryReactorAdapter",
@@ -2060,9 +2211,9 @@
       2.5,
       2.5
     ],
-    "phase": "base",
-    "meshes": 39,
-    "triangles": 5308,
+    "phase": "textures",
+    "meshes": 77,
+    "triangles": 8686,
     "ports": [
       {
         "id": "socket 2",
@@ -2108,6 +2259,10 @@
         ],
         "reactor_transition": true
       }
-    ]
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
   }
 }

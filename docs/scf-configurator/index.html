@@ -1,21 +1,65 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SE Ship Core XML Configurator</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <meta name="theme-color" content="#18191b" />
+  <title>Ship Core Configurator · Arcane Systems</title>
+  <link rel="stylesheet" href="./styles.css?v=1021" />
 </head>
 <body>
-  <header>
-    <h1>SE Ship Core XML Configurator</h1>
-    <p>Build and renovate Ship Core XML files.</p>
-  </header>
-
-  <main>
-    <details class="panel" open>
-      <summary class="panel-summary"><h2>1) Open or Import Existing Configuration (optional)</h2></summary>
-      <div class="panel-content">
+  <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><symbol id="icon-core" viewBox="0 0 24 24"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9m-4-11.3 8-4.5"/></symbol><symbol id="icon-blocks" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol><symbol id="icon-caps" viewBox="0 0 24 24"><path d="M4 7h16M7 4v6m10-6v6M4 17h16m-8-6v10"/></symbol><symbol id="icon-upgrade" viewBox="0 0 24 24"><path d="m12 3-8 11h7l-1 7 10-12h-8l1-6Z"/></symbol><symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 7V5h6l2 3h10v11H3V7Z"/></symbol><symbol id="icon-export" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol><symbol id="icon-book" viewBox="0 0 24 24"><path d="M4 4h7l1 2 1-2h7v16h-7l-1 1-1-1H4V4Zm8 2v15"/></symbol><symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></symbol></defs></svg>
+  <a class="skip-link" href="#mainContent">Skip to editor</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Workspace navigation">
+      <a class="brand" href="#coreProfiles"><span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#icon-core"/></svg></span><span><strong>Arcane Systems</strong><small>SHIP CORE FRAMEWORK</small></span></a>
+      <div class="sidebar-content">
+        <div class="nav-label">CONFIGURATION</div>
+        <nav aria-label="Configuration"><a class="nav-link" href="#coreProfiles"><svg class="icon" aria-hidden="true"><use href="#icon-core"/></svg><span>Ship cores</span><span class="nav-count" data-count="cores">0</span></a><a class="nav-link" href="#blockGroupPage"><svg class="icon" aria-hidden="true"><use href="#icon-blocks"/></svg><span>Block groups</span><span class="nav-count" data-count="groups">0</span></a><a class="nav-link" href="#sharedCoreCaps"><svg class="icon" aria-hidden="true"><use href="#icon-caps"/></svg><span>Shared core caps</span><span class="nav-count" data-count="caps">0</span></a><a class="nav-link" href="#upgradePage"><svg class="icon" aria-hidden="true"><use href="#icon-upgrade"/></svg><span>Upgrade modules</span><span class="nav-count" data-count="upgrades">0</span></a></nav>
+        <div class="nav-label nav-label-spaced">WORKSPACE</div>
+        <nav aria-label="Workspace">
+          <a class="nav-link" href="#sourcePage"><svg class="icon" aria-hidden="true"><use href="#icon-folder"/></svg><span>Open &amp; import</span></a>
+          <a class="nav-link" href="#exportPage"><svg class="icon" aria-hidden="true"><use href="#icon-export"/></svg><span>Validate &amp; export</span><span id="navValidationDot" class="status-dot"></span></a>
+        </nav>
+        <a class="sidebar-docs" href="../ship-core-framework.md" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#icon-book"/></svg> Configuration reference <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="sidebar-footer"><span class="local-indicator"><span class="status-dot"></span> Local workspace</span><p>Configuration stays in your browser until you save or export.</p><span id="draftStatus">Browser autosave enabled</span></div>
+    </aside>
+    <div class="workspace-body">
+      <header class="topbar">
+        <nav class="breadcrumb" aria-label="Breadcrumb"><span>Configurator</span><span aria-hidden="true">/</span><strong id="currentPageLabel">Ship cores</strong></nav>
+        <div class="topbar-actions"><span class="local-badge">SPACE ENGINEERS</span><button id="themeToggle" class="icon-button" type="button" aria-label="Switch to light theme"><svg class="icon" aria-hidden="true"><use href="#icon-sun"/></svg></button><a class="button primary" href="#exportPage"><svg class="icon" aria-hidden="true"><use href="#icon-export"/></svg><span>Export configuration</span></a></div>
+      </header>
+      <main id="mainContent" class="workspace-main" tabindex="-1">
+        <section id="coreProfiles" class="workspace-page" data-title="Ship cores">
+          <div class="page-heading"><div><p class="eyebrow">CONFIGURATION / CORE PROFILES</p><h1>Ship cores</h1><p>Define what your ships can do. One profile, all of its rules.</p></div><span class="page-tag">Ship Core Framework</span></div>
+          <div class="workspace-metrics" aria-label="Configuration overview">
+            <div><span>CORE PROFILES</span><strong data-count="cores">0</strong><small>+ No Core fallback</small></div>
+            <div><span>BLOCK GROUPS</span><strong data-count="groups">0</strong><small>Reusable classifications</small></div>
+            <div><span>UPGRADE MODULES</span><strong data-count="upgrades">0</strong><small>Available enhancements</small></div>
+            <a href="#exportPage"><span>VALIDATION</span><strong id="workspaceValidation">Checking</strong><small id="workspaceValidationDetail">Checking configuration</small></a>
+          </div>
+          <div class="selection-toolbar"><label for="selectedCore">Editing core profile</label><select id="selectedCore" aria-label="Selected Core"></select><button id="addCore" class="primary">+ Add ship core</button></div>
+          <div id="shipCores"></div>
+        </section>
+        <section id="blockGroupPage" class="workspace-page" data-title="Block groups">
+          <div class="page-heading"><div><p class="eyebrow">CONFIGURATION / CLASSIFICATION</p><h1>Block groups</h1><p>Classify blocks once. Reuse their weights and facing rules across core limits.</p></div></div>
+          <div class="selection-toolbar"><label for="selectedGroup">Editing block group</label><select id="selectedGroup" aria-label="Selected Group"></select><button id="addGroup" class="primary">+ Add block group</button></div>
+          <div id="blockGroups"></div>
+        </section>
+        <section id="sharedCoreCaps" class="workspace-page" data-title="Shared core caps">
+          <div class="page-heading"><div><p class="eyebrow">CONFIGURATION / MANIFEST GROUPS</p><h1>Shared core caps</h1><p>Set a shared core-count allowance across multiple profiles.</p></div></div>
+          <div class="notice">Group caps are defined here. Assign membership under <a href="#coreProfiles" data-open-core-tab="docking">Ship cores → Docking &amp; shared caps</a>. Each core has its own connector priority.</div>
+          <div class="selection-toolbar"><label for="selectedManifestGroup">Editing shared cap</label><select id="selectedManifestGroup" aria-label="Selected Manifest Group"></select><button id="addManifestGroup" class="primary">+ Add shared cap</button></div>
+          <div id="manifestGroups"></div>
+        </section>
+        <section id="upgradePage" class="workspace-page" data-title="Upgrade modules">
+          <div class="page-heading"><div><p class="eyebrow">CONFIGURATION / ENHANCEMENTS</p><h1>Upgrade modules</h1><p>Extend a core's performance, capacity, and named block limits.</p></div></div>
+          <div class="selection-toolbar"><label for="selectedUpgradeModule">Editing upgrade module</label><select id="selectedUpgradeModule" aria-label="Selected Upgrade Module"></select><button id="addUpgradeModule" class="primary">+ Add upgrade module</button></div>
+          <div id="upgradeModules"></div>
+        </section>
+        <section id="sourcePage" class="workspace-page" data-title="Open &amp; import">
+          <div class="page-heading"><div><p class="eyebrow">WORKSPACE / SOURCE FILES</p><h1>Open &amp; import</h1><p>Start from your mod, import existing XML, or migrate a legacy configuration.</p></div></div>
       <section class="card preferred-option" aria-labelledby="preferredFolderHeading">
         <h3 id="preferredFolderHeading">Update in place <span class="preferred-badge">Preferred</span></h3>
         <p class="muted">Open a mod root or <code>Data</code> folder to load it directly into the editor. When finished, use <strong>Update Open Folder</strong> under Generated XML to write changes back in place.</p>
@@ -79,60 +123,11 @@
         <button id="resetEditor">Reset Editor</button>
         <button id="resetDraftStorage">Clear Autosave Draft</button>
       </div>
-      <pre id="importStatus" class="code-block"></pre>
-      </div>
-    </details>
-
-    <details class="panel" open>
-      <summary class="panel-summary"><h2>2) Reusable Block Groups</h2></summary>
-      <div class="panel-content">
-      <div class="menu-controls">
-        <button id="addGroup">Add Block Group</button>
-        <select id="selectedGroup" aria-label="Selected Group"></select>
-      </div>
-      <div id="blockGroups"></div>
-      </div>
-    </details>
-
-    <details class="panel" open>
-      <summary class="panel-summary"><h2>3) Manifest Groups</h2></summary>
-      <div class="panel-content">
-      <p class="muted">Manifest groups define shared core caps in <code>ShipCoreConfig_Manifest.xml</code>. Assign ship cores to groups and configure connector blacklist subtype entries here.</p>
-      <div class="menu-controls">
-        <button id="addManifestGroup">Add Manifest Group</button>
-        <select id="selectedManifestGroup" aria-label="Selected Manifest Group"></select>
-      </div>
-      <div id="manifestGroups"></div>
-      </div>
-    </details>
-
-    <details class="panel" open>
-      <summary class="panel-summary"><h2>4) Ship Cores</h2></summary>
-      <div class="panel-content">
-      <div class="menu-controls">
-        <button id="addCore">Add Ship Core</button>
-        <select id="selectedCore" aria-label="Selected Core"></select>
-      </div>
-      <div id="shipCores"></div>
-      </div>
-    </details>
-
-
-    <details class="panel" open>
-      <summary class="panel-summary"><h2>5) Upgrade Modules</h2></summary>
-      <div class="panel-content">
-      <div class="menu-controls">
-        <button id="addUpgradeModule">Add Upgrade Module</button>
-        <select id="selectedUpgradeModule" aria-label="Selected Upgrade Module"></select>
-      </div>
-      <div id="upgradeModules"></div>
-      </div>
-    </details>
-
-    <details class="panel" open>
-      <summary class="panel-summary"><h2>6) Generated XML</h2></summary>
-      <div class="panel-content">
-      <p class="muted">Generated XML previews update automatically as you edit.</p>
+      <pre id="importStatus" class="code-block" aria-live="polite"></pre>
+        </section>
+        <section id="exportPage" class="workspace-page" data-title="Validate &amp; export">
+          <div class="page-heading"><div><p class="eyebrow">WORKSPACE / OUTPUT</p><h1>Validate &amp; export</h1><p>Review your configuration, then update the open folder or download the files.</p></div></div>
+          <section class="card export-card">
       <h3>Framework Validation</h3>
       <pre id="validationStatus" class="code-block validation-status" aria-live="polite"></pre>
       <div class="row wrap">
@@ -152,10 +147,13 @@
       <pre id="manifestXml" class="code-block"></pre>
       <h3>ShipCore XML Files</h3>
       <pre id="coresXml" class="code-block"></pre>
-      </div>
-    </details>
-  </main>
 
-  <script type="module" src="./app.js?v=1018"></script>
+          </section>
+        </section>
+        <footer class="workspace-footer"><span>Arcane Systems <span aria-hidden="true">/</span> Ship Core Configurator</span><span>Hover a field for help · Esc to dismiss</span></footer>
+      </main>
+    </div>
+  </div>
+  <script type="module" src="./app.js?v=1021"></script>
 </body>
 </html>

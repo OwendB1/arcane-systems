@@ -1,5 +1,9 @@
 # Thermal failure, physical ejection and plasma — 16 September 2026
 
+The generated Blender previews mentioned below were pruned during repository
+cleanup on 16 October 2026. Maintained models, texture sources and runtime assets
+remain unchanged.
+
 Implemented in the local prototype; compiled and exported, **not validated in-game**. No regression suites or game control accompanied this pass. The numerical thresholds below are provisional balance values.
 
 ## Accepted behavior
@@ -50,8 +54,8 @@ Moving-door collision, arbitrary roof obstructions, damaged routes after vent co
 
 The plasma uses a new monochrome filament texture, tinted per fuel at runtime. The sphere is smooth and 1.2 m across inside the existing 1.76 m containment shell. Tile faces now have open centres, thick 45 mm frames and luminous edges, allowing the plasma to show through. Four ring models remain shared across tiers. Native upgrade empties and the reactor housing were not scaled.
 
-- [Static Blender material comparison](validation/plasma-fuel-review.png) — illustrative lighting; not an in-game screenshot.
+- Static Blender material comparison — illustrative lighting; not an in-game screenshot.
 - [Art/technical channel authoring](assets/build_physical_plasma.py), [review renderer](assets/render_plasma_review.py), [texture provenance](assets/textures/plasma-filaments-provenance.json).
-- [Build log](validation/thermal-ejection-build.log), [seven model exports and embedded collision evidence](validation/physical-plasma-export.json), [local deployment](validation/local-deployment.json).
+- Build log, [seven model exports and embedded collision evidence](validation/physical-plasma-export.json), [local deployment](validation/local-deployment.json).
 
 Next game review must establish native capacity limiting, 10× fuel debits, resupply recovery, overheating and irreversible timers, interior/ejected detonation positions, save/rejoin/removal behavior, physical clearance/gravity, and shader appearance. Compilation and asset export do not establish these runtime outcomes.

@@ -1,7 +1,0 @@
-<?xml version="1.0" ?>
-<Model Name="ArcanePower_EnergyCapacity">
-	<Parameter Name="RescaleFactor">1.0</Parameter>
-	<Parameter Name="Centered">false</Parameter>
-	<Parameter Name="RescaleToLengthInMeters">false</Parameter>
-	<MaterialRef Name="Construction"/>
-</Model>

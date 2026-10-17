@@ -377,3 +377,21 @@ ShipCoreFramework/Bin64
 # Generated Graphify output in every project, including nested projects.
 graphify-out/
 ArcanePower/.cache/
+
+# Regenerated Blender review captures and export staging. Keep source blends,
+# source fingerprints, audit reports, runtime textures and Workshop artwork.
+*.blend[0-9]*
+/ArcanePower/assets/mockups/
+/ArcanePower/validation/**/*.png
+/ArcanePower/validation/**/*.jpg
+/ArcanePower/validation/**/*.jpeg
+/ArcanePower/validation/**/*.gif
+/ArcanePower/validation/**/*.mp4
+/ArcanePower/validation/**/*.wav
+/ArcanePower/validation/**/ui-reviews.json
+/ArcanePower/validation/**/*-plan.json
+/ArcanePower/validation/**/*-progress.json
+/ArcanePower/validation/*-export-backup/
+/ArcanePower/validation/**/export-backup/
+/ArcanePower/src/.energy-model-staging/
+/ArcanePower/src/Models/Cubes/large/.*-stage/

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CategoryClasses>
+    <Category xsi:type="MyObjectBuilder_GuiBlockCategoryDefinition">
+      <Id>
+        <TypeId>GuiBlockCategoryDefinition</TypeId>
+        <SubtypeId>ArcaneSystems_Thermal</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Systems</DisplayName>
+      <Name>ArcaneSystems</Name>
+      <ItemIds>
+        <string>Reactor/ArcanePower_Thermal_BraytonTrain</string>
+        <string>Reactor/ArcanePower_Thermal_BraytonTrainUpgraded</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryHeater</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryHeaterUpgraded</string>
+        <string>UpgradeModule/ArcanePower_Thermal_Recuperator</string>
+        <string>UpgradeModule/ArcanePower_Thermal_RecuperatorUpgraded</string>
+        <string>UpgradeModule/ArcanePower_Thermal_AtmosphericCooler</string>
+        <string>UpgradeModule/ArcanePower_Thermal_SpaceRadiator</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryStraight</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryElbow</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryRiser</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryTee</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryCross</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryRollAdapter</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryEndCap</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpStraight</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpElbow</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpRiser</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpTee</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpCross</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpRollAdapter</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpEndCap</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpStraight</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpElbow</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpRiser</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpTee</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpCross</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpRollAdapter</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpEndCap</string>
+        <string>Reactor/ArcanePower_Thermal_ReactorHousing</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryReactorAdapter</string>
+      </ItemIds>
+    </Category>
+  </CategoryClasses>
+</Definitions>

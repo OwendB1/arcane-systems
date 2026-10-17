@@ -9,7 +9,7 @@ using VRage.Utils;
 
 namespace ArcanePower
 {
-    public enum VentCommand { Sync, Start, Stop, Toggle, SecurityOn, SecurityOff }
+    public enum VentCommand { Sync, Start, Stop, Toggle, SecurityOn, SecurityOff, Standalone, Brayton }
 
     [ProtoContract]
     public sealed class VentPacket
@@ -28,6 +28,7 @@ namespace ArcanePower
         private readonly List<IMyTerminalAction> actions = new List<IMyTerminalAction>();
         private IMyTerminalControlButton control;
         private IMyTerminalControlOnOffSwitch security;
+        private IMyTerminalControlOnOffSwitch thermalMode;
 
         public override void BeforeStart()
         {
@@ -46,6 +47,13 @@ namespace ArcanePower
             security.SupportsMultipleBlocks = true;
             security.Getter = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.Motion.SecurityMode; };
             security.Setter = (b, enabled) => SendCommand(b.EntityId, enabled ? VentCommand.SecurityOn : VentCommand.SecurityOff);
+            thermalMode = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlOnOffSwitch, IMyReactor>("ArcanePower_ThermalMode");
+            thermalMode.Title = MyStringId.GetOrCompute("Brayton mode");
+            thermalMode.Tooltip = MyStringId.GetOrCompute("Standalone: 20% conversion with hidden manifolds. Brayton: connected heater, recovery, train and cooling bank. Changing mode shuts down, drains paid heat, then moves the manifolds under real containment power. Restart manually when settled.");
+            thermalMode.OnText = MyStringId.GetOrCompute("Brayton");
+            thermalMode.OffText = MyStringId.GetOrCompute("Standalone");
+            thermalMode.Getter = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.Motion.Thermal != null && r.Motion.Thermal.Requested == ThermalMode.Brayton; };
+            thermalMode.Setter = (b, enabled) => SendCommand(b.EntityId, enabled ? VentCommand.Brayton : VentCommand.Standalone);
             AddAction("ArcanePower_StartVent", "Vent reactor", VentCommand.Start);
             AddAction("ArcanePower_ToggleVent", "Vent reactor", VentCommand.Toggle);
             MyAPIGateway.TerminalControls.CustomControlGetter += Controls;
@@ -70,6 +78,8 @@ namespace ArcanePower
         private void Controls(IMyTerminalBlock block, List<IMyTerminalControl> list)
         {
             if (Reactors.ContainsKey(block.EntityId)) { list.Add(control); list.Add(security); }
+            Reactor r;
+            if (Reactors.TryGetValue(block.EntityId, out r) && r.ThermalVariant) list.Add(thermalMode);
         }
         private void Actions(IMyTerminalBlock block, List<IMyTerminalAction> list)
         {
@@ -110,6 +120,8 @@ namespace ArcanePower
             else if (command == VentCommand.Toggle) reactor.RequestVent(!reactor.Motion.Requested);
             else if (command == VentCommand.SecurityOn) reactor.SetSecurityMode(true);
             else if (command == VentCommand.SecurityOff) reactor.SetSecurityMode(false);
+            else if (command == VentCommand.Standalone) reactor.RequestThermalMode(ThermalMode.Standalone);
+            else if (command == VentCommand.Brayton) reactor.RequestThermalMode(ThermalMode.Brayton);
         }
 
         private void Receive(ushort channel, byte[] bytes, ulong sender, bool fromServer)
@@ -126,7 +138,7 @@ namespace ArcanePower
                     if (!Reactors.TryGetValue(packet.EntityId, out r)) return;
                     if (MyAPIGateway.Multiplayer.IsServer)
                     {
-                        if (fromServer || packet.Command < VentCommand.Sync || packet.Command > VentCommand.SecurityOff) return;
+                        if (fromServer || packet.Command < VentCommand.Sync || packet.Command > VentCommand.Brayton) return;
                         if (packet.Command == VentCommand.Sync)
                         {
                             MyAPIGateway.Multiplayer.SendMessageTo(Channel,

@@ -1,0 +1,301 @@
+{
+  "status": "passed",
+  "question": "Was the main reactor polygon count reduced?",
+  "finding": "No recent reduction. Original production source and all 1632 current housing meshes match their prior checkpoints.",
+  "comparison_scope": "Blender main-collection mesh triangles, on the same counting basis; evaluated counts agree. Separately exported subpart models are not included.",
+  "counts": {
+    "arcane-power-before-exterior-detail.blend": {
+      "ArcanePower_ReactorPrototype": {
+        "meshes": 669,
+        "polygons": 39800,
+        "triangles": 84362
+      }
+    },
+    "arcane-power-prototype.blend": {
+      "ArcanePower_ReactorPrototype": {
+        "meshes": 1600,
+        "polygons": 48560,
+        "triangles": 105014
+      }
+    },
+    "arcane-thermal-before-production.blend": {
+      "ArcanePower_ReactorPrototype": {
+        "meshes": 1600,
+        "polygons": 48560,
+        "triangles": 105014
+      }
+    },
+    "arcane-thermal-before-controller-backing.blend": {
+      "ArcanePower_ReactorPrototype": {
+        "meshes": 1600,
+        "polygons": 48560,
+        "triangles": 105014
+      },
+      "ArcanePower_Thermal_ReactorHousing": {
+        "meshes": 1632,
+        "polygons": 60129,
+        "triangles": 132242
+      }
+    },
+    "arcane-thermal-before-axial-train-rebuild.blend": {
+      "ArcanePower_ReactorPrototype": {
+        "meshes": 1600,
+        "polygons": 48560,
+        "triangles": 105014
+      },
+      "ArcanePower_Thermal_ReactorHousing": {
+        "meshes": 1632,
+        "polygons": 60373,
+        "triangles": 132858
+      }
+    },
+    "arcane-thermal-models.blend": {
+      "ArcanePower_ReactorPrototype": {
+        "meshes": 1600,
+        "polygons": 48560,
+        "triangles": 105014
+      },
+      "ArcanePower_Thermal_ReactorHousing": {
+        "meshes": 1632,
+        "polygons": 60373,
+        "triangles": 132858
+      }
+    }
+  },
+  "current_vs_before_turbine_work": {
+    "missing": [],
+    "added": [],
+    "changed": []
+  },
+  "embedded_original_vs_accepted_external_source": {
+    "missing": [],
+    "added": [],
+    "changed": []
+  },
+  "inherited_geometry_and_normals_unchanged": 1509,
+  "modified_inherited_meshes": [
+    {
+      "source": "Lower machinery drum.009",
+      "old_triangles": 1408,
+      "new_triangles": 4964
+    }
+  ],
+  "replaced_local_source_meshes": {
+    "count": 90,
+    "triangles": 3360,
+    "reason": "Four old lower armor/service-panel bays became split manifold covers; old controller infills were replaced with continuous backing.",
+    "names": [
+      "Drum segmented armor.025",
+      "Drum segmented armor.034",
+      "Drum segmented armor.037",
+      "Drum segmented armor.046",
+      "AP upgrade socket / lower armor infill -1",
+      "AP upgrade socket / lower armor infill 1",
+      "Reactor exterior / service receiver",
+      "Reactor exterior / pocket floor",
+      "Reactor exterior / flush access door",
+      "Reactor exterior / captive screw",
+      "Reactor exterior / native screw face",
+      "Reactor exterior / captive screw.001",
+      "Reactor exterior / native screw face.001",
+      "Reactor exterior / captive screw.002",
+      "Reactor exterior / native screw face.002",
+      "Reactor exterior / captive screw.003",
+      "Reactor exterior / native screw face.003",
+      "Reactor exterior / panel pull foot",
+      "Reactor exterior / panel pull foot.001",
+      "Reactor exterior / panel pull grip",
+      "Reactor exterior / equipment number stock",
+      "Reactor exterior / native equipment number",
+      "Reactor exterior / door hinge",
+      "Reactor exterior / door hinge.001",
+      "Reactor exterior / service receiver.007",
+      "Reactor exterior / pocket floor.007",
+      "Reactor exterior / flush access door.007",
+      "Reactor exterior / captive screw.036",
+      "Reactor exterior / native screw face.036",
+      "Reactor exterior / captive screw.037",
+      "Reactor exterior / native screw face.037",
+      "Reactor exterior / captive screw.038",
+      "Reactor exterior / native screw face.038",
+      "Reactor exterior / captive screw.039",
+      "Reactor exterior / native screw face.039",
+      "Reactor exterior / panel pull foot.014",
+      "Reactor exterior / panel pull foot.015",
+      "Reactor exterior / panel pull grip.007",
+      "Reactor exterior / equipment number stock.007",
+      "Reactor exterior / native equipment number.007",
+      "Reactor exterior / service-bay divider.001",
+      "Reactor exterior / recessed louver.017",
+      "Reactor exterior / recessed louver.018",
+      "Reactor exterior / recessed louver.019",
+      "Reactor exterior / service receiver.008",
+      "Reactor exterior / pocket floor.008",
+      "Reactor exterior / flush access door.008",
+      "Reactor exterior / captive screw.040",
+      "Reactor exterior / native screw face.040",
+      "Reactor exterior / captive screw.041",
+      "Reactor exterior / native screw face.041",
+      "Reactor exterior / captive screw.042",
+      "Reactor exterior / native screw face.042",
+      "Reactor exterior / captive screw.043",
+      "Reactor exterior / native screw face.043",
+      "Reactor exterior / panel pull foot.016",
+      "Reactor exterior / panel pull foot.017",
+      "Reactor exterior / panel pull grip.008",
+      "Reactor exterior / equipment number stock.008",
+      "Reactor exterior / native equipment number.008",
+      "Reactor exterior / door hinge.004",
+      "Reactor exterior / door hinge.005",
+      "Reactor exterior / service receiver.015",
+      "Reactor exterior / pocket floor.015",
+      "Reactor exterior / flush access door.015",
+      "Reactor exterior / captive screw.076",
+      "Reactor exterior / native screw face.076",
+      "Reactor exterior / captive screw.077",
+      "Reactor exterior / native screw face.077",
+      "Reactor exterior / captive screw.078",
+      "Reactor exterior / native screw face.078",
+      "Reactor exterior / captive screw.079",
+      "Reactor exterior / native screw face.079",
+      "Reactor exterior / panel pull foot.030",
+      "Reactor exterior / panel pull foot.031",
+      "Reactor exterior / panel pull grip.015",
+      "Reactor exterior / equipment number stock.015",
+      "Reactor exterior / native equipment number.015",
+      "Reactor exterior / service-bay divider.003",
+      "Reactor exterior / recessed louver.037",
+      "Reactor exterior / recessed louver.038",
+      "Reactor exterior / recessed louver.039",
+      "Texture detail / service warning",
+      "Texture detail / service warning.007",
+      "Texture detail / service warning.008",
+      "Texture detail / service warning.015",
+      "Texture detail / drum rolled seam",
+      "Texture detail / drum rolled seam.007",
+      "Texture detail / drum rolled seam.008",
+      "Texture detail / drum rolled seam.015"
+    ]
+  },
+  "hidden_current_main_meshes": 0,
+  "current_main_modifiers": [],
+  "visual_findings": "Rim/base and chamber seal surfaces retain their original segmented geometry and flat/smooth face assignments. Matching close-ups show the same rim silhouette and shading.",
+  "visual_evidence": [
+    {
+      "image": "reactor-polycount-accepted-rim-1.8m.png",
+      "scene": "ArcanePower_ReactorPrototype",
+      "target": [
+        4.25,
+        -4.25,
+        3.3499999046325684
+      ],
+      "eye": [
+        5.484048843383789,
+        -5.484048843383789,
+        3.7907309532165527
+      ],
+      "distance_m": 1.7999991292752704,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    },
+    {
+      "image": "reactor-polycount-accepted-rim-2.4m.png",
+      "scene": "ArcanePower_ReactorPrototype",
+      "target": [
+        4.25,
+        -4.25,
+        3.3499999046325684
+      ],
+      "eye": [
+        5.89539909362793,
+        -5.8953986167907715,
+        3.9376420974731445
+      ],
+      "distance_m": 2.399999606857665,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    },
+    {
+      "image": "reactor-polycount-accepted-rim-3.0m.png",
+      "scene": "ArcanePower_ReactorPrototype",
+      "target": [
+        4.25,
+        -4.25,
+        3.3499999046325684
+      ],
+      "eye": [
+        6.306748390197754,
+        -6.3067474365234375,
+        4.08455228805542
+      ],
+      "distance_m": 2.999998529751735,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    },
+    {
+      "image": "reactor-polycount-current-rim-1.8m.png",
+      "scene": "ArcanePower_Thermal_ReactorHousing",
+      "target": [
+        4.25,
+        -4.25,
+        3.3499999046325684
+      ],
+      "eye": [
+        5.484048843383789,
+        -5.484048843383789,
+        3.7907309532165527
+      ],
+      "distance_m": 1.7999991292752704,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    },
+    {
+      "image": "reactor-polycount-current-rim-2.4m.png",
+      "scene": "ArcanePower_Thermal_ReactorHousing",
+      "target": [
+        4.25,
+        -4.25,
+        3.3499999046325684
+      ],
+      "eye": [
+        5.89539909362793,
+        -5.8953986167907715,
+        3.9376420974731445
+      ],
+      "distance_m": 2.399999606857665,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    },
+    {
+      "image": "reactor-polycount-current-rim-3.0m.png",
+      "scene": "ArcanePower_Thermal_ReactorHousing",
+      "target": [
+        4.25,
+        -4.25,
+        3.3499999046325684
+      ],
+      "eye": [
+        6.306748390197754,
+        -6.3067474365234375,
+        4.08455228805542
+      ],
+      "distance_m": 2.999998529751735,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    }
+  ],
+  "changes_to_model": "None; read-only inspection.",
+  "native_in_game_scope": "Latest manifold variant remains unexported, as recorded separately. This checks source geometry."
+}

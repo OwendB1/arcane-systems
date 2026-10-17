@@ -1,19 +1,91 @@
 # Arcane Power — remaining implementation work
 
-Updated 16 October 2026 after the curved manifold repair.
+Generated review captures were pruned again on 17 October 2026. Historical inspection
+descriptions below remain; current blends, checkpoints and compact audit reports
+are retained.
+
+Updated 17 October 2026 after native thermal export and local packaging.
 The current status below supersedes the historical delivery notes that follow;
 the [full plan](arcane-power-plan.md) retains the wider design direction.
 
 ## Current status
 
+- **Native thermal delivery, 17 October:** all 31 thermal block definitions and
+  native mains, 24 moving subparts, 93 construction models and 174 LODs are installed
+  locally and packaged in the unpublished 0.1.0 ZIP. All 322 native meshes pass
+  exact evaluated triangle counts, collision-byte, material and dependency checks.
+  Manifold rest frames and both train variants' shaft pivots/orientations pass.
+  Custom glass now uses uniform CA/NG textures instead of window-edge dirt.
+  The 120 external pressure pipes share the reactor struts' smoked glass and metal
+  finish, with 355 fitted rings; telescopic sleeves keep their unobstructed glands.
+  All 31 thermal icons were refreshed. Reactor tubes retain metal backing and
+  guard rails; weld stages retain opaque supporting pipe bodies. CO₂ supply is
+  integrated into powered commissioning. Native assets supersede the earlier
+  export gates below; live SE rendering, commissioning and multiplayer validation
+  remain pending. [Delivery check](../ArcanePower/validation/thermal-models/delivery-check.json).
+
+- **Flow and emissives, 16 October:** all 31 thermal mains have separate hot,
+  return and status materials. Server-derived circulation drives liquid streaks,
+  gas wisps, internal coolant risers and four chamber injectors. A 122-block
+  room-perimeter example uses existing grid-sized conduit pieces. Capped spurs,
+  standby branches and invalid connections carry no visible flow; reactor
+  indicators retract with the manifolds. Compatibility compilation, 1,323,383
+  runtime checks, geometry/backing audits, 47 manifold poses and live three-distance
+  reviews pass. The saved Blender source includes isolated moving previews.
+  Native exports/definitions are delivered; live game appearance remains pending.
+  [Flow review](../ArcanePower/validation/thermal-models/flow-emissives-review.json).
+
+- **Construction guidance, 16 October:** SCF-style preview facing/rotation arrows,
+  H/C socket markers, contextual build instructions and assembly verification
+  are implemented for thermal blocks. Checks distinguish placement alignment,
+  complete construction and authoritative operating status; missing recovery,
+  cooling, welding and malformed joints remain actionable. The focused checks
+  cover the authored layout and all 24 grid orientations. Native assets are delivered;
+  in-game HUD/commissioning validation remains pending. See the
+  [construction guide](../ArcanePower/THERMAL-CONSTRUCTION.md).
+
+- **Transparent pipes and turbine internals, 16 October:** the 30 non-reactor
+  mains use native clear pressure walls on conduits/fluid headers. Both train
+  variants have hollow inspection windows, six dense turbine rotor rows (384
+  blades) interleaved with six fixed vane rows, and six independent compressor
+  rotor rows (336 blades) with seven fixed vane rows. End-plenum piping feeds
+  the front and exhausts at the rear; accepted external side sockets stay fixed. Source rebuilds retain the visibility pass. Server
+  rotor state follows paid heat and a gameplay pressure estimate, with smooth
+  spool/coast, save identity and client synchronization. Native subparts and
+  thermal definitions are delivered; in-game motion remains pending. See the
+  [runtime contract](../ArcanePower/THERMAL-RUNTIME.md).
+
+- **Thermal runtime prototype, 16 October:** separate C# subtype logic now covers
+  20% standalone / 40–78% Brayton, shutdown/drain/move mode transitions, manifold
+  poses, physical socket checks, per-block heat, native output/fuel accounting,
+  dispatch and paid startup/cooldown circulation. Focused kernel/layout checks
+  pass; existing direct-electric definitions are preserved. Native model exports and
+  thermal definitions are delivered; live multiplayer/runtime validation remains a gate.
+  [Implementation and boundaries](../ArcanePower/THERMAL-RUNTIME.md).
+
+- **Brayton main models and textures, 16 October:** all eight machines and 22
+  typed pipe/transition pieces now have native SEUT surface textures, supported
+  atlas details, service hardware, fasteners and pressure markings. Premium
+  hot-end stencils use 2200 C. Procedural rebuilds preserve the finished phases
+  and assembly instances. Close UI inspection and saved-file geometry, UV,
+  backing and grid/socket checks are recorded in the
+  [review evidence](../ArcanePower/validation/thermal-models/REVIEW.md).
+  Native exports and LODs/build stages are delivered; thermal world validation remains pending.
+  A second asset/detail loop sharpens housings to at most 3 mm flat chamfers,
+  gives fasteners faceted normals, reduces the flange joint to 28 mm and packs
+  the train, heater vessels, exchanger plates and radiator tiles more closely.
+  Supported angular brackets and fitted native details replace the loose
+  blockout spacing; the original grid/socket contract is preserved.
+
 - **Reactor manifold repair, 16 October:** original curved lower armor now splits
   and slides under adjacent panels, hiding two-stage primary pipe heads in
   standalone mode. Four bays flank the two native controller slots. A one-cell
   transition mates the native band height to the standard pipe lattice. The
-  mechanical preview passes 14 sampled positions and close UI review at
+  mechanical preview passes 47 sampled positions and close UI review at
   1.8/2.4/3.0 m. Original production sources remain protected. Native moving
-  subparts/collision and gameplay switching are pending; other model refinement
-  is held until this repair is reviewed. Standalone/Brayton balance targets are
+  subparts/collision are delivered; in-game mode validation remains pending. Rounded twin-bore
+  castings and moving rear connectors now tie the deployed pipes into the shell;
+  both controller recesses and their lower notches are restored. Standalone/Brayton balance targets are
   now 20% / up to 78% net. [Current source](../ArcanePower/assets/arcane-thermal-models.blend).
 
 - **Modular Brayton study, 15 October:** standalone generation targets 20% net; sCO₂ Brayton starts at 40% net,
@@ -23,7 +95,8 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   fan cooler and two-sided space radiator replace the combined cooler. The former
   topping converter is removed from the active design/models. Editable premium
   hardware, branching conduit and a three-train bank accompany the four
-  environment/grade layout studies. Thermal runtime and native exports remain future work; the extraction geometry
+  environment/grade layout studies. The separate runtime prototype now exists;
+  native exports are delivered and world validation remains pending. The extraction geometry
   is superseded by the current curved-panel manifold variant. [Design and models](../ArcanePower/THERMAL-POWER.md).
 
 - **Native texture detail, 15 October:** reactor, both controllers, battery and
@@ -32,7 +105,7 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   surfaces match their installed backing. Geometry, native interfaces, collision,
   LODs and driven materials are preserved. New native MWMs are connected locally;
   fresh-load review verifies all eleven battery preview assemblies. In-game
-  inspection remains pending. [Preview](../ArcanePower/validation/native-texture-detail/capacity-1.8m.png).
+  inspection remains pending. Preview.
 - **Controller main-model detail, 15 October:** standard now has a broad service
   cassette and passive cooling bank; advanced has paired power cartridges,
   connected buses, seated heat spreaders and extra cooling. Both have native
@@ -42,7 +115,7 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   geometry gates pass. Receiver rims now clear the casing by 6 mm, and covers
   clear their lower shoulders by at least 4.5 mm. Saved art is exported and
   connected to the local mod; game review remains pending.
-  [Comparison](../ArcanePower/validation/controller-detail-loop-01/review-front.jpg).
+  Comparison.
 - **Reactor exterior review, 15 October:** saved main housing now has varied
   lower service bays, a continuous upper cooling belt, and detailed chamfered
   pillars. Accepted pillar proportions and roof seats are retained. Lower feet
@@ -78,7 +151,7 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   This art revision still awaits a game reload/live inspection. User explicitly
   deferred further LOD work. The newly requested battery construction update is
   exported; reactor/controller construction redesign remains deferred.
-  [Mounted detail](../ArcanePower/validation/energy-core-loop-05/mounted-root-top.png)
+  Mounted detail
   and [export evidence](../ArcanePower/validation/energy-main-export.json).
 - **Construction complete:** three native welding/grinding stages for all twelve
   public blocks (36 models). Native imports, bounds, construction materials,
@@ -184,7 +257,7 @@ The selected **1.6 m × 1.0 m piggyback packs**, raised **2.3 m socket surrounds
 
 ## Completed in the preceding hardware/tile pass
 
-- Recorded [startup/shutdown](../ArcanePower/validation/recordings/reactor-startup-shutdown.mp4) and [vent ejection](../ArcanePower/validation/recordings/reactor-vent.mp4) from spectator view on the primary monitor at 3440×1440/60 fps. These show the preceding reactor revision at low load. Existing ceiling blocks obscure the roof hatch; footage does not establish hot cooldown or rated output.
+- Recorded startup/shutdown and vent ejection from spectator view on the primary monitor at 3440×1440/60 fps. These show the preceding reactor revision at low load. Existing ceiling blocks obscure the roof hatch; footage does not establish hot cooldown or rated output.
 - Repaired the reactor and both attached controllers. [Repair evidence](../ArcanePower/validation/recordings/repair.json) confirms full integrity and build after reloading and resaving the lab.
 - Authored/exported stackable 3×1×3-cell vent duct and outlet, each with a 3.72 m lined bore. The outlet uses four moving leaves and fuel/alarm emissives. Direct code follows a straight aligned route and synchronizes its terminal door to the reactor doors.
 - Authored/exported distinct one-cell crescent standard/advanced containment controllers with native upgrade mating detectors.
@@ -216,7 +289,7 @@ The running lab remains repaired on its recorded revision. Local deployment beco
 2. **Finish vent behavior.** Handle blocked passages/outlets and independent shutter faults. Broken routes now pause committed ejection without resetting heat/fuses and resume after repair at the original height. Actuation now uses the containment grid/reserve budget; validate its supply-loss behavior. Tune the new critical explosions and add discharge-specific effects/sounds, plus collision geometry appropriate to moving doors. Current routing requires 1–15 fully built, aligned tubes plus one outlet on the same grid before startup; subsequent route loss shuts down or warns according to the saved Security mode. There is no legacy direct roof path. Arbitrary obstructions beyond the outlet are not checked. Ejection now hands off to native physical objects beyond the outlet; verify collision, gravity, launch speed and native cleanup limits. Define regulated/automatic vent modes and exhaust-capacity progression if retained from the broader plan.
 3. **Make mining-to-generation playable.** Weighted asteroid voxel materials, dense concentrates and cumulative fuel recipes are now implemented. Validate discovery/drilling/refining and existing procedural terrain behavior; decide planetary/custom-terrain support separately. Ore/fuel definitions alone do not make deposits mineable. Complete a survival run without admin-spawned resources.
 4. **Validate Arcane Energy Core storage.** Implementation, models, animation and basic native host checks are complete. Validate sustained surplus capture, demand peaks, reserve contention and actual splits/projection in-game. Vanilla batteries remain a valid startup/backup option.
-5. **Finish art and feedback.** Construction stages and battery icons are delivered. Further LODs, sound/particle refinement and mass/components/PCU tuning remain. Review ore/fuel/voxel art alongside tile flight paths, door pockets, highlights and glass in-game.
+5. **Finish art and feedback.** Construction stages and battery icons are delivered. Further art, sound/particle refinement and mass/components/PCU tuning remain. Review ore/fuel/voxel art alongside tile flight paths, door pockets, highlights and glass in-game.
 6. **Finish release hardening.** The user authorized this validation pass; focused checks and an unpublished runtime package are complete. Finish the explicit release gates above before publication.
 
 ## Current balance assumptions

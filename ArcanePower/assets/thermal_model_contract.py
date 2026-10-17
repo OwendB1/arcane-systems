@@ -9,6 +9,13 @@ import math
 
 CELL = 2.5
 CIRCUITS = ('PRIMARY', 'CO2_HP', 'CO2_LP')
+# Accepted external manifold positions. Internal flow changes must not move these sockets.
+TRAIN_PORTS = [
+    {'id': 'CO2 leg -1', 'type': 'CO2_HP', 'position': [-2.5, -3.75, 1.25],
+     'normal': [0., -1., 0.], 'hot_axis': [0., 0., 1.]},
+    {'id': 'CO2 leg 1', 'type': 'CO2_LP', 'position': [-2.5, 3.75, 1.25],
+     'normal': [0., 1., 0.], 'hot_axis': [0., 0., 1.]},
+]
 MACHINES = {
     'Brayton train': (5, 3, 2),
     'Brayton train upgraded': (5, 3, 2),

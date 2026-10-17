@@ -26,7 +26,7 @@ namespace ArcanePower
     [MySessionComponentDescriptor(MyUpdateOrder.NoUpdate)]
     public sealed class EnergySession : MySessionComponentBase
     {
-        private const ushort Channel = 49372;
+        private const ushort Channel = 49374;
         private static readonly Dictionary<long, EnergyCore> Cells = new Dictionary<long, EnergyCore>();
         internal static readonly Dictionary<long, JumpDriveSurge> Drives = new Dictionary<long, JumpDriveSurge>();
         private static bool ready;

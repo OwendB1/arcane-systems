@@ -1,0 +1,199 @@
+{
+  "status": "passed",
+  "file": "assets/arcane-thermal-native-export.blend",
+  "backend": "blender_official",
+  "blender": "5.2.1 LTS",
+  "review_scope": "Derived construction stages and distance meshes; accepted main geometry unchanged",
+  "native_meshes_prepared": 270,
+  "counts": {
+    "block_mains": 31,
+    "moving_parts": 24,
+    "construction_stages": 93,
+    "lods": 122
+  },
+  "evidence": {
+    "overviews": [
+      "native-qa-pipe-sheet.jpg",
+      "native-qa-train-sheet.jpg",
+      "native-qa-reactor-sheet.jpg"
+    ],
+    "closeups": [
+      "native-close-pipe-sheet.jpg",
+      "native-close-train-sheet.jpg",
+      "native-close-reactor-sheet.jpg"
+    ],
+    "chamber": "native-chamber-sheet.jpg"
+  },
+  "distances_m": [
+    1.8,
+    2.4,
+    3.0
+  ],
+  "lens_mm": 48,
+  "studio_light": "studio.exr",
+  "light_rotation": 0.5,
+  "light_intensity": 0.8,
+  "observations": [
+    "Stages expose construction framing and fitted unpowered machinery; glass and powered materials are excluded.",
+    "Main and LOD silhouettes retain the accepted pipe, train and reactor forms.",
+    "Glass and emission surfaces stay exact; distant structural tessellation is reduced.",
+    "Both train rotors remain seated in the isolated assembled review.",
+    "Chamber-facing backing and outer service-panel seating inspected."
+  ],
+  "rejected_capture": "Initial below-floor reactor interior views were obscured; replaced with wall/floor views in the chamber.",
+  "live_game_validation": "not_run",
+  "restored_view": {
+    "file": "assets/arcane-thermal-models.blend",
+    "scene": "Thermal production / Flow chamber",
+    "frame": 12,
+    "distance_m": 24,
+    "target": [
+      0,
+      0,
+      -0.1
+    ],
+    "direction": [
+      1,
+      -1,
+      0.65
+    ],
+    "preview_handler_installed": true
+  },
+  "reactor_refinement": {
+    "source_triangles": 208026,
+    "glass": "ArcanePower_CoolantGlass",
+    "main_lod_evidence": "native-updated-reactor-sheet.jpg",
+    "construction_evidence": "native-supported-stages-sheet.jpg",
+    "construction_coolant_bodies_per_stage": 24,
+    "construction_jackets_per_stage": 88,
+    "status": "passed"
+  },
+  "native_export": "passed",
+  "native_revision": "Models/Cubes/large/Thermal/thermal_4918df2683ad",
+  "package_sha256": "195056c41c95a13688cb20dd347123996150aa59ae5f0270f85d5326d70363d5",
+  "native_uv_review": {
+    "status": "passed",
+    "views": [
+      "native-uv-corrected-reactor.png",
+      "native-uv-corrected-train-stage.png",
+      "native-uv-corrected-cross-stage.png",
+      "native-uv-corrected-riser-sheet.jpg"
+    ]
+  },
+  "uv_review_cameras": [
+    {
+      "image": "native-uv-corrected-reactor.png",
+      "scene": "Thermal production / UV corrected reactor",
+      "target": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "eye": [
+        15.419821739196777,
+        -15.419818878173828,
+        10.022882461547852
+      ],
+      "distance_m": 23.999997774759827,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    },
+    {
+      "image": "native-uv-corrected-riser-1.8.png",
+      "scene": "Thermal production / UV corrected reactor",
+      "target": [
+        3.7869999408721924,
+        -4.585000038146973,
+        0.6499999761581421
+      ],
+      "eye": [
+        5.047252655029297,
+        -5.84525203704834,
+        0.9020504355430603
+      ],
+      "distance_m": 1.8000004165701915,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    },
+    {
+      "image": "native-uv-corrected-riser-2.4.png",
+      "scene": "Thermal production / UV corrected reactor",
+      "target": [
+        3.7869999408721924,
+        -4.585000038146973,
+        0.6499999761581421
+      ],
+      "eye": [
+        5.467336177825928,
+        -6.265334606170654,
+        0.9860671162605286
+      ],
+      "distance_m": 2.39999902478089,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    },
+    {
+      "image": "native-uv-corrected-riser-3.0.png",
+      "scene": "Thermal production / UV corrected reactor",
+      "target": [
+        3.7869999408721924,
+        -4.585000038146973,
+        0.6499999761581421
+      ],
+      "eye": [
+        5.887420654296875,
+        -6.68541955947876,
+        1.0700839757919312
+      ],
+      "distance_m": 2.9999999677141505,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    },
+    {
+      "image": "native-uv-corrected-train-stage.png",
+      "scene": "Thermal production / UV corrected train-stage",
+      "target": [
+        -1.7999999523162842,
+        0.0,
+        0.0
+      ],
+      "eye": [
+        7.837388038635254,
+        -9.637388229370117,
+        6.264301776885986
+      ],
+      "distance_m": 14.999999237060527,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    },
+    {
+      "image": "native-uv-corrected-cross-stage.png",
+      "scene": "Thermal production / UV corrected cross-stage",
+      "target": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "eye": [
+        3.212462902069092,
+        -3.2124624252319336,
+        2.0881004333496094
+      ],
+      "distance_m": 4.999999570846539,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929
+    }
+  ]
+}

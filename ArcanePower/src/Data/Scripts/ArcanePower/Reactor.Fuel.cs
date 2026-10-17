@@ -38,7 +38,7 @@ namespace ArcanePower
             inventory.Constraint = constraint;
             inventory.MaxVolume = (MyFixedPoint)(2f * MyAPIGateway.Session.BlocksInventorySizeMultiplier);
             ((VRage.Game.Entity.MyInventoryBase)reactor.GetInventory()).ContentsChanged += FuelChanged;
-            reactor.PowerOutputMultiplier = PowerMW[Motion.FuelTier - 1] / PowerMW[0];
+            reactor.PowerOutputMultiplier = ElectricalRatingMW / PowerMW[0];
             RefreshFuelCapacity();
         }
 
@@ -56,6 +56,7 @@ namespace ArcanePower
         private void RefreshFuelCapacity()
         {
             if (nativeReactor == null) return;
+            if (ThermalVariant) { RefreshThermalCapacity(); return; }
             // Native inventory callbacks otherwise treat the empty FuelInfos
             // list as unlimited capacity. Our callback runs after theirs.
             float units = MyAPIGateway.Session.CreativeMode ? 1f
@@ -74,6 +75,8 @@ namespace ArcanePower
 
         private double FuelUnitsPerMinute()
         {
+            if (ThermalVariant && Motion.Thermal != null)
+                return Motion.Thermal.ProducedMW / ThermalHeatMW / (FuelEfficiency * FuelUnitsPerCanister);
             bool failed = Motion.TileStarved && Motion.Core == CorePhase.Running && reactor.Enabled
                 && !Motion.PowerPaused && (Motion.Vent == VentPhase.Idle || Motion.Vent == VentPhase.ShieldClosing);
             return (failed ? Motion.StarvedLoad * 10.0 : reactor.CurrentOutput / (double)PowerMW[Motion.FuelTier - 1]) / (FuelEfficiency * FuelUnitsPerCanister);
@@ -84,12 +87,12 @@ namespace ArcanePower
             if (nativeReactor == null) return;
             if (!MyAPIGateway.Multiplayer.IsServer)
             {
-                float clientMultiplier = PowerMW[Motion.FuelTier - 1] / PowerMW[0];
+                float clientMultiplier = ElectricalRatingMW / PowerMW[0];
                 if (reactor.PowerOutputMultiplier != clientMultiplier) reactor.PowerOutputMultiplier = clientMultiplier;
                 return;
             }
             var inventory = reactor.GetInventory();
-            if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && reactor.CurrentOutput <= 0)
+            if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && reactor.CurrentOutput <= 0 && (!ThermalVariant || ThermalCold))
             {
                 int selected = -1;
                 for (int i = 0; i < Fuels.Length; i++)
@@ -97,7 +100,7 @@ namespace ArcanePower
                 if (selected >= 0) Motion.FuelTier = selected + 1;
                 else if (Motion.FuelTier + 1 > controllerRingCapacity) Motion.FuelTier = controllerRingCapacity - 1;
             }
-            float multiplier = PowerMW[Motion.FuelTier - 1] / PowerMW[0];
+            float multiplier = ElectricalRatingMW / PowerMW[0];
             if (reactor.PowerOutputMultiplier != multiplier) reactor.PowerOutputMultiplier = multiplier;
             if (initializationFrames == 0 && Motion.FuelTier + 1 > controllerRingCapacity) reactor.Enabled = false;
 
@@ -106,9 +109,16 @@ namespace ArcanePower
             // rounding credit, avoiding fixed-point rounding loss at low demand.
             bool starvedBurn = Motion.TileStarved && Motion.Core == CorePhase.Running && reactor.Enabled
                 && !Motion.PowerPaused && (Motion.Vent == VentPhase.Idle || Motion.Vent == VentPhase.ShieldClosing);
-            if (!MyAPIGateway.Session.CreativeMode && (reactor.CurrentOutput > 0 || starvedBurn))
+            if (ThermalVariant && Motion.Thermal != null)
             {
-                Motion.FuelDebt += FuelUnitsPerMinute() / 3600;
+                if (!MyAPIGateway.Session.CreativeMode)
+                    Motion.FuelDebt += Motion.Thermal.FuelHeatMJ / (ThermalHeatMW * 600 * FuelEfficiency);
+                Motion.Thermal.FuelHeatMJ = 0;
+            }
+            if (!MyAPIGateway.Session.CreativeMode && (reactor.CurrentOutput > 0 || starvedBurn || (ThermalVariant && Motion.FuelDebt > 0)))
+            {
+                if (!ThermalVariant) Motion.FuelDebt += FuelUnitsPerMinute() / 3600;
+                else if (starvedBurn) Motion.FuelDebt += Motion.StarvedLoad * 10.0 / (FuelEfficiency * FuelUnitsPerCanister * 3600);
                 MyFixedPoint amount = (MyFixedPoint)Motion.FuelDebt;
                 if (amount > 0)
                 {

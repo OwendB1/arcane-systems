@@ -1,0 +1,1679 @@
+{
+  "Brayton train": {
+    "cells": [
+      5,
+      3,
+      2
+    ],
+    "ports": [
+      {
+        "id": "CO2 leg -1",
+        "type": "CO2_HP",
+        "position": [
+          -2.5,
+          -3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "CO2 leg 1",
+        "type": "CO2_LP",
+        "position": [
+          -2.5,
+          3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Brayton train upgraded": {
+    "cells": [
+      5,
+      3,
+      2
+    ],
+    "ports": [
+      {
+        "id": "CO2 leg -1",
+        "type": "CO2_HP",
+        "position": [
+          -2.5,
+          -3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "CO2 leg 1",
+        "type": "CO2_LP",
+        "position": [
+          -2.5,
+          3.75,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Primary heater": {
+    "cells": [
+      3,
+      3,
+      3
+    ],
+    "ports": [
+      {
+        "id": "primary",
+        "type": "PRIMARY",
+        "position": [
+          -3.75,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "CO2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          -3.75,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Primary heater upgraded": {
+    "cells": [
+      3,
+      3,
+      3
+    ],
+    "ports": [
+      {
+        "id": "primary",
+        "type": "PRIMARY",
+        "position": [
+          -3.75,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "CO2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          -3.75,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Recuperator": {
+    "cells": [
+      3,
+      2,
+      3
+    ],
+    "ports": [
+      {
+        "id": "high-pressure -1",
+        "type": "CO2_HP",
+        "position": [
+          -3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "low-pressure -1",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "high-pressure 1",
+        "type": "CO2_HP",
+        "position": [
+          3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "low-pressure 1",
+        "type": "CO2_LP",
+        "position": [
+          3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Recuperator upgraded": {
+    "cells": [
+      3,
+      2,
+      3
+    ],
+    "ports": [
+      {
+        "id": "high-pressure -1",
+        "type": "CO2_HP",
+        "position": [
+          -3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "low-pressure -1",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "high-pressure 1",
+        "type": "CO2_HP",
+        "position": [
+          3.75,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "low-pressure 1",
+        "type": "CO2_LP",
+        "position": [
+          3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Atmospheric cooler": {
+    "cells": [
+      3,
+      2,
+      3
+    ],
+    "ports": [
+      {
+        "id": "CO2",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Space radiator": {
+    "cells": [
+      3,
+      2,
+      3
+    ],
+    "ports": [
+      {
+        "id": "CO2",
+        "type": "CO2_LP",
+        "position": [
+          -3.75,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "Reactor housing": {
+    "cells": [
+      5,
+      5,
+      3
+    ],
+    "ports": [
+      {
+        "id": "primary LA",
+        "type": "PRIMARY",
+        "position": [
+          -6.25,
+          -2.5,
+          -2.33
+        ],
+        "normal": [
+          -1,
+          0,
+          0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "adapter": "PRIMARY / Reactor adapter"
+      },
+      {
+        "id": "primary LB",
+        "type": "PRIMARY",
+        "position": [
+          -6.25,
+          2.5,
+          -2.33
+        ],
+        "normal": [
+          -1,
+          0,
+          0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "adapter": "PRIMARY / Reactor adapter"
+      },
+      {
+        "id": "primary RA",
+        "type": "PRIMARY",
+        "position": [
+          6.25,
+          -2.5,
+          -2.33
+        ],
+        "normal": [
+          1,
+          0,
+          0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "adapter": "PRIMARY / Reactor adapter"
+      },
+      {
+        "id": "primary RB",
+        "type": "PRIMARY",
+        "position": [
+          6.25,
+          2.5,
+          -2.33
+        ],
+        "normal": [
+          1,
+          0,
+          0
+        ],
+        "hot_axis": [
+          0,
+          0,
+          1
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "adapter": "PRIMARY / Reactor adapter"
+      }
+    ]
+  },
+  "PRIMARY / Straight": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Elbow": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Riser": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Tee": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Cross": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 4",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Roll adapter": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / End cap": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Straight": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Elbow": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Riser": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Tee": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Cross": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 4",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / Roll adapter": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "CO2_HP / End cap": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Straight": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Elbow": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Riser": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Tee": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Cross": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 4",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / Roll adapter": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "CO2_LP / End cap": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "PRIMARY / Reactor adapter": {
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "ports": [
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "reactor inlet",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.17000000178813934
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "reactor_transition": true
+      }
+    ]
+  }
+}

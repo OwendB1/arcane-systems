@@ -1,0 +1,39 @@
+{
+  "schema": "animation_contact_sheet_report.v1",
+  "frames": [
+    "ArcanePower/validation/thermal-models/flow-room-frame-001.png",
+    "ArcanePower/validation/thermal-models/flow-room-frame-005.png",
+    "ArcanePower/validation/thermal-models/flow-room-frame-009.png",
+    "ArcanePower/validation/thermal-models/flow-room-frame-013.png",
+    "ArcanePower/validation/thermal-models/flow-room-frame-017.png",
+    "ArcanePower/validation/thermal-models/flow-room-frame-021.png"
+  ],
+  "frame_diff": [
+    {
+      "from": "flow-room-frame-001.png",
+      "to": "flow-room-frame-005.png",
+      "mean_rgb_diff": 0.15107732391181372
+    },
+    {
+      "from": "flow-room-frame-005.png",
+      "to": "flow-room-frame-009.png",
+      "mean_rgb_diff": 0.11842970942854254
+    },
+    {
+      "from": "flow-room-frame-009.png",
+      "to": "flow-room-frame-013.png",
+      "mean_rgb_diff": 0.13253545996664498
+    },
+    {
+      "from": "flow-room-frame-013.png",
+      "to": "flow-room-frame-017.png",
+      "mean_rgb_diff": 0.15041332981415498
+    },
+    {
+      "from": "flow-room-frame-017.png",
+      "to": "flow-room-frame-021.png",
+      "mean_rgb_diff": 0.12159696995655822
+    }
+  ],
+  "warnings": []
+}

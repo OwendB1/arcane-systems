@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "revision": "Models/Cubes/large/Thermal/thermal_718d41e91a88",
+  "native_detectors_verified": 4,
+  "static_hatch_sections": 3,
+  "indices_per_hatch": 1146,
+  "top_vent_leaves": 4,
+  "native_interfaces_unchanged": true,
+  "native_geometry_collision_uv_material_tags_preserved": true,
+  "changed_native_tags": [
+    "Dummies",
+    "FBXHash",
+    "HKTHash"
+  ],
+  "authored_native_meshes_unchanged": 269,
+  "changed_native_models": [
+    "APT_ReactorHousing_M"
+  ],
+  "native_highlights": {
+    "detector_conveyor_0": [
+      "Thermal reactor / Inventory access / side 0_section.001"
+    ],
+    "detector_conveyor_2": [
+      "Thermal reactor / Inventory access / side 2_section.001"
+    ],
+    "detector_conveyor_top": [
+      "subpart_VentHatch1",
+      "subpart_VentHatch2",
+      "subpart_VentHatch3",
+      "subpart_VentHatch4"
+    ],
+    "detector_conveyor_bottom": [
+      "Thermal reactor / Axial conveyor / bottom / Conveyor Access LG_section.001"
+    ]
+  },
+  "source_and_export_clone_remapping": true,
+  "game_reloaded": false
+}

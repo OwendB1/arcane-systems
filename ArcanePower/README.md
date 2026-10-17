@@ -3,7 +3,33 @@
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962)
 · [Publishing workflow and gallery sources](RELEASE.md)
 
+Repository cleanup (17 October 2026): generated inspection images, recordings,
+logs, capture queues, obsolete export revisions/staging and the original v01–v03
+mockups/bootstrap scripts were removed. Historical review descriptions below
+remain as context; their captures are no longer stored here. Production blends,
+named checkpoints, texture/icon sources, runtime assets, Workshop artwork and
+compact audit/source-fingerprint reports remain. Fresh review captures and export
+staging are local generated output covered by `.gitignore`. The latest pass also
+removed temporary asset scripts, stale caches and superseded native revisions.
+All Blender files and current release assets were preserved. The thermal staging
+folder retains accepted collision inputs and its source manifest; regenerate
+FBX/XML exports before compiling another native release.
+
+The current authoring sources are `assets/arcane-power-prototype.blend` (reactor),
+`assets/arcane-energy-core.blend` (battery), `assets/arcane-power-fuels.blend` and
+`assets/arcane-thermal-models.blend` (Brayton family). The retained
+`build_thermal_concepts.py` and `review_thermal_concepts.py` supply helpers to the
+production thermal builder/reviewer and remain required.
+
 Arcane Power is an SE1 reactor, fuel-processing and energy-storage mod in development. The current large-grid reactor fits **5×5×3 cells** (SE `Size=(5,3,5)`). Its rounded housing has three native-size conveyor access hatches plus a centered top conveyor connection behind the vent hatch, two base upgrade sockets and curved chamber glass. This is an engineering slice of the [mod plan](../docs/arcane-power-plan.md), not the finished progression.
+
+Thermal art delivery, 17 October 2026: all 31 blocks, 24 moving subparts,
+93 construction models and 174 LODs are installed locally and packaged in the
+unpublished 0.1.0 ZIP. Custom glass uses uniform textures; external pressure pipes
+share the reactor struts' smoked glass, metal jackets and fitted rings. Icons are
+refreshed. All 322 native meshes and the installed package pass their
+[delivery checks](validation/thermal-models/delivery-check.json); this art pass
+still needs an in-game reload and visual check.
 
 ## Construction and Energy Core delivery — updated 15 October 2026
 
@@ -19,7 +45,7 @@ their mains and retain their validated bytes. Fifty distance meshes now follow t
 current main models, with immutable native LOD references included in packaging.
 The actual Blender UI was reviewed at 1.8, 2.4 and 3.0 m; the finished reactor is
 left open. [Delivery checks](validation/current-model-export.json) ·
-[Live UI view](validation/reactor-texture-lod-loop/ui-final-reactor.png).
+Live UI view.
 This art refresh has not been reloaded in-game or published to Workshop.
 
 The **3×3×3 Energy Core** uses full-block **1×3×1 upgrade pillars**, with two side
@@ -28,7 +54,7 @@ core and share its Up direction. Existing compact banks retain their geometry an
 fixed native storage and 10/100/1,000 GW bank transfer tiers. It includes native
 charge modes, emergency reserve controls, charge-dependent glow, slow rotation,
 icons and construction models. [Setup, ratings and validation](ENERGY-STORAGE.md)
-· [Stage sheet](validation/energy-core-stages.png).
+· Stage sheet.
 
 The isolated survival test verified native output allocation, stabilizer
 disconnect/reconnect and copied-charge reset. Updated charge and identity markers
@@ -45,7 +71,7 @@ The user approved moving all animation from Animation Engine into the mod and ad
 
 ## Latest Blender fit revision
 
-A [width comparison](validation/pack-width-comparison.png) now shows 1.6 m and 2.0 m packs at the same 1.0 m height, with 2.3 m and 3.0 m socket surrounds. The 2.0 m version is a rough, non-exported comparison in `AP pack width comparison (not exported)`; the user selected the **1.6 m pack with its 2.3 m socket surround**. Native upgrade empties were compared before/after and retain their transforms.
+A width comparison now shows 1.6 m and 2.0 m packs at the same 1.0 m height, with 2.3 m and 3.0 m socket surrounds. The 2.0 m version is a rough, non-exported comparison in `AP pack width comparison (not exported)`; the user selected the **1.6 m pack with its 2.3 m socket surround**. Native upgrade empties were compared before/after and retain their transforms.
 
 The saved reactor scene now includes both controllers at their native adjacent-cell centres, plus a roof duct/outlet stack, in `AP mounted hardware (not exported)`. Controllers are compact piggyback power packs, 1.60 m wide × 1.00 m high around the native 0.68 m socket. Their backs follow the drum with a 12 mm seam and a recessed connector cavity. The packs are 12 cm shallower than the initial cartridge revision, with twin cell covers, retaining clips and one/two fuel status bars. A curved base manifold forms an open socket surround whose lip ends 25 mm behind the pack face. Packs and native ports are raised 17 cm to center on the white panels, with 9 cm above/below each socket surround. Native occupied cells and block anchors are unchanged; only the visual mating skirt enters the unused space beside the curved drum. Vent service details have actual recesses, and the reactor roof backing has clearance behind its liner and panel seats. See [fit_hardware_assembly.py](assets/fit_hardware_assembly.py). **This revision has now been exported to MWM; local deployment is recorded in [local-deployment.json](validation/local-deployment.json). The recordings below still show the preceding revision.**
 
@@ -176,15 +202,15 @@ The server derives load from native `CurrentOutput / MaxOutput`, smoothed with a
 
 [build_ceiling_hatch.py](assets/build_ceiling_hatch.py) adds four inner doors sharing the VentHatch mesh and its underside trims/emissives. From Z=2.365 m they lift 0.32 m, then slide 1.98 m between the dispensers, rotated 45 degrees relative to the outer doors. A radius-1.86 m lined bore and retraction pockets connect the inner and outer openings; overlapping central tube geometry was removed.
 
-[highlight_inventory_hatches.py](assets/highlight_inventory_hatches.py) assigns each conveyor detector to its access-hatch mesh, with the intended frame left unselected. The reported failure was traced to zero mesh sections in the compiled MWM despite correct detector targets. The helper now gives all four hatch meshes the `_section` suffix required by MwmBuilder and updates their detector links. At the earlier four-hatch stage, the compiled MWM contained four matching sections, each with 1,146 indices; revision `lab_3ed994c27b1f` was deployed. That evidence predates replacement of the top hatch. In-game highlighting remains unverified. The current glass uses native dirt/chrome textures; material tuning and the first-load emissive retry are recorded in [LEARNINGS.md](LEARNINGS.md).
+[highlight_inventory_hatches.py](assets/highlight_inventory_hatches.py) assigns each conveyor detector to its access-hatch mesh, with the intended frame left unselected. The reported failure was traced to zero mesh sections in the compiled MWM despite correct detector targets. The helper now gives all four hatch meshes the `_section` suffix required by MwmBuilder and updates their detector links. At the earlier four-hatch stage, the compiled MWM contained four matching sections, each with 1,146 indices; revision `lab_3ed994c27b1f` was deployed. That evidence predates replacement of the top hatch. In-game highlighting remains unverified. The current custom glass uses uniform CA/NG textures with native reflections; the earlier dirt-based tuning and first-load emissive retry are recorded in [LEARNINGS.md](LEARNINGS.md).
 
-Iterate geometry in Blender using Blender MCP and SEUT. **Do not run regression suites unless the user asks.** Review static poses in Blender; do not create a substitute timeline animation. Earlier [mockups](assets/mockups/README.md) and shape scripts are historical stages and can overwrite later work if rerun indiscriminately.
+Iterate geometry in Blender using Blender MCP and SEUT. **Do not run regression suites unless the user asks.** Review static poses in Blender; do not create a substitute timeline animation. Continue from the maintained blends and authoring scripts; the original mockups and superseded bootstrap/migration scripts have been retired.
 
 ### Reactor sound and feedback
 
 The original procedural sound bank uses resonant tones, beating harmonics and
 distortion, with upper harmonics adding definition to the deep field tones.
-[Listen to the palette](validation/audio/reactor-palette.wav): assembly
+Listen to the palette: assembly
 at 0s, ignition/running at 8s, increasing load from 13s, instability from 23s,
 vent at 30s, explosion at 34s and shutdown at 40s. This is an abbreviated listening
 demo, not an in-game recording or the actual startup timing.
@@ -235,7 +261,7 @@ outlet have separate spatial emitters. Interior field/ignition/shutdown sounds r
 24 m and tile/deck/hatch sounds reach 18 m. Native `Poly2` attenuation gives
 25% gain at half range, 6.25% at three-quarter range, and silence at the boundary.
 The external vent discharge reaches 60 m; the explosion reaches 1500 m.
-[Listen to the mechanism palette](validation/audio/reactor-mechanisms.wav): deck
+Listen to the mechanism palette: deck
 at 0–2 s, three tile releases/latches at 3–5 s, hatch motion at 6–7.5 and
 9–10.5 s, and retraction/catches at 12–14.2 s. This is a palette preview, not a game recording. Focused acceptance
 checks in `tools/check_mechanism_feedback.py` and the mod compatibility build
@@ -266,7 +292,7 @@ Build and focused checks passed; in-game visual/audio review remains pending.
 
 [prepare_lab.py](tools/prepare_lab.py) deploys to `~/.config/SpaceEngineers/Mods/ArcanePower-Prototype` and creates **Arcane Power - Prototype Lab** only if absent. Existing worlds are preserved. Model families are deployed together under a content-versioned directory so relative subpart references resolve. Deployment removes the old `Data/Animation/main.bsl`; newly created worlds omit the Animation Engine dependency. The current running world's mod list is unchanged.
 
-Two [spectator recordings](validation/recordings/recordings.json) capture the preceding reactor revision `lab_c05a1c7be62e`: [startup and shutdown](validation/recordings/reactor-startup-shutdown.mp4), and [vent ejection](validation/recordings/reactor-vent.mp4). GPU Screen Recorder captured the primary DP-4 monitor at 3440×1440/60 fps. These show low-load visual operation, not rated electrical output or hot cooldown. Existing ceiling blocks obscure the roof hatch. [Repair evidence](validation/recordings/repair.json) confirms the reactor and both controllers returned to full integrity/build after reload and resave.
+Two [spectator recordings](validation/recordings/recordings.json) capture the preceding reactor revision `lab_c05a1c7be62e`: startup and shutdown, and vent ejection. GPU Screen Recorder captured the primary DP-4 monitor at 3440×1440/60 fps. These show low-load visual operation, not rated electrical output or hot cooldown. Existing ceiling blocks obscure the roof hatch. [Repair evidence](validation/recordings/repair.json) confirms the reactor and both controllers returned to full integrity/build after reload and resave.
 
 The earlier hardware/tile pass compiled with zero warnings/errors. On 15 September the selected pack/socket and vent refinements were exported and five icons refreshed. That asset pass deployed 45 files under `lab_06d121e6bcac`; the subsequent power/inventory/maintenance script pass adds three files. Neither new pass has been loaded in-game. No regression suites or new C# build were run during the asset export. [local-deployment.json](validation/local-deployment.json) distinguishes deployment from live evidence. New hardware, inventory behavior and synchronization still need in-game review.
 
@@ -304,15 +330,15 @@ A containment-input shortfall triggers controlled shutdown and manual restart lo
 
 The reactor inventory now receives an explicit six-item whitelist and matching empty-slot tooltip on server and clients: Aether, Helion, Empyrean and Standard/Reinforced/Advanced Containment Tiles. The reactor-specific definition uses the same filter for native conveyor pull information. This replaces the stale generic tooltip derived from empty native `FuelInfos`; alternative-fuel consumption remains scripted to avoid native simultaneous-fuel requirements.
 
-This script pass is compiled and locally deployed; the model revision remains `lab_06d121e6bcac`. No regression suites or game reload were performed. Supply accounting, UI appearance, late joins and maintenance flight clearance are implemented but not yet game-validated. See [build log](validation/survival-power-build.log).
+This script pass is compiled and locally deployed; the model revision remains `lab_06d121e6bcac`. No regression suites or game reload were performed. Supply accounting, UI appearance, late joins and maintenance flight clearance are implemented but not yet game-validated. See build log.
 
 ## Knowledge graph
 
-The scoped [JSON graph](graphify-out/graph.json), [interactive view](graphify-out/graph.html) and [audit report](graphify-out/GRAPH_REPORT.md) index these documents and selected small runtime/authoring tools. Heavy binary assets and generated per-part coordinate arrays are excluded. The repository-wide graph is separate.
+The scoped JSON graph, interactive view and audit report index these documents and selected small runtime/authoring tools. Heavy binary assets and generated per-part coordinate arrays are excluded. The repository-wide graph is separate.
 
 ## Thermal failure and plasma delivery — 16 September 2026
 
-The local mod now contains `lab_64ff9a73f168`: updated smooth plasma, open thick containment frames, seven embedded collision models, generated CM/NG/ADD textures, spent-part definitions and direct-script thermal/physical ejection. The native upgrade empties and housing retain the selected fit. The final script build passed with zero warnings/errors; 54 delivery files were copied. [Static fuel-colour preview](validation/plasma-fuel-review.png), [behavior and remaining limits](THERMAL-FAILURE.md), [deployment record](validation/local-deployment.json). No game reload, destructive test or regression suite was run.
+The local mod now contains `lab_64ff9a73f168`: updated smooth plasma, open thick containment frames, seven embedded collision models, generated CM/NG/ADD textures, spent-part definitions and direct-script thermal/physical ejection. The native upgrade empties and housing retain the selected fit. The final script build passed with zero warnings/errors; 54 delivery files were copied. Static fuel-colour preview, [behavior and remaining limits](THERMAL-FAILURE.md), [deployment record](validation/local-deployment.json). No game reload, destructive test or regression suite was run.
 
 ## Reactor housing collision repair — 9 October 2026
 
@@ -356,10 +382,10 @@ with separate backing and lamp depths. Fixed dispensers have pitched cheeks and
 curved retainers joining them to the ceiling and glass surround.
 
 [Live review](assets/review_reactor_exterior.py) records 1.8, 2.4 and 3.0 m views
-at a fixed focal length and lighting. [Feet](validation/reactor-exterior-loop-01/review-feet.jpg),
-[status lamps](validation/reactor-exterior-loop-01/review-status.jpg),
-[upper band/seats](validation/reactor-exterior-loop-01/review-upper.jpg) and
-[chamber/dispenser mounts](validation/reactor-exterior-loop-01/review-chamber.jpg)
+at a fixed focal length and lighting. Feet,
+status lamps,
+upper band/seats and
+chamber/dispenser mounts
 were inspected. The [geometry audit](validation/reactor-exterior-loop-01/geometry.json)
 checks solid winding, native materials/UVs, lamp separation, supported screws,
 feet and mounts, and clear dispensing paths. Original dispensers, native
@@ -383,7 +409,7 @@ no custom replacement game textures are needed. Battery construction copies
 inherit the finished surfaces when their backing is installed.
 [Texture audit](validation/native-texture-detail/energy-audit.json) preserves
 geometry, dummies, collision, LODs and powered materials while checking decal
-backing and visibility. [Close view](validation/native-texture-detail/capacity-1.8m.png).
+backing and visibility. Close view.
 
 The standard controller now has a broad removable service cassette, release
 handle, side latches and passive cooling bank. The advanced version has paired
@@ -395,8 +421,8 @@ Receiver lips now stand 6 mm clear of casing faces, with at least 4.5 mm cover
 clearance. Narrower status carriers avoid their receiver shoulders. All 14 rims
 have solid backing; fan/vent supports and native anchors are unchanged.
 
-[Front comparison](validation/controller-detail-loop-01/review-front.jpg) and
-[installed review](validation/controller-detail-loop-01/review-mounted.jpg)
+Front comparison and
+installed review
 cover 1.8, 2.4 and 3.0 m. The [focused audit](assets/audit_controller_details.py)
 checks solids, UVs, bounds, visible/seated fasteners, cooling and bus support,
 and protected geometry. [Refinement source](assets/refine_controller_details.py)
@@ -421,13 +447,13 @@ Capacity cells, transfer transformers and stabilizer coils are visible before
 completion. The Energy Core's last stage includes its unpowered central assembly.
 The reactor and vent frames retain their round chamber/exhaust openings. Finished
 models, accepted collisions and build thresholds are unchanged.
-[Reactor/hardware sheet](validation/construction-stages.png) ·
-[Energy Core family sheet](validation/energy-core-stages.png).
+Reactor/hardware sheet ·
+Energy Core family sheet.
 
 The reactor, standard/advanced controllers, vent tube and vent outlet now each
 have three native build-progress models: exposed construction-steel framework,
 installed internals, then partial housing. Glazing, powered trim and animated
-subparts appear with the completed model. [Preview](validation/construction-stages.png).
+subparts appear with the completed model. Preview.
 The vent stages retain an open central bore. Each stage embeds its finished
 block's static collision, matching SEUT's normal fallback behavior.
 
@@ -567,7 +593,7 @@ reactor/ejected-core model definitions. Add `--refresh-cache` for fresh paths ev
 when content is unchanged. The latest dark-material reversion still needs an
 in-game reload to review.
 
-[Visual sheet](validation/fuel-assets.png) · [Blender source](assets/arcane-power-fuels.blend)
+Visual sheet · [Blender source](assets/arcane-power-fuels.blend)
 
 Rebuild with `blender -b --factory-startup --python assets/build_fuel_assets.py`
 from this directory, then `python3 tools/compile_fuel_assets.py`. The compiler

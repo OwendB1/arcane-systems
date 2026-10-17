@@ -1,5 +1,6 @@
 """Actual grid-block assemblies and reproducible live-UI review evidence."""
 import json
+import math
 from pathlib import Path
 import runpy
 
@@ -13,13 +14,56 @@ OUT = M['OUT']
 OLD = runpy.run_path(str(ROOT/'assets/review_thermal_concepts.py'))
 
 
-def view(scene, target=(0, 0, 0), direction=(1, -1, .65), distance=18):
-    return OLD['view'](scene, target, direction, distance)
+def view(scene, target=(0, 0, 0), direction=(1, -1, .65), distance=18, light_rotation=.5):
+    assert -math.pi <= light_rotation <= math.pi, 'Studio light rotation is limited to +/- pi'
+    row = OLD['view'](scene, target, direction, distance)
+    for area in bpy.context.screen.areas:
+        if area.type == 'VIEW_3D':
+            area.spaces.active.shading.studiolight_rotate_z = light_rotation
+    row['light_rotation'] = light_rotation
+    return row
 
 
 def snapshot(filename):
     OLD['snapshot'].__globals__['OUT'] = OUT
     return OLD['snapshot'](filename)
+
+
+def start_review(plan, label):
+    """Let the live viewport settle between each view and its UI capture."""
+    key = 'thermal_live_review'
+    previous = bpy.app.driver_namespace.get(key)
+    assert not previous or previous['status'] != 'running', 'A UI review is already running'
+    state = {'status': 'running', 'index': 0, 'total': len(plan), 'phase': 'set'}
+    bpy.app.driver_namespace[key] = state
+    (OUT/(label+'-plan.json')).write_text(json.dumps(plan, indent=2)+'\n')
+
+    def progress():
+        (OUT/(label+'-progress.json')).write_text(json.dumps(state, indent=2)+'\n')
+
+    def step():
+        if state['index'] == len(plan):
+            state['status'] = 'complete'
+            progress()
+            return None
+        row = plan[state['index']]
+        if state['phase'] == 'set':
+            view(row['scene'], row['target'], row['direction'], row['distance'],
+                 row.get('light_rotation', .5))
+            if 'frame' in row:
+                bpy.context.scene.frame_set(row['frame'])
+            state['phase'] = 'capture'
+            progress()
+            return 1.1
+        snapshot(row['file'])
+        state['index'] += 1
+        state['phase'] = 'set'
+        progress()
+        return .05
+
+    progress()
+    bpy.app.timers.register(step, first_interval=.1)
+    return {'review': label, 'views': len(plan)}
 
 
 def fresh(label):
@@ -62,9 +106,14 @@ def instance(scene, name, position, rotation=None, label=None):
 
 def ports(obj):
     m = obj.matrix_world
+    # Matrix decomposition in Blender leaves ~1e-7 offsets at quarter turns.
+    # These review sockets belong to the exact cardinal pipe lattice.
+    def cardinal(v):
+        assert all(abs(x-round(x)) < 1e-5 for x in v), ('Non-grid direction', obj.name, v)
+        return [round(x) for x in v]
     return [dict(r, position=list(m@Vector(r['position'])),
-                 normal=list(m.to_3x3()@Vector(r['normal'])),
-                 hot_axis=list(m.to_3x3()@Vector(r['hot_axis'])))
+                 normal=cardinal(m.to_3x3()@Vector(r['normal'])),
+                 hot_axis=cardinal(m.to_3x3()@Vector(r['hot_axis'])))
             for r in json.loads(obj.instance_collection['ports'])]
 
 
@@ -103,10 +152,10 @@ def lineup():
     return {'scene': scene.name, 'models': len(C['SPECS'])}
 
 
-def plant(environment='atmosphere', upgraded=False):
+def plant(environment='atmosphere', upgraded=False, room_loop=False):
     assert environment in ('atmosphere', 'space')
     runpy.run_path(str(ROOT/'assets/build_reactor_thermal_manifolds.py'))['pose'](1)
-    scene, p = fresh(environment.title()+(' premium' if upgraded else ' starter'))
+    scene, p = fresh('Reactor room loop' if room_loop else environment.title()+(' premium' if upgraded else ' starter'))
     suffix = ' upgraded' if upgraded else ''
     names = {'train': 'Brayton train'+suffix, 'recovery': 'Recuperator'+suffix,
              'heater': 'Primary heater'+suffix,
@@ -143,49 +192,67 @@ def plant(environment='atmosphere', upgraded=False):
              (('recovery', 'high-pressure -1'), ('train', 'CO2 leg -1')),
              (('train', 'CO2 leg 1'), ('recovery', 'low-pressure -1')),
              (('recovery', 'low-pressure 1'), ('cooler', 'CO2'))]
+    if room_loop:
+        anchors = [((-27.5,-22.5,1.25), -math.pi/2), ((25,-22.5,1.25), 0),
+                   ((25,20,1.25), math.pi/2), ((-12.5,20,1.25), math.pi)]
+        for i,(pos,angle) in enumerate(anchors):
+            key='room'+str(i+1)
+            rotation=Matrix([[round(v) for v in row] for row in Matrix.Rotation(angle,3,'Z')])
+            obj=instance(scene,'PRIMARY / Elbow',pos,rotation,key)
+            bpy.context.view_layer.update()
+            for port in ports(obj): sockets[key,port['id']]=port
+            blocked |= C['occupied'](pos,(1,1,1))
+        edges = [(('source','primary RA'),('room1','socket 1'))]+[
+            (('room'+str(i),'socket 2'),('room'+str(i+1),'socket 1')) for i in range(1,4)]+[
+            (('room4','socket 2'),('heater','primary'))]+edges[1:]
     routes = []
     for index, (a, b) in enumerate(edges):
         left, right = sockets[a], sockets[b]
         assert left['type'] == right['type']
-        steps = C['route'](left, right, blocked)
+        try:
+            steps = C['route'](left, right, blocked)
+        except (ValueError, AssertionError) as error:
+            raise ValueError('Route '+str(a)+' -> '+str(b)+': '+str(error)) from error
         for j, step in enumerate(steps):
             model = left['type']+' / '+step['shape']
             instance(scene, model, C['centre'](step['cell']), step['rotation'],
                      'Route '+str(index+1)+' / '+str(j+1)+' / '+model)
             blocked.add(tuple(step['cell']))
         routes.append({'from': list(a), 'to': list(b), 'circuit': left['type'], 'blocks': steps})
-    floor(p, (-2.5, 0), (65, 50))
+    floor(p, (-2.5, 0), (75, 60) if room_loop else (65, 50))
     scene['thermal_grid_routes'] = json.dumps(routes)
     scene['thermal_environment'] = environment
     scene['thermal_grade'] = 'premium' if upgraded else 'starter'
-    path = OUT/(environment+('-premium' if upgraded else '-starter')+'-grid-bill.json')
+    path = OUT/('reactor-room-grid-bill.json' if room_loop else environment+('-premium' if upgraded else '-starter')+'-grid-bill.json')
     report = {'scene': scene.name, 'units': names, 'positions': positions, 'routes': routes,
               'pipe_blocks': sum(len(r['blocks']) for r in routes),
               'efficiency_note': 'Hardware/topology view; premium efficiency also requires extra recovery capacity'}
     path.write_text(json.dumps(report, indent=2)+'\n')
+    if room_loop:
+        bpy.context.view_layer.update()
+        fixture = {'scene': scene.name, 'instances': [
+            {'model': obj['thermal_instance'], 'matrix_blender': [list(row) for row in obj.matrix_world]}
+            for obj in scene.objects if obj.get('thermal_instance')]}
+        (ROOT.parent/'tests/fixtures/thermal-room-layout.json').write_text(json.dumps(fixture, indent=2)+'\n')
     return {'scene': scene.name, 'pipe_blocks': report['pipe_blocks'], 'typed_routes': len(routes)}
 
 
 def bank():
     """Three machines, two typed headers built exclusively from 1-cell parts."""
     scene, p = fresh('Grid parallel bank')
-    used = set()
     for x in (-15, 0, 15):
-        obj = instance(scene, 'Brayton train', (x, 0, 2.5))
-        used |= C['occupied'](obj.location, C['SPECS']['Brayton train'])
+        instance(scene, 'Brayton train', (x, 0, 2.5))
     for sign, circuit in ((-1, 'CO2_HP'), (1, 'CO2_LP')):
-        # Header y=±7.5; at branches a tee faces the adjacent machine.
         for i in range(-10, 9):
             x = i*2.5
             shape = 'Tee' if x in (-17.5, -2.5, 12.5) else 'Straight'
-            rot = Matrix.Rotation(3.141592653589793 if sign > 0 else 0, 3, 'Z')
-            # Tee's default north branch must face inward.
+            rot = Matrix.Rotation(math.pi if sign > 0 else 0, 3, 'Z')
             obj = instance(scene, circuit+' / '+shape, (x, sign*7.5, 3.75), rot)
             obj['bank_header'] = circuit
         for x in (-17.5, -2.5, 12.5):
-            obj = instance(scene, circuit+' / Straight', (x, sign*5, 3.75), Matrix.Rotation(3.141592653589793/2, 3, 'Z'))
+            obj = instance(scene, circuit+' / Straight', (x, sign*5, 3.75), Matrix.Rotation(math.pi/2, 3, 'Z'))
             obj['bank_branch'] = circuit
-        for x, angle in ((-27.5, 3.141592653589793), (22.5, 0)):
+        for x, angle in ((-27.5, math.pi), (22.5, 0)):
             instance(scene, circuit+' / End cap', (x, sign*7.5, 3.75), Matrix.Rotation(angle, 3, 'Z'))
     floor(p, (-2.5, 0), (62.5, 27.5))
     scene['bank_expected_ports_closed'] = True

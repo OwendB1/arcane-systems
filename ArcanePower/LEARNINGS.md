@@ -1,12 +1,17 @@
 # Arcane Power engineering learnings
 
+Historical record: the 16 October 2026 repository cleanup removed obsolete
+bootstrap/migration scripts and generated captures/logs mentioned below. Continue
+from the maintained blends; current authoring sources and retained audit reports
+are described in [README.md](README.md).
+
 Current runtime: all 103 parts use direct C# motion, including normal shutdown and finite core ejection. Actual fuel tiers and normalized heat/damage supersede the earlier Fuel-I-only and zero-discharge prototype. Animation Engine findings below are historical; see the final migration section. The user requires Blender-first review and no regression suites unless requested.
 
 Evidence date: **2026-09-13**. SE1 client **1.210.014**, native Linux/Pulsar; prepared `$se-dev-game-code` snapshot reports the same version. Workflow preference: iterate geometry primarily in Blender; startup animation must use actual Animation Engine, not a Blender timeline preview. The user has now authorized preparation for the next in-game check; deployment/reload status is recorded separately below. These are implementation findings, separate from proposed mechanics in the [plan](../docs/arcane-power-plan.md).
 
 ## Grid dimensions and attachment
 
-The user's **5×5×3 length × width × height** means SBC `Size x="5" y="3" z="5"`: SE uses Y up. Large-grid cells are 2.5 m, giving a 12.5×7.5×12.5 m model envelope in SE axes. Blender uses Z up, so the SEUT bounding box is X=5, Y=5, Z=3. Keep the lower conveyor row at its native cell height when compressing the housing. [Definition generation](tools/prepare_lab.py), [height fitting](assets/fit_three_cells.py).
+The user's **5×5×3 length × width × height** means SBC `Size x="5" y="3" z="5"`: SE uses Y up. Large-grid cells are 2.5 m, giving a 12.5×7.5×12.5 m model envelope in SE axes. Blender uses Z up, so the SEUT bounding box is X=5, Y=5, Z=3. Keep the lower conveyor row at its native cell height when compressing the housing. [Definition generation](tools/prepare_lab.py), height fitting.
 
 The current top mount uses inscribed strips over the widened round roof, including outer grid cells while excluding empty corners. The bottom mount spans the 5×5 footprint. The earlier in-game revision had a central 3×3 top mount. In the lab, the placed reactor occupies approximately `[6,1,2]` through `[10,3,6]`; se-remote confirmed a real test armor block at `[8,4,4]` via `CubeExists`. The [saved response](validation/top-attachment.json) proves existence after placement; it is not a full mount/collision audit.
 
@@ -57,13 +62,13 @@ Do not infer operational success from a loaded model or parsed animation script.
 
 ## Latest Blender housing and port layout
 
-The base and roof have a 6.24 m radius inside the 12.5 m square footprint. Native port meshes remain unscaled. Side conveyor detector centers are Blender `(0, ±6.22, -2.5)`; upgrade detector centers are `(±6.22, 0, -2.5)`; top/bottom conveyor centers are `(0, 0, ±3.72)`. Blender Z maps to SE Y. The side ports therefore occupy the bottom cell row, with external controllers centered at local SE `(±7.5, -2.5, 0)` before block orientation is applied. The old lab controller coordinates at reactor mid-height are obsolete for this model. [Base upgrade integration](assets/integrate_base_upgrades.py), [housing widening and axial conveyors](assets/widen_housings.py).
+The base and roof have a 6.24 m radius inside the 12.5 m square footprint. Native port meshes remain unscaled. Side conveyor detector centers are Blender `(0, ±6.22, -2.5)`; upgrade detector centers are `(±6.22, 0, -2.5)`; top/bottom conveyor centers are `(0, 0, ±3.72)`. Blender Z maps to SE Y. The side ports therefore occupy the bottom cell row, with external controllers centered at local SE `(±7.5, -2.5, 0)` before block orientation is applied. The old lab controller coordinates at reactor mid-height are obsolete for this model. Base upgrade integration, housing widening and axial conveyors.
 
-The roof's common ceiling is Blender Z=3.750 m. Backing, plates, decals and rims end at 3.746, 3.748, 3.749 and 3.750 m respectively. This seats the complete rounded housing under blocks above it while retaining visible panel relief when uncovered. The widening pass cuts actual skin openings for the top/bottom hatches; a detector behind an uncut housing would not make the panel accessible. [Roof seating](assets/flush_roof.py).
+The roof's common ceiling is Blender Z=3.750 m. Backing, plates, decals and rims end at 3.746, 3.748, 3.749 and 3.750 m respectively. This seats the complete rounded housing under blocks above it while retaining visible panel relief when uncovered. The widening pass cuts actual skin openings for the top/bottom hatches; a detector behind an uncut housing would not make the panel accessible. Roof seating.
 
 `four_inventory_ports.py` is an intermediate authoring stage, superseded on its left/right faces by `integrate_base_upgrades.py`. Local Blender QA passed: main and ten collision bodies fit within ±6.25 m XY and ±3.75 m Z; the latest expanded set of 46 rays across six interfaces hits the native hatch/frame faces before surrounding housing, and all 24 deck plates face upward; four conveyor and two upgrade detectors match their expected positions. Expanded barrel skins needed actual recess cuts to clear the fixed port faces. The earlier MWM/Havok source export passed after the spherical-field fix; no MWM error was reported. SEUT still emitted its existing root-empty W005 warning. SBC parsing and the C# solution build passed, with zero C# warnings/errors. That earlier housing-stage model was not deployed or checked in game. [Local check script](assets/check_prototype.py), [recorded geometry evidence](validation/blender-prototype.json). These checks do not prove game interaction or physics.
 
-The trunk-removal pass removes all four original radial trunk meshes. The native conveyor frames remain at their grid faces. Thin upgrade adapter plates used at that stage have since been replaced by curved surrounds. The earlier local 30-ray visibility and bounds checks passed after removal; the later 46-ray check also samples frame edges. See [remove_radial_trunks.py](assets/remove_radial_trunks.py). This revision is Blender/export only.
+The trunk-removal pass removes all four original radial trunk meshes. The native conveyor frames remain at their grid faces. Thin upgrade adapter plates used at that stage have since been replaced by curved surrounds. The earlier local 30-ray visibility and bounds checks passed after removal; the later 46-ray check also samples frame edges. See remove_radial_trunks.py. This revision is Blender/export only.
 
 ## SEUT preview material diagnosis
 
@@ -75,17 +80,17 @@ A separate SEUT callback issue can change the wrong material: updating a materia
 
 ## Earlier spherical-field correction
 
-The housing's XY-only widening also stretched the faceted field into an oval. That revision rebuilt it as a true 80-triangle icosphere with radius 1.30 m (2.60 m diameter), preserving its center and materials. Every vertex radius is asserted within 1e-5 m of 1.30 m; the closest inner-ring vertex has radial distance about 1.644 m. This vertex check is a local authoring sanity check, not full animated clearance proof. [round_containment_field.py](assets/round_containment_field.py) performs the rebuild, and [widen_housings.py](assets/widen_housings.py) now excludes the sphere from radial housing scaling. Local bounds and interface checks passed again after the correction; no new in-game test was performed. The later deployable chamber supersedes this radius-1.30 m mesh with individual tiles on a nominal radius-0.88 m field.
+The housing's XY-only widening also stretched the faceted field into an oval. That revision rebuilt it as a true 80-triangle icosphere with radius 1.30 m (2.60 m diameter), preserving its center and materials. Every vertex radius is asserted within 1e-5 m of 1.30 m; the closest inner-ring vertex has radial distance about 1.644 m. This vertex check is a local authoring sanity check, not full animated clearance proof. round_containment_field.py performs the rebuild, and widen_housings.py now excludes the sphere from radial housing scaling. Local bounds and interface checks passed again after the correction; no new in-game test was performed. The later deployable chamber supersedes this radius-1.30 m mesh with individual tiles on a nominal radius-0.88 m field.
 
 ## Outward deck and ring surfaces
 
-The inside-out deck appearance was a mesh-winding error: all 24 deck plates had negative signed volume and their top-face normals pointed down. The shared [annulus helper](assets/mockups/build_mockups.py#L94) generated inward-facing surfaces from its cross-section order. It now reverses each generated face once; both full-ring and partial-sector checks produced positive signed volume with upward top normals.
+The inside-out deck appearance was a mesh-winding error: all 24 deck plates had negative signed volume and their top-face normals pointed down. The shared annulus helper generated inward-facing surfaces from its cross-section order. It now reverses each generated face once; both full-ring and partial-sector checks produced positive signed volume with upward top normals.
 
-[repair_surface_orientation.py](assets/repair_surface_orientation.py) migrates already-built closed solids by reversing faces only when every edge is manifold and signed volume is negative. The observed repair changed 87 generated solids across the main reactor and both ring scenes. Deliberately two-sided glass and other open meshes are not processed; native/open meshes were not changed in this migration. Regenerated geometry uses the corrected helper. [check_prototype.py](assets/check_prototype.py) now explicitly requires upward-facing top surfaces on all 24 deck plates; the migration separately asserts positive signed volume after each reversal.
+repair_surface_orientation.py migrates already-built closed solids by reversing faces only when every edge is manifold and signed volume is negative. The observed repair changed 87 generated solids across the main reactor and both ring scenes. Deliberately two-sided glass and other open meshes are not processed; native/open meshes were not changed in this migration. Regenerated geometry uses the corrected helper. [check_prototype.py](assets/check_prototype.py) now explicitly requires upward-facing top surfaces on all 24 deck plates; the migration separately asserts positive signed volume after each reversal.
 
 ## Conveyor openings follow the native frame
 
-A square housing opening left gaps around the native conveyor frame's chamfered corners. The `conveyor_cutter` helper in [widen_housings.py](assets/widen_housings.py) derives its outline from the projected convex hull of the installed SEUT `Conveyor Frame LG`: approximately ±1 m extents with 0.2 m corner chamfers. Scaling that outline by 1.01 supplies about 10 mm fitting clearance. The resulting cutter is applied to the roof, floor, front and back conveyor openings; it preserves the frame's corner profile instead of cutting away a square around it.
+A square housing opening left gaps around the native conveyor frame's chamfered corners. The `conveyor_cutter` helper in widen_housings.py derives its outline from the projected convex hull of the installed SEUT `Conveyor Frame LG`: approximately ±1 m extents with 0.2 m corner chamfers. Scaling that outline by 1.01 supplies about 10 mm fitting clearance. The resulting cutter is applied to the roof, floor, front and back conveyor openings; it preserves the frame's corner profile instead of cutting away a square around it.
 
 Fourteen existing housing skins were restored from the revision before the square cuts and recut with this native outline, retaining the other model refinements. The latest local check samples hatch and frame edges: **46/46 rays across six interfaces passed**, with 24 upward deck plates, all six detector positions, the overall 5×5×3 bounds and ten collision bodies passing as well. [Recorded Blender evidence](validation/blender-prototype.json). This revision was not deployed and no new game calls were made. These geometry checks remain separate from in-game interaction and collision behavior.
 
@@ -165,6 +170,18 @@ The stowed and deployed shapes received static Blender visual inspection only, w
 
 ## Native inventory-hatch highlighting
 
+Thermal clone correction, 17 October 2026: copying Blender objects retains SEUT
+`highlight_objects` pointers to the original scene. Renaming custom strings does
+not remap those pointers. The native thermal sections also retained `.001` while
+their detector strings omitted it, leaving valid sections unreachable. Remap
+highlight targets through the object-copy map at both the authoring and native
+export stages. Preserve exact mesh names; strip Blender duplicate suffixes only
+for native empty/subpart IDs, as SEUT does. The shared hatch helper now owns this
+mapping and native release validation checks all four detectors, the three
+1,146-index hatch sections and four top vent leaves. The repair preserves native
+geometry, UV, material, section and collision payloads; game appearance requires
+a world reload after deployment.
+
 The user reported a conveyor detector-box highlight. [highlight_inventory_hatches.py](assets/highlight_inventory_hatches.py) assigns all four conveyor detectors through SEUT `highlight_objects` and the custom `highlight` property to their corresponding native Conveyor Access meshes only, leaving frames unselected. Decompiled `MyCharacterDetectorComponent.cs:473–489` uses custom highlights when present and otherwise falls back to DummyHighlight; `MyHudSelectedObject.cs:187–243` resolves mesh sections. The user subsequently reported highlighting was still wrong in game. Inspection found the compiled MWM had zero mesh sections even though detector highlight metadata was correct.
 
 `MwmBuilder.MyModelProcessor.GenerateMeshSections` only accepts names matching `^(?<prefix>.+)_section_?(?<suffix>.*)$`. SEUT AddHighlightEmpty normally adds `_section_`; the manual helper had omitted that naming step. The helper now idempotently suffixes each of the four access-hatch object names with `_section` and links its detector to the renamed mesh. The saved Blender scene includes this correction and main-only export finished. Direct compiled-MWM inspection now finds four matching hatch sections (side 0, side 2, top and bottom), with detector highlight names matching each section. Every section has 1,146 indices: PaintedMetal_Yellow 432, Conveyor 6 and Metal_Dull 708. Twenty-nine files were deployed as `lab_3ed994c27b1f`. No regression checks or game reload followed; actual in-game highlighting remains unverified.
@@ -237,7 +254,7 @@ The user still found the chamber glass largely invisible in game. The installed 
 
 ## 14 September 2026 — spectator recordings and repair
 
-[Startup/shutdown](validation/recordings/reactor-startup-shutdown.mp4) and [venting](validation/recordings/reactor-vent.mp4) were captured with GPU Screen Recorder on primary DP-4, 3440×1440 at 60 fps, using SE Remote spectator input and the seated cockpit toolbar (`D1`/`D2`). [Metadata](validation/recordings/recordings.json) records durations and scope. Low-load assembled-field motion and upward red ejection were visible on revision `lab_c05a1c7be62e`. Existing ceiling armor obscures the roof hatch; these recordings do not establish unobstructed passage, rated output or hot cooldown.
+Startup/shutdown and venting were captured with GPU Screen Recorder on primary DP-4, 3440×1440 at 60 fps, using SE Remote spectator input and the seated cockpit toolbar (`D1`/`D2`). [Metadata](validation/recordings/recordings.json) records durations and scope. Low-load assembled-field motion and upward red ejection were visible on revision `lab_c05a1c7be62e`. Existing ceiling armor obscures the roof hatch; these recordings do not establish unobstructed passage, rated output or hot cooldown.
 
 The current SE Remote interface has input, save/reload and typed grid operations, but no arbitrary C# execution or general repair call. After saving, the sector/checkpoint/cache were backed up in `validation/recordings/before-repair`. Only the reactor and two controllers had their saved IntegrityPercent/BuildPercent restored to 1. Removing this world's backed-up binary sector cache forced XML loading; the game's expected outdated-world conversion prompt was accepted. Reloading and resaving confirmed all three full values in [repair.json](validation/recordings/repair.json). No other blocks were repaired or changed by that patch.
 
@@ -328,7 +345,7 @@ A dynamic one-block small grid carries the ejected plasma, with native natural g
 
 New `ArcanePlasma` material uses generated monochrome filaments, runtime fuel tint and18 emissive intensity. Explicitly set that material name; setting only native `Emissive` misses it. The1.2m smooth plasma sphere fits within the1.76m framed shell. Open tile centres expose it while preserving45mm thick rims and luminous edges. CM has nonmetallic alpha0; NG and ADD are Non-Color technical channels. Native collision export also scans `.hkt.fbx` with MwmBuilder: collision meshes need UV channels/materials or the extra import errors even if the main MWM was written. Disable only the background popup handler in export scripts to avoid Blender crashing while showing such errors; fix the underlying mesh channels and rerun the affected exports.
 
-Seven exports and final C# compilation succeeded. Local delivery54files, revision `lab_64ff9a73f168`; runtime and DDS copies match. Static [fuel preview](validation/plasma-fuel-review.png) is Blender lighting, not game evidence. No regression suites or game control. Full play/balance/multiplayer validation remains pending.
+Seven exports and final C# compilation succeeded. Local delivery54files, revision `lab_64ff9a73f168`; runtime and DDS copies match. Static fuel preview is Blender lighting, not game evidence. No regression suites or game control. Full play/balance/multiplayer validation remains pending.
 
 Prepared game shader evidence: `Content/Shaders/Geometry/Materials/PixelUtilsMaterials.hlsli` FeedOutputInternal multiplies CM-derived base_color by pixel.color_mul and ADD.y by pixel.emissive. This supports retaining the filament pattern while runtime tint/intensity changes. The current scoped Graphify update indexes fourteen runtime/authoring files and THERMAL-FAILURE.md (446 nodes, 978 edges); historical document nodes remain explicitly marked as prior snapshots in GRAPH_REPORT.md. Host semantic extraction token usage is unavailable; no external LLM extraction calls were made.
 

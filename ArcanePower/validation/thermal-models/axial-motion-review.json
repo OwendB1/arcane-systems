@@ -1,0 +1,72 @@
+{
+  "status": "complete",
+  "index": 3,
+  "phase": "set",
+  "angles": [
+    0.0,
+    2.0,
+    4.0
+  ],
+  "frames": [
+    {
+      "image": "axial-rotor-pose-0.png",
+      "scene": "ArcanePower_Thermal_BraytonTrain",
+      "target": [
+        -1.350000023841858,
+        -1.1399999856948853,
+        1.4800000190734863
+      ],
+      "eye": [
+        -0.7882702350616455,
+        -3.3869194984436035,
+        2.1091370582580566
+      ],
+      "distance_m": 2.4000003394980984,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929,
+      "manual_pose_degrees": 0.0
+    },
+    {
+      "image": "axial-rotor-pose-1.png",
+      "scene": "ArcanePower_Thermal_BraytonTrain",
+      "target": [
+        -1.350000023841858,
+        -1.1399999856948853,
+        1.4800000190734863
+      ],
+      "eye": [
+        -0.7882702350616455,
+        -3.3869194984436035,
+        2.1091370582580566
+      ],
+      "distance_m": 2.4000003394980984,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929,
+      "manual_pose_degrees": 2.0
+    },
+    {
+      "image": "axial-rotor-pose-2.png",
+      "scene": "ArcanePower_Thermal_BraytonTrain",
+      "target": [
+        -1.350000023841858,
+        -1.1399999856948853,
+        1.4800000190734863
+      ],
+      "eye": [
+        -0.7882702350616455,
+        -3.3869194984436035,
+        2.1091370582580566
+      ],
+      "distance_m": 2.4000003394980984,
+      "lens_mm": 48.0,
+      "studio_light": "studio.exr",
+      "light_rotation": 0.5,
+      "light_intensity": 0.800000011920929,
+      "manual_pose_degrees": 4.0
+    }
+  ]
+}

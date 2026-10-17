@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<Model Name="ArcanePower_EnergyFan">
-  <Parameter Name="RescaleFactor">1.0</Parameter>
-  <Parameter Name="Centered">false</Parameter>
-  <Parameter Name="RescaleToLengthInMeters">false</Parameter>
-  <MaterialRef Name="Metal_Shiny" />
-  <MaterialRef Name="Metal_Dull" />
-</Model>

@@ -34,6 +34,7 @@ contributions (requires Mono and the local Steam installation).
 ## Tools and development
 
 - [XML configurator](docs/scf-configurator/index.html) for authoring and updating Ship Core Framework configurations; see the [local preview instructions](docs/ship-core-framework.md#local-preview).
+- [CoreSelectionPriority](docs/ship-core-framework.md#coreselectionpriority-example) controls connector blacklist ranking: higher values win, then group block count. It does not select the main core within a mechanical group.
 - [Runtime authority layout](docs/authority-layout.md) for framework contributors.
 
 ## License

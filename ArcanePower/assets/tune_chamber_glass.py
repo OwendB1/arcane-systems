@@ -1,7 +1,8 @@
-"""Subtle baseline haze plus native window dirt/reflections; no MWM rebuild."""
+"""Subtle uniform baseline haze and native reflections; no MWM rebuild."""
 import bpy
 from pathlib import Path
 import xml.etree.ElementTree as ET
+import runpy
 
 root = Path(__file__).resolve().parents[1]
 path = root / 'src/Data/TransparentMaterials.sbc'
@@ -32,8 +33,8 @@ m.seut.reflection_shadow = .20
 m.seut.specular_color_factor = 3.0
 layer.objects.active = previous
 
-# Preview uses the same native dirt texture. Its packed alpha must first be
-# restored using repair_seut_preview_textures.py (the library's RGB TIF lost it).
+# Keep the preview/export texture nodes; the shared flow material stage replaces
+# window-edge dirt with uniform CA/NG images after these constants are set.
 nodes, links = m.node_tree.nodes, m.node_tree.links
 texture = nodes['CM']
 texture.image.reload()
@@ -58,5 +59,6 @@ links.new(opacity.outputs[0], preview.inputs['Alpha'])
 links.new(preview.outputs['BSDF'], next(n for n in nodes if n.type == 'OUTPUT_MATERIAL').inputs['Surface'])
 m.surface_render_method = 'BLENDED'
 m.diffuse_color = (.94, .97, 1.0, .10)
+runpy.run_path(str(root/'assets/refine_thermal_flow.py'))['uniform_glass_materials']()
 bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
-print('Glass: baseline haze alpha .025, subtle cool-grey tint; native dirt/reflections retained')
+print('Glass: uniform haze alpha .025, subtle cool-grey tint; native reflections retained')

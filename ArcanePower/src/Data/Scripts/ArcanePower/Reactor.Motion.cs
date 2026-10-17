@@ -71,6 +71,7 @@ namespace ArcanePower
         [ProtoMember(50)] public int RingCount = 2;
         [ProtoMember(51), System.ComponentModel.DefaultValue(true)] public bool SecurityMode = true;
         [ProtoMember(52)] public bool ControllersReady;
+        [ProtoMember(53)] public ThermalReactorState Thermal;
 
         // XML-only compatibility with saves made before fuel and hardware tiers
         // were separated. Never write the obsolete field into new saves/packets.
@@ -156,6 +157,8 @@ namespace ArcanePower
             if (state.EntityId != Id) return;
             if (!Valid(state))
             {
+                if (ThermalVariant && state.Thermal != null)
+                { thermalRestoreFault = true; reactor.Enabled = false; }
                 VRage.Utils.MyLog.Default.WriteLineAndConsole("ArcanePower: cannot restore reactor " + Id
                     + ": invalid saved motion state (fuel remainder=" + state.FuelDebt + ")");
                 return;
@@ -198,7 +201,10 @@ namespace ArcanePower
                 && state.Heat >= 0 && state.Heat <= 4 && state.VentLoad >= 0 && state.VentLoad <= 1
                 && state.VentHeat >= 0 && state.VentHeat <= 4
                 && state.FuelDebt >= -(double)VRage.MyFixedPoint.SmallestPossibleValue * .5 - 1e-12 && state.FuelDebt < 1
-                && state.Status >= ReactorStatus.ShutOff && state.Status <= ReactorStatus.Active;
+                && state.Status >= ReactorStatus.ShutOff && state.Status <= ReactorStatus.Active
+                && (state.Thermal == null || (state.Thermal.Valid(state.EntityId)
+                    && state.Thermal.Store.Valid(state.EntityId, PowerMW[state.FuelTier - 1] / .40 * 8)
+                    && state.Thermal.FuelHeatMJ <= PowerMW[state.FuelTier - 1] / .40 * 8));
         }
 
         internal void ReceiveState(MotionState state)
@@ -267,6 +273,8 @@ namespace ArcanePower
                 UpdateStatus();
                 Motion.TargetLoad = reactor.MaxOutput > 0
                     ? MathHelper.Clamp(reactor.CurrentOutput / reactor.MaxOutput, 0, 1) : 0;
+                if (ThermalVariant && Motion.Thermal != null)
+                    Motion.TargetLoad = (float)ThermalMath.Clamp(Motion.Thermal.ProducedMW / ThermalHeatMW, 0, 1);
                 if (Motion.TileStarved && !Motion.PayloadReleased) Motion.TargetLoad = Motion.StarvedLoad;
                 bool ventPowerCut = Motion.Vent != VentPhase.Idle && Motion.Vent != VentPhase.ShieldClosing;
                 if (ventPowerCut || ((Motion.Core == CorePhase.Stopping || Motion.Core == CorePhase.Cooling) && Motion.Vent == VentPhase.Idle))
@@ -465,7 +473,7 @@ namespace ArcanePower
 
         internal void SaveMotion()
         {
-            if (!motionInitialized || restoreLegacyHardware || reactor == null || MyAPIGateway.Multiplayer == null || MyAPIGateway.Utilities == null || !MyAPIGateway.Multiplayer.IsServer) return;
+            if (!motionInitialized || restoreLegacyHardware || thermalRestoreFault || reactor == null || MyAPIGateway.Multiplayer == null || MyAPIGateway.Utilities == null || !MyAPIGateway.Multiplayer.IsServer) return;
             if (Entity.Storage == null) Entity.Storage = new MyModStorageComponent();
             Motion.Enabled = reactor.Enabled;
             Entity.Storage[MotionStorage] = MyAPIGateway.Utilities.SerializeToXML(Motion);

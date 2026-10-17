@@ -22,6 +22,43 @@ class EnergyModelProbe
     }
     static void Main(string[] args)
     {
+        if (args[0] == "--highlights")
+        {
+            var highlightTags = Read(args[1], "Sections", "Dummies").GetTagData();
+            var sections = (List<MyMeshSectionInfo>)highlightTags["Sections"];
+            var dummies = (Dictionary<string,MyModelDummy>)highlightTags["Dummies"];
+            foreach (var section in sections)
+                Console.WriteLine("SECTION\t" + section.Name + "\t" + section.Meshes.Sum(m => m.IndexCount));
+            foreach (var entry in dummies.Where(d => d.Key.StartsWith("detector_conveyor_")))
+            {
+                object highlightValue;
+                string highlight = entry.Value.CustomData.TryGetValue("highlight", out highlightValue) ? highlightValue as string : null;
+                Console.WriteLine("HIGHLIGHT\t" + entry.Key + "\t" + highlight);
+                if (string.IsNullOrEmpty(highlight)) throw new Exception("Missing hatch highlight: " + entry.Key);
+                foreach (string target in highlight.Split(';'))
+                    if (target.StartsWith("subpart_"))
+                    {
+                        if (!dummies.ContainsKey(target) || !dummies[target].CustomData.ContainsKey("file"))
+                            throw new Exception("Unresolved hatch subpart: " + target);
+                    }
+                    else if (!sections.Any(s => s.Name == target && s.Meshes.Sum(m => m.IndexCount) > 0))
+                        throw new Exception("Unresolved hatch mesh section: " + target);
+            }
+            return;
+        }
+        if (args[0] == "--dummies")
+        {
+            object dummyTag;
+            if (Read(args[1], "Dummies").GetTagData().TryGetValue("Dummies", out dummyTag))
+                foreach (var entry in (Dictionary<string,MyModelDummy>)dummyTag)
+                {
+                    object file;
+                    entry.Value.CustomData.TryGetValue("file", out file);
+                    Console.WriteLine(entry.Key + "\t" + string.Join(",", Elements(entry.Value.Matrix)
+                        .Select(v => v.ToString("R",System.Globalization.CultureInfo.InvariantCulture))) + "\t" + (file ?? ""));
+                }
+            return;
+        }
         if (args[0] == "--lod-paths")
         {
             // MWMBuilder ignores XML Model paths and derives sibling LOD names.
@@ -29,6 +66,12 @@ class EnergyModelProbe
             // every geometry, material, interface and physics byte stays intact.
             var lods = (MyLODDescriptor[])Read(args[1], "LODs").GetTagData()["LODs"];
             if (args.Length != lods.Length + 3) throw new Exception("LOD path count differs from native descriptors");
+            if (lods.Select(l => l.Model).SequenceEqual(args.Skip(3)))
+            {
+                File.Copy(args[1], args[2], true);
+                Console.WriteLine("LOD paths already match; native bytes preserved");
+                return;
+            }
             for (int i = 0; i < lods.Length; i++) lods[i].Model = args[i + 3];
             var bytes = File.ReadAllBytes(args[1]);
             long pointer = -1;

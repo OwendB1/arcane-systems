@@ -155,6 +155,25 @@ Blacklist behavior:
 - Connector punishment remembers which enabled blocks it shuts off and turns them back on when disconnecting or a limit refresh clears the restriction. Blocks that were already off stay off; another connector punishment or the block's own limits can keep a block off. This tracking lasts for the current world session.
 - If priority and block count both match, neither side outranks the other for blacklist punishment.
 
+### CoreSelectionPriority example
+
+`CoreSelectionPriority` belongs to each ship-core entry in the manifest and defaults to `0`.
+Higher numbers outrank lower numbers regardless of ship size. Equal priorities fall back to
+the total block count of each mechanical group; if both counts also match, neither group
+can enforce its connector blacklist against the other.
+
+For example, give a carrier priority `10` and a fighter priority `0`. If the carrier lists
+the fighter core's subtype in `BlacklistedCoreSubtypeId`, the docked fighter's matching
+blocks count toward the carrier's non-critical block limits, even if the fighter has more
+blocks. Imported blocks over the carrier's remaining capacity are shut off. Without that
+blacklist entry, priority alone does not import the fighter's blocks or disable its core.
+This also works through a chain of connected connectors.
+
+Despite its name, this field does not select the main core or backup core within one
+mechanical group. That selection uses the block count of the grid carrying each eligible
+core, with entity ID as a deterministic tie-breaker. It is also separate from
+`SpeedOverridePriority`, which ranks speed sources when `SpeedOverrideMode=Priority`.
+
 ### Manifest upgrade-module entries
 
 Repeated `<UpgradeModule>` entries under `<CoreManifest>`.
@@ -179,7 +198,7 @@ This file is an XML list of `BlockGroup` entries. `BlockGroup` definitions let m
 | Tag | Type | Meaning | Notes |
 | --- | --- | --- | --- |
 | `TypeId` | `string` | Space Engineers block type ID. | Required for a useful match. |
-| `SubtypeId` | `string` | Specific subtype ID. | Empty means any subtype under that type. `any` also works as wildcard. |
+| `SubtypeId` | `string` | Specific subtype ID. | Empty matches the empty/base subtype only. Use `any` to match every subtype under that type. |
 | `CountWeight` | `float` | Weight contributed by a matching block. | Use fractions or larger weights for weighted caps. |
 | `PrimaryDirection` | `DirectionType` | Block-local axis used for directional locking. | Optional. Defaults to `Forward`; use values like `Up` for blocks whose practical facing is not their forward axis. |
 
@@ -625,6 +644,17 @@ Recommended integration path:
 - wait for config/runtime readiness and inspect `ApiReadResult<T>` instead of trusting fallback values
 
 ## XML configurator
+
+The web editor uses sidebar navigation for ship cores, reusable block groups, shared core
+caps, upgrade modules, imports, and export. Each selected core has Overview, Block limits,
+Performance, Abilities, and Docking & shared caps tabs. CoreSelectionPriority, connector
+blacklists, and shared-cap membership are edited only in the core's Docking & shared caps
+tab. The Shared core caps page defines group names and MaxCount and lists member profiles.
+Dark and light themes are available from the top bar.
+
+Every configuration field has detailed help on hover or keyboard focus, including units,
+special values, and related settings. Hovering the label also shows its field's help. Press
+Escape to dismiss a tooltip.
 
 A static configurator lives under `docs/` and helps build or update:
 

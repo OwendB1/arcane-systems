@@ -1,0 +1,45 @@
+{
+  "status": "passed_source_and_preview",
+  "scope": "Saved Blender geometry/materials and compiled mod logic; no live SE world",
+  "blender_file": "assets/arcane-thermal-models.blend",
+  "blender_sha256": "5d176715ecfcf17b0885496fcb6f0dc8fe4b69ac67c3fab8fa3fa304251547f7",
+  "source_models": 31,
+  "room_blocks": 122,
+  "runtime_checks": 1323341,
+  "compatibility_compile": {
+    "warnings": 0,
+    "errors": 0
+  },
+  "manifold_poses": 47,
+  "ui_distances_metres": [
+    1.8,
+    2.4,
+    3.0
+  ],
+  "ui_lens_mm": 48,
+  "ui_plans": [
+    "flow-emissives-plan.json",
+    "flow-final-manifold-plan.json"
+  ],
+  "motion_contact_sheets": [
+    "flow-chamber-contact.png",
+    "flow-room-contact.png"
+  ],
+  "motion_review": {
+    "silhouette": "stable",
+    "flicker": "no whole-material or geometry state swaps",
+    "readability": "restrained gas wisps and liquid streaks inside clear walls",
+    "physical_seating": "guarded sight windows, supported pump lids and edge lamps",
+    "route_authority": "Compiled C# directions for starter and room fixtures",
+    "export_truth": "Preview meshes are isolated; native C# billboards own game motion"
+  },
+  "reload_check": {
+    "flow_models": 31,
+    "room_blocks": 122,
+    "pump_heads": 4,
+    "preview_meshes_outside_mains": true
+  },
+  "native_model_definition_installation": "pending",
+  "in_game_validation": "not_run",
+  "protected_original_reactor_and_battery": "unchanged"
+}

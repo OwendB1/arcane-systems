@@ -1,0 +1,225 @@
+{
+  "status": "passed",
+  "revision": 2,
+  "feedback": "Internal reactor glass tubes were indistinct. Add metal surrounds and darker glass.",
+  "source": "assets/arcane-thermal-models.blend",
+  "checkpoint": "assets/arcane-thermal-before-tube-contrast.blend",
+  "implementation": "assets/refine_thermal_flow.py::reactor_tube_contrast",
+  "glass": "ArcanePower_CoolantGlass",
+  "native_definition": "src/Data/TransparentMaterials.sbc",
+  "changes": [
+    "Independent smoked blue-grey glass with native and preview parameters.",
+    "Metal pressure-jacket backing and three seated collars per sight length.",
+    "Paired metal guard rails on vertical risers.",
+    "Sight apertures face the visible side of pillar risers; distributor apertures face the chamber."
+  ],
+  "evidence": "tube-contrast-v2-sheet.jpg",
+  "detail_distances_m": [
+    1.8,
+    2.4,
+    3.0
+  ],
+  "lens_mm": 48,
+  "studio_light": "studio.exr",
+  "light_rotation": 0.5,
+  "light_intensity": 0.8,
+  "audit": {
+    "status": "passed",
+    "models": 31,
+    "assemblies": {
+      "Thermal production / Atmosphere starter": {
+        "instances": 56,
+        "occupied_cells": 219,
+        "mated_sockets": 56
+      },
+      "Thermal production / Grid parallel bank": {
+        "instances": 51,
+        "occupied_cells": 138,
+        "mated_sockets": 52
+      },
+      "Thermal production / Reactor room loop": {
+        "instances": 122,
+        "occupied_cells": 285,
+        "mated_sockets": 122
+      }
+    },
+    "failure_count": 0,
+    "failures": []
+  },
+  "skill_gap": "Existing material, modeling and live visual-review methods cover this repair; no skill edit needed.",
+  "native_export": "passed",
+  "live_game_validation": "not_run",
+  "construction_review": {
+    "status": "passed",
+    "bodies_per_stage": 24,
+    "jackets_per_stage": 88,
+    "fix": "Internal coolant tubes become opaque Construction bodies in BS2/BS3.",
+    "image": "native-supported-stages-sheet.jpg",
+    "rejected": "native-construction-missing-pipes.jpg",
+    "views": [
+      {
+        "image": "native-supported-bs2.png",
+        "scene": "Thermal production / Supported reactor BS2",
+        "target": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "eye": [
+          15.419821739196777,
+          -15.419818878173828,
+          10.022882461547852
+        ],
+        "distance_m": 23.999997774759827,
+        "lens_mm": 48.0,
+        "studio_light": "studio.exr",
+        "light_rotation": 0.5,
+        "light_intensity": 0.800000011920929
+      },
+      {
+        "image": "native-supported-bs2-1.8.png",
+        "scene": "Thermal production / Supported reactor BS2",
+        "target": [
+          3.7869999408721924,
+          -4.585000038146973,
+          0.6499999761581421
+        ],
+        "eye": [
+          5.047252655029297,
+          -5.84525203704834,
+          0.9020504355430603
+        ],
+        "distance_m": 1.8000004165701915,
+        "lens_mm": 48.0,
+        "studio_light": "studio.exr",
+        "light_rotation": 0.5,
+        "light_intensity": 0.800000011920929
+      },
+      {
+        "image": "native-supported-bs2-2.4.png",
+        "scene": "Thermal production / Supported reactor BS2",
+        "target": [
+          3.7869999408721924,
+          -4.585000038146973,
+          0.6499999761581421
+        ],
+        "eye": [
+          5.467336177825928,
+          -6.265334606170654,
+          0.9860671162605286
+        ],
+        "distance_m": 2.39999902478089,
+        "lens_mm": 48.0,
+        "studio_light": "studio.exr",
+        "light_rotation": 0.5,
+        "light_intensity": 0.800000011920929
+      },
+      {
+        "image": "native-supported-bs2-3.0.png",
+        "scene": "Thermal production / Supported reactor BS2",
+        "target": [
+          3.7869999408721924,
+          -4.585000038146973,
+          0.6499999761581421
+        ],
+        "eye": [
+          5.887420654296875,
+          -6.68541955947876,
+          1.0700839757919312
+        ],
+        "distance_m": 2.9999999677141505,
+        "lens_mm": 48.0,
+        "studio_light": "studio.exr",
+        "light_rotation": 0.5,
+        "light_intensity": 0.800000011920929
+      },
+      {
+        "image": "native-supported-bs3.png",
+        "scene": "Thermal production / Supported reactor BS3",
+        "target": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "eye": [
+          15.419821739196777,
+          -15.419818878173828,
+          10.022882461547852
+        ],
+        "distance_m": 23.999997774759827,
+        "lens_mm": 48.0,
+        "studio_light": "studio.exr",
+        "light_rotation": 0.5,
+        "light_intensity": 0.800000011920929
+      },
+      {
+        "image": "native-supported-bs3-1.8.png",
+        "scene": "Thermal production / Supported reactor BS3",
+        "target": [
+          3.7869999408721924,
+          -4.585000038146973,
+          0.6499999761581421
+        ],
+        "eye": [
+          5.047252655029297,
+          -5.84525203704834,
+          0.9020504355430603
+        ],
+        "distance_m": 1.8000004165701915,
+        "lens_mm": 48.0,
+        "studio_light": "studio.exr",
+        "light_rotation": 0.5,
+        "light_intensity": 0.800000011920929
+      },
+      {
+        "image": "native-supported-bs3-2.4.png",
+        "scene": "Thermal production / Supported reactor BS3",
+        "target": [
+          3.7869999408721924,
+          -4.585000038146973,
+          0.6499999761581421
+        ],
+        "eye": [
+          5.467336177825928,
+          -6.265334606170654,
+          0.9860671162605286
+        ],
+        "distance_m": 2.39999902478089,
+        "lens_mm": 48.0,
+        "studio_light": "studio.exr",
+        "light_rotation": 0.5,
+        "light_intensity": 0.800000011920929
+      },
+      {
+        "image": "native-supported-bs3-3.0.png",
+        "scene": "Thermal production / Supported reactor BS3",
+        "target": [
+          3.7869999408721924,
+          -4.585000038146973,
+          0.6499999761581421
+        ],
+        "eye": [
+          5.887420654296875,
+          -6.68541955947876,
+          1.0700839757919312
+        ],
+        "distance_m": 2.9999999677141505,
+        "lens_mm": 48.0,
+        "studio_light": "studio.exr",
+        "light_rotation": 0.5,
+        "light_intensity": 0.800000011920929
+      }
+    ]
+  },
+  "native_revision": "Models/Cubes/large/Thermal/thermal_4918df2683ad",
+  "package_sha256": "195056c41c95a13688cb20dd347123996150aa59ae5f0270f85d5326d70363d5",
+  "native_uv_review": {
+    "status": "passed",
+    "views": [
+      "native-uv-corrected-reactor.png",
+      "native-uv-corrected-train-stage.png",
+      "native-uv-corrected-cross-stage.png",
+      "native-uv-corrected-riser-sheet.jpg"
+    ]
+  }
+}

@@ -2,14 +2,17 @@
 
 16 October 2026. Current direction: closed sCO₂ Brayton only. The earlier topping
 converter and its dedicated utility circuit have been removed from the active
-proposal, procedural sources and Blender study. This remains a gameplay/model
-proposal; existing runtime reactors still generate electricity directly.
+proposal, procedural sources and Blender study. Existing runtime reactors still
+generate electricity directly. A separate [C# runtime prototype](THERMAL-RUNTIME.md)
+now implements mode/manifold control and Brayton accounting. All 31 native thermal
+models and definitions, 93 construction stages and 122 LODs are delivered in the
+local 0.1.0 alpha package. World validation remains pending.
 
 Accepted balance: **20% net standalone**, with primary manifolds hidden;
 **40% net starter Brayton**, upgradeable to **78% net**. These are alternative
 conversion paths for allocated reactor heat. Never award 20% plus 78% for the
 same heat. Standalone operation uses integrated heat rejection; its capacity and
-startup/shutdown behavior still need runtime integration.
+startup/shutdown behavior are implemented with finite paid heat inventories.
 
 ## The engineering loop
 
@@ -18,6 +21,11 @@ exhaust heat into the compressed supply. Internally the CO₂ follows compressor
 recuperator cold side → primary heater → turbine → recuperator hot side → cooler
 → compressor. Primary carrier and CO₂ never mix. The train contains an electric
 compressor drive and a separate turbine/generator shaft.
+
+The reactor generates its own sealed CO₂ charge during the existing powered
+eight-second commissioning phase. This includes loop filling and pressurization;
+players need no separate CO₂ generator, tank or filling conveyor. The charge is
+abstracted by commissioning readiness rather than a consumable gas inventory.
 
 Players connect matching thermal sockets. Flow allocation, pressure and working
 inventory are automatic; no manual valve sequence, fluid recipe spreadsheet or
@@ -197,11 +205,31 @@ class. Existing battery bank transfer caps and native recharge losses remain.
 
 Production work now lives in [arcane-thermal-models.blend](assets/arcane-thermal-models.blend):
 31 main sources (eight machines, the reactor housing variant, 21 typed conduit
-pieces and one reactor transition). Bases and two real grid assemblies pass the
-geometry/interface gate. Other-machine geometry and texture refinement is held
-while the reactor manifold repair is completed; their older hot-end stencils
-also still need the new temperature targets. LODs/build stages are not being
-polished ahead of main models.
+pieces and one reactor transition). All eight machines and 22 pipe/transition
+models now have their main geometry and native SEUT texture/detail pass. The
+train has bolted split joints and switchgear hardware; the heater has pressure
+service hatches, isolation actuators and rear bracing; the recuperator has
+supported tie nuts and readable bank identifiers. Fan guard retainers, radiator
+tile shoes and pipe insulation clamps finish their respective families.
+Native atlas panels, warnings and screw faces preserve their source UVs. Metric
+surface UVs, restrained chamfer wear and pressure markings distinguish PRIMARY,
+22 MPa HP and 8 MPa LP connections; premium hot-end markings now read 2200 C.
+The second refinement pass replaces broad edge breaks with flat, at-most-3 mm
+single chamfers and keeps hex hardware faceted. Machine manifolds have angular
+skid brackets; existing frame posts carry the load where available. Train casing
+gaps are 115/125 mm, heater vessels and roof hatches fit more closely, each
+recuperator has 84 plates, and radiator tile joints are 10 mm. New pipe flanges
+mate across a 28 mm face gap, with sharp load webs behind them. Grid dimensions,
+socket positions, hot/cold roll and functional flow clearances stay fixed.
+Native framed vents, compact control panels, fastener plates and welded seams
+fit the settled surfaces and retain their atlas UVs.
+The maintained refinement source is `assets/refine_thermal_models.py`; rebuilding
+a finished base replays its detail and texture stages. The approved reactor
+variant stays on its separate builder. Close review uses fixed-light/lens
+1.8/2.4/3.0 m triplets, with evidence in
+[the review record](validation/thermal-models/REVIEW.md).
+Native exports, LODs and construction stages are delivered. In-game thermal
+behavior remains a live-world validation gate.
 
 The reactor variant preserves its 5×5×3 Blender-cell envelope and original
 controller receivers, collars, glass, pillars and ring well. Four pairs of compact
@@ -213,7 +241,8 @@ each pair of heads; a tapered rounded connector travels with it and seats inside
 the curved housing when deployed. The connector passes through a small internal
 bulkhead guide, while the hot and return bores stay separate. Standalone state
 fully hides the assembly; Brayton state exposes it. This is a saved mechanical
-rig, not installed mode-switching/runtime animation.
+rig. The runtime targets this motion, and its 20 native moving subparts and block
+definition are installed locally.
 
 The old conveyor-sized recess behind each controller receiver has been filled
 back to the curved housing, including its lower notch. The small native yellow
@@ -230,8 +259,8 @@ The accepted original reactor/battery files remain unchanged. The new variant
 is maintained by `build_reactor_thermal_manifolds.py`. The focused
 [curved-cover audit](validation/thermal-models/curved-manifold-audit.json) checks
 closed-assembly occlusion, separate open bores, split solids and 47 deployment positions; close review
-uses 1.8/2.4/3.0 m actual UI views. Native collision/subpart export and in-game
-switching remain later integration gates.
+uses 1.8/2.4/3.0 m actual UI views. Native collision/subpart export passes; switching
+in a live world remains a validation gate.
 
 The earlier concept baseline follows for reference.
 

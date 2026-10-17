@@ -8,6 +8,7 @@ kit's Z=-2.5 lattice. Drivers preview mechanics only; no runtime mode code here.
 """
 import json
 import math
+import runpy
 from pathlib import Path
 
 import bpy
@@ -129,6 +130,7 @@ def build(p):
             value = copy[key]
             if key != 'reactor_source_name' and isinstance(value, str) and value in names:
                 copy[key] = names[value]
+    runpy.run_path(str(ROOT/'assets/highlight_inventory_hatches.py'))['remap_highlights'](copies)
     root = next(c for o, c in copies.items() if o.parent is None)
     p.scene['thermal_manifolds_deployment'] = 0.
     p.scene.id_properties_ui('thermal_manifolds_deployment').update(min=0., max=1.,

@@ -1,0 +1,368 @@
+{
+  "status": "passed",
+  "blocks": 51,
+  "public_blocks": 43,
+  "hidden_blocks": 8,
+  "thermal_icons": 31,
+  "menu_entries": 43,
+  "all_icons_and_definitions_packaged": true,
+  "catalog": [
+    {
+      "id": "UpgradeModule/ArcanePower_ContainmentController",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_ContainmentController.sbc",
+      "icon": "Textures/GUI/Icons/ArcaneContainmentController.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_AdvancedContainmentController",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_ContainmentController.sbc",
+      "icon": "Textures/GUI/Icons/ArcaneAdvancedContainmentController.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "BatteryBlock/ArcanePower_EnergyCore_Pillar",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCore.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCore.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "BatteryBlock/ArcanePower_EnergyCapacity_Pillar",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCore.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCapacity.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "BatteryBlock/ArcanePower_EnergyCapacityAdvanced_Pillar",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCore.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCapacityAdvanced.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_EnergyTransfer_Pillar",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCore.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyTransfer.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_EnergyTransferAdvanced_Pillar",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCore.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyTransferAdvanced.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_EnergyStabilizer_Pillar",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCore.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyStabilizer.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_EnergyStabilizerAdvanced_Pillar",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCore.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyStabilizerAdvanced.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "BatteryBlock/ArcanePower_EnergyCore",
+      "public": false,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyCore.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "BatteryBlock/ArcanePower_EnergyCapacity",
+      "public": false,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyCapacity.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "BatteryBlock/ArcanePower_EnergyCapacityAdvanced",
+      "public": false,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyCapacityAdvanced.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_EnergyTransfer",
+      "public": false,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyTransfer.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_EnergyTransferAdvanced",
+      "public": false,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyTransferAdvanced.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_EnergyStabilizer",
+      "public": false,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyStabilizer.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_EnergyStabilizerAdvanced",
+      "public": false,
+      "definition": "Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyStabilizerAdvanced.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "Reactor/ArcanePower_ReactorPrototype",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_ReactorPrototype.sbc",
+      "icon": "Textures/GUI/Icons/ArcaneReactor.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "Reactor/ArcanePower_Thermal_BraytonTrain",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrain.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "Reactor/ArcanePower_Thermal_BraytonTrainUpgraded",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainUpgraded.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_PrimaryHeater",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryHeater.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_PrimaryHeaterUpgraded",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryHeaterUpgraded.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_Recuperator",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_Recuperator.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_RecuperatorUpgraded",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_RecuperatorUpgraded.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_AtmosphericCooler",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCooler.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_SpaceRadiator",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiator.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_PrimaryStraight",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraight.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_PrimaryElbow",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbow.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_PrimaryRiser",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiser.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_PrimaryTee",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTee.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_PrimaryCross",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCross.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_PrimaryRollAdapter",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapter.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_PrimaryEndCap",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCap.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2HpStraight",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpStraight.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2HpElbow",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpElbow.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2HpRiser",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpRiser.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2HpTee",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpTee.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2HpCross",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpCross.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2HpRollAdapter",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpRollAdapter.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2HpEndCap",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpEndCap.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2LpStraight",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpStraight.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2LpElbow",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpElbow.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2LpRiser",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpRiser.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2LpTee",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpTee.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2LpCross",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpCross.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2LpRollAdapter",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpRollAdapter.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_CO2LpEndCap",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpEndCap.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "Reactor/ArcanePower_Thermal_ReactorHousing",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_ReactorHousing.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "UpgradeModule/ArcanePower_Thermal_PrimaryReactorAdapter",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
+      "icon": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryReactorAdapter.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "Conveyor/ArcanePower_VentDuct",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Vents.sbc",
+      "icon": "Textures/GUI/Icons/ArcaneVentDuct.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "Conveyor/ArcanePower_VentOutlet",
+      "public": true,
+      "definition": "Data/CubeBlocks/ArcanePower_Vents.sbc",
+      "icon": "Textures/GUI/Icons/ArcaneVentOutlet.dds",
+      "construction_stages": 3
+    },
+    {
+      "id": "CubeBlock/ArcanePower_EjectedCore",
+      "public": false,
+      "definition": "Data/EjectedContainment.sbc",
+      "icon": "Textures/GUI/Icons/ArcaneReactor.dds",
+      "construction_stages": 0
+    }
+  ]
+}

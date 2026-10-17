@@ -1,0 +1,41 @@
+{
+  "passed": 145,
+  "failures": [
+    {
+      "stem": "APT_ReactorHousing_M_BS2",
+      "type": "bs",
+      "native": 167867,
+      "authored": 167906,
+      "error": [
+        "",
+        "Unhandled Exception:",
+        "System.Exception: Compiled mesh differs from authoring source: 167867 / 167906"
+      ]
+    },
+    {
+      "stem": "APT_ReactorHousing_M_BS3",
+      "type": "bs",
+      "native": 173667,
+      "authored": 173706,
+      "error": [
+        "",
+        "Unhandled Exception:",
+        "System.Exception: Compiled mesh differs from authoring source: 173667 / 173706"
+      ]
+    },
+    {
+      "stem": "APT_ReactorHousing_M",
+      "type": "main",
+      "native": 187579,
+      "authored": 187618,
+      "error": [
+        "",
+        "Unhandled Exception:",
+        "System.Exception: Compiled mesh differs from authoring source: 187579 / 187618"
+      ]
+    }
+  ],
+  "status": "historical_failure_resolved",
+  "current_validation": "native-export.json",
+  "resolution": "Use evaluated triangulation for the concave vent; preserve authored raw geometry."
+}

@@ -6,6 +6,7 @@ Blender calls. Model coordinates are X length, Y width, Z up, in metres.
 import hashlib
 import json
 import math
+import runpy
 from pathlib import Path
 
 import bpy
@@ -247,10 +248,10 @@ def brayton(p):
     # Supported electrical trunk terminates in the generator cabinet.
     p.box('bus trunk',(2.9,-1.55,-1.6),(2.0,.32,.38),'Metal_Shiny')
     for x in (2.1,3.5):p.box('bus pedestal',(x,-1.55,-2.03),(.35,.5,.5),'PaintedMetal_VeryDark')
-    for sign in (-1,1):
-        p.port('CO2 leg '+str(sign),(-2.5,sign*3.75,1.25),(0,sign,0),'CO2_HP' if sign<0 else 'CO2_LP')
-        p.tube('turbine hot header',((-2.5,sign*3.60,1.71),(-2.5,sign*2.6,1.71),(-1.35,sign*2.6,1.71),(-1.35,sign*1.3,1.71)),.29)
-        p.tube('compressor cold header',((-2.5,sign*3.60,.79),(-2.5,sign*3.1,.79),(-4.25,sign*2.0,.79),(-4.25,sign*.9,.79)),.29)
+    contract = runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))
+    for port in contract['TRAIN_PORTS']:
+        p.port(port['id'], port['position'], port['normal'], port['type'], port['hot_axis'])
+    # Seated end-plenum piping follows the final hollow casings in the visibility stage.
     for x in (-1.9,-1.3,-.7):p.box('turbine inspection rib',(x,-1.65,1.55),(.30,.35,.7),'Metal_Dull',.018)
     for x in (1.05,1.55,2.05,2.55,3.05):
         p.box('stator cooling jacket',(x,0,2.0),(.12,1.2,.20),'Metal_Dull',.01)

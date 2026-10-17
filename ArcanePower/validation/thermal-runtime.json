@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "scope": "Compiled production kernel with native math; no live SE world",
+  "runtime_contracts": 31,
+  "authored_starter_blocks": 56,
+  "manifold_samples": 47,
+  "authored_room_blocks": 122,
+  "conservation_hours_per_efficiency": 1,
+  "efficiencies": [
+    0.2,
+    0.4,
+    0.78
+  ],
+  "rotor_checks": "Cold start, heat/pressure response, coastdown, reload/copy identity, invalid inputs, phase integration and native pivots",
+  "flow_checks": "Starter and room routing, opposed H/C, capped spurs, standby branches, equal parallel routes, split/facing/roll/type faults, path sampling and state validation",
+  "construction_checks": "Authored build, incomplete/detached blocks, open/circuit/facing/roll/crowded joints, 24 placement orientations, missing recovery/cooling and unchanged runtime authority",
+  "integration_checks": "Unique multiplayer channels, compatible game logic for all 31 thermal subtypes and registered runtime sessions",
+  "checks": "Thermal runtime: 1323383 checks passed (registrations/channels, budget, conservation, reload, modes, 47 manifold poses, heat/pressure rotors, construction/orientation guide and authored topology)",
+  "native_delivery_report": "thermal-models/delivery-check.json",
+  "in_game_validation": "not_run"
+}

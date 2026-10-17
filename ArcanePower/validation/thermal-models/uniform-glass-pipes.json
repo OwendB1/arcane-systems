@@ -1,0 +1,145 @@
+{
+  "models": {
+    "Brayton train": {
+      "pipes": 4,
+      "clamps": 18
+    },
+    "Brayton train upgraded": {
+      "pipes": 4,
+      "clamps": 18
+    },
+    "Primary heater": {
+      "pipes": 12,
+      "clamps": 50
+    },
+    "Primary heater upgraded": {
+      "pipes": 12,
+      "clamps": 50
+    },
+    "Recuperator": {
+      "pipes": 8,
+      "clamps": 36
+    },
+    "Recuperator upgraded": {
+      "pipes": 8,
+      "clamps": 36
+    },
+    "Atmospheric cooler": {
+      "pipes": 2,
+      "clamps": 2
+    },
+    "Space radiator": {
+      "pipes": 2,
+      "clamps": 4
+    },
+    "Reactor housing": {
+      "pipes": 24,
+      "clamps": 0
+    },
+    "PRIMARY / Straight": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "PRIMARY / Elbow": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "PRIMARY / Riser": {
+      "pipes": 2,
+      "clamps": 5
+    },
+    "PRIMARY / Tee": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "PRIMARY / Cross": {
+      "pipes": 2,
+      "clamps": 8
+    },
+    "PRIMARY / Roll adapter": {
+      "pipes": 2,
+      "clamps": 8
+    },
+    "PRIMARY / End cap": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "CO2_HP / Straight": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "CO2_HP / Elbow": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "CO2_HP / Riser": {
+      "pipes": 2,
+      "clamps": 5
+    },
+    "CO2_HP / Tee": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "CO2_HP / Cross": {
+      "pipes": 2,
+      "clamps": 8
+    },
+    "CO2_HP / Roll adapter": {
+      "pipes": 2,
+      "clamps": 8
+    },
+    "CO2_HP / End cap": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "CO2_LP / Straight": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "CO2_LP / Elbow": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "CO2_LP / Riser": {
+      "pipes": 2,
+      "clamps": 5
+    },
+    "CO2_LP / Tee": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "CO2_LP / Cross": {
+      "pipes": 2,
+      "clamps": 8
+    },
+    "CO2_LP / Roll adapter": {
+      "pipes": 2,
+      "clamps": 8
+    },
+    "CO2_LP / End cap": {
+      "pipes": 2,
+      "clamps": 6
+    },
+    "PRIMARY / Reactor adapter": {
+      "pipes": 2,
+      "clamps": 6
+    }
+  },
+  "unchanged_ports_and_centrelines": true,
+  "native_dirt_texture_replaced": true,
+  "live_review_distances_m": [
+    1.8,
+    2.4,
+    3.0
+  ],
+  "review_views": 114,
+  "geometry_audit": "passed",
+  "runtime_checks": 1323383,
+  "native_export": "passed",
+  "native_revision": "Models/Cubes/large/Thermal/thermal_9925267823a3",
+  "accepted_collision_files_unchanged": 128,
+  "installed_files_verified": 694,
+  "game_reloaded": false,
+  "native_export_method": "Isolated SEUT export; identical native exporter and accepted HKT files",
+  "review_captures_pruned": true
+}

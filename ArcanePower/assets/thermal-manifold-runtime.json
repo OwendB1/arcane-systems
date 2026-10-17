@@ -1,0 +1,95 @@
+{
+  "revision": 4,
+  "coordinate_conversion": "SE=(-BlenderX, BlenderZ, BlenderY)",
+  "root_space_subparts": true,
+  "bays": [
+    {
+      "id": "LA",
+      "carriage": "Thermal manifold LA / carriage",
+      "stroke_m": 1.4100000000000001,
+      "source_panel": "Drum segmented armor.037",
+      "intermediate_stage": "Thermal manifold LA / intermediate sleeve",
+      "panel_angle": -2.7488935358207263,
+      "stowed_face": [
+        -4.84,
+        -2.5,
+        -2.33
+      ],
+      "deployed_face": [
+        -6.25,
+        -2.5,
+        -2.33
+      ],
+      "cover_slides": [
+        "Thermal manifold LA / curved slide -1",
+        "Thermal manifold LA / curved slide 1"
+      ]
+    },
+    {
+      "id": "LB",
+      "carriage": "Thermal manifold LB / carriage",
+      "stroke_m": 1.4100000000000001,
+      "source_panel": "Drum segmented armor.034",
+      "intermediate_stage": "Thermal manifold LB / intermediate sleeve",
+      "panel_angle": 2.7488934995523917,
+      "stowed_face": [
+        -4.84,
+        2.5,
+        -2.33
+      ],
+      "deployed_face": [
+        -6.25,
+        2.5,
+        -2.33
+      ],
+      "cover_slides": [
+        "Thermal manifold LB / curved slide -1",
+        "Thermal manifold LB / curved slide 1"
+      ]
+    },
+    {
+      "id": "RA",
+      "carriage": "Thermal manifold RA / carriage",
+      "stroke_m": 1.4100000000000001,
+      "source_panel": "Drum segmented armor.046",
+      "intermediate_stage": "Thermal manifold RA / intermediate sleeve",
+      "panel_angle": -0.3926991540374016,
+      "stowed_face": [
+        4.84,
+        -2.5,
+        -2.33
+      ],
+      "deployed_face": [
+        6.25,
+        -2.5,
+        -2.33
+      ],
+      "cover_slides": [
+        "Thermal manifold RA / curved slide -1",
+        "Thermal manifold RA / curved slide 1"
+      ]
+    },
+    {
+      "id": "RB",
+      "carriage": "Thermal manifold RB / carriage",
+      "stroke_m": 1.4100000000000001,
+      "source_panel": "Drum segmented armor.025",
+      "intermediate_stage": "Thermal manifold RB / intermediate sleeve",
+      "panel_angle": 0.39269908772339324,
+      "stowed_face": [
+        4.84,
+        2.5,
+        -2.33
+      ],
+      "deployed_face": [
+        6.25,
+        2.5,
+        -2.33
+      ],
+      "cover_slides": [
+        "Thermal manifold RB / curved slide -1",
+        "Thermal manifold RB / curved slide 1"
+      ]
+    }
+  ]
+}

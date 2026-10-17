@@ -1,0 +1,1387 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_ReactorDefinition">
+      <Id>
+        <TypeId>Reactor</TypeId>
+        <SubtypeId>ArcanePower_Thermal_BraytonTrain</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Brayton train</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrain.dds</Icon>
+      <Description>Closed-loop sCO2 turbine/compressor train. The reactor generates its working fluid internally. Connect typed HP and LP sockets through recuperation and cooling, preserve H/C roll, and supply startup electricity to the primary heater. No gas generator or tank required.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="5" y="2" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_BraytonTrain_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="60" />
+        <Component Subtype="Construction" Count="30" />
+        <Component Subtype="LargeTube" Count="15" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_BraytonTrain</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
+      <MaxPowerOutput>19500</MaxPowerOutput>
+      <InventorySize>
+        <X>2</X>
+        <Y>1</Y>
+        <Z>1</Z>
+      </InventorySize>
+      <InventoryFillFactorMin>0.0005</InventoryFillFactorMin>
+      <InventoryFillFactorMax>0.001</InventoryFillFactorMax>
+      <FuelPullAmountFromConveyorInMinutes>10.0</FuelPullAmountFromConveyorInMinutes>
+      <FuelInfos />
+      <PrimarySound />
+      <DamageEffectName>Damage_Reactor_Damaged</DamageEffectName>
+      <DamagedSound>ParticleReactor</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>80</PCU>
+      <IsAirTight>false</IsAirTight>
+      <TieredUpdateTimes>
+        <unsignedInt>900</unsignedInt>
+        <unsignedInt>1800</unsignedInt>
+        <unsignedInt>3600</unsignedInt>
+      </TieredUpdateTimes>
+      <TargetingGroups>
+        <string>PowerSystems</string>
+      </TargetingGroups>
+      <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_BraytonTrain_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_BraytonTrain_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_BraytonTrain_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_ReactorDefinition">
+      <Id>
+        <TypeId>Reactor</TypeId>
+        <SubtypeId>ArcanePower_Thermal_BraytonTrainUpgraded</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Brayton train upgraded</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainUpgraded.dds</Icon>
+      <Description>Closed-loop sCO2 turbine/compressor train. The reactor generates its working fluid internally. Connect typed HP and LP sockets through recuperation and cooling, preserve H/C roll, and supply startup electricity to the primary heater. No gas generator or tank required.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="5" y="2" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_BraytonTrainUpgraded_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="60" />
+        <Component Subtype="Construction" Count="30" />
+        <Component Subtype="LargeTube" Count="15" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_BraytonTrainUpgraded</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
+      <MaxPowerOutput>1950000</MaxPowerOutput>
+      <InventorySize>
+        <X>2</X>
+        <Y>1</Y>
+        <Z>1</Z>
+      </InventorySize>
+      <InventoryFillFactorMin>0.0005</InventoryFillFactorMin>
+      <InventoryFillFactorMax>0.001</InventoryFillFactorMax>
+      <FuelPullAmountFromConveyorInMinutes>10.0</FuelPullAmountFromConveyorInMinutes>
+      <FuelInfos />
+      <PrimarySound />
+      <DamageEffectName>Damage_Reactor_Damaged</DamageEffectName>
+      <DamagedSound>ParticleReactor</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>80</PCU>
+      <IsAirTight>false</IsAirTight>
+      <TieredUpdateTimes>
+        <unsignedInt>900</unsignedInt>
+        <unsignedInt>1800</unsignedInt>
+        <unsignedInt>3600</unsignedInt>
+      </TieredUpdateTimes>
+      <TargetingGroups>
+        <string>PowerSystems</string>
+      </TargetingGroups>
+      <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_BraytonTrainUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_BraytonTrainUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_BraytonTrainUpgraded_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryHeater</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Primary heater</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryHeater.dds</Icon>
+      <Description>Closed-loop thermal Primary heater. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryHeater_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="54" />
+        <Component Subtype="Construction" Count="27" />
+        <Component Subtype="LargeTube" Count="13" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryHeater</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>30</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryHeater_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryHeater_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryHeater_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryHeaterUpgraded</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Primary heater upgraded</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryHeaterUpgraded.dds</Icon>
+      <Description>Closed-loop thermal Primary heater upgraded. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryHeaterUpgraded_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="54" />
+        <Component Subtype="Construction" Count="27" />
+        <Component Subtype="LargeTube" Count="13" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryHeaterUpgraded</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>30</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryHeaterUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryHeaterUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryHeaterUpgraded_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_Recuperator</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Recuperator</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_Recuperator.dds</Icon>
+      <Description>Closed-loop thermal Recuperator. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="2" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_Recuperator_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="36" />
+        <Component Subtype="Construction" Count="18" />
+        <Component Subtype="LargeTube" Count="9" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_Recuperator</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>30</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_Recuperator_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_Recuperator_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_Recuperator_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_RecuperatorUpgraded</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Recuperator upgraded</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_RecuperatorUpgraded.dds</Icon>
+      <Description>Closed-loop thermal Recuperator upgraded. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="2" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_RecuperatorUpgraded_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="36" />
+        <Component Subtype="Construction" Count="18" />
+        <Component Subtype="LargeTube" Count="9" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_RecuperatorUpgraded</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>30</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_RecuperatorUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_RecuperatorUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_RecuperatorUpgraded_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_AtmosphericCooler</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Atmospheric cooler</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCooler.dds</Icon>
+      <Description>Closed-loop thermal Atmospheric cooler. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="2" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_AtmosphericCooler_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="36" />
+        <Component Subtype="Construction" Count="18" />
+        <Component Subtype="LargeTube" Count="9" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_AtmosphericCooler</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>30</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_AtmosphericCooler_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_AtmosphericCooler_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_AtmosphericCooler_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_SpaceRadiator</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Space radiator</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiator.dds</Icon>
+      <Description>Closed-loop thermal Space radiator. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="2" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_SpaceRadiator_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="36" />
+        <Component Subtype="Construction" Count="18" />
+        <Component Subtype="LargeTube" Count="9" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_SpaceRadiator</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>30</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_SpaceRadiator_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_SpaceRadiator_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_SpaceRadiator_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryStraight</SubtypeId>
+      </Id>
+      <DisplayName>Arcane PRIMARY Straight</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraight.dds</Icon>
+      <Description>Closed-loop thermal PRIMARY / Straight. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryStraight_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryStraight</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryStraight_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryStraight_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryStraight_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbow</SubtypeId>
+      </Id>
+      <DisplayName>Arcane PRIMARY Elbow</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbow.dds</Icon>
+      <Description>Closed-loop thermal PRIMARY / Elbow. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryElbow_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbow</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryElbow_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryElbow_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryElbow_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryRiser</SubtypeId>
+      </Id>
+      <DisplayName>Arcane PRIMARY Riser</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiser.dds</Icon>
+      <Description>Closed-loop thermal PRIMARY / Riser. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryRiser_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryRiser</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryRiser_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryRiser_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryRiser_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryTee</SubtypeId>
+      </Id>
+      <DisplayName>Arcane PRIMARY Tee</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTee.dds</Icon>
+      <Description>Closed-loop thermal PRIMARY / Tee. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryTee_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryTee</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryTee_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryTee_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryTee_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryCross</SubtypeId>
+      </Id>
+      <DisplayName>Arcane PRIMARY Cross</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCross.dds</Icon>
+      <Description>Closed-loop thermal PRIMARY / Cross. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryCross_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryCross</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryCross_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryCross_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryCross_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryRollAdapter</SubtypeId>
+      </Id>
+      <DisplayName>Arcane PRIMARY Roll adapter</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapter.dds</Icon>
+      <Description>Closed-loop thermal PRIMARY / Roll adapter. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryRollAdapter_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryRollAdapter</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryRollAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryRollAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryRollAdapter_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryEndCap</SubtypeId>
+      </Id>
+      <DisplayName>Arcane PRIMARY End cap</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCap.dds</Icon>
+      <Description>Closed-loop thermal PRIMARY / End cap. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryEndCap_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryEndCap</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryEndCap_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryEndCap_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryEndCap_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2HpStraight</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_HP Straight</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpStraight.dds</Icon>
+      <Description>Closed-loop thermal CO2_HP / Straight. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpStraight_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2HpStraight</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpStraight_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpStraight_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpStraight_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2HpElbow</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_HP Elbow</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpElbow.dds</Icon>
+      <Description>Closed-loop thermal CO2_HP / Elbow. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpElbow_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2HpElbow</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpElbow_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpElbow_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpElbow_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2HpRiser</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_HP Riser</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpRiser.dds</Icon>
+      <Description>Closed-loop thermal CO2_HP / Riser. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpRiser_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2HpRiser</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpRiser_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpRiser_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpRiser_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2HpTee</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_HP Tee</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpTee.dds</Icon>
+      <Description>Closed-loop thermal CO2_HP / Tee. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpTee_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2HpTee</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpTee_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpTee_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpTee_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2HpCross</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_HP Cross</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpCross.dds</Icon>
+      <Description>Closed-loop thermal CO2_HP / Cross. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpCross_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2HpCross</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpCross_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpCross_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpCross_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2HpRollAdapter</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_HP Roll adapter</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpRollAdapter.dds</Icon>
+      <Description>Closed-loop thermal CO2_HP / Roll adapter. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpRollAdapter_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2HpRollAdapter</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpRollAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpRollAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpRollAdapter_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2HpEndCap</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_HP End cap</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpEndCap.dds</Icon>
+      <Description>Closed-loop thermal CO2_HP / End cap. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpEndCap_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2HpEndCap</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpEndCap_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpEndCap_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2HpEndCap_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2LpStraight</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_LP Straight</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpStraight.dds</Icon>
+      <Description>Closed-loop thermal CO2_LP / Straight. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpStraight_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2LpStraight</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpStraight_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpStraight_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpStraight_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2LpElbow</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_LP Elbow</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpElbow.dds</Icon>
+      <Description>Closed-loop thermal CO2_LP / Elbow. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpElbow_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2LpElbow</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpElbow_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpElbow_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpElbow_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2LpRiser</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_LP Riser</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpRiser.dds</Icon>
+      <Description>Closed-loop thermal CO2_LP / Riser. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpRiser_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2LpRiser</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpRiser_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpRiser_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpRiser_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2LpTee</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_LP Tee</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpTee.dds</Icon>
+      <Description>Closed-loop thermal CO2_LP / Tee. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpTee_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2LpTee</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpTee_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpTee_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpTee_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2LpCross</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_LP Cross</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpCross.dds</Icon>
+      <Description>Closed-loop thermal CO2_LP / Cross. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpCross_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2LpCross</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpCross_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpCross_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpCross_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2LpRollAdapter</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_LP Roll adapter</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpRollAdapter.dds</Icon>
+      <Description>Closed-loop thermal CO2_LP / Roll adapter. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpRollAdapter_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2LpRollAdapter</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpRollAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpRollAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpRollAdapter_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_CO2LpEndCap</SubtypeId>
+      </Id>
+      <DisplayName>Arcane CO₂_LP End cap</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpEndCap.dds</Icon>
+      <Description>Closed-loop thermal CO2_LP / End cap. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpEndCap_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_CO2LpEndCap</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpEndCap_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpEndCap_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_CO2LpEndCap_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_ReactorDefinition">
+      <Id>
+        <TypeId>Reactor</TypeId>
+        <SubtypeId>ArcanePower_Thermal_ReactorHousing</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Thermal Reactor</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_ReactorHousing.dds</Icon>
+      <Description>Integrated CO2 generation and powered loop pressurization. Standalone: 20% net. Brayton: 40% starter, up to 78% with source tier, recovery and cooling. Two containment controllers and a working vent route required. Select the thermal mode in the reactor controls; stop and cool before changing modes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="5" y="3" z="5" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_ReactorHousing_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="50" />
+        <Component Subtype="Construction" Count="40" />
+        <Component Subtype="MetalGrid" Count="4" />
+        <Component Subtype="LargeTube" Count="8" />
+        <Component Subtype="Reactor" Count="100" />
+        <Component Subtype="Motor" Count="6" />
+        <Component Subtype="Computer" Count="25" />
+        <Component Subtype="SteelPlate" Count="30" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_ReactorHousing</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
+      <MaxPowerOutput>10000</MaxPowerOutput>
+      <InventorySize>
+        <X>2</X>
+        <Y>1</Y>
+        <Z>1</Z>
+      </InventorySize>
+      <InventoryFillFactorMin>0.0005</InventoryFillFactorMin>
+      <InventoryFillFactorMax>0.001</InventoryFillFactorMax>
+      <FuelPullAmountFromConveyorInMinutes>10.0</FuelPullAmountFromConveyorInMinutes>
+      <FuelInfos />
+      <PrimarySound />
+      <DamageEffectName>Damage_Reactor_Damaged</DamageEffectName>
+      <DamagedSound>ParticleReactor</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>100</PCU>
+      <IsAirTight>false</IsAirTight>
+      <TieredUpdateTimes>
+        <unsignedInt>900</unsignedInt>
+        <unsignedInt>1800</unsignedInt>
+        <unsignedInt>3600</unsignedInt>
+      </TieredUpdateTimes>
+      <TargetingGroups>
+        <string>PowerSystems</string>
+      </TargetingGroups>
+      <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
+      <MountPoints>
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="5" EndY="5" />
+        <MountPoint Side="Top" StartX="1.2916" EndX="3.7084" StartY="0.3160" EndY="0.6280" />
+        <MountPoint Side="Top" StartX="0.8491" EndX="4.1509" StartY="0.6280" EndY="0.9400" />
+        <MountPoint Side="Top" StartX="0.5516" EndX="4.4484" StartY="0.9400" EndY="1.2520" />
+        <MountPoint Side="Top" StartX="0.3384" EndX="4.6616" StartY="1.2520" EndY="1.5640" />
+        <MountPoint Side="Top" StartX="0.1861" EndX="4.8139" StartY="1.5640" EndY="1.8760" />
+        <MountPoint Side="Top" StartX="0.0833" EndX="4.9167" StartY="1.8760" EndY="2.1880" />
+        <MountPoint Side="Top" StartX="0.0236" EndX="4.9764" StartY="2.1880" EndY="2.5000" />
+        <MountPoint Side="Top" StartX="0.0236" EndX="4.9764" StartY="2.5000" EndY="2.8120" />
+        <MountPoint Side="Top" StartX="0.0833" EndX="4.9167" StartY="2.8120" EndY="3.1240" />
+        <MountPoint Side="Top" StartX="0.1861" EndX="4.8139" StartY="3.1240" EndY="3.4360" />
+        <MountPoint Side="Top" StartX="0.3384" EndX="4.6616" StartY="3.4360" EndY="3.7480" />
+        <MountPoint Side="Top" StartX="0.5516" EndX="4.4484" StartY="3.7480" EndY="4.0600" />
+        <MountPoint Side="Top" StartX="0.8491" EndX="4.1509" StartY="4.0600" EndY="4.3720" />
+        <MountPoint Side="Top" StartX="1.2916" EndX="3.7084" StartY="4.3720" EndY="4.6840" />
+        <MountPoint Side="Front" StartX="2" EndX="3" StartY="0" EndY="1" />
+        <MountPoint Side="Back" StartX="2" EndX="3" StartY="0" EndY="1" />
+        <MountPoint Side="Left" StartX="2" EndX="3" StartY="0" EndY="1" />
+        <MountPoint Side="Right" StartX="2" EndX="3" StartY="0" EndY="1" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_ReactorHousing_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_ReactorHousing_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_ReactorHousing_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryReactorAdapter</SubtypeId>
+      </Id>
+      <DisplayName>Arcane PRIMARY Reactor adapter</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryReactorAdapter.dds</Icon>
+      <Description>Closed-loop thermal PRIMARY / Reactor adapter. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryReactorAdapter_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryReactorAdapter</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryReactorAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryReactorAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_9925267823a3/APT_PrimaryReactorAdapter_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+  </CubeBlocks>
+</Definitions>

@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "revision": 2,
+  "latest_ui_images": 338,
+  "detail_triplets": 102,
+  "detail_images": 306,
+  "whole_models": 30,
+  "assemblies": 2,
+  "distances_m": [
+    1.8,
+    2.4,
+    3.0
+  ],
+  "lens_mm": 48,
+  "checks": [
+    "fresh UI captures exist",
+    "actual views match latest plan",
+    "fixed target, lens and lighting within each triplet"
+  ],
+  "limits": "Blender authoring and visual review; no native export or in-game validation."
+}

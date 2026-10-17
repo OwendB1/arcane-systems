@@ -1,9 +1,14 @@
 # Modular Brayton: current concept review
 
+Repository cleanup, 16 October 2026: generated captures/logs, the UI manifest and
+`history-before-brayton-only/` reports were pruned. The descriptions below record
+the earlier concept review. The concept blend and compact audit/source reports
+remain; current production work lives in `assets/arcane-thermal-models.blend`.
+
 15 October 2026. Official Blender MCP, existing Blender 5.2.1 LTS window.
 Current file: `assets/arcane-thermal-concepts.blend`, saved and reopened with
-`Thermal / Parallel train bank` active. The prior study is retained only as an
-undo checkpoint and under `history-before-brayton-only/`; it is not current design.
+`Thermal / Parallel train bank` active. The prior study is retained only as a
+Blender undo checkpoint; it is not current design.
 
 Current component set: 11 editable concepts, 1,127 meshes. The former converter,
 magnet equipment, utility ports and combined cooler are absent from active models.

@@ -1,9 +1,13 @@
 # Arcane Energy Core
 
+Generated review images and recordings were pruned on 16 October 2026. Review
+descriptions below are historical; maintained blends, checkpoints and compact
+audit/source reports remain in the repository.
+
 The pillar installation uses a **3×3×3 large-grid core**, with separate
 **1×3×1 large-grid capacity, transfer and stabilizer pillars**. The modules retain
 a full-block footprint, with curved backs fitted around the chamber. The seven blocks have models,
-icons and three construction stages each. [Model and stage sheet](validation/energy-core-stages.png).
+icons and three construction stages each. Model and stage sheet.
 
 The storage family shares the reactor's segmented round housings, machined
 collars, clear curved chamber glass and recessed service hardware. All four core
@@ -183,7 +187,7 @@ UV origins, restrained edge wear, supported side welds and isolation/lift
 markings. Standard module warning strips are yellow; advanced strips are white.
 Existing native paint masks, normal/gloss textures and atlas UVs remain in use.
 The construction copies carry the matching surface treatment.
-[Texture preview](validation/native-texture-detail/capacity-1.8m.png) and
+Texture preview and
 [geometry/backing audit](validation/native-texture-detail/energy-audit.json).
 
 The current main-model authoring pass is saved in `assets/arcane-energy-core.blend`,
@@ -204,9 +208,9 @@ Review-copy offsets were repaired by evaluating both scenes before reading
 transforms. All eleven assembly copies retain matching poses after reload; the
 production file contains only the authoring scenes. Collision, subparts, LODs and
 construction geometry were verified unchanged during the main-model sync.
-[Main-model sheet](validation/energy-loop-03/main-detail-sheet.png),
-[repaired comparison](validation/energy-loop-02/offset-repaired-comparison.png),
-[service-door close-up](validation/energy-loop-03/ArcanePower_EnergyTransferAdvanced-service.png)
+Main-model sheet,
+repaired comparison,
+service-door close-up
 and [geometry audit](validation/energy-geometry-audit.json).
 The 15 October dock pass replaces separate socket rails with closed clipped
 receivers and opaque native-port backs. Three compact tapered housings per core
@@ -231,10 +235,10 @@ rays, 144 door-ledge and 192 louver-end support samples, 48 screw seating checks
 pass fresh-load checks. No game reload or live validation of this art revision
 has been performed. Further LOD work remains deferred. The updated battery
 construction stages below are exported in the same active family.
-[Top saddle](validation/energy-core-loop-05/mounted-root-top.png),
-[bottom saddle](validation/energy-core-loop-05/mounted-root-bottom.png),
-[service recess](validation/energy-core-loop-05/service-panel-micro.png),
-[engineer-scale inspection](validation/energy-core-loop-05/engineer-scale.png)
+Top saddle,
+bottom saddle,
+service recess,
+engineer-scale inspection
 and [native export proof](validation/energy-main-export.json).
 
 Stored fraction controls field radius, glow intensity and four fill markers.
@@ -294,7 +298,7 @@ changing across six samples, with both native upgrade connections and the
 to retain its state colour while glowing. All seven models, 21 construction
 stages and the 259-file release package passed their checks. See
 [detail evidence](validation/energy-detail.json) and the
-[live view](validation/energy-detail-live.png).
+live view.
 
 The three-cell pillar revision passed native model/socket and all 21 stage checks,
 plus placement policy checks across all 24 cardinal orientations. The isolated
@@ -302,7 +306,7 @@ pillar world verified both native upgrade connections, 111,000 MWh mixed capacit
 a 1 TW ceiling, the 12 MW test load and front-stabilizer disable/re-enable. The
 original compact save also reloaded with its geometry, connections and charge
 preserved. See [pillar evidence](validation/energy-pillars.json), the
-[live bank](validation/energy-pillars-live.png) and the updated blueprint above.
+live bank and the updated blueprint above.
 
 
 The 14 October refinement passed native socket/mating and model-bound checks for
@@ -311,7 +315,7 @@ In the isolated survival world, both native upgrade modules report one connectio
 the mixed bank retains 111,000 MWh capacity, a 1 TW ceiling and supplies the native
 12 MW test load. Stabilizer disable/re-enable and saved-charge reload also passed.
 See [refinement evidence](validation/energy-refinement.json) and the
-[in-game view](validation/energy-refined-live.png). This remains a single-client check.
+in-game view. This remains a single-client check.
 
 The SE compatibility build passes with zero warnings/errors. Focused policy
 checks cover tiers, total transfer allocation, native output resets, reserve

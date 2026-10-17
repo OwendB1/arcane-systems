@@ -1,0 +1,184 @@
+{
+  "status": "passed",
+  "cause": "Mixed UV channel names were zero-filled by batch join. Normalize each source render UV before joining; repair reduction slivers.",
+  "references": [
+    {
+      "reference": "APT_BraytonTrainUpgraded_M_BS2",
+      "main_triangles": 128901,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 70823
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 33512
+        }
+      ]
+    },
+    {
+      "reference": "APT_BraytonTrainUpgraded_M_BS3",
+      "main_triangles": 131959,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 71580
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 33856
+        }
+      ]
+    },
+    {
+      "reference": "APT_BraytonTrain_M_BS2",
+      "main_triangles": 127989,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 70218
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 33083
+        }
+      ]
+    },
+    {
+      "reference": "APT_BraytonTrain_M_BS3",
+      "main_triangles": 131047,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 70975
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 33427
+        }
+      ]
+    },
+    {
+      "reference": "APT_CO2HpCross_M_BS2",
+      "main_triangles": 9920,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 35,
+          "triangles": 5180
+        },
+        {
+          "level": 2,
+          "distance_m": 90,
+          "triangles": 2210
+        }
+      ]
+    },
+    {
+      "reference": "APT_CO2HpCross_M_BS3",
+      "main_triangles": 9920,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 35,
+          "triangles": 5180
+        },
+        {
+          "level": 2,
+          "distance_m": 90,
+          "triangles": 2210
+        }
+      ]
+    },
+    {
+      "reference": "APT_CO2LpCross_M_BS2",
+      "main_triangles": 9976,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 35,
+          "triangles": 5212
+        },
+        {
+          "level": 2,
+          "distance_m": 90,
+          "triangles": 2204
+        }
+      ]
+    },
+    {
+      "reference": "APT_CO2LpCross_M_BS3",
+      "main_triangles": 9976,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 35,
+          "triangles": 5212
+        },
+        {
+          "level": 2,
+          "distance_m": 90,
+          "triangles": 2204
+        }
+      ]
+    },
+    {
+      "reference": "APT_ReactorHousing_M",
+      "main_triangles": 187618,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 136424
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 106371
+        }
+      ]
+    },
+    {
+      "reference": "APT_ReactorHousing_M_BS2",
+      "main_triangles": 167906,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 100991
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 55335
+        }
+      ]
+    },
+    {
+      "reference": "APT_ReactorHousing_M_BS3",
+      "main_triangles": 173706,
+      "lods": [
+        {
+          "level": 1,
+          "distance_m": 75,
+          "triangles": 104908
+        },
+        {
+          "level": 2,
+          "distance_m": 150,
+          "triangles": 58219
+        }
+      ]
+    }
+  ],
+  "native_import_meshes": 270,
+  "native_uv_errors": 0
+}

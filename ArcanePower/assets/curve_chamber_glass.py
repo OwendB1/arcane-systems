@@ -1,4 +1,4 @@
-"""Run after fit_three_cells.py in Blender: seated curved, low-reflection glass."""
+"""Seat curved, low-reflection glass on the saved 5x3x5 reactor in Blender."""
 import bpy
 import importlib
 import math

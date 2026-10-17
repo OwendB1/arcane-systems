@@ -1,4 +1,6 @@
-// app.js build v1018
+// app.js build v1021
+import { installFieldHelp } from "./field-help.js";
+import { installWorkspace, renderWorkspaceStatus, restoreCoreTab } from "./workspace.js";
 import {
   VALID_DIRECTIONS,
   VALID_ALLOWED_DIRECTIONS,
@@ -17,7 +19,6 @@ const state = {
   outputUpgradeModuleDirectory: "Data/UpgradeModules/",
   selectedGroupIndex: 0,
   selectedManifestGroupIndex: 0,
-  selectedManifestCoreEntryIndex: 0,
   selectedCoreIndex: 0,
   selectedUpgradeModuleIndex: 0,
   noCoreCore: null,
@@ -260,13 +261,14 @@ function persistDraftToStorage() {
       outputUpgradeModuleDirectory: state.outputUpgradeModuleDirectory,
       selectedGroupIndex: state.selectedGroupIndex,
       selectedManifestGroupIndex: state.selectedManifestGroupIndex,
-      selectedManifestCoreEntryIndex: state.selectedManifestCoreEntryIndex,
       selectedCoreIndex: state.selectedCoreIndex,
       selectedUpgradeModuleIndex: state.selectedUpgradeModuleIndex,
       expandedLimitPanelsByCore: state.expandedLimitPanelsByCore
     };
     localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(payload));
+    ids("draftStatus").textContent = "Draft saved locally";
   } catch (error) {
+    ids("draftStatus").textContent = "Autosave unavailable";
     console.warn("Failed to persist configurator draft to local storage.", error);
   }
 }
@@ -302,7 +304,6 @@ function restoreDraftFromStorage() {
     state.outputUpgradeModuleDirectory = normalizeOutputDirectory(parsedDraft.outputUpgradeModuleDirectory, "Data/UpgradeModules/");
     state.selectedGroupIndex = Number.isInteger(parsedDraft.selectedGroupIndex) ? parsedDraft.selectedGroupIndex : 0;
     state.selectedManifestGroupIndex = Number.isInteger(parsedDraft.selectedManifestGroupIndex) ? parsedDraft.selectedManifestGroupIndex : 0;
-    state.selectedManifestCoreEntryIndex = Number.isInteger(parsedDraft.selectedManifestCoreEntryIndex) ? parsedDraft.selectedManifestCoreEntryIndex : 0;
     state.selectedCoreIndex = Number.isInteger(parsedDraft.selectedCoreIndex) ? parsedDraft.selectedCoreIndex : 0;
     state.selectedUpgradeModuleIndex = Number.isInteger(parsedDraft.selectedUpgradeModuleIndex) ? parsedDraft.selectedUpgradeModuleIndex : 0;
     state.expandedLimitPanelsByCore = parsedDraft.expandedLimitPanelsByCore && typeof parsedDraft.expandedLimitPanelsByCore === "object"
@@ -575,6 +576,7 @@ function renderEditorValidation(validation = validateEditorConfig(state)) {
   ["downloadAllFiles", "downloadNoCore", "downloadGroups", "downloadManifest", "downloadCores"]
     .forEach((id) => { ids(id).disabled = blocked; });
   ids("updateSelectedFolder").disabled = blocked || !_selectedUpdateFolderHandle;
+  renderWorkspaceStatus(state, validation);
   return validation;
 }
 
@@ -774,9 +776,6 @@ function ensureValidSelectedIndexes() {
   state.selectedManifestGroupIndex = state.manifestGroups.length
     ? Math.min(Math.max(state.selectedManifestGroupIndex, 0), state.manifestGroups.length - 1)
     : -1;
-  state.selectedManifestCoreEntryIndex = state.shipCores.length
-    ? Math.min(Math.max(state.selectedManifestCoreEntryIndex, 0), state.shipCores.length - 1)
-    : -1;
 
   if (!state.noCoreCore) state.noCoreCore = createDefaultNoCore();
 
@@ -914,7 +913,6 @@ function removeManifestGroupReferences(groupNameToRemove) {
 function addShipCore(core = createDefaultCore()) {
   state.shipCores.push(cloneShipCore(core));
   state.selectedCoreIndex = state.shipCores.length;
-  state.selectedManifestCoreEntryIndex = state.shipCores.length - 1;
   renderManifestGroups();
   renderShipCores();
 }
@@ -1031,7 +1029,6 @@ function resetEditor(seed = true, options = {}) {
   state.outputUpgradeModuleDirectory = "Data/UpgradeModules/";
   state.selectedGroupIndex = 0;
   state.selectedManifestGroupIndex = 0;
-  state.selectedManifestCoreEntryIndex = 0;
   state.selectedCoreIndex = 0;
   state.selectedUpgradeModuleIndex = 0;
   state.noCoreCore = createDefaultNoCore();
@@ -1127,18 +1124,15 @@ function renderBlockGroups() {
   `;
 }
 
-function manifestGroupCoreCheckboxes(groupIndex) {
+function manifestGroupCoreMembers(groupIndex) {
   const manifestGroup = state.manifestGroups[groupIndex];
   if (!manifestGroup) return "";
 
   return state.shipCores
-    .map((core, idx) => {
-      const labelBase = core.subtypeId?.trim() || core.uniqueName?.trim() || `Unnamed Core ${idx + 1}`;
-      const isSelected = normalizeManifestGroupNames(core.manifestGroups || []).includes(manifestGroup.name);
-      return `<label class="group-checklist-item ${isSelected ? "selected" : ""}">
-      <input data-action="manifest-core-toggle" data-gm="${groupIndex}" data-c="${idx + 1}" type="checkbox" ${isSelected ? "checked" : ""} />
-      <span>${escapeXml(labelBase)}</span>
-    </label>`;
+    .filter((core) => normalizeManifestGroupNames(core.manifestGroups || []).includes(manifestGroup.name))
+    .map((core) => {
+      const label = core.subtypeId?.trim() || core.uniqueName?.trim() || "Unnamed Core";
+      return `<li>${escapeXml(label)}</li>`;
     })
     .join("");
 }
@@ -1188,72 +1182,39 @@ function crossConnectorPunishmentWhitelistItemForCore(coreIndex, core) {
   return `<div class="group-checklist">
     <label class="group-checklist-item ${isSelected ? "selected" : ""}">
       <input data-action="core-cross-connector-punishment-whitelist-toggle" data-c="${coreIndex}" type="checkbox" ${isSelected ? "checked" : ""} />
-      <span>${escapeXml(label)}</span>
+      <span>Exempt ${escapeXml(label)} from no-core imports</span>
     </label>
   </div>`;
 }
 
-function manifestCoreEntryLabel(core, idx) {
-  const labelBase = core?.subtypeId?.trim() || core?.uniqueName?.trim() || `Unnamed Core ${idx + 1}`;
-  return `${idx + 1}. ${labelBase}`;
-}
-
-function manifestCoreEntrySelector() {
-  if (!state.shipCores.length) {
-    return "";
-  }
-
-  return `
-    <div class="menu-controls">
-      <select data-action="selected-manifest-core-entry" aria-label="Selected Manifest Core Entry">
-        ${state.shipCores
-          .map((core, idx) => `<option value="${idx}" ${idx === state.selectedManifestCoreEntryIndex ? "selected" : ""}>${escapeXml(manifestCoreEntryLabel(core, idx))}</option>`)
-          .join("")}
-      </select>
-    </div>
-  `;
-}
-
-function manifestCoreEntryEditor() {
-  if (!state.shipCores.length) {
-    return `<p class="muted">Add ship cores to configure manifest entries.</p>`;
-  }
-
-  ensureValidSelectedIndexes();
-
-  const idx = state.selectedManifestCoreEntryIndex;
-  const core = state.shipCores[idx];
-  if (!core) {
-    return `<p class="muted">Add ship cores to configure manifest entries.</p>`;
-  }
-
-  const selectorIndex = idx + 1;
-  const coreLabel = core.subtypeId?.trim() || core.uniqueName?.trim() || `Unnamed Core ${idx + 1}`;
-  const manifestPath = buildCoreOutputPath(core, deriveCoreFilename(core));
+function coreManifestSettings(coreIndex, core) {
   const manifestGroupsMarkup = state.manifestGroups.filter((group) => group.name.trim()).length
-    ? `<div class="group-checklist">${manifestGroupCheckboxesForCore(selectorIndex, core.manifestGroups || [])}</div>`
-    : `<p class="muted">No manifest groups defined yet.</p>`;
-  const blacklistMarkup = state.shipCores.filter((candidate, candidateIdx) => candidateIdx !== idx && String(candidate?.subtypeId ?? "").trim()).length
-    ? `<div class="group-checklist">${manifestBlacklistCheckboxesForCore(selectorIndex, core.manifestBlacklistedCoreSubtypeIds || [])}</div>`
-    : `<p class="muted">No other ship core subtypes available to blacklist yet.</p>`;
+    || core.manifestGroups?.length
+    ? `<div class="group-checklist">${manifestGroupCheckboxesForCore(coreIndex, core.manifestGroups || [])}</div>`
+    : `<p class="muted">No shared core caps defined yet. <a href="#sharedCoreCaps">Add a manifest group</a> to create one.</p>`;
+  const blacklistMarkup = state.shipCores.some((candidate, idx) => idx !== coreIndex - 1 && String(candidate?.subtypeId ?? "").trim())
+    ? `<div class="group-checklist">${manifestBlacklistCheckboxesForCore(coreIndex, core.manifestBlacklistedCoreSubtypeIds || [])}</div>`
+    : `<p class="muted">Add another ship core with a subtype to choose a blacklist target.</p>`;
 
   return `
-    <div class="card">
-      <div class="row wrap">
-        <strong>${escapeXml(coreLabel)}</strong>
-        <span class="muted">${escapeXml(manifestPath)}</span>
-      </div>
-      <h4>Manifest Groups</h4>
-      ${manifestGroupsMarkup}
-      <h4>Core Selection</h4>
-      <div class="row wrap">
-        <label class="inline">CoreSelectionPriority <input data-action="core-selection-priority" data-c="${selectorIndex}" class="small" type="number" value="${Number(core.coreSelectionPriority) || 0}" /></label>
-      </div>
-      <h4>Connector Blacklist</h4>
-      <p class="muted">Lower-ranked blacklisted core groups count against this core's non-critical limits.</p>
-      ${blacklistMarkup}
-      <h4>No-core CrossConnectorPunishment Whitelist</h4>
-      ${crossConnectorPunishmentWhitelistItemForCore(selectorIndex, core)}
+    <div class="core-manifest-settings">
+      <section class="card" aria-labelledby="coreSharedCapsHeading">
+        <h4 id="coreSharedCapsHeading">Shared core caps</h4>
+        <p class="muted">Choose the manifest groups this core counts toward. Each group's shared MaxCount applies.</p>
+        ${manifestGroupsMarkup}
+        <p><a href="#sharedCoreCaps">Manage shared caps</a></p>
+      </section>
+      <section class="card" aria-labelledby="coreConnectorHeading">
+        <h4 id="coreConnectorHeading">Docking and connector limits</h4>
+        <label class="modifier-field">Connector blacklist priority (CoreSelectionPriority)
+          <input data-action="core-selection-priority" data-c="${coreIndex}" class="small" type="number" value="${Number(core.coreSelectionPriority) || 0}" />
+        </label>
+        <p class="muted">Higher priority wins; equal priorities compare group block count. Only blacklisted, lower-ranked groups share this core's non-critical limits.</p>
+        <h5>Core subtypes to blacklist</h5>
+        ${blacklistMarkup}
+        <h5>No-core imports</h5>
+        ${crossConnectorPunishmentWhitelistItemForCore(coreIndex, core)}
+      </section>
     </div>
   `;
 }
@@ -1290,21 +1251,16 @@ function renderManifestGroups() {
           <button data-action="duplicate-manifest-group" data-gm="${groupIndex}">Duplicate Group</button>
           <button data-action="remove-manifest-group" data-gm="${groupIndex}">Delete Group</button>
         </div>
-        <p class="muted">Assigned ship cores: ${assignedCoreCount}</p>
-        ${state.shipCores.length
-          ? `<div class="group-checklist">${manifestGroupCoreCheckboxes(groupIndex)}</div>`
-          : `<p class="muted">Add ship cores, then assign them to this manifest group here.</p>`}
+        <h4>Member core profiles (${assignedCoreCount})</h4>
+        ${assignedCoreCount
+          ? `<ul>${manifestGroupCoreMembers(groupIndex)}</ul>`
+          : `<p class="muted">No core profiles assigned yet.</p>`}
+        <p class="muted">Assign membership under <a href="#coreProfiles" data-open-core-tab="docking">Ship cores → Docking & shared caps</a>.</p>
       </div>
     `;
   }
 
-  ids("manifestGroups").innerHTML = `
-    ${manifestGroupEditor}
-    <h3>Manifest Core Entries</h3>
-    <p class="muted">Configure per-core manifest groups and connector blacklist entries here.</p>
-    ${manifestCoreEntrySelector()}
-    ${manifestCoreEntryEditor()}
-  `;
+  ids("manifestGroups").innerHTML = manifestGroupEditor;
 }
 
 function blockGroupCheckboxes(coreIndex, limitIndex, selected = [], searchText = "",
@@ -1522,34 +1478,42 @@ function renderShipCores() {
   const core = getCoreBySelectorIndex(coreIndex);
   if (!core) return;
   const isNoCore = coreIndex === 0;
-  if (isNoCore) {
-    core.outputDirectory = "";
-  }
+  if (isNoCore) core.outputDirectory = "";
   const expandedLimitPanels = normalizeExpandedLimitPanelsForCore(coreIndex);
+  const tabs = [["overview", "Overview"], ["limits", "Block limits"], ["performance", "Performance"], ["abilities", "Abilities"],
+    ...(isNoCore ? [] : [["docking", "Docking & shared caps"]])];
 
   ids("shipCores").innerHTML = `
-    <div class="card">
-      <div class="row wrap">
-        <label class="inline">Core Subtype <input data-action="core-subtype" data-c="${coreIndex}" class="small" placeholder="SubtypeId" value="${escapeXml(core.subtypeId)}" /></label>
-        <label class="inline">Core Name <input data-action="core-unique" data-c="${coreIndex}" class="small" placeholder="UniqueName" value="${escapeXml(core.uniqueName)}" /></label>
-        <label class="inline">Output Folder <input data-action="core-output-directory" data-c="${coreIndex}" class="small${isNoCore ? " no-core-output-disabled" : ""}" placeholder="${isNoCore ? "" : "Data/Cores/"}" value="${escapeXml(isNoCore ? "" : core.outputDirectory)}" ${isNoCore ? "disabled title=\"No Core output always stays in the root folder.\"" : ""} /></label>
-        <label class="inline">Mobility
-          <select data-action="core-mobility" data-c="${coreIndex}" class="small">
-            ${["Static", "Mobile", "Both"].map((value) => `<option ${core.mobilityType === value ? "selected" : ""}>${value}</option>`).join("")}
-          </select>
-        </label>
-        <button data-action="duplicate-core" data-c="${coreIndex}">Duplicate Core</button>
-        ${isNoCore
-    ? `<button data-action="reset-no-core" data-c="${coreIndex}">Reset No Core</button>`
-    : `<button data-action="remove-core" data-c="${coreIndex}">Delete Core</button>`}
+    <div class="core-editor-heading">
+      <div><h2>${escapeXml(core.uniqueName || core.subtypeId || "Unnamed core")}</h2><p>${isNoCore ? "Fallback rules for grids without an active core" : escapeXml(core.subtypeId || "Set a core subtype to identify this profile")}</p></div>
+      <div class="editor-actions">
+        <button data-action="duplicate-core" data-c="${coreIndex}">Duplicate core</button>
+        ${isNoCore ? `<button data-action="reset-no-core" data-c="${coreIndex}">Reset No Core</button>` : `<button data-action="remove-core" data-c="${coreIndex}">Delete core</button>`}
       </div>
-      <div class="row wrap">
+    </div>
+    <div class="core-tabs" role="tablist" aria-label="Core settings">
+      ${tabs.map(([key, label]) => `<button type="button" id="core-tab-${key}" data-core-tab="${key}" role="tab" aria-controls="core-panel-${key}" aria-selected="false">${label}${key === "limits" ? ` <span class="tab-count">${core.blockLimits.length}</span>` : ""}</button>`).join("")}
+    </div>
+    <div id="core-panel-overview" data-core-panel="overview" role="tabpanel" aria-labelledby="core-tab-overview">
+      <section class="form-section">
+        <h3>Identity & placement</h3><p class="muted">The block definition, display name, and where this profile can operate.</p>
+        <div class="form-grid">
+          <label class="modifier-field">Core Subtype <input data-action="core-subtype" data-c="${coreIndex}" placeholder="SubtypeId" value="${escapeXml(core.subtypeId)}" /></label>
+          <label class="modifier-field">Core Name <input data-action="core-unique" data-c="${coreIndex}" placeholder="UniqueName" value="${escapeXml(core.uniqueName)}" /></label>
+          <label class="modifier-field">Output Folder <input data-action="core-output-directory" data-c="${coreIndex}" placeholder="Data/Cores/" value="${escapeXml(core.outputDirectory)}" ${isNoCore ? "disabled" : ""} /></label>
+          <label class="modifier-field">Mobility <select data-action="core-mobility" data-c="${coreIndex}">${["Static", "Mobile", "Both"].map((value) => `<option ${core.mobilityType === value ? "selected" : ""}>${value}</option>`).join("")}</select></label>
+        </div>
+      </section>
+      <section class="form-section"><h3>Grid capacity</h3><p class="muted">Physical capacity of the mechanical group. Negative values disable optional caps.</p>
+        <div class="row wrap">
         <label class="inline">MaxBlocks <input data-action="core-maxblocks" data-c="${coreIndex}" class="small" type="number" value="${core.maxBlocks}" /></label>
         <label class="inline">MinBlocks <input data-action="core-minblocks" data-c="${coreIndex}" class="small" type="number" value="${core.minBlocks}" /></label>
         <label class="inline">MaxMass <input data-action="core-maxmass" data-c="${coreIndex}" class="small" type="number" value="${core.maxMass}" /></label>
         <label class="inline">MaxPCU <input data-action="core-maxpcu" data-c="${coreIndex}" class="small" type="number" value="${core.maxPcu}" /></label>
       </div>
-      <div class="row wrap">
+      </section>
+      <section class="form-section"><h3>Ownership & faction requirements</h3><p class="muted">Who can place this core and how many their player or faction can own.</p>
+        <div class="row wrap">
         <label class="inline">MaxBackupCores <input data-action="core-maxbackupcores" data-c="${coreIndex}" class="small" type="number" value="${core.maxBackupCores}" /></label>
         <label class="inline">MaxPerPlayer <input data-action="core-maxpp" data-c="${coreIndex}" class="small" type="number" value="${core.maxPerPlayer}" /></label>
         <label class="inline">MaxPerFaction <input data-action="core-maxpf" data-c="${coreIndex}" class="small" type="number" value="${core.maxPerFaction}" /></label>
@@ -1562,45 +1526,15 @@ function renderShipCores() {
         <label class="inline">MinPlayers <input data-action="core-minplayers" data-c="${coreIndex}" class="small" type="number" value="${core.minPerFaction}" /></label>
         <label class="inline">MaxPlayers <input data-action="core-maxplayers" data-c="${coreIndex}" class="small" type="number" value="${core.maxPlayers}" /></label>
       </div>
-      <div class="row wrap">
-        <label class="inline">ForceBroadcast <input data-action="core-fb" data-c="${coreIndex}" type="checkbox" ${core.forceBroadcast ? "checked" : ""}/></label>
-        <label class="inline">BroadcastRange <input data-action="core-fbr" data-c="${coreIndex}" class="small" type="number" value="${core.forceBroadcastRange}" /></label>
-        <label class="inline">SpeedBoostEnabled <input data-action="core-speedboost" data-c="${coreIndex}" type="checkbox" ${core.speedBoostEnabled ? "checked" : ""}/></label>
-        <label class="inline">EnableActiveDefense <input data-action="core-enable-active-defense" data-c="${coreIndex}" type="checkbox" ${core.enableActiveDefenseModifiers ? "checked" : ""}/></label>
-        <label class="inline">SpeedLimitType
-          <select data-action="core-speed-limit-type" data-c="${coreIndex}" class="small">
-            ${["Normal", "Friction"].map((value) => `<option ${core.speedLimitType === value ? "selected" : ""}>${value}</option>`).join("")}
-          </select>
-        </label>
-        <label class="inline">SpeedOverrideMode
-          <select data-action="core-speed-override-mode" data-c="${coreIndex}" class="small">
-            ${["None", "OnlyIfHeavier", "Priority", "Any"].map((value) => `<option ${core.speedOverrideMode === value ? "selected" : ""}>${value}</option>`).join("")}
-          </select>
-        </label>
-        <label class="inline">SpeedOverridePriority <input data-action="core-speed-override-priority" data-c="${coreIndex}" class="small" type="number" value="${core.speedOverridePriority}" /></label>
-        <button data-action="add-limit" data-c="${coreIndex}">Add Block Limit</button>
-        <button data-action="add-core-upgrade-allowance" data-c="${coreIndex}">Add Allowed Upgrade Module</button>
-      </div>
-      <div class="row wrap">
-        <label class="inline">PowerOverclockEnabled <input data-action="core-power-overclock-enabled" data-c="${coreIndex}" type="checkbox" ${core.powerOverclockEnabled ? "checked" : ""}/></label>
-        <label class="inline">Multiplier <input data-action="core-power-overclock-multiplier" data-c="${coreIndex}" class="small" type="number" step="0.01" value="${core.powerOverclockMultiplier}" /></label>
-        <label class="inline">Duration <input data-action="core-power-overclock-duration" data-c="${coreIndex}" class="small" type="number" step="0.1" value="${core.powerOverclockDuration}" /></label>
-        <label class="inline">Cooldown <input data-action="core-power-overclock-cooldown" data-c="${coreIndex}" class="small" type="number" step="0.1" value="${core.powerOverclockCooldown}" /></label>
-        <label class="inline">Damage/second <input data-action="core-power-overclock-damage" data-c="${coreIndex}" class="small" type="number" step="0.1" value="${core.powerOverclockDamagePerSecond}" /></label>
-      </div>
+      </section>
+      <section class="form-section"><h3>Broadcasting</h3>
+        <div class="row wrap">
+          <label class="inline">ForceBroadcast <input data-action="core-fb" data-c="${coreIndex}" type="checkbox" ${core.forceBroadcast ? "checked" : ""}/></label>
+          <label class="inline">BroadcastRange <input data-action="core-fbr" data-c="${coreIndex}" type="number" value="${core.forceBroadcastRange}" /></label>
+        </div>
+      </section>
+      <section class="form-section"><div class="section-heading"><h3>Allowed upgrade modules</h3><button data-action="add-core-upgrade-allowance" data-c="${coreIndex}">+ Add allowance</button></div>
 
-      ${isNoCore ? "" : `
-      <h4>Manifest Groups</h4>
-      ${state.manifestGroups.filter((group) => group.name.trim()).length
-        ? `<div class="group-checklist">${manifestGroupCheckboxesForCore(coreIndex, core.manifestGroups || [])}</div>`
-        : `<p class="muted">No manifest groups defined yet. Add them in the Manifest Groups section.</p>`}
-      <h4>Core Selection</h4>
-      <div class="row wrap">
-        <label class="inline">CoreSelectionPriority <input data-action="core-selection-priority" data-c="${coreIndex}" class="small" type="number" value="${Number(core.coreSelectionPriority) || 0}" /></label>
-      </div>
-      `}
-
-      <h4>Allowed Upgrade Modules</h4>
       ${(core.allowedUpgradeModules || []).map((entry, allowanceIndex) => `
         <div class="row wrap">
           <label class="inline">TypeId <input data-action="core-upgrade-type" data-c="${coreIndex}" data-au="${allowanceIndex}" class="small" placeholder="blank = UpgradeModule" value="${escapeXml(entry.typeId || "")}" /></label>
@@ -1611,31 +1545,13 @@ function renderShipCores() {
         </div>
       `).join("")}
 
-      <div class="modifier-row four-columns">
-        ${modifierFieldColumn({
-          title: "Grid Modifiers",
-          action: "core-modifier-grid",
-          dataAttrs: `data-c="${coreIndex}"`,
-          fields: mapModifierFields(core.modifiers, DEFAULT_GRID_MODIFIERS)
-        })}
-        ${speedModifierColumn({
-          coreIndex,
-          modifiers: core.speedModifiers
-        })}
-        ${modifierFieldColumn({
-          title: "Passive Defense Modifiers",
-          action: "core-modifier-passive-defense",
-          dataAttrs: `data-c="${coreIndex}"`,
-          fields: mapModifierFields(core.passiveDefenseModifiers, DEFAULT_DEFENSE_MODIFIERS)
-        })}
-        ${modifierFieldColumn({
-          title: "Active Defense Modifiers",
-          action: "core-modifier-active-defense",
-          dataAttrs: `data-c="${coreIndex}"`,
-          fields: mapModifierFields(core.activeDefenseModifiers, DEFAULT_DEFENSE_MODIFIERS)
-        })}
-      </div>
 
+        ${core.allowedUpgradeModules?.length ? "" : `<p class="muted">No modules allowed yet. Add an allowance to enable attached upgrades.</p>`}
+      </section>
+    </div>
+    <div id="core-panel-limits" data-core-panel="limits" role="tabpanel" aria-labelledby="core-tab-limits">
+      <div class="section-heading"><div><h3>Block limits</h3><p class="muted">Weighted caps, directional budgets, and enforcement rules.</p></div><button data-action="add-limit" data-c="${coreIndex}" class="primary">+ Add block limit</button></div>
+      ${core.blockLimits.length ? "" : `<div class="notice">No block limits yet. Add a limit and choose the reusable block groups it should count.</div>`}
       ${core.blockLimits.map((limit, limitIndex) => `
         <details class="card block-limit-panel" data-action="limit-toggle" data-c="${coreIndex}" data-l="${limitIndex}" ${expandedLimitPanels.includes(limitIndex) ? "open" : ""}>
           <summary class="block-limit-summary ${Array.isArray(limit.blockGroups) && limit.blockGroups.length === 0 ? "block-limit-summary--missing-groups" : ""} ${limitNeedsDirectionWarning(limit) ? "block-limit-summary--warning" : ""}">${escapeXml(limit.name?.trim() || `Block Limit ${limitIndex + 1}`)}</summary>
@@ -1692,7 +1608,41 @@ function renderShipCores() {
         </details>
       `).join("")}
     </div>
+    <div id="core-panel-performance" data-core-panel="performance" role="tabpanel" aria-labelledby="core-tab-performance">
+      <section class="form-section"><h3>Speed enforcement</h3><p class="muted">Choose the speed model and how physically linked groups select their speed source.</p>
+        <div class="row wrap">
+          <label class="inline">SpeedLimitType <select data-action="core-speed-limit-type" data-c="${coreIndex}">${["Normal", "Friction"].map((value) => `<option ${core.speedLimitType === value ? "selected" : ""}>${value}</option>`).join("")}</select></label>
+          <label class="inline">SpeedOverrideMode <select data-action="core-speed-override-mode" data-c="${coreIndex}">${["None", "OnlyIfHeavier", "Priority", "Any"].map((value) => `<option ${core.speedOverrideMode === value ? "selected" : ""}>${value}</option>`).join("")}</select></label>
+          <label class="inline">SpeedOverridePriority <input data-action="core-speed-override-priority" data-c="${coreIndex}" type="number" value="${core.speedOverridePriority}" /></label>
+        </div>
+      </section>
+      <div class="modifier-row four-columns">
+        ${modifierFieldColumn({title: "Grid Modifiers", action: "core-modifier-grid", dataAttrs: `data-c="${coreIndex}"`, fields: mapModifierFields(core.modifiers, DEFAULT_GRID_MODIFIERS)})}
+        ${speedModifierColumn({coreIndex, modifiers: core.speedModifiers})}
+        ${modifierFieldColumn({title: "Passive Defense Modifiers", action: "core-modifier-passive-defense", dataAttrs: `data-c="${coreIndex}"`, fields: mapModifierFields(core.passiveDefenseModifiers, DEFAULT_DEFENSE_MODIFIERS)})}
+      </div>
+    </div>
+    <div id="core-panel-abilities" data-core-panel="abilities" role="tabpanel" aria-labelledby="core-tab-abilities">
+      <section class="form-section"><h3>Speed boost</h3><p class="muted">Boost speed, duration, and cooldown are configured in the Performance tab's Speed Modifiers.</p>
+        <label class="inline">SpeedBoostEnabled <input data-action="core-speedboost" data-c="${coreIndex}" type="checkbox" ${core.speedBoostEnabled ? "checked" : ""}/></label>
+      </section>
+      <section class="form-section"><h3>Power overclock</h3><p class="muted">Temporary reactor output, recovery time, and optional integrity wear.</p>
+        <div class="row wrap">
+        <label class="inline">PowerOverclockEnabled <input data-action="core-power-overclock-enabled" data-c="${coreIndex}" type="checkbox" ${core.powerOverclockEnabled ? "checked" : ""}/></label>
+        <label class="inline">Multiplier <input data-action="core-power-overclock-multiplier" data-c="${coreIndex}" class="small" type="number" step="0.01" value="${core.powerOverclockMultiplier}" /></label>
+        <label class="inline">Duration <input data-action="core-power-overclock-duration" data-c="${coreIndex}" class="small" type="number" step="0.1" value="${core.powerOverclockDuration}" /></label>
+        <label class="inline">Cooldown <input data-action="core-power-overclock-cooldown" data-c="${coreIndex}" class="small" type="number" step="0.1" value="${core.powerOverclockCooldown}" /></label>
+        <label class="inline">Damage/second <input data-action="core-power-overclock-damage" data-c="${coreIndex}" class="small" type="number" step="0.1" value="${core.powerOverclockDamagePerSecond}" /></label>
+      </div>
+      </section>
+      <section class="form-section"><h3>Active defense</h3><p class="muted">Temporarily replace passive damage multipliers with this profile.</p>
+        <label class="inline">EnableActiveDefense <input data-action="core-enable-active-defense" data-c="${coreIndex}" type="checkbox" ${core.enableActiveDefenseModifiers ? "checked" : ""}/></label>
+      </section>
+      ${modifierFieldColumn({title: "Active Defense Modifiers", action: "core-modifier-active-defense", dataAttrs: `data-c="${coreIndex}"`, fields: mapModifierFields(core.activeDefenseModifiers, DEFAULT_DEFENSE_MODIFIERS)})}
+    </div>
+    ${isNoCore ? "" : `<div id="core-panel-docking" data-core-panel="docking" role="tabpanel" aria-labelledby="core-tab-docking">${coreManifestSettings(coreIndex, core)}</div>`}
   `;
+  restoreCoreTab();
 }
 
 function renderLimitGroupChecklist(coreIndex, limitIndex) {
@@ -1756,13 +1706,13 @@ function renderUpgradeModules() {
         <label class="inline">Module Type <input data-action="upgrade-type" data-u="${moduleIndex}" class="small" placeholder="TypeId" value="${escapeXml(module.typeId || "UpgradeModule")}" /></label>
         <label class="inline">Module Subtype <input data-action="upgrade-subtype" data-u="${moduleIndex}" class="small" placeholder="SubtypeId" value="${escapeXml(module.subtypeId)}" /></label>
         <label class="inline">Module Name <input data-action="upgrade-unique" data-u="${moduleIndex}" class="small" placeholder="UniqueName" value="${escapeXml(module.uniqueName)}" /></label>
-        <button data-action="add-upgrade-modifier" data-u="${moduleIndex}">Add Modifier</button>
-        <button data-action="add-upgrade-limit-modifier" data-u="${moduleIndex}">Add Block Limit Modifier</button>
-        <button data-action="add-capacity-modifier" data-u="${moduleIndex}">Add Capacity Modifier</button>
         <button data-action="remove-upgrade-module" data-u="${moduleIndex}">Delete Upgrade Module</button>
       </div>
 
-      <h4>Stat Modifiers</h4>
+    </div>
+    <section class="card">
+      <div class="section-heading"><h3>Stat modifiers</h3><button data-action="add-upgrade-modifier" data-u="${moduleIndex}">+ Add modifier</button></div>
+      ${module.modifiers?.length ? "" : `<p class="muted">No stat changes. Add a modifier to change a core's performance.</p>`}
       ${(module.modifiers || []).map((modifier, modifierIndex) => `
         <div class="row wrap">
           <label class="inline">Stat
@@ -1780,7 +1730,9 @@ function renderUpgradeModules() {
         </div>
       `).join("")}
 
-      <h4>Block Limit Modifiers</h4>
+    </section>
+    <section class="card">
+      <div class="section-heading"><h3>Block limit modifiers</h3><button data-action="add-upgrade-limit-modifier" data-u="${moduleIndex}">+ Add limit modifier</button></div>
       <p class="muted">${escapeXml(blockLimitNameNote)}</p>
       ${(module.blockLimitModifiers || []).map((modifier, modifierIndex) => `
         <div class="row wrap">
@@ -1795,7 +1747,10 @@ function renderUpgradeModules() {
         </div>
       `).join("")}
 
-      <h4>Capacity Modifiers (MaxBlocks / MaxMass / MaxPCU)</h4>
+    </section>
+    <section class="card">
+      <div class="section-heading"><h3>Capacity modifiers</h3><button data-action="add-capacity-modifier" data-u="${moduleIndex}">+ Add capacity modifier</button></div>
+      <p class="muted">Adjust MaxBlocks, dry MaxMass, or MaxPCU on the receiving core.</p>
       ${(module.capacityModifiers || []).map((modifier, modifierIndex) => `
         <div class="row wrap">
           <label class="inline">Stat
@@ -1812,7 +1767,7 @@ function renderUpgradeModules() {
           <button data-action="remove-capacity-modifier" data-u="${moduleIndex}" data-cm="${modifierIndex}">Remove</button>
         </div>
       `).join("")}
-    </div>
+    </section>
   `;
 }
 
@@ -2746,7 +2701,6 @@ document.addEventListener("click", (event) => {
     state.shipCores.splice(shipCoreIndex, 1);
     shiftExpandedLimitPanelsAfterCoreRemoval(coreIndex);
     if (state.selectedCoreIndex >= totalCoreOptions()) state.selectedCoreIndex = totalCoreOptions() - 1;
-    if (state.selectedManifestCoreEntryIndex >= state.shipCores.length) state.selectedManifestCoreEntryIndex = state.shipCores.length - 1;
     didMutate = true;
   }
   if (action === "duplicate-core") {
@@ -2757,7 +2711,6 @@ document.addEventListener("click", (event) => {
       duplicatedCore.originalFileName = "";
       state.shipCores.unshift(duplicatedCore);
       state.selectedCoreIndex = 1;
-      state.selectedManifestCoreEntryIndex = 0;
 
       const shifted = {};
       Object.entries(state.expandedLimitPanelsByCore).forEach(([key, value]) => {
@@ -2782,7 +2735,6 @@ document.addEventListener("click", (event) => {
       state.expandedLimitPanelsByCore[coreIndex + 1] = [];
 
       state.selectedCoreIndex = coreIndex + 1;
-      state.selectedManifestCoreEntryIndex = shipCoreIndex + 1;
       didMutate = true;
     }
   }
@@ -2899,6 +2851,8 @@ document.addEventListener("input", (event) => {
   if (!selectedCore && (action.startsWith("core-") || action.startsWith("limit-"))) return;
   if (!selectedUpgrade && action.startsWith("upgrade-")) return;
 
+  if (action === "core-selection-priority") selectedCore.coreSelectionPriority = Number(target.value) || 0;
+
   if (action === "core-unique") {
     selectedCore.uniqueName = target.value;
     clearGeneratedFilenameForRenamedCore(coreIndex, selectedCore);
@@ -2956,7 +2910,7 @@ document.addEventListener("input", (event) => {
     updateDirectionBudgetStatus(coreIndex, limitIndex, limit);
   }
   if (action === "limit-max") updateDirectionBudgetStatus(coreIndex, limitIndex, selectedCore.blockLimits[limitIndex]);
-  if (action === "limit-visibility" && selectElement) selectedCore.blockLimits[limitIndex].limitVisibility = normalizeLimitVisibility(selectElement.value);
+  if (action === "limit-visibility") selectedCore.blockLimits[limitIndex].limitVisibility = normalizeLimitVisibility(target.value);
   if (action === "limit-group-search") {
     selectedCore.blockLimits[limitIndex].groupSearch = target.value;
     renderLimitGroupChecklist(coreIndex, limitIndex);
@@ -3072,13 +3026,6 @@ document.addEventListener("change", (event) => {
     return;
   }
 
-  if (action === "selected-manifest-core-entry" && selectElement) {
-    state.selectedManifestCoreEntryIndex = Number(selectElement.value);
-    renderManifestGroups();
-    generateXml();
-    return;
-  }
-
   if (action === "group-name" || action === "manifest-name" || action === "core-subtype") {
     commitDeferredTextInput(target);
     return;
@@ -3170,17 +3117,6 @@ document.addEventListener("change", (event) => {
     limit.excludedBlockGroups = Array.from(selectedSet);
     renderShipCores();
   }
-  if (action === "manifest-core-toggle" && inputElement) {
-    const manifestGroup = state.manifestGroups[manifestGroupIndex];
-    const selectedShipCore = state.shipCores[coreIndex - 1];
-    if (!manifestGroup || !selectedShipCore) return;
-
-    const selectedSet = new Set(selectedShipCore.manifestGroups || []);
-    if (inputElement.checked) selectedSet.add(manifestGroup.name);
-    else selectedSet.delete(manifestGroup.name);
-    selectedShipCore.manifestGroups = normalizeManifestGroupNames(Array.from(selectedSet));
-    renderEditors();
-  }
   if (action === "core-manifest-group-toggle" && inputElement) {
     const groupName = inputElement.dataset.groupName || "";
     if (!groupName) return;
@@ -3199,15 +3135,11 @@ document.addEventListener("change", (event) => {
     if (inputElement.checked) selectedSet.add(blacklistedSubtype);
     else selectedSet.delete(blacklistedSubtype);
     selectedCore.manifestBlacklistedCoreSubtypeIds = normalizeManifestBlacklistSubtypeIds(Array.from(selectedSet));
-    renderManifestGroups();
+    renderShipCores();
   }
   if (action === "core-cross-connector-punishment-whitelist-toggle" && inputElement) {
     selectedCore.crossConnectorPunishmentWhitelisted = inputElement.checked;
-    renderManifestGroups();
-  }
-  if (action === "core-selection-priority" && inputElement) {
-    selectedCore.coreSelectionPriority = Number(inputElement.value) || 0;
-    renderManifestGroups();
+    renderShipCores();
   }
 
   if (action === "upgrade-mod-stat" && selectElement) selectedUpgrade.modifiers[upgradeModifierIndex].stat = selectElement.value;
@@ -3364,7 +3296,6 @@ ids("loadLegacyModConfig").addEventListener("click", async () => {
   state.selectedGroupIndex = 0;
   state.manifestGroups = [];
   state.selectedManifestGroupIndex = -1;
-  state.selectedManifestCoreEntryIndex = state.shipCores.length ? 0 : -1;
   state.selectedCoreIndex = 0;
   state.upgradeModules = [];
   state.selectedUpgradeModuleIndex = 0;
@@ -3517,7 +3448,6 @@ async function processUploadedXmlFiles(groupsFile, manifestFile, noCoreFile, cor
       );
       state.manifestGroups = manifest.groups;
       state.selectedManifestGroupIndex = manifest.groups.length ? 0 : -1;
-      state.selectedManifestCoreEntryIndex = -1;
 
       manifest.shipCores.forEach((entry) => {
         const manifestPath = entry.filename;
@@ -3663,7 +3593,6 @@ async function processUploadedXmlFiles(groupsFile, manifestFile, noCoreFile, cor
     status.push(`Manifest upgrade module file '${path}' could not be read and was ignored.`));
 
   state.selectedCoreIndex = 0;
-  state.selectedManifestCoreEntryIndex = state.shipCores.length ? 0 : -1;
   state.selectedUpgradeModuleIndex = 0;
   state.expandedLimitPanelsByCore = {};
 
@@ -3906,6 +3835,9 @@ async function loadUploadedXml() {
 ids("loadUploadedXml").addEventListener("click", () => loadUploadedXml());
 ids("openUpdateFolder").addEventListener("click", openUpdateFolder);
 ids("updateSelectedFolder").addEventListener("click", updateSelectedFolder);
+
+installWorkspace(document);
+installFieldHelp(document);
 
 (() => {
   if (typeof window.showDirectoryPicker !== "function") {
