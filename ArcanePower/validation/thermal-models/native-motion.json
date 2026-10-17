@@ -1,0 +1,70 @@
+{
+  "status": "passed",
+  "checks": 1376,
+  "meshes": 40,
+  "moving_parts": 24,
+  "maximum_error_m": 0.0059375762939453125,
+  "failed_checks": 0,
+  "failures": [],
+  "native_mesh_sha256": {
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_LA_Carriage_M.mwm": "322e9bfdad1a8130e6e504b4c883165567ba68956a9ac06febe6bc0364bb8d8f",
+    "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LA_Carriage_M_LOD1_r8b66a7c1d5ca.mwm": "8b66a7c1d5cacdc8a601cda0be686a04675461530dfcff1107ceba2ae9d61da9",
+    "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LA_Carriage_M_LOD2_rdcbebefee264.mwm": "dcbebefee264b03723e4c42f72e367077abf42d0cab674b694b5e13ab225f07f",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_LA_Intermediate_M.mwm": "38f396d205bdc6ef280b465a7742fec5ebc36e52dd5a7a497acb7b51ff88feee",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_LA_CoverMinus_M.mwm": "404cc599a940a3d53eb83580b442be2f7aba418937ea247df3ea004055b755e7",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_LA_CoverPlus_M.mwm": "73b0fd0ea36d7aa6c7b3cdd346c8547a8e6dc5d44987689856b06d45714ae7bf",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_LA_ConnectorTail_M.mwm": "2a6671d5d4f59c6ba9943df52d2051f7445867b1ef88a8ae44051aa17af16496",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_LB_Carriage_M.mwm": "9987c2ff5efd210831b6fef5a06898d606efac75e2a751d682400133fae266f4",
+    "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LB_Carriage_M_LOD1_r9035db5d82bc.mwm": "9035db5d82bc4ef31f85d5c104ab8915cc28c5f26b8ec4621da9f7ddb4dd83ca",
+    "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LB_Carriage_M_LOD2_rdafd45727061.mwm": "dafd4572706193cd6484c4a67d9b0b6cabc5d81365a85332be8579465a7692a1",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_LB_Intermediate_M.mwm": "3e6cd8c5f20283d58b94575105f36911e6c959e238023a6e3bececacb59944c6",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_LB_CoverMinus_M.mwm": "2b683653e1e051947be38bfa0f1a40a20996d4105be81516bd088cd71e81b04a",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_LB_CoverPlus_M.mwm": "ec69a9b7ef63aac4c23dc695abb79f2ee533e76560f3d8d529b0f4e2b09ab203",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_LB_ConnectorTail_M.mwm": "aaecbfd13ea57e7d58a84cc458179f6f0998125f1a6a6ab2c8514c7f4f943a7d",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_RA_Carriage_M.mwm": "3b90e530d56af6d118ecdfe34adc199f83aa9e722b8e130144c348268ef571b0",
+    "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RA_Carriage_M_LOD1_rfeed8b4e3c5e.mwm": "feed8b4e3c5e1d82f5837da796735fb1c5994ee92fe886a5d72cf79ec0b6aee8",
+    "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RA_Carriage_M_LOD2_rb10c3b8b6407.mwm": "b10c3b8b64078b8bce349c48d05ee301c3bd0496ed8891306f6ba8d00522e2f1",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_RA_Intermediate_M.mwm": "08e3ee47b2556ef35011f8d06c28f557fd8384ea3eb69ebbac50c829a793244f",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_RA_CoverMinus_M.mwm": "909ab10b3fa5ef36b738df9f82c747a82d6b768db13da94e6c3191cf23910598",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_RA_CoverPlus_M.mwm": "ca28ab012835d30ed3dcd0c758116daa1d25b31ac5166f0b768ddcf43a76bb51",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_RA_ConnectorTail_M.mwm": "91d208ca94731e4095877cfefd5c9f6435462a7511e89482191a5be43231a04f",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_RB_Carriage_M.mwm": "4707a54a689da3d7b4fc36159c2eb62add5d28b9514927ec5d8fc7082bf55b0d",
+    "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RB_Carriage_M_LOD1_rf047d40b78f4.mwm": "f047d40b78f4d481ac09af3b8c5d756e22c1ca1557c566d4f68fd826759e608e",
+    "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RB_Carriage_M_LOD2_ra5145b1e9831.mwm": "a5145b1e98319acd4e7269d40bf3816a51f1000de8db94210038913478b64c5c",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_RB_Intermediate_M.mwm": "f76217753de68ed6b4229c0cc5023db3c446c8f527aeda7c92666690587e730b",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_RB_CoverMinus_M.mwm": "55567cfbe6284ebe1ec5b3c0e20b2ddc3f11743edacc3b2cf8a80289a27cd8b0",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_RB_CoverPlus_M.mwm": "61e78dc7adb38869ce89e8114886158743c6ec2f06fe0897917736fc95be4ad5",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_RB_ConnectorTail_M.mwm": "aced4e1d15bd9b48bb6a4f4d6ec97336a51c4b2b9bd4d55776229f9af9d62c93",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrain_TurbineRotor_M.mwm": "6358bbaad46ecc8e25bb395b2aa2068d9505cc17a7b1c64d0797d0312d100d0e",
+    "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_TurbineRotor_M_LOD1_rb07edb710d78.mwm": "b07edb710d787fc181547d368a18da5ca19423e6e0c802b364fee6858aeb69f4",
+    "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_TurbineRotor_M_LOD2_rea71cd1ea740.mwm": "ea71cd1ea740df6996e49c427d6f1a2ca40e80794eceb98d8307f011db83c2de",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrain_CompressorRotor_M.mwm": "a13ffd547665e38369a7cf0d957166b18bac08e9f9e9053fe4d92ed1339fa9ff",
+    "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_CompressorRotor_M_LOD1_r7bda93bf23e8.mwm": "7bda93bf23e852aeace23ca18dd25f85b3bd141ed0c68e38f7c74c4347c08e32",
+    "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_CompressorRotor_M_LOD2_r9a4521a450d7.mwm": "9a4521a450d75283a9a1853502afcf194f1657afad8c447b9ce8315c89a93fac",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrainUpgraded_TurbineRotor_M.mwm": "65ebd45ba693b8152dfc2e9992a9bfafb67a41b00f6507fbe3ab64469ff24c65",
+    "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_TurbineRotor_M_LOD1_r0494bf7bc79b.mwm": "0494bf7bc79bccf63658267661f249e8cb38fb879195402a33ef5f1f8abf7fcf",
+    "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_TurbineRotor_M_LOD2_r0a8ab4a9bd58.mwm": "0a8ab4a9bd58907d3d723e3a59c68afb4435e58888692cde549ad014e699cc7c",
+    "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrainUpgraded_CompressorRotor_M.mwm": "d2991871c28277a8d5d98eaf8fcd5971a95282c8bf5e0d1bb57169bfba84d45b",
+    "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_CompressorRotor_M_LOD1_re3021ec8d99c.mwm": "e3021ec8d99ca664bf17782e1dea4121f1af4db780d020c13acae69ce2be5d68",
+    "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_CompressorRotor_M_LOD2_r61857d092f58.mwm": "61857d092f58858c92dd3e2b4ce6587540b0f1a3b023003bd7f6189bb76e99d0"
+  },
+  "models": [
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "path": "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_M.mwm",
+      "sha256": "93ad8cb1a3385cc0a3a51d1f74a5668e42bfde6cf67059a46bfdb6f31ebdcb0d"
+    },
+    {
+      "subtype": "ArcanePower_Thermal_BraytonTrain",
+      "path": "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrain_M.mwm",
+      "sha256": "cb300583537e763e1eeae936dc4ed49631554bc082ae9e68884ee217e9edfaa8"
+    },
+    {
+      "subtype": "ArcanePower_Thermal_BraytonTrainUpgraded",
+      "path": "Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrainUpgraded_M.mwm",
+      "sha256": "d6811f3e479d07d1323c85a4523394c0e14ffe00c4d11d881bf5c7955452b52c"
+    }
+  ],
+  "contract_sha256": "c7e69d68cc9dcbc572534fec020552ba578b204cec4ab795036190fb18da662c",
+  "runtime_pose_sha256": "c7a30d523e5ef2325afc2f7fa45153a4ba0ddc09a791dbaa1e6e0f12ba6473a7"
+}

@@ -16,6 +16,16 @@ def main():
     report=json.loads((ROOT/'validation/thermal-models/native-export.json').read_text())
     tree=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc')
     blocks={d.findtext('Id/SubtypeId'):d for d in tree.findall('CubeBlocks/Definition')}
+    motion=json.loads((ROOT/'validation/thermal-models/native-motion.json').read_text())
+    assert motion['status']=='passed' and motion['moving_parts']==24 and motion['failed_checks']==0,'Native moving meshes do not match authoring motion'
+    assert motion['contract_sha256']==hashlib.sha256((ROOT/'assets/thermal-native-motion-contract.json').read_bytes()).hexdigest(),'Native motion contract changed after validation'
+    assert motion['runtime_pose_sha256']==hashlib.sha256(b''.join((MOD/'Data/Scripts/ArcanePower'/name).read_bytes()
+        for name in ('ThermalManifolds.cs','ThermalRotors.cs','ThermalModels.cs','ThermalPlant.cs'))).hexdigest(),'Runtime poses changed after native motion validation'
+    for model in motion['models']:
+        assert model['path']==blocks[model['subtype']].findtext('Model')
+        assert model['sha256']==hashlib.sha256((MOD/model['path']).read_bytes()).hexdigest(),'Native moving model changed after validation'
+    for path,digest in motion['native_mesh_sha256'].items():
+        assert digest==hashlib.sha256((MOD/path).read_bytes()).hexdigest(),'Native moving mesh changed after motion validation'
     assert set(blocks)=={m['subtype'] for m in models.values()}
     assert report['status']=='passed' and report['blocks']==31 and report['construction_models']==93
     highlights=report['inventory_highlights']
@@ -102,6 +112,7 @@ def main():
     result['internal_plumbing_preserved']=True
     result['main_reactor']='ArcanePower_Thermal_ReactorHousing'
     result['loadable_model_folder_matches_runtime_closure']=True
+    result['exported_mesh_runtime_motion_verified']=True
     (ROOT/'validation/thermal-models/delivery-check.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
 

@@ -46,6 +46,18 @@ definition is archived in `assets/definitions/`, outside the mod; its blends and
 native validation baselines remain available outside the mod. Existing grids using that removed
 prototype subtype need the current reactor placed in its stead.
 
+Native motion repair, 17 October: thermal moving meshes now use the same native
+axes as their identity-oriented dummies and runtime poses. This fixes reversed
+manifold travel and connector tails stretching far outside the housing; both train
+rotor variants receive the same export correction. The native motion gate applies
+compiled runtime matrices to actual MWM vertices and LODs, comparing 1,376 results
+against independently sampled authoring motion. All pass within 6 mm of native
+vertex packing precision. [Motion evidence](validation/thermal-models/native-motion.json).
+Regenerate the source contract with `assets/build_native_motion_contract.py` in
+the production Blender scene after intentional rig changes. Native installation
+runs `tools/check_native_thermal_motion.py`; delivery verifies its model and pose
+fingerprints. The repaired motion still needs an SE world reload and in-game check.
+
 ## Construction and Energy Core delivery — updated 15 October 2026
 
 All twelve public blocks now have **three native construction stages**, 36 models

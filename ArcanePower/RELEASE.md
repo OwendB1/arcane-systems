@@ -46,6 +46,9 @@ External pipe walls use continuous reflective glass; internal coolant plumbing
 retains its accepted finish and geometry. Socket inserts and face seals now have
 separate seats. Runtime manifold validation tolerates native export rounding,
 and reactor connection guidance is limited to incomplete, settled Brayton setups.
+Native moving meshes now share the main model's axes, correcting reversed pipe
+travel and misplaced tail anchors. Actual exported vertices and LODs pass 1,376
+runtime-pose comparisons against the authoring rig, including both train variants.
 Each thermal block has its own
 model-rendered inventory icon. Pipe icons identify
 PRIMARY, HP and LP circuits; upgraded machines carry a tier marker. All 50 block
@@ -67,6 +70,7 @@ python3 ArcanePower/tools/compile_mod.py
 python3 ArcanePower/tools/check_thermal_runtime.py
 python3 ArcanePower/tools/check_construction_stages.py
 python3 ArcanePower/tools/check_energy_core.py
+python3 ArcanePower/tools/check_native_thermal_motion.py
 python3 ArcanePower/tools/package_release.py
 python3 ArcanePower/tools/check_thermal_delivery.py
 ```

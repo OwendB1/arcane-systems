@@ -13,7 +13,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_BraytonTrain_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrain_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -55,9 +55,9 @@
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_BraytonTrain_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_BraytonTrain_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_BraytonTrain_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrain_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrain_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrain_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -74,7 +74,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_BraytonTrainUpgraded_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrainUpgraded_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -116,9 +116,9 @@
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_BraytonTrainUpgraded_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_BraytonTrainUpgraded_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_BraytonTrainUpgraded_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrainUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrainUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_BraytonTrainUpgraded_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -135,7 +135,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryHeater_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryHeater_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="54" />
         <Component Subtype="Construction" Count="27" />
@@ -157,9 +157,9 @@
       <PCU>30</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryHeater_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryHeater_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryHeater_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryHeater_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryHeater_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryHeater_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -177,7 +177,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryHeaterUpgraded_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryHeaterUpgraded_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="54" />
         <Component Subtype="Construction" Count="27" />
@@ -199,9 +199,9 @@
       <PCU>30</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryHeaterUpgraded_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryHeaterUpgraded_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryHeaterUpgraded_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryHeaterUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryHeaterUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryHeaterUpgraded_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -219,7 +219,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_Recuperator_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_Recuperator_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="36" />
         <Component Subtype="Construction" Count="18" />
@@ -241,9 +241,9 @@
       <PCU>30</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_Recuperator_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_Recuperator_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_Recuperator_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_Recuperator_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_Recuperator_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_Recuperator_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -261,7 +261,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_RecuperatorUpgraded_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_RecuperatorUpgraded_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="36" />
         <Component Subtype="Construction" Count="18" />
@@ -283,9 +283,9 @@
       <PCU>30</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_RecuperatorUpgraded_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_RecuperatorUpgraded_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_RecuperatorUpgraded_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_RecuperatorUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_RecuperatorUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_RecuperatorUpgraded_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -303,7 +303,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_AtmosphericCooler_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_AtmosphericCooler_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="36" />
         <Component Subtype="Construction" Count="18" />
@@ -325,9 +325,9 @@
       <PCU>30</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_AtmosphericCooler_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_AtmosphericCooler_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_AtmosphericCooler_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_AtmosphericCooler_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_AtmosphericCooler_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_AtmosphericCooler_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -345,7 +345,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_SpaceRadiator_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_SpaceRadiator_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="36" />
         <Component Subtype="Construction" Count="18" />
@@ -367,9 +367,9 @@
       <PCU>30</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_SpaceRadiator_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_SpaceRadiator_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_SpaceRadiator_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_SpaceRadiator_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_SpaceRadiator_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_SpaceRadiator_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -387,7 +387,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryStraight_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryStraight_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -409,9 +409,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryStraight_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryStraight_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryStraight_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryStraight_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryStraight_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryStraight_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -429,7 +429,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryElbow_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryElbow_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -451,9 +451,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryElbow_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryElbow_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryElbow_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryElbow_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryElbow_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryElbow_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -471,7 +471,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryRiser_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryRiser_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -493,9 +493,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryRiser_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryRiser_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryRiser_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryRiser_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryRiser_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryRiser_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -513,7 +513,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryTee_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryTee_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -535,9 +535,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryTee_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryTee_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryTee_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryTee_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryTee_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryTee_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -555,7 +555,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryCross_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryCross_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -577,9 +577,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryCross_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryCross_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryCross_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryCross_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryCross_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryCross_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -597,7 +597,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryRollAdapter_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryRollAdapter_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -619,9 +619,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryRollAdapter_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryRollAdapter_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryRollAdapter_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryRollAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryRollAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryRollAdapter_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -639,7 +639,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryEndCap_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryEndCap_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -661,9 +661,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryEndCap_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryEndCap_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryEndCap_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryEndCap_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryEndCap_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryEndCap_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -681,7 +681,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpStraight_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpStraight_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -703,9 +703,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpStraight_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpStraight_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpStraight_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpStraight_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpStraight_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpStraight_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -723,7 +723,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpElbow_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpElbow_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -745,9 +745,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpElbow_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpElbow_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpElbow_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpElbow_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpElbow_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpElbow_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -765,7 +765,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpRiser_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpRiser_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -787,9 +787,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpRiser_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpRiser_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpRiser_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpRiser_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpRiser_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpRiser_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -807,7 +807,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpTee_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpTee_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -829,9 +829,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpTee_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpTee_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpTee_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpTee_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpTee_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpTee_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -849,7 +849,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpCross_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpCross_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -871,9 +871,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpCross_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpCross_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpCross_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpCross_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpCross_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpCross_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -891,7 +891,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpRollAdapter_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpRollAdapter_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -913,9 +913,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpRollAdapter_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpRollAdapter_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpRollAdapter_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpRollAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpRollAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpRollAdapter_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -933,7 +933,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpEndCap_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpEndCap_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -955,9 +955,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpEndCap_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpEndCap_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2HpEndCap_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpEndCap_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpEndCap_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2HpEndCap_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -975,7 +975,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpStraight_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpStraight_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -997,9 +997,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpStraight_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpStraight_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpStraight_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpStraight_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpStraight_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpStraight_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1017,7 +1017,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpElbow_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpElbow_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1039,9 +1039,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpElbow_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpElbow_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpElbow_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpElbow_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpElbow_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpElbow_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1059,7 +1059,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpRiser_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpRiser_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1081,9 +1081,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpRiser_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpRiser_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpRiser_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpRiser_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpRiser_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpRiser_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1101,7 +1101,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpTee_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpTee_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1123,9 +1123,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpTee_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpTee_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpTee_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpTee_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpTee_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpTee_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1143,7 +1143,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpCross_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpCross_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1165,9 +1165,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpCross_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpCross_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpCross_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpCross_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpCross_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpCross_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1185,7 +1185,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpRollAdapter_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpRollAdapter_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1207,9 +1207,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpRollAdapter_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpRollAdapter_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpRollAdapter_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpRollAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpRollAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpRollAdapter_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1227,7 +1227,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpEndCap_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpEndCap_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1249,9 +1249,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpEndCap_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpEndCap_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_CO2LpEndCap_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpEndCap_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpEndCap_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_CO2LpEndCap_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1269,7 +1269,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="3" z="5" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_ReactorHousing_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="50" />
         <Component Subtype="Construction" Count="40" />
@@ -1334,9 +1334,9 @@
         <MountPoint Side="Right" StartX="2" EndX="3" StartY="0" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_ReactorHousing_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_ReactorHousing_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_ReactorHousing_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_ReactorHousing_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1353,7 +1353,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryReactorAdapter_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryReactorAdapter_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1375,9 +1375,9 @@
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryReactorAdapter_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryReactorAdapter_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f1bf54fa72df/APT_PrimaryReactorAdapter_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryReactorAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryReactorAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_ea66c7e8c915/APT_PrimaryReactorAdapter_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>

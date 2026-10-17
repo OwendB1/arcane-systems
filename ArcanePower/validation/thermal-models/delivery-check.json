@@ -17,5 +17,6 @@
   "uniform_native_glass_textures": true,
   "internal_plumbing_preserved": true,
   "main_reactor": "ArcanePower_Thermal_ReactorHousing",
-  "loadable_model_folder_matches_runtime_closure": true
+  "loadable_model_folder_matches_runtime_closure": true,
+  "exported_mesh_runtime_motion_verified": true
 }

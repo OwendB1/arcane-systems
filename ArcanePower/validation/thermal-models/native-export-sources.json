@@ -1,704 +1,4 @@
 {
-  "APT_ReactorHousing_LA_Carriage_M_LOD1": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LA_Carriage_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 2932,
-    "authored_triangles": 2932,
-    "reference": "APT_ReactorHousing_LA_Carriage_M",
-    "distance": 35
-  },
-  "APT_ReactorHousing_LA_Carriage_M_LOD2": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LA_Carriage_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 2034,
-    "authored_triangles": 2034,
-    "reference": "APT_ReactorHousing_LA_Carriage_M",
-    "distance": 90
-  },
-  "APT_ReactorHousing_LA_Carriage_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LA_Carriage_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 4294,
-    "authored_triangles": 4294,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_LA_Intermediate_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LA_Intermediate_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 640,
-    "authored_triangles": 640,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_LA_CoverMinus_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LA_CoverMinus_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 22,
-    "authored_triangles": 22,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_LA_CoverPlus_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LA_CoverPlus_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 22,
-    "authored_triangles": 22,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_LA_ConnectorTail_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LA_ConnectorTail_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 124,
-    "authored_triangles": 124,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_LB_Carriage_M_LOD1": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LB_Carriage_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 2932,
-    "authored_triangles": 2932,
-    "reference": "APT_ReactorHousing_LB_Carriage_M",
-    "distance": 35
-  },
-  "APT_ReactorHousing_LB_Carriage_M_LOD2": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LB_Carriage_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 2034,
-    "authored_triangles": 2034,
-    "reference": "APT_ReactorHousing_LB_Carriage_M",
-    "distance": 90
-  },
-  "APT_ReactorHousing_LB_Carriage_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LB_Carriage_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 4294,
-    "authored_triangles": 4294,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_LB_Intermediate_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LB_Intermediate_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 640,
-    "authored_triangles": 640,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_LB_CoverMinus_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LB_CoverMinus_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 22,
-    "authored_triangles": 22,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_LB_CoverPlus_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LB_CoverPlus_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 22,
-    "authored_triangles": 22,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_LB_ConnectorTail_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_LB_ConnectorTail_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 124,
-    "authored_triangles": 124,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_RA_Carriage_M_LOD1": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RA_Carriage_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 2932,
-    "authored_triangles": 2932,
-    "reference": "APT_ReactorHousing_RA_Carriage_M",
-    "distance": 35
-  },
-  "APT_ReactorHousing_RA_Carriage_M_LOD2": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RA_Carriage_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 2034,
-    "authored_triangles": 2034,
-    "reference": "APT_ReactorHousing_RA_Carriage_M",
-    "distance": 90
-  },
-  "APT_ReactorHousing_RA_Carriage_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RA_Carriage_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 4294,
-    "authored_triangles": 4294,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_RA_Intermediate_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RA_Intermediate_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 640,
-    "authored_triangles": 640,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_RA_CoverMinus_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RA_CoverMinus_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 22,
-    "authored_triangles": 22,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_RA_CoverPlus_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RA_CoverPlus_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 22,
-    "authored_triangles": 22,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_RA_ConnectorTail_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RA_ConnectorTail_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 124,
-    "authored_triangles": 124,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_RB_Carriage_M_LOD1": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RB_Carriage_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 2932,
-    "authored_triangles": 2932,
-    "reference": "APT_ReactorHousing_RB_Carriage_M",
-    "distance": 35
-  },
-  "APT_ReactorHousing_RB_Carriage_M_LOD2": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RB_Carriage_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 2034,
-    "authored_triangles": 2034,
-    "reference": "APT_ReactorHousing_RB_Carriage_M",
-    "distance": 90
-  },
-  "APT_ReactorHousing_RB_Carriage_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RB_Carriage_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 4294,
-    "authored_triangles": 4294,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_RB_Intermediate_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RB_Intermediate_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 640,
-    "authored_triangles": 640,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_RB_CoverMinus_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RB_CoverMinus_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 22,
-    "authored_triangles": 22,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_RB_CoverPlus_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RB_CoverPlus_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 22,
-    "authored_triangles": 22,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_RB_ConnectorTail_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_RB_ConnectorTail_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 124,
-    "authored_triangles": 124,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_M_BS2_LOD1": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 105215,
-    "authored_triangles": 105215,
-    "reference": "APT_ReactorHousing_M_BS2",
-    "distance": 75
-  },
-  "APT_ReactorHousing_M_BS2_LOD2": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 57255,
-    "authored_triangles": 57255,
-    "reference": "APT_ReactorHousing_M_BS2",
-    "distance": 150
-  },
-  "APT_ReactorHousing_M_BS3_LOD1": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 109132,
-    "authored_triangles": 109132,
-    "reference": "APT_ReactorHousing_M_BS3",
-    "distance": 75
-  },
-  "APT_ReactorHousing_M_BS3_LOD2": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 60139,
-    "authored_triangles": 60139,
-    "reference": "APT_ReactorHousing_M_BS3",
-    "distance": 150
-  },
-  "APT_ReactorHousing_M_LOD1": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 136424,
-    "authored_triangles": 136424,
-    "reference": "APT_ReactorHousing_M",
-    "distance": 75
-  },
-  "APT_ReactorHousing_M_LOD2": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 106371,
-    "authored_triangles": 106371,
-    "reference": "APT_ReactorHousing_M",
-    "distance": 150
-  },
-  "APT_ReactorHousing_M_BS1": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_M",
-    "type": "bs",
-    "index": 1,
-    "triangles": 6368,
-    "authored_triangles": 6368,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_M_BS2": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_M",
-    "type": "bs",
-    "index": 2,
-    "triangles": 175547,
-    "authored_triangles": 175586,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_M_BS3": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_M",
-    "type": "bs",
-    "index": 3,
-    "triangles": 181347,
-    "authored_triangles": 181386,
-    "reference": null,
-    "distance": null
-  },
-  "APT_ReactorHousing_M": {
-    "block": "Reactor housing",
-    "scene": "APT_ReactorHousing_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 187579,
-    "authored_triangles": 187618,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrain_TurbineRotor_M_LOD1": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_TurbineRotor_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 14216,
-    "authored_triangles": 14216,
-    "reference": "APT_BraytonTrain_TurbineRotor_M",
-    "distance": 75
-  },
-  "APT_BraytonTrain_TurbineRotor_M_LOD2": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_TurbineRotor_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 6462,
-    "authored_triangles": 6462,
-    "reference": "APT_BraytonTrain_TurbineRotor_M",
-    "distance": 150
-  },
-  "APT_BraytonTrain_TurbineRotor_M": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_TurbineRotor_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 25848,
-    "authored_triangles": 25848,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrain_CompressorRotor_M_LOD1": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_CompressorRotor_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 12474,
-    "authored_triangles": 12474,
-    "reference": "APT_BraytonTrain_CompressorRotor_M",
-    "distance": 35
-  },
-  "APT_BraytonTrain_CompressorRotor_M_LOD2": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_CompressorRotor_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 5670,
-    "authored_triangles": 5670,
-    "reference": "APT_BraytonTrain_CompressorRotor_M",
-    "distance": 90
-  },
-  "APT_BraytonTrain_CompressorRotor_M": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_CompressorRotor_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 22680,
-    "authored_triangles": 22680,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrain_M_BS2_LOD1": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 78655,
-    "authored_triangles": 78655,
-    "reference": "APT_BraytonTrain_M_BS2",
-    "distance": 75
-  },
-  "APT_BraytonTrain_M_BS2_LOD2": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 36677,
-    "authored_triangles": 36677,
-    "reference": "APT_BraytonTrain_M_BS2",
-    "distance": 150
-  },
-  "APT_BraytonTrain_M_BS3_LOD1": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 79411,
-    "authored_triangles": 79411,
-    "reference": "APT_BraytonTrain_M_BS3",
-    "distance": 75
-  },
-  "APT_BraytonTrain_M_BS3_LOD2": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 37022,
-    "authored_triangles": 37022,
-    "reference": "APT_BraytonTrain_M_BS3",
-    "distance": 150
-  },
-  "APT_BraytonTrain_M_LOD1": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 66291,
-    "authored_triangles": 66291,
-    "reference": "APT_BraytonTrain_M",
-    "distance": 75
-  },
-  "APT_BraytonTrain_M_LOD2": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 41096,
-    "authored_triangles": 41096,
-    "reference": "APT_BraytonTrain_M",
-    "distance": 150
-  },
-  "APT_BraytonTrain_M_BS1": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_M",
-    "type": "bs",
-    "index": 1,
-    "triangles": 608,
-    "authored_triangles": 608,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrain_M_BS2": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_M",
-    "type": "bs",
-    "index": 2,
-    "triangles": 142989,
-    "authored_triangles": 142989,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrain_M_BS3": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_M",
-    "type": "bs",
-    "index": 3,
-    "triangles": 146047,
-    "authored_triangles": 146047,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrain_M": {
-    "block": "Brayton train",
-    "scene": "APT_BraytonTrain_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 110479,
-    "authored_triangles": 110479,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrainUpgraded_TurbineRotor_M_LOD1": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_TurbineRotor_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 14216,
-    "authored_triangles": 14216,
-    "reference": "APT_BraytonTrainUpgraded_TurbineRotor_M",
-    "distance": 75
-  },
-  "APT_BraytonTrainUpgraded_TurbineRotor_M_LOD2": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_TurbineRotor_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 6462,
-    "authored_triangles": 6462,
-    "reference": "APT_BraytonTrainUpgraded_TurbineRotor_M",
-    "distance": 150
-  },
-  "APT_BraytonTrainUpgraded_TurbineRotor_M": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_TurbineRotor_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 25848,
-    "authored_triangles": 25848,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrainUpgraded_CompressorRotor_M_LOD1": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_CompressorRotor_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 12474,
-    "authored_triangles": 12474,
-    "reference": "APT_BraytonTrainUpgraded_CompressorRotor_M",
-    "distance": 35
-  },
-  "APT_BraytonTrainUpgraded_CompressorRotor_M_LOD2": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_CompressorRotor_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 5670,
-    "authored_triangles": 5670,
-    "reference": "APT_BraytonTrainUpgraded_CompressorRotor_M",
-    "distance": 90
-  },
-  "APT_BraytonTrainUpgraded_CompressorRotor_M": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_CompressorRotor_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 22680,
-    "authored_triangles": 22680,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrainUpgraded_M_BS2_LOD1": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 79260,
-    "authored_triangles": 79260,
-    "reference": "APT_BraytonTrainUpgraded_M_BS2",
-    "distance": 75
-  },
-  "APT_BraytonTrainUpgraded_M_BS2_LOD2": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 37106,
-    "authored_triangles": 37106,
-    "reference": "APT_BraytonTrainUpgraded_M_BS2",
-    "distance": 150
-  },
-  "APT_BraytonTrainUpgraded_M_BS3_LOD1": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 80017,
-    "authored_triangles": 80017,
-    "reference": "APT_BraytonTrainUpgraded_M_BS3",
-    "distance": 75
-  },
-  "APT_BraytonTrainUpgraded_M_BS3_LOD2": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 37450,
-    "authored_triangles": 37450,
-    "reference": "APT_BraytonTrainUpgraded_M_BS3",
-    "distance": 150
-  },
-  "APT_BraytonTrainUpgraded_M_LOD1": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_M",
-    "type": "lod",
-    "index": 1,
-    "triangles": 66898,
-    "authored_triangles": 66898,
-    "reference": "APT_BraytonTrainUpgraded_M",
-    "distance": 75
-  },
-  "APT_BraytonTrainUpgraded_M_LOD2": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_M",
-    "type": "lod",
-    "index": 2,
-    "triangles": 41525,
-    "authored_triangles": 41525,
-    "reference": "APT_BraytonTrainUpgraded_M",
-    "distance": 150
-  },
-  "APT_BraytonTrainUpgraded_M_BS1": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_M",
-    "type": "bs",
-    "index": 1,
-    "triangles": 608,
-    "authored_triangles": 608,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrainUpgraded_M_BS2": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_M",
-    "type": "bs",
-    "index": 2,
-    "triangles": 143901,
-    "authored_triangles": 143901,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrainUpgraded_M_BS3": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_M",
-    "type": "bs",
-    "index": 3,
-    "triangles": 146959,
-    "authored_triangles": 146959,
-    "reference": null,
-    "distance": null
-  },
-  "APT_BraytonTrainUpgraded_M": {
-    "block": "Brayton train upgraded",
-    "scene": "APT_BraytonTrainUpgraded_M",
-    "type": "main",
-    "index": 0,
-    "triangles": 111391,
-    "authored_triangles": 111391,
-    "reference": null,
-    "distance": null
-  },
   "APT_PrimaryHeater_M_BS2_LOD1": {
     "block": "Primary heater",
     "scene": "APT_PrimaryHeater_M",
@@ -3336,6 +2636,706 @@
     "index": 0,
     "triangles": 9722,
     "authored_triangles": 9722,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LA_Carriage_M_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_Carriage_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2932,
+    "authored_triangles": 2932,
+    "reference": "APT_ReactorHousing_LA_Carriage_M",
+    "distance": 35
+  },
+  "APT_ReactorHousing_LA_Carriage_M_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_Carriage_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2034,
+    "authored_triangles": 2034,
+    "reference": "APT_ReactorHousing_LA_Carriage_M",
+    "distance": 90
+  },
+  "APT_ReactorHousing_LA_Carriage_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_Carriage_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4294,
+    "authored_triangles": 4294,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LA_Intermediate_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_Intermediate_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 640,
+    "authored_triangles": 640,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LA_CoverMinus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_CoverMinus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LA_CoverPlus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_CoverPlus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LA_ConnectorTail_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_ConnectorTail_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 124,
+    "authored_triangles": 124,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LB_Carriage_M_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_Carriage_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2932,
+    "authored_triangles": 2932,
+    "reference": "APT_ReactorHousing_LB_Carriage_M",
+    "distance": 35
+  },
+  "APT_ReactorHousing_LB_Carriage_M_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_Carriage_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2034,
+    "authored_triangles": 2034,
+    "reference": "APT_ReactorHousing_LB_Carriage_M",
+    "distance": 90
+  },
+  "APT_ReactorHousing_LB_Carriage_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_Carriage_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4294,
+    "authored_triangles": 4294,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LB_Intermediate_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_Intermediate_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 640,
+    "authored_triangles": 640,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LB_CoverMinus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_CoverMinus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LB_CoverPlus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_CoverPlus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LB_ConnectorTail_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_ConnectorTail_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 124,
+    "authored_triangles": 124,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RA_Carriage_M_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_Carriage_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2932,
+    "authored_triangles": 2932,
+    "reference": "APT_ReactorHousing_RA_Carriage_M",
+    "distance": 35
+  },
+  "APT_ReactorHousing_RA_Carriage_M_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_Carriage_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2034,
+    "authored_triangles": 2034,
+    "reference": "APT_ReactorHousing_RA_Carriage_M",
+    "distance": 90
+  },
+  "APT_ReactorHousing_RA_Carriage_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_Carriage_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4294,
+    "authored_triangles": 4294,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RA_Intermediate_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_Intermediate_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 640,
+    "authored_triangles": 640,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RA_CoverMinus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_CoverMinus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RA_CoverPlus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_CoverPlus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RA_ConnectorTail_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_ConnectorTail_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 124,
+    "authored_triangles": 124,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RB_Carriage_M_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_Carriage_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2932,
+    "authored_triangles": 2932,
+    "reference": "APT_ReactorHousing_RB_Carriage_M",
+    "distance": 35
+  },
+  "APT_ReactorHousing_RB_Carriage_M_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_Carriage_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2034,
+    "authored_triangles": 2034,
+    "reference": "APT_ReactorHousing_RB_Carriage_M",
+    "distance": 90
+  },
+  "APT_ReactorHousing_RB_Carriage_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_Carriage_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4294,
+    "authored_triangles": 4294,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RB_Intermediate_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_Intermediate_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 640,
+    "authored_triangles": 640,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RB_CoverMinus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_CoverMinus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RB_CoverPlus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_CoverPlus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RB_ConnectorTail_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_ConnectorTail_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 124,
+    "authored_triangles": 124,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_M_BS2_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 105215,
+    "authored_triangles": 105215,
+    "reference": "APT_ReactorHousing_M_BS2",
+    "distance": 75
+  },
+  "APT_ReactorHousing_M_BS2_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 57255,
+    "authored_triangles": 57255,
+    "reference": "APT_ReactorHousing_M_BS2",
+    "distance": 150
+  },
+  "APT_ReactorHousing_M_BS3_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 109132,
+    "authored_triangles": 109132,
+    "reference": "APT_ReactorHousing_M_BS3",
+    "distance": 75
+  },
+  "APT_ReactorHousing_M_BS3_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 60139,
+    "authored_triangles": 60139,
+    "reference": "APT_ReactorHousing_M_BS3",
+    "distance": 150
+  },
+  "APT_ReactorHousing_M_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 136424,
+    "authored_triangles": 136424,
+    "reference": "APT_ReactorHousing_M",
+    "distance": 75
+  },
+  "APT_ReactorHousing_M_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 106371,
+    "authored_triangles": 106371,
+    "reference": "APT_ReactorHousing_M",
+    "distance": 150
+  },
+  "APT_ReactorHousing_M_BS1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 6368,
+    "authored_triangles": 6368,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_M_BS2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 175547,
+    "authored_triangles": 175586,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_M_BS3": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 181347,
+    "authored_triangles": 181386,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 187579,
+    "authored_triangles": 187618,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_TurbineRotor_M_LOD1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_TurbineRotor_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 14216,
+    "authored_triangles": 14216,
+    "reference": "APT_BraytonTrain_TurbineRotor_M",
+    "distance": 75
+  },
+  "APT_BraytonTrain_TurbineRotor_M_LOD2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_TurbineRotor_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 6462,
+    "authored_triangles": 6462,
+    "reference": "APT_BraytonTrain_TurbineRotor_M",
+    "distance": 150
+  },
+  "APT_BraytonTrain_TurbineRotor_M": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_TurbineRotor_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 25848,
+    "authored_triangles": 25848,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_CompressorRotor_M_LOD1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_CompressorRotor_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12474,
+    "authored_triangles": 12474,
+    "reference": "APT_BraytonTrain_CompressorRotor_M",
+    "distance": 35
+  },
+  "APT_BraytonTrain_CompressorRotor_M_LOD2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_CompressorRotor_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5670,
+    "authored_triangles": 5670,
+    "reference": "APT_BraytonTrain_CompressorRotor_M",
+    "distance": 90
+  },
+  "APT_BraytonTrain_CompressorRotor_M": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_CompressorRotor_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22680,
+    "authored_triangles": 22680,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_M_BS2_LOD1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 78655,
+    "authored_triangles": 78655,
+    "reference": "APT_BraytonTrain_M_BS2",
+    "distance": 75
+  },
+  "APT_BraytonTrain_M_BS2_LOD2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 36677,
+    "authored_triangles": 36677,
+    "reference": "APT_BraytonTrain_M_BS2",
+    "distance": 150
+  },
+  "APT_BraytonTrain_M_BS3_LOD1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 79411,
+    "authored_triangles": 79411,
+    "reference": "APT_BraytonTrain_M_BS3",
+    "distance": 75
+  },
+  "APT_BraytonTrain_M_BS3_LOD2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37022,
+    "authored_triangles": 37022,
+    "reference": "APT_BraytonTrain_M_BS3",
+    "distance": 150
+  },
+  "APT_BraytonTrain_M_LOD1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 66291,
+    "authored_triangles": 66291,
+    "reference": "APT_BraytonTrain_M",
+    "distance": 75
+  },
+  "APT_BraytonTrain_M_LOD2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 41096,
+    "authored_triangles": 41096,
+    "reference": "APT_BraytonTrain_M",
+    "distance": 150
+  },
+  "APT_BraytonTrain_M_BS1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_M_BS2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 142989,
+    "authored_triangles": 142989,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_M_BS3": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 146047,
+    "authored_triangles": 146047,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_M": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 110479,
+    "authored_triangles": 110479,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_TurbineRotor_M_LOD1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_TurbineRotor_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 14216,
+    "authored_triangles": 14216,
+    "reference": "APT_BraytonTrainUpgraded_TurbineRotor_M",
+    "distance": 75
+  },
+  "APT_BraytonTrainUpgraded_TurbineRotor_M_LOD2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_TurbineRotor_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 6462,
+    "authored_triangles": 6462,
+    "reference": "APT_BraytonTrainUpgraded_TurbineRotor_M",
+    "distance": 150
+  },
+  "APT_BraytonTrainUpgraded_TurbineRotor_M": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_TurbineRotor_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 25848,
+    "authored_triangles": 25848,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_CompressorRotor_M_LOD1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_CompressorRotor_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12474,
+    "authored_triangles": 12474,
+    "reference": "APT_BraytonTrainUpgraded_CompressorRotor_M",
+    "distance": 35
+  },
+  "APT_BraytonTrainUpgraded_CompressorRotor_M_LOD2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_CompressorRotor_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5670,
+    "authored_triangles": 5670,
+    "reference": "APT_BraytonTrainUpgraded_CompressorRotor_M",
+    "distance": 90
+  },
+  "APT_BraytonTrainUpgraded_CompressorRotor_M": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_CompressorRotor_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22680,
+    "authored_triangles": 22680,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_M_BS2_LOD1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 79260,
+    "authored_triangles": 79260,
+    "reference": "APT_BraytonTrainUpgraded_M_BS2",
+    "distance": 75
+  },
+  "APT_BraytonTrainUpgraded_M_BS2_LOD2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37106,
+    "authored_triangles": 37106,
+    "reference": "APT_BraytonTrainUpgraded_M_BS2",
+    "distance": 150
+  },
+  "APT_BraytonTrainUpgraded_M_BS3_LOD1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 80017,
+    "authored_triangles": 80017,
+    "reference": "APT_BraytonTrainUpgraded_M_BS3",
+    "distance": 75
+  },
+  "APT_BraytonTrainUpgraded_M_BS3_LOD2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37450,
+    "authored_triangles": 37450,
+    "reference": "APT_BraytonTrainUpgraded_M_BS3",
+    "distance": 150
+  },
+  "APT_BraytonTrainUpgraded_M_LOD1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 66898,
+    "authored_triangles": 66898,
+    "reference": "APT_BraytonTrainUpgraded_M",
+    "distance": 75
+  },
+  "APT_BraytonTrainUpgraded_M_LOD2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 41525,
+    "authored_triangles": 41525,
+    "reference": "APT_BraytonTrainUpgraded_M",
+    "distance": 150
+  },
+  "APT_BraytonTrainUpgraded_M_BS1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_M_BS2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 143901,
+    "authored_triangles": 143901,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_M_BS3": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 146959,
+    "authored_triangles": 146959,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_M": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 111391,
+    "authored_triangles": 111391,
     "reference": null,
     "distance": null
   }

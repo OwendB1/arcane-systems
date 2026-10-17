@@ -230,6 +230,7 @@ def install():
             'co2':'Integrated reactor generation and powered commissioning; no separate gas supply blocks',
             'game_reloaded':False,'workshop_published':False}
     (OUT/'native-export.json').write_text(json.dumps(report,indent=2)+'\n')
+    subprocess.run([sys.executable,str(ROOT/'tools/check_native_thermal_motion.py')],check=True)
     print('Installed',len(mains),'thermal blocks;',len(rows),'validated native meshes at',revision,flush=True)
 
 

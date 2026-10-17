@@ -13,6 +13,15 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
 
 ## Current status
 
+- **Native motion axis repair, 17 October:** the thermal exporter now compensates
+  both moving meshes and root dummies. This fixes reversed manifold travel and
+  connector tails scaling around mirrored anchors; train rotors share the repair.
+  A new gate applies the compiled runtime matrices to actual packed MWM vertices
+  and LODs. All 1,376 comparisons across 24 moving parts pass, with maximum error
+  below 6 mm from native vertex quantization. Native delivery rejects changed
+  mesh/pose fingerprints. In-game validation after a world reload remains pending.
+  [Native motion evidence](../ArcanePower/validation/thermal-models/native-motion.json).
+
 - **Native thermal delivery, 17 October:** all 31 thermal block definitions and
   native mains, 24 moving subparts, 93 construction models and 186 LODs are installed
   locally and packaged in the unpublished 0.1.0 ZIP. All 334 native meshes pass

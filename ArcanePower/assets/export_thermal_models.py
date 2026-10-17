@@ -221,7 +221,11 @@ def prepare(name):
             native=ident+'_'+part
             s,col,root=scene(native,cells,True)
             for obj in members:
-                if obj.type=='MESH':copy_mesh(obj,col,root,Matrix.Translation(-pivot))
+                # SEUT exports subpart vertices as (X,Z,-Y), while main
+                # vertices and runtime poses use (-X,Z,Y). With our identity
+                # native dummies, bake the missing half-turn into the mesh too.
+                if obj.type=='MESH':copy_mesh(obj,col,root,Matrix.Rotation(math.pi,4,'Z')@Matrix.Translation(-pivot))
+            s['thermal_mesh_frame']='reactor-local (-X,Z,Y)'
             bpy.context.view_layer.update()
             LOD['build_lods'](s,batch=True)
             generated.append(s.name)
@@ -239,7 +243,7 @@ def prepare(name):
         runpy.run_path(str(ROOT/'assets/highlight_inventory_hatches.py'))['remap_highlights'](copies,native=True)
         for part,members,pivot in groups:
             # SEUT's FBX empty axes otherwise import as a 180-degree Y turn.
-            # Compensate the dummy only; meshes already use native coordinates.
+            # Compensate the dummy and bake the same half-turn into its mesh.
             dummy(col,root,'subpart_'+part,Matrix.Translation(pivot)@Matrix.Rotation(math.pi,4,'Z'),native_id(ident+'_'+part))
         bpy.context.view_layer.update()
         assert tris(col)>0,('Empty native main',name)
