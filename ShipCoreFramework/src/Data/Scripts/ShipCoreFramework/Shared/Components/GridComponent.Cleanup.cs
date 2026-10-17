@@ -7,13 +7,18 @@ namespace ShipCoreFramework
     {
         internal void Clean()
         {
+            _appliedModifiers = null;
             if (Grid != null)
             {
                 Grid.OnMarkForClose -= GridMarkedForClose;
                 Grid.OnBlockAdded -= BlockAddedEvent;
                 Grid.OnBlockRemoved -= BlockRemoved;
                 if (Session.IsServer)
+                {
                     ((IMyCubeGrid)Grid).OnBlockIntegrityChanged -= BlockIntegrityChanged;
+                    Grid.OnBlockOwnershipChanged -= GridOwnershipChanged;
+                    Grid.OnStaticChanged -= GridStaticChanged;
+                }
             }
 
             List<IMySlimBlock> blocksCopy;

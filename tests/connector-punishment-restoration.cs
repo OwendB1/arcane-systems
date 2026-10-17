@@ -69,10 +69,20 @@ namespace ShipCoreFramework
         internal double TotalWeight, ConnectorWeight;
         internal readonly double[] DirectionWeights = new double[6];
         internal readonly object BucketLock = new object();
-        internal readonly List<IMySlimBlock> Members = new List<IMySlimBlock>();
+        internal readonly MeasuredList<IMySlimBlock> Members = new MeasuredList<IMySlimBlock>();
         internal readonly HashSet<IMySlimBlock> ConnectorMembers = new HashSet<IMySlimBlock>();
     }
-    internal static class GridComponent { internal static int KeyOf(IMySlimBlock block) { return 0; } }
+    internal class MeasuredList<T> : List<T>, ICollection<T>
+    {
+        internal int CopiedItems;
+        void ICollection<T>.CopyTo(T[] array, int index)
+        { CopiedItems += Count; CopyTo(array, index); }
+    }
+    internal static class GridComponent
+    {
+        internal static int KeyReads;
+        internal static int KeyOf(IMySlimBlock block) { KeyReads++; return 0; }
+    }
     internal static class Session
     {
         internal static bool IsServer = true, IsGameThread = true, IsShuttingDown;
@@ -104,7 +114,7 @@ namespace ShipCoreFramework
         private void NotifyDirectionalPlacementViolation(IMyCubeBlock reference, IMySlimBlock block) { }
         private static bool TryResolveBlockFacing(IMyCubeBlock reference, IMySlimBlock block, DirectionType direction, out DirectionType facing)
         { facing = DirectionType.Forward; return false; }
-        private double GetEffectiveMaxCount(BlockLimit limit) { return limit.MaxCount; }
+        private float GetEffectiveMaxCount(BlockLimit limit) { return (float)limit.MaxCount; }
         private string GetGroupKey() { return "test"; }
         private long GetRepresentativeGridId() { return 1; }
         private void MarkLimitsEnforced(int count) { Applied += count; }
@@ -222,6 +232,38 @@ namespace ShipCoreFramework
             Functional(enabled).Closed = true;
             Disconnect(group);
             Check(Functional(enabled).EnableWrites == 0, "Destroyed blocks must not be restored.");
+            group.Close();
+
+            // A connector-only check must scale with imported blocks, not the owner's local grid.
+            group = new GroupComponent();
+            var imported = new[] { Block(true), Block(true, 1) };
+            limit = Import(group, 10002, imported);
+            var largeBucket = group.Limits[limit];
+            for (var i = 0; i < 10000; i++) largeBucket.Members.Add(Block(true, i + 2));
+            largeBucket.TotalWeight += 10000;
+            GridComponent.KeyReads = 0;
+            Run(group);
+            Check(largeBucket.Members.CopiedItems == 0 && GridComponent.KeyReads == 0,
+                "An under-capacity connector check must not copy or inspect any members.");
+            limit.MaxCount = 10000;
+            Run(group);
+            Check(largeBucket.Members.CopiedItems == 0 && GridComponent.KeyReads == imported.Length,
+                "An over-capacity connector check must inspect only imported members.");
+            Check(!Functional(imported[0]).Enabled && !Functional(imported[1]).Enabled,
+                "Local totals must still consume capacity during connector-only checks.");
+            Run(group, true);
+            Check(largeBucket.Members.CopiedItems == largeBucket.Members.Count,
+                "Full enforcement must retain local membership checks.");
+            limit.MaxCount = 10002;
+            Run(group);
+            Check(Functional(imported[0]).Enabled && Functional(imported[1]).Enabled,
+                "The under-capacity fast path must restore previously punished imports.");
+            group.ForceShutOff = true;
+            GridComponent.KeyReads = 0;
+            Run(group);
+            Check(!Functional(imported[0]).Enabled && GridComponent.KeyReads == imported.Length,
+                "Forced shutdown must bypass the capacity fast path and inspect only imports.");
+            Disconnect(group);
             group.Close();
 
             group = new GroupComponent();

@@ -28,7 +28,12 @@ namespace ShipCoreFramework
             if (_closing || Session.IsShuttingDown) return;
             RefreshGridStateCacheIfNeeded(true);
             var directionReferenceChanged = RefreshNoCoreDirectionLockReferenceCacheIfNeeded();
-            RefreshModifierStateCacheIfNeeded();
+            if (_modifierStateCacheDirty)
+            {
+                RefreshModifierStateCacheIfNeeded();
+                ApplyModifiers(Modifiers);
+                RefreshDefenseModifierCache();
+            }
             RefreshIgnoredStateCacheIfNeeded(true);
 
             if (directionReferenceChanged)
@@ -133,11 +138,18 @@ namespace ShipCoreFramework
                 return;
 
             var wasNpcGroup = _cachedIsNpcGroup;
+            var wasIgnoredByAiOrFactionTag = _cachedIsIgnoredByAiOrFactionTag;
             _cachedIsNpcGroup = IsNpcGroup();
             _cachedIsIgnoredByAiOrFactionTag = IsIgnoredByAiOrFactionTag();
             _cachedIsIgnoredGroup = ComputeIsIgnoredGroup();
             _ignoredStateCacheDirty = false;
             _nextIgnoredStateCacheRefreshTick = tick + IgnoredStateCacheRefreshIntervalTicks;
+
+            if (wasIgnoredByAiOrFactionTag != _cachedIsIgnoredByAiOrFactionTag)
+            {
+                InvalidateModifierStateCache();
+                QueuePunishmentStateRefresh();
+            }
 
             if (wasNpcGroup != _cachedIsNpcGroup)
             {

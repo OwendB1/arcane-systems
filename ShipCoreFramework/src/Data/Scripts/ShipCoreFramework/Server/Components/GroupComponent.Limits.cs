@@ -383,6 +383,7 @@ namespace ShipCoreFramework
         {
             Session.MarkRuntimeStateDirty(this);
             ApplyGroupContribution(contribution, 1);
+            QueuePunishmentStateRefresh();
             InvalidateGameThreadStateCache(true);
             IncrementLimitGeneration();
             InvalidateSpeedStateCache();
@@ -402,6 +403,7 @@ namespace ShipCoreFramework
         {
             Session.MarkRuntimeStateDirty(this);
             ApplyGroupContribution(contribution, -1);
+            QueuePunishmentStateRefresh();
             InvalidateGameThreadStateCache(true);
             IncrementLimitGeneration();
 
@@ -422,6 +424,7 @@ namespace ShipCoreFramework
         {
             if (delta == 0) return;
             AddGroupPCU(delta);
+            QueuePunishmentStateRefresh();
             IncrementLimitGeneration();
             Session.MarkRuntimeStateDirty(this);
         }
@@ -607,6 +610,7 @@ namespace ShipCoreFramework
 
                 double total;
                 double connectorTotal;
+                float effectiveMaxCount;
                 var directionTotals = new double[6];
                 List<IMySlimBlock> membersCopy;
                 HashSet<IMySlimBlock> connectorMembersCopy;
@@ -615,9 +619,15 @@ namespace ShipCoreFramework
                     if (connectorOnly && bucket.ConnectorWeight <= 0d) continue;
                     total = bucket.TotalWeight;
                     connectorTotal = bucket.ConnectorWeight;
+                    effectiveMaxCount = forceShutOffPunishment ? 0f : GetEffectiveMaxCount(limit);
+                    // No connector can exceed the remaining capacity; execution still restores old shutdowns.
+                    if (connectorOnly && !forceShutOffPunishment &&
+                        Math.Max(total, connectorTotal) <= effectiveMaxCount) continue;
                     Array.Copy(bucket.DirectionWeights, directionTotals,
                         Math.Min(bucket.DirectionWeights.Length, directionTotals.Length));
-                    membersCopy = new List<IMySlimBlock>(bucket.Members);
+                    membersCopy = connectorOnly
+                        ? new List<IMySlimBlock>(bucket.ConnectorMembers)
+                        : new List<IMySlimBlock>(bucket.Members);
                     connectorMembersCopy = new HashSet<IMySlimBlock>(bucket.ConnectorMembers);
                 }
 
@@ -718,7 +728,6 @@ namespace ShipCoreFramework
                     }
                 }
 
-                var effectiveMaxCount = GetEffectiveMaxCount(limit);
                 var localTotal = Math.Max(0d, total - connectorTotal);
                 if (!connectorOnly && localTotal > effectiveMaxCount)
                 {

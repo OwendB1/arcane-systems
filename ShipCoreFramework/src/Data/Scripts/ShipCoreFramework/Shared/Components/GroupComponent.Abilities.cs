@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Sandbox.ModAPI;
-using IMyTerminalBlock = Sandbox.ModAPI.IMyTerminalBlock;
 
 namespace ShipCoreFramework
 {
@@ -45,14 +44,7 @@ namespace ShipCoreFramework
             }
 
             foreach (var kvp in GridDictionary)
-            {
-                var blocksCopy = kvp.Value.GetBlocksCopy();
-                foreach (var block in blocksCopy)
-                {
-                    var terminalBlock = block?.FatBlock as IMyTerminalBlock;
-                    if (terminalBlock != null) CubeGridModifiers.ApplyModifiers(terminalBlock, modifiers);
-                }
-            }
+                kvp.Value.ApplyModifiers(modifiers);
         }
 
         internal bool IsPowerOverclockActive()
@@ -115,17 +107,15 @@ namespace ShipCoreFramework
 
         internal GridDefenseModifiers GetActiveDefenseModifiers()
         {
-            return Session.IsServer && Session.IsGameThread
-                ? ComputeActiveDefenseModifiers()
-                : GetCachedActiveDefenseModifiers();
+            if (Session.IsServer && Session.IsGameThread) RefreshModifierStateCacheIfNeeded();
+            return GetCachedActiveDefenseModifiers();
         }
 
 
         internal GridDefenseModifiers GetPassiveDefenseModifiers()
         {
-            return Session.IsServer && Session.IsGameThread
-                ? ComputePassiveDefenseModifiers()
-                : GetCachedPassiveDefenseModifiers();
+            if (Session.IsServer && Session.IsGameThread) RefreshModifierStateCacheIfNeeded();
+            return GetCachedPassiveDefenseModifiers();
         }
 
     }

@@ -136,7 +136,7 @@ namespace ShipCoreFramework
             RefreshPunishmentState();
             RefreshGridStateCache();
             RefreshNoCoreDirectionLockReferenceCache();
-            RefreshModifierStateCache();
+            RefreshModifierStateCacheIfNeeded();
             ApplyModifiers(Modifiers);
             DefenseValuesChanged();
 

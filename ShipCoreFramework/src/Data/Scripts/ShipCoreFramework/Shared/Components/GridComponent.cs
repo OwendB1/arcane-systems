@@ -69,7 +69,11 @@ namespace ShipCoreFramework
             Grid.OnBlockAdded += BlockAddedEvent;
             Grid.OnBlockRemoved += BlockRemoved;
             if (Session.IsServer)
+            {
                 ((IMyCubeGrid)Grid).OnBlockIntegrityChanged += BlockIntegrityChanged;
+                Grid.OnBlockOwnershipChanged += GridOwnershipChanged;
+                Grid.OnStaticChanged += GridStaticChanged;
+            }
 
             if (!processBlocks) return;
 

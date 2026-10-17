@@ -15,7 +15,7 @@ namespace ShipCoreFramework
             if (Session.IsServer || state == null || _closing) return;
 
             var nextModifiers = FromRuntimeData(state.Modifiers);
-            var modifiersChanged = !_runtimeStateReceived || !SameModifiers(_cachedActiveGridModifiers, nextModifiers);
+            var modifiersChanged = !_runtimeStateReceived || !CubeGridModifiers.SameModifiers(_cachedActiveGridModifiers, nextModifiers);
             var broadcastChanges = _runtimeStateReceived;
             var previousCoreBlockId = _runtimeMainCoreBlockId;
             var previousCoreSubtypeId = _runtimeCoreSubtypeId;
@@ -286,20 +286,6 @@ namespace ShipCoreFramework
             if (previousDefenseActive) ModAPI.BroadcastActiveDefenseDeactivated(eventGridId);
             foreach (var t in previousGridIds)
                 ModAPI.BroadcastGridRemovedFromGroup(t, eventGridId);
-        }
-
-        private static bool SameModifiers(GridModifiers left, GridModifiers right)
-        {
-            return left != null && right != null &&
-                   left.AssemblerSpeed == right.AssemblerSpeed &&
-                   left.DrillHarvestMultiplier == right.DrillHarvestMultiplier &&
-                   left.GyroEfficiency == right.GyroEfficiency &&
-                   left.GyroForce == right.GyroForce &&
-                   left.PowerProducersOutput == right.PowerProducersOutput &&
-                   left.RefineEfficiency == right.RefineEfficiency &&
-                   left.RefineSpeed == right.RefineSpeed &&
-                   left.ThrusterEfficiency == right.ThrusterEfficiency &&
-                   left.ThrusterForce == right.ThrusterForce;
         }
 
         private void ApplyRuntimeCore(long mainCoreBlockId)

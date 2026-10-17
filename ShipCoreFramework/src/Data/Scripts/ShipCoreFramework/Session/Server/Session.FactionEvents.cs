@@ -54,12 +54,14 @@ namespace ShipCoreFramework
         {
             if (!IsServer) return;
             PerFactionManager.TrackFactionMembers(factionId);
+            EnforceOverCapacityForGroups(GetAffectedGroupsForFactionChange(factionId, 0));
         }
 
         private static void FactionEdited(long factionId)
         {
             if (!IsServer) return;
             PerFactionManager.TrackFactionMembers(factionId);
+            EnforceOverCapacityForGroups(GetAffectedGroupsForFactionChange(factionId, 0));
         }
 
         private static void SessionReady()
@@ -87,8 +89,8 @@ namespace ShipCoreFramework
 
         private static IEnumerable<GroupComponent> GetAffectedGroupsForFactionChange(long factionId, long playerId)
         {
-            return GroupDict.Values.Where(group => group.MainCoreComponent != null &&
-                                                   (group.OwnerId == playerId ||
+            return GroupDict.Values.Where(group => group != null &&
+                                                   (playerId > 0 && group.OwnerId == playerId ||
                                                     factionId > 0 &&
                                                     group.OwningFaction != null &&
                                                     group.OwningFaction.FactionId == factionId));
@@ -96,10 +98,10 @@ namespace ShipCoreFramework
 
         private static void EnforceOverCapacityForGroups(IEnumerable<GroupComponent> groups)
         {
-            foreach (var comp in groups.Where(group => group?.MainCoreComponent != null).Distinct().ToList())
+            foreach (var comp in groups.Where(group => group != null).Distinct().ToList())
             {
+                comp.OnOwnershipOrMobilityChanged();
                 comp.SyncBeaconComponents();
-                comp.RefreshPunishmentState();
             }
         }
     }

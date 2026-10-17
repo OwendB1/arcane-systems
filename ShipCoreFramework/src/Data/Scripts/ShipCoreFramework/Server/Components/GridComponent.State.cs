@@ -29,5 +29,15 @@ namespace ShipCoreFramework
         {
             LimitsNexusSync.NotifyLocalGridClose();
         }
+
+        private void GridOwnershipChanged(Sandbox.Game.Entities.MyCubeGrid grid)
+        {
+            GroupComponent?.OnOwnershipOrMobilityChanged();
+        }
+
+        private void GridStaticChanged(Sandbox.Game.Entities.MyCubeGrid grid, bool isStatic)
+        {
+            GroupComponent?.OnOwnershipOrMobilityChanged();
+        }
     }
 }

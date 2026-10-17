@@ -249,24 +249,6 @@ namespace ShipCoreFramework
             return modifiers;
         }
 
-        private static GridModifiers Clone(GridModifiers modifiers)
-        {
-            if (modifiers == null) return new GridModifiers();
-
-            return new GridModifiers
-            {
-                AssemblerSpeed = modifiers.AssemblerSpeed,
-                DrillHarvestMultiplier = modifiers.DrillHarvestMultiplier,
-                GyroEfficiency = modifiers.GyroEfficiency,
-                GyroForce = modifiers.GyroForce,
-                PowerProducersOutput = modifiers.PowerProducersOutput,
-                RefineEfficiency = modifiers.RefineEfficiency,
-                RefineSpeed = modifiers.RefineSpeed,
-                ThrusterEfficiency = modifiers.ThrusterEfficiency,
-                ThrusterForce = modifiers.ThrusterForce
-            };
-        }
-
         private static SpeedModifiers Clone(SpeedModifiers modifiers)
         {
             if (modifiers == null) return new SpeedModifiers();
@@ -336,22 +318,5 @@ namespace ShipCoreFramework
             };
         }
 
-        private static GridDefenseModifiers Clone(GridDefenseModifiers modifiers)
-        {
-            if (modifiers == null) return new GridDefenseModifiers();
-
-            return new GridDefenseModifiers
-            {
-                Bullet = modifiers.Bullet,
-                PostShield = modifiers.PostShield,
-                Duration = modifiers.Duration,
-                Cooldown = modifiers.Cooldown,
-                Rocket = modifiers.Rocket,
-                Explosion = modifiers.Explosion,
-                Environment = modifiers.Environment,
-                Energy = modifiers.Energy,
-                Kinetic = modifiers.Kinetic
-            };
-        }
     }
 }

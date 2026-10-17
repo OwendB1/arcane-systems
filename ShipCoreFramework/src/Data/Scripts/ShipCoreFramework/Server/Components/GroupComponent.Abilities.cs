@@ -24,7 +24,8 @@ namespace ShipCoreFramework
         internal void RefreshPunishmentState()
         {
             if (!Session.IsServer) return;
-            if (_closing || Session.IsShuttingDown || IsInitializingGrids) return;
+            // Deactivate already clears punishment and restores modifiers; block/grid events handle later changes.
+            if (_closing || Deactivated || Session.IsShuttingDown || IsInitializingGrids) return;
             if (!Session.IsGameThread)
             {
                 MyAPIGateway.Utilities.InvokeOnGameThread(RefreshPunishmentState);
@@ -36,7 +37,7 @@ namespace ShipCoreFramework
             var previousPunishModifiersForSync = PunishModifiers;
             var previousPunishLimitedBlocks = PunishLimitedBlocks;
 
-            if (Deactivated || IsIgnoredByAiOrFactionTagThreadSafe())
+            if (IsIgnoredByAiOrFactionTagThreadSafe())
             {
                 ClearDeactivatedLimitState();
                 RefreshModifierStateCache();
@@ -61,7 +62,7 @@ namespace ShipCoreFramework
 
             RefreshLimitedBlockPunishmentState();
             RefreshPunishmentFlags();
-            RefreshModifierStateCache();
+            RefreshModifierStateCacheIfNeeded();
             if (mainCoreChanged || previousPunishModifiers != PunishModifiers) ApplyModifiers(Modifiers);
             RefreshDefenseModifierCache();
             MarkRuntimeStateDirtyIfChanged(previousMainCore, previousPunishSpeed,
@@ -342,6 +343,13 @@ namespace ShipCoreFramework
 
         internal void RefreshDefenseModifierCache()
         {
+            if (_closing || Session.IsShuttingDown) return;
+            if (!Session.IsGameThread)
+            {
+                MyAPIGateway.Utilities.InvokeOnGameThread(RefreshDefenseModifierCache);
+                return;
+            }
+
             GridDefenseModifiers discardedModifiers;
             if (Deactivated || MainCoreComponent == null)
             {
@@ -351,7 +359,15 @@ namespace ShipCoreFramework
             }
 
             var modifiers = GetCurrentDefenseModifiers();
-            foreach (var kvp in GridDictionary) CubeGridModifiers.DefenseModifiers[kvp.Key.EntityId] = modifiers;
+            GridDefenseModifiers snapshot = null;
+            foreach (var kvp in GridDictionary)
+            {
+                GridDefenseModifiers previous;
+                if (CubeGridModifiers.DefenseModifiers.TryGetValue(kvp.Key.EntityId, out previous) &&
+                    CubeGridModifiers.SameModifiers(previous, modifiers)) continue;
+                if (snapshot == null) snapshot = CubeGridModifiers.Clone(modifiers);
+                CubeGridModifiers.DefenseModifiers[kvp.Key.EntityId] = snapshot;
+            }
         }
 
         internal void RemoveDefenseModifierCache(long gridEntityId)
