@@ -306,6 +306,9 @@ namespace ArcanePower
                 }
                 source.ProduceThermal(plan.AcceptedMW * circulation);
             }
+            foreach (var source in sources)
+                if (source.ThermalInitialized && !source.Motion.Thermal.Settled)
+                    source.Motion.Thermal.Diagnostic = source.ThermalModeTransitionHint;
             foreach (var machine in machines)
             {
                 if (!startupHosts.Contains(machine.Entity.EntityId)) machine.StopStartup();

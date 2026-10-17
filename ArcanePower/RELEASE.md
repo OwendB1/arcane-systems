@@ -34,21 +34,30 @@ fuel/voxel art, containment hardware, vents, LCD and tablet implementations.
 
 The 17 October delivery adds all 31 thermal blocks, including the latest reactor
 manifolds, internal smoked coolant glass, turbine/compressor rotors and typed pipe
-kit. All 93 thermal construction models and 174 LODs are exported. Native import
-checks validate 322 meshes, collision bytes, material dependencies, 20 manifold
+kit. All 93 thermal construction models and 186 LODs are exported. Native import
+checks validate 334 meshes, collision bytes, material dependencies, 20 manifold
 rest frames and four shaft pivots/frames. The reactor generates and pressurizes
 its own CO₂ charge during powered commissioning; no gas supply blocks are needed.
-Each thermal block has its own model-rendered inventory icon. Pipe icons identify
-PRIMARY, HP and LP circuits; upgraded machines carry a tier marker. All 51 block
+The thermal design is now the sole playable Arcane Reactor; the old prototype
+definition is retained under `assets/definitions/` and excluded from the mod. Its
+Blender sources and accepted native comparison inputs remain outside the mod.
+Existing thermal reactor subtype IDs are unchanged.
+External pipe walls use continuous reflective glass; internal coolant plumbing
+retains its accepted finish and geometry. Socket inserts and face seals now have
+separate seats. Runtime manifold validation tolerates native export rounding,
+and reactor connection guidance is limited to incomplete, settled Brayton setups.
+Each thermal block has its own
+model-rendered inventory icon. Pipe icons identify
+PRIMARY, HP and LP circuits; upgraded machines carry a tier marker. All 50 block
 definitions, including seven hidden legacy blocks and the ejected core, are checked
-for icons, model references and recipes. All 43 buildable blocks have menu entries
+for icons, model references and recipes. All 42 buildable blocks have menu entries
 and three construction stages. [Block catalog](validation/block-catalog.json).
 [Native delivery evidence](validation/thermal-models/delivery-check.json).
 
 The 13 October runtime pass closes construction-stage startup/generation gaps,
 restricts cold-start reserve requests to eligible reactors, revokes removed storage
 module allocations immediately and finishes offline/distant storage visuals.
-The native shared menu includes twelve Power blocks and 31 thermal blocks. Earlier compact banks
+The native shared menu includes eleven Power blocks and 31 thermal blocks. Earlier compact banks
 retain their original hidden definitions and assets, preserving existing saves.
 
 Build the runtime ZIP from the repository root:
@@ -67,6 +76,12 @@ Extract its contents into a local mod directory and enable it in an experimental
 SE1 world. The local development symlink already exposes `src` on the next world
 load. Do not load both the extracted package and the development copy together.
 The manifest records every packaged file's SHA-256 and required vanilla assets.
+After packaging resolves all native subparts and LODs, it removes unused files
+from `src/Models/Cubes/large`. Accepted collisions and native comparison inputs
+are preserved under `assets/collisions/` and `assets/native-baselines/`; production
+blends remain the rebuild source. Export staging must be regenerated for another
+native compile. Ordinary deployment uses the current definitions and needs no raw
+export files.
 
 Direct mod code owns animation; Animation Engine is unnecessary. Text HUD API
 is optional for rich handheld telemetry, with native text fallback. Runtime

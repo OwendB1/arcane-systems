@@ -70,7 +70,7 @@ with tempfile.TemporaryDirectory(prefix='arcane-core-feedback-') as directory:
                     '-r:/usr/lib/mono/4.5/Facades/netstandard.dll', str(target)], check=True)
     subprocess.run(['mono', str(exe)], check=True, env={**os.environ, 'MONO_PATH': str(game)})
 
-material = ET.parse(ROOT/'src/Models/Cubes/large/ArcanePower_Plasma.xml')
+material = ET.parse(ROOT/'assets/definitions/ArcanePower_Plasma.xml')
 for channel, parameter in (('cm', 'ColorMetalTexture'), ('ng', 'NormalGlossTexture'), ('add', 'AddMapsTexture')):
     texture = material.find("Material/Parameter[@Name='"+parameter+"']").text
     with Image.open(ROOT/'src'/texture.replace('\\', '/')) as image:

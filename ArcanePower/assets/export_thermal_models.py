@@ -21,6 +21,7 @@ from mathutils import Matrix, Vector
 
 ROOT=Path(__file__).resolve().parents[1]
 STAGING=ROOT/'src/Models/Cubes/large/.thermal-stage'
+COLLISIONS=ROOT/'assets/collisions/Cubes/large'
 M=runpy.run_path(str(ROOT/'assets/build_thermal_models.py'))
 C=M['COLS']
 LOD=runpy.run_path(str(ROOT/'assets/build_energy_lods.py'))
@@ -271,6 +272,10 @@ def export(name, only_stems=None, preserve_collision=False):
     for key in rows[name]['scenes']:
         s=bpy.data.scenes[key];bpy.context.window.scene=s;bpy.context.view_layer.update()
         cols=C.get_collections(s)
+        if preserve_collision and s.seut.sceneType=='mainScene':
+            for suffix in ('','_BS1','_BS2','_BS3'):
+                filename=s.seut.subtypeId+suffix+'.hkt'
+                shutil.copy2(COLLISIONS/'Thermal'/filename,STAGING/filename)
         if only_stems is not None and not any(EXPORT.get_col_filename(col) in only_stems
                 for col in (cols['lod'] or [])+(cols['bs'] or [])+cols['main']):continue
         # SEUT edits all duplicate empty names globally; restore the authoring IDs.
@@ -314,7 +319,7 @@ def export(name, only_stems=None, preserve_collision=False):
             for o,(matrix,size) in transforms.items():
                 o.matrix_basis=matrix;o.empty_display_size=size
         if name=='Reactor housing' and s.seut.sceneType=='mainScene' and only_stems is None and not preserve_collision:
-            shutil.copy2(ROOT/'src/Models/Cubes/large/ArcanePower_ReactorPrototype.hkt',STAGING/(s.seut.subtypeId+'.hkt'))
+            shutil.copy2(COLLISIONS/'ArcanePower_ReactorPrototype.hkt',STAGING/(s.seut.subtypeId+'.hkt'))
         if s.seut.sceneType=='mainScene' and only_stems is None:
             assert (STAGING/(s.seut.subtypeId+'.hkt')).is_file(), 'Missing accepted block collision'
             for stage in (1,2,3):

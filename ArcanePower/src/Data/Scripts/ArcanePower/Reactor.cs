@@ -13,10 +13,21 @@ using Sandbox.Game.Lights;
 
 namespace ArcanePower
 {
-    [MyEntityComponentDescriptor(typeof(MyObjectBuilder_Reactor), false, "ArcanePower_ReactorPrototype", "ArcanePower_Thermal_ReactorHousing")]
+    [MyEntityComponentDescriptor(typeof(MyObjectBuilder_Reactor), false, "ArcanePower_Thermal_ReactorHousing")]
     public sealed partial class Reactor : MyGameLogicComponent
     {
         private IMyReactor reactor;
+        private bool closing;
+        private bool IsLive
+        {
+            get
+            {
+                // SE defers entity deletion. Logic and inventory callbacks can
+                // still arrive after creative removal has begun tearing it down.
+                return !closing && reactor != null && !reactor.MarkedForClose && !reactor.Closed
+                    && reactor.SlimBlock != null && reactor.GetInventory() != null;
+            }
+        }
         // Native upgrade modules refresh connections on their 100-frame update.
         // Keep the saved pose parked until that pass, then prime power for two ticks.
         private int initializationFrames = 120;
@@ -44,6 +55,7 @@ namespace ArcanePower
 
         public override void UpdateOnceBeforeFrame()
         {
+            if (!IsLive) return;
             reactor.OnUpgradeValuesChanged += CheckContainment;
             reactor.AppendingCustomInfo += AppendInfo;
             NeedsUpdate = MyEntityUpdateEnum.EACH_FRAME;
@@ -55,6 +67,7 @@ namespace ArcanePower
 
         public override void UpdateBeforeSimulation()
         {
+            if (!IsLive) return;
             RefreshRestPoses();
             if (initializationFrames > 0)
             {
@@ -93,6 +106,7 @@ namespace ArcanePower
 
         private void CheckContainment()
         {
+            if (!IsLive) return;
             float controllers, capacity;
             reactor.UpgradeValues.TryGetValue("ArcaneControllerCount", out controllers);
             reactor.UpgradeValues.TryGetValue("ArcaneContainment", out capacity);
@@ -201,6 +215,9 @@ namespace ArcanePower
 
         public override void Close()
         {
+            if (closing) return;
+            closing = true;
+            NeedsUpdate = MyEntityUpdateEnum.NONE;
             CloseSound();
             if (coreGlow != null)
             {
@@ -210,7 +227,11 @@ namespace ArcanePower
             if (reactor == null) return;
             reactor.OnUpgradeValuesChanged -= CheckContainment;
             reactor.AppendingCustomInfo -= AppendInfo;
-            ((VRage.Game.Entity.MyInventoryBase)reactor.GetInventory()).ContentsChanged -= FuelChanged;
+            if (fuelInventory != null)
+            {
+                fuelInventory.ContentsChanged -= FuelChanged;
+                fuelInventory = null;
+            }
             SaveMotion();
             VentSession.Remove(this);
         }

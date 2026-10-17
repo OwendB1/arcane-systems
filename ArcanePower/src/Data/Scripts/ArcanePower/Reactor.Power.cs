@@ -16,7 +16,7 @@ namespace ArcanePower
 
         internal bool NeedsStorageSupport
         {
-            get { return motionInitialized && initializationFrames == 0 && !Entity.Closed && (Motion.Vent != VentPhase.Idle
+            get { return motionInitialized && initializationFrames == 0 && IsLive && (Motion.Vent != VentPhase.Idle
                 || Motion.Core == CorePhase.Cooling || Motion.Core == CorePhase.Stopping
                 || Motion.Core == CorePhase.Starting
                 || (Motion.Core == CorePhase.Off && CanPrepareContainment) || ThermalNeedsPowerSupport); }

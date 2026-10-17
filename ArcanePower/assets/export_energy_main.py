@@ -12,6 +12,7 @@ import shutil
 import bpy
 
 ROOT = Path(__file__).resolve().parents[1]
+LAB = runpy.run_path(str(ROOT/'tools/prepare_lab.py'))
 PROTOTYPE = Path(bpy.data.filepath).name == 'arcane-power-prototype.blend'
 STAGING = ROOT/'src/Models/Cubes/large'/('.prototype-main-stage' if PROTOTYPE else '.energy-main-stage')
 COLS = importlib.import_module('space-engineers-utilities.seut_collections')
@@ -94,13 +95,14 @@ def export_sources(names):
                 assert all('FINISHED' in status for status in statuses), (name, statuses)
         finally:
             scene.seut.export_exportPath, scene.seut.linkSubpartInstances = previous
-        hkt = target/(name+'.hkt')
+        hkt = (LAB['COLLISIONS'] if target==ROOT/'src/Models/Cubes/large' else target)/(name+'.hkt')
         if name == 'ArcanePower_AdvancedContainmentController':
-            hkt = target/'ArcanePower_ContainmentController.hkt'
+            hkt = LAB['COLLISIONS']/'ArcanePower_ContainmentController.hkt'
         has_collision = any(c.objects for c in COLS.get_collections(scene)['hkt'] or [])
         if has_collision and hkt.is_file():
             shutil.copy2(hkt, STAGING/(name+'.hkt'))
-        assert (target/(name+'.mwm')).is_file(), 'Missing accepted native model: '+name
+        accepted = LAB['model_source'](name) if target==ROOT/'src/Models/Cubes/large' else target/(name+'.mwm')
+        assert accepted.is_file(), 'Missing accepted native model: '+name
         rows[name] = {
             'collections': [EXPORT.get_col_filename(c) for c in collections],
             'triangles': triangle_counts[name],
@@ -108,8 +110,8 @@ def export_sources(names):
             'authored_triangles':sum(len(p.vertices)-2 for o in main_col.objects if o.type == 'MESH' for p in o.data.polygons),
             'triangulation_adjustments':adjustments,
             'target': target.relative_to(ROOT/'src').as_posix(),
-            'collision': hkt.relative_to(ROOT/'src').as_posix() if has_collision and hkt.is_file() else None,
-            'collision_model': (target/(name+'.mwm')).relative_to(ROOT/'src').as_posix(),
+            'collision': hkt.relative_to(ROOT).as_posix() if has_collision and hkt.is_file() else None,
+            'collision_model': accepted.relative_to(ROOT).as_posix(),
         }
         (STAGING/(name+'-source.json')).write_text(json.dumps(rows[name], indent=2)+'\n')
     return rows

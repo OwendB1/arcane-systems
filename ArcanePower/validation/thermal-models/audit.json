@@ -4,7 +4,7 @@
     "Brayton train": {
       "phase": "textures",
       "meshes": 424,
-      "triangles": 157971,
+      "triangles": 159007,
       "fasteners": 132,
       "decals": 129,
       "markings": 0,
@@ -33,7 +33,7 @@
     "Brayton train upgraded": {
       "phase": "textures",
       "meshes": 442,
-      "triangles": 158883,
+      "triangles": 159919,
       "fasteners": 136,
       "decals": 136,
       "markings": 0,
@@ -62,7 +62,7 @@
     "Primary heater": {
       "phase": "textures",
       "meshes": 248,
-      "triangles": 29740,
+      "triangles": 30776,
       "fasteners": 40,
       "decals": 71,
       "markings": 0,
@@ -74,7 +74,7 @@
     "Primary heater upgraded": {
       "phase": "textures",
       "meshes": 286,
-      "triangles": 31632,
+      "triangles": 32668,
       "fasteners": 48,
       "decals": 85,
       "markings": 0,
@@ -86,7 +86,7 @@
     "Recuperator": {
       "phase": "textures",
       "meshes": 314,
-      "triangles": 33546,
+      "triangles": 35618,
       "fasteners": 36,
       "decals": 71,
       "markings": 0,
@@ -99,7 +99,7 @@
     "Recuperator upgraded": {
       "phase": "textures",
       "meshes": 394,
-      "triangles": 35562,
+      "triangles": 37634,
       "fasteners": 52,
       "decals": 107,
       "markings": 0,
@@ -112,7 +112,7 @@
     "Atmospheric cooler": {
       "phase": "textures",
       "meshes": 263,
-      "triangles": 16480,
+      "triangles": 16998,
       "fasteners": 45,
       "decals": 62,
       "markings": 0,
@@ -124,7 +124,7 @@
     "Space radiator": {
       "phase": "textures",
       "meshes": 243,
-      "triangles": 15087,
+      "triangles": 15605,
       "fasteners": 30,
       "decals": 40,
       "markings": 0,
@@ -145,7 +145,7 @@
     "PRIMARY / Straight": {
       "phase": "textures",
       "meshes": 77,
-      "triangles": 7662,
+      "triangles": 8698,
       "fasteners": 14,
       "decals": 20,
       "markings": 0,
@@ -157,7 +157,7 @@
     "PRIMARY / Elbow": {
       "phase": "textures",
       "meshes": 77,
-      "triangles": 13550,
+      "triangles": 14586,
       "fasteners": 14,
       "decals": 20,
       "markings": 0,
@@ -169,7 +169,7 @@
     "PRIMARY / Riser": {
       "phase": "textures",
       "meshes": 76,
-      "triangles": 16366,
+      "triangles": 17402,
       "fasteners": 14,
       "decals": 20,
       "markings": 0,
@@ -181,7 +181,7 @@
     "PRIMARY / Tee": {
       "phase": "textures",
       "meshes": 101,
-      "triangles": 10753,
+      "triangles": 12307,
       "fasteners": 18,
       "decals": 27,
       "markings": 0,
@@ -193,7 +193,7 @@
     "PRIMARY / Cross": {
       "phase": "textures",
       "meshes": 127,
-      "triangles": 14356,
+      "triangles": 16428,
       "fasteners": 22,
       "decals": 34,
       "markings": 0,
@@ -205,7 +205,7 @@
     "PRIMARY / Roll adapter": {
       "phase": "textures",
       "meshes": 79,
-      "triangles": 20206,
+      "triangles": 21242,
       "fasteners": 14,
       "decals": 20,
       "markings": 0,
@@ -217,7 +217,7 @@
     "PRIMARY / End cap": {
       "phase": "textures",
       "meshes": 55,
-      "triangles": 5579,
+      "triangles": 6097,
       "fasteners": 10,
       "decals": 13,
       "markings": 0,
@@ -229,7 +229,7 @@
     "CO2_HP / Straight": {
       "phase": "textures",
       "meshes": 79,
-      "triangles": 8636,
+      "triangles": 9672,
       "fasteners": 14,
       "decals": 22,
       "markings": 0,
@@ -241,7 +241,7 @@
     "CO2_HP / Elbow": {
       "phase": "textures",
       "meshes": 79,
-      "triangles": 14524,
+      "triangles": 15560,
       "fasteners": 14,
       "decals": 22,
       "markings": 0,
@@ -253,7 +253,7 @@
     "CO2_HP / Riser": {
       "phase": "textures",
       "meshes": 78,
-      "triangles": 17340,
+      "triangles": 18376,
       "fasteners": 14,
       "decals": 22,
       "markings": 0,
@@ -265,7 +265,7 @@
     "CO2_HP / Tee": {
       "phase": "textures",
       "meshes": 104,
-      "triangles": 12214,
+      "triangles": 13768,
       "fasteners": 18,
       "decals": 30,
       "markings": 0,
@@ -277,7 +277,7 @@
     "CO2_HP / Cross": {
       "phase": "textures",
       "meshes": 131,
-      "triangles": 16304,
+      "triangles": 18376,
       "fasteners": 22,
       "decals": 38,
       "markings": 0,
@@ -289,7 +289,7 @@
     "CO2_HP / Roll adapter": {
       "phase": "textures",
       "meshes": 81,
-      "triangles": 21180,
+      "triangles": 22216,
       "fasteners": 14,
       "decals": 22,
       "markings": 0,
@@ -301,7 +301,7 @@
     "CO2_HP / End cap": {
       "phase": "textures",
       "meshes": 56,
-      "triangles": 6066,
+      "triangles": 6584,
       "fasteners": 10,
       "decals": 14,
       "markings": 0,
@@ -313,7 +313,7 @@
     "CO2_LP / Straight": {
       "phase": "textures",
       "meshes": 79,
-      "triangles": 8664,
+      "triangles": 9700,
       "fasteners": 14,
       "decals": 22,
       "markings": 0,
@@ -325,7 +325,7 @@
     "CO2_LP / Elbow": {
       "phase": "textures",
       "meshes": 79,
-      "triangles": 14552,
+      "triangles": 15588,
       "fasteners": 14,
       "decals": 22,
       "markings": 0,
@@ -337,7 +337,7 @@
     "CO2_LP / Riser": {
       "phase": "textures",
       "meshes": 78,
-      "triangles": 17368,
+      "triangles": 18404,
       "fasteners": 14,
       "decals": 22,
       "markings": 0,
@@ -349,7 +349,7 @@
     "CO2_LP / Tee": {
       "phase": "textures",
       "meshes": 104,
-      "triangles": 12256,
+      "triangles": 13810,
       "fasteners": 18,
       "decals": 30,
       "markings": 0,
@@ -361,7 +361,7 @@
     "CO2_LP / Cross": {
       "phase": "textures",
       "meshes": 131,
-      "triangles": 16360,
+      "triangles": 18432,
       "fasteners": 22,
       "decals": 38,
       "markings": 0,
@@ -373,7 +373,7 @@
     "CO2_LP / Roll adapter": {
       "phase": "textures",
       "meshes": 81,
-      "triangles": 21208,
+      "triangles": 22244,
       "fasteners": 14,
       "decals": 22,
       "markings": 0,
@@ -385,7 +385,7 @@
     "CO2_LP / End cap": {
       "phase": "textures",
       "meshes": 56,
-      "triangles": 6080,
+      "triangles": 6598,
       "fasteners": 10,
       "decals": 14,
       "markings": 0,
@@ -397,7 +397,7 @@
     "PRIMARY / Reactor adapter": {
       "phase": "textures",
       "meshes": 77,
-      "triangles": 8686,
+      "triangles": 9722,
       "fasteners": 14,
       "decals": 20,
       "markings": 0,

@@ -80,7 +80,7 @@ def audit():
                     fail(name, 'original reactor provenance', obj.name)
                 accepted_materials = original and list(mesh.materials) == list(original.data.materials)
                 if not mesh.materials or (not accepted_materials and any(not mat or
-                    (not mat.library and not (mat.name in ('ArcanePower_ClearChamber','ArcanePower_CoolantGlass') and mat.seut.technique == 'GLASS')
+                    (not mat.library and not (mat.name in ('ArcanePower_ClearChamber','ArcanePower_CoolantGlass','ArcanePower_InternalCoolantGlass') and mat.seut.technique == 'GLASS')
                      and not (mat.name in ('ThermalStatus', 'ThermalHot', 'ThermalCold') and mat.get('thermal_native_emissive')))
                     for mat in mesh.materials)):
                     fail(name, 'native SEUT material', obj.name)
@@ -149,11 +149,39 @@ def audit():
                 if buried:
                     fail(name, 'projected decal clears curved backing between vertices', obj.name)
         ports = json.loads(col['ports'])
+        if name != 'Reactor housing' and scene.get('thermal_flow_revision'):
+            walls = [o for o in col.objects if o.type=='MESH' and o.get('thermal_pressure_glass')]
+            for port in ports:
+                c,n,up = (Vector(port[k]) for k in ('position','normal','hot_axis'))
+                across = up.cross(n)
+                prefix = name+' / '+port['id']
+                flange = next(o for o in col.objects if o.name.startswith(prefix+' flange') and o.get('interface_type')==port['type'])
+                for sign in (-1,1):
+                    bore = c+up*(sign*.46)
+                    seal = next(o for o in col.objects if o.name.startswith(prefix+' seated face seal '+str(sign)))
+                    insert = next(o for o in col.objects if o.name.startswith(prefix+' pressure lip '+str(sign)))
+                    seal_z = [(seal.matrix_world@v.co-bore).dot(n) for v in seal.data.vertices]
+                    insert_z = [(insert.matrix_world@v.co-bore).dot(n) for v in insert.data.vertices]
+                    if abs(min(seal_z)+.008)>1e-5 or abs(max(seal_z))>1e-5 or max(insert_z)>min(seal_z)+1e-5:
+                        fail(name,'face seal abuts insert without overlap',seal.name)
+                    for j in range(8):
+                        radial = (up*math.cos(j*math.tau/8)+across*math.sin(j*math.tau/8))*.378
+                        hit = tree(flange).ray_cast(bore+radial+n*.05,-n,.20)[0]
+                        if hit is None or abs((hit-bore).dot(n)+.055)>1e-4:
+                            fail(name,'pressure insert has recessed counterbore shoulder',flange.name)
+                            break
+                    for wall in walls:
+                        for vertex in wall.data.vertices:
+                            delta = wall.matrix_world@vertex.co-bore
+                            axial = delta.dot(n)
+                            if -.0559 < axial < .002 and (delta-n*axial).length < .361:
+                                fail(name,'pipe end clears seal and pressure insert',wall.name)
+                                break
         if scene.get('thermal_visibility_revision'):
             glazed = [o for o in col.objects if o.get('thermal_pressure_glass')]
             stats['transparent_pressure_tubes'] = len(glazed)
             for obj in glazed:
-                if not any(obj.data.materials[f.material_index].name in ('ArcanePower_ClearChamber','ArcanePower_CoolantGlass')
+                if not any(obj.data.materials[f.material_index].name in ('ArcanePower_ClearChamber','ArcanePower_CoolantGlass','ArcanePower_InternalCoolantGlass')
                            for f in obj.data.polygons):
                     fail(name, 'transparent pressure-wall faces', obj.name)
                 if obj.get('thermal_external_pipe_style') and any(
@@ -161,6 +189,23 @@ def audit():
                         obj.data.materials[f.material_index].name != 'ArcanePower_CoolantGlass'
                         for f in obj.data.polygons):
                     fail(name, 'shared smoked external sight glass', obj.name)
+                # Test the complete wall, including the underside and inner
+                # surface. A single glass polygon cannot establish coverage.
+                if obj.get('pipe_path') and not obj.get('thermal_internal_coolant'):
+                    path = list(map(Vector, json.loads(obj['pipe_path'])))
+                    margin = .40
+                    if any(min((obj.matrix_world@f.center-end).length for end in (path[0], path[-1])) > margin
+                           and obj.data.materials[f.material_index].name != 'ArcanePower_CoolantGlass'
+                           for f in obj.data.polygons):
+                        fail(name, 'full circumference pressure glass', obj.name)
+                elif col.get('pipe_shape') in ('Tee', 'Cross'):
+                    z = .46 if 'connected H ' in obj.name else -.46
+                    ends = [Vector((x,y,z)) for x,y in [(-1.25,0),(1.25,0),(0,1.25)]
+                            + ([(0,-1.25)] if col['pipe_shape']=='Cross' else [])]
+                    if any(min((obj.matrix_world@f.center-end).length for end in ends) > .40
+                           and obj.data.materials[f.material_index].name != 'ArcanePower_CoolantGlass'
+                           for f in obj.data.polygons):
+                        fail(name, 'full circumference branch glass', obj.name)
             for obj in col.objects:
                 if not obj.get('thermal_external_pipe_clamp'):
                     continue

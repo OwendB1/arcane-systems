@@ -61,6 +61,10 @@ def check_catalog():
         rows.append({'id': ident, 'public': public, 'definition': path.relative_to(MOD).as_posix(),
                      'icon': icons[0].text, 'construction_stages': len(stages)})
     assert menu <= set(blocks), ('Dangling menu entries', menu-set(blocks))
+    assert 'Reactor/ArcanePower_ReactorPrototype' not in blocks, 'Legacy reactor must remain an authoring asset'
+    main = blocks['Reactor/ArcanePower_Thermal_ReactorHousing'][1]
+    assert main.findtext('DisplayName') == 'Arcane Reactor'
+    assert sum(b.findtext('DisplayName') == 'Arcane Reactor' for _, b in blocks.values()) == 1
     thermal = [row for row in rows if '/ArcanePower_Thermal_' in row['id']]
     assert len(thermal) == 31
     assert len({packaged[row['icon']]['sha256'] for row in thermal}) == len(thermal), 'Thermal icons must be distinct'

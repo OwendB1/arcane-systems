@@ -91,27 +91,6 @@
   "live_game_checked": false,
   "models": [
     {
-      "subtype": "ArcanePower_ReactorPrototype",
-      "stage": 1,
-      "file": "Models/Cubes/large/ArcanePower_ReactorPrototype_BS1_rdf3bdc01e236.mwm",
-      "sha256": "df3bdc01e23613973b27c22d51ef7c2268c303700b4c4e5ff891cc2ec45f635a",
-      "bytes": 1049004
-    },
-    {
-      "subtype": "ArcanePower_ReactorPrototype",
-      "stage": 2,
-      "file": "Models/Cubes/large/ArcanePower_ReactorPrototype_BS2_rd26fc9c21bb3.mwm",
-      "sha256": "d26fc9c21bb3ac3fe8cb5b3d4305f7729ac94988e1a96e3028c90defbd64758a",
-      "bytes": 4194732
-    },
-    {
-      "subtype": "ArcanePower_ReactorPrototype",
-      "stage": 3,
-      "file": "Models/Cubes/large/ArcanePower_ReactorPrototype_BS3_rdb2b1be6460b.mwm",
-      "sha256": "db2b1be6460bc3873febfb7328b5ed9f2e20283f9bb233017b36cba355cfd253",
-      "bytes": 8389036
-    },
-    {
       "subtype": "ArcanePower_ContainmentController",
       "stage": 1,
       "file": "Models/Cubes/large/ArcanePower_ContainmentController_BS1_r7d89d01ce5d5.mwm",

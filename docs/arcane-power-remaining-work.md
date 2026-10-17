@@ -3,6 +3,9 @@
 Generated review captures were pruned again on 17 October 2026. Historical inspection
 descriptions below remain; current blends, checkpoints and compact audit reports
 are retained.
+The loadable large-block model folder now contains only current runtime
+dependencies. Accepted physics and native comparison inputs are retained outside
+`src`; packaging prunes unused model exports after resolving subparts and LODs.
 
 Updated 17 October 2026 after native thermal export and local packaging.
 The current status below supersedes the historical delivery notes that follow;
@@ -11,25 +14,31 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
 ## Current status
 
 - **Native thermal delivery, 17 October:** all 31 thermal block definitions and
-  native mains, 24 moving subparts, 93 construction models and 174 LODs are installed
-  locally and packaged in the unpublished 0.1.0 ZIP. All 322 native meshes pass
+  native mains, 24 moving subparts, 93 construction models and 186 LODs are installed
+  locally and packaged in the unpublished 0.1.0 ZIP. All 334 native meshes pass
   exact evaluated triangle counts, collision-byte, material and dependency checks.
   Manifold rest frames and both train variants' shaft pivots/orientations pass.
   Custom glass now uses uniform CA/NG textures instead of window-edge dirt.
-  The 120 external pressure pipes share the reactor struts' smoked glass and metal
-  finish, with 355 fitted rings; telescopic sleeves keep their unobstructed glands.
+  The 120 external pressure pipes use continuous reflective glass walls and 355
+  fitted rings; telescopic sleeves keep their unobstructed glands. Generic socket
+  inserts sit in stepped counterbores, with abutting seals and recessed pipe ends.
   All 31 thermal icons were refreshed. Reactor tubes retain metal backing and
   guard rails; weld stages retain opaque supporting pipe bodies. CO₂ supply is
   integrated into powered commissioning. Native assets supersede the earlier
   export gates below; live SE rendering, commissioning and multiplayer validation
   remain pending. [Delivery check](../ArcanePower/validation/thermal-models/delivery-check.json).
 
+- **Mode and guide fixes, 17 October:** manifold rig validation accepts native
+  export rounding while rejecting displaced or rotated origins. Mode changes
+  report cooldown/power interlocks. The reactor construction HUD appears only
+  in settled Brayton mode when connections/construction remain incomplete.
+
 - **Flow and emissives, 16 October:** all 31 thermal mains have separate hot,
   return and status materials. Server-derived circulation drives liquid streaks,
   gas wisps, internal coolant risers and four chamber injectors. A 122-block
   room-perimeter example uses existing grid-sized conduit pieces. Capped spurs,
   standby branches and invalid connections carry no visible flow; reactor
-  indicators retract with the manifolds. Compatibility compilation, 1,323,383
+  indicators retract with the manifolds. Compatibility compilation, 1,323,399
   runtime checks, geometry/backing audits, 47 manifold poses and live three-distance
   reviews pass. The saved Blender source includes isolated moving previews.
   Native exports/definitions are delivered; live game appearance remains pending.
@@ -358,3 +367,10 @@ custom planetary maps and meteorite distribution are outside this asteroid pass.
 Controller/fuel separation is implemented: two standard, mixed and two advanced controllers deploy 2/3/4 rings at 1×/1.5×/2× tile rates, independently of compatible fuel, with 80%/90%/99% fuel efficiency. Deployed hardware remains latched through cooldown and ejection. Validate lower fuels with stronger controllers, live hardware changes, near-empty fuel capacity and multiplayer/save restoration in-game.
 
 Damage-triggered core ejection is implemented at 60% remaining reactor integrity, gated by two fully built, functional controllers and the complete vent route. Security mode defaults on (vent loss shuts down); off keeps an already-running reactor generating with a warning. Controller/vent loss pauses committed ejection, while heat/fuses continue. Focused offline checks and the SE compatibility build passed; live damage, repair, reserve-power and multiplayer validation remain pending.
+
+17 October 2026 reactor consolidation: the thermal design is the sole playable
+Arcane Reactor. The prototype definition is archived outside the mod and its
+assets retained. External pipe walls are glass around their circumference;
+internal reactor pipes retain the checkpoint geometry/material assignments.
+Native/package checks cover the delivery; this pass still needs an in-game
+reload and appearance check.

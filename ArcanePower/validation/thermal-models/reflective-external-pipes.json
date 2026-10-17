@@ -1,0 +1,155 @@
+{
+  "status": "passed",
+  "source": "assets/arcane-thermal-models.blend",
+  "external_wall_assignment_revision": 2,
+  "external_glass_reflectivity": 0.45,
+  "internal_restored": "internal-pipes-preserved.json",
+  "external_review_views": [
+    {
+      "scene": "ArcanePower_Thermal_BraytonTrain",
+      "target": [
+        -0.5,
+        2.55,
+        1.8
+      ],
+      "direction": [
+        0,
+        1,
+        0.2
+      ],
+      "distance": 1.8,
+      "file": "glass-final-train-side-1.8.png"
+    },
+    {
+      "scene": "ArcanePower_Thermal_BraytonTrain",
+      "target": [
+        -0.5,
+        2.55,
+        1.8
+      ],
+      "direction": [
+        0,
+        1,
+        0.2
+      ],
+      "distance": 2.4,
+      "file": "glass-final-train-side-2.4.png"
+    },
+    {
+      "scene": "ArcanePower_Thermal_BraytonTrain",
+      "target": [
+        -0.5,
+        2.55,
+        1.8
+      ],
+      "direction": [
+        0,
+        1,
+        0.2
+      ],
+      "distance": 3.0,
+      "file": "glass-final-train-side-3.0.png"
+    },
+    {
+      "scene": "ArcanePower_Thermal_BraytonTrain",
+      "target": [
+        -0.5,
+        2.55,
+        1.8
+      ],
+      "direction": [
+        -1,
+        0,
+        1
+      ],
+      "distance": 1.8,
+      "file": "glass-final-train-top-1.8.png"
+    },
+    {
+      "scene": "ArcanePower_Thermal_BraytonTrain",
+      "target": [
+        -0.5,
+        2.55,
+        1.8
+      ],
+      "direction": [
+        -1,
+        0,
+        1
+      ],
+      "distance": 2.4,
+      "file": "glass-final-train-top-2.4.png"
+    },
+    {
+      "scene": "ArcanePower_Thermal_BraytonTrain",
+      "target": [
+        -0.5,
+        2.55,
+        1.8
+      ],
+      "direction": [
+        -1,
+        0,
+        1
+      ],
+      "distance": 3.0,
+      "file": "glass-final-train-top-3.0.png"
+    },
+    {
+      "scene": "ArcanePower_Thermal_CO2HpCross",
+      "target": [
+        0,
+        0,
+        0.46
+      ],
+      "direction": [
+        1,
+        1,
+        0.7
+      ],
+      "distance": 1.8,
+      "file": "glass-final-branch-1.8.png"
+    },
+    {
+      "scene": "ArcanePower_Thermal_CO2HpCross",
+      "target": [
+        0,
+        0,
+        0.46
+      ],
+      "direction": [
+        1,
+        1,
+        0.7
+      ],
+      "distance": 2.4,
+      "file": "glass-final-branch-2.4.png"
+    },
+    {
+      "scene": "ArcanePower_Thermal_CO2HpCross",
+      "target": [
+        0,
+        0,
+        0.46
+      ],
+      "direction": [
+        1,
+        1,
+        0.7
+      ],
+      "distance": 3.0,
+      "file": "glass-final-branch-3.0.png"
+    }
+  ],
+  "review_distances_m": [
+    1.8,
+    2.4,
+    3.0
+  ],
+  "lens_mm": 48,
+  "studio_light": "studio.exr",
+  "light_rotation": 0.5,
+  "notes": "Reviewed continuous glass walls on straight/curved train runs and branch junctions. Metal clamps/end fittings retained. Earlier internal glass edit reverted exactly to checkpoint.",
+  "live_game_validation": "not_run",
+  "review_captures_pruned": false
+}

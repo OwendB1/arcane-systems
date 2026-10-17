@@ -13,6 +13,9 @@ ROOT = Path(__file__).resolve().parents[1]
 GAME = Path.home()/'.local/share/Steam/steamapps/common/SpaceEngineers'
 USER = Path.home()/'.config/SpaceEngineers'
 MOD = ROOT/'src'
+REACTOR_TEMPLATE = ROOT/'assets/definitions/ArcanePower_ReactorPrototype.sbc'
+COLLISIONS = ROOT/'assets/collisions/Cubes/large'
+BASE_MODELS = ROOT/'assets/native-baselines/Cubes/large'
 WORLD = USER/'Saves/76561198074076521/Arcane Power - Prototype Lab'
 XSI = 'http://www.w3.org/2001/XMLSchema-instance'
 E.register_namespace('xsi', XSI)
@@ -41,11 +44,19 @@ BUILD_BLOCKS = {
 }
 
 
+def model_source(name):
+    """Find a fresh export or its accepted authoring baseline outside the mod."""
+    for folder in (MOD/'Models/Cubes/large', BASE_MODELS):
+        source=folder/(name+'.mwm')
+        if source.is_file():return source
+    raise FileNotFoundError('Export the model from its production blend first: '+name)
+
+
 def model_revision(name):
     """Give each export a fresh native model/physics cache key."""
-    source=MOD/('Models/Cubes/large/'+name+'.mwm')
+    source=model_source(name)
     data=source.read_bytes()
-    version=source.with_name(source.stem+'_r'+hashlib.sha256(data).hexdigest()[:12]+source.suffix)
+    version=MOD/'Models/Cubes/large'/(source.stem+'_r'+hashlib.sha256(data).hexdigest()[:12]+source.suffix)
     if not version.exists() or version.read_bytes()!=data:version.write_bytes(data)
     return version.relative_to(MOD).as_posix()
 
@@ -54,8 +65,11 @@ def refresh_reactor_model():
     # Subpart filenames are relative to the parent MWM. A parent-only hash
     # misses plasma/ring/tile changes and leaves their native cache keys intact.
     folder=MOD/'Models/Cubes/large'
-    models=sorted(p for p in folder.glob('ArcanePower_*.mwm')
-                  if '.hkt.' not in p.name and not re.search(r'_BS\d|_r[0-9a-f]{12}',p.stem))
+    names={p.stem for directory in (BASE_MODELS,folder) for p in directory.glob('ArcanePower_*.mwm')
+           if '.hkt.' not in p.name and not re.search(r'_BS\d|_LOD\d|_r[0-9a-f]{12}',p.stem)}
+    models=[model_source(name) for name in sorted(names)]
+    if 'ArcanePower_ReactorPrototype' not in names:
+        raise FileNotFoundError('Export the archived reactor from its production blend first')
     digest=hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in models)).hexdigest()[:12]
     revision=folder/('reactor_'+digest)
     revision.mkdir(exist_ok=True)
@@ -64,7 +78,7 @@ def refresh_reactor_model():
         if not target.exists() or target.read_bytes()!=source.read_bytes():
             shutil.copy2(source,target)
     relative=(revision/'ArcanePower_ReactorPrototype.mwm').relative_to(MOD).as_posix()
-    path=MOD/'Data/CubeBlocks/ArcanePower_ReactorPrototype.sbc'
+    path=REACTOR_TEMPLATE
     tree=E.parse(path)
     model=tree.find('CubeBlocks/Definition/Model')
     if model.text!=relative:
@@ -83,7 +97,7 @@ def refresh_reactor_model():
 
 def refresh_build_stages():
     for filename in dict.fromkeys(BUILD_BLOCKS.values()):
-        path=MOD/'Data/CubeBlocks'/filename
+        path=REACTOR_TEMPLATE if filename == 'ArcanePower_ReactorPrototype.sbc' else MOD/'Data/CubeBlocks'/filename
         tree=E.parse(path)
         for block in tree.findall('CubeBlocks/Definition'):
             name=block.findtext('Id/SubtypeId')
@@ -127,7 +141,7 @@ def definitions():
     for side in ['Front','Back','Left','Right']:
         E.SubElement(mount,'MountPoint',Side=side,StartX='2',EndX='3',StartY='0',EndY='1')
     root=E.Element('Definitions'); blocks=E.SubElement(root,'CubeBlocks');blocks.append(reactor)
-    save(root,MOD/'Data/CubeBlocks/ArcanePower_ReactorPrototype.sbc')
+    save(root,REACTOR_TEMPLATE)
     refresh_reactor_model()
 
     production=E.parse(GAME/'Content/Data/CubeBlocks/CubeBlocks_Production.sbc').getroot()
@@ -159,7 +173,7 @@ def definitions():
     root=E.Element('Definitions');cat=E.SubElement(E.SubElement(root,'CategoryClasses'),'Category',{'{'+XSI+'}type':'MyObjectBuilder_GuiBlockCategoryDefinition'})
     set_text(cat,'Id/TypeId','GuiBlockCategoryDefinition');set_text(cat,'Id/SubtypeId','ArcaneSystems_Power')
     set_text(cat,'DisplayName','Arcane Systems');set_text(cat,'Name','ArcaneSystems')
-    set_text(cat,'ItemIds/string','Reactor/ArcanePower_ReactorPrototype')
+    E.SubElement(cat,'ItemIds')
     E.SubElement(cat.find('ItemIds'),'string').text='UpgradeModule/ArcanePower_ContainmentController'
     E.SubElement(cat.find('ItemIds'),'string').text='UpgradeModule/ArcanePower_AdvancedContainmentController'
     save(root,MOD/'Data/BlockCategories.sbc')
@@ -334,8 +348,6 @@ def containment_tiles():
 
 
 def deploy():
-    refresh_reactor_model()
-    refresh_build_stages()
     target=USER/'Mods/ArcanePower-Prototype'
     if target.is_symlink():
         if target.resolve() != MOD.resolve():
@@ -349,6 +361,8 @@ def deploy():
     # with the direct-script controller after updating an existing local mod.
     legacy=target/'Data/Animation/main.bsl'
     if legacy.exists():legacy.unlink()
+    # The old reactor remains an authoring asset, never a loadable definition.
+    (target/'Data/CubeBlocks/ArcanePower_ReactorPrototype.sbc').unlink(missing_ok=True)
     copied=[]
     for p in MOD.rglob('*'):
         if p.is_file() and (p.suffix.lower() in ['.sbc','.cs','.bsl','.info','.dds','.mod'] or (p.suffix.lower()=='.mwm' and '.hkt.' not in p.name)):

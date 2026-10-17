@@ -1,6 +1,6 @@
 {
   "file": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/arcane-thermal-models.blend",
-  "scene": "ArcanePower_Thermal_BraytonTrain",
+  "scene": "ArcanePower_Thermal_ReactorHousing",
   "local_image_dependencies": [
     "assets/textures/thermal/UniformGlass_ca.png",
     "assets/textures/thermal/UniformGlass_ng.png",

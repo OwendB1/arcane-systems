@@ -1,0 +1,11 @@
+{
+  "status": "passed",
+  "block": "CO2_HP / End cap",
+  "exported_meshes": 6,
+  "fresh_staging": true,
+  "accepted_collision_bytes_unchanged": true,
+  "production_blends_saved": false,
+  "live_scene_changed": false,
+  "native_compiled_meshes": 6,
+  "native_import_and_collision_passed": true
+}

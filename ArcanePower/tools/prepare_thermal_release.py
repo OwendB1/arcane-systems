@@ -12,7 +12,7 @@ import shutil
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
-from prepare_lab import ROOT, MOD, GAME, XSI, save, set_text
+from prepare_lab import ROOT, MOD, GAME, XSI, REACTOR_TEMPLATE, save, set_text
 from package_release import resolve
 
 STAGING=MOD/'Models/Cubes/large/.thermal-stage'
@@ -83,7 +83,7 @@ def dummies(exe,path):
 
 
 def definitions(models,mains,revision):
-    reactor=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_ReactorPrototype.sbc').find('CubeBlocks/Definition')
+    reactor=ET.parse(REACTOR_TEMPLATE).find('CubeBlocks/Definition')
     module=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_ContainmentController.sbc').find('CubeBlocks/Definition')
     root=ET.Element('Definitions');blocks=ET.SubElement(root,'CubeBlocks')
     category=ET.Element('Definitions');classes=ET.SubElement(category,'CategoryClasses')
@@ -98,7 +98,7 @@ def definitions(models,mains,revision):
         blocks.append(definition)
         typeid='Reactor' if is_source or is_train else 'UpgradeModule'
         set_text(definition,'Id/TypeId',typeid);set_text(definition,'Id/SubtypeId',ident)
-        set_text(definition,'DisplayName','Arcane '+('Thermal Reactor' if is_source else name.replace(' / ',' ').replace('CO2','CO₂')))
+        set_text(definition,'DisplayName','Arcane '+('Reactor' if is_source else name.replace(' / ',' ').replace('CO2','CO₂')))
         set_text(definition,'Icon','Textures/GUI/Icons/ArcanePower/Thermal/'+ident+'.dds')
         set_text(definition,'BlockPairName',ident)
         set_text(definition,'Model',(revision/(mains[name]+'.mwm')).as_posix())
@@ -195,7 +195,9 @@ def install():
                 assert max(abs(v-w) for v,w in zip(actual[key][0][:12],[1,0,0,0,0,1,0,0,0,0,1,0]))<1e-5,('Rotated shaft rest frame',key)
     bundle={stem+'.mwm':STAGING/(stem+'.mwm') for stem,row in rows.items() if row['type']!='lod'}
     pending=list(bundle.values())
-    original=MOD/ET.parse(MOD/'Data/CubeBlocks/ArcanePower_ReactorPrototype.sbc').findtext('CubeBlocks/Definition/Model')
+    current=next(block for block in ET.parse(MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').findall('CubeBlocks/Definition')
+                 if block.findtext('Id/SubtypeId')=='ArcanePower_Thermal_ReactorHousing')
+    inherited=MOD/current.findtext('Model')
     while pending:
         path=pending.pop()
         for matrix,file in dummies(exe,path).values():
@@ -204,7 +206,7 @@ def install():
             assert not relative.is_absolute() and '..' not in relative.parts,('Invalid native subpart',file)
             key=relative.as_posix()
             if key in bundle:continue
-            source=next((folder/relative for folder in (STAGING,original.parent,MOD/'Models/Cubes/large') if (folder/relative).is_file()),None)
+            source=next((folder/relative for folder in (STAGING,inherited.parent,MOD/'Models/Cubes/large') if (folder/relative).is_file()),None)
             assert source is not None,('Missing native subpart dependency',file,path)
             bundle[key]=source;pending.append(source)
     stamp=hashlib.sha256(b''.join(key.encode()+path.read_bytes() for key,path in sorted(bundle.items()))).hexdigest()[:12]

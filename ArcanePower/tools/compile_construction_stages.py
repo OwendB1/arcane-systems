@@ -7,7 +7,7 @@ import subprocess
 import sys
 import tempfile
 
-from prepare_lab import BUILD_BLOCKS, MOD, ROOT, GAME, refresh_build_stages
+from prepare_lab import BUILD_BLOCKS, MOD, ROOT, GAME, REACTOR_TEMPLATE, COLLISIONS, model_source, refresh_build_stages
 from prepare_energy_core import BLOCKS as ENERGY_BLOCKS, refresh_models
 from export_energy_main import digest, settings
 from package_release import resolve
@@ -19,7 +19,7 @@ def compile_models(blocks,folder):
     shutil.copytree(setup/'assets/Tools/MWMBuilder',cache,dirs_exist_ok=True)
     # Wine's default .NET trace listener fails while formatting compiler output.
     (cache/'MwmBuilder.exe.config').write_text('<configuration><system.diagnostics><trace><listeners><clear /></listeners></trace></system.diagnostics></configuration>')
-    canonical=MOD/'Models/Cubes/large';win=lambda path:'Z:'+str(path).replace('/',chr(92))
+    canonical=COLLISIONS;win=lambda path:'Z:'+str(path).replace('/',chr(92))
     for name in blocks:
         collision=canonical/(('ArcanePower_ContainmentController' if name=='ArcanePower_AdvancedContainmentController' else name)+'.hkt')
         for stage in range(1,4):
@@ -45,7 +45,7 @@ def install_stages(staging,blocks,energy=True):
             subprocess.run(['mcs','-out:'+str(exe),'-r:/usr/lib/mono/4.5/Facades/netstandard.dll',*['-r:'+str(game/(n+'.dll')) for n in ('VRage.Render','VRage.Math','VRage.Library')],str(ROOT/'tools'/(name+'.cs'))],check=True)
             probes[name]=exe
         for stem,spec in specs.items():
-            path=staging/(stem+'.mwm');collision=folder/(('ArcanePower_ContainmentController' if spec['block']=='ArcanePower_AdvancedContainmentController' else spec['block'])+'.hkt')
+            path=staging/(stem+'.mwm');collision=COLLISIONS/(('ArcanePower_ContainmentController' if spec['block']=='ArcanePower_AdvancedContainmentController' else spec['block'])+'.hkt')
             output=subprocess.check_output(['mono',str(probes['EnergyModelProbe']),str(path),str(spec['triangles']),str(collision)],env=env,text=True)
             lines=[line.split('\t') for line in output.splitlines()]
             materials=sorted({line[1] for line in lines if line[0]=='MATERIAL'})
@@ -53,13 +53,13 @@ def install_stages(staging,blocks,energy=True):
             assert not any(line[0] in ('SUBPART','LOD') for line in lines),'Unfinished stage references moving/derived models: '+stem
             assert 'Construction' in materials and not any(any(token in m for token in ('Emissive','EnergyGlow','EnergyFill','EnergyStatus','ClearChamber')) for m in materials),'Powered or glazed stage: '+stem
             for texture in textures:assert resolve(MOD,texture) or resolve(GAME/'Content',texture),'Missing stage texture: '+texture
-            subprocess.run(['mono',str(probes['ConstructionModelProbe']),str(path),str(collision),str(folder/(spec['block']+'.mwm'))],check=True,env=env)
+            subprocess.run(['mono',str(probes['ConstructionModelProbe']),str(path),str(collision),str(model_source(spec['block']))],check=True,env=env)
             rows[stem]={**spec,'sha256':digest(path),'bytes':path.stat().st_size,'materials':materials,'textures':textures,'native_import_passed':True}
-    definition_paths=[MOD/'Data/CubeBlocks/ArcanePower_EnergyCore.sbc'] if energy else [MOD/'Data/CubeBlocks'/n for n in set(BUILD_BLOCKS[b] for b in blocks)]
+    definition_paths=[MOD/'Data/CubeBlocks/ArcanePower_EnergyCore.sbc'] if energy else [REACTOR_TEMPLATE if n=='ArcanePower_ReactorPrototype.sbc' else MOD/'Data/CubeBlocks'/n for n in set(BUILD_BLOCKS[b] for b in blocks)]
     before_settings={p:settings(p) for p in definition_paths}
     legacy=MOD/'Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc';legacy_hash=digest(legacy)
     finished={p:digest(p) for p in folder.glob('*.mwm') if '_BS' not in p.stem}
-    collision_hashes={p:digest(p) for p in folder.glob('*.hkt') if '_BS' not in p.stem}
+    collision_hashes={p:digest(p) for p in COLLISIONS.glob('*.hkt') if '_BS' not in p.stem}
     report_folder=ROOT/('validation/energy-construction-update' if energy else 'validation/reactor-texture-lod-loop')
     backup=report_folder/'export-backup';backup.mkdir(exist_ok=True)
     for p in definition_paths:shutil.copy2(p,backup/p.name)

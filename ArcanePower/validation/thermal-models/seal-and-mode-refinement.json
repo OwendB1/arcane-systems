@@ -1,0 +1,37 @@
+{
+  "status": "passed",
+  "socket_models": 30,
+  "external_pressure_walls_fitted": 96,
+  "profile": {
+    "flange_through_radius_m": 0.36,
+    "counterbore_radius_m": 0.39,
+    "shoulder_depth_m": 0.055,
+    "insert_back_m": -0.055,
+    "insert_front_m": -0.008,
+    "seal_back_m": -0.008,
+    "seal_front_m": 0,
+    "pipe_end_m": -0.056
+  },
+  "socket_coordinates_unchanged": true,
+  "internal_objects_preserved": 112,
+  "detail_review_distances_m": [
+    1.8,
+    2.4,
+    3.0
+  ],
+  "animation_samples": [
+    0,
+    0.15,
+    0.4,
+    0.7,
+    1,
+    0.7,
+    0.4,
+    0.15,
+    0
+  ],
+  "native_rounding_regression": "Actual imported LA rest axes ~3.9e-7 deviation accepted; shifted/rotated/NaN matrices rejected",
+  "guide_rule": "Only placed reactor, settled Brayton mode, incomplete construction",
+  "review_captures_pruned": false,
+  "in_game_validation": "not_run"
+}

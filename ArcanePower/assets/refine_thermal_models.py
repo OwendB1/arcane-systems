@@ -114,6 +114,77 @@ def tighten_ports(p):
                 obj.data.update()
 
 
+def pressure_seal_fit(p):
+    """Seat the socket insert in a counterbore, with a butt seal and pipe end.
+
+    The old through bore coincided with the insert's inside wall, while the
+    pipe and seal passed through both. Keep socket coordinates and bore clear.
+    """
+    if p.name == 'Reactor housing' or p.col.get('thermal_seal_fit_revision') == 1:
+        return
+    key = 'Thermal pressure flange / stepped seal seat'
+    template = bpy.data.meshes.get(key)
+    if template is None:
+        plate = p.box('temporary seal seat', (0,0,-.074), (2.04,2.04,.12), 'PaintedMetal_Colorable', .003)
+        for sign in (-1,1):
+            for label, low, high, radius in [('pipe bore',-.16,.02,.360), ('insert counterbore',-.055,.02,.390)]:
+                cutter = p.cylinder('temporary '+label,(0,sign*.46,low),(0,sign*.46,high),radius,sides=32)
+                bpy.context.view_layer.objects.active = plate
+                mod = plate.modifiers.new(label,'BOOLEAN')
+                mod.operation,mod.solver,mod.object = 'DIFFERENCE','EXACT',cutter
+                bpy.ops.object.modifier_apply(modifier=mod.name)
+                bpy.data.objects.remove(cutter,do_unlink=True)
+        template = plate.data
+        template.transform(plate.matrix_world)
+        M['BUILD']['uv'](plate)
+        template.name,template.use_fake_user = key,True
+        bpy.data.objects.remove(plate,do_unlink=True)
+    for port in p.ports:
+        c,n,up = (Vector(port[k]) for k in ('position','normal','hot_axis'))
+        prefix = p.name+' / '+port['id']
+        flange = next(o for o in p.col.objects if o.name.startswith(prefix+' flange') and o.get('interface_type')==port['type'])
+        flange.data = template
+        flange['thermal_seal_fit_revision'] = 1
+        for sign in (-1,1):
+            bore = c+up*(sign*.46)
+            insert = next(o for o in p.col.objects if o.name.startswith(prefix+' pressure lip '+str(sign)))
+            temp = p.tube('temporary pressure insert',[bore-n*.055,bore-n*.008],.385,'Metal_Dull',.110,32)
+            temp.data.transform(insert.matrix_world.inverted())
+            insert.data = temp.data
+            insert['pipe_path'],insert['pipe_radius'] = temp['pipe_path'],temp['pipe_radius']
+            insert['thermal_seal_fit_revision'] = 1
+            bpy.data.objects.remove(temp,do_unlink=True)
+            seal = next(o for o in p.col.objects if o.name.startswith(prefix+' seated face seal '+str(sign)))
+            temp = p.tube('temporary butt seal',[bore-n*.008,bore],.308,'PaintedMetal_VeryDark',.033,32)
+            temp.data.transform(seal.matrix_world.inverted())
+            seal.data = temp.data
+            seal['pipe_path'],seal['pipe_radius'] = temp['pipe_path'],temp['pipe_radius']
+            seal['thermal_seal_fit_revision'] = 1
+            bpy.data.objects.remove(temp,do_unlink=True)
+            for obj in p.col.objects:
+                if not obj.get('thermal_pressure_glass') or obj.get('thermal_internal_coolant'):
+                    continue
+                path = list(map(Vector,json.loads(obj['pipe_path']))) if obj.get('pipe_path') else []
+                if path and min((end-bore).length for end in (path[0],path[-1])) > .12:
+                    continue
+                if obj.data.users>1:obj.data=obj.data.copy()
+                inverse = obj.matrix_world.inverted()
+                for vertex in obj.data.vertices:
+                    point = obj.matrix_world@vertex.co
+                    axial = (point-bore).dot(n)
+                    radial = point-bore-n*axial
+                    if -.10 < axial < .002 and radial.length < .361:
+                        vertex.co = inverse@(point+n*(-.056+axial*.44-axial))
+                for i,point in enumerate(path):
+                    axial = (point-bore).dot(n)
+                    if (point-bore).length < .10 and axial > -.10:
+                        path[i] = point+n*(-.056+axial*.44-axial)
+                if path:obj['pipe_path'] = json.dumps([list(v) for v in path])
+                obj['thermal_seal_fit_revision'] = 1
+                obj.data.update()
+    p.col['thermal_seal_fit_revision'] = 1
+
+
 def mark(p, support, asset, centre, u, v, width, library='Atlas2'):
     """Project a native atlas asset onto real backing, preserving its UVs."""
     key = 'Thermal detail template / '+library+' / '+asset

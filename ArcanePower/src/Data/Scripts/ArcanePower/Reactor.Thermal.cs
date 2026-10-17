@@ -14,7 +14,7 @@ namespace ArcanePower
             if (Motion.Thermal != null)
             { Motion.Thermal.Faulted = true; Motion.Thermal.Diagnostic = "Runtime fault; heat inventory isolated and retained"; }
         }
-        internal bool ThermalVariant { get { return reactor != null && reactor.BlockDefinition.SubtypeName == "ArcanePower_Thermal_ReactorHousing"; } }
+        internal bool ThermalVariant { get { return IsLive && reactor.BlockDefinition.SubtypeName == "ArcanePower_Thermal_ReactorHousing"; } }
         internal bool ThermalInitialized { get { return ThermalVariant && motionInitialized && initializationFrames == 0 && !thermalRestoreFault && Motion.Thermal != null; } }
         internal double ThermalInternalCirculation
         {
@@ -46,6 +46,14 @@ namespace ArcanePower
                 && !Motion.Critical && Motion.Heat <= CooldownHeat
                 && Motion.Thermal.Store.HotMJ + Motion.Thermal.Store.WasteMJ + Motion.Thermal.AttachedHeatMJ <= .001; }
         }
+        private bool ThermalManifoldPower
+        {
+            get { return !Motion.PowerPaused && (Motion.PowerInputMW >= ContainmentMW * .999 || Motion.ReserveMJ > ContainmentMW / 60); }
+        }
+        internal string ThermalModeTransitionHint
+        {
+            get { return Motion.Thermal.TransitionHint(ThermalCold, ThermalManifoldPower, ManifoldRigReady); }
+        }
 
         private void InitializeThermalRuntime()
         {
@@ -64,7 +72,7 @@ namespace ArcanePower
                     {
                         string name = ThermalManifolds.Name(bay, part);
                         Matrix rest;
-                        if (!restPoses.TryGetValue(name, out rest) || rest != Matrix.Identity
+                        if (!restPoses.TryGetValue(name, out rest) || !ThermalManifolds.CompatibleRest(rest)
                             || !((VRage.Game.Entity.MyEntity)Entity).Subparts.ContainsKey(name)) return false;
                     }
                 return true;
@@ -91,8 +99,7 @@ namespace ArcanePower
                 if (!Motion.Thermal.Settled) reactor.Enabled = false;
                 // Movement requires delivered motor power or the existing paid
                 // emergency reserve. The normal containment sink owns both.
-                Motion.Thermal.AdvanceManifolds(ThermalCold, !Motion.PowerPaused
-                    && (Motion.PowerInputMW >= ContainmentMW * .999 || Motion.ReserveMJ > ContainmentMW / 60), ManifoldRigReady, 1.0 / 60);
+                Motion.Thermal.AdvanceManifolds(ThermalCold, ThermalManifoldPower, ManifoldRigReady, 1.0 / 60);
             }
             if (!MyAPIGateway.Utilities.IsDedicated && ManifoldRigReady)
                 for (int bay = 0; bay < 4; bay++)
@@ -141,7 +148,7 @@ namespace ArcanePower
 
         private void RefreshThermalCapacity()
         {
-            if (nativeReactor == null || Motion.Thermal == null) return;
+            if (!IsLive || nativeReactor == null || Motion.Thermal == null) return;
             var state = Motion.Thermal;
             double limit = ThermalCanRun && state.Mode == ThermalMode.Standalone
                 ? ThermalMath.ExportLimit(state.Store, ThermalHeatMW * 8, .20, ThermalHeatMW * .20 * Motion.PowerRamp, 1.0 / 60) : 0;

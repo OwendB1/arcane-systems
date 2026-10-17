@@ -1,0 +1,3342 @@
+{
+  "APT_ReactorHousing_LA_Carriage_M_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_Carriage_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2932,
+    "authored_triangles": 2932,
+    "reference": "APT_ReactorHousing_LA_Carriage_M",
+    "distance": 35
+  },
+  "APT_ReactorHousing_LA_Carriage_M_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_Carriage_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2034,
+    "authored_triangles": 2034,
+    "reference": "APT_ReactorHousing_LA_Carriage_M",
+    "distance": 90
+  },
+  "APT_ReactorHousing_LA_Carriage_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_Carriage_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4294,
+    "authored_triangles": 4294,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LA_Intermediate_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_Intermediate_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 640,
+    "authored_triangles": 640,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LA_CoverMinus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_CoverMinus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LA_CoverPlus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_CoverPlus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LA_ConnectorTail_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LA_ConnectorTail_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 124,
+    "authored_triangles": 124,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LB_Carriage_M_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_Carriage_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2932,
+    "authored_triangles": 2932,
+    "reference": "APT_ReactorHousing_LB_Carriage_M",
+    "distance": 35
+  },
+  "APT_ReactorHousing_LB_Carriage_M_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_Carriage_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2034,
+    "authored_triangles": 2034,
+    "reference": "APT_ReactorHousing_LB_Carriage_M",
+    "distance": 90
+  },
+  "APT_ReactorHousing_LB_Carriage_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_Carriage_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4294,
+    "authored_triangles": 4294,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LB_Intermediate_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_Intermediate_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 640,
+    "authored_triangles": 640,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LB_CoverMinus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_CoverMinus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LB_CoverPlus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_CoverPlus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_LB_ConnectorTail_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_LB_ConnectorTail_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 124,
+    "authored_triangles": 124,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RA_Carriage_M_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_Carriage_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2932,
+    "authored_triangles": 2932,
+    "reference": "APT_ReactorHousing_RA_Carriage_M",
+    "distance": 35
+  },
+  "APT_ReactorHousing_RA_Carriage_M_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_Carriage_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2034,
+    "authored_triangles": 2034,
+    "reference": "APT_ReactorHousing_RA_Carriage_M",
+    "distance": 90
+  },
+  "APT_ReactorHousing_RA_Carriage_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_Carriage_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4294,
+    "authored_triangles": 4294,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RA_Intermediate_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_Intermediate_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 640,
+    "authored_triangles": 640,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RA_CoverMinus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_CoverMinus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RA_CoverPlus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_CoverPlus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RA_ConnectorTail_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RA_ConnectorTail_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 124,
+    "authored_triangles": 124,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RB_Carriage_M_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_Carriage_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2932,
+    "authored_triangles": 2932,
+    "reference": "APT_ReactorHousing_RB_Carriage_M",
+    "distance": 35
+  },
+  "APT_ReactorHousing_RB_Carriage_M_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_Carriage_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2034,
+    "authored_triangles": 2034,
+    "reference": "APT_ReactorHousing_RB_Carriage_M",
+    "distance": 90
+  },
+  "APT_ReactorHousing_RB_Carriage_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_Carriage_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4294,
+    "authored_triangles": 4294,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RB_Intermediate_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_Intermediate_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 640,
+    "authored_triangles": 640,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RB_CoverMinus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_CoverMinus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RB_CoverPlus_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_CoverPlus_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22,
+    "authored_triangles": 22,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_RB_ConnectorTail_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_RB_ConnectorTail_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 124,
+    "authored_triangles": 124,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_M_BS2_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 105215,
+    "authored_triangles": 105215,
+    "reference": "APT_ReactorHousing_M_BS2",
+    "distance": 75
+  },
+  "APT_ReactorHousing_M_BS2_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 57255,
+    "authored_triangles": 57255,
+    "reference": "APT_ReactorHousing_M_BS2",
+    "distance": 150
+  },
+  "APT_ReactorHousing_M_BS3_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 109132,
+    "authored_triangles": 109132,
+    "reference": "APT_ReactorHousing_M_BS3",
+    "distance": 75
+  },
+  "APT_ReactorHousing_M_BS3_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 60139,
+    "authored_triangles": 60139,
+    "reference": "APT_ReactorHousing_M_BS3",
+    "distance": 150
+  },
+  "APT_ReactorHousing_M_LOD1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 136424,
+    "authored_triangles": 136424,
+    "reference": "APT_ReactorHousing_M",
+    "distance": 75
+  },
+  "APT_ReactorHousing_M_LOD2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 106371,
+    "authored_triangles": 106371,
+    "reference": "APT_ReactorHousing_M",
+    "distance": 150
+  },
+  "APT_ReactorHousing_M_BS1": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 6368,
+    "authored_triangles": 6368,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_M_BS2": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 175547,
+    "authored_triangles": 175586,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_M_BS3": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 181347,
+    "authored_triangles": 181386,
+    "reference": null,
+    "distance": null
+  },
+  "APT_ReactorHousing_M": {
+    "block": "Reactor housing",
+    "scene": "APT_ReactorHousing_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 187579,
+    "authored_triangles": 187618,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_TurbineRotor_M_LOD1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_TurbineRotor_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 14216,
+    "authored_triangles": 14216,
+    "reference": "APT_BraytonTrain_TurbineRotor_M",
+    "distance": 75
+  },
+  "APT_BraytonTrain_TurbineRotor_M_LOD2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_TurbineRotor_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 6462,
+    "authored_triangles": 6462,
+    "reference": "APT_BraytonTrain_TurbineRotor_M",
+    "distance": 150
+  },
+  "APT_BraytonTrain_TurbineRotor_M": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_TurbineRotor_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 25848,
+    "authored_triangles": 25848,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_CompressorRotor_M_LOD1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_CompressorRotor_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12474,
+    "authored_triangles": 12474,
+    "reference": "APT_BraytonTrain_CompressorRotor_M",
+    "distance": 35
+  },
+  "APT_BraytonTrain_CompressorRotor_M_LOD2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_CompressorRotor_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5670,
+    "authored_triangles": 5670,
+    "reference": "APT_BraytonTrain_CompressorRotor_M",
+    "distance": 90
+  },
+  "APT_BraytonTrain_CompressorRotor_M": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_CompressorRotor_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22680,
+    "authored_triangles": 22680,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_M_BS2_LOD1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 78655,
+    "authored_triangles": 78655,
+    "reference": "APT_BraytonTrain_M_BS2",
+    "distance": 75
+  },
+  "APT_BraytonTrain_M_BS2_LOD2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 36677,
+    "authored_triangles": 36677,
+    "reference": "APT_BraytonTrain_M_BS2",
+    "distance": 150
+  },
+  "APT_BraytonTrain_M_BS3_LOD1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 79411,
+    "authored_triangles": 79411,
+    "reference": "APT_BraytonTrain_M_BS3",
+    "distance": 75
+  },
+  "APT_BraytonTrain_M_BS3_LOD2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37022,
+    "authored_triangles": 37022,
+    "reference": "APT_BraytonTrain_M_BS3",
+    "distance": 150
+  },
+  "APT_BraytonTrain_M_LOD1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 66291,
+    "authored_triangles": 66291,
+    "reference": "APT_BraytonTrain_M",
+    "distance": 75
+  },
+  "APT_BraytonTrain_M_LOD2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 41096,
+    "authored_triangles": 41096,
+    "reference": "APT_BraytonTrain_M",
+    "distance": 150
+  },
+  "APT_BraytonTrain_M_BS1": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_M_BS2": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 142989,
+    "authored_triangles": 142989,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_M_BS3": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 146047,
+    "authored_triangles": 146047,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrain_M": {
+    "block": "Brayton train",
+    "scene": "APT_BraytonTrain_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 110479,
+    "authored_triangles": 110479,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_TurbineRotor_M_LOD1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_TurbineRotor_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 14216,
+    "authored_triangles": 14216,
+    "reference": "APT_BraytonTrainUpgraded_TurbineRotor_M",
+    "distance": 75
+  },
+  "APT_BraytonTrainUpgraded_TurbineRotor_M_LOD2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_TurbineRotor_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 6462,
+    "authored_triangles": 6462,
+    "reference": "APT_BraytonTrainUpgraded_TurbineRotor_M",
+    "distance": 150
+  },
+  "APT_BraytonTrainUpgraded_TurbineRotor_M": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_TurbineRotor_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 25848,
+    "authored_triangles": 25848,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_CompressorRotor_M_LOD1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_CompressorRotor_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12474,
+    "authored_triangles": 12474,
+    "reference": "APT_BraytonTrainUpgraded_CompressorRotor_M",
+    "distance": 35
+  },
+  "APT_BraytonTrainUpgraded_CompressorRotor_M_LOD2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_CompressorRotor_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5670,
+    "authored_triangles": 5670,
+    "reference": "APT_BraytonTrainUpgraded_CompressorRotor_M",
+    "distance": 90
+  },
+  "APT_BraytonTrainUpgraded_CompressorRotor_M": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_CompressorRotor_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22680,
+    "authored_triangles": 22680,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_M_BS2_LOD1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 79260,
+    "authored_triangles": 79260,
+    "reference": "APT_BraytonTrainUpgraded_M_BS2",
+    "distance": 75
+  },
+  "APT_BraytonTrainUpgraded_M_BS2_LOD2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37106,
+    "authored_triangles": 37106,
+    "reference": "APT_BraytonTrainUpgraded_M_BS2",
+    "distance": 150
+  },
+  "APT_BraytonTrainUpgraded_M_BS3_LOD1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 80017,
+    "authored_triangles": 80017,
+    "reference": "APT_BraytonTrainUpgraded_M_BS3",
+    "distance": 75
+  },
+  "APT_BraytonTrainUpgraded_M_BS3_LOD2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37450,
+    "authored_triangles": 37450,
+    "reference": "APT_BraytonTrainUpgraded_M_BS3",
+    "distance": 150
+  },
+  "APT_BraytonTrainUpgraded_M_LOD1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 66898,
+    "authored_triangles": 66898,
+    "reference": "APT_BraytonTrainUpgraded_M",
+    "distance": 75
+  },
+  "APT_BraytonTrainUpgraded_M_LOD2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 41525,
+    "authored_triangles": 41525,
+    "reference": "APT_BraytonTrainUpgraded_M",
+    "distance": 150
+  },
+  "APT_BraytonTrainUpgraded_M_BS1": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_M_BS2": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 143901,
+    "authored_triangles": 143901,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_M_BS3": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 146959,
+    "authored_triangles": 146959,
+    "reference": null,
+    "distance": null
+  },
+  "APT_BraytonTrainUpgraded_M": {
+    "block": "Brayton train upgraded",
+    "scene": "APT_BraytonTrainUpgraded_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 111391,
+    "authored_triangles": 111391,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryHeater_M_BS2_LOD1": {
+    "block": "Primary heater",
+    "scene": "APT_PrimaryHeater_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 15593,
+    "authored_triangles": 15593,
+    "reference": "APT_PrimaryHeater_M_BS2",
+    "distance": 75
+  },
+  "APT_PrimaryHeater_M_BS2_LOD2": {
+    "block": "Primary heater",
+    "scene": "APT_PrimaryHeater_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 7798,
+    "authored_triangles": 7798,
+    "reference": "APT_PrimaryHeater_M_BS2",
+    "distance": 150
+  },
+  "APT_PrimaryHeater_M_BS3_LOD1": {
+    "block": "Primary heater",
+    "scene": "APT_PrimaryHeater_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 15593,
+    "authored_triangles": 15593,
+    "reference": "APT_PrimaryHeater_M_BS3",
+    "distance": 75
+  },
+  "APT_PrimaryHeater_M_BS3_LOD2": {
+    "block": "Primary heater",
+    "scene": "APT_PrimaryHeater_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 7798,
+    "authored_triangles": 7798,
+    "reference": "APT_PrimaryHeater_M_BS3",
+    "distance": 150
+  },
+  "APT_PrimaryHeater_M_LOD1": {
+    "block": "Primary heater",
+    "scene": "APT_PrimaryHeater_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 18357,
+    "authored_triangles": 18357,
+    "reference": "APT_PrimaryHeater_M",
+    "distance": 75
+  },
+  "APT_PrimaryHeater_M_LOD2": {
+    "block": "Primary heater",
+    "scene": "APT_PrimaryHeater_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11838,
+    "authored_triangles": 11838,
+    "reference": "APT_PrimaryHeater_M",
+    "distance": 150
+  },
+  "APT_PrimaryHeater_M_BS1": {
+    "block": "Primary heater",
+    "scene": "APT_PrimaryHeater_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryHeater_M_BS2": {
+    "block": "Primary heater",
+    "scene": "APT_PrimaryHeater_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 29928,
+    "authored_triangles": 29928,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryHeater_M_BS3": {
+    "block": "Primary heater",
+    "scene": "APT_PrimaryHeater_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 29928,
+    "authored_triangles": 29928,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryHeater_M": {
+    "block": "Primary heater",
+    "scene": "APT_PrimaryHeater_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 30776,
+    "authored_triangles": 30776,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryHeaterUpgraded_M_BS2_LOD1": {
+    "block": "Primary heater upgraded",
+    "scene": "APT_PrimaryHeaterUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 16825,
+    "authored_triangles": 16825,
+    "reference": "APT_PrimaryHeaterUpgraded_M_BS2",
+    "distance": 75
+  },
+  "APT_PrimaryHeaterUpgraded_M_BS2_LOD2": {
+    "block": "Primary heater upgraded",
+    "scene": "APT_PrimaryHeaterUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 8742,
+    "authored_triangles": 8742,
+    "reference": "APT_PrimaryHeaterUpgraded_M_BS2",
+    "distance": 150
+  },
+  "APT_PrimaryHeaterUpgraded_M_BS3_LOD1": {
+    "block": "Primary heater upgraded",
+    "scene": "APT_PrimaryHeaterUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 16825,
+    "authored_triangles": 16825,
+    "reference": "APT_PrimaryHeaterUpgraded_M_BS3",
+    "distance": 75
+  },
+  "APT_PrimaryHeaterUpgraded_M_BS3_LOD2": {
+    "block": "Primary heater upgraded",
+    "scene": "APT_PrimaryHeaterUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 8742,
+    "authored_triangles": 8742,
+    "reference": "APT_PrimaryHeaterUpgraded_M_BS3",
+    "distance": 150
+  },
+  "APT_PrimaryHeaterUpgraded_M_LOD1": {
+    "block": "Primary heater upgraded",
+    "scene": "APT_PrimaryHeaterUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 19588,
+    "authored_triangles": 19588,
+    "reference": "APT_PrimaryHeaterUpgraded_M",
+    "distance": 75
+  },
+  "APT_PrimaryHeaterUpgraded_M_LOD2": {
+    "block": "Primary heater upgraded",
+    "scene": "APT_PrimaryHeaterUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 12782,
+    "authored_triangles": 12782,
+    "reference": "APT_PrimaryHeaterUpgraded_M",
+    "distance": 150
+  },
+  "APT_PrimaryHeaterUpgraded_M_BS1": {
+    "block": "Primary heater upgraded",
+    "scene": "APT_PrimaryHeaterUpgraded_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryHeaterUpgraded_M_BS2": {
+    "block": "Primary heater upgraded",
+    "scene": "APT_PrimaryHeaterUpgraded_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 31820,
+    "authored_triangles": 31820,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryHeaterUpgraded_M_BS3": {
+    "block": "Primary heater upgraded",
+    "scene": "APT_PrimaryHeaterUpgraded_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 31820,
+    "authored_triangles": 31820,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryHeaterUpgraded_M": {
+    "block": "Primary heater upgraded",
+    "scene": "APT_PrimaryHeaterUpgraded_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 32668,
+    "authored_triangles": 32668,
+    "reference": null,
+    "distance": null
+  },
+  "APT_Recuperator_M_BS2_LOD1": {
+    "block": "Recuperator",
+    "scene": "APT_Recuperator_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 19609,
+    "authored_triangles": 19609,
+    "reference": "APT_Recuperator_M_BS2",
+    "distance": 75
+  },
+  "APT_Recuperator_M_BS2_LOD2": {
+    "block": "Recuperator",
+    "scene": "APT_Recuperator_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11156,
+    "authored_triangles": 11156,
+    "reference": "APT_Recuperator_M_BS2",
+    "distance": 150
+  },
+  "APT_Recuperator_M_BS3_LOD1": {
+    "block": "Recuperator",
+    "scene": "APT_Recuperator_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 19609,
+    "authored_triangles": 19609,
+    "reference": "APT_Recuperator_M_BS3",
+    "distance": 75
+  },
+  "APT_Recuperator_M_BS3_LOD2": {
+    "block": "Recuperator",
+    "scene": "APT_Recuperator_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11156,
+    "authored_triangles": 11156,
+    "reference": "APT_Recuperator_M_BS3",
+    "distance": 150
+  },
+  "APT_Recuperator_M_LOD1": {
+    "block": "Recuperator",
+    "scene": "APT_Recuperator_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 23569,
+    "authored_triangles": 23569,
+    "reference": "APT_Recuperator_M",
+    "distance": 75
+  },
+  "APT_Recuperator_M_LOD2": {
+    "block": "Recuperator",
+    "scene": "APT_Recuperator_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 16220,
+    "authored_triangles": 16220,
+    "reference": "APT_Recuperator_M",
+    "distance": 150
+  },
+  "APT_Recuperator_M_BS1": {
+    "block": "Recuperator",
+    "scene": "APT_Recuperator_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_Recuperator_M_BS2": {
+    "block": "Recuperator",
+    "scene": "APT_Recuperator_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 33314,
+    "authored_triangles": 33314,
+    "reference": null,
+    "distance": null
+  },
+  "APT_Recuperator_M_BS3": {
+    "block": "Recuperator",
+    "scene": "APT_Recuperator_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 33314,
+    "authored_triangles": 33314,
+    "reference": null,
+    "distance": null
+  },
+  "APT_Recuperator_M": {
+    "block": "Recuperator",
+    "scene": "APT_Recuperator_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 35618,
+    "authored_triangles": 35618,
+    "reference": null,
+    "distance": null
+  },
+  "APT_RecuperatorUpgraded_M_BS2_LOD1": {
+    "block": "Recuperator upgraded",
+    "scene": "APT_RecuperatorUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 20953,
+    "authored_triangles": 20953,
+    "reference": "APT_RecuperatorUpgraded_M_BS2",
+    "distance": 75
+  },
+  "APT_RecuperatorUpgraded_M_BS2_LOD2": {
+    "block": "Recuperator upgraded",
+    "scene": "APT_RecuperatorUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 12500,
+    "authored_triangles": 12500,
+    "reference": "APT_RecuperatorUpgraded_M_BS2",
+    "distance": 150
+  },
+  "APT_RecuperatorUpgraded_M_BS3_LOD1": {
+    "block": "Recuperator upgraded",
+    "scene": "APT_RecuperatorUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 20953,
+    "authored_triangles": 20953,
+    "reference": "APT_RecuperatorUpgraded_M_BS3",
+    "distance": 75
+  },
+  "APT_RecuperatorUpgraded_M_BS3_LOD2": {
+    "block": "Recuperator upgraded",
+    "scene": "APT_RecuperatorUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 12500,
+    "authored_triangles": 12500,
+    "reference": "APT_RecuperatorUpgraded_M_BS3",
+    "distance": 150
+  },
+  "APT_RecuperatorUpgraded_M_LOD1": {
+    "block": "Recuperator upgraded",
+    "scene": "APT_RecuperatorUpgraded_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 24913,
+    "authored_triangles": 24913,
+    "reference": "APT_RecuperatorUpgraded_M",
+    "distance": 75
+  },
+  "APT_RecuperatorUpgraded_M_LOD2": {
+    "block": "Recuperator upgraded",
+    "scene": "APT_RecuperatorUpgraded_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 17564,
+    "authored_triangles": 17564,
+    "reference": "APT_RecuperatorUpgraded_M",
+    "distance": 150
+  },
+  "APT_RecuperatorUpgraded_M_BS1": {
+    "block": "Recuperator upgraded",
+    "scene": "APT_RecuperatorUpgraded_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_RecuperatorUpgraded_M_BS2": {
+    "block": "Recuperator upgraded",
+    "scene": "APT_RecuperatorUpgraded_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 35330,
+    "authored_triangles": 35330,
+    "reference": null,
+    "distance": null
+  },
+  "APT_RecuperatorUpgraded_M_BS3": {
+    "block": "Recuperator upgraded",
+    "scene": "APT_RecuperatorUpgraded_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 35330,
+    "authored_triangles": 35330,
+    "reference": null,
+    "distance": null
+  },
+  "APT_RecuperatorUpgraded_M": {
+    "block": "Recuperator upgraded",
+    "scene": "APT_RecuperatorUpgraded_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 37634,
+    "authored_triangles": 37634,
+    "reference": null,
+    "distance": null
+  },
+  "APT_AtmosphericCooler_M_BS2_LOD1": {
+    "block": "Atmospheric cooler",
+    "scene": "APT_AtmosphericCooler_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7391,
+    "authored_triangles": 7391,
+    "reference": "APT_AtmosphericCooler_M_BS2",
+    "distance": 75
+  },
+  "APT_AtmosphericCooler_M_BS2_LOD2": {
+    "block": "Atmospheric cooler",
+    "scene": "APT_AtmosphericCooler_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4549,
+    "authored_triangles": 4549,
+    "reference": "APT_AtmosphericCooler_M_BS2",
+    "distance": 150
+  },
+  "APT_AtmosphericCooler_M_BS3_LOD1": {
+    "block": "Atmospheric cooler",
+    "scene": "APT_AtmosphericCooler_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9199,
+    "authored_triangles": 9199,
+    "reference": "APT_AtmosphericCooler_M_BS3",
+    "distance": 75
+  },
+  "APT_AtmosphericCooler_M_BS3_LOD2": {
+    "block": "Atmospheric cooler",
+    "scene": "APT_AtmosphericCooler_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5997,
+    "authored_triangles": 5997,
+    "reference": "APT_AtmosphericCooler_M_BS3",
+    "distance": 150
+  },
+  "APT_AtmosphericCooler_M_LOD1": {
+    "block": "Atmospheric cooler",
+    "scene": "APT_AtmosphericCooler_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 10422,
+    "authored_triangles": 10422,
+    "reference": "APT_AtmosphericCooler_M",
+    "distance": 75
+  },
+  "APT_AtmosphericCooler_M_LOD2": {
+    "block": "Atmospheric cooler",
+    "scene": "APT_AtmosphericCooler_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 7688,
+    "authored_triangles": 7688,
+    "reference": "APT_AtmosphericCooler_M",
+    "distance": 150
+  },
+  "APT_AtmosphericCooler_M_BS1": {
+    "block": "Atmospheric cooler",
+    "scene": "APT_AtmosphericCooler_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_AtmosphericCooler_M_BS2": {
+    "block": "Atmospheric cooler",
+    "scene": "APT_AtmosphericCooler_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 12752,
+    "authored_triangles": 12752,
+    "reference": null,
+    "distance": null
+  },
+  "APT_AtmosphericCooler_M_BS3": {
+    "block": "Atmospheric cooler",
+    "scene": "APT_AtmosphericCooler_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 15794,
+    "authored_triangles": 15794,
+    "reference": null,
+    "distance": null
+  },
+  "APT_AtmosphericCooler_M": {
+    "block": "Atmospheric cooler",
+    "scene": "APT_AtmosphericCooler_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 16998,
+    "authored_triangles": 16998,
+    "reference": null,
+    "distance": null
+  },
+  "APT_SpaceRadiator_M_BS2_LOD1": {
+    "block": "Space radiator",
+    "scene": "APT_SpaceRadiator_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 10658,
+    "authored_triangles": 10658,
+    "reference": "APT_SpaceRadiator_M_BS2",
+    "distance": 75
+  },
+  "APT_SpaceRadiator_M_BS2_LOD2": {
+    "block": "Space radiator",
+    "scene": "APT_SpaceRadiator_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 7871,
+    "authored_triangles": 7871,
+    "reference": "APT_SpaceRadiator_M_BS2",
+    "distance": 150
+  },
+  "APT_SpaceRadiator_M_BS3_LOD1": {
+    "block": "Space radiator",
+    "scene": "APT_SpaceRadiator_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 11054,
+    "authored_triangles": 11054,
+    "reference": "APT_SpaceRadiator_M_BS3",
+    "distance": 75
+  },
+  "APT_SpaceRadiator_M_BS3_LOD2": {
+    "block": "Space radiator",
+    "scene": "APT_SpaceRadiator_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 8267,
+    "authored_triangles": 8267,
+    "reference": "APT_SpaceRadiator_M_BS3",
+    "distance": 150
+  },
+  "APT_SpaceRadiator_M_LOD1": {
+    "block": "Space radiator",
+    "scene": "APT_SpaceRadiator_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 11925,
+    "authored_triangles": 11925,
+    "reference": "APT_SpaceRadiator_M",
+    "distance": 75
+  },
+  "APT_SpaceRadiator_M_LOD2": {
+    "block": "Space radiator",
+    "scene": "APT_SpaceRadiator_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9608,
+    "authored_triangles": 9608,
+    "reference": "APT_SpaceRadiator_M",
+    "distance": 150
+  },
+  "APT_SpaceRadiator_M_BS1": {
+    "block": "Space radiator",
+    "scene": "APT_SpaceRadiator_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_SpaceRadiator_M_BS2": {
+    "block": "Space radiator",
+    "scene": "APT_SpaceRadiator_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 15045,
+    "authored_triangles": 15045,
+    "reference": null,
+    "distance": null
+  },
+  "APT_SpaceRadiator_M_BS3": {
+    "block": "Space radiator",
+    "scene": "APT_SpaceRadiator_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 15441,
+    "authored_triangles": 15441,
+    "reference": null,
+    "distance": null
+  },
+  "APT_SpaceRadiator_M": {
+    "block": "Space radiator",
+    "scene": "APT_SpaceRadiator_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 15605,
+    "authored_triangles": 15605,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryStraight_M_LOD1": {
+    "block": "PRIMARY / Straight",
+    "scene": "APT_PrimaryStraight_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5564,
+    "authored_triangles": 5564,
+    "reference": "APT_PrimaryStraight_M",
+    "distance": 35
+  },
+  "APT_PrimaryStraight_M_LOD2": {
+    "block": "PRIMARY / Straight",
+    "scene": "APT_PrimaryStraight_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3822,
+    "authored_triangles": 3822,
+    "reference": "APT_PrimaryStraight_M",
+    "distance": 90
+  },
+  "APT_PrimaryStraight_M_BS1": {
+    "block": "PRIMARY / Straight",
+    "scene": "APT_PrimaryStraight_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryStraight_M_BS2": {
+    "block": "PRIMARY / Straight",
+    "scene": "APT_PrimaryStraight_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 7850,
+    "authored_triangles": 7850,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryStraight_M_BS3": {
+    "block": "PRIMARY / Straight",
+    "scene": "APT_PrimaryStraight_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 7850,
+    "authored_triangles": 7850,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryStraight_M": {
+    "block": "PRIMARY / Straight",
+    "scene": "APT_PrimaryStraight_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 8698,
+    "authored_triangles": 8698,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbow_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow",
+    "scene": "APT_PrimaryElbow_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7450,
+    "authored_triangles": 7450,
+    "reference": "APT_PrimaryElbow_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbow_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow",
+    "scene": "APT_PrimaryElbow_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3606,
+    "authored_triangles": 3606,
+    "reference": "APT_PrimaryElbow_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbow_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow",
+    "scene": "APT_PrimaryElbow_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7450,
+    "authored_triangles": 7450,
+    "reference": "APT_PrimaryElbow_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbow_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow",
+    "scene": "APT_PrimaryElbow_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3606,
+    "authored_triangles": 3606,
+    "reference": "APT_PrimaryElbow_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbow_M_LOD1": {
+    "block": "PRIMARY / Elbow",
+    "scene": "APT_PrimaryElbow_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 11452,
+    "authored_triangles": 11452,
+    "reference": "APT_PrimaryElbow_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbow_M_LOD2": {
+    "block": "PRIMARY / Elbow",
+    "scene": "APT_PrimaryElbow_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9711,
+    "authored_triangles": 9711,
+    "reference": "APT_PrimaryElbow_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbow_M_BS1": {
+    "block": "PRIMARY / Elbow",
+    "scene": "APT_PrimaryElbow_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbow_M_BS2": {
+    "block": "PRIMARY / Elbow",
+    "scene": "APT_PrimaryElbow_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 13738,
+    "authored_triangles": 13738,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbow_M_BS3": {
+    "block": "PRIMARY / Elbow",
+    "scene": "APT_PrimaryElbow_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 13738,
+    "authored_triangles": 13738,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbow_M": {
+    "block": "PRIMARY / Elbow",
+    "scene": "APT_PrimaryElbow_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 14586,
+    "authored_triangles": 14586,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiser_M_BS2_LOD1": {
+    "block": "PRIMARY / Riser",
+    "scene": "APT_PrimaryRiser_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9000,
+    "authored_triangles": 9000,
+    "reference": "APT_PrimaryRiser_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryRiser_M_BS2_LOD2": {
+    "block": "PRIMARY / Riser",
+    "scene": "APT_PrimaryRiser_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4310,
+    "authored_triangles": 4310,
+    "reference": "APT_PrimaryRiser_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryRiser_M_BS3_LOD1": {
+    "block": "PRIMARY / Riser",
+    "scene": "APT_PrimaryRiser_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9000,
+    "authored_triangles": 9000,
+    "reference": "APT_PrimaryRiser_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryRiser_M_BS3_LOD2": {
+    "block": "PRIMARY / Riser",
+    "scene": "APT_PrimaryRiser_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4310,
+    "authored_triangles": 4310,
+    "reference": "APT_PrimaryRiser_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryRiser_M_LOD1": {
+    "block": "PRIMARY / Riser",
+    "scene": "APT_PrimaryRiser_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 14384,
+    "authored_triangles": 14384,
+    "reference": "APT_PrimaryRiser_M",
+    "distance": 35
+  },
+  "APT_PrimaryRiser_M_LOD2": {
+    "block": "PRIMARY / Riser",
+    "scene": "APT_PrimaryRiser_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 12718,
+    "authored_triangles": 12718,
+    "reference": "APT_PrimaryRiser_M",
+    "distance": 90
+  },
+  "APT_PrimaryRiser_M_BS1": {
+    "block": "PRIMARY / Riser",
+    "scene": "APT_PrimaryRiser_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiser_M_BS2": {
+    "block": "PRIMARY / Riser",
+    "scene": "APT_PrimaryRiser_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 16554,
+    "authored_triangles": 16554,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiser_M_BS3": {
+    "block": "PRIMARY / Riser",
+    "scene": "APT_PrimaryRiser_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 16554,
+    "authored_triangles": 16554,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiser_M": {
+    "block": "PRIMARY / Riser",
+    "scene": "APT_PrimaryRiser_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 17402,
+    "authored_triangles": 17402,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryTee_M_BS2_LOD1": {
+    "block": "PRIMARY / Tee",
+    "scene": "APT_PrimaryTee_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5711,
+    "authored_triangles": 5711,
+    "reference": "APT_PrimaryTee_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryTee_M_BS2_LOD2": {
+    "block": "PRIMARY / Tee",
+    "scene": "APT_PrimaryTee_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2842,
+    "authored_triangles": 2842,
+    "reference": "APT_PrimaryTee_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryTee_M_BS3_LOD1": {
+    "block": "PRIMARY / Tee",
+    "scene": "APT_PrimaryTee_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5711,
+    "authored_triangles": 5711,
+    "reference": "APT_PrimaryTee_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryTee_M_BS3_LOD2": {
+    "block": "PRIMARY / Tee",
+    "scene": "APT_PrimaryTee_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2842,
+    "authored_triangles": 2842,
+    "reference": "APT_PrimaryTee_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryTee_M_LOD1": {
+    "block": "PRIMARY / Tee",
+    "scene": "APT_PrimaryTee_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 8133,
+    "authored_triangles": 8133,
+    "reference": "APT_PrimaryTee_M",
+    "distance": 35
+  },
+  "APT_PrimaryTee_M_LOD2": {
+    "block": "PRIMARY / Tee",
+    "scene": "APT_PrimaryTee_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5828,
+    "authored_triangles": 5828,
+    "reference": "APT_PrimaryTee_M",
+    "distance": 90
+  },
+  "APT_PrimaryTee_M_BS1": {
+    "block": "PRIMARY / Tee",
+    "scene": "APT_PrimaryTee_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryTee_M_BS2": {
+    "block": "PRIMARY / Tee",
+    "scene": "APT_PrimaryTee_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 10731,
+    "authored_triangles": 10731,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryTee_M_BS3": {
+    "block": "PRIMARY / Tee",
+    "scene": "APT_PrimaryTee_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 10731,
+    "authored_triangles": 10731,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryTee_M": {
+    "block": "PRIMARY / Tee",
+    "scene": "APT_PrimaryTee_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 12307,
+    "authored_triangles": 12307,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCross_M_BS2_LOD1": {
+    "block": "PRIMARY / Cross",
+    "scene": "APT_PrimaryCross_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7492,
+    "authored_triangles": 7492,
+    "reference": "APT_PrimaryCross_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryCross_M_BS2_LOD2": {
+    "block": "PRIMARY / Cross",
+    "scene": "APT_PrimaryCross_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3679,
+    "authored_triangles": 3679,
+    "reference": "APT_PrimaryCross_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryCross_M_BS3_LOD1": {
+    "block": "PRIMARY / Cross",
+    "scene": "APT_PrimaryCross_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7492,
+    "authored_triangles": 7492,
+    "reference": "APT_PrimaryCross_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryCross_M_BS3_LOD2": {
+    "block": "PRIMARY / Cross",
+    "scene": "APT_PrimaryCross_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3679,
+    "authored_triangles": 3679,
+    "reference": "APT_PrimaryCross_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryCross_M_LOD1": {
+    "block": "PRIMARY / Cross",
+    "scene": "APT_PrimaryCross_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 10984,
+    "authored_triangles": 10984,
+    "reference": "APT_PrimaryCross_M",
+    "distance": 35
+  },
+  "APT_PrimaryCross_M_LOD2": {
+    "block": "PRIMARY / Cross",
+    "scene": "APT_PrimaryCross_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 7962,
+    "authored_triangles": 7962,
+    "reference": "APT_PrimaryCross_M",
+    "distance": 90
+  },
+  "APT_PrimaryCross_M_BS1": {
+    "block": "PRIMARY / Cross",
+    "scene": "APT_PrimaryCross_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCross_M_BS2": {
+    "block": "PRIMARY / Cross",
+    "scene": "APT_PrimaryCross_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 14124,
+    "authored_triangles": 14124,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCross_M_BS3": {
+    "block": "PRIMARY / Cross",
+    "scene": "APT_PrimaryCross_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 14124,
+    "authored_triangles": 14124,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCross_M": {
+    "block": "PRIMARY / Cross",
+    "scene": "APT_PrimaryCross_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 16428,
+    "authored_triangles": 16428,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapter_M_BS2_LOD1": {
+    "block": "PRIMARY / Roll adapter",
+    "scene": "APT_PrimaryRollAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 11112,
+    "authored_triangles": 11112,
+    "reference": "APT_PrimaryRollAdapter_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapter_M_BS2_LOD2": {
+    "block": "PRIMARY / Roll adapter",
+    "scene": "APT_PrimaryRollAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5270,
+    "authored_triangles": 5270,
+    "reference": "APT_PrimaryRollAdapter_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapter_M_BS3_LOD1": {
+    "block": "PRIMARY / Roll adapter",
+    "scene": "APT_PrimaryRollAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 11112,
+    "authored_triangles": 11112,
+    "reference": "APT_PrimaryRollAdapter_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapter_M_BS3_LOD2": {
+    "block": "PRIMARY / Roll adapter",
+    "scene": "APT_PrimaryRollAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5270,
+    "authored_triangles": 5270,
+    "reference": "APT_PrimaryRollAdapter_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapter_M_LOD1": {
+    "block": "PRIMARY / Roll adapter",
+    "scene": "APT_PrimaryRollAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 17878,
+    "authored_triangles": 17878,
+    "reference": "APT_PrimaryRollAdapter_M",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapter_M_LOD2": {
+    "block": "PRIMARY / Roll adapter",
+    "scene": "APT_PrimaryRollAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 15982,
+    "authored_triangles": 15982,
+    "reference": "APT_PrimaryRollAdapter_M",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapter_M_BS1": {
+    "block": "PRIMARY / Roll adapter",
+    "scene": "APT_PrimaryRollAdapter_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapter_M_BS2": {
+    "block": "PRIMARY / Roll adapter",
+    "scene": "APT_PrimaryRollAdapter_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 20394,
+    "authored_triangles": 20394,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapter_M_BS3": {
+    "block": "PRIMARY / Roll adapter",
+    "scene": "APT_PrimaryRollAdapter_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 20394,
+    "authored_triangles": 20394,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapter_M": {
+    "block": "PRIMARY / Roll adapter",
+    "scene": "APT_PrimaryRollAdapter_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 21242,
+    "authored_triangles": 21242,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryEndCap_M_LOD1": {
+    "block": "PRIMARY / End cap",
+    "scene": "APT_PrimaryEndCap_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 3892,
+    "authored_triangles": 3892,
+    "reference": "APT_PrimaryEndCap_M",
+    "distance": 35
+  },
+  "APT_PrimaryEndCap_M_LOD2": {
+    "block": "PRIMARY / End cap",
+    "scene": "APT_PrimaryEndCap_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2639,
+    "authored_triangles": 2639,
+    "reference": "APT_PrimaryEndCap_M",
+    "distance": 90
+  },
+  "APT_PrimaryEndCap_M_BS1": {
+    "block": "PRIMARY / End cap",
+    "scene": "APT_PrimaryEndCap_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryEndCap_M_BS2": {
+    "block": "PRIMARY / End cap",
+    "scene": "APT_PrimaryEndCap_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 5977,
+    "authored_triangles": 5977,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryEndCap_M_BS3": {
+    "block": "PRIMARY / End cap",
+    "scene": "APT_PrimaryEndCap_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 5977,
+    "authored_triangles": 5977,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryEndCap_M": {
+    "block": "PRIMARY / End cap",
+    "scene": "APT_PrimaryEndCap_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 6097,
+    "authored_triangles": 6097,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpStraight_M_BS2_LOD1": {
+    "block": "CO2_HP / Straight",
+    "scene": "APT_CO2HpStraight_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4749,
+    "authored_triangles": 4749,
+    "reference": "APT_CO2HpStraight_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2HpStraight_M_BS2_LOD2": {
+    "block": "CO2_HP / Straight",
+    "scene": "APT_CO2HpStraight_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2170,
+    "authored_triangles": 2170,
+    "reference": "APT_CO2HpStraight_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2HpStraight_M_BS3_LOD1": {
+    "block": "CO2_HP / Straight",
+    "scene": "APT_CO2HpStraight_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4749,
+    "authored_triangles": 4749,
+    "reference": "APT_CO2HpStraight_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2HpStraight_M_BS3_LOD2": {
+    "block": "CO2_HP / Straight",
+    "scene": "APT_CO2HpStraight_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2170,
+    "authored_triangles": 2170,
+    "reference": "APT_CO2HpStraight_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2HpStraight_M_LOD1": {
+    "block": "CO2_HP / Straight",
+    "scene": "APT_CO2HpStraight_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 6100,
+    "authored_triangles": 6100,
+    "reference": "APT_CO2HpStraight_M",
+    "distance": 35
+  },
+  "APT_CO2HpStraight_M_LOD2": {
+    "block": "CO2_HP / Straight",
+    "scene": "APT_CO2HpStraight_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3858,
+    "authored_triangles": 3858,
+    "reference": "APT_CO2HpStraight_M",
+    "distance": 90
+  },
+  "APT_CO2HpStraight_M_BS1": {
+    "block": "CO2_HP / Straight",
+    "scene": "APT_CO2HpStraight_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpStraight_M_BS2": {
+    "block": "CO2_HP / Straight",
+    "scene": "APT_CO2HpStraight_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 8824,
+    "authored_triangles": 8824,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpStraight_M_BS3": {
+    "block": "CO2_HP / Straight",
+    "scene": "APT_CO2HpStraight_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 8824,
+    "authored_triangles": 8824,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpStraight_M": {
+    "block": "CO2_HP / Straight",
+    "scene": "APT_CO2HpStraight_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 9672,
+    "authored_triangles": 9672,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpElbow_M_BS2_LOD1": {
+    "block": "CO2_HP / Elbow",
+    "scene": "APT_CO2HpElbow_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7986,
+    "authored_triangles": 7986,
+    "reference": "APT_CO2HpElbow_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2HpElbow_M_BS2_LOD2": {
+    "block": "CO2_HP / Elbow",
+    "scene": "APT_CO2HpElbow_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3642,
+    "authored_triangles": 3642,
+    "reference": "APT_CO2HpElbow_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2HpElbow_M_BS3_LOD1": {
+    "block": "CO2_HP / Elbow",
+    "scene": "APT_CO2HpElbow_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7986,
+    "authored_triangles": 7986,
+    "reference": "APT_CO2HpElbow_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2HpElbow_M_BS3_LOD2": {
+    "block": "CO2_HP / Elbow",
+    "scene": "APT_CO2HpElbow_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3642,
+    "authored_triangles": 3642,
+    "reference": "APT_CO2HpElbow_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2HpElbow_M_LOD1": {
+    "block": "CO2_HP / Elbow",
+    "scene": "APT_CO2HpElbow_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 11988,
+    "authored_triangles": 11988,
+    "reference": "APT_CO2HpElbow_M",
+    "distance": 35
+  },
+  "APT_CO2HpElbow_M_LOD2": {
+    "block": "CO2_HP / Elbow",
+    "scene": "APT_CO2HpElbow_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9746,
+    "authored_triangles": 9746,
+    "reference": "APT_CO2HpElbow_M",
+    "distance": 90
+  },
+  "APT_CO2HpElbow_M_BS1": {
+    "block": "CO2_HP / Elbow",
+    "scene": "APT_CO2HpElbow_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpElbow_M_BS2": {
+    "block": "CO2_HP / Elbow",
+    "scene": "APT_CO2HpElbow_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 14712,
+    "authored_triangles": 14712,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpElbow_M_BS3": {
+    "block": "CO2_HP / Elbow",
+    "scene": "APT_CO2HpElbow_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 14712,
+    "authored_triangles": 14712,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpElbow_M": {
+    "block": "CO2_HP / Elbow",
+    "scene": "APT_CO2HpElbow_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 15560,
+    "authored_triangles": 15560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRiser_M_BS2_LOD1": {
+    "block": "CO2_HP / Riser",
+    "scene": "APT_CO2HpRiser_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9536,
+    "authored_triangles": 9536,
+    "reference": "APT_CO2HpRiser_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2HpRiser_M_BS2_LOD2": {
+    "block": "CO2_HP / Riser",
+    "scene": "APT_CO2HpRiser_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4346,
+    "authored_triangles": 4346,
+    "reference": "APT_CO2HpRiser_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2HpRiser_M_BS3_LOD1": {
+    "block": "CO2_HP / Riser",
+    "scene": "APT_CO2HpRiser_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9536,
+    "authored_triangles": 9536,
+    "reference": "APT_CO2HpRiser_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2HpRiser_M_BS3_LOD2": {
+    "block": "CO2_HP / Riser",
+    "scene": "APT_CO2HpRiser_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4346,
+    "authored_triangles": 4346,
+    "reference": "APT_CO2HpRiser_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2HpRiser_M_LOD1": {
+    "block": "CO2_HP / Riser",
+    "scene": "APT_CO2HpRiser_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 14920,
+    "authored_triangles": 14920,
+    "reference": "APT_CO2HpRiser_M",
+    "distance": 35
+  },
+  "APT_CO2HpRiser_M_LOD2": {
+    "block": "CO2_HP / Riser",
+    "scene": "APT_CO2HpRiser_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 12754,
+    "authored_triangles": 12754,
+    "reference": "APT_CO2HpRiser_M",
+    "distance": 90
+  },
+  "APT_CO2HpRiser_M_BS1": {
+    "block": "CO2_HP / Riser",
+    "scene": "APT_CO2HpRiser_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRiser_M_BS2": {
+    "block": "CO2_HP / Riser",
+    "scene": "APT_CO2HpRiser_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 17528,
+    "authored_triangles": 17528,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRiser_M_BS3": {
+    "block": "CO2_HP / Riser",
+    "scene": "APT_CO2HpRiser_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 17528,
+    "authored_triangles": 17528,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRiser_M": {
+    "block": "CO2_HP / Riser",
+    "scene": "APT_CO2HpRiser_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 18376,
+    "authored_triangles": 18376,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpTee_M_BS2_LOD1": {
+    "block": "CO2_HP / Tee",
+    "scene": "APT_CO2HpTee_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 6515,
+    "authored_triangles": 6515,
+    "reference": "APT_CO2HpTee_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2HpTee_M_BS2_LOD2": {
+    "block": "CO2_HP / Tee",
+    "scene": "APT_CO2HpTee_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2894,
+    "authored_triangles": 2894,
+    "reference": "APT_CO2HpTee_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2HpTee_M_BS3_LOD1": {
+    "block": "CO2_HP / Tee",
+    "scene": "APT_CO2HpTee_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 6515,
+    "authored_triangles": 6515,
+    "reference": "APT_CO2HpTee_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2HpTee_M_BS3_LOD2": {
+    "block": "CO2_HP / Tee",
+    "scene": "APT_CO2HpTee_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2894,
+    "authored_triangles": 2894,
+    "reference": "APT_CO2HpTee_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2HpTee_M_LOD1": {
+    "block": "CO2_HP / Tee",
+    "scene": "APT_CO2HpTee_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 8938,
+    "authored_triangles": 8938,
+    "reference": "APT_CO2HpTee_M",
+    "distance": 35
+  },
+  "APT_CO2HpTee_M_LOD2": {
+    "block": "CO2_HP / Tee",
+    "scene": "APT_CO2HpTee_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5881,
+    "authored_triangles": 5881,
+    "reference": "APT_CO2HpTee_M",
+    "distance": 90
+  },
+  "APT_CO2HpTee_M_BS1": {
+    "block": "CO2_HP / Tee",
+    "scene": "APT_CO2HpTee_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpTee_M_BS2": {
+    "block": "CO2_HP / Tee",
+    "scene": "APT_CO2HpTee_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 12192,
+    "authored_triangles": 12192,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpTee_M_BS3": {
+    "block": "CO2_HP / Tee",
+    "scene": "APT_CO2HpTee_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 12192,
+    "authored_triangles": 12192,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpTee_M": {
+    "block": "CO2_HP / Tee",
+    "scene": "APT_CO2HpTee_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 13768,
+    "authored_triangles": 13768,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpCross_M_BS2_LOD1": {
+    "block": "CO2_HP / Cross",
+    "scene": "APT_CO2HpCross_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 8564,
+    "authored_triangles": 8564,
+    "reference": "APT_CO2HpCross_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2HpCross_M_BS2_LOD2": {
+    "block": "CO2_HP / Cross",
+    "scene": "APT_CO2HpCross_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3748,
+    "authored_triangles": 3748,
+    "reference": "APT_CO2HpCross_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2HpCross_M_BS3_LOD1": {
+    "block": "CO2_HP / Cross",
+    "scene": "APT_CO2HpCross_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 8564,
+    "authored_triangles": 8564,
+    "reference": "APT_CO2HpCross_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2HpCross_M_BS3_LOD2": {
+    "block": "CO2_HP / Cross",
+    "scene": "APT_CO2HpCross_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3748,
+    "authored_triangles": 3748,
+    "reference": "APT_CO2HpCross_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2HpCross_M_LOD1": {
+    "block": "CO2_HP / Cross",
+    "scene": "APT_CO2HpCross_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12056,
+    "authored_triangles": 12056,
+    "reference": "APT_CO2HpCross_M",
+    "distance": 35
+  },
+  "APT_CO2HpCross_M_LOD2": {
+    "block": "CO2_HP / Cross",
+    "scene": "APT_CO2HpCross_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 8032,
+    "authored_triangles": 8032,
+    "reference": "APT_CO2HpCross_M",
+    "distance": 90
+  },
+  "APT_CO2HpCross_M_BS1": {
+    "block": "CO2_HP / Cross",
+    "scene": "APT_CO2HpCross_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpCross_M_BS2": {
+    "block": "CO2_HP / Cross",
+    "scene": "APT_CO2HpCross_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 16072,
+    "authored_triangles": 16072,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpCross_M_BS3": {
+    "block": "CO2_HP / Cross",
+    "scene": "APT_CO2HpCross_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 16072,
+    "authored_triangles": 16072,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpCross_M": {
+    "block": "CO2_HP / Cross",
+    "scene": "APT_CO2HpCross_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 18376,
+    "authored_triangles": 18376,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRollAdapter_M_BS2_LOD1": {
+    "block": "CO2_HP / Roll adapter",
+    "scene": "APT_CO2HpRollAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 11648,
+    "authored_triangles": 11648,
+    "reference": "APT_CO2HpRollAdapter_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2HpRollAdapter_M_BS2_LOD2": {
+    "block": "CO2_HP / Roll adapter",
+    "scene": "APT_CO2HpRollAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5306,
+    "authored_triangles": 5306,
+    "reference": "APT_CO2HpRollAdapter_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2HpRollAdapter_M_BS3_LOD1": {
+    "block": "CO2_HP / Roll adapter",
+    "scene": "APT_CO2HpRollAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 11648,
+    "authored_triangles": 11648,
+    "reference": "APT_CO2HpRollAdapter_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2HpRollAdapter_M_BS3_LOD2": {
+    "block": "CO2_HP / Roll adapter",
+    "scene": "APT_CO2HpRollAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5306,
+    "authored_triangles": 5306,
+    "reference": "APT_CO2HpRollAdapter_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2HpRollAdapter_M_LOD1": {
+    "block": "CO2_HP / Roll adapter",
+    "scene": "APT_CO2HpRollAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 18414,
+    "authored_triangles": 18414,
+    "reference": "APT_CO2HpRollAdapter_M",
+    "distance": 35
+  },
+  "APT_CO2HpRollAdapter_M_LOD2": {
+    "block": "CO2_HP / Roll adapter",
+    "scene": "APT_CO2HpRollAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 16018,
+    "authored_triangles": 16018,
+    "reference": "APT_CO2HpRollAdapter_M",
+    "distance": 90
+  },
+  "APT_CO2HpRollAdapter_M_BS1": {
+    "block": "CO2_HP / Roll adapter",
+    "scene": "APT_CO2HpRollAdapter_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRollAdapter_M_BS2": {
+    "block": "CO2_HP / Roll adapter",
+    "scene": "APT_CO2HpRollAdapter_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 21368,
+    "authored_triangles": 21368,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRollAdapter_M_BS3": {
+    "block": "CO2_HP / Roll adapter",
+    "scene": "APT_CO2HpRollAdapter_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 21368,
+    "authored_triangles": 21368,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRollAdapter_M": {
+    "block": "CO2_HP / Roll adapter",
+    "scene": "APT_CO2HpRollAdapter_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22216,
+    "authored_triangles": 22216,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpEndCap_M_LOD1": {
+    "block": "CO2_HP / End cap",
+    "scene": "APT_CO2HpEndCap_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4159,
+    "authored_triangles": 4159,
+    "reference": "APT_CO2HpEndCap_M",
+    "distance": 35
+  },
+  "APT_CO2HpEndCap_M_LOD2": {
+    "block": "CO2_HP / End cap",
+    "scene": "APT_CO2HpEndCap_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2656,
+    "authored_triangles": 2656,
+    "reference": "APT_CO2HpEndCap_M",
+    "distance": 90
+  },
+  "APT_CO2HpEndCap_M_BS1": {
+    "block": "CO2_HP / End cap",
+    "scene": "APT_CO2HpEndCap_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpEndCap_M_BS2": {
+    "block": "CO2_HP / End cap",
+    "scene": "APT_CO2HpEndCap_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 6464,
+    "authored_triangles": 6464,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpEndCap_M_BS3": {
+    "block": "CO2_HP / End cap",
+    "scene": "APT_CO2HpEndCap_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 6464,
+    "authored_triangles": 6464,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpEndCap_M": {
+    "block": "CO2_HP / End cap",
+    "scene": "APT_CO2HpEndCap_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 6584,
+    "authored_triangles": 6584,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpStraight_M_BS2_LOD1": {
+    "block": "CO2_LP / Straight",
+    "scene": "APT_CO2LpStraight_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4764,
+    "authored_triangles": 4764,
+    "reference": "APT_CO2LpStraight_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2LpStraight_M_BS2_LOD2": {
+    "block": "CO2_LP / Straight",
+    "scene": "APT_CO2LpStraight_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2166,
+    "authored_triangles": 2166,
+    "reference": "APT_CO2LpStraight_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2LpStraight_M_BS3_LOD1": {
+    "block": "CO2_LP / Straight",
+    "scene": "APT_CO2LpStraight_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4764,
+    "authored_triangles": 4764,
+    "reference": "APT_CO2LpStraight_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2LpStraight_M_BS3_LOD2": {
+    "block": "CO2_LP / Straight",
+    "scene": "APT_CO2LpStraight_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2166,
+    "authored_triangles": 2166,
+    "reference": "APT_CO2LpStraight_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2LpStraight_M_LOD1": {
+    "block": "CO2_LP / Straight",
+    "scene": "APT_CO2LpStraight_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 6116,
+    "authored_triangles": 6116,
+    "reference": "APT_CO2LpStraight_M",
+    "distance": 35
+  },
+  "APT_CO2LpStraight_M_LOD2": {
+    "block": "CO2_LP / Straight",
+    "scene": "APT_CO2LpStraight_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3854,
+    "authored_triangles": 3854,
+    "reference": "APT_CO2LpStraight_M",
+    "distance": 90
+  },
+  "APT_CO2LpStraight_M_BS1": {
+    "block": "CO2_LP / Straight",
+    "scene": "APT_CO2LpStraight_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpStraight_M_BS2": {
+    "block": "CO2_LP / Straight",
+    "scene": "APT_CO2LpStraight_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 8852,
+    "authored_triangles": 8852,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpStraight_M_BS3": {
+    "block": "CO2_LP / Straight",
+    "scene": "APT_CO2LpStraight_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 8852,
+    "authored_triangles": 8852,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpStraight_M": {
+    "block": "CO2_LP / Straight",
+    "scene": "APT_CO2LpStraight_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 9700,
+    "authored_triangles": 9700,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpElbow_M_BS2_LOD1": {
+    "block": "CO2_LP / Elbow",
+    "scene": "APT_CO2LpElbow_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 8002,
+    "authored_triangles": 8002,
+    "reference": "APT_CO2LpElbow_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2LpElbow_M_BS2_LOD2": {
+    "block": "CO2_LP / Elbow",
+    "scene": "APT_CO2LpElbow_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3638,
+    "authored_triangles": 3638,
+    "reference": "APT_CO2LpElbow_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2LpElbow_M_BS3_LOD1": {
+    "block": "CO2_LP / Elbow",
+    "scene": "APT_CO2LpElbow_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 8002,
+    "authored_triangles": 8002,
+    "reference": "APT_CO2LpElbow_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2LpElbow_M_BS3_LOD2": {
+    "block": "CO2_LP / Elbow",
+    "scene": "APT_CO2LpElbow_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3638,
+    "authored_triangles": 3638,
+    "reference": "APT_CO2LpElbow_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2LpElbow_M_LOD1": {
+    "block": "CO2_LP / Elbow",
+    "scene": "APT_CO2LpElbow_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12004,
+    "authored_triangles": 12004,
+    "reference": "APT_CO2LpElbow_M",
+    "distance": 35
+  },
+  "APT_CO2LpElbow_M_LOD2": {
+    "block": "CO2_LP / Elbow",
+    "scene": "APT_CO2LpElbow_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9742,
+    "authored_triangles": 9742,
+    "reference": "APT_CO2LpElbow_M",
+    "distance": 90
+  },
+  "APT_CO2LpElbow_M_BS1": {
+    "block": "CO2_LP / Elbow",
+    "scene": "APT_CO2LpElbow_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpElbow_M_BS2": {
+    "block": "CO2_LP / Elbow",
+    "scene": "APT_CO2LpElbow_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 14740,
+    "authored_triangles": 14740,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpElbow_M_BS3": {
+    "block": "CO2_LP / Elbow",
+    "scene": "APT_CO2LpElbow_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 14740,
+    "authored_triangles": 14740,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpElbow_M": {
+    "block": "CO2_LP / Elbow",
+    "scene": "APT_CO2LpElbow_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 15588,
+    "authored_triangles": 15588,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRiser_M_BS2_LOD1": {
+    "block": "CO2_LP / Riser",
+    "scene": "APT_CO2LpRiser_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9550,
+    "authored_triangles": 9550,
+    "reference": "APT_CO2LpRiser_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2LpRiser_M_BS2_LOD2": {
+    "block": "CO2_LP / Riser",
+    "scene": "APT_CO2LpRiser_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4342,
+    "authored_triangles": 4342,
+    "reference": "APT_CO2LpRiser_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2LpRiser_M_BS3_LOD1": {
+    "block": "CO2_LP / Riser",
+    "scene": "APT_CO2LpRiser_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9550,
+    "authored_triangles": 9550,
+    "reference": "APT_CO2LpRiser_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2LpRiser_M_BS3_LOD2": {
+    "block": "CO2_LP / Riser",
+    "scene": "APT_CO2LpRiser_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4342,
+    "authored_triangles": 4342,
+    "reference": "APT_CO2LpRiser_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2LpRiser_M_LOD1": {
+    "block": "CO2_LP / Riser",
+    "scene": "APT_CO2LpRiser_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 14934,
+    "authored_triangles": 14934,
+    "reference": "APT_CO2LpRiser_M",
+    "distance": 35
+  },
+  "APT_CO2LpRiser_M_LOD2": {
+    "block": "CO2_LP / Riser",
+    "scene": "APT_CO2LpRiser_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 12750,
+    "authored_triangles": 12750,
+    "reference": "APT_CO2LpRiser_M",
+    "distance": 90
+  },
+  "APT_CO2LpRiser_M_BS1": {
+    "block": "CO2_LP / Riser",
+    "scene": "APT_CO2LpRiser_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRiser_M_BS2": {
+    "block": "CO2_LP / Riser",
+    "scene": "APT_CO2LpRiser_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 17556,
+    "authored_triangles": 17556,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRiser_M_BS3": {
+    "block": "CO2_LP / Riser",
+    "scene": "APT_CO2LpRiser_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 17556,
+    "authored_triangles": 17556,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRiser_M": {
+    "block": "CO2_LP / Riser",
+    "scene": "APT_CO2LpRiser_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 18404,
+    "authored_triangles": 18404,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpTee_M_BS2_LOD1": {
+    "block": "CO2_LP / Tee",
+    "scene": "APT_CO2LpTee_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 6539,
+    "authored_triangles": 6539,
+    "reference": "APT_CO2LpTee_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2LpTee_M_BS2_LOD2": {
+    "block": "CO2_LP / Tee",
+    "scene": "APT_CO2LpTee_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2891,
+    "authored_triangles": 2891,
+    "reference": "APT_CO2LpTee_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2LpTee_M_BS3_LOD1": {
+    "block": "CO2_LP / Tee",
+    "scene": "APT_CO2LpTee_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 6539,
+    "authored_triangles": 6539,
+    "reference": "APT_CO2LpTee_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2LpTee_M_BS3_LOD2": {
+    "block": "CO2_LP / Tee",
+    "scene": "APT_CO2LpTee_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2891,
+    "authored_triangles": 2891,
+    "reference": "APT_CO2LpTee_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2LpTee_M_LOD1": {
+    "block": "CO2_LP / Tee",
+    "scene": "APT_CO2LpTee_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 8960,
+    "authored_triangles": 8960,
+    "reference": "APT_CO2LpTee_M",
+    "distance": 35
+  },
+  "APT_CO2LpTee_M_LOD2": {
+    "block": "CO2_LP / Tee",
+    "scene": "APT_CO2LpTee_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5876,
+    "authored_triangles": 5876,
+    "reference": "APT_CO2LpTee_M",
+    "distance": 90
+  },
+  "APT_CO2LpTee_M_BS1": {
+    "block": "CO2_LP / Tee",
+    "scene": "APT_CO2LpTee_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpTee_M_BS2": {
+    "block": "CO2_LP / Tee",
+    "scene": "APT_CO2LpTee_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 12234,
+    "authored_triangles": 12234,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpTee_M_BS3": {
+    "block": "CO2_LP / Tee",
+    "scene": "APT_CO2LpTee_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 12234,
+    "authored_triangles": 12234,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpTee_M": {
+    "block": "CO2_LP / Tee",
+    "scene": "APT_CO2LpTee_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 13810,
+    "authored_triangles": 13810,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpCross_M_BS2_LOD1": {
+    "block": "CO2_LP / Cross",
+    "scene": "APT_CO2LpCross_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 8596,
+    "authored_triangles": 8596,
+    "reference": "APT_CO2LpCross_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2LpCross_M_BS2_LOD2": {
+    "block": "CO2_LP / Cross",
+    "scene": "APT_CO2LpCross_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3742,
+    "authored_triangles": 3742,
+    "reference": "APT_CO2LpCross_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2LpCross_M_BS3_LOD1": {
+    "block": "CO2_LP / Cross",
+    "scene": "APT_CO2LpCross_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 8596,
+    "authored_triangles": 8596,
+    "reference": "APT_CO2LpCross_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2LpCross_M_BS3_LOD2": {
+    "block": "CO2_LP / Cross",
+    "scene": "APT_CO2LpCross_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3742,
+    "authored_triangles": 3742,
+    "reference": "APT_CO2LpCross_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2LpCross_M_LOD1": {
+    "block": "CO2_LP / Cross",
+    "scene": "APT_CO2LpCross_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12088,
+    "authored_triangles": 12088,
+    "reference": "APT_CO2LpCross_M",
+    "distance": 35
+  },
+  "APT_CO2LpCross_M_LOD2": {
+    "block": "CO2_LP / Cross",
+    "scene": "APT_CO2LpCross_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 8026,
+    "authored_triangles": 8026,
+    "reference": "APT_CO2LpCross_M",
+    "distance": 90
+  },
+  "APT_CO2LpCross_M_BS1": {
+    "block": "CO2_LP / Cross",
+    "scene": "APT_CO2LpCross_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpCross_M_BS2": {
+    "block": "CO2_LP / Cross",
+    "scene": "APT_CO2LpCross_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 16128,
+    "authored_triangles": 16128,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpCross_M_BS3": {
+    "block": "CO2_LP / Cross",
+    "scene": "APT_CO2LpCross_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 16128,
+    "authored_triangles": 16128,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpCross_M": {
+    "block": "CO2_LP / Cross",
+    "scene": "APT_CO2LpCross_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 18432,
+    "authored_triangles": 18432,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRollAdapter_M_BS2_LOD1": {
+    "block": "CO2_LP / Roll adapter",
+    "scene": "APT_CO2LpRollAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 11662,
+    "authored_triangles": 11662,
+    "reference": "APT_CO2LpRollAdapter_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2LpRollAdapter_M_BS2_LOD2": {
+    "block": "CO2_LP / Roll adapter",
+    "scene": "APT_CO2LpRollAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5302,
+    "authored_triangles": 5302,
+    "reference": "APT_CO2LpRollAdapter_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2LpRollAdapter_M_BS3_LOD1": {
+    "block": "CO2_LP / Roll adapter",
+    "scene": "APT_CO2LpRollAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 11662,
+    "authored_triangles": 11662,
+    "reference": "APT_CO2LpRollAdapter_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2LpRollAdapter_M_BS3_LOD2": {
+    "block": "CO2_LP / Roll adapter",
+    "scene": "APT_CO2LpRollAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 5302,
+    "authored_triangles": 5302,
+    "reference": "APT_CO2LpRollAdapter_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2LpRollAdapter_M_LOD1": {
+    "block": "CO2_LP / Roll adapter",
+    "scene": "APT_CO2LpRollAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 18430,
+    "authored_triangles": 18430,
+    "reference": "APT_CO2LpRollAdapter_M",
+    "distance": 35
+  },
+  "APT_CO2LpRollAdapter_M_LOD2": {
+    "block": "CO2_LP / Roll adapter",
+    "scene": "APT_CO2LpRollAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 16015,
+    "authored_triangles": 16015,
+    "reference": "APT_CO2LpRollAdapter_M",
+    "distance": 90
+  },
+  "APT_CO2LpRollAdapter_M_BS1": {
+    "block": "CO2_LP / Roll adapter",
+    "scene": "APT_CO2LpRollAdapter_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRollAdapter_M_BS2": {
+    "block": "CO2_LP / Roll adapter",
+    "scene": "APT_CO2LpRollAdapter_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 21396,
+    "authored_triangles": 21396,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRollAdapter_M_BS3": {
+    "block": "CO2_LP / Roll adapter",
+    "scene": "APT_CO2LpRollAdapter_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 21396,
+    "authored_triangles": 21396,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRollAdapter_M": {
+    "block": "CO2_LP / Roll adapter",
+    "scene": "APT_CO2LpRollAdapter_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 22244,
+    "authored_triangles": 22244,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpEndCap_M_LOD1": {
+    "block": "CO2_LP / End cap",
+    "scene": "APT_CO2LpEndCap_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4166,
+    "authored_triangles": 4166,
+    "reference": "APT_CO2LpEndCap_M",
+    "distance": 35
+  },
+  "APT_CO2LpEndCap_M_LOD2": {
+    "block": "CO2_LP / End cap",
+    "scene": "APT_CO2LpEndCap_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2655,
+    "authored_triangles": 2655,
+    "reference": "APT_CO2LpEndCap_M",
+    "distance": 90
+  },
+  "APT_CO2LpEndCap_M_BS1": {
+    "block": "CO2_LP / End cap",
+    "scene": "APT_CO2LpEndCap_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpEndCap_M_BS2": {
+    "block": "CO2_LP / End cap",
+    "scene": "APT_CO2LpEndCap_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 6478,
+    "authored_triangles": 6478,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpEndCap_M_BS3": {
+    "block": "CO2_LP / End cap",
+    "scene": "APT_CO2LpEndCap_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 6478,
+    "authored_triangles": 6478,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpEndCap_M": {
+    "block": "CO2_LP / End cap",
+    "scene": "APT_CO2LpEndCap_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 6598,
+    "authored_triangles": 6598,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryReactorAdapter_M_BS2_LOD1": {
+    "block": "PRIMARY / Reactor adapter",
+    "scene": "APT_PrimaryReactorAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4776,
+    "authored_triangles": 4776,
+    "reference": "APT_PrimaryReactorAdapter_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryReactorAdapter_M_BS2_LOD2": {
+    "block": "PRIMARY / Reactor adapter",
+    "scene": "APT_PrimaryReactorAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2391,
+    "authored_triangles": 2391,
+    "reference": "APT_PrimaryReactorAdapter_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryReactorAdapter_M_BS3_LOD1": {
+    "block": "PRIMARY / Reactor adapter",
+    "scene": "APT_PrimaryReactorAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4776,
+    "authored_triangles": 4776,
+    "reference": "APT_PrimaryReactorAdapter_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryReactorAdapter_M_BS3_LOD2": {
+    "block": "PRIMARY / Reactor adapter",
+    "scene": "APT_PrimaryReactorAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2391,
+    "authored_triangles": 2391,
+    "reference": "APT_PrimaryReactorAdapter_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryReactorAdapter_M_LOD1": {
+    "block": "PRIMARY / Reactor adapter",
+    "scene": "APT_PrimaryReactorAdapter_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 6588,
+    "authored_triangles": 6588,
+    "reference": "APT_PrimaryReactorAdapter_M",
+    "distance": 35
+  },
+  "APT_PrimaryReactorAdapter_M_LOD2": {
+    "block": "PRIMARY / Reactor adapter",
+    "scene": "APT_PrimaryReactorAdapter_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4846,
+    "authored_triangles": 4846,
+    "reference": "APT_PrimaryReactorAdapter_M",
+    "distance": 90
+  },
+  "APT_PrimaryReactorAdapter_M_BS1": {
+    "block": "PRIMARY / Reactor adapter",
+    "scene": "APT_PrimaryReactorAdapter_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryReactorAdapter_M_BS2": {
+    "block": "PRIMARY / Reactor adapter",
+    "scene": "APT_PrimaryReactorAdapter_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 8874,
+    "authored_triangles": 8874,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryReactorAdapter_M_BS3": {
+    "block": "PRIMARY / Reactor adapter",
+    "scene": "APT_PrimaryReactorAdapter_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 8874,
+    "authored_triangles": 8874,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryReactorAdapter_M": {
+    "block": "PRIMARY / Reactor adapter",
+    "scene": "APT_PrimaryReactorAdapter_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 9722,
+    "authored_triangles": 9722,
+    "reference": null,
+    "distance": null
+  }
+}

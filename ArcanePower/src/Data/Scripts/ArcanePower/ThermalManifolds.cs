@@ -8,6 +8,18 @@ namespace ArcanePower
         public static readonly string[] Parts = { "Carriage", "Intermediate", "CoverMinus", "CoverPlus", "ConnectorTail" };
         public static string Name(int bay, string part) { return "Thermal_" + ThermalModels.ManifoldBays[bay] + "_" + part; }
 
+        public static bool CompatibleRest(Matrix rest)
+        {
+            // Match the native import gate: FBX leaves sub-microradian roundoff.
+            const float squared = 1e-10f;
+            return Vector3.DistanceSquared(rest.Right, Vector3.Right) <= squared
+                && Vector3.DistanceSquared(rest.Up, Vector3.Up) <= squared
+                && Vector3.DistanceSquared(rest.Backward, Vector3.Backward) <= squared
+                && rest.Translation.LengthSquared() <= squared
+                && Math.Abs(rest.M14) <= 1e-5f && Math.Abs(rest.M24) <= 1e-5f
+                && Math.Abs(rest.M34) <= 1e-5f && Math.Abs(rest.M44 - 1) <= 1e-5f;
+        }
+
         // Native subpart meshes must be baked in reactor-local stowed space,
         // with identity root dummies. The casting/connector move in Carriage;
         // the long tail gets its own fixed-anchor nonuniform scale.

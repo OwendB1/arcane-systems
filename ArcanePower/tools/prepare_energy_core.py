@@ -4,7 +4,7 @@ from pathlib import Path
 import shutil
 import sys
 import xml.etree.ElementTree as E
-from prepare_lab import MOD, save, set_text, XSI
+from prepare_lab import MOD, save, set_text, XSI, model_source
 
 BLOCKS = {
  'ArcanePower_EnergyCore': ('Arcane Energy Core',1000,1),
@@ -20,9 +20,9 @@ BLOCKS = {
 def model_revision():
  folder=MOD/'Models/Cubes/large'
  # Reuse the exact reactor hoops, including their original UVs/materials.
- files=[folder/(name+'.mwm') for name in ('ArcanePower_EnergyRotor','ArcanePower_EnergyFan','ArcanePower_Ring3','ArcanePower_Ring4')]
+ files=[model_source(name) for name in ('ArcanePower_EnergyRotor','ArcanePower_EnergyFan','ArcanePower_Ring3','ArcanePower_Ring4')]
  for name in BLOCKS:
-  files += [folder/(name+suffix+'.mwm') for suffix in ('','_BS1','_BS2','_BS3')]
+  files += [model_source(name+suffix) for suffix in ('','_BS1','_BS2','_BS3')]
  digest=hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in files)).hexdigest()[:12]
  revision=folder/('energy_'+digest);revision.mkdir(exist_ok=True)
  for p in files:shutil.copy2(p,revision/p.name)

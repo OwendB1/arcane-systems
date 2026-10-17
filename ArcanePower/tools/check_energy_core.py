@@ -1,7 +1,7 @@
 """Focused storage acceptance using the shipped policy methods and native models."""
 import os,re,subprocess,sys,tempfile,xml.etree.ElementTree as ET
 from pathlib import Path
-from prepare_lab import ROOT,MOD,GAME
+from prepare_lab import ROOT,MOD,GAME,COLLISIONS,model_source
 from prepare_energy_core import BLOCKS
 
 def method(source,name):
@@ -59,9 +59,9 @@ if path.exists() and '--policy-only' not in sys.argv:
   assert (MOD/block.findtext('Model')).exists()
   if name=='ArcanePower_EnergyCore':
    for ring in ('ArcanePower_Ring3.mwm','ArcanePower_Ring4.mwm'):
-    assert (MOD/block.findtext('Model')).with_name(ring).read_bytes()==(MOD/'Models/Cubes/large'/ring).read_bytes()
+    assert (MOD/block.findtext('Model')).with_name(ring).read_bytes()==model_source(Path(ring).stem).read_bytes()
   if 'EnergyStabilizer' in name:
-   assert (MOD/block.findtext('Model')).with_name('ArcanePower_EnergyFan.mwm').read_bytes()==(MOD/'Models/Cubes/large/ArcanePower_EnergyFan.mwm').read_bytes()
+   assert (MOD/block.findtext('Model')).with_name('ArcanePower_EnergyFan.mwm').read_bytes()==model_source('ArcanePower_EnergyFan').read_bytes()
   assert (MOD/block.findtext('Icon')).exists()
   assert len(block.findall('BuildProgressModels/Model'))==3
   for stage in block.findall('BuildProgressModels/Model'):assert (MOD/stage.get('File')).exists()
@@ -105,5 +105,5 @@ if path.exists() and '--policy-only' not in sys.argv:
     env={**os.environ,'MONO_PATH':str(game)})
    for stage in block.findall('BuildProgressModels/Model'):
     subprocess.run(['mono',str(probe),str(MOD/stage.get('File')),
-     str(MOD/'Models/Cubes/large'/(name+'.hkt')),str(MOD/block.findtext('Model'))],
+     str(COLLISIONS/(name+'.hkt')),str(MOD/block.findtext('Model'))],
      check=True,env={**os.environ,'MONO_PATH':str(game)})

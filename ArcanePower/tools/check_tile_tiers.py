@@ -34,7 +34,6 @@ namespace Sandbox.ModAPI {
         public static class Multiplayer { public static bool IsServer=true; }
     }
 }
-namespace VRageMath { public static class MathHelper { public static float Clamp(float n,float lo,float hi) { return Math.Max(lo,Math.Min(hi,n)); } } }
 namespace VRage.Game.ModAPI.Ingame {
     public struct MyItemType {
         public string Id;
@@ -78,7 +77,7 @@ CHECKS = r'''
     public sealed partial class Reactor {
         FakeReactor reactor=new FakeReactor();
         MotionState Motion=new MotionState();
-        float[] PowerMW={10000,100000,1000000};
+        static readonly float[] PowerMW={10000,100000,1000000};
         List<MyInventoryItem> transferItems=new List<MyInventoryItem>();
         void SaveMotion() {}
         void BeginShutdown() {}
@@ -147,8 +146,12 @@ CHECKS = r'''
 with tempfile.TemporaryDirectory(prefix="arcane-tile-check-") as folder:
     source = Path(folder) / "check.cs"
     source.write_text(STUBS + state + CHECKS + accounting + validation + pull + "}}")
+    # Include real thermal save-state validation; shaft drawing is outside this inventory check.
+    rotors = (ROOT / "src/Data/Scripts/ArcanePower/ThermalRotors.cs").read_text()
+    rotor_state = Path(folder) / "ThermalRotors.cs"
+    rotor_state.write_text(rotors[:rotors.index("        public static Matrix Pose(")] + "    }\n}\n")
     exe = source.with_suffix(".exe")
-    subprocess.run(["mcs", "-r:/usr/lib/mono/4.5/Facades/netstandard.dll", "-r:" + str(GAME / "VRage.Library.dll"), "-r:" + str(GAME / "ProtoBuf.Net.Core.dll"), "-r:" + str(GAME / "ProtoBuf.Net.dll"), "-out:" + str(exe), str(source)], check=True)
+    subprocess.run(["mcs", "-r:/usr/lib/mono/4.5/Facades/netstandard.dll", "-r:" + str(GAME / "VRage.Library.dll"), "-r:" + str(GAME / "VRage.Math.dll"), "-r:" + str(GAME / "ProtoBuf.Net.Core.dll"), "-r:" + str(GAME / "ProtoBuf.Net.dll"), "-out:" + str(exe), str(source), str(ROOT / "src/Data/Scripts/ArcanePower/ThermalPlant.cs"), str(rotor_state)], check=True)
     subprocess.run(["mono", str(exe)], check=True, env={**os.environ, "MONO_PATH": str(GAME)})
 
 components = ET.parse(ROOT / "src/Data/ContainmentTiles.sbc").findall("Components/Component")
@@ -164,6 +167,7 @@ for component, recipe, factor in zip(components, recipes, (1, 10, 100)):
             ("Component", "Computer"): 4, ("Component", "Detector"): 1, ("Component", "MetalGrid"): 4}
     assert inputs == {key: amount * factor for key, amount in base.items()}
     assert float(component.findtext("Volume")) == 2
-inventory = ET.parse(ROOT / "src/Data/CubeBlocks/ArcanePower_ReactorPrototype.sbc").find("CubeBlocks/Definition/InventorySize")
+inventory = next(d for d in ET.parse(ROOT / "src/Data/CubeBlocks/ArcanePower_Thermal.sbc").findall("CubeBlocks/Definition")
+                 if d.findtext("Id/SubtypeId") == "ArcanePower_Thermal_ReactorHousing").find("InventorySize")
 assert tuple(float(inventory.findtext(axis)) for axis in "XYZ") == (2, 1, 1)
 print("PASS: three recipes with 1x/10x/100x costs and times, 2,000 L inventory")

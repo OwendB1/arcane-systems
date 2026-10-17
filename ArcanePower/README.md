@@ -11,11 +11,16 @@ named checkpoints, texture/icon sources, runtime assets, Workshop artwork and
 compact audit/source-fingerprint reports remain. Fresh review captures and export
 staging are local generated output covered by `.gitignore`. The latest pass also
 removed temporary asset scripts, stale caches and superseded native revisions.
-All Blender files and current release assets were preserved. The thermal staging
-folder retains accepted collision inputs and its source manifest; regenerate
-FBX/XML exports before compiling another native release.
+Production Blender files, named checkpoints and current release assets were
+preserved. `src/Models/Cubes/large` now contains only the 481 models in the current
+runtime dependency closure. Accepted physics live in `assets/collisions/`; native
+interface/comparison baselines live in `assets/native-baselines/`, outside the mod.
+The source export manifest is retained under `validation/thermal-models/`.
+Regenerate FBX/XML staging from the production blends before another native build.
+Successful packaging prunes unused model exports again, preserving rebuild inputs
+first. [Cleanup evidence](validation/model-export-cleanup.json).
 
-The current authoring sources are `assets/arcane-power-prototype.blend` (reactor),
+The current authoring sources are `assets/arcane-power-prototype.blend` (archived reactor design),
 `assets/arcane-energy-core.blend` (battery), `assets/arcane-power-fuels.blend` and
 `assets/arcane-thermal-models.blend` (Brayton family). The retained
 `build_thermal_concepts.py` and `review_thermal_concepts.py` supply helpers to the
@@ -24,12 +29,22 @@ production thermal builder/reviewer and remain required.
 Arcane Power is an SE1 reactor, fuel-processing and energy-storage mod in development. The current large-grid reactor fits **5×5×3 cells** (SE `Size=(5,3,5)`). Its rounded housing has three native-size conveyor access hatches plus a centered top conveyor connection behind the vent hatch, two base upgrade sockets and curved chamber glass. This is an engineering slice of the [mod plan](../docs/arcane-power-plan.md), not the finished progression.
 
 Thermal art delivery, 17 October 2026: all 31 blocks, 24 moving subparts,
-93 construction models and 174 LODs are installed locally and packaged in the
-unpublished 0.1.0 ZIP. Custom glass uses uniform textures; external pressure pipes
-share the reactor struts' smoked glass, metal jackets and fitted rings. Icons are
-refreshed. All 322 native meshes and the installed package pass their
+93 construction models and 186 LODs are installed locally and packaged in the
+unpublished 0.1.0 ZIP. Custom glass uses uniform textures. External pressure pipes have continuous,
+reflective glass walls with separate metal rings and end fittings. Internal
+reactor plumbing retains its previous materials and geometry. Socket inserts and
+seals have separate seats, and pipe ends stop behind them. Icons are refreshed. All 334 native meshes and the installed package pass their
 [delivery checks](validation/thermal-models/delivery-check.json); this art pass
 still needs an in-game reload and visual check.
+
+The thermal design is the sole playable **Arcane Reactor**, with standalone and
+Brayton modes. Manifold deployment accepts native export rounding and reports
+cooldown or motor-power interlocks. Reactor connection guidance appears only
+in settled Brayton mode while construction/connections are incomplete. Its subtype remains `ArcanePower_Thermal_ReactorHousing` so existing
+thermal builds retain their identity. The original `ArcanePower_ReactorPrototype`
+definition is archived in `assets/definitions/`, outside the mod; its blends and
+native validation baselines remain available outside the mod. Existing grids using that removed
+prototype subtype need the current reactor placed in its stead.
 
 ## Construction and Energy Core delivery — updated 15 October 2026
 

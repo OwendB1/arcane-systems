@@ -158,6 +158,7 @@ def apply(name):
         p.scene['thermal_flow_revision'] = REVISION
     coolant_glass(p)
     uniform_glass_materials()
+    runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))['pressure_seal_fit'](p)
     external_pipe_jackets(p)
     row = record(p)
     M['record'](name)
@@ -310,9 +311,9 @@ def reactor_sight_frames(p):
     p.col['thermal_sight_frames_revision']=5
 
 
-def coolant_glass(p):
-    """One smoked pressure-glass material for reactor and room plumbing."""
-    name = 'ArcanePower_CoolantGlass'
+def coolant_glass(p, internal=False):
+    """Reflective external glass; preserve the accepted internal coolant finish."""
+    name = 'ArcanePower_InternalCoolantGlass' if internal else 'ArcanePower_CoolantGlass'
     glass = bpy.data.materials.get(name)
     if glass is None:
         glass = bpy.data.materials['ArcanePower_ClearChamber'].copy()
@@ -327,23 +328,23 @@ def coolant_glass(p):
     bpy.context.view_layer.objects.active = host
     try:
         glass.seut.color = (.42, .60, .68, .62)
-        glass.seut.color_add = (.006, .009, .012, .16)
-        glass.seut.reflectivity = .22
-        glass.seut.fresnel = .70
-        glass.seut.specular_color_factor = 6
+        glass.seut.color_add = (.006, .009, .012, .16 if internal else .10)
+        glass.seut.reflectivity = .22 if internal else .45
+        glass.seut.fresnel = .70 if internal else .90
+        glass.seut.specular_color_factor = 6 if internal else 8
     finally:
         bpy.context.view_layer.objects.active = active
         bpy.data.objects.remove(host, do_unlink=True)
         bpy.data.meshes.remove(mesh)
     nodes = glass.node_tree.nodes
     preview = nodes['Arcane clear glass preview']
-    preview.inputs['Base Color'].default_value = (.10, .18, .22, 1)
-    preview.inputs['Roughness'].default_value = .19
-    preview.inputs['IOR'].default_value = 1.48
+    preview.inputs['Base Color'].default_value = (.10, .18, .22, 1) if internal else (.28, .42, .48, 1)
+    preview.inputs['Roughness'].default_value = .19 if internal else .075
+    preview.inputs['IOR'].default_value = 1.48 if internal else 1.50
     nodes['AP glass dirt alpha'].inputs[1].default_value = .35
-    nodes['AP glass dirt alpha'].inputs[2].default_value = .24
-    nodes['AP glass preview opacity'].inputs[1].default_value = .20
-    glass.diffuse_color = (.10, .18, .22, .40)
+    nodes['AP glass dirt alpha'].inputs[2].default_value = .24 if internal else .18
+    nodes['AP glass preview opacity'].inputs[1].default_value = .20 if internal else .40
+    glass.diffuse_color = (.10, .18, .22, .40) if internal else (.28, .42, .48, .30)
     # The native glass ID has its own definition; the outer chamber stays clear.
     file = ROOT/'src/Data/TransparentMaterials.sbc'
     tree = ET.parse(file)
@@ -355,8 +356,8 @@ def coolant_glass(p):
     definition.find('Id/SubtypeId').text = name
     for key, values in [('Color',glass.seut.color),('ColorAdd',glass.seut.color_add)]:
         for axis,value in zip(('X','Y','Z','W'),values): definition.find(key+'/'+axis).text = str(round(value,5))
-    for key,value in [('Reflectivity',.22),('Fresnel',.70),('SpecularColorFactor',6)]:
-        definition.find(key).text = str(value)
+    for key,value in [('Reflectivity',glass.seut.reflectivity),('Fresnel',glass.seut.fresnel),('SpecularColorFactor',glass.seut.specular_color_factor)]:
+        definition.find(key).text = str(round(value,5))
     ET.indent(tree); tree.write(file,encoding='utf-8',xml_declaration=True)
     return glass
 
@@ -384,7 +385,7 @@ def uniform_glass_materials():
             img.save()
         images[suffix] = img
     for mat in bpy.data.materials:
-        if not mat.name.startswith(('ArcanePower_ClearChamber', 'ArcanePower_CoolantGlass')):
+        if not mat.name.startswith(('ArcanePower_ClearChamber', 'ArcanePower_CoolantGlass', 'ArcanePower_InternalCoolantGlass')):
             continue
         nodes = mat.node_tree.nodes
         nodes['CM'].image = images['ca']
@@ -394,7 +395,7 @@ def uniform_glass_materials():
     file = ROOT/'src/Data/TransparentMaterials.sbc'
     tree = ET.parse(file)
     for definition in tree.getroot().find('TransparentMaterials'):
-        if definition.findtext('Id/SubtypeId') not in ('ArcanePower_ClearChamber', 'ArcanePower_CoolantGlass'):
+        if definition.findtext('Id/SubtypeId') not in ('ArcanePower_ClearChamber', 'ArcanePower_CoolantGlass', 'ArcanePower_InternalCoolantGlass'):
             continue
         for tag, suffix in [('Texture', 'ca'), ('GlossTexture', 'ng')]:
             definition.find(tag).text = 'Textures/Models/ArcanePower/Thermal/UniformGlass_'+suffix+'.dds'
@@ -408,13 +409,16 @@ def external_pipe_jackets(p):
     Only authored fluid pressure walls qualify. Keep telescoping fits clear:
     their existing glands provide the rings; no added clamp travels into a bore.
     """
-    if p.col.get('thermal_external_jacket_revision') == 1:
+    if p.col.get('thermal_external_jacket_revision') == 2:
         return
     glass = p.native['ArcanePower_CoolantGlass']
     V = runpy.run_path(str(ROOT/'assets/refine_thermal_visibility.py'))
     for obj in list(p.col.objects):
         if obj.get('thermal_external_pipe_clamp'):
             bpy.data.objects.remove(obj, do_unlink=True)
+    # Reclassify from the authored paths, recovering walls that revision 1
+    # changed to metal. End fittings remain outside the glass sight length.
+    V['transparent_pipes'](p)
     tubes = [o for o in p.col.objects if o.type == 'MESH' and o.get('thermal_pressure_glass')
              and not o.get('thermal_internal_coolant') and (o.get('pipe_path') or
              (p.col.get('pipe_shape') in ('Tee', 'Cross') and ' / connected ' in o.name))]
@@ -424,6 +428,15 @@ def external_pipe_jackets(p):
         if obj.get('pipe_path'):
             paths = [list(map(Vector, json.loads(obj['pipe_path'])))]
             radius = obj['pipe_radius']
+            # Clamp spacing stays anchored to the socket face when the
+            # pressure wall is shortened behind its insert and seal.
+            if obj.get('thermal_seal_fit_revision'):
+                for end in (0,-1):
+                    for port in p.ports:
+                        for sign in (-1,1):
+                            socket = Vector(port['position'])+Vector(port['hot_axis'])*(sign*.46)
+                            if (paths[0][end]-socket).length < .12:
+                                paths[0][end] = socket
         else:
             z = .46 if 'connected H ' in obj.name else -.46
             centre = Vector((0, 0, z))
@@ -440,14 +453,10 @@ def external_pipe_jackets(p):
         for face in obj.data.polygons:
             mat = obj.data.materials[face.material_index]
             if mat.seut.technique == 'GLASS':
-                point = face.center
-                centre = min((V['nearest'](point, path) for path in paths), key=lambda c: (point-c).length_squared)
-                # A continuous metal underside, with a clear upper sight arc.
-                # Telescopic walls retain their fitted original face pattern.
-                face.material_index = window if telescopic or (point-centre).normalized().z > -.10 else metal
+                face.material_index = window
             elif mat.name.startswith('PaintedMetal'):
                 face.material_index = metal
-        obj['thermal_external_pipe_style'] = 1
+        obj['thermal_external_pipe_style'] = 2
         if telescopic:
             continue
         for path in paths:
@@ -491,12 +500,12 @@ def external_pipe_jackets(p):
                         band['thermal_clamp_radius'] = radius
                         break
                     remaining -= length
-    p.col['thermal_external_jacket_revision'] = 1
+    p.col['thermal_external_jacket_revision'] = 2
 
 
 def reactor_tube_contrast(p):
     """Smoked sight glass inside a metal pressure jacket, with seated clamps."""
-    glass = coolant_glass(p)
+    glass = coolant_glass(p, internal=True)
     name = glass.name
     tubes = [o for o in p.col.objects if o.type == 'MESH' and o.get('thermal_internal_coolant')]
     if p.col.get('thermal_tube_contrast_revision') == 2: return

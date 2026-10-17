@@ -68,6 +68,15 @@ namespace ArcanePower
             get { return Mode == Requested && Deployment == (Mode == ThermalMode.Brayton ? 1 : 0); }
         }
 
+        public string TransitionHint(bool cold, bool powered, bool rigReady)
+        {
+            if (Settled) return null;
+            if (!rigReady) return "Mode change blocked: native manifold parts or origins are incompatible";
+            if (!cold) return "Mode change: shutting down and draining trapped heat before moving manifolds";
+            if (!powered) return "Mode change paused: supply containment power through the two controllers";
+            return Requested == ThermalMode.Brayton ? "Deploying Brayton manifolds" : "Retracting manifolds for standalone mode";
+        }
+
         public void AdvanceManifolds(bool cold, bool powered, bool rigReady, double seconds)
         {
             if (!cold || !powered || !rigReady || !ThermalMath.Finite(seconds) || seconds <= 0) return;

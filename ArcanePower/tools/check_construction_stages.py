@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 import xml.etree.ElementTree as ET
 
-from prepare_lab import BUILD_BLOCKS, MOD, ROOT, GAME
+from prepare_lab import BUILD_BLOCKS, MOD, ROOT, GAME, COLLISIONS, model_source
 
 game = GAME/'Bin64'
 folder = MOD/'Models/Cubes/large'
@@ -20,18 +20,19 @@ with tempfile.TemporaryDirectory(prefix='arcane-stages-') as tmp:
                     *['-r:'+str(game/(name+'.dll')) for name in ('VRage.Render','VRage.Math','VRage.Library')],
                     str(ROOT/'tools/ConstructionModelProbe.cs')],check=True)
     for name, filename in BUILD_BLOCKS.items():
+        if name=='ArcanePower_ReactorPrototype':continue  # Archived authoring design.
         definitions = ET.parse(MOD/'Data/CubeBlocks'/filename)
         block = next(n for n in definitions.findall('CubeBlocks/Definition') if n.findtext('Id/SubtypeId')==name)
         stages = block.findall('BuildProgressModels/Model')
         assert [n.get('BuildPercentUpperBound') for n in stages] == ['0.33','0.67','1.00']
-        collision = folder/('ArcanePower_ContainmentController.hkt' if 'Advanced' in name else name+'.hkt')
+        collision = COLLISIONS/('ArcanePower_ContainmentController.hkt' if 'Advanced' in name else name+'.hkt')
         for stage, node in enumerate(stages,1):
-            canonical = folder/(name+'_BS'+str(stage)+'.mwm')
+            canonical = model_source(name+'_BS'+str(stage))
             delivered = MOD/node.get('File')
             data = delivered.read_bytes()
             digest = hashlib.sha256(data).hexdigest()
             assert data == canonical.read_bytes() and digest[:12] in delivered.stem
-            subprocess.run(['mono',str(probe),str(delivered),str(collision),str(folder/(name+'.mwm'))],
+            subprocess.run(['mono',str(probe),str(delivered),str(collision),str(model_source(name))],
                            check=True,env={**os.environ,'MONO_PATH':str(game)})
             models.append({'subtype':name,'stage':stage,'file':node.get('File'),'sha256':digest,'bytes':len(data)})
 
@@ -72,4 +73,4 @@ class Check {
     subprocess.run(['mono',str(exe)],check=True)
 report.update(exported=True, models=models, native_model_import_passed=True, model_transitions_passed=True)
 report_path.write_text(json.dumps(report,indent=2)+'\n')
-print('PASS: 15 shipped models, five native build progress definitions, runtime model transitions')
+print('PASS:',len(models),'shipped hardware stages, four native build progress definitions, runtime model transitions')

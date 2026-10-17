@@ -18,6 +18,12 @@ namespace ArcanePower
     // startup permission nor substitutes client observations for server state.
     public static class ThermalConstruction
     {
+        public static bool ShowReactorGuide(ThermalReactorState state, ThermalBuildCheck check)
+        {
+            return state != null && state.Mode == ThermalMode.Brayton && state.Settled
+                && check != null && !check.Verified;
+        }
+
         public static string Role(ThermalModel model)
         {
             switch (model.Kind)

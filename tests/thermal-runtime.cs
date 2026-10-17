@@ -156,7 +156,34 @@ public static partial class ThermalRuntimeChecks
 
     private static void ModesAndStartup()
     {
+        // Actual native importer roundoff used to reject every manifold rig.
+        Matrix nativeRest = Matrix.Identity;
+        nativeRest.M12 = 8.742284e-8f; nativeRest.M13 = 3.89414367e-7f;
+        nativeRest.M21 = -8.742278e-8f; nativeRest.M23 = -1.62920685e-7f;
+        nativeRest.M31 = -3.894144e-7f; nativeRest.M32 = 1.62920657e-7f;
+        Check(ThermalManifolds.CompatibleRest(nativeRest), "native manifold roundoff remains compatible");
+        Matrix badRest = nativeRest; badRest.M41 = .001f;
+        Check(!ThermalManifolds.CompatibleRest(badRest), "reject shifted manifold origins");
+        badRest = nativeRest; badRest.M11 = float.NaN;
+        Check(!ThermalManifolds.CompatibleRest(badRest), "reject invalid manifold transforms");
+        Check(!ThermalManifolds.CompatibleRest(Matrix.CreateRotationY(.01f)), "reject genuinely rotated manifold rigs");
+        var guideState = new ThermalReactorState();
+        var guideCheck = new ThermalBuildCheck();
+        Check(!ThermalConstruction.ShowReactorGuide(null, guideCheck), "no reactor guide without operating state");
+        Check(!ThermalConstruction.ShowReactorGuide(guideState, guideCheck), "hide reactor connections in standalone");
+        guideState.Requested = ThermalMode.Brayton;
+        Check(!ThermalConstruction.ShowReactorGuide(guideState, guideCheck), "hide reactor guide while entering Brayton");
+        guideState.Mode = ThermalMode.Brayton; guideState.Deployment = 1;
+        Check(ThermalConstruction.ShowReactorGuide(guideState, guideCheck), "show incomplete Brayton connections");
+        guideCheck.Verified = true;
+        Check(!ThermalConstruction.ShowReactorGuide(guideState, guideCheck), "hide verified Brayton connection guide");
+        guideCheck.Verified = false; guideState.Requested = ThermalMode.Standalone;
+        Check(!ThermalConstruction.ShowReactorGuide(guideState, guideCheck), "hide reactor guide while leaving Brayton");
         var state = new ThermalReactorState { Store = new ThermalStore { EntityId = 1 }, Requested = ThermalMode.Brayton };
+        Check(state.TransitionHint(true, true, false).Contains("incompatible"), "report missing manifold rig");
+        Check(state.TransitionHint(false, true, true).Contains("trapped heat"), "report cooling interlock");
+        Check(state.TransitionHint(true, false, true).Contains("controllers"), "report manifold motor power interlock");
+        Check(state.TransitionHint(true, true, true).Contains("Deploying"), "report active deployment");
         state.AdvanceManifolds(false, true, true, 1);
         Near(state.Deployment, 0, "hot interlock");
         state.AdvanceManifolds(true, false, true, 1);
@@ -165,7 +192,9 @@ public static partial class ThermalRuntimeChecks
         Near(state.Deployment, 0, "native rig interlock");
         for (int tick = 0; tick < 361; tick++) state.AdvanceManifolds(true, true, true, 1.0 / 60);
         Check(state.Settled && state.Mode == ThermalMode.Brayton, "fully deployed mode");
+        Check(state.TransitionHint(true, true, true) == null, "settled mode has no transition warning");
         state.Requested = ThermalMode.Standalone;
+        Check(state.TransitionHint(true, true, true).Contains("Retracting"), "report active retraction");
         for (int tick = 0; tick < 361; tick++) state.AdvanceManifolds(true, true, true, 1.0 / 60);
         Check(state.Settled && state.Mode == ThermalMode.Standalone, "fully stowed mode");
         Check(state.Valid(1) && !state.Valid(2), "saved mode identity");

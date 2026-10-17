@@ -52,6 +52,9 @@ def main():
     # The package must contain the exact inspected model closure, not just sources.
     manifest=json.loads((ROOT/'validation/release-manifest.json').read_text())
     packaged={r['path']:r for r in manifest['files']}
+    model_folder=MOD/'Models/Cubes/large'
+    actual_models={p.relative_to(MOD).as_posix() for p in model_folder.rglob('*') if p.is_file()}
+    assert actual_models=={p for p in packaged if p.startswith('Models/Cubes/large/')},'Unused or missing loadable model exports'
     assert set(files)<=set(packaged),'Release omitted a thermal main/weld model'
     for path in files:
         assert packaged[path]['sha256']==hashlib.sha256((MOD/path).read_bytes()).hexdigest()
@@ -72,7 +75,7 @@ def main():
             assert (MOD/path).is_file() and hashlib.sha256((MOD/path).read_bytes()).hexdigest()==digest,('Stale ZIP entry',path)
     catalog=check_catalog()
     glass=ET.parse(MOD/'Data/TransparentMaterials.sbc')
-    for name in ('ArcanePower_ClearChamber','ArcanePower_CoolantGlass'):
+    for name in ('ArcanePower_ClearChamber','ArcanePower_CoolantGlass','ArcanePower_InternalCoolantGlass'):
         definition=next(d for d in glass.findall('TransparentMaterials/TransparentMaterial')
                         if d.findtext('Id/SubtypeId')==name)
         for tag,suffix in (('Texture','ca'),('GlossTexture','ng')):
@@ -82,6 +85,12 @@ def main():
             with Image.open(MOD/value) as image:
                 assert max(ImageStat.Stat(image).stddev)==0,('Nonuniform glass texture',value)
                 if suffix=='ca':assert image.getextrema()==((0,0),(0,0),(0,0),(0,0))
+    external=next(d for d in glass.findall('TransparentMaterials/TransparentMaterial') if d.findtext('Id/SubtypeId')=='ArcanePower_CoolantGlass')
+    internal=next(d for d in glass.findall('TransparentMaterials/TransparentMaterial') if d.findtext('Id/SubtypeId')=='ArcanePower_InternalCoolantGlass')
+    assert abs(float(external.findtext('Reflectivity'))-.45)<1e-5
+    assert abs(float(internal.findtext('Reflectivity'))-.22)<1e-5
+    restored=json.loads((ROOT/'validation/thermal-models/internal-pipes-preserved.json').read_text())
+    assert restored['status']=='passed' and restored['geometry_transforms_and_material_assignments_match']
     result={'status':'passed','blocks':len(blocks),'construction_models':93,
             'lod_models':report['lod_models'],'validated_meshes':report['native_meshes'],
             'definitions_and_package_match':True,'co2_supply':'Integrated reactor commissioning',
@@ -90,6 +99,9 @@ def main():
             'all_block_definitions':catalog['blocks'],'dedicated_thermal_icons':catalog['thermal_icons'],
             'native_import':True,'live_game_validation':'not_run'}
     result['uniform_native_glass_textures']=True
+    result['internal_plumbing_preserved']=True
+    result['main_reactor']='ArcanePower_Thermal_ReactorHousing'
+    result['loadable_model_folder_matches_runtime_closure']=True
     (ROOT/'validation/thermal-models/delivery-check.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
 

@@ -95,3 +95,27 @@ Offline verification:
 
 A fresh in-game world reload remains to be verified. The running game must reload
 the mod scripts to apply this fix. No live world files were modified.
+
+## Creative deletion lifecycle (2026-10-17)
+
+The game log at 10:44:29 records a `NullReferenceException` in
+`Reactor.RefreshFuelCapacity → UpdateFuel → UpdateBeforeSimulation` after a running
+reactor was removed with creative right-click. Native entity deletion is deferred;
+the game logic can still receive updates while the block's resources are being
+removed. Checking only whether the cached native reactor reference exists is
+insufficient.
+
+Reactor initialization, ticks, and fuel callbacks now share a live-block check:
+the component must not be closing, the block must not be marked/closed, and its
+slim block and inventory must still exist. Thermal capacity/source checks use the
+same gate. Close disables further updates and unsubscribes from the inventory that
+was actually registered, rather than looking up an inventory that may already be
+gone. Repeated Close calls are harmless. Existing save and core-hazard behavior
+remain in place.
+
+`python3 ArcanePower/tools/check_reactor_removal.py` compiles the actual lifecycle
+and fuel methods with engine doubles and native fixed-point math. It checks
+creative/survival, prototype/thermal, late ticks, inventory callbacks, missing
+resources, live generation/fuel use, cached unsubscription, and repeated cleanup.
+Removing the lifecycle guards reproduces the null-reference failure in this test.
+A fresh in-game creative-deletion test is still required.

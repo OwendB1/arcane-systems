@@ -43,8 +43,7 @@ namespace ArcanePower
                 var slim = section.CubeGrid.GetCubeBlock(position);
                 var block = slim == null ? null : slim.FatBlock;
                 if (block == null || block.Orientation.Up != section.Orientation.Up) return null;
-                if (block.BlockDefinition.SubtypeName == "ArcanePower_ReactorPrototype"
-                    || block.BlockDefinition.SubtypeName == "ArcanePower_Thermal_ReactorHousing")
+                if (block.BlockDefinition.SubtypeName == "ArcanePower_Thermal_ReactorHousing")
                 {
                     if (!block.IsFunctional || slim.BuildLevelRatio < 1f) return null;
                     var owner = block.GameLogic.GetAs<Reactor>();

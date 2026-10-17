@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "internal_tubes": 24,
+  "internal_objects": 112,
+  "checkpoint": "arcane-thermal-before-full-glass-pipes.blend",
+  "geometry_transforms_and_material_assignments_match": true,
+  "internal_glass_reflectivity": 0.2199999988079071
+}

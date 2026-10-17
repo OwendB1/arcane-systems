@@ -14,7 +14,7 @@ import sys
 import tempfile
 import xml.etree.ElementTree as E
 
-from prepare_lab import ROOT, MOD, GAME, refresh_reactor_model, save
+from prepare_lab import ROOT, MOD, GAME, COLLISIONS, model_source, refresh_reactor_model, save
 from prepare_energy_core import BLOCKS, refresh_models
 from package_release import resolve
 
@@ -61,7 +61,7 @@ def main(prototype=False):
                         *['-r:'+str(game/(n+'.dll')) for n in ('VRage.Render','VRage.Math','VRage.Library')],
                         str(ROOT/'tools/EnergyModelProbe.cs')],check=True)
         for name in names:
-            target=MOD/specs[name]['target']/(name+'.mwm')
+            target=model_source(name) if specs[name]['target']=='Models/Cubes/large' else ROOT/specs[name]['collision_model']
             path=staging/(name+'-accepted.hkt')
             subprocess.run(['mono',str(exe),'--collision',str(target),str(path)],check=True,env=probe_env)
             accepted[name]=path
@@ -69,7 +69,7 @@ def main(prototype=False):
             if path.stat().st_size:shutil.copy2(path,collision)
             else:collision.unlink(missing_ok=True)
         # Keep the reviewed plasma texture revision and its original dark DDS.
-        shutil.copy2(folder/'ArcanePower_Plasma.xml',staging/'ArcanePower_Plasma.xml')
+        shutil.copy2(ROOT/'assets/definitions/ArcanePower_Plasma.xml',staging/'ArcanePower_Plasma.xml')
     def compile(pattern):
         with log.open('a') as output:
             subprocess.run(['wine',str(cache/'MwmBuilder.exe'),'/f','/s:'+win(staging),
@@ -115,8 +115,8 @@ def main(prototype=False):
                 subprocess.run(['mono',str(probes['EnergyModelProbe']),'--lod-paths',str(path),str(fixed),*references],check=True,env=probe_env)
                 fixed.replace(path)
             args = ['mono', str(probes['EnergyModelProbe']), str(path), str(specs[name]['triangles'])]
-            if prototype: args.extend((str(accepted[name]),str(MOD/specs[name]['target']/(name+'.mwm'))))
-            elif name in BLOCKS: args.append(str(folder/(name+'.hkt')))
+            if prototype: args.extend((str(accepted[name]),str(model_source(name) if specs[name]['target']=='Models/Cubes/large' else ROOT/specs[name]['collision_model'])))
+            elif name in BLOCKS: args.append(str(COLLISIONS/(name+'.hkt')))
             output = subprocess.check_output(args, env=probe_env, text=True)
             lines = [line.split('\t') for line in output.splitlines()]
             textures = sorted({line[1].replace(chr(92), '/') for line in lines if line[0] == 'TEXTURE'})
@@ -124,7 +124,7 @@ def main(prototype=False):
             for texture in textures:
                 assert resolve(MOD, texture) or resolve(GAME/'Content', texture), 'Missing texture: '+texture
             for subpart in subparts:
-                assert (staging/(subpart+'.mwm')).is_file() or (folder/(subpart+'.mwm')).is_file(), 'Missing subpart: '+subpart
+                assert (staging/(subpart+'.mwm')).is_file() or model_source(subpart).is_file(), 'Missing subpart: '+subpart
             lods=[]
             for line in lines:
                 if line[0]!='LOD':continue
@@ -154,7 +154,7 @@ def main(prototype=False):
     legacy = MOD/'Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc'
     legacy_hash = digest(legacy)
     derived = {p: digest(p) for p in folder.glob('*_BS*.mwm')}
-    collision_hashes={p:digest(p) for p in (MOD/'Models').rglob('*.hkt') if not any(part.startswith('.') for part in p.relative_to(MOD).parts)}
+    collision_hashes={p:digest(p) for p in (ROOT/'assets/collisions').rglob('*.hkt')}
     backup = ROOT/('validation/'+label+'-export-backup')
     backup.mkdir(exist_ok=True)
     for path in definition_files:

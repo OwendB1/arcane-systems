@@ -1,10 +1,10 @@
 {
   "status": "passed",
-  "blocks": 51,
-  "public_blocks": 43,
+  "blocks": 50,
+  "public_blocks": 42,
   "hidden_blocks": 8,
   "thermal_icons": 31,
-  "menu_entries": 43,
+  "menu_entries": 42,
   "all_icons_and_definitions_packaged": true,
   "catalog": [
     {
@@ -117,13 +117,6 @@
       "public": false,
       "definition": "Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc",
       "icon": "Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyStabilizerAdvanced.dds",
-      "construction_stages": 3
-    },
-    {
-      "id": "Reactor/ArcanePower_ReactorPrototype",
-      "public": true,
-      "definition": "Data/CubeBlocks/ArcanePower_ReactorPrototype.sbc",
-      "icon": "Textures/GUI/Icons/ArcaneReactor.dds",
       "construction_stages": 3
     },
     {

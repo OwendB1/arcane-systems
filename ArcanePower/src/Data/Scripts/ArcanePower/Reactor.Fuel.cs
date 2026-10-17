@@ -18,6 +18,7 @@ namespace ArcanePower
         private static readonly float[] ControllerEfficiencies = { .80f, .90f, .99f };
         private float FuelEfficiency { get { return ControllerEfficiencies[Motion.RingCount - 2]; } }
         private MyReactor nativeReactor;
+        private VRage.Game.Entity.MyInventoryBase fuelInventory;
         private readonly List<IMyTerminalBlock> fuelSources = new List<IMyTerminalBlock>();
         private readonly List<MyInventoryItem> transferItems = new List<MyInventoryItem>();
 
@@ -37,25 +38,26 @@ namespace ArcanePower
             var inventory = (Sandbox.Game.MyInventory)reactor.GetInventory();
             inventory.Constraint = constraint;
             inventory.MaxVolume = (MyFixedPoint)(2f * MyAPIGateway.Session.BlocksInventorySizeMultiplier);
-            ((VRage.Game.Entity.MyInventoryBase)reactor.GetInventory()).ContentsChanged += FuelChanged;
+            fuelInventory = inventory;
+            fuelInventory.ContentsChanged += FuelChanged;
             reactor.PowerOutputMultiplier = ElectricalRatingMW / PowerMW[0];
             RefreshFuelCapacity();
         }
 
         private void FuelChanged(VRage.Game.Entity.MyInventoryBase inventory)
         {
-            if (MyAPIGateway.Multiplayer.IsServer) RefreshFuelCapacity();
+            if (IsLive && MyAPIGateway.Multiplayer.IsServer) RefreshFuelCapacity();
         }
 
         private bool HasUsableFuel()
         {
-            return Motion.FuelTier + 1 <= controllerRingCapacity && (MyAPIGateway.Session.CreativeMode
+            return IsLive && Motion.FuelTier + 1 <= controllerRingCapacity && (MyAPIGateway.Session.CreativeMode
                 || reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1])) > 0);
         }
 
         private void RefreshFuelCapacity()
         {
-            if (nativeReactor == null) return;
+            if (!IsLive || nativeReactor == null) return;
             if (ThermalVariant) { RefreshThermalCapacity(); return; }
             // Native inventory callbacks otherwise treat the empty FuelInfos
             // list as unlimited capacity. Our callback runs after theirs.
@@ -84,7 +86,7 @@ namespace ArcanePower
 
         private void UpdateFuel()
         {
-            if (nativeReactor == null) return;
+            if (!IsLive || nativeReactor == null) return;
             if (!MyAPIGateway.Multiplayer.IsServer)
             {
                 float clientMultiplier = ElectricalRatingMW / PowerMW[0];

@@ -15,7 +15,7 @@
   "flow_checks": "Starter and room routing, opposed H/C, capped spurs, standby branches, equal parallel routes, split/facing/roll/type faults, path sampling and state validation",
   "construction_checks": "Authored build, incomplete/detached blocks, open/circuit/facing/roll/crowded joints, 24 placement orientations, missing recovery/cooling and unchanged runtime authority",
   "integration_checks": "Unique multiplayer channels, compatible game logic for all 31 thermal subtypes and registered runtime sessions",
-  "checks": "Thermal runtime: 1323383 checks passed (registrations/channels, budget, conservation, reload, modes, 47 manifold poses, heat/pressure rotors, construction/orientation guide and authored topology)",
+  "checks": "Thermal runtime: 1323399 checks passed (registrations/channels, budget, conservation, reload, modes, 47 manifold poses, heat/pressure rotors, construction/orientation guide and authored topology)",
   "native_delivery_report": "thermal-models/delivery-check.json",
   "in_game_validation": "not_run"
 }

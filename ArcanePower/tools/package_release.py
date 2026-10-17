@@ -2,12 +2,14 @@
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
+import shutil
 import subprocess
 import tempfile
 import xml.etree.ElementTree as ET
 import zipfile
-from prepare_lab import ROOT, MOD, GAME
+from prepare_lab import ROOT, MOD, GAME, COLLISIONS, BASE_MODELS
 
 
 def resolve(root, value):
@@ -21,6 +23,46 @@ def resolve(root, value):
         if candidate is None: return None
         path = candidate
     return path if path.is_file() else None
+
+
+def prune_model_exports(runtime_files):
+    """Keep only the resolved runtime closure in the loadable model folder."""
+    folder=MOD/'Models/Cubes/large'
+    unused=sorted(p for p in folder.rglob('*') if p.is_file() and p not in runtime_files)
+    if not unused:return
+    preserved=[]
+    # Save exact physics and native interface baselines before deleting any
+    # intermediate exports. Blends remain the geometry/material source.
+    for path in unused:
+        relative=path.relative_to(folder)
+        destination=None
+        if path.suffix=='.hkt' and relative.parent==Path('.'):
+            destination=COLLISIONS/path.name
+        elif path.suffix=='.hkt' and relative.parent==Path('.thermal-stage'):
+            destination=COLLISIONS/'Thermal'/path.name
+        elif relative.parent==Path('.') and path.suffix=='.mwm' and path.stem.startswith('ArcanePower_') and not re.search(r'_LOD\d|_r[0-9a-f]{12}|\.hkt$',path.stem):
+            destination=BASE_MODELS/path.name
+        elif relative==Path('ArcanePower_Plasma.xml'):
+            destination=ROOT/'assets/definitions'/path.name
+        elif relative==Path('.thermal-stage/sources.json'):
+            destination=ROOT/'validation/thermal-models/native-export-sources.json'
+        if destination:
+            if destination.suffix=='.hkt' and destination.exists() and destination.read_bytes()!=path.read_bytes():
+                raise RuntimeError('Export differs from accepted collision input: '+str(destination))
+            destination.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copy2(path,destination)
+            sha=hashlib.sha256(path.read_bytes()).hexdigest()
+            assert hashlib.sha256(destination.read_bytes()).hexdigest()==sha,('Authoring input copy failed',path)
+            preserved.append({'path':destination.relative_to(ROOT).as_posix(),'sha256':sha,'bytes':destination.stat().st_size})
+    removed_bytes=sum(p.stat().st_size for p in unused)
+    for path in unused:path.unlink()
+    for path in sorted((p for p in folder.rglob('*') if p.is_dir()),key=lambda p:len(p.parts),reverse=True):
+        if not any(path.iterdir()):path.rmdir()
+    report={'status':'passed','removed_files':len(unused),'removed_bytes':removed_bytes,
+            'runtime_models_retained':sum(p.is_relative_to(folder) for p in runtime_files),
+            'preserved_authoring_inputs':preserved}
+    (ROOT/'validation/model-export-cleanup.json').write_text(json.dumps(report,indent=2)+'\n')
+    print('Pruned',len(unused),'unused model exports;',removed_bytes,'bytes removed from src')
 
 
 def main():
@@ -77,6 +119,7 @@ def main():
         sha256=hashlib.sha256(archive.read_bytes()).hexdigest(), bytes=archive.stat().st_size,
         files=entries, native_assets=sorted(native))
     (ROOT/'validation/release-manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')
+    prune_model_exports(files)
     print(str(archive)+': '+str(len(entries))+' files, '+str(manifest['bytes'])+' bytes; dependencies resolved')
 
 

@@ -77,6 +77,7 @@ namespace ArcanePower
             if (preview)
             {
                 if (!ThermalModels.All.TryGetValue(definition.Id.SubtypeName, out model)) return;
+                if (model.Kind == ThermalKind.Reactor) return;
                 var box = builder.GetBuildBoundingBox();
                 // GetBuildBoundingBox can replace its centre with the add-cell
                 // anchor when aiming at an existing block. Use the model pose,
@@ -132,6 +133,11 @@ namespace ArcanePower
             }
             if (selected == null) return;
             check = ThermalConstruction.Inspect(nodes, selected.Id);
+            if (model.Kind == ThermalKind.Reactor)
+            {
+                var reactor = aimed.FatBlock == null ? null : VentSession.Find(aimed.FatBlock.EntityId);
+                if (!ThermalConstruction.ShowReactorGuide(reactor == null ? null : reactor.Motion.Thermal, check)) return;
+            }
             suggested = ThermalConstruction.Suggest(selected, rotation, centre, nodes);
             string next = check.Next;
             if (rotation != suggested) next = preview ? "Rotate preview toward GREEN; BLUE shows the H side"

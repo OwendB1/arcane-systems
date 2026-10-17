@@ -18,7 +18,7 @@
     ],
     "phase": "textures",
     "meshes": 424,
-    "triangles": 157971,
+    "triangles": 159007,
     "ports": [
       {
         "id": "CO2 leg -1",
@@ -100,7 +100,7 @@
     ],
     "phase": "textures",
     "meshes": 442,
-    "triangles": 158883,
+    "triangles": 159919,
     "ports": [
       {
         "id": "CO2 leg -1",
@@ -182,7 +182,7 @@
     ],
     "phase": "textures",
     "meshes": 248,
-    "triangles": 29740,
+    "triangles": 30776,
     "ports": [
       {
         "id": "primary",
@@ -247,7 +247,7 @@
     ],
     "phase": "textures",
     "meshes": 286,
-    "triangles": 31632,
+    "triangles": 32668,
     "ports": [
       {
         "id": "primary",
@@ -312,7 +312,7 @@
     ],
     "phase": "textures",
     "meshes": 314,
-    "triangles": 33546,
+    "triangles": 35618,
     "ports": [
       {
         "id": "high-pressure -1",
@@ -415,7 +415,7 @@
     ],
     "phase": "textures",
     "meshes": 394,
-    "triangles": 35562,
+    "triangles": 37634,
     "ports": [
       {
         "id": "high-pressure -1",
@@ -518,7 +518,7 @@
     ],
     "phase": "textures",
     "meshes": 263,
-    "triangles": 16480,
+    "triangles": 16998,
     "ports": [
       {
         "id": "CO2",
@@ -564,7 +564,7 @@
     ],
     "phase": "textures",
     "meshes": 243,
-    "triangles": 15087,
+    "triangles": 15605,
     "ports": [
       {
         "id": "CO2",
@@ -610,7 +610,7 @@
     ],
     "phase": "textures",
     "meshes": 77,
-    "triangles": 7662,
+    "triangles": 8698,
     "ports": [
       {
         "id": "socket 1",
@@ -675,7 +675,7 @@
     ],
     "phase": "textures",
     "meshes": 77,
-    "triangles": 13550,
+    "triangles": 14586,
     "ports": [
       {
         "id": "socket 1",
@@ -740,7 +740,7 @@
     ],
     "phase": "textures",
     "meshes": 76,
-    "triangles": 16366,
+    "triangles": 17402,
     "ports": [
       {
         "id": "socket 1",
@@ -805,7 +805,7 @@
     ],
     "phase": "textures",
     "meshes": 101,
-    "triangles": 10753,
+    "triangles": 12307,
     "ports": [
       {
         "id": "socket 1",
@@ -889,7 +889,7 @@
     ],
     "phase": "textures",
     "meshes": 127,
-    "triangles": 14356,
+    "triangles": 16428,
     "ports": [
       {
         "id": "socket 1",
@@ -992,7 +992,7 @@
     ],
     "phase": "textures",
     "meshes": 79,
-    "triangles": 20206,
+    "triangles": 21242,
     "ports": [
       {
         "id": "socket 1",
@@ -1057,7 +1057,7 @@
     ],
     "phase": "textures",
     "meshes": 55,
-    "triangles": 5579,
+    "triangles": 6097,
     "ports": [
       {
         "id": "socket 1",
@@ -1103,7 +1103,7 @@
     ],
     "phase": "textures",
     "meshes": 79,
-    "triangles": 8636,
+    "triangles": 9672,
     "ports": [
       {
         "id": "socket 1",
@@ -1168,7 +1168,7 @@
     ],
     "phase": "textures",
     "meshes": 79,
-    "triangles": 14524,
+    "triangles": 15560,
     "ports": [
       {
         "id": "socket 1",
@@ -1233,7 +1233,7 @@
     ],
     "phase": "textures",
     "meshes": 78,
-    "triangles": 17340,
+    "triangles": 18376,
     "ports": [
       {
         "id": "socket 1",
@@ -1298,7 +1298,7 @@
     ],
     "phase": "textures",
     "meshes": 104,
-    "triangles": 12214,
+    "triangles": 13768,
     "ports": [
       {
         "id": "socket 1",
@@ -1382,7 +1382,7 @@
     ],
     "phase": "textures",
     "meshes": 131,
-    "triangles": 16304,
+    "triangles": 18376,
     "ports": [
       {
         "id": "socket 1",
@@ -1485,7 +1485,7 @@
     ],
     "phase": "textures",
     "meshes": 81,
-    "triangles": 21180,
+    "triangles": 22216,
     "ports": [
       {
         "id": "socket 1",
@@ -1550,7 +1550,7 @@
     ],
     "phase": "textures",
     "meshes": 56,
-    "triangles": 6066,
+    "triangles": 6584,
     "ports": [
       {
         "id": "socket 1",
@@ -1596,7 +1596,7 @@
     ],
     "phase": "textures",
     "meshes": 79,
-    "triangles": 8664,
+    "triangles": 9700,
     "ports": [
       {
         "id": "socket 1",
@@ -1661,7 +1661,7 @@
     ],
     "phase": "textures",
     "meshes": 79,
-    "triangles": 14552,
+    "triangles": 15588,
     "ports": [
       {
         "id": "socket 1",
@@ -1726,7 +1726,7 @@
     ],
     "phase": "textures",
     "meshes": 78,
-    "triangles": 17368,
+    "triangles": 18404,
     "ports": [
       {
         "id": "socket 1",
@@ -1791,7 +1791,7 @@
     ],
     "phase": "textures",
     "meshes": 104,
-    "triangles": 12256,
+    "triangles": 13810,
     "ports": [
       {
         "id": "socket 1",
@@ -1875,7 +1875,7 @@
     ],
     "phase": "textures",
     "meshes": 131,
-    "triangles": 16360,
+    "triangles": 18432,
     "ports": [
       {
         "id": "socket 1",
@@ -1978,7 +1978,7 @@
     ],
     "phase": "textures",
     "meshes": 81,
-    "triangles": 21208,
+    "triangles": 22244,
     "ports": [
       {
         "id": "socket 1",
@@ -2043,7 +2043,7 @@
     ],
     "phase": "textures",
     "meshes": 56,
-    "triangles": 6080,
+    "triangles": 6598,
     "ports": [
       {
         "id": "socket 1",
@@ -2213,7 +2213,7 @@
     ],
     "phase": "textures",
     "meshes": 77,
-    "triangles": 8686,
+    "triangles": 9722,
     "ports": [
       {
         "id": "socket 2",
