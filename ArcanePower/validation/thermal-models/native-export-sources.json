@@ -3338,5 +3338,1805 @@
     "authored_triangles": 111391,
     "reference": null,
     "distance": null
+  },
+  "APT_PrimaryStraightBare_M_LOD1": {
+    "block": "PRIMARY / Straight bare",
+    "scene": "APT_PrimaryStraightBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 3840,
+    "authored_triangles": 3840,
+    "reference": "APT_PrimaryStraightBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryStraightBare_M_LOD2": {
+    "block": "PRIMARY / Straight bare",
+    "scene": "APT_PrimaryStraightBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2816,
+    "authored_triangles": 2816,
+    "reference": "APT_PrimaryStraightBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryStraightBare_M_BS1": {
+    "block": "PRIMARY / Straight bare",
+    "scene": "APT_PrimaryStraightBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2560,
+    "authored_triangles": 2560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryStraightBare_M_BS2": {
+    "block": "PRIMARY / Straight bare",
+    "scene": "APT_PrimaryStraightBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 4608,
+    "authored_triangles": 4608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryStraightBare_M_BS3": {
+    "block": "PRIMARY / Straight bare",
+    "scene": "APT_PrimaryStraightBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 4648,
+    "authored_triangles": 4648,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryStraightBare_M": {
+    "block": "PRIMARY / Straight bare",
+    "scene": "APT_PrimaryStraightBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 5932,
+    "authored_triangles": 5932,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow bare",
+    "scene": "APT_PrimaryElbowBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5568,
+    "authored_triangles": 5568,
+    "reference": "APT_PrimaryElbowBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow bare",
+    "scene": "APT_PrimaryElbowBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2624,
+    "authored_triangles": 2624,
+    "reference": "APT_PrimaryElbowBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow bare",
+    "scene": "APT_PrimaryElbowBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5568,
+    "authored_triangles": 5568,
+    "reference": "APT_PrimaryElbowBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow bare",
+    "scene": "APT_PrimaryElbowBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2624,
+    "authored_triangles": 2624,
+    "reference": "APT_PrimaryElbowBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowBare_M_LOD1": {
+    "block": "PRIMARY / Elbow bare",
+    "scene": "APT_PrimaryElbowBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9728,
+    "authored_triangles": 9728,
+    "reference": "APT_PrimaryElbowBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowBare_M_LOD2": {
+    "block": "PRIMARY / Elbow bare",
+    "scene": "APT_PrimaryElbowBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 8704,
+    "authored_triangles": 8704,
+    "reference": "APT_PrimaryElbowBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowBare_M_BS1": {
+    "block": "PRIMARY / Elbow bare",
+    "scene": "APT_PrimaryElbowBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2560,
+    "authored_triangles": 2560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowBare_M_BS2": {
+    "block": "PRIMARY / Elbow bare",
+    "scene": "APT_PrimaryElbowBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 10496,
+    "authored_triangles": 10496,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowBare_M_BS3": {
+    "block": "PRIMARY / Elbow bare",
+    "scene": "APT_PrimaryElbowBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 10536,
+    "authored_triangles": 10536,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowBare_M": {
+    "block": "PRIMARY / Elbow bare",
+    "scene": "APT_PrimaryElbowBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 11820,
+    "authored_triangles": 11820,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Riser bare",
+    "scene": "APT_PrimaryRiserBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7128,
+    "authored_triangles": 7128,
+    "reference": "APT_PrimaryRiserBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryRiserBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Riser bare",
+    "scene": "APT_PrimaryRiserBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3328,
+    "authored_triangles": 3328,
+    "reference": "APT_PrimaryRiserBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryRiserBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Riser bare",
+    "scene": "APT_PrimaryRiserBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7128,
+    "authored_triangles": 7128,
+    "reference": "APT_PrimaryRiserBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryRiserBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Riser bare",
+    "scene": "APT_PrimaryRiserBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3328,
+    "authored_triangles": 3328,
+    "reference": "APT_PrimaryRiserBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryRiserBare_M_LOD1": {
+    "block": "PRIMARY / Riser bare",
+    "scene": "APT_PrimaryRiserBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12672,
+    "authored_triangles": 12672,
+    "reference": "APT_PrimaryRiserBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryRiserBare_M_LOD2": {
+    "block": "PRIMARY / Riser bare",
+    "scene": "APT_PrimaryRiserBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11712,
+    "authored_triangles": 11712,
+    "reference": "APT_PrimaryRiserBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryRiserBare_M_BS1": {
+    "block": "PRIMARY / Riser bare",
+    "scene": "APT_PrimaryRiserBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2304,
+    "authored_triangles": 2304,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserBare_M_BS2": {
+    "block": "PRIMARY / Riser bare",
+    "scene": "APT_PrimaryRiserBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 13312,
+    "authored_triangles": 13312,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserBare_M_BS3": {
+    "block": "PRIMARY / Riser bare",
+    "scene": "APT_PrimaryRiserBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 13352,
+    "authored_triangles": 13352,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserBare_M": {
+    "block": "PRIMARY / Riser bare",
+    "scene": "APT_PrimaryRiserBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 14636,
+    "authored_triangles": 14636,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryTeeBare_M_LOD1": {
+    "block": "PRIMARY / Tee bare",
+    "scene": "APT_PrimaryTeeBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5752,
+    "authored_triangles": 5752,
+    "reference": "APT_PrimaryTeeBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryTeeBare_M_LOD2": {
+    "block": "PRIMARY / Tee bare",
+    "scene": "APT_PrimaryTeeBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4472,
+    "authored_triangles": 4472,
+    "reference": "APT_PrimaryTeeBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryTeeBare_M_BS1": {
+    "block": "PRIMARY / Tee bare",
+    "scene": "APT_PrimaryTeeBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 3072,
+    "authored_triangles": 3072,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryTeeBare_M_BS2": {
+    "block": "PRIMARY / Tee bare",
+    "scene": "APT_PrimaryTeeBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 6392,
+    "authored_triangles": 6392,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryTeeBare_M_BS3": {
+    "block": "PRIMARY / Tee bare",
+    "scene": "APT_PrimaryTeeBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 6432,
+    "authored_triangles": 6432,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryTeeBare_M": {
+    "block": "PRIMARY / Tee bare",
+    "scene": "APT_PrimaryTeeBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 8356,
+    "authored_triangles": 8356,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Cross bare",
+    "scene": "APT_PrimaryCrossBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4444,
+    "authored_triangles": 4444,
+    "reference": "APT_PrimaryCrossBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryCrossBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Cross bare",
+    "scene": "APT_PrimaryCrossBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2172,
+    "authored_triangles": 2172,
+    "reference": "APT_PrimaryCrossBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryCrossBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Cross bare",
+    "scene": "APT_PrimaryCrossBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4444,
+    "authored_triangles": 4444,
+    "reference": "APT_PrimaryCrossBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryCrossBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Cross bare",
+    "scene": "APT_PrimaryCrossBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2172,
+    "authored_triangles": 2172,
+    "reference": "APT_PrimaryCrossBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryCrossBare_M_LOD1": {
+    "block": "PRIMARY / Cross bare",
+    "scene": "APT_PrimaryCrossBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7920,
+    "authored_triangles": 7920,
+    "reference": "APT_PrimaryCrossBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryCrossBare_M_LOD2": {
+    "block": "PRIMARY / Cross bare",
+    "scene": "APT_PrimaryCrossBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 6256,
+    "authored_triangles": 6256,
+    "reference": "APT_PrimaryCrossBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryCrossBare_M_BS1": {
+    "block": "PRIMARY / Cross bare",
+    "scene": "APT_PrimaryCrossBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 4096,
+    "authored_triangles": 4096,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossBare_M_BS2": {
+    "block": "PRIMARY / Cross bare",
+    "scene": "APT_PrimaryCrossBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 8688,
+    "authored_triangles": 8688,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossBare_M_BS3": {
+    "block": "PRIMARY / Cross bare",
+    "scene": "APT_PrimaryCrossBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 8728,
+    "authored_triangles": 8728,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossBare_M": {
+    "block": "PRIMARY / Cross bare",
+    "scene": "APT_PrimaryCrossBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 11292,
+    "authored_triangles": 11292,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Roll adapter bare",
+    "scene": "APT_PrimaryRollAdapterBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9202,
+    "authored_triangles": 9202,
+    "reference": "APT_PrimaryRollAdapterBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapterBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Roll adapter bare",
+    "scene": "APT_PrimaryRollAdapterBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4288,
+    "authored_triangles": 4288,
+    "reference": "APT_PrimaryRollAdapterBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapterBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Roll adapter bare",
+    "scene": "APT_PrimaryRollAdapterBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9202,
+    "authored_triangles": 9202,
+    "reference": "APT_PrimaryRollAdapterBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapterBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Roll adapter bare",
+    "scene": "APT_PrimaryRollAdapterBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4288,
+    "authored_triangles": 4288,
+    "reference": "APT_PrimaryRollAdapterBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapterBare_M_LOD1": {
+    "block": "PRIMARY / Roll adapter bare",
+    "scene": "APT_PrimaryRollAdapterBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 16128,
+    "authored_triangles": 16128,
+    "reference": "APT_PrimaryRollAdapterBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapterBare_M_LOD2": {
+    "block": "PRIMARY / Roll adapter bare",
+    "scene": "APT_PrimaryRollAdapterBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 14976,
+    "authored_triangles": 14976,
+    "reference": "APT_PrimaryRollAdapterBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapterBare_M_BS1": {
+    "block": "PRIMARY / Roll adapter bare",
+    "scene": "APT_PrimaryRollAdapterBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 3072,
+    "authored_triangles": 3072,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterBare_M_BS2": {
+    "block": "PRIMARY / Roll adapter bare",
+    "scene": "APT_PrimaryRollAdapterBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 17152,
+    "authored_triangles": 17152,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterBare_M_BS3": {
+    "block": "PRIMARY / Roll adapter bare",
+    "scene": "APT_PrimaryRollAdapterBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 17192,
+    "authored_triangles": 17192,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterBare_M": {
+    "block": "PRIMARY / Roll adapter bare",
+    "scene": "APT_PrimaryRollAdapterBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 18476,
+    "authored_triangles": 18476,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryEndCapBare_M_LOD1": {
+    "block": "PRIMARY / End cap bare",
+    "scene": "APT_PrimaryEndCapBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2824,
+    "authored_triangles": 2824,
+    "reference": "APT_PrimaryEndCapBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryEndCapBare_M_LOD2": {
+    "block": "PRIMARY / End cap bare",
+    "scene": "APT_PrimaryEndCapBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 1982,
+    "authored_triangles": 1982,
+    "reference": "APT_PrimaryEndCapBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryEndCapBare_M_BS1": {
+    "block": "PRIMARY / End cap bare",
+    "scene": "APT_PrimaryEndCapBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2048,
+    "authored_triangles": 2048,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryEndCapBare_M_BS2": {
+    "block": "PRIMARY / End cap bare",
+    "scene": "APT_PrimaryEndCapBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 3832,
+    "authored_triangles": 3832,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryEndCapBare_M_BS3": {
+    "block": "PRIMARY / End cap bare",
+    "scene": "APT_PrimaryEndCapBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 3872,
+    "authored_triangles": 3872,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryEndCapBare_M": {
+    "block": "PRIMARY / End cap bare",
+    "scene": "APT_PrimaryEndCapBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4516,
+    "authored_triangles": 4516,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpStraightBare_M_LOD1": {
+    "block": "CO2_HP / Straight bare",
+    "scene": "APT_CO2HpStraightBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 3840,
+    "authored_triangles": 3840,
+    "reference": "APT_CO2HpStraightBare_M",
+    "distance": 35
+  },
+  "APT_CO2HpStraightBare_M_LOD2": {
+    "block": "CO2_HP / Straight bare",
+    "scene": "APT_CO2HpStraightBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2816,
+    "authored_triangles": 2816,
+    "reference": "APT_CO2HpStraightBare_M",
+    "distance": 90
+  },
+  "APT_CO2HpStraightBare_M_BS1": {
+    "block": "CO2_HP / Straight bare",
+    "scene": "APT_CO2HpStraightBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2560,
+    "authored_triangles": 2560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpStraightBare_M_BS2": {
+    "block": "CO2_HP / Straight bare",
+    "scene": "APT_CO2HpStraightBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 4608,
+    "authored_triangles": 4608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpStraightBare_M_BS3": {
+    "block": "CO2_HP / Straight bare",
+    "scene": "APT_CO2HpStraightBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 4648,
+    "authored_triangles": 4648,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpStraightBare_M": {
+    "block": "CO2_HP / Straight bare",
+    "scene": "APT_CO2HpStraightBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 5932,
+    "authored_triangles": 5932,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpElbowBare_M_BS2_LOD1": {
+    "block": "CO2_HP / Elbow bare",
+    "scene": "APT_CO2HpElbowBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5568,
+    "authored_triangles": 5568,
+    "reference": "APT_CO2HpElbowBare_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2HpElbowBare_M_BS2_LOD2": {
+    "block": "CO2_HP / Elbow bare",
+    "scene": "APT_CO2HpElbowBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2624,
+    "authored_triangles": 2624,
+    "reference": "APT_CO2HpElbowBare_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2HpElbowBare_M_BS3_LOD1": {
+    "block": "CO2_HP / Elbow bare",
+    "scene": "APT_CO2HpElbowBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5568,
+    "authored_triangles": 5568,
+    "reference": "APT_CO2HpElbowBare_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2HpElbowBare_M_BS3_LOD2": {
+    "block": "CO2_HP / Elbow bare",
+    "scene": "APT_CO2HpElbowBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2624,
+    "authored_triangles": 2624,
+    "reference": "APT_CO2HpElbowBare_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2HpElbowBare_M_LOD1": {
+    "block": "CO2_HP / Elbow bare",
+    "scene": "APT_CO2HpElbowBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9728,
+    "authored_triangles": 9728,
+    "reference": "APT_CO2HpElbowBare_M",
+    "distance": 35
+  },
+  "APT_CO2HpElbowBare_M_LOD2": {
+    "block": "CO2_HP / Elbow bare",
+    "scene": "APT_CO2HpElbowBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 8704,
+    "authored_triangles": 8704,
+    "reference": "APT_CO2HpElbowBare_M",
+    "distance": 90
+  },
+  "APT_CO2HpElbowBare_M_BS1": {
+    "block": "CO2_HP / Elbow bare",
+    "scene": "APT_CO2HpElbowBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2560,
+    "authored_triangles": 2560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpElbowBare_M_BS2": {
+    "block": "CO2_HP / Elbow bare",
+    "scene": "APT_CO2HpElbowBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 10496,
+    "authored_triangles": 10496,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpElbowBare_M_BS3": {
+    "block": "CO2_HP / Elbow bare",
+    "scene": "APT_CO2HpElbowBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 10536,
+    "authored_triangles": 10536,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpElbowBare_M": {
+    "block": "CO2_HP / Elbow bare",
+    "scene": "APT_CO2HpElbowBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 11820,
+    "authored_triangles": 11820,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRiserBare_M_BS2_LOD1": {
+    "block": "CO2_HP / Riser bare",
+    "scene": "APT_CO2HpRiserBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7128,
+    "authored_triangles": 7128,
+    "reference": "APT_CO2HpRiserBare_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2HpRiserBare_M_BS2_LOD2": {
+    "block": "CO2_HP / Riser bare",
+    "scene": "APT_CO2HpRiserBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3328,
+    "authored_triangles": 3328,
+    "reference": "APT_CO2HpRiserBare_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2HpRiserBare_M_BS3_LOD1": {
+    "block": "CO2_HP / Riser bare",
+    "scene": "APT_CO2HpRiserBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7128,
+    "authored_triangles": 7128,
+    "reference": "APT_CO2HpRiserBare_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2HpRiserBare_M_BS3_LOD2": {
+    "block": "CO2_HP / Riser bare",
+    "scene": "APT_CO2HpRiserBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3328,
+    "authored_triangles": 3328,
+    "reference": "APT_CO2HpRiserBare_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2HpRiserBare_M_LOD1": {
+    "block": "CO2_HP / Riser bare",
+    "scene": "APT_CO2HpRiserBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12672,
+    "authored_triangles": 12672,
+    "reference": "APT_CO2HpRiserBare_M",
+    "distance": 35
+  },
+  "APT_CO2HpRiserBare_M_LOD2": {
+    "block": "CO2_HP / Riser bare",
+    "scene": "APT_CO2HpRiserBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11712,
+    "authored_triangles": 11712,
+    "reference": "APT_CO2HpRiserBare_M",
+    "distance": 90
+  },
+  "APT_CO2HpRiserBare_M_BS1": {
+    "block": "CO2_HP / Riser bare",
+    "scene": "APT_CO2HpRiserBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2304,
+    "authored_triangles": 2304,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRiserBare_M_BS2": {
+    "block": "CO2_HP / Riser bare",
+    "scene": "APT_CO2HpRiserBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 13312,
+    "authored_triangles": 13312,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRiserBare_M_BS3": {
+    "block": "CO2_HP / Riser bare",
+    "scene": "APT_CO2HpRiserBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 13352,
+    "authored_triangles": 13352,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRiserBare_M": {
+    "block": "CO2_HP / Riser bare",
+    "scene": "APT_CO2HpRiserBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 14636,
+    "authored_triangles": 14636,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpTeeBare_M_LOD1": {
+    "block": "CO2_HP / Tee bare",
+    "scene": "APT_CO2HpTeeBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5752,
+    "authored_triangles": 5752,
+    "reference": "APT_CO2HpTeeBare_M",
+    "distance": 35
+  },
+  "APT_CO2HpTeeBare_M_LOD2": {
+    "block": "CO2_HP / Tee bare",
+    "scene": "APT_CO2HpTeeBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4472,
+    "authored_triangles": 4472,
+    "reference": "APT_CO2HpTeeBare_M",
+    "distance": 90
+  },
+  "APT_CO2HpTeeBare_M_BS1": {
+    "block": "CO2_HP / Tee bare",
+    "scene": "APT_CO2HpTeeBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 3072,
+    "authored_triangles": 3072,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpTeeBare_M_BS2": {
+    "block": "CO2_HP / Tee bare",
+    "scene": "APT_CO2HpTeeBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 6392,
+    "authored_triangles": 6392,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpTeeBare_M_BS3": {
+    "block": "CO2_HP / Tee bare",
+    "scene": "APT_CO2HpTeeBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 6432,
+    "authored_triangles": 6432,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpTeeBare_M": {
+    "block": "CO2_HP / Tee bare",
+    "scene": "APT_CO2HpTeeBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 8356,
+    "authored_triangles": 8356,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpCrossBare_M_BS2_LOD1": {
+    "block": "CO2_HP / Cross bare",
+    "scene": "APT_CO2HpCrossBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4444,
+    "authored_triangles": 4444,
+    "reference": "APT_CO2HpCrossBare_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2HpCrossBare_M_BS2_LOD2": {
+    "block": "CO2_HP / Cross bare",
+    "scene": "APT_CO2HpCrossBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2172,
+    "authored_triangles": 2172,
+    "reference": "APT_CO2HpCrossBare_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2HpCrossBare_M_BS3_LOD1": {
+    "block": "CO2_HP / Cross bare",
+    "scene": "APT_CO2HpCrossBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4444,
+    "authored_triangles": 4444,
+    "reference": "APT_CO2HpCrossBare_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2HpCrossBare_M_BS3_LOD2": {
+    "block": "CO2_HP / Cross bare",
+    "scene": "APT_CO2HpCrossBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2172,
+    "authored_triangles": 2172,
+    "reference": "APT_CO2HpCrossBare_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2HpCrossBare_M_LOD1": {
+    "block": "CO2_HP / Cross bare",
+    "scene": "APT_CO2HpCrossBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7920,
+    "authored_triangles": 7920,
+    "reference": "APT_CO2HpCrossBare_M",
+    "distance": 35
+  },
+  "APT_CO2HpCrossBare_M_LOD2": {
+    "block": "CO2_HP / Cross bare",
+    "scene": "APT_CO2HpCrossBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 6256,
+    "authored_triangles": 6256,
+    "reference": "APT_CO2HpCrossBare_M",
+    "distance": 90
+  },
+  "APT_CO2HpCrossBare_M_BS1": {
+    "block": "CO2_HP / Cross bare",
+    "scene": "APT_CO2HpCrossBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 4096,
+    "authored_triangles": 4096,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpCrossBare_M_BS2": {
+    "block": "CO2_HP / Cross bare",
+    "scene": "APT_CO2HpCrossBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 8688,
+    "authored_triangles": 8688,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpCrossBare_M_BS3": {
+    "block": "CO2_HP / Cross bare",
+    "scene": "APT_CO2HpCrossBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 8728,
+    "authored_triangles": 8728,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpCrossBare_M": {
+    "block": "CO2_HP / Cross bare",
+    "scene": "APT_CO2HpCrossBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 11292,
+    "authored_triangles": 11292,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRollAdapterBare_M_BS2_LOD1": {
+    "block": "CO2_HP / Roll adapter bare",
+    "scene": "APT_CO2HpRollAdapterBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9202,
+    "authored_triangles": 9202,
+    "reference": "APT_CO2HpRollAdapterBare_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2HpRollAdapterBare_M_BS2_LOD2": {
+    "block": "CO2_HP / Roll adapter bare",
+    "scene": "APT_CO2HpRollAdapterBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4288,
+    "authored_triangles": 4288,
+    "reference": "APT_CO2HpRollAdapterBare_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2HpRollAdapterBare_M_BS3_LOD1": {
+    "block": "CO2_HP / Roll adapter bare",
+    "scene": "APT_CO2HpRollAdapterBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9202,
+    "authored_triangles": 9202,
+    "reference": "APT_CO2HpRollAdapterBare_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2HpRollAdapterBare_M_BS3_LOD2": {
+    "block": "CO2_HP / Roll adapter bare",
+    "scene": "APT_CO2HpRollAdapterBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4288,
+    "authored_triangles": 4288,
+    "reference": "APT_CO2HpRollAdapterBare_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2HpRollAdapterBare_M_LOD1": {
+    "block": "CO2_HP / Roll adapter bare",
+    "scene": "APT_CO2HpRollAdapterBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 16128,
+    "authored_triangles": 16128,
+    "reference": "APT_CO2HpRollAdapterBare_M",
+    "distance": 35
+  },
+  "APT_CO2HpRollAdapterBare_M_LOD2": {
+    "block": "CO2_HP / Roll adapter bare",
+    "scene": "APT_CO2HpRollAdapterBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 14976,
+    "authored_triangles": 14976,
+    "reference": "APT_CO2HpRollAdapterBare_M",
+    "distance": 90
+  },
+  "APT_CO2HpRollAdapterBare_M_BS1": {
+    "block": "CO2_HP / Roll adapter bare",
+    "scene": "APT_CO2HpRollAdapterBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 3072,
+    "authored_triangles": 3072,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRollAdapterBare_M_BS2": {
+    "block": "CO2_HP / Roll adapter bare",
+    "scene": "APT_CO2HpRollAdapterBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 17152,
+    "authored_triangles": 17152,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRollAdapterBare_M_BS3": {
+    "block": "CO2_HP / Roll adapter bare",
+    "scene": "APT_CO2HpRollAdapterBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 17192,
+    "authored_triangles": 17192,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpRollAdapterBare_M": {
+    "block": "CO2_HP / Roll adapter bare",
+    "scene": "APT_CO2HpRollAdapterBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 18476,
+    "authored_triangles": 18476,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpEndCapBare_M_LOD1": {
+    "block": "CO2_HP / End cap bare",
+    "scene": "APT_CO2HpEndCapBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2824,
+    "authored_triangles": 2824,
+    "reference": "APT_CO2HpEndCapBare_M",
+    "distance": 35
+  },
+  "APT_CO2HpEndCapBare_M_LOD2": {
+    "block": "CO2_HP / End cap bare",
+    "scene": "APT_CO2HpEndCapBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 1982,
+    "authored_triangles": 1982,
+    "reference": "APT_CO2HpEndCapBare_M",
+    "distance": 90
+  },
+  "APT_CO2HpEndCapBare_M_BS1": {
+    "block": "CO2_HP / End cap bare",
+    "scene": "APT_CO2HpEndCapBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2048,
+    "authored_triangles": 2048,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpEndCapBare_M_BS2": {
+    "block": "CO2_HP / End cap bare",
+    "scene": "APT_CO2HpEndCapBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 3832,
+    "authored_triangles": 3832,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpEndCapBare_M_BS3": {
+    "block": "CO2_HP / End cap bare",
+    "scene": "APT_CO2HpEndCapBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 3872,
+    "authored_triangles": 3872,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2HpEndCapBare_M": {
+    "block": "CO2_HP / End cap bare",
+    "scene": "APT_CO2HpEndCapBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4516,
+    "authored_triangles": 4516,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpStraightBare_M_LOD1": {
+    "block": "CO2_LP / Straight bare",
+    "scene": "APT_CO2LpStraightBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 3840,
+    "authored_triangles": 3840,
+    "reference": "APT_CO2LpStraightBare_M",
+    "distance": 35
+  },
+  "APT_CO2LpStraightBare_M_LOD2": {
+    "block": "CO2_LP / Straight bare",
+    "scene": "APT_CO2LpStraightBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2816,
+    "authored_triangles": 2816,
+    "reference": "APT_CO2LpStraightBare_M",
+    "distance": 90
+  },
+  "APT_CO2LpStraightBare_M_BS1": {
+    "block": "CO2_LP / Straight bare",
+    "scene": "APT_CO2LpStraightBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2560,
+    "authored_triangles": 2560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpStraightBare_M_BS2": {
+    "block": "CO2_LP / Straight bare",
+    "scene": "APT_CO2LpStraightBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 4608,
+    "authored_triangles": 4608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpStraightBare_M_BS3": {
+    "block": "CO2_LP / Straight bare",
+    "scene": "APT_CO2LpStraightBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 4648,
+    "authored_triangles": 4648,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpStraightBare_M": {
+    "block": "CO2_LP / Straight bare",
+    "scene": "APT_CO2LpStraightBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 5932,
+    "authored_triangles": 5932,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpElbowBare_M_BS2_LOD1": {
+    "block": "CO2_LP / Elbow bare",
+    "scene": "APT_CO2LpElbowBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5568,
+    "authored_triangles": 5568,
+    "reference": "APT_CO2LpElbowBare_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2LpElbowBare_M_BS2_LOD2": {
+    "block": "CO2_LP / Elbow bare",
+    "scene": "APT_CO2LpElbowBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2624,
+    "authored_triangles": 2624,
+    "reference": "APT_CO2LpElbowBare_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2LpElbowBare_M_BS3_LOD1": {
+    "block": "CO2_LP / Elbow bare",
+    "scene": "APT_CO2LpElbowBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5568,
+    "authored_triangles": 5568,
+    "reference": "APT_CO2LpElbowBare_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2LpElbowBare_M_BS3_LOD2": {
+    "block": "CO2_LP / Elbow bare",
+    "scene": "APT_CO2LpElbowBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2624,
+    "authored_triangles": 2624,
+    "reference": "APT_CO2LpElbowBare_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2LpElbowBare_M_LOD1": {
+    "block": "CO2_LP / Elbow bare",
+    "scene": "APT_CO2LpElbowBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9728,
+    "authored_triangles": 9728,
+    "reference": "APT_CO2LpElbowBare_M",
+    "distance": 35
+  },
+  "APT_CO2LpElbowBare_M_LOD2": {
+    "block": "CO2_LP / Elbow bare",
+    "scene": "APT_CO2LpElbowBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 8704,
+    "authored_triangles": 8704,
+    "reference": "APT_CO2LpElbowBare_M",
+    "distance": 90
+  },
+  "APT_CO2LpElbowBare_M_BS1": {
+    "block": "CO2_LP / Elbow bare",
+    "scene": "APT_CO2LpElbowBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2560,
+    "authored_triangles": 2560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpElbowBare_M_BS2": {
+    "block": "CO2_LP / Elbow bare",
+    "scene": "APT_CO2LpElbowBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 10496,
+    "authored_triangles": 10496,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpElbowBare_M_BS3": {
+    "block": "CO2_LP / Elbow bare",
+    "scene": "APT_CO2LpElbowBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 10536,
+    "authored_triangles": 10536,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpElbowBare_M": {
+    "block": "CO2_LP / Elbow bare",
+    "scene": "APT_CO2LpElbowBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 11820,
+    "authored_triangles": 11820,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRiserBare_M_BS2_LOD1": {
+    "block": "CO2_LP / Riser bare",
+    "scene": "APT_CO2LpRiserBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7128,
+    "authored_triangles": 7128,
+    "reference": "APT_CO2LpRiserBare_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2LpRiserBare_M_BS2_LOD2": {
+    "block": "CO2_LP / Riser bare",
+    "scene": "APT_CO2LpRiserBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3328,
+    "authored_triangles": 3328,
+    "reference": "APT_CO2LpRiserBare_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2LpRiserBare_M_BS3_LOD1": {
+    "block": "CO2_LP / Riser bare",
+    "scene": "APT_CO2LpRiserBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7128,
+    "authored_triangles": 7128,
+    "reference": "APT_CO2LpRiserBare_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2LpRiserBare_M_BS3_LOD2": {
+    "block": "CO2_LP / Riser bare",
+    "scene": "APT_CO2LpRiserBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3328,
+    "authored_triangles": 3328,
+    "reference": "APT_CO2LpRiserBare_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2LpRiserBare_M_LOD1": {
+    "block": "CO2_LP / Riser bare",
+    "scene": "APT_CO2LpRiserBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12672,
+    "authored_triangles": 12672,
+    "reference": "APT_CO2LpRiserBare_M",
+    "distance": 35
+  },
+  "APT_CO2LpRiserBare_M_LOD2": {
+    "block": "CO2_LP / Riser bare",
+    "scene": "APT_CO2LpRiserBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11712,
+    "authored_triangles": 11712,
+    "reference": "APT_CO2LpRiserBare_M",
+    "distance": 90
+  },
+  "APT_CO2LpRiserBare_M_BS1": {
+    "block": "CO2_LP / Riser bare",
+    "scene": "APT_CO2LpRiserBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2304,
+    "authored_triangles": 2304,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRiserBare_M_BS2": {
+    "block": "CO2_LP / Riser bare",
+    "scene": "APT_CO2LpRiserBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 13312,
+    "authored_triangles": 13312,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRiserBare_M_BS3": {
+    "block": "CO2_LP / Riser bare",
+    "scene": "APT_CO2LpRiserBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 13352,
+    "authored_triangles": 13352,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRiserBare_M": {
+    "block": "CO2_LP / Riser bare",
+    "scene": "APT_CO2LpRiserBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 14636,
+    "authored_triangles": 14636,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpTeeBare_M_LOD1": {
+    "block": "CO2_LP / Tee bare",
+    "scene": "APT_CO2LpTeeBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 5752,
+    "authored_triangles": 5752,
+    "reference": "APT_CO2LpTeeBare_M",
+    "distance": 35
+  },
+  "APT_CO2LpTeeBare_M_LOD2": {
+    "block": "CO2_LP / Tee bare",
+    "scene": "APT_CO2LpTeeBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4472,
+    "authored_triangles": 4472,
+    "reference": "APT_CO2LpTeeBare_M",
+    "distance": 90
+  },
+  "APT_CO2LpTeeBare_M_BS1": {
+    "block": "CO2_LP / Tee bare",
+    "scene": "APT_CO2LpTeeBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 3072,
+    "authored_triangles": 3072,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpTeeBare_M_BS2": {
+    "block": "CO2_LP / Tee bare",
+    "scene": "APT_CO2LpTeeBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 6392,
+    "authored_triangles": 6392,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpTeeBare_M_BS3": {
+    "block": "CO2_LP / Tee bare",
+    "scene": "APT_CO2LpTeeBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 6432,
+    "authored_triangles": 6432,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpTeeBare_M": {
+    "block": "CO2_LP / Tee bare",
+    "scene": "APT_CO2LpTeeBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 8356,
+    "authored_triangles": 8356,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpCrossBare_M_BS2_LOD1": {
+    "block": "CO2_LP / Cross bare",
+    "scene": "APT_CO2LpCrossBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4444,
+    "authored_triangles": 4444,
+    "reference": "APT_CO2LpCrossBare_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2LpCrossBare_M_BS2_LOD2": {
+    "block": "CO2_LP / Cross bare",
+    "scene": "APT_CO2LpCrossBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2172,
+    "authored_triangles": 2172,
+    "reference": "APT_CO2LpCrossBare_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2LpCrossBare_M_BS3_LOD1": {
+    "block": "CO2_LP / Cross bare",
+    "scene": "APT_CO2LpCrossBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4444,
+    "authored_triangles": 4444,
+    "reference": "APT_CO2LpCrossBare_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2LpCrossBare_M_BS3_LOD2": {
+    "block": "CO2_LP / Cross bare",
+    "scene": "APT_CO2LpCrossBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2172,
+    "authored_triangles": 2172,
+    "reference": "APT_CO2LpCrossBare_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2LpCrossBare_M_LOD1": {
+    "block": "CO2_LP / Cross bare",
+    "scene": "APT_CO2LpCrossBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7920,
+    "authored_triangles": 7920,
+    "reference": "APT_CO2LpCrossBare_M",
+    "distance": 35
+  },
+  "APT_CO2LpCrossBare_M_LOD2": {
+    "block": "CO2_LP / Cross bare",
+    "scene": "APT_CO2LpCrossBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 6256,
+    "authored_triangles": 6256,
+    "reference": "APT_CO2LpCrossBare_M",
+    "distance": 90
+  },
+  "APT_CO2LpCrossBare_M_BS1": {
+    "block": "CO2_LP / Cross bare",
+    "scene": "APT_CO2LpCrossBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 4096,
+    "authored_triangles": 4096,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpCrossBare_M_BS2": {
+    "block": "CO2_LP / Cross bare",
+    "scene": "APT_CO2LpCrossBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 8688,
+    "authored_triangles": 8688,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpCrossBare_M_BS3": {
+    "block": "CO2_LP / Cross bare",
+    "scene": "APT_CO2LpCrossBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 8728,
+    "authored_triangles": 8728,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpCrossBare_M": {
+    "block": "CO2_LP / Cross bare",
+    "scene": "APT_CO2LpCrossBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 11292,
+    "authored_triangles": 11292,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRollAdapterBare_M_BS2_LOD1": {
+    "block": "CO2_LP / Roll adapter bare",
+    "scene": "APT_CO2LpRollAdapterBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9202,
+    "authored_triangles": 9202,
+    "reference": "APT_CO2LpRollAdapterBare_M_BS2",
+    "distance": 35
+  },
+  "APT_CO2LpRollAdapterBare_M_BS2_LOD2": {
+    "block": "CO2_LP / Roll adapter bare",
+    "scene": "APT_CO2LpRollAdapterBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4288,
+    "authored_triangles": 4288,
+    "reference": "APT_CO2LpRollAdapterBare_M_BS2",
+    "distance": 90
+  },
+  "APT_CO2LpRollAdapterBare_M_BS3_LOD1": {
+    "block": "CO2_LP / Roll adapter bare",
+    "scene": "APT_CO2LpRollAdapterBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9202,
+    "authored_triangles": 9202,
+    "reference": "APT_CO2LpRollAdapterBare_M_BS3",
+    "distance": 35
+  },
+  "APT_CO2LpRollAdapterBare_M_BS3_LOD2": {
+    "block": "CO2_LP / Roll adapter bare",
+    "scene": "APT_CO2LpRollAdapterBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4288,
+    "authored_triangles": 4288,
+    "reference": "APT_CO2LpRollAdapterBare_M_BS3",
+    "distance": 90
+  },
+  "APT_CO2LpRollAdapterBare_M_LOD1": {
+    "block": "CO2_LP / Roll adapter bare",
+    "scene": "APT_CO2LpRollAdapterBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 16128,
+    "authored_triangles": 16128,
+    "reference": "APT_CO2LpRollAdapterBare_M",
+    "distance": 35
+  },
+  "APT_CO2LpRollAdapterBare_M_LOD2": {
+    "block": "CO2_LP / Roll adapter bare",
+    "scene": "APT_CO2LpRollAdapterBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 14976,
+    "authored_triangles": 14976,
+    "reference": "APT_CO2LpRollAdapterBare_M",
+    "distance": 90
+  },
+  "APT_CO2LpRollAdapterBare_M_BS1": {
+    "block": "CO2_LP / Roll adapter bare",
+    "scene": "APT_CO2LpRollAdapterBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 3072,
+    "authored_triangles": 3072,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRollAdapterBare_M_BS2": {
+    "block": "CO2_LP / Roll adapter bare",
+    "scene": "APT_CO2LpRollAdapterBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 17152,
+    "authored_triangles": 17152,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRollAdapterBare_M_BS3": {
+    "block": "CO2_LP / Roll adapter bare",
+    "scene": "APT_CO2LpRollAdapterBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 17192,
+    "authored_triangles": 17192,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpRollAdapterBare_M": {
+    "block": "CO2_LP / Roll adapter bare",
+    "scene": "APT_CO2LpRollAdapterBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 18476,
+    "authored_triangles": 18476,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpEndCapBare_M_LOD1": {
+    "block": "CO2_LP / End cap bare",
+    "scene": "APT_CO2LpEndCapBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 2824,
+    "authored_triangles": 2824,
+    "reference": "APT_CO2LpEndCapBare_M",
+    "distance": 35
+  },
+  "APT_CO2LpEndCapBare_M_LOD2": {
+    "block": "CO2_LP / End cap bare",
+    "scene": "APT_CO2LpEndCapBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 1982,
+    "authored_triangles": 1982,
+    "reference": "APT_CO2LpEndCapBare_M",
+    "distance": 90
+  },
+  "APT_CO2LpEndCapBare_M_BS1": {
+    "block": "CO2_LP / End cap bare",
+    "scene": "APT_CO2LpEndCapBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2048,
+    "authored_triangles": 2048,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpEndCapBare_M_BS2": {
+    "block": "CO2_LP / End cap bare",
+    "scene": "APT_CO2LpEndCapBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 3832,
+    "authored_triangles": 3832,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpEndCapBare_M_BS3": {
+    "block": "CO2_LP / End cap bare",
+    "scene": "APT_CO2LpEndCapBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 3872,
+    "authored_triangles": 3872,
+    "reference": null,
+    "distance": null
+  },
+  "APT_CO2LpEndCapBare_M": {
+    "block": "CO2_LP / End cap bare",
+    "scene": "APT_CO2LpEndCapBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 4516,
+    "authored_triangles": 4516,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryReactorAdapterBare_M_LOD1": {
+    "block": "PRIMARY / Reactor adapter bare",
+    "scene": "APT_PrimaryReactorAdapterBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 4864,
+    "authored_triangles": 4864,
+    "reference": "APT_PrimaryReactorAdapterBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryReactorAdapterBare_M_LOD2": {
+    "block": "PRIMARY / Reactor adapter bare",
+    "scene": "APT_PrimaryReactorAdapterBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3840,
+    "authored_triangles": 3840,
+    "reference": "APT_PrimaryReactorAdapterBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryReactorAdapterBare_M_BS1": {
+    "block": "PRIMARY / Reactor adapter bare",
+    "scene": "APT_PrimaryReactorAdapterBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2560,
+    "authored_triangles": 2560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryReactorAdapterBare_M_BS2": {
+    "block": "PRIMARY / Reactor adapter bare",
+    "scene": "APT_PrimaryReactorAdapterBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 5632,
+    "authored_triangles": 5632,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryReactorAdapterBare_M_BS3": {
+    "block": "PRIMARY / Reactor adapter bare",
+    "scene": "APT_PrimaryReactorAdapterBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 5672,
+    "authored_triangles": 5672,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryReactorAdapterBare_M": {
+    "block": "PRIMARY / Reactor adapter bare",
+    "scene": "APT_PrimaryReactorAdapterBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 6956,
+    "authored_triangles": 6956,
+    "reference": null,
+    "distance": null
   }
 }

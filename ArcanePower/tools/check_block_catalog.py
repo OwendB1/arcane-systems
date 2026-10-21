@@ -61,12 +61,25 @@ def check_catalog():
         rows.append({'id': ident, 'public': public, 'definition': path.relative_to(MOD).as_posix(),
                      'icon': icons[0].text, 'construction_stages': len(stages)})
     assert menu <= set(blocks), ('Dangling menu entries', menu-set(blocks))
+    variants={}
+    for path in sorted((MOD/'Data').rglob('*.sbc')):
+        for group in ET.parse(path).findall('BlockVariantGroups/BlockVariantGroup'):
+            ident=group.find('Id').get('Subtype')
+            assert ident not in variants, ('Duplicate variant group',ident)
+            members=[n.get('Type').removeprefix('MyObjectBuilder_')+'/'+n.get('Subtype') for n in group.findall('Blocks/Block')]
+            assert members and len(members)==len(set(members)) and set(members)<=set(blocks), ('Invalid variant members',ident)
+            variants[ident]=members
     assert 'Reactor/ArcanePower_ReactorPrototype' not in blocks, 'Legacy reactor must remain an authoring asset'
     main = blocks['Reactor/ArcanePower_Thermal_ReactorHousing'][1]
     assert main.findtext('DisplayName') == 'Arcane Reactor'
     assert sum(b.findtext('DisplayName') == 'Arcane Reactor' for _, b in blocks.values()) == 1
     thermal = [row for row in rows if '/ArcanePower_Thermal_' in row['id']]
-    assert len(thermal) == 31
+    models = json.loads((ROOT/'validation/thermal-models/models.json').read_text())
+    assert len(thermal) == len(models)
+    for model in models.values():
+        if not model.get('variant_of'):continue
+        bare=model['subtype'];framed=bare.removesuffix('Bare')
+        assert variants[framed+'Styles']==['UpgradeModule/'+bare,'UpgradeModule/'+framed]
     assert len({packaged[row['icon']]['sha256'] for row in thermal}) == len(thermal), 'Thermal icons must be distinct'
     result = {'status': 'passed', 'blocks': len(rows), 'public_blocks': sum(row['public'] for row in rows),
               'hidden_blocks': sum(not row['public'] for row in rows), 'thermal_icons': len(thermal),

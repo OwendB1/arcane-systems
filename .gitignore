@@ -378,20 +378,38 @@ ShipCoreFramework/Bin64
 graphify-out/
 ArcanePower/.cache/
 
-# Regenerated Blender review captures and export staging. Keep source blends,
-# source fingerprints, audit reports, runtime textures and Workshop artwork.
+# Regenerated Blender review output and export staging. Keep source blends,
+# required source fingerprints/manifests, runtime textures and Workshop artwork.
 *.blend[0-9]*
 /ArcanePower/assets/mockups/
-/ArcanePower/validation/**/*.png
-/ArcanePower/validation/**/*.jpg
-/ArcanePower/validation/**/*.jpeg
-/ArcanePower/validation/**/*.gif
-/ArcanePower/validation/**/*.mp4
-/ArcanePower/validation/**/*.wav
-/ArcanePower/validation/**/ui-reviews.json
-/ArcanePower/validation/**/*-plan.json
-/ArcanePower/validation/**/*-progress.json
-/ArcanePower/validation/*-export-backup/
-/ArcanePower/validation/**/export-backup/
 /ArcanePower/src/.energy-model-staging/
 /ArcanePower/src/Models/Cubes/large/.*-stage/
+
+# Validation outputs are disposable after a completed pass. These exceptions
+# are tool inputs/baselines and the latest delivery summary; see validation/README.md.
+/ArcanePower/validation/**
+!/ArcanePower/validation/**/
+!/ArcanePower/validation/README.md
+!/ArcanePower/validation/construction-stages.json
+!/ArcanePower/validation/energy-construction-source.json
+!/ArcanePower/validation/release-manifest.json
+!/ArcanePower/validation/controller-detail-loop-01/source.json
+!/ArcanePower/validation/energy-construction-update/protected-source.json
+!/ArcanePower/validation/native-texture-detail/source.json
+!/ArcanePower/validation/reactor-exterior-loop-01/source.json
+!/ArcanePower/validation/reactor-texture-lod-loop/energy-protected.json
+!/ArcanePower/validation/reactor-texture-lod-loop/prototype-protected.json
+!/ArcanePower/validation/thermal-concepts/battery-reference.json
+!/ArcanePower/validation/thermal-concepts/protected-production.json
+!/ArcanePower/validation/thermal-concepts/reactor-reference.json
+!/ArcanePower/validation/thermal-models/delivery-check.json
+!/ArcanePower/validation/thermal-models/flow-review-states.json
+!/ArcanePower/validation/thermal-models/internal-pipes-baseline.json
+!/ArcanePower/validation/thermal-models/internal-pipes-preserved.json
+!/ArcanePower/validation/thermal-models/models.json
+!/ArcanePower/validation/thermal-models/native-export-sources.json
+!/ArcanePower/validation/thermal-models/native-export.json
+!/ArcanePower/validation/thermal-models/native-motion.json
+!/ArcanePower/validation/thermal-models/native-source-scenes.json
+!/ArcanePower/validation/thermal-models/protected-sources.json
+!/ArcanePower/validation/thermal-models/tight-fit-before-interfaces.json

@@ -421,5 +421,269 @@
       1
     ],
     "moving_parts": []
+  },
+  "PRIMARY / Straight bare": {
+    "source": "ArcanePower_Thermal_PrimaryStraightBare",
+    "scenes": [
+      "APT_PrimaryStraightBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow bare": {
+    "source": "ArcanePower_Thermal_PrimaryElbowBare",
+    "scenes": [
+      "APT_PrimaryElbowBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Riser bare": {
+    "source": "ArcanePower_Thermal_PrimaryRiserBare",
+    "scenes": [
+      "APT_PrimaryRiserBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Tee bare": {
+    "source": "ArcanePower_Thermal_PrimaryTeeBare",
+    "scenes": [
+      "APT_PrimaryTeeBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Cross bare": {
+    "source": "ArcanePower_Thermal_PrimaryCrossBare",
+    "scenes": [
+      "APT_PrimaryCrossBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Roll adapter bare": {
+    "source": "ArcanePower_Thermal_PrimaryRollAdapterBare",
+    "scenes": [
+      "APT_PrimaryRollAdapterBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / End cap bare": {
+    "source": "ArcanePower_Thermal_PrimaryEndCapBare",
+    "scenes": [
+      "APT_PrimaryEndCapBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_HP / Straight bare": {
+    "source": "ArcanePower_Thermal_CO2HpStraightBare",
+    "scenes": [
+      "APT_CO2HpStraightBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_HP / Elbow bare": {
+    "source": "ArcanePower_Thermal_CO2HpElbowBare",
+    "scenes": [
+      "APT_CO2HpElbowBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_HP / Riser bare": {
+    "source": "ArcanePower_Thermal_CO2HpRiserBare",
+    "scenes": [
+      "APT_CO2HpRiserBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_HP / Tee bare": {
+    "source": "ArcanePower_Thermal_CO2HpTeeBare",
+    "scenes": [
+      "APT_CO2HpTeeBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_HP / Cross bare": {
+    "source": "ArcanePower_Thermal_CO2HpCrossBare",
+    "scenes": [
+      "APT_CO2HpCrossBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_HP / Roll adapter bare": {
+    "source": "ArcanePower_Thermal_CO2HpRollAdapterBare",
+    "scenes": [
+      "APT_CO2HpRollAdapterBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_HP / End cap bare": {
+    "source": "ArcanePower_Thermal_CO2HpEndCapBare",
+    "scenes": [
+      "APT_CO2HpEndCapBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_LP / Straight bare": {
+    "source": "ArcanePower_Thermal_CO2LpStraightBare",
+    "scenes": [
+      "APT_CO2LpStraightBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_LP / Elbow bare": {
+    "source": "ArcanePower_Thermal_CO2LpElbowBare",
+    "scenes": [
+      "APT_CO2LpElbowBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_LP / Riser bare": {
+    "source": "ArcanePower_Thermal_CO2LpRiserBare",
+    "scenes": [
+      "APT_CO2LpRiserBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_LP / Tee bare": {
+    "source": "ArcanePower_Thermal_CO2LpTeeBare",
+    "scenes": [
+      "APT_CO2LpTeeBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_LP / Cross bare": {
+    "source": "ArcanePower_Thermal_CO2LpCrossBare",
+    "scenes": [
+      "APT_CO2LpCrossBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_LP / Roll adapter bare": {
+    "source": "ArcanePower_Thermal_CO2LpRollAdapterBare",
+    "scenes": [
+      "APT_CO2LpRollAdapterBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "CO2_LP / End cap bare": {
+    "source": "ArcanePower_Thermal_CO2LpEndCapBare",
+    "scenes": [
+      "APT_CO2LpEndCapBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Reactor adapter bare": {
+    "source": "ArcanePower_Thermal_PrimaryReactorAdapterBare",
+    "scenes": [
+      "APT_PrimaryReactorAdapterBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
   }
 }

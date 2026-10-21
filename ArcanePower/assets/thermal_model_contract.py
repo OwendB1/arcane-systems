@@ -41,6 +41,8 @@ PIPE_PORTS = {
 SPECS = dict(MACHINES)
 SPECS.update({c+' / '+shape: (1, 1, 1) for c in CIRCUITS for shape in PIPE_PORTS})
 SPECS['PRIMARY / Reactor adapter'] = (1, 1, 1)
+BARE_PIPES = {name + ' bare': name for name in SPECS if ' / ' in name}
+SPECS.update({name: SPECS[base] for name, base in BARE_PIPES.items()})
 
 
 def subtype(name):
@@ -147,7 +149,9 @@ def route(start, end, blocked):
 
 
 def self_check():
-    assert len(ROTATIONS) == 24 and len(SPECS) == 31
+    assert len(ROTATIONS) == 24 and len(SPECS) == 31 + len(BARE_PIPES)
+    assert len(BARE_PIPES) == 22
+    assert all(SPECS[name] == SPECS[base] == (1, 1, 1) for name, base in BARE_PIPES.items())
     assert len({subtype(n) for n in SPECS}) == len(SPECS)
     for name, size in SPECS.items():
         pos = tuple((s % 2 == 0)*1.25 for s in size[:2]) + (size[2]*1.25,)

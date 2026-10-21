@@ -56,6 +56,6 @@ The plasma uses a new monochrome filament texture, tinted per fuel at runtime. T
 
 - Static Blender material comparison — illustrative lighting; not an in-game screenshot.
 - [Art/technical channel authoring](assets/build_physical_plasma.py), [review renderer](assets/render_plasma_review.py), [texture provenance](assets/textures/plasma-filaments-provenance.json).
-- Build log, [seven model exports and embedded collision evidence](validation/physical-plasma-export.json), [local deployment](validation/local-deployment.json).
+- Build log, seven model exports and embedded collision evidence (report pruned), local deployment (report pruned).
 
 Next game review must establish native capacity limiting, 10× fuel debits, resupply recovery, overheating and irreversible timers, interior/ejected detonation positions, save/rejoin/removal behavior, physical clearance/gravity, and shader appearance. Compilation and asset export do not establish these runtime outcomes.

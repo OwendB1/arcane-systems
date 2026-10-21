@@ -26,10 +26,14 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def manifest():
+def manifest(additions=False):
     rows=json.loads((STAGING/'sources.json').read_text())
     models=json.loads((OUT/'models.json').read_text())
-    assert {r['block'] for r in rows.values()}==set(models),'Incomplete source export'
+    names={r['block'] for r in rows.values()}
+    if additions:
+        assert names <= set(models) and all(models[name].get('variant_of') for name in names), 'Additions must be authored variants'
+        models={name:spec for name,spec in models.items() if name in names}
+    assert names==set(models),'Incomplete source export'
     scenes=json.loads((OUT/'native-source-scenes.json').read_text())
     mains={name:next(stem for stem,r in rows.items() if r['type']=='main' and r['scene']==scenes[name]['scenes'][-1])
            for name in models}
@@ -42,8 +46,8 @@ def manifest():
     return rows,models,mains
 
 
-def compile_all():
-    rows,_,_=manifest()
+def compile_all(additions=False):
+    rows,_,_=manifest(additions)
     cache=Path.home()/'.cache/arcane-power/thermal/MWMBuilder'
     shutil.copytree(SETUP/'assets/Tools/MWMBuilder',cache,dirs_exist_ok=True)
     (cache/'MwmBuilder.exe.config').write_text('<configuration><system.diagnostics><trace><listeners><clear /></listeners></trace></system.diagnostics></configuration>')
@@ -82,7 +86,7 @@ def dummies(exe,path):
             for line in output.splitlines() if (parts:=line.split('\t'))}
 
 
-def definitions(models,mains,revision):
+def definitions(models,mains,revision,additions=False):
     reactor=ET.parse(REACTOR_TEMPLATE).find('CubeBlocks/Definition')
     module=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_ContainmentController.sbc').find('CubeBlocks/Definition')
     root=ET.Element('Definitions');blocks=ET.SubElement(root,'CubeBlocks')
@@ -92,6 +96,16 @@ def definitions(models,mains,revision):
     set_text(group,'Id/SubtypeId','ArcaneSystems_Thermal')
     set_text(group,'DisplayName','Arcane Systems');set_text(group,'Name','ArcaneSystems')
     ids=ET.SubElement(group,'ItemIds')
+    if additions:
+        root=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').getroot()
+        blocks=root.find('CubeBlocks')
+        category=ET.parse(MOD/'Data/ThermalCategories.sbc').getroot()
+        ids=category.find('.//ItemIds')
+        replacing={spec['subtype'] for spec in models.values()}
+        for definition in list(blocks):
+            if definition.findtext('Id/SubtypeId') in replacing:blocks.remove(definition)
+        for item in list(ids):
+            if item.text.removeprefix('UpgradeModule/') in replacing:ids.remove(item)
     for name,spec in models.items():
         ident=spec['subtype'];is_source=name=='Reactor housing';is_train=name.startswith('Brayton train')
         definition=copy.deepcopy(reactor if is_source or is_train else module)
@@ -99,6 +113,8 @@ def definitions(models,mains,revision):
         typeid='Reactor' if is_source or is_train else 'UpgradeModule'
         set_text(definition,'Id/TypeId',typeid);set_text(definition,'Id/SubtypeId',ident)
         set_text(definition,'DisplayName','Arcane '+('Reactor' if is_source else name.replace(' / ',' ').replace('CO2','CO₂')))
+        if spec.get('variant_of'):
+            set_text(definition,'DisplayName','Arcane '+spec['variant_of'].replace(' / ',' ').replace('CO2','CO₂')+' Pipe (Bare)')
         set_text(definition,'Icon','Textures/GUI/Icons/ArcanePower/Thermal/'+ident+'.dds')
         set_text(definition,'BlockPairName',ident)
         set_text(definition,'Model',(revision/(mains[name]+'.mwm')).as_posix())
@@ -136,10 +152,25 @@ def definitions(models,mains,revision):
         ET.SubElement(ids,'string').text=typeid+'/'+ident
     save(root,MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc')
     save(category,MOD/'Data/ThermalCategories.sbc')
+    # Native variant groups expose both appearances together in the build menu.
+    variants=ET.Element('Definitions');groups=ET.SubElement(variants,'BlockVariantGroups')
+    for name,spec in models.items():
+        if not spec.get('variant_of'):continue
+        ident=spec['subtype'];base=ident.removesuffix('Bare')
+        group=ET.SubElement(groups,'BlockVariantGroup')
+        ET.SubElement(group,'Id',Type='MyObjectBuilder_BlockVariantGroup',Subtype=base+'Styles')
+        set_text(group,'Icon','Textures/GUI/Icons/ArcanePower/Thermal/'+ident+'.dds')
+        set_text(group,'DisplayName','Arcane '+spec['variant_of'].replace(' / ',' ').replace('CO2','CO₂')+' Pipes')
+        set_text(group,'Description','Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.')
+        members=ET.SubElement(group,'Blocks')
+        for subtype in (ident,base):ET.SubElement(members,'Block',Type='MyObjectBuilder_UpgradeModule',Subtype=subtype)
+    save(variants,MOD/'Data/CubeBlocks/ArcanePower_ThermalVariants.sbc')
 
 
-def install():
-    rows,models,mains=manifest();exe=probe_exe()
+def install(additions=False):
+    rows,models,mains=manifest(additions);exe=probe_exe()
+    previous=json.loads((OUT/'native-export.json').read_text()) if additions else None
+    if previous:assert previous['status']=='passed'
     lods={};native={};compiled={}
     highlights={}
     lod_folder=MOD/'Models/Cubes/large/Thermal/LOD'
@@ -158,7 +189,7 @@ def install():
             fixed.replace(path)
         hkt=path.with_suffix('.hkt')
         data=probe(exe,path,row['triangles'],hkt if hkt.exists() else None)
-        if stem==mains['Reactor housing']:
+        if stem==mains.get('Reactor housing'):
             assert any(f[0]=='MATERIAL' and f[1]=='ArcanePower_CoolantGlass' for f in data),'Native reactor lacks current coolant glass'
         for fields in data:
             if fields[0]=='TEXTURE':
@@ -220,12 +251,13 @@ def install():
         destination=target/key;destination.parent.mkdir(parents=True,exist_ok=True)
         if destination.exists():assert digest(destination)==digest(source),'Immutable model path collision'
         else:shutil.copy2(source,destination)
-    definitions(models,mains,revision)
-    report={'status':'passed','revision':revision.as_posix(),'blocks':len(mains),'native_meshes':len(rows),
-            'construction_models':sum(r['type']=='bs' for r in rows.values()),
-            'lod_models':sum(r['type']=='lod' for r in rows.values()),
-            'native_models':compiled,'external_native_subparts':len(bundle)-sum(r['type']!='lod' for r in rows.values()),
-            'inventory_highlights':highlights,
+    definitions(models,mains,revision,additions)
+    if previous:compiled={**previous['native_models'],**compiled}
+    report={'status':'passed','revision':revision.as_posix(),'blocks':len(json.loads((OUT/'models.json').read_text())),'native_meshes':len(compiled),
+            'construction_models':sum(r['type']=='bs' for r in compiled.values()),
+            'lod_models':sum(r['type']=='lod' for r in compiled.values()),
+            'native_models':compiled,'external_native_subparts':previous['external_native_subparts'] if previous else len(bundle)-sum(r['type']!='lod' for r in rows.values()),
+            'inventory_highlights':highlights or (previous['inventory_highlights'] if previous else {}),
             'physics':'Accepted reactor collision preserved; other blocks use up to ten hulls derived from real authored solids',
             'co2':'Integrated reactor generation and powered commissioning; no separate gas supply blocks',
             'game_reloaded':False,'workshop_published':False}
@@ -235,5 +267,6 @@ def install():
 
 
 if __name__=='__main__':
-    if '--install-only' not in sys.argv:compile_all()
-    install()
+    additions='--additions' in sys.argv
+    if '--install-only' not in sys.argv:compile_all(additions)
+    install(additions)

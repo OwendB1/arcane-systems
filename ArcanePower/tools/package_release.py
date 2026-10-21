@@ -46,6 +46,12 @@ def prune_model_exports(runtime_files):
             destination=ROOT/'assets/definitions'/path.name
         elif relative==Path('.thermal-stage/sources.json'):
             destination=ROOT/'validation/thermal-models/native-export-sources.json'
+            if destination.exists():
+                # Incremental variant exports contain only their new rows.
+                # Keep the prior source ledger when removing staging.
+                rows=json.loads(destination.read_text())
+                rows.update(json.loads(path.read_text()))
+                path.write_text(json.dumps(rows,indent=2)+'\n')
         if destination:
             if destination.suffix=='.hkt' and destination.exists() and destination.read_bytes()!=path.read_bytes():
                 raise RuntimeError('Export differs from accepted collision input: '+str(destination))

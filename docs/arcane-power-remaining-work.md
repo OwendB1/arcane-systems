@@ -1,8 +1,9 @@
 # Arcane Power — remaining implementation work
 
-Generated review captures were pruned again on 17 October 2026. Historical inspection
-descriptions below remain; current blends, checkpoints and compact audit reports
-are retained.
+Generated review captures and obsolete validation reports are pruned after completed
+modelling passes. Historical inspection descriptions remain; current blends,
+checkpoints and required [validation inputs](../ArcanePower/validation/README.md)
+are retained along with the latest delivery summary.
 The loadable large-block model folder now contains only current runtime
 dependencies. Accepted physics and native comparison inputs are retained outside
 `src`; packaging prunes unused model exports after resolving subparts and LODs.
@@ -51,7 +52,7 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   runtime checks, geometry/backing audits, 47 manifold poses and live three-distance
   reviews pass. The saved Blender source includes isolated moving previews.
   Native exports/definitions are delivered; live game appearance remains pending.
-  [Flow review](../ArcanePower/validation/thermal-models/flow-emissives-review.json).
+  Flow review (report pruned).
 
 - **Construction guidance, 16 October:** SCF-style preview facing/rotation arrows,
   H/C socket markers, contextual build instructions and assembly verification
@@ -87,7 +88,7 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   hot-end stencils use 2200 C. Procedural rebuilds preserve the finished phases
   and assembly instances. Close UI inspection and saved-file geometry, UV,
   backing and grid/socket checks are recorded in the
-  [review evidence](../ArcanePower/validation/thermal-models/REVIEW.md).
+  review evidence (report pruned).
   Native exports and LODs/build stages are delivered; thermal world validation remains pending.
   A second asset/detail loop sharpens housings to at most 3 mm flat chamfers,
   gives fasteners faceted normals, reduces the flange joint to 28 mm and packs
@@ -146,8 +147,8 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   fresh local paths under `reactor_787f4951767a` (tablet uses its item revision).
   Game inspection remains pending; LOD and reactor/controller construction
   redesign remain deferred.
-  [Review evidence](../ArcanePower/validation/reactor-exterior-loop-01/distance-review.json).
-  [Native export](../ArcanePower/validation/prototype-main-export.json).
+  Review evidence (report pruned).
+  Native export (report pruned).
 - **Battery main-model review, 15 October:** seven finished authoring models now
   have recessed service doors/intakes, seated emissive strips, module-specific
   retention/cooling/fan hardware and detailed drum access panels. Further loops
@@ -170,7 +171,7 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   deferred further LOD work. The newly requested battery construction update is
   exported; reactor/controller construction redesign remains deferred.
   Mounted detail
-  and [export evidence](../ArcanePower/validation/energy-main-export.json).
+  and export evidence (report pruned).
 - **Construction complete:** three native welding/grinding stages for all twelve
   public blocks (36 models). Native imports, bounds, construction materials,
   embedded collisions and reactor model transitions pass. Damage integrity is
@@ -182,7 +183,7 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   21 stages from current mains: three mating stations, current seated equipment,
   static fan blades and whole side/deck armor assemblies. Native import, material,
   bounds, collision and active-definition gates pass; 1.8/2.4/3.0 m views inspected.
-  [Battery stage proof](../ArcanePower/validation/energy-construction-update/native-export.json).
+  Battery stage proof (report pruned).
 - **Energy Core implemented:** accepted compact 3×3×3 controller plus standard/
   advanced capacity, transfer and stabilizer modules, fixed native batteries,
   charge modes, emergency reserve, icons and charge/flow visuals.
@@ -229,7 +230,7 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
    mining-to-generation survival, and release tuning of recipes, PCU and mass.
    Broader vent/terrain refinements below remain design backlog.
 
-Evidence: [storage runtime](../ArcanePower/validation/energy-runtime.json),
+Evidence: storage runtime (report pruned),
 [construction](../ArcanePower/validation/construction-stages.json),
 [release manifest](../ArcanePower/validation/release-manifest.json).
 
@@ -276,7 +277,7 @@ The selected **1.6 m × 1.0 m piggyback packs**, raised **2.3 m socket surrounds
 ## Completed in the preceding hardware/tile pass
 
 - Recorded startup/shutdown and vent ejection from spectator view on the primary monitor at 3440×1440/60 fps. These show the preceding reactor revision at low load. Existing ceiling blocks obscure the roof hatch; footage does not establish hot cooldown or rated output.
-- Repaired the reactor and both attached controllers. [Repair evidence](../ArcanePower/validation/recordings/repair.json) confirms full integrity and build after reloading and resaving the lab.
+- Repaired the reactor and both attached controllers. Repair evidence (report pruned) confirms full integrity and build after reloading and resaving the lab.
 - Authored/exported stackable 3×1×3-cell vent duct and outlet, each with a 3.72 m lined bore. The outlet uses four moving leaves and fuel/alarm emissives. Direct code follows a straight aligned route and synchronizes its terminal door to the reactor doors.
 - Authored/exported distinct one-cell crescent standard/advanced containment controllers with native upgrade mating detectors.
 - Authored/exported a thick framed triangular component, model-rendered icons and a provisional assembler recipe. Added server-owned tile reserve, wear, conveyor supply, shortage shutdown and vent loss.

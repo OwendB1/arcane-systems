@@ -40,6 +40,28 @@
         <string>UpgradeModule/ArcanePower_Thermal_CO2LpEndCap</string>
         <string>Reactor/ArcanePower_Thermal_ReactorHousing</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryReactorAdapter</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryStraightBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryElbowBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryRiserBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryTeeBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryCrossBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryRollAdapterBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryEndCapBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpStraightBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpElbowBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpRiserBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpTeeBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpCrossBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpRollAdapterBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2HpEndCapBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpStraightBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpElbowBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpRiserBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpTeeBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpCrossBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpRollAdapterBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_CO2LpEndCapBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_PrimaryReactorAdapterBare</string>
       </ItemIds>
     </Category>
   </CategoryClasses>

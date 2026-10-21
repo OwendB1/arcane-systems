@@ -133,6 +133,22 @@ def stages(s, source_objects, name, root):
         return any(t in o.name.lower() for t in ('armor','panel','cover','casing','cladding','lid','drum segmented'))
     for level in (1,2,3):
         col=C.create_seut_collection(s,'bs',level)
+        if name in M['CONTRACT']['BARE_PIPES']:
+            # Weld the actual rings and tubes; a rectangular temporary cage
+            # would restore the very silhouette this variant removes.
+            for obj in meshes:
+                fixture = any(m and m.name.startswith('Thermal') for m in obj.data.materials)
+                if fixture or obj.get('thermal_decal_support'):
+                    continue
+                if level == 1 and not ('pressure lip' in obj.name or obj.get('thermal_external_pipe_clamp')):
+                    continue
+                if level == 2 and obj.get('thermal_support'):
+                    continue
+                copy_mesh(obj,col,root,construction=True)
+            if tris(col)>8000:
+                LOD['build_lods'](s,col,batch=True)
+            col.hide_render=True
+            continue
         frame=BUILD['Parts'](col)
         if name=='Reactor housing': BUILD['reactor_frame'](frame)
         else: BUILD['rectangular_frame'](frame,low,high,.065 if ' / ' in name else .12)
@@ -355,7 +371,11 @@ def export_isolated(name, staging=None):
     bpy.data.batch_remove(ids=[s for s in bpy.data.scenes if s!=source])
     prepare(name)
     bpy.data.orphans_purge(do_local_ids=True,do_linked_ids=True,do_recursive=True)
-    return export(name,preserve_collision=True)
+    # Newly added blocks build physics once. Later detail/LOD passes reuse the
+    # accepted inputs just like the established thermal family.
+    preserve=all((COLLISIONS/'Thermal'/(native_id(M['CONTRACT']['subtype'](name))+suffix+'.hkt')).is_file()
+                 for suffix in ('','_BS1','_BS2','_BS3'))
+    return export(name,preserve_collision=preserve)
 
 
 if __name__=='__main__':

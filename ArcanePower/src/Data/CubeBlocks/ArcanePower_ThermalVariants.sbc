@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions>
+  <BlockVariantGroups>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_PrimaryStraightStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraightBare.dds</Icon>
+      <DisplayName>Arcane PRIMARY Straight Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryStraightBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryStraight" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_PrimaryElbowStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowBare.dds</Icon>
+      <DisplayName>Arcane PRIMARY Elbow Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbow" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_PrimaryRiserStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiserBare.dds</Icon>
+      <DisplayName>Arcane PRIMARY Riser Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRiserBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRiser" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_PrimaryTeeStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTeeBare.dds</Icon>
+      <DisplayName>Arcane PRIMARY Tee Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryTeeBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryTee" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_PrimaryCrossStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCrossBare.dds</Icon>
+      <DisplayName>Arcane PRIMARY Cross Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryCrossBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryCross" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_PrimaryRollAdapterStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapterBare.dds</Icon>
+      <DisplayName>Arcane PRIMARY Roll adapter Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRollAdapterBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRollAdapter" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_PrimaryEndCapStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCapBare.dds</Icon>
+      <DisplayName>Arcane PRIMARY End cap Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryEndCapBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryEndCap" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2HpStraightStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpStraightBare.dds</Icon>
+      <DisplayName>Arcane CO₂_HP Straight Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpStraightBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpStraight" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2HpElbowStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpElbowBare.dds</Icon>
+      <DisplayName>Arcane CO₂_HP Elbow Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpElbowBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpElbow" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2HpRiserStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpRiserBare.dds</Icon>
+      <DisplayName>Arcane CO₂_HP Riser Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpRiserBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpRiser" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2HpTeeStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpTeeBare.dds</Icon>
+      <DisplayName>Arcane CO₂_HP Tee Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpTeeBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpTee" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2HpCrossStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpCrossBare.dds</Icon>
+      <DisplayName>Arcane CO₂_HP Cross Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpCrossBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpCross" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2HpRollAdapterStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpRollAdapterBare.dds</Icon>
+      <DisplayName>Arcane CO₂_HP Roll adapter Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpRollAdapterBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpRollAdapter" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2HpEndCapStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2HpEndCapBare.dds</Icon>
+      <DisplayName>Arcane CO₂_HP End cap Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpEndCapBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2HpEndCap" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2LpStraightStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpStraightBare.dds</Icon>
+      <DisplayName>Arcane CO₂_LP Straight Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpStraightBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpStraight" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2LpElbowStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpElbowBare.dds</Icon>
+      <DisplayName>Arcane CO₂_LP Elbow Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpElbowBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpElbow" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2LpRiserStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpRiserBare.dds</Icon>
+      <DisplayName>Arcane CO₂_LP Riser Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpRiserBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpRiser" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2LpTeeStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpTeeBare.dds</Icon>
+      <DisplayName>Arcane CO₂_LP Tee Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpTeeBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpTee" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2LpCrossStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpCrossBare.dds</Icon>
+      <DisplayName>Arcane CO₂_LP Cross Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpCrossBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpCross" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2LpRollAdapterStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpRollAdapterBare.dds</Icon>
+      <DisplayName>Arcane CO₂_LP Roll adapter Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpRollAdapterBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpRollAdapter" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_CO2LpEndCapStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_CO2LpEndCapBare.dds</Icon>
+      <DisplayName>Arcane CO₂_LP End cap Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpEndCapBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_CO2LpEndCap" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_PrimaryReactorAdapterStyles" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryReactorAdapterBare.dds</Icon>
+      <DisplayName>Arcane PRIMARY Reactor adapter Pipes</DisplayName>
+      <Description>Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryReactorAdapterBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryReactorAdapter" />
+      </Blocks>
+    </BlockVariantGroup>
+  </BlockVariantGroups>
+</Definitions>

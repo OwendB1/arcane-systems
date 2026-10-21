@@ -270,7 +270,50 @@ public static partial class ThermalRuntimeChecks
         Check(plant.Ready && !plant.Nodes.Contains(detached), "detached module grants no capacity");
         reactor.Healthy = false;
         Check(!new ThermalNetwork(layout).Plant(reactor).Ready, "projected or incomplete source cannot run");
-        Check(ThermalModels.All.Count == 31, "all model contracts generated");
+        Check(ThermalModels.All.Count == 53, "all model contracts generated");
+    }
+
+    private static void BarePipes()
+    {
+        int variants = 0;
+        foreach (var entry in ThermalModels.All)
+        {
+            if (!entry.Key.EndsWith("Bare")) continue;
+            variants++;
+            var bare = entry.Value;
+            var framed = ThermalModels.All[entry.Key.Substring(0, entry.Key.Length - 4)];
+            Check(bare.Kind == ThermalKind.Pipe && bare.Kind == framed.Kind && bare.Cells == framed.Cells
+                && bare.Grade == framed.Grade && bare.Ports.Length == framed.Ports.Length, "bare pipe keeps physical grid and runtime role");
+            Near(bare.RatingMW, framed.RatingMW, "bare pipe keeps capacity");
+            for (int i = 0; i < bare.Ports.Length; i++)
+            {
+                var a = bare.Ports[i]; var b = framed.Ports[i];
+                Check(a.Circuit == b.Circuit && a.Position == b.Position && a.Normal == b.Normal && a.HotAxis == b.HotAxis,
+                    "bare fitting preserves socket, pressure type and H/C orientation");
+            }
+            var paths = ThermalFlowModels.All[entry.Key];
+            var original = ThermalFlowModels.All[framed.Subtype];
+            Check(paths.Length == original.Length, "bare pipe has every authored flow path");
+            for (int i = 0; i < paths.Length; i++)
+            {
+                var a = paths[i]; var b = original[i];
+                Check(a.Circuit == b.Circuit && a.Port == b.Port && a.Hot == b.Hot && a.Internal == b.Internal
+                    && a.Radius == b.Radius && a.Points.Length == b.Points.Length, "bare flow uses the same pressure tube");
+                for (int j = 0; j < a.Points.Length; j++) Check(a.Points[j] == b.Points[j], "bare flow stays inside unchanged glass");
+            }
+        }
+        Check(variants == 22, "complete bare pipe family");
+        var layout = BareLayout();
+        var reactor = layout.Find(n => n.Model.Kind == ThermalKind.Reactor);
+        Check(new ThermalNetwork(layout).Plant(reactor).Ready, "complete plant connects using bare pipes");
+        int mixed = 0;
+        foreach (var node in layout)
+            if (node.Model.Kind == ThermalKind.Pipe && node.Id % 2 == 0)
+            {
+                node.Model = ThermalModels.All[node.Model.Subtype.Substring(0, node.Model.Subtype.Length - 4)];
+                mixed++;
+            }
+        Check(mixed > 0 && new ThermalNetwork(layout).Plant(reactor).Ready, "framed and bare pipes connect in the same plant");
     }
 
     private static void Rotors()
@@ -518,7 +561,7 @@ public static partial class ThermalRuntimeChecks
         selected = new ThermalNetwork(diamond).FlowDirections("PRIMARY",new HashSet<long> {1},new HashSet<long> {4});
         Check(selected.Count == 4 && selected[1][0] == 2 && selected[1][1] == 2, "equal parallel physical routes both circulate");
 
-        Check(ThermalFlowModels.All.Count == 31, "flow contract covers every model");
+        Check(ThermalFlowModels.All.Count == ThermalModels.All.Count, "flow contract covers every model");
         foreach (var entry in ThermalFlowModels.All)
         {
             var spec = ThermalModels.All[entry.Key];
@@ -556,7 +599,7 @@ public static partial class ThermalRuntimeChecks
 
     public static void Main(string[] args)
     {
-        Registrations(); Budgets(); Stores(); ModesAndStartup(); Topology(); Rotors(); Construction(); Flow(args.Length > 0 ? args[0] : null);
+        Registrations(); Budgets(); Stores(); ModesAndStartup(); Topology(); BarePipes(); Rotors(); Construction(); Flow(args.Length > 0 ? args[0] : null);
         Console.WriteLine("Thermal runtime: " + checks + " checks passed (registrations/channels, budget, conservation, reload, modes, 47 manifold poses, heat/pressure rotors, construction/orientation guide and authored topology)");
     }
 }

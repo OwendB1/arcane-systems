@@ -42,6 +42,7 @@ def audit():
             fail(name, 'missing base', ident)
             continue
         scene, col = M['scene_for'](name), M['main_for'](name)
+        bare = name in C['BARE_PIPES']
         bpy.context.window.scene = scene
         bpy.context.view_layer.update()
         half = Vector(cells)*1.25
@@ -155,7 +156,9 @@ def audit():
                 c,n,up = (Vector(port[k]) for k in ('position','normal','hot_axis'))
                 across = up.cross(n)
                 prefix = name+' / '+port['id']
-                flange = next(o for o in col.objects if o.name.startswith(prefix+' flange') and o.get('interface_type')==port['type'])
+                flange = next((o for o in col.objects if o.name.startswith(prefix+' flange') and o.get('interface_type')==port['type']), None)
+                if not bare and flange is None:
+                    fail(name, 'socket has its mounting flange', port['id'])
                 for sign in (-1,1):
                     bore = c+up*(sign*.46)
                     seal = next(o for o in col.objects if o.name.startswith(prefix+' seated face seal '+str(sign)))
@@ -164,7 +167,7 @@ def audit():
                     insert_z = [(insert.matrix_world@v.co-bore).dot(n) for v in insert.data.vertices]
                     if abs(min(seal_z)+.008)>1e-5 or abs(max(seal_z))>1e-5 or max(insert_z)>min(seal_z)+1e-5:
                         fail(name,'face seal abuts insert without overlap',seal.name)
-                    for j in range(8):
+                    for j in range(8) if flange else ():
                         radial = (up*math.cos(j*math.tau/8)+across*math.sin(j*math.tau/8))*.378
                         hit = tree(flange).ray_cast(bore+radial+n*.05,-n,.20)[0]
                         if hit is None or abs((hit-bore).dot(n)+.055)>1e-4:
@@ -279,7 +282,7 @@ def audit():
                 if any(tree(a).overlap(tree(b)) for a, b in itertools.combinations(flow, 2)):
                     fail(name, 'separate pressure channels without intersections', scene.name)
         if scene.get('thermal_detail_revision', 0) >= 2:
-            reference = json.loads((OUT/'tight-fit-before-interfaces.json').read_text())[name]
+            reference = json.loads((OUT/'tight-fit-before-interfaces.json').read_text())[C['BARE_PIPES'].get(name, name)]
             if ports != reference['ports'] or list(cells) != reference['cells']:
                 fail(name, 'preserved pre-refinement cells and sockets', scene.name)
             stats['max_chamfer_mm'] = max((o.get('thermal_chamfer_m', 0)*1000 for o in col.objects), default=0)
@@ -291,12 +294,20 @@ def audit():
             for web in webs:
                 if any(tree(web).overlap(tree(pipe)) for pipe in flow):
                     fail(name, 'load supports clear flowing channels', web.name)
-            for port in ports:
+            for port in ports if not bare else ():
                 flange = next(o for o in col.objects if o.name.startswith(name+' / '+port['id']+' flange') and o.get('interface_type'))
                 n, c = Vector(port['normal']), Vector(port['position'])
                 front = max((flange.matrix_world@v.co-c).dot(n) for v in flange.data.vertices)
                 if abs(front+.014) > .0001:
                     fail(name, '14 mm flange face setback', port['id'])
+            if bare:
+                base = C['BARE_PIPES'][name]
+                if ports != json.loads(M['main_for'](base)['ports']):
+                    fail(name, 'bare and framed sockets are interchangeable', scene.name)
+                if any(o.get('interface_type') or any(t in o.name.lower() for t in
+                       ('pipe cage', 'pipe base mounting shoe', 'flange load web', 'status bezel', 'status lens'))
+                       for o in col.objects):
+                    fail(name, 'pipe-only silhouette without plate or cage hardware', scene.name)
             if name.startswith('Brayton train'):
                 casings = [next(o for o in col.objects if o.name.startswith(name+' / '+label+' casing'))
                            for label in ('compressor', 'turbine', 'generator')]
@@ -317,7 +328,7 @@ def audit():
             for i in range(3):
                 if i != axis:
                     offset = port.get('cell_offset', [0, 0, 0])
-                    if offset != [0, 0, 0] and (name not in ('Reactor housing', 'PRIMARY / Reactor adapter') or offset != [0, 0, .17]):
+                    if offset != [0, 0, 0] and (C['BARE_PIPES'].get(name, name) not in ('Reactor housing', 'PRIMARY / Reactor adapter') or offset != [0, 0, .17]):
                         fail(name, 'unapproved socket offset', port['id'])
                     index = (pos[i]-offset[i]+half[i]-1.25)/2.5
                     if abs(index-round(index)) > 1e-5:

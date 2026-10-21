@@ -54,7 +54,7 @@ model-rendered inventory icon. Pipe icons identify
 PRIMARY, HP and LP circuits; upgraded machines carry a tier marker. All 50 block
 definitions, including seven hidden legacy blocks and the ejected core, are checked
 for icons, model references and recipes. All 42 buildable blocks have menu entries
-and three construction stages. [Block catalog](validation/block-catalog.json).
+and three construction stages. [Block catalog check](tools/check_block_catalog.py).
 [Native delivery evidence](validation/thermal-models/delivery-check.json).
 
 The 13 October runtime pass closes construction-stage startup/generation gaps,

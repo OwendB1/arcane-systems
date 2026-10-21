@@ -1,8 +1,9 @@
 """Production thermal main models, built in bounded calls in live Blender.
 
 Reuses the reviewed machine builders and native SEUT materials. The concept and
-accepted reactor/battery files remain separate. build_base() for every model
-precedes refine_geometry(), then refine_textures(). No LOD/build-stage work here.
+accepted reactor/battery files remain separate. Existing mains progress through
+base, geometry and textures; bare pipe variants derive from the finished mains.
+No LOD/build-stage work here.
 """
 import hashlib
 import importlib
@@ -196,6 +197,9 @@ def record(name):
                          for o in col.objects if o.type == 'EMPTY' and o.get('native_subpart')]
     if s.get('thermal_flow_revision'):
         row['flow_revision'] = s['thermal_flow_revision']
+    if s.get('thermal_variant_of'):
+        row['variant_of'] = s['thermal_variant_of']
+        row['style'] = 'bare'
     path = OUT/'models.json'
     rows = json.loads(path.read_text()) if path.exists() else {}
     rows[name] = row
@@ -279,6 +283,8 @@ def heat_tap(p):
 
 
 def build_base(name):
+    if name in CONTRACT['BARE_PIPES']:
+        return build_bare_pipe(name)
     p = Parts(name)
     if name == 'Reactor housing':
         runpy.run_path(str(ROOT/'assets/build_reactor_thermal_manifolds.py'))['build'](p)
@@ -314,6 +320,69 @@ def build_base(name):
     return row
 
 
+def build_bare_pipe(name):
+    """Derive pipe-only blocks from accepted mains without editing shared art.
+
+    Circular pressure fittings, glass, UVs, port frames and flow paths stay
+    identical. Remove the mounting cage and plate-dependent details together,
+    so bolts, decals and status panels cannot float where their backing was.
+    """
+    base = CONTRACT['BARE_PIPES'][name]
+    source = main_for(base)
+    source_scene = scene_for(base)
+    assert source_scene['thermal_phase'] == 'textures', 'Derive bare pipes from finished mains'
+    p = Parts(name)
+    for key, value in source.items():
+        if key != 'seut':
+            p.col[key] = value
+    p.col['thermal_model'] = name
+    p.col['thermal_variant_of'] = base
+    p.ports = json.loads(source['ports'])
+    owners = ('thermal_support', 'thermal_decal_support', 'thermal_marking_support',
+              'thermal_seated_on', 'thermal_support_space')
+    removed = {o.name for o in source.objects if o.get('interface_type') or any(
+        term in o.name.lower() for term in ('pipe cage', 'pipe base mounting shoe',
+                                           'flange load web', 'flange load gusset',
+                                           'status bezel', 'status lens'))}
+    while True:
+        dependents = {o.name for o in source.objects if any(o.get(k) in removed for k in owners)}
+        if dependents <= removed:
+            break
+        removed |= dependents
+    copies = {}
+    for old in source.objects:
+        if old.name in removed:
+            continue
+        obj = old.copy()
+        if old.data:
+            obj.data = old.data.copy()
+        obj.animation_data_clear()
+        obj.name = name + ' / ' + old.name.removeprefix(base + ' / ')
+        p.col.objects.link(obj)
+        copies[old] = obj
+    renamed = {old.name: obj.name for old, obj in copies.items()}
+    for old, obj in copies.items():
+        pose = old.matrix_world.copy()
+        obj.parent = copies.get(old.parent)
+        obj.matrix_world = pose
+        for key in owners:
+            if obj.get(key):
+                assert obj[key] in renamed, (name, 'Unsupported retained detail', old.name, obj[key])
+                obj[key] = renamed[obj[key]]
+    p.finish()
+    for key, value in source_scene.items():
+        if key.startswith('thermal_') and key not in ('thermal_model',):
+            p.scene[key] = value
+    p.scene['thermal_variant_of'] = base
+    p.scene['thermal_bare_revision'] = 1
+    bpy.context.view_layer.update()
+    flows = ROOT / 'assets/thermal-flow-paths.json'
+    data = json.loads(flows.read_text())
+    data['models'][CONTRACT['subtype'](name)] = data['models'][CONTRACT['subtype'](base)]
+    flows.write_text(json.dumps(data, indent=2) + '\n')
+    return record(name)
+
+
 def rebuild_base(name):
     scene, col = scene_for(name), main_for(name)
     assert scene.get('thermal_model') == name and scene['thermal_phase'] in ('base', 'geometry', 'textures')
@@ -329,7 +398,7 @@ def rebuild_base(name):
     row = build_base(name)
     for obj in users:
         obj.instance_collection = main_for(name)
-    if phase != 'base':
+    if phase != 'base' and name not in CONTRACT['BARE_PIPES']:
         refine = runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))
         row = refine['geometry'](name)
         if phase == 'textures':

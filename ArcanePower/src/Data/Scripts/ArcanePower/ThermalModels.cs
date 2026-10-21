@@ -210,6 +210,144 @@ namespace ArcanePower
                     new ThermalPort("PRIMARY", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
                     new ThermalPort("PRIMARY", new Vector3(1.25f, 0.17f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
                 } });
+            models.Add("ArcanePower_Thermal_PrimaryStraightBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_PrimaryStraightBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("PRIMARY", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("PRIMARY", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_PrimaryElbowBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_PrimaryElbowBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("PRIMARY", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("PRIMARY", new Vector3(-0f, 0f, 1.25f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_PrimaryRiserBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_PrimaryRiserBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("PRIMARY", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("PRIMARY", new Vector3(-0f, 1.25f, 0f), new Vector3(-0f, 1f, 0f), new Vector3(1f, 0f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_PrimaryTeeBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_PrimaryTeeBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("PRIMARY", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("PRIMARY", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("PRIMARY", new Vector3(-0f, 0f, 1.25f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_PrimaryCrossBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_PrimaryCrossBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("PRIMARY", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("PRIMARY", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("PRIMARY", new Vector3(-0f, 0f, -1.25f), new Vector3(-0f, 0f, -1f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("PRIMARY", new Vector3(-0f, 0f, 1.25f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_PrimaryRollAdapterBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_PrimaryRollAdapterBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("PRIMARY", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("PRIMARY", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 0f, 1f)),
+                } });
+            models.Add("ArcanePower_Thermal_PrimaryEndCapBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_PrimaryEndCapBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("PRIMARY", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2HpStraightBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2HpStraightBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_HP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_HP", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2HpElbowBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2HpElbowBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_HP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_HP", new Vector3(-0f, 0f, 1.25f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2HpRiserBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2HpRiserBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_HP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_HP", new Vector3(-0f, 1.25f, 0f), new Vector3(-0f, 1f, 0f), new Vector3(1f, 0f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2HpTeeBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2HpTeeBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_HP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_HP", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_HP", new Vector3(-0f, 0f, 1.25f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2HpCrossBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2HpCrossBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_HP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_HP", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_HP", new Vector3(-0f, 0f, -1.25f), new Vector3(-0f, 0f, -1f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_HP", new Vector3(-0f, 0f, 1.25f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2HpRollAdapterBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2HpRollAdapterBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_HP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_HP", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 0f, 1f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2HpEndCapBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2HpEndCapBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_HP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2LpStraightBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2LpStraightBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_LP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_LP", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2LpElbowBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2LpElbowBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_LP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_LP", new Vector3(-0f, 0f, 1.25f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2LpRiserBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2LpRiserBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_LP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_LP", new Vector3(-0f, 1.25f, 0f), new Vector3(-0f, 1f, 0f), new Vector3(1f, 0f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2LpTeeBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2LpTeeBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_LP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_LP", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_LP", new Vector3(-0f, 0f, 1.25f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2LpCrossBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2LpCrossBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_LP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_LP", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_LP", new Vector3(-0f, 0f, -1.25f), new Vector3(-0f, 0f, -1f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_LP", new Vector3(-0f, 0f, 1.25f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2LpRollAdapterBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2LpRollAdapterBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_LP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("CO2_LP", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 0f, 1f)),
+                } });
+            models.Add("ArcanePower_Thermal_CO2LpEndCapBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_CO2LpEndCapBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("CO2_LP", new Vector3(1.25f, 0f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                } });
+            models.Add("ArcanePower_Thermal_PrimaryReactorAdapterBare", new ThermalModel {
+                Subtype = "ArcanePower_Thermal_PrimaryReactorAdapterBare", Cells = new Vector3I(1, 1, 1),
+                Kind = ThermalKind.Pipe, Grade = 3, RatingMW = 2500000, Ports = new[] {
+                    new ThermalPort("PRIMARY", new Vector3(-1.25f, 0f, 0f), new Vector3(-1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                    new ThermalPort("PRIMARY", new Vector3(1.25f, 0.17f, 0f), new Vector3(1f, 0f, 0f), new Vector3(-0f, 1f, 0f)),
+                } });
             return models;
         }
     }
@@ -219,6 +357,6 @@ namespace ArcanePower
     public sealed class ThermalTrain : ThermalBlock { }
     [VRage.Game.Components.MyEntityComponentDescriptor(
         typeof(Sandbox.Common.ObjectBuilders.MyObjectBuilder_UpgradeModule), false,
-        "ArcanePower_Thermal_PrimaryHeater", "ArcanePower_Thermal_PrimaryHeaterUpgraded", "ArcanePower_Thermal_Recuperator", "ArcanePower_Thermal_RecuperatorUpgraded", "ArcanePower_Thermal_AtmosphericCooler", "ArcanePower_Thermal_SpaceRadiator", "ArcanePower_Thermal_PrimaryStraight", "ArcanePower_Thermal_PrimaryElbow", "ArcanePower_Thermal_PrimaryRiser", "ArcanePower_Thermal_PrimaryTee", "ArcanePower_Thermal_PrimaryCross", "ArcanePower_Thermal_PrimaryRollAdapter", "ArcanePower_Thermal_PrimaryEndCap", "ArcanePower_Thermal_CO2HpStraight", "ArcanePower_Thermal_CO2HpElbow", "ArcanePower_Thermal_CO2HpRiser", "ArcanePower_Thermal_CO2HpTee", "ArcanePower_Thermal_CO2HpCross", "ArcanePower_Thermal_CO2HpRollAdapter", "ArcanePower_Thermal_CO2HpEndCap", "ArcanePower_Thermal_CO2LpStraight", "ArcanePower_Thermal_CO2LpElbow", "ArcanePower_Thermal_CO2LpRiser", "ArcanePower_Thermal_CO2LpTee", "ArcanePower_Thermal_CO2LpCross", "ArcanePower_Thermal_CO2LpRollAdapter", "ArcanePower_Thermal_CO2LpEndCap", "ArcanePower_Thermal_PrimaryReactorAdapter")]
+        "ArcanePower_Thermal_PrimaryHeater", "ArcanePower_Thermal_PrimaryHeaterUpgraded", "ArcanePower_Thermal_Recuperator", "ArcanePower_Thermal_RecuperatorUpgraded", "ArcanePower_Thermal_AtmosphericCooler", "ArcanePower_Thermal_SpaceRadiator", "ArcanePower_Thermal_PrimaryStraight", "ArcanePower_Thermal_PrimaryElbow", "ArcanePower_Thermal_PrimaryRiser", "ArcanePower_Thermal_PrimaryTee", "ArcanePower_Thermal_PrimaryCross", "ArcanePower_Thermal_PrimaryRollAdapter", "ArcanePower_Thermal_PrimaryEndCap", "ArcanePower_Thermal_CO2HpStraight", "ArcanePower_Thermal_CO2HpElbow", "ArcanePower_Thermal_CO2HpRiser", "ArcanePower_Thermal_CO2HpTee", "ArcanePower_Thermal_CO2HpCross", "ArcanePower_Thermal_CO2HpRollAdapter", "ArcanePower_Thermal_CO2HpEndCap", "ArcanePower_Thermal_CO2LpStraight", "ArcanePower_Thermal_CO2LpElbow", "ArcanePower_Thermal_CO2LpRiser", "ArcanePower_Thermal_CO2LpTee", "ArcanePower_Thermal_CO2LpCross", "ArcanePower_Thermal_CO2LpRollAdapter", "ArcanePower_Thermal_CO2LpEndCap", "ArcanePower_Thermal_PrimaryReactorAdapter", "ArcanePower_Thermal_PrimaryStraightBare", "ArcanePower_Thermal_PrimaryElbowBare", "ArcanePower_Thermal_PrimaryRiserBare", "ArcanePower_Thermal_PrimaryTeeBare", "ArcanePower_Thermal_PrimaryCrossBare", "ArcanePower_Thermal_PrimaryRollAdapterBare", "ArcanePower_Thermal_PrimaryEndCapBare", "ArcanePower_Thermal_CO2HpStraightBare", "ArcanePower_Thermal_CO2HpElbowBare", "ArcanePower_Thermal_CO2HpRiserBare", "ArcanePower_Thermal_CO2HpTeeBare", "ArcanePower_Thermal_CO2HpCrossBare", "ArcanePower_Thermal_CO2HpRollAdapterBare", "ArcanePower_Thermal_CO2HpEndCapBare", "ArcanePower_Thermal_CO2LpStraightBare", "ArcanePower_Thermal_CO2LpElbowBare", "ArcanePower_Thermal_CO2LpRiserBare", "ArcanePower_Thermal_CO2LpTeeBare", "ArcanePower_Thermal_CO2LpCrossBare", "ArcanePower_Thermal_CO2LpRollAdapterBare", "ArcanePower_Thermal_CO2LpEndCapBare", "ArcanePower_Thermal_PrimaryReactorAdapterBare")]
     public sealed class ThermalMachine : ThermalBlock { }
 }

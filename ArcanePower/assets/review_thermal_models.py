@@ -50,6 +50,15 @@ def start_review(plan, label):
         if state['phase'] == 'set':
             view(row['scene'], row['target'], row['direction'], row['distance'],
                  row.get('light_rotation', .5))
+            if 'lens_mm' in row:
+                for area in bpy.context.screen.areas:
+                    if area.type == 'VIEW_3D':area.spaces.active.lens = row['lens_mm']
+            if 'collection' in row:
+                def visibility(layer):
+                    if layer.collection.seut.col_type in ('main', 'bs', 'lod', 'hkt'):
+                        layer.hide_viewport = layer.collection.name != row['collection']
+                    for child in layer.children:visibility(child)
+                visibility(bpy.context.view_layer.layer_collection)
             if 'frame' in row:
                 bpy.context.scene.frame_set(row['frame'])
             state['phase'] = 'capture'

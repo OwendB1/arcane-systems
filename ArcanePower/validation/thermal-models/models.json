@@ -2264,5 +2264,1599 @@
     "transparent_pressure_tubes": 2,
     "rotors": [],
     "flow_revision": 1
+  },
+  "PRIMARY / Straight bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryStraightBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 26,
+    "triangles": 5932,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Straight",
+    "style": "bare"
+  },
+  "PRIMARY / Elbow bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 26,
+    "triangles": 11820,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Elbow",
+    "style": "bare"
+  },
+  "PRIMARY / Riser bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryRiserBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 25,
+    "triangles": 14636,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Riser",
+    "style": "bare"
+  },
+  "PRIMARY / Tee bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryTeeBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 32,
+    "triangles": 8356,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Tee",
+    "style": "bare"
+  },
+  "PRIMARY / Cross bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryCrossBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 40,
+    "triangles": 11292,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 4",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Cross",
+    "style": "bare"
+  },
+  "PRIMARY / Roll adapter bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryRollAdapterBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 28,
+    "triangles": 18476,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Roll adapter",
+    "style": "bare"
+  },
+  "PRIMARY / End cap bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryEndCapBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 22,
+    "triangles": 4516,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / End cap",
+    "style": "bare"
+  },
+  "CO2_HP / Straight bare": {
+    "subtype": "ArcanePower_Thermal_CO2HpStraightBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 26,
+    "triangles": 5932,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_HP / Straight",
+    "style": "bare"
+  },
+  "CO2_HP / Elbow bare": {
+    "subtype": "ArcanePower_Thermal_CO2HpElbowBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 26,
+    "triangles": 11820,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_HP / Elbow",
+    "style": "bare"
+  },
+  "CO2_HP / Riser bare": {
+    "subtype": "ArcanePower_Thermal_CO2HpRiserBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 25,
+    "triangles": 14636,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_HP / Riser",
+    "style": "bare"
+  },
+  "CO2_HP / Tee bare": {
+    "subtype": "ArcanePower_Thermal_CO2HpTeeBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 32,
+    "triangles": 8356,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_HP / Tee",
+    "style": "bare"
+  },
+  "CO2_HP / Cross bare": {
+    "subtype": "ArcanePower_Thermal_CO2HpCrossBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 40,
+    "triangles": 11292,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 4",
+        "type": "CO2_HP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_HP / Cross",
+    "style": "bare"
+  },
+  "CO2_HP / Roll adapter bare": {
+    "subtype": "ArcanePower_Thermal_CO2HpRollAdapterBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 28,
+    "triangles": 18476,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_HP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_HP / Roll adapter",
+    "style": "bare"
+  },
+  "CO2_HP / End cap bare": {
+    "subtype": "ArcanePower_Thermal_CO2HpEndCapBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 22,
+    "triangles": 4516,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_HP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_HP / End cap",
+    "style": "bare"
+  },
+  "CO2_LP / Straight bare": {
+    "subtype": "ArcanePower_Thermal_CO2LpStraightBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 26,
+    "triangles": 5932,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_LP / Straight",
+    "style": "bare"
+  },
+  "CO2_LP / Elbow bare": {
+    "subtype": "ArcanePower_Thermal_CO2LpElbowBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 26,
+    "triangles": 11820,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_LP / Elbow",
+    "style": "bare"
+  },
+  "CO2_LP / Riser bare": {
+    "subtype": "ArcanePower_Thermal_CO2LpRiserBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 25,
+    "triangles": 14636,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_LP / Riser",
+    "style": "bare"
+  },
+  "CO2_LP / Tee bare": {
+    "subtype": "ArcanePower_Thermal_CO2LpTeeBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 32,
+    "triangles": 8356,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_LP / Tee",
+    "style": "bare"
+  },
+  "CO2_LP / Cross bare": {
+    "subtype": "ArcanePower_Thermal_CO2LpCrossBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 40,
+    "triangles": 11292,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 3",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 4",
+        "type": "CO2_LP",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_LP / Cross",
+    "style": "bare"
+  },
+  "CO2_LP / Roll adapter bare": {
+    "subtype": "ArcanePower_Thermal_CO2LpRollAdapterBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 28,
+    "triangles": 18476,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "CO2_LP",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_LP / Roll adapter",
+    "style": "bare"
+  },
+  "CO2_LP / End cap bare": {
+    "subtype": "ArcanePower_Thermal_CO2LpEndCapBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 22,
+    "triangles": 4516,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "CO2_LP",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "CO2_LP / End cap",
+    "style": "bare"
+  },
+  "PRIMARY / Reactor adapter bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryReactorAdapterBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 26,
+    "triangles": 6956,
+    "ports": [
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "reactor inlet",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.17000000178813934
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "cell_offset": [
+          0,
+          0,
+          0.17
+        ],
+        "reactor_transition": true
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Reactor adapter",
+    "style": "bare"
   }
 }

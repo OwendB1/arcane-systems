@@ -227,7 +227,7 @@ The maintained refinement source is `assets/refine_thermal_models.py`; rebuildin
 a finished base replays its detail and texture stages. The approved reactor
 variant stays on its separate builder. Close review uses fixed-light/lens
 1.8/2.4/3.0 m triplets, with evidence in
-[the review record](validation/thermal-models/REVIEW.md).
+the review record (report pruned).
 Native exports, LODs and construction stages are delivered. In-game thermal
 behavior remains a live-world validation gate.
 
@@ -257,7 +257,7 @@ in the assembly bill; no off-grid pipe placement is assumed.
 The flat external cassettes were rejected and remain only in an undo checkpoint.
 The accepted original reactor/battery files remain unchanged. The new variant
 is maintained by `build_reactor_thermal_manifolds.py`. The focused
-[curved-cover audit](validation/thermal-models/curved-manifold-audit.json) checks
+curved-cover audit (report pruned) checks
 closed-assembly occlusion, separate open bores, split solids and 47 deployment positions; close review
 uses 1.8/2.4/3.0 m actual UI views. Native collision/subpart export passes; switching
 in a live world remains a validation gate.
@@ -337,6 +337,6 @@ base/premium layout scenes. Seventy-five actual Blender UI captures cover 25
 joint/detail targets at 1.8/2.4/3.0 m. Geometry, typed connections, fan clearance,
 modular/environment energy checks, solution build and save/reload checks pass.
 Production reactor/battery source hashes are unchanged. See the current
-[review record](validation/thermal-concepts/REVIEW.md),
-[geometry audit](validation/thermal-concepts/audit.json) and
-[energy examples](validation/thermal-concepts/energy-budget.json).
+review record (report pruned),
+geometry audit (report pruned) and
+energy examples (report pruned).

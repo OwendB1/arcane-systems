@@ -27,7 +27,7 @@ def main():
     for path,digest in motion['native_mesh_sha256'].items():
         assert digest==hashlib.sha256((MOD/path).read_bytes()).hexdigest(),'Native moving mesh changed after motion validation'
     assert set(blocks)=={m['subtype'] for m in models.values()}
-    assert report['status']=='passed' and report['blocks']==31 and report['construction_models']==93
+    assert report['status']=='passed' and report['blocks']==len(models) and report['construction_models']==3*len(models)
     highlights=report['inventory_highlights']
     assert set(highlights)=={'detector_conveyor_0','detector_conveyor_2','detector_conveyor_top','detector_conveyor_bottom'}
     assert len(highlights['detector_conveyor_top'])==4 and all(len(highlights[key])==1 for key in highlights if key!='detector_conveyor_top')
@@ -101,7 +101,7 @@ def main():
     assert abs(float(internal.findtext('Reflectivity'))-.22)<1e-5
     restored=json.loads((ROOT/'validation/thermal-models/internal-pipes-preserved.json').read_text())
     assert restored['status']=='passed' and restored['geometry_transforms_and_material_assignments_match']
-    result={'status':'passed','blocks':len(blocks),'construction_models':93,
+    result={'status':'passed','blocks':len(blocks),'construction_models':3*len(models),
             'lod_models':report['lod_models'],'validated_meshes':report['native_meshes'],
             'definitions_and_package_match':True,'co2_supply':'Integrated reactor commissioning',
             'runtime_scripts':len(scripts),'runtime_definitions':len(definitions),

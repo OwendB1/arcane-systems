@@ -1,7 +1,0 @@
-{
-  "status": "passed",
-  "moving_scenes": 24,
-  "rotated_mesh_datablocks": 184,
-  "triangle_counts_match_native_sources": true,
-  "source_mains_changed": false
-}
