@@ -17,6 +17,8 @@ ROOT = Path(__file__).resolve().parents[1]
 M = runpy.run_path(str(ROOT/'assets/build_thermal_models.py'))
 RIG = json.loads((ROOT/'assets/thermal-rotor-runtime.json').read_text())
 REVISION = 2
+SHAFT_Z = M['CONTRACT']['TRAIN_SHAFT_Z']
+CENTRES = M['CONTRACT']['TRAIN_CENTRES']
 
 
 def nearest(point, path):
@@ -79,46 +81,311 @@ def transparent_pipes(p):
 
 def inspection_casing(p, label, x, length, radius):
     old = next(o for o in p.col.objects if o.name.startswith(p.name+' / '+label+' casing'))
+    if label == 'generator':
+        x = M['CONTRACT']['generator_x'](x)
+        length *= M['CONTRACT']['TRAIN_GENERATOR_STRETCH']
     # End collars and the original split band/cradle seats stay metal. The two
     # upper side apertures contain glass through the full pressure-wall thickness.
-    window = length*(.298 if label == 'turbine' else .225)
+    # Leave a full nozzle diameter and clearance between end/window flanges.
+    window = length*({'turbine': .275, 'compressor': .20, 'generator': .395}[label])
     left, right = x-window, x+window
-    obj = p.tube('temporary inspection casing', [(x-length/2, 0, .45),
-        (left, 0, .45), (right, 0, .45), (x+length/2, 0, .45)],
+    rear = M['CONTRACT']['TRAIN_GENERATOR_REAR'] if label == 'generator' else x+length/2
+    obj = p.tube('temporary inspection casing', [(x-length/2, 0, SHAFT_Z),
+        (left, 0, SHAFT_Z), (right, 0, SHAFT_Z), (rear, 0, SHAFT_Z)],
         radius, 'PaintedMetal_Darker', .12, 48)
+    angles = (22.5,82.5,277.5,337.5)
+    if label == 'generator':
+        top, bottom = math.cos(math.radians(22.5)), math.cos(math.radians(82.5))
+        middle, half_height = (top+bottom)/2, (top-bottom)*.4
+        a,b = (math.degrees(math.acos(v)) for v in (middle+half_height,middle-half_height))
+        angles = (a,b,360-b,360-a)
+        knots = (0,22.5,82.5,90,180,270,277.5,337.5,360)
+        targets = (0,a,b,90,180,270,360-b,360-a,360)
+        for vertex in obj.data.vertices:
+            point = vertex.co
+            angle = math.degrees(math.atan2(-point.y,point.z-SHAFT_Z)) % 360
+            interval = min(len(knots)-2,bisect.bisect_right(knots,angle)-1)
+            t = (angle-knots[interval])/(knots[interval+1]-knots[interval])
+            mapped = math.radians(targets[interval]+t*(targets[interval+1]-targets[interval]))
+            r = math.hypot(point.y,point.z-SHAFT_Z)
+            point.y,point.z = -r*math.sin(mapped),SHAFT_Z+r*math.cos(mapped)
+        obj.data.update(); M['BUILD']['uv'](obj)
     outside, inside = glass_slots(p, obj)
+    armor = None
+    if p.name.endswith(' upgraded'):
+        armor = len(obj.data.materials)
+        obj.data.materials.append(p.native['PaintedMetal_Colorable'])
     for face in obj.data.polygons:
         c = face.center
-        angle = math.degrees(math.atan2(-c.y, c.z-.45)) % 360
-        if left < c.x < right and (22.5 < angle < 82.5 or 277.5 < angle < 337.5):
-            radial = Vector((0, c.y, c.z-.45))
+        angle = math.degrees(math.atan2(-c.y, c.z-SHAFT_Z)) % 360
+        if left < c.x < right and (angles[0] < angle < angles[1] or
+                (label != 'generator' and angles[2] < angle < angles[3])):
+            radial = Vector((0, c.y, c.z-SHAFT_Z))
             face.material_index = outside if face.normal.dot(radial) > 0 else inside
+        elif armor is not None and face.normal.dot(Vector((0,c.y,c.z-SHAFT_Z))) > .2:
+            face.material_index = armor
     old.data = obj.data
     old['thermal_hollow_casing'] = True
     old['thermal_pressure_wall_m'] = .12
     old['thermal_window_x'] = (left, right)
-    old['thermal_window_angles_deg'] = (22.5, 82.5, 277.5, 337.5)
+    old['thermal_window_angles_deg'] = angles
+    if label == 'generator':
+        old['thermal_window_height_factor'] = .8
+        old['thermal_single_sided_window'] = True
     old['thermal_visibility_revision'] = REVISION
     bpy.data.objects.remove(obj, do_unlink=True)
     # Narrow machined rails cover the aperture edges, with supported captive
     # fasteners; no opaque panel or former decorative rib blocks the window.
-    for degrees in (22.5, 82.5, 277.5, 337.5):
+    for degrees in (angles[:2] if label == 'generator' else angles):
         a = math.radians(degrees)
         radial = Vector((0, -math.sin(a), math.cos(a)))
-        rail = p.box(label+' inspection window rail', (x, 0, .45),
+        rail = p.box(label+' inspection window rail', (x, 0, SHAFT_Z),
                      (right-left+.10, .065, .055), 'Metal_Dull', .003)
         rail.rotation_euler.x = a
         rail.location += radial*(radius+.017)
         rail['thermal_seated_on'] = old.name
         for sx in (left+.10, x, right-.10):
-            point = Vector((sx, 0, .45))+radial*(radius+.043)
+            point = Vector((sx, 0, SHAFT_Z))+radial*(radius+.043)
             p.bolt(label+' window captive stud', point, radial, rail, .022)
     for sx in (left-.025, right+.025):
         frame = p.tube(label+' inspection window end frame',
-                       [(sx-.025, 0, .45), (sx+.025, 0, .45)],
+                       [(sx-.025, 0, SHAFT_Z), (sx+.025, 0, SHAFT_Z)],
                        radius+.027, 'Metal_Dull', .045, 96)
         frame['thermal_seated_on'] = old.name
     return old
+
+
+def casing_sector(p,label,x0,x1,inner,outer,a0,a1,material):
+    """A closed pressure-jacket segment seated on a curved housing."""
+    steps=math.ceil(abs(a1-a0)/3)
+    angles=[math.radians(a0+(a1-a0)*i/steps) for i in range(steps+1)]
+    n=len(angles)
+    verts=[(x,-r*math.sin(a),SHAFT_Z+r*math.cos(a))
+           for x in (x0,x1) for r in (inner,outer) for a in angles]
+    faces=[]
+    for a,b in ((0,n),(n,3*n),(3*n,2*n),(2*n,0)):
+        faces.extend((a+j,a+j+1,b+j+1,b+j) for j in range(n-1))
+    faces.extend(((0,n,3*n,2*n),(n-1,2*n-1,4*n-1,3*n-1)))
+    obj=p.mesh(label,verts,faces,material)
+    obj['thermal_upgrade_jacket']=True
+    return obj
+
+
+def upgrade_jackets(p,casings,generator):
+    if not p.name.endswith(' upgraded'):return
+    x=CENTRES['turbine']
+    for dx in (-.30,.30):
+        obj=casing_sector(p,'high temperature crown cassette',x+dx-.23,x+dx+.23,
+                           1.845,1.96,-18,18,'PaintedMetal_Colorable')
+        obj['thermal_seated_on']=casings['turbine'].name
+        for degrees in (-12,12):
+            a=math.radians(degrees)
+            normal=Vector((0,-math.sin(a),math.cos(a)))
+            p.bolt('crown cassette captive stud',Vector((x+dx,0,SHAFT_Z))+normal*1.965,
+                   normal,obj,.025)
+    for dx in (-.26,0,.26):
+        x=M['CONTRACT']['generator_x'](CENTRES['generator']+dx)
+        obj=casing_sector(p,'upgraded lower stator cooling fin',x-.05,
+            x+.05,1.615,1.735,108,148,'Metal_Dull')
+        obj['thermal_seated_on']=generator.name
+
+
+def transition_casing(p, label, start, end, r0, r1, window=False):
+    """Closed annular shell, with glazed sectors through its full wall."""
+    sides = 96
+    stations = [start, start+.15, end-.15, end] if window else [start, end]
+    def radius(x): return r0+(r1-r0)*(x-start)/(end-start)
+    verts = [(x, -r*math.sin(j*math.tau/sides), SHAFT_Z+r*math.cos(j*math.tau/sides))
+             for x in stations for r in (radius(x), radius(x)-.12) for j in range(sides)]
+    faces = []
+    for k in range(len(stations)-1):
+        for ring in (0, 1):
+            a, b = k*2*sides+ring*sides, (k+1)*2*sides+ring*sides
+            faces += [(a+j, a+(j+1)%sides, b+(j+1)%sides, b+j) for j in range(sides)]
+    for k in (0, len(stations)-1):
+        a = k*2*sides
+        faces += [(a+j,a+(j+1)%sides,a+sides+(j+1)%sides,a+sides+j) for j in range(sides)]
+    obj = p.mesh(label, verts, faces, 'PaintedMetal_Darker')
+    obj['thermal_pressure_wall_m'] = .12
+    obj['thermal_transition_span'] = (start, end)
+    obj['thermal_transition_radii'] = (r0, r1)
+    glass, _ = glass_slots(p, obj) if window else (0, 0)
+    armor=None
+    if p.name.endswith(' upgraded'):
+        armor=len(obj.data.materials)
+        obj.data.materials.append(p.native['PaintedMetal_Colorable'])
+    for face in obj.data.polygons:
+        c = face.center
+        face.use_smooth = face.index < 2*sides*(len(stations)-1)
+        angle = math.degrees(math.atan2(-c.y, c.z-SHAFT_Z)) % 360
+        if window and stations[1] < c.x < stations[-2] and (22.5 < angle < 82.5 or 277.5 < angle < 337.5):
+            face.material_index = glass
+        elif armor is not None and face.normal.dot(Vector((0,c.y,c.z-SHAFT_Z))) > .2:
+            face.material_index=armor
+    if not window: return obj
+    obj['thermal_window_x'] = (stations[1], stations[-2])
+    obj['thermal_window_angles_deg'] = (22.5, 82.5, 277.5, 337.5)
+    # Rails follow the cone generators instead of floating over the slope.
+    from mathutils import Matrix
+    for degrees in (22.5, 82.5, 277.5, 337.5):
+        a = math.radians(degrees)
+        radial = Vector((0, -math.sin(a), math.cos(a)))
+        left, right = stations[1]-.025, stations[-2]+.025
+        pa = Vector((left,0,SHAFT_Z))+radial*(radius(left)+.017)
+        pb = Vector((right,0,SHAFT_Z))+radial*(radius(right)+.017)
+        along = (pb-pa).normalized()
+        tangent = Vector((0,math.cos(a),math.sin(a)))
+        normal = along.cross(tangent)
+        rail = p.box(label+' inspection window rail', (pa+pb)/2, ((pb-pa).length,.065,.055), 'Metal_Dull', .003)
+        rail.rotation_euler = Matrix((along,tangent,normal)).transposed().to_euler()
+        rail['thermal_seated_on'] = obj.name
+        for x in (left+.10,(left+right)/2,right-.10):
+            point = Vector((x,0,SHAFT_Z))+radial*(radius(x)+.017)+normal*.028
+            p.bolt(label+' window captive stud',point,normal,rail,.022)
+    for x in (stations[1]-.025, stations[-2]+.025):
+        frame = p.tube(label+' inspection window end frame',[(x-.025,0,SHAFT_Z),(x+.025,0,SHAFT_Z)],
+                       radius(x)+.032,'Metal_Dull',.055,96)
+        frame['thermal_seated_on'] = obj.name
+    return obj
+
+
+def generator_armature(p):
+    """Wound rotor shares the turbine shaft; bearing supports stay stationary."""
+    name = 'ArcanePower_ArmatureCopper'
+    mat = bpy.data.materials.get(name)
+    if mat is None:
+        mat = p.native['Metal_Shiny'].copy(); mat.name = name
+    if not mat.get('thermal_armature_copper'):
+        folder = ROOT/'src/Textures/Models/ArcanePower/Thermal'
+        # Native packed textures, so copper survives MWM export and armor skins.
+        for node, suffix, color in [('CM','cm',(.63,.29,.095,1)),
+                                    ('NG','ng',(.5,.5,1,.64)),('ADD','add',(1,0,0,0))]:
+            img = bpy.data.images.new('Armature copper '+suffix,width=16,height=16,alpha=True)
+            img.colorspace_settings.name = 'sRGB' if suffix == 'cm' else 'Non-Color'
+            img.alpha_mode = 'CHANNEL_PACKED'; img.pixels.foreach_set(list(color)*256)
+            img.filepath_raw = str(folder/('ArmatureCopper_'+suffix+'.png'))
+            img.file_format = 'PNG'; img.save()
+            tex = mat.node_tree.nodes.get(node)
+            if tex is None:
+                tex = mat.node_tree.nodes.new('ShaderNodeTexImage'); tex.name = node
+                group = mat.node_tree.nodes['SEUT_NODE_GROUP']
+                mat.node_tree.links.new(tex.outputs['Color'],group.inputs[node+' Color'])
+                mat.node_tree.links.new(tex.outputs['Alpha'],group.inputs[node+' Alpha'])
+            tex.image = img
+        group = mat.node_tree.nodes['SEUT_NODE_GROUP']
+        group.inputs['Color Override Alpha'].default_value = 0
+        mat['thermal_armature_copper'] = True
+    # SEUT validates texture channel labels as well as node names.
+    for channel in ('CM', 'NG', 'ADD'):
+        mat.node_tree.nodes[channel].label = channel
+    p.native[name] = mat
+    steel_name = 'ArcanePower_ArmatureSteel'
+    steel = bpy.data.materials.get(steel_name)
+    if steel is None:
+        steel = p.native['Metal_Dull'].copy(); steel.name = steel_name
+        img = bpy.data.images.new('Armature steel laminations',width=64,height=16,alpha=True)
+        img.colorspace_settings.name = 'sRGB'; img.alpha_mode = 'CHANNEL_PACKED'
+        pixels = []
+        for y in range(16):
+            for u in range(64):
+                tone = .14 if u < 3 else .42
+                pixels.extend((tone*.95,tone*.98,tone,1))
+        img.pixels.foreach_set(pixels)
+        img.filepath_raw = str(ROOT/'src/Textures/Models/ArcanePower/Thermal/ArmatureSteel_cm.png')
+        img.file_format = 'PNG'; img.save()
+        steel.node_tree.nodes['CM'].image = img
+        steel['thermal_laminated_steel'] = True
+    p.native[steel_name] = steel
+    x = M['CONTRACT']['generator_x'](CENTRES['generator'])
+    stretch = M['CONTRACT']['TRAIN_GENERATOR_STRETCH']
+    owned = {p.cylinder('generator laminated armature',(x-.81*stretch,0,SHAFT_Z),(x+.81*stretch,0,SHAFT_Z),.80,'Metal_Dull',64)}
+    # Salient poles: an I-shaped section from the shaft end, with copper
+    # wrapped around the narrow web between the root and broad pole shoe.
+    # Twenty-four slotted teeth form a cylindrical laminated armature.
+    # Each pole has four close-packed layers of ten rounded turns.
+    for i in range(24):
+        a = i*math.tau/24+math.pi/48
+        radial = Vector((0,math.cos(a),math.sin(a)))
+        tangent = Vector((0,-math.sin(a),math.cos(a)))
+        def arc(r,angle):
+            t = math.radians(angle)
+            return (r*math.sin(t),r*math.cos(t))
+        section = [arc(.78,-7+j*1.75) for j in range(9)]
+        section += [arc(.89,7),(.035,.89),(.035,1.145),arc(1.145,6.5)]
+        section += [arc(1.23,6.5-j*1.625) for j in range(9)]
+        section += [arc(1.145,-6.5),(-.035,1.145),(-.035,.89),arc(.89,-7)]
+        count = len(section)
+        verts = [Vector((x+u*stretch,0,SHAFT_Z))+tangent*v+radial*r for u in (-.53,.53) for v,r in section]
+        faces = [tuple(reversed(range(count))),tuple(range(count,2*count))]
+        faces += [(j,(j+1)%count,(j+1)%count+count,j+count) for j in range(count)]
+        pole = p.mesh('generator flanged armature pole',verts,faces,steel_name)
+        uv = pole.data.uv_layers.active
+        for face in pole.data.polygons:
+            if abs(face.normal.x) > .9: continue
+            axis = 1 if abs(face.normal.z) > abs(face.normal.y) else 2
+            for li in face.loop_indices:
+                point = pole.data.vertices[pole.data.loops[li].vertex_index].co
+                uv.data[li].uv = ((point.x-x)/.035,point[axis])
+        pole['thermal_generator_pole'] = i
+        owned.add(pole)
+        for layer in range(4):
+            verts, faces = [], []
+            width, half = .057+layer*.013, (.58+layer*.013)*stretch
+            for turn in range(10):
+                r = .909+turn*.024
+                # Straight slot conductors join true semicircular end turns.
+                # Functional conductor curvature is separate from hard-edged
+                # housings. Use analytic normals to keep each turn round.
+                points = []
+                for centre,start in ((half-width,-90),(-half+width,90)):
+                    for step in range(13):
+                        angle = math.radians(start+step*15)
+                        normal = Vector((math.cos(angle),0,0))+tangent*math.sin(angle)
+                        point = Vector((x+centre,0,SHAFT_Z))+radial*r+normal*width
+                        points.append((point,normal))
+                offset = len(verts)
+                for j, (point,across) in enumerate(points):
+                    verts += [point+radial*(.0107*math.cos(k*math.tau/6))+across*(.006*math.sin(k*math.tau/6)) for k in range(6)]
+                    faces += [tuple(offset+v for v in (j*6+k,j*6+(k+1)%6,((j+1)%len(points))*6+(k+1)%6,((j+1)%len(points))*6+k)) for k in range(6)]
+            coil = p.mesh('generator copper winding layer',verts,faces,name)
+            for face in coil.data.polygons: face.use_smooth = True
+            coil['thermal_generator_winding'] = True
+            coil['thermal_generator_pole'] = i
+            coil['thermal_winding_layer'] = layer
+            coil['thermal_winding_turns'] = 10
+            owned.add(coil)
+    for sign in (-1,1):
+        ring = p.tube('generator armature retaining band',[(x+sign*.79*stretch-.035,0,SHAFT_Z),(x+sign*.79*stretch+.035,0,SHAFT_Z)],
+                      .84,'Metal_Shiny',.065,64)
+        owned.add(ring)
+        p.tube('generator stationary bearing',[(x+sign*.86*stretch-.035,0,SHAFT_Z),(x+sign*.86*stretch+.035,0,SHAFT_Z)],
+               .40,'Metal_Dull',.15,48)
+    for obj in owned: obj['thermal_generator_armature'] = True
+    # Fixed magnets follow the casing. The single inspection side uses end
+    # tiles reaching toward the centre; the far wall stays fully enclosed.
+    for sector in range(24):
+        degrees = sector*15
+        # The topmost visible row (30 degrees) bridges the full bay.
+        window = 37.5 < degrees < 82.5
+        spans = ((x-.78*stretch,x-.46*stretch),(x+.46*stretch,x+.78*stretch)) if window else ((x-.78*stretch,x+.78*stretch),)
+        # Fourteen-degree tiles on a fifteen-degree pitch leave one degree,
+        # one third of the former three-degree inter-magnet clearance.
+        angles = [math.radians(degrees-7+j*1.75) for j in range(9)]
+        for lo,hi in spans:
+            verts = [(sx,-r*math.sin(a),SHAFT_Z+r*math.cos(a)) for sx in (lo,hi) for r in (1.31,1.51) for a in angles]
+            faces = []
+            for a,b in ((0,9),(9,27),(27,18),(18,0)):
+                faces += [(a+j,a+j+1,b+j+1,b+j) for j in range(8)]
+            faces += [(0,9,27,18),(8,17,35,26)]
+            magnet = p.mesh('generator stationary permanent magnet',verts,faces,'Metal_Shiny')
+            bpy.context.view_layer.objects.active = magnet
+            bevel = magnet.modifiers.new('Rounded magnet edges','BEVEL')
+            bevel.width = .012; bevel.segments = 3; bevel.limit_method = 'ANGLE'; bevel.angle_limit = .35
+            bpy.ops.object.modifier_apply(modifier=bevel.name)
+            M['BUILD']['uv'](magnet)
+            magnet['thermal_generator_magnet'] = True
+            magnet['thermal_seated_on'] = next(o.name for o in p.col.objects if o.name.startswith(p.name+' / generator casing'))
+    return owned
 
 
 def blade_row(p, label, x, hub, tip, chord, pitch, count, stage):
@@ -138,7 +405,7 @@ def blade_row(p, label, x, hub, tip, chord, pitch, count, stage):
                 axial = chord*(u*math.cos(twist)-v*math.sin(twist))
                 tangent = chord*(u*math.sin(twist)+v*math.cos(twist))
                 verts.append((x+axial+.012*t, radius*math.cos(angle)-tangent*math.sin(angle),
-                              .45+radius*math.sin(angle)+tangent*math.cos(angle)))
+                              SHAFT_Z+radius*math.sin(angle)+tangent*math.cos(angle)))
         local = [tuple(reversed(range(n))), tuple(range(4*n, 5*n))]
         local += [(k*n+j, k*n+(j+1)%n, (k+1)*n+(j+1)%n, (k+1)*n+j)
                   for k in range(4) for j in range(n)]
@@ -167,17 +434,21 @@ def rotor(p, spec):
         description='Manual rotor inspection pose; game motion is driven by ThermalRotors.cs')
     turbine = label == 'turbine'
     radius, tip, chord = (1.85, 1.695, .16) if turbine else (1.35, 1.195, .075)
-    lo, hi = (-2.26, -.44) if turbine else (-4.78, -3.72)
-    drum_lo, drum_hi = (-2.85, .15) if turbine else (-5.40, -3.10)
+    lo, hi = (pivot.x-.91, pivot.x+.91) if turbine else (pivot.x-.53, pivot.x+.53)
+    drum_lo, drum_hi = (pivot.x-1.50, pivot.x+1.50) if turbine else (pivot.x-1.15, CENTRES['turbine']-1.70)
     def hub(x):
         t = (x-drum_lo)/(drum_hi-drum_lo)
-        return 1.19-.30*t if turbine else .69+.27*t
+        if turbine: return 1.19-.30*t
+        knee = pivot.x+1.15
+        return .69+.27*(x-drum_lo)/(knee-drum_lo) if x <= knee else .96+.18*(x-knee)/(drum_hi-knee)
     # The continuous tapered drum carries the blade roots; the flow is annular.
     sides = 96
-    verts = [(x, hub(x)*math.cos(j*math.tau/sides), .45+hub(x)*math.sin(j*math.tau/sides))
-             for x in (drum_lo, drum_hi) for j in range(sides)]
-    faces = [tuple(reversed(range(sides))), tuple(range(sides, 2*sides))]
-    faces += [(j, (j+1)%sides, (j+1)%sides+sides, j+sides) for j in range(sides)]
+    verts = [(x, hub(x)*math.cos(j*math.tau/sides), SHAFT_Z+hub(x)*math.sin(j*math.tau/sides))
+             for x in ((drum_lo, drum_hi) if turbine else (drum_lo,pivot.x+1.15,drum_hi)) for j in range(sides)]
+    rings = len(verts)//sides
+    faces = [tuple(reversed(range(sides))), tuple(range((rings-1)*sides, rings*sides))]
+    faces += [(k*sides+j,k*sides+(j+1)%sides,(k+1)*sides+(j+1)%sides,(k+1)*sides+j)
+              for k in range(rings-1) for j in range(sides)]
     drum = p.mesh(label+' tapered rotor drum', verts, faces, 'Metal_Dull')
     for face in drum.data.polygons[2:]:
         face.use_smooth = True
@@ -195,9 +466,32 @@ def rotor(p, spec):
         if rotating:
             owned.add(obj)
         else:
-            ring = p.tube(label+' stationary carrier', [(x-.023, 0, .45), (x+.023, 0, .45)],
+            ring = p.tube(label+' stationary carrier', [(x-.023, 0, SHAFT_Z), (x+.023, 0, SHAFT_Z)],
                           radius-.09, 'Metal_Dull', .035, 96)
             ring['thermal_stator_carrier'] = True
+    if not turbine:
+        start, end = CENTRES['compressor']+1.21, CENTRES['turbine']-1.575
+        count_rows = spec['transition_rotor_rows']+spec['transition_stator_rows']
+        def shell_radius(x): return 1.35+.50*max(0,min(1,(x-start)/(end-start)))
+        for row in range(count_rows):
+            x = pivot.x+.66+(end-.23-pivot.x-.66)*row/(count_rows-1)
+            rotating = row % 2 == 0
+            outer = shell_radius(x)
+            # Leading edge is the smallest bore along each blade's sweep.
+            tip = shell_radius(x-.08)-.12-.040 if rotating else outer-.112
+            obj = blade_row(p,'compressor'+(' blade row' if rotating else ' stator vane row'),x,
+                            hub(x)-.012 if rotating else hub(x)+.045,tip,.13,
+                            math.radians(32 if rotating else -32),
+                            spec['blades_per_row'] if rotating else spec['vanes_per_row'],8+row//2)
+            obj['thermal_rotating'] = rotating
+            obj['thermal_transition_stage'] = True
+            if rotating: owned.add(obj)
+            else:
+                ring = p.tube('compressor stationary carrier',[(x-.023,0,SHAFT_Z),(x+.023,0,SHAFT_Z)],
+                              outer-.09,'Metal_Dull',.045,96)
+                ring['thermal_stator_carrier'] = True
+    else:
+        owned.update(generator_armature(p))
     shaft_label = 'turbine generator shaft' if turbine else 'independent compressor shaft'
     owned.update(o for o in p.col.objects if o.name.startswith(p.name+' / '+shaft_label))
     bpy.context.view_layer.update()
@@ -237,39 +531,59 @@ def rounded_path(points, radius=.34):
     return [list(p) for p in out+[points[-1]]]
 
 
+def compressor_cable(p):
+    """A round cable follows tangent bends above the deck, with a seated gland."""
+    cx,bx=CENTRES['compressor'],CENTRES['cabinet']
+    for obj in list(p.col.objects):
+        if ' / compressor supply conduit' in obj.name or ' / cabinet cable gland' in obj.name:
+            bpy.data.objects.remove(obj,do_unlink=True)
+    path=rounded_path(((bx,-1.11,-1.77),(bx,-1.45,-1.77),(bx,-2.00,-1.91),
+        (cx-1.73,-2.00,-1.91),(cx-1.73,-2.00,SHAFT_Z),
+        (cx-1.73,-.90,SHAFT_Z),(cx-1.49,-.72,SHAFT_Z)),.24)
+    side=1 if ' mirrored' in p.name else -1
+    if side==1:path=[(x,-y,z) for x,y,z in path]
+    cable=p.tube('compressor supply conduit',path,.09,'PaintedMetal_VeryDark',.025,24)
+    cable['thermal_cable_bend_radius']=.24
+    p.tube('cabinet cable gland',((bx,side*1.13,-1.77),(bx,side*1.27,-1.77)),
+           .125,'Metal_Dull',.04,24)
+    return cable
+
+
 def end_plenum_pipes(p, casings):
-    # H: heater -> turbine front -> rear exhaust -> recovery.
-    # C: cooling -> compressor front -> rear discharge -> heater.
+    # One duplex socket: H enters the compressor front, crosses its expanding
+    # pressure casing directly into the turbine, then C returns from the rear.
     channels = [
-        ('HP hot inlet', 'turbine', -1, -2.64, 1.71),
-        ('HP compressed return', 'compressor', -1, -3.38, .79),
-        ('LP hot exhaust', 'turbine', 1, -.06, 1.71),
-        ('LP cooled inlet', 'compressor', 1, -5.12, .79),
+        ('hot compressor inlet', 'compressor', -1, CENTRES['compressor']-.87, -.79, True),
+        ('cold rear return', 'turbine', -1, CENTRES['turbine']+1.29, -1.71, False),
     ]
-    for label, machine, sign, x, height in channels:
+    for label, machine, sign, x, height, front in channels:
         radius = 1.85 if machine == 'turbine' else 1.35
-        angle = math.pi/6 if machine == 'turbine' else math.asin(.34/radius)
-        normal = Vector((0, sign*math.cos(angle), math.sin(angle)))
-        origin = Vector((x, 0, .45))
+        run_y = 1.55 if sign < 0 else 2.17
+        normal = Vector((0, sign*run_y, height-SHAFT_Z)).normalized()
+        origin = Vector((x, 0, SHAFT_Z))
         centre = origin+normal*radius
-        end = origin+normal*(radius-.145)
-        lead = origin+normal*(radius+.95)
-        start = (-2.5, sign*3.75, height)
-        if machine == 'compressor':
-            path = [start, (-2.5, sign*3.10, height), (x, sign*3.10, height), lead, end]
-        else:
-            path = [start, (-2.5, sign*3.02, height), lead, end]
-        pipe = p.tube(label, rounded_path(path), .29, 'Metal_Dull', .045, 32)
-        pipe['thermal_flow_machine'] = machine
-        pipe['thermal_flow_end'] = 'front' if label in ('HP hot inlet', 'LP cooled inlet') else 'rear'
-        pipe['thermal_flow_channel'] = label
-        pipe['thermal_nozzle_centre'] = centre
-        pipe['thermal_nozzle_normal'] = normal
-        # Open the pressure wall at the opaque end plenum, outside the windows.
+        end = origin+normal*(radius-.20)
+        lead = Vector((x, sign*run_y, height))
+        start = Vector((M['CONTRACT']['TRAIN_PORTS'][0]['position'][0], sign*2.5, height))
+        if sign < 0:
+            if front:
+                # Tangent S transition into casing 1, with a straight socket
+                # neck and radial nozzle neck instead of two cramped elbows.
+                neck = start+Vector((0, .40, 0))
+                lead = centre+normal*.26
+                a, b = neck+Vector((0, .28, 0)), lead+normal*.32
+                curve = [(1-t)**3*neck+3*(1-t)**2*t*a+3*(1-t)*t*t*b+t**3*lead
+                         for t in (i/20 for i in range(21))]
+                path = [start]+curve+[end]
+            else:
+                path = rounded_path([start, (start.x, -run_y, height), lead, end], .48)
+            pipe = p.tube(label, path, .29, 'Metal_Dull', .045, 32)
+            pipe['thermal_gas_channel'] = True
         casing = casings[machine]
         cutter = p.cylinder('temporary end plenum bore', centre-normal*.35,
-                            centre+normal*.40, .245, sides=32)
-        bands = [o for o in p.col.objects if o.name.startswith(p.name+' / '+machine+' split casing band')]
+                            centre+normal*.40, .305, sides=32)
+        bands = [o for o in p.col.objects if any(o.name.startswith(p.name+' / '+machine+part)
+                 for part in (' split casing band', ' stepped end flange', ' inspection window end frame'))]
         for target in [casing]+bands:
             bpy.context.view_layer.objects.active = target
             mod = target.modifiers.new('Seated '+label+' bore', 'BOOLEAN')
@@ -277,11 +591,48 @@ def end_plenum_pipes(p, casings):
             bpy.ops.object.modifier_apply(modifier=mod.name)
             M['BUILD']['uv'](target)
         bpy.data.objects.remove(cutter, do_unlink=True)
-        # A short pressure collar seats on the curved casing around the nozzle.
-        collar = p.tube(label+' nozzle collar', [centre-normal*.11, centre+normal*.10], .310, 'Metal_Dull', .065, 32)
+        collar = p.tube(label+' nozzle collar', [centre-normal*.11, centre+normal*.10], .365, 'Metal_Dull', .060, 32)
         collar['thermal_nozzle_collar'] = True
+        collar['thermal_flow_machine'] = machine
+        collar['thermal_flow_end'] = 'front' if front else 'rear'
+        collar['thermal_flow_channel'] = label
+        collar['thermal_nozzle_centre'] = centre
+        collar['thermal_nozzle_normal'] = normal
+    clear_pipe_supports(p)
     for casing in casings.values():
         M['BUILD']['uv'](casing)
+
+
+def clear_pipe_supports(p):
+    """Closed service bores in load cradles; clearance for socket brackets."""
+    import bmesh
+    from mathutils.bvhtree import BVHTree
+    def tree(obj):
+        return BVHTree.FromPolygons([obj.matrix_world@v.co for v in obj.data.vertices],
+                                   [list(f.vertices) for f in obj.data.polygons])
+    runpy.run_path(str(ROOT/'assets/refine_train_supports.py'))['refine'](p)
+    supports = [o for o in p.col.objects if 'manifold skid bracket' in o.name]
+    for pipe in list(p.col.objects):
+        if not pipe.get('thermal_gas_channel') and not pipe.get('thermal_nozzle_collar') and not pipe.get('thermal_strut_fitting') and 'compressor supply conduit' not in pipe.name:
+            continue
+        path = list(map(Vector, json.loads(pipe['pipe_path'])))
+        path[0] -= (path[1]-path[0]).normalized()*.04
+        path[-1] += (path[-1]-path[-2]).normalized()*.04
+        cutter = p.tube('temporary support clearance', path, pipe['pipe_radius']+.035, 'Metal_Dull', .045, 32)
+        mesh = bmesh.new();mesh.from_mesh(cutter.data);mesh.verts.ensure_lookup_table()
+        bmesh.ops.delete(mesh, geom=[v for v in mesh.verts if v.index%64 >= 32], context='VERTS')
+        bmesh.ops.holes_fill(mesh, edges=[e for e in mesh.edges if e.is_boundary], sides=0)
+        bmesh.ops.recalc_face_normals(mesh, faces=list(mesh.faces));mesh.to_mesh(cutter.data);mesh.free()
+        clearance = tree(cutter)
+        for support in supports:
+            if not clearance.overlap(tree(support)):continue
+            bpy.context.view_layer.objects.active = support
+            mod = support.modifiers.new('Pipe clearance pocket', 'BOOLEAN')
+            mod.operation, mod.solver, mod.object = 'DIFFERENCE', 'EXACT', cutter
+            bpy.ops.object.modifier_apply(modifier=mod.name)
+            support['thermal_pipe_clearance_m'] = .035
+            M['BUILD']['uv'](support)
+        bpy.data.objects.remove(cutter, do_unlink=True)
 
 
 def apply(name):
@@ -297,12 +648,28 @@ def apply(name):
         for obj in list(p.col.objects):
             if obj.name.startswith(p.name+' / turbine inspection rib'):
                 bpy.data.objects.remove(obj, do_unlink=True)
-        casings = {'turbine': inspection_casing(p, 'turbine', -1.35, 3.15, 1.85),
-                   'compressor': inspection_casing(p, 'compressor', -4.25, 2.42, 1.35)}
+        casings = {'turbine': inspection_casing(p, 'turbine', CENTRES['turbine'], 3.15, 1.85),
+                   'compressor': inspection_casing(p, 'compressor', CENTRES['compressor'], 2.42, 1.35)}
+        generator = inspection_casing(p,'generator',CENTRES['generator'],2.0,1.62)
+        runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))['mark'](
+            p, generator, 'Tech Panel', (M['CONTRACT']['generator_x'](CENTRES['generator']),1.622,SHAFT_Z),
+            (-1,0,0), (0,0,1), .40, 'Atlas3')
+        upgrade_jackets(p,casings,generator)
+        old = next(o for o in p.col.objects if o.get('thermal_compressor_transition'))
+        bpy.data.objects.remove(old,do_unlink=True)
+        taper = transition_casing(p,'compressor expanding casing',CENTRES['compressor']+1.21,
+                                  CENTRES['turbine']-1.575,1.35,1.85,window=True)
+        taper['thermal_compressor_transition'] = True
+        taper = transition_casing(p,'generator steep transition',CENTRES['turbine']+1.575,
+                                  CENTRES['generator']-1,1.85,1.62)
+        taper['thermal_generator_transition'] = True
+        compressor_cable(p)
         end_plenum_pipes(p, casings)
         for spec in RIG['rotors']:
             rotor(p, spec)
     pipes = transparent_pipes(p)
+    if name.startswith('Brayton train'):
+        runpy.run_path(str(ROOT/'assets/refine_train_service_details.py'))['apply'](p)
     for obj in set(p.col.objects)-before:
         obj['thermal_visibility_revision'] = REVISION
     p.scene['thermal_visibility_revision'] = REVISION

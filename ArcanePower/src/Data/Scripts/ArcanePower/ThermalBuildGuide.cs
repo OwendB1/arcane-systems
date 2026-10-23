@@ -105,6 +105,13 @@ namespace ArcanePower
             }
             if (grid.GridSizeEnum != MyCubeSize.Large)
             { Show(model, "Thermal blocks require a 2.5 m large grid", null); return; }
+            if (model.Kind == ThermalKind.RadiatorPanel)
+            {
+                check = null;
+                Show(model, preview ? "Align both side pipes with the panel directly below; use the same block orientation"
+                    : ThermalSession.RadiatorConnection(aimed.FatBlock == null ? 0 : aimed.FatBlock.EntityId), null);
+                return;
+            }
 
             blocks.Clear(); nodes.Clear();
             grid.GetBlocks(blocks, b => ThermalModels.All.ContainsKey(b.BlockDefinition.Id.SubtypeName));
@@ -195,7 +202,7 @@ namespace ArcanePower
                 if (issue != ThermalJointStatus.Matched) text.Append(" / ").Append(ThermalConstruction.JointHint(issue));
                 text.Append("\nAssembly: ").Append(check.Open).Append(" open / ").Append(check.Wrong)
                     .Append(" mismatched socket ends / ").Append(check.Pending).Append(" unfinished or unavailable blocks");
-                text.Append("\n<color=150,180,200>H = orange; C = cyan. Verify all three circuits; cap unused sockets.");
+                text.Append("\n<color=150,180,200>H = orange; C = cyan. Align both bores on every socket face; cap unused sockets.");
             }
             if (server != null) text.Append("\nServer: ").Append(server);
             text.Append("\nConstruction checks do not authorize startup. Cooling, power and reactor safeguards still apply.");

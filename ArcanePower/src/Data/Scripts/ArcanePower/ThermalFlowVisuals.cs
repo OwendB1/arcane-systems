@@ -129,22 +129,14 @@ namespace ArcanePower
             List<ThermalBlock> bank, ThermalPlan plan, double circulation)
         {
             if (!captureFlow) return;
-            var heaters = new HashSet<long>(plan.Heaters);
             var trains = new HashSet<long>();
             var coolers = new HashSet<long>();
             foreach (var train in plan.Trains) trains.Add(train.Id);
             foreach (var block in bank) if (block.Unit().CoolingMW > 0) coolers.Add(block.Entity.EntityId);
-            var oriented = new Dictionary<long, byte[]>();
-            foreach (var route in new[] {
-                network.FlowDirections("PRIMARY", new HashSet<long> { source.Id }, heaters),
-                network.FlowDirections("CO2_HP", heaters, trains),
-                network.FlowDirections("CO2_LP", trains, coolers) })
-                foreach (var entry in route)
-                {
-                    byte[] ports;
-                    if (!oriented.TryGetValue(entry.Key, out ports)) oriented[entry.Key] = ports = new byte[entry.Value.Length];
-                    for (int i = 0; i < ports.Length; i++) if (entry.Value[i] != 0) ports[i] = entry.Value[i];
-                }
+            // One supply/return pair reaches every dispatched terminal branch.
+            // H flows from the reactor to active machines; C follows it back.
+            trains.UnionWith(coolers);
+            var oriented = network.FlowDirections(new HashSet<long> { source.Id }, trains);
             double heat = ThermalMath.Clamp((source.Motion.Thermal.Store.HotMJ + source.Motion.Thermal.ProducedMW / 60)
                 / (source.ThermalHeatMW * .5), 0, 1) * ThermalMath.Span(source.ThermalHotC, 45, 2200);
             foreach (var endpoint in endpoints)
@@ -156,6 +148,17 @@ namespace ArcanePower
                 view.State.Heat = heat;
                 view.State.Internal = endpoint.Model.Kind != ThermalKind.Pipe;
                 view.State.Mode = circulation > 0 ? ThermalFlowMode.Pumping : ThermalFlowMode.Ready;
+                ThermalBlock radiator;
+                if (Blocks.TryGetValue(endpoint.Id, out radiator) && radiator.Spec.Kind == ThermalKind.Radiator)
+                    foreach (var panel in radiator.RadiatorPanels)
+                    {
+                        FlowView linked;
+                        if (!flows.TryGetValue(panel.Entity.EntityId, out linked)) continue;
+                        linked.State.Rate = view.State.Rate;
+                        linked.State.Heat = view.State.Heat;
+                        linked.State.Mode = view.State.Mode;
+                        linked.State.Internal = true;
+                    }
             }
         }
         private void UpdateFlow()

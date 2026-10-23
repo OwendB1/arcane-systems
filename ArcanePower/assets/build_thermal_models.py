@@ -200,6 +200,8 @@ def record(name):
     if s.get('thermal_variant_of'):
         row['variant_of'] = s['thermal_variant_of']
         row['style'] = 'bare'
+    if col.get('air_exhaust_samples'):
+        row['air_exhaust_samples'] = json.loads(col['air_exhaust_samples'])
     path = OUT/'models.json'
     rows = json.loads(path.read_text()) if path.exists() else {}
     rows[name] = row
@@ -283,9 +285,18 @@ def heat_tap(p):
 
 
 def build_base(name):
+    if 'mirrored' in name:
+        return runpy.run_path(str(ROOT/'assets/build_mirrored_train.py'))['build'](name)
+    if name == 'Atmospheric cooler':
+        return runpy.run_path(str(ROOT/'assets/build_integrated_cooler.py'))['apply']()
+    if name == 'Radiator panel':
+        return runpy.run_path(str(ROOT/'assets/build_tracking_radiator.py'))['extension']()
     if name in CONTRACT['BARE_PIPES']:
         return build_bare_pipe(name)
     p = Parts(name)
+    if name == 'Space radiator':
+        p.finish()
+        return runpy.run_path(str(ROOT/'assets/build_tracking_radiator.py'))['apply']()
     if name == 'Reactor housing':
         runpy.run_path(str(ROOT/'assets/build_reactor_thermal_manifolds.py'))['build'](p)
     elif name == 'PRIMARY / Reactor adapter':
@@ -384,6 +395,8 @@ def build_bare_pipe(name):
 
 
 def rebuild_base(name):
+    if name == 'Atmospheric cooler':
+        return runpy.run_path(str(ROOT/'assets/build_integrated_cooler.py'))['apply']()
     scene, col = scene_for(name), main_for(name)
     assert scene.get('thermal_model') == name and scene['thermal_phase'] in ('base', 'geometry', 'textures')
     phase = scene['thermal_phase']
@@ -398,7 +411,7 @@ def rebuild_base(name):
     row = build_base(name)
     for obj in users:
         obj.instance_collection = main_for(name)
-    if phase != 'base' and name not in CONTRACT['BARE_PIPES']:
+    if phase != 'base' and name not in CONTRACT['BARE_PIPES'] and 'mirrored' not in name:
         refine = runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))
         row = refine['geometry'](name)
         if phase == 'textures':

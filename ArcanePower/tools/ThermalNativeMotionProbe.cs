@@ -49,7 +49,8 @@ class ThermalNativeMotionProbe
                 var dummy=dummies["subpart_"+name];
                 string path=Path.Combine(Path.GetDirectoryName(parent),(string)dummy.CustomData["file"]+".mwm");
                 var data=Read(path);var points=Vertices(data);var samples=(object[])part["samples"];
-                bool manifold=name.StartsWith("Thermal_L")||name.StartsWith("Thermal_R");
+                bool radiator=name==ThermalRadiators.Subpart;
+                bool manifold=!radiator && (name.StartsWith("Thermal_L")||name.StartsWith("Thermal_R"));
                 int bay=manifold?Array.IndexOf(ThermalModels.ManifoldBays,name.Split('_')[1]):-1;
                 string kind=manifold?name.Substring(name.LastIndexOf('_')+1):null;
                 var poses=new List<float[]>();
@@ -66,7 +67,7 @@ class ThermalNativeMotionProbe
                 foreach(Dictionary<string,object> sample in samples)
                 {
                     double value=Convert.ToDouble(sample["value"]);
-                    Matrix pose=manifold?ThermalManifolds.Pose(bay,kind,value):ThermalRotors.Pose(name.EndsWith("TurbineRotor")?0:1,value);
+                    Matrix pose=radiator?ThermalRadiators.Pose(value,(string)model["name"]=="Radiator panel"):manifold?ThermalManifolds.Pose(bay,kind,value):ThermalRotors.Pose(name.EndsWith("TurbineRotor")?0:1,value);
                     poses.Add(Values(pose));
                     var expected=(object[])sample["bounds"];
                     foreach(var level in levels)

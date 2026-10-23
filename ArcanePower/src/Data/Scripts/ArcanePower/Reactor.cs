@@ -38,6 +38,7 @@ namespace ArcanePower
         private MyEntitySubpart previousRing;
         private int appearanceRefresh;
         private ReactorStatus previousStatus;
+        private bool previousPrecharging;
         private int pulseTick;
         private const float EmissiveIntensity = 12f;
         private MyLight coreGlow;
@@ -143,19 +144,29 @@ namespace ArcanePower
             entity.Subparts.TryGetValue("Ring1", out first);
             bool venting = Motion.Vent != VentPhase.Idle;
             bool incomplete = Motion.Status == ReactorStatus.Incomplete || venting || Motion.Critical;
+            bool precharging = Precharging;
+            bool charging = precharging && PrechargeMW > .000001;
             pulseTick = (pulseTick + 1) % 120;
             // Subparts can exist before their render objects are ready on world
             // load. Retry once per second even when the entity/state is unchanged;
             // this also restores colours after a later render-object recreation.
-            Color color = venting || Motion.Critical ? Color.Red : Motion.Status == ReactorStatus.Active ? FuelColors[Motion.FuelTier - 1]
+            Color color = venting || Motion.Critical ? Color.Red
+                : precharging ? Color.White
+                : Motion.Status == ReactorStatus.Active ? FuelColors[Motion.FuelTier - 1]
                 : Motion.Status == ReactorStatus.OutOfFuel ? Color.Yellow : Color.Red;
-            float intensity = EmissiveIntensity * (incomplete ? .5f + .5f * (float)System.Math.Cos(pulseTick * System.Math.PI / 60) : 1f);
-            if (incomplete || previousRing != first || previousFuelTier != Motion.FuelTier || previousStatus != Motion.Status || --appearanceRefresh <= 0)
+            float intensity = EmissiveIntensity;
+            if (incomplete || (precharging && !charging))
+                intensity *= .5f + .5f * (float)System.Math.Cos(pulseTick * System.Math.PI / 60);
+            else if (charging)
+                intensity *= pulseTick % 60 < 30 ? 1f : 0f;
+            if (incomplete || precharging || previousPrecharging != precharging || previousRing != first
+                || previousFuelTier != Motion.FuelTier || previousStatus != Motion.Status || --appearanceRefresh <= 0)
             {
                 appearanceRefresh = 60;
                 previousRing = first;
                 previousFuelTier = Motion.FuelTier;
                 previousStatus = Motion.Status;
+                previousPrecharging = precharging;
                 entity.SetEmissiveParts("Emissive", color, intensity);
                 entity.SetEmissivePartsForSubparts("Emissive", color, intensity);
             }

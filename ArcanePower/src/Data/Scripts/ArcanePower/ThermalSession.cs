@@ -11,6 +11,7 @@ namespace ArcanePower
     {
         [ProtoMember(1)] public long EntityId;
         [ProtoMember(2)] public ThermalRotorState State;
+        [ProtoMember(3)] public ThermalRadiatorState Radiator;
     }
 
     [MySessionComponentDescriptor(MyUpdateOrder.AfterSimulation)]
@@ -30,7 +31,7 @@ namespace ArcanePower
         internal static void Add(ThermalBlock block)
         {
             Blocks[block.Entity.EntityId] = block;
-            if (ready && !MyAPIGateway.Multiplayer.IsServer && block.Spec.Kind == ThermalKind.Train) RequestRotor(block);
+            if (ready && !MyAPIGateway.Multiplayer.IsServer && HasMotion(block)) RequestRotor(block);
         }
         internal static void Remove(ThermalBlock block) { Blocks.Remove(block.Entity.EntityId); }
 
@@ -40,8 +41,14 @@ namespace ArcanePower
             InitializeFlow();
             ready = true;
             if (!MyAPIGateway.Multiplayer.IsServer)
-                foreach (var block in Blocks.Values) if (block.Spec.Kind == ThermalKind.Train) RequestRotor(block);
+                foreach (var block in Blocks.Values) if (HasMotion(block)) RequestRotor(block);
         }
+
+        private static bool HasMotion(ThermalBlock block)
+        { return block.Spec.Kind == ThermalKind.Train || block.IsRadiator; }
+
+        private static ThermalRotorPacket MotionPacket(ThermalBlock block)
+        { return new ThermalRotorPacket { EntityId = block.Entity.EntityId, State = block.Store.Rotor, Radiator = block.Store.Radiator }; }
 
         private static void RequestRotor(ThermalBlock block)
         {
@@ -59,16 +66,16 @@ namespace ArcanePower
                 MyAPIGateway.Utilities.InvokeOnGameThread(() =>
                 {
                     ThermalBlock block;
-                    if (!ready || !Blocks.TryGetValue(packet.EntityId, out block) || block.Spec.Kind != ThermalKind.Train) return;
+                    if (!ready || !Blocks.TryGetValue(packet.EntityId, out block) || !HasMotion(block)) return;
                     if (MyAPIGateway.Multiplayer.IsServer)
                     {
                         // Clients may ask for a read-only pose; they can never
                         // submit drive, pressure, inventory or speed state.
-                        if (fromServer || packet.State != null) return;
+                        if (fromServer || packet.State != null || packet.Radiator != null) return;
                         MyAPIGateway.Multiplayer.SendMessageTo(RotorChannel, MyAPIGateway.Utilities.SerializeToBinary(
-                            new ThermalRotorPacket { EntityId = packet.EntityId, State = block.Store.Rotor }), sender);
+                            MotionPacket(block)), sender);
                     }
-                    else if (fromServer) block.ReceiveRotor(packet.State);
+                    else if (fromServer) { block.ReceiveRotor(packet.State); block.ReceiveRadiator(packet.Radiator); }
                 });
             }
             catch (Exception error) { VRage.Utils.MyLog.Default.WriteLine("ArcanePower: ignored invalid rotor packet: " + error.Message); }
@@ -79,19 +86,22 @@ namespace ArcanePower
             if (MyAPIGateway.Session == null) return;
             bool server = MyAPIGateway.Multiplayer.IsServer;
             BeginFlowFrame();
-            try { if (server) AdvancePlant(); }
+            try { if (server) { LinkRadiators(); AdvancePlant(); } }
             catch (Exception error)
             {
                 VRage.Utils.MyLog.Default.WriteLine("ArcanePower: thermal runtime isolated after fault: " + error);
-                foreach (var block in Blocks.Values) { block.SetOutput(0); block.StopStartup(); block.RotorCirculation = 0; }
+                foreach (var block in Blocks.Values) { block.SetOutput(0); block.StopStartup(); block.RotorCirculation = 0; block.RadiatorRejectedMW = 0; }
                 foreach (var source in VentSession.All) if (source.ThermalVariant) source.FailThermalRuntime();
             }
             foreach (var block in Blocks.Values)
+                if (block.Spec.Kind == ThermalKind.Radiator) block.AdvanceRadiator();
+            foreach (var block in Blocks.Values)
             {
                 block.AdvanceRotor();
-                if (server && ready && tick % 30 == 0 && block.Spec.Kind == ThermalKind.Train)
+                if (block.Spec.Kind != ThermalKind.Radiator) block.AdvanceRadiator();
+                if (server && ready && tick % 30 == 0 && HasMotion(block))
                     MyAPIGateway.Multiplayer.SendMessageToOthers(RotorChannel, MyAPIGateway.Utilities.SerializeToBinary(
-                        new ThermalRotorPacket { EntityId = block.Entity.EntityId, State = block.Store.Rotor }));
+                        MotionPacket(block)));
             }
             UpdateFlow();
             if (++tick % 60 == 0 && server) SaveData();
@@ -110,14 +120,16 @@ namespace ArcanePower
                 machine.OutputGrantMW = 0;
                 machine.RotorCirculation = 0;
                 machine.RotorHotC = 45;
+                machine.RadiatorRejectedMW = 0;
                 if (machine.Healthy)
                 {
                     var unit = machine.Unit();
                     if (unit.CoolingMW > 0 && machine.Spec.Kind == ThermalKind.Radiator)
                     {
                         double capacity = unit.CoolingMW / 60;
-                        capacity -= ThermalMath.Reject(machine.Store, capacity, false);
-                        ThermalMath.Reject(machine.Store, capacity, true);
+                        double rejected = ThermalMath.Reject(machine.Store, capacity, false);
+                        rejected += ThermalMath.Reject(machine.Store, capacity - rejected, true);
+                        machine.RadiatorRejectedMW = rejected * 60;
                     }
                 }
             }
@@ -141,7 +153,7 @@ namespace ArcanePower
                         state.AttachedHeatMJ += machine.Store.HotMJ + machine.Store.WasteMJ;
                 }
                 state.ProducedMW = 0; state.SupportedMW = 0;
-                state.RecoveryRatio = 0;
+                state.CoolingMW = state.RequiredCoolingMW = 0;
                 state.DutyTrains = state.StandbyTrains = 0;
                 if (state.Mode == ThermalMode.Standalone)
                 {
@@ -161,9 +173,14 @@ namespace ArcanePower
                 // Emergency passive housing rejection is deliberately small.
                 // Lost cooling preserves the remaining hot inventory and never
                 // silently enables the standalone electrical conversion path.
-                state.RejectedMW = ThermalMath.Reject(state.Store, source.ThermalHeatMW * .02 / 60, false) * 60;
+                state.RejectedMW = 0;
                 if (!source.ThermalCanRun)
-                    state.RejectedMW += ThermalMath.Reject(state.Store, source.ThermalHeatMW * .02 / 60, true) * 60;
+                {
+                    double budget = source.ThermalHeatMW * .02 / 60;
+                    double rejected = ThermalMath.Reject(state.Store, budget, false);
+                    rejected += ThermalMath.Reject(state.Store, budget - rejected, true);
+                    state.RejectedMW = rejected * 60;
+                }
                 var endpoints = new List<ThermalEndpoint> { source.ThermalEndpoint() };
                 foreach (var machine in machines)
                     if (!machine.Block.Closed && machine.Block.CubeGrid == source.Block.CubeGrid)
@@ -192,19 +209,21 @@ namespace ArcanePower
                 foreach (var machine in bank) units.Add(machine.Unit());
                 var plan = ThermalMath.Dispatch(source.ThermalHeatMW, source.ThermalHotC, units);
                 state.Efficiency = plan.Efficiency; state.SupportedMW = plan.NetMW;
-                state.RecoveryRatio = plan.RecoveryRatio;
                 state.DutyTrains = plan.Trains.Count; state.StandbyTrains = plan.Standby;
                 state.Diagnostic = plan.Limit;
                 ThermalBlock host = null;
                 foreach (var machine in bank)
-                    if (plan.Heaters.Contains(machine.Entity.EntityId) && (host == null || machine.Entity.EntityId < host.Entity.EntityId)) host = machine;
-                if (host != null && !source.ThermalCanRun && state.AttachedHeatMJ > .001)
+                    if (plan.Trains.Exists(t => t.Id == machine.Entity.EntityId) && (host == null || machine.Entity.EntityId < host.Entity.EntityId)) host = machine;
+                if (host != null && !source.ThermalCanRun
+                    && state.Store.HotMJ + state.Store.WasteMJ + state.AttachedHeatMJ > .001)
                 {
-                    host.RequestStartup(source.Id, plan.DesignMW * .02);
+                    host.RequestStartup(source.Id, plan.AcceptedMW * .02);
                     startupHosts.Add(host.Entity.EntityId);
                 }
-                double circulation = ThermalMath.CirculationPower(state.NetOutputMW,
-                    host != null && host.StartupOwner == source.Id ? host.StartupInputMW : 0, plan.DesignMW);
+                double circulation = ThermalMath.CirculationPower(state.NetOutputMW, plan.Efficiency,
+                    host != null && host.StartupOwner == source.Id ? host.StartupInputMW : 0, plan.AcceptedMW);
+                state.CoolingMW = plan.CoolingMW * circulation;
+                state.RequiredCoolingMW = plan.RequiredCoolingMW * source.Motion.PowerRamp;
                 CapturePlantFlow(source, network, endpoints, bank, plan, circulation);
                 foreach (var cooler in bank)
                 {
@@ -217,7 +236,24 @@ namespace ArcanePower
                 // inventory, before admitting new reaction heat.
                 var coolerFlow = new Dictionary<long, double>();
                 foreach (var cooler in bank)
-                    if (cooler.Unit().CoolingMW > 0) coolerFlow[cooler.Entity.EntityId] = cooler.Spec.RatingMW * circulation / 60;
+                    if (cooler.Unit().CoolingMW > 0) coolerFlow[cooler.Entity.EntityId] = cooler.EffectiveRatingMW * circulation / 60;
+                // The C bore returns spent working fluid to the reactor. Keep
+                // its paid waste on that real entity until a cooler removes it;
+                // cooling shortage must accumulate heat at the core.
+                foreach (var sender in bank)
+                    if (sender.Spec.Kind == ThermalKind.Train)
+                        ThermalMath.Transfer(sender.Store, state.Store, source.ThermalHeatMW * 8,
+                            sender.Spec.RatingMW * circulation / 60, true);
+                foreach (var cooler in bank)
+                {
+                    if (!coolerFlow.ContainsKey(cooler.Entity.EntityId)) continue;
+                    double flow = coolerFlow[cooler.Entity.EntityId];
+                    double budget = flow;
+                    flow -= ThermalMath.Transfer(state.Store, cooler.Store, cooler.Spec.CapacityMJ, flow, true);
+                    if (!source.ThermalCanRun)
+                        flow -= ThermalMath.Transfer(state.Store, cooler.Store, cooler.Spec.CapacityMJ, flow, false);
+                    coolerFlow[cooler.Entity.EntityId] -= budget - flow;
+                }
                 foreach (var sender in bank)
                     foreach (var cooler in bank)
                     {
@@ -250,7 +286,7 @@ namespace ArcanePower
                     starts[source.Id] = startup = new BankStart { Signature = signature };
                 if (startup.Seconds < 8)
                 {
-                    double demand = plan.DesignMW * .02;
+                    double demand = plan.AcceptedMW * .02;
                     double delivered = host.RequestStartup(source.Id, demand);
                     startupHosts.Add(host.Entity.EntityId);
                     // AccountStartup already stored all delivered electricity
@@ -273,13 +309,10 @@ namespace ArcanePower
                     // Keep the paid circulation alive long enough for the first
                     // heat packet to reach a train. Afterwards stored heat can
                     // meet new electrical demand without an idle grid load.
-                    host.RequestStartup(source.Id, plan.DesignMW * .02);
+                    host.RequestStartup(source.Id, plan.AcceptedMW * .02);
                     startupHosts.Add(host.Entity.EntityId);
                 }
                 if (circulation <= 0) state.Diagnostic = "Circulation unpowered; paid heat retained / external power required for a cold train";
-                var heaterFlow = new Dictionary<long, double>();
-                foreach (var machine in bank)
-                    if (plan.Heaters.Contains(machine.Entity.EntityId)) heaterFlow[machine.Entity.EntityId] = machine.Spec.RatingMW / 60;
                 foreach (var selected in plan.Trains)
                 {
                     ThermalBlock train;
@@ -291,16 +324,8 @@ namespace ArcanePower
                     // Pipes are ideal pass-through links in this prototype;
                     // all MJ reside on real source/machine entities, never on
                     // a second, duplicated aggregate network reservoir.
-                    double remaining = plan.AcceptedMW * share * circulation / 60;
-                    foreach (var heater in bank)
-                    {
-                        if (!heaterFlow.ContainsKey(heater.Entity.EntityId)) continue;
-                        double flow = Math.Min(heaterFlow[heater.Entity.EntityId], remaining);
-                        ThermalMath.Transfer(state.Store, heater.Store, heater.Spec.CapacityMJ, flow, false);
-                        double passed = ThermalMath.Transfer(heater.Store, train.Store, train.Spec.CapacityMJ, flow, false);
-                        remaining -= passed;
-                        heaterFlow[heater.Entity.EntityId] -= flow;
-                    }
+                    double flow = plan.AcceptedMW * share * circulation / 60;
+                    ThermalMath.Transfer(state.Store, train.Store, train.Spec.CapacityMJ, flow, false);
                     train.OutputGrantMW = ThermalMath.ExportLimit(train.Store, train.Spec.CapacityMJ, plan.Efficiency,
                         plan.NetMW * share * source.Motion.PowerRamp, 1.0 / 60);
                 }

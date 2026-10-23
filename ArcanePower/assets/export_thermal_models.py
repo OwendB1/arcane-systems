@@ -42,7 +42,7 @@ def tris(col):
 
 
 def native_id(identifier):
-    value='APT_'+identifier.removeprefix('ArcanePower_Thermal_').replace('Thermal_','')+'_M'
+    value='APT_'+identifier.removeprefix('ArcanePower_Thermal_').replace('Thermal_','').replace('Mirrored','Mir')+'_M'
     assert len(value)<=45,value
     return value
 
@@ -110,7 +110,7 @@ def subparts(name, source):
                 groups.append(('Thermal_'+bay['id']+'_'+part,objects,Vector((0,0,0))))
             tails=[o for o in source.objects if o.get('thermal_extending_connector')==bay['id']]
             groups.append(('Thermal_'+bay['id']+'_ConnectorTail',tails,Vector((0,0,0))))
-    elif name.startswith('Brayton train'):
+    elif name.startswith('Brayton train') or name in ('Space radiator','Radiator panel'):
         for root in source.objects:
             if root.type=='EMPTY' and root.get('native_subpart'):
                 groups.append((root['native_subpart'],list(root.children),root.matrix_world.translation.copy()))
@@ -130,7 +130,10 @@ def stages(s, source_objects, name, root):
     low=Vector([min(v[i] for v in p)+.025 for i in range(3)])
     high=Vector([max(v[i] for v in p)-.025 for i in range(3)])
     def panel(o):
-        return any(t in o.name.lower() for t in ('armor','panel','cover','casing','cladding','lid','drum segmented'))
+        # The block name "Radiator panel" must not classify its shafts and
+        # pipe ribs as panel skins during intermediate construction.
+        label=o.name.removeprefix(name+' / ').lower()
+        return any(t in label for t in ('armor','panel','cover','casing','cladding','lid','drum segmented'))
     for level in (1,2,3):
         col=C.create_seut_collection(s,'bs',level)
         if name in M['CONTRACT']['BARE_PIPES']:
@@ -189,7 +192,8 @@ def collision(s, col, root):
     # Each hull follows one actual solid. Never enclose the whole machine in a
     # single box; the reactor keeps its accepted walkable chamber collision.
     meshes=[o for o in col.objects if o.type=='MESH' and structural(o)
-            and not o.get('thermal_external_pipe_clamp')]
+            and not o.get('thermal_external_pipe_clamp')
+            and not o.get('thermal_cable_bend_radius')]
     def volume(o):
         points=[o.matrix_world@v.co for v in o.data.vertices]
         dims=[max(v[i] for v in points)-min(v[i] for v in points) for i in range(3)]
@@ -218,6 +222,11 @@ def collision(s, col, root):
 def prepare(name):
     source_scene=M['scene_for'](name);bpy.context.window.scene=source_scene;bpy.context.view_layer.update()
     old_pose=None
+    radiator_root=next((o for o in source_scene.objects if o.get('native_subpart')=='Thermal_RadiatorPanels'),None) if name in ('Space radiator','Radiator panel') else None
+    radiator_angle=radiator_root.rotation_euler.z if radiator_root else 0
+    if radiator_root:
+        radiator_root.rotation_euler.z=0
+        bpy.context.view_layer.update()
     if name=='Reactor housing':
         old_pose=source_scene['thermal_manifolds_deployment']
         runpy.run_path(str(ROOT/'assets/build_reactor_thermal_manifolds.py'))['pose'](0)
@@ -277,6 +286,10 @@ def prepare(name):
         s['thermal_derived_complete']=True
     finally:
         if old_pose is not None:runpy.run_path(str(ROOT/'assets/build_reactor_thermal_manifolds.py'))['pose'](old_pose)
+        if radiator_root:
+            bpy.context.window.scene=source_scene
+            radiator_root.rotation_euler.z=radiator_angle
+            bpy.context.view_layer.update()
     return rows[name]
 
 
@@ -350,7 +363,7 @@ def export(name, only_stems=None, preserve_collision=False):
     return {'model':name,'exported_meshes':sum(r['block']==name for r in records.values()),'staging':str(STAGING)}
 
 
-def export_isolated(name, staging=None):
+def export_isolated(name, staging=None, rebuild_collision=False):
     """Use the same native pipeline in a disposable background Blender process.
 
     SEUT temporarily remaps linked materials. Unrelated scenes and orphan meshes
@@ -359,6 +372,10 @@ def export_isolated(name, staging=None):
     """
     global STAGING
     assert bpy.app.background, 'Isolation must never discard scenes in the live session'
+    # SEUT's GUI error popup crashes background Blender before logging the
+    # underlying error. Keep its reporting and cancellation, without the popup.
+    errors=importlib.import_module('space-engineers-utilities.seut_errors')
+    errors.show_popup_report=lambda context,title,text: print(title+': '+text,flush=True)
     assert Path(bpy.data.filepath)==M['FILE'], 'Start from the reviewed production mains'
     if staging is not None:STAGING=Path(staging).resolve()
     assert STAGING.is_relative_to(ROOT/'src'), 'SEUT staging must be inside the mod directory'
@@ -375,11 +392,14 @@ def export_isolated(name, staging=None):
     # accepted inputs just like the established thermal family.
     preserve=all((COLLISIONS/'Thermal'/(native_id(M['CONTRACT']['subtype'](name))+suffix+'.hkt')).is_file()
                  for suffix in ('','_BS1','_BS2','_BS3'))
+    if rebuild_collision:preserve=False
     return export(name,preserve_collision=preserve)
 
 
 if __name__=='__main__':
     import sys
     args=sys.argv[sys.argv.index('--')+1:]
+    rebuild='--rebuild-collision' in args
+    args=[a for a in args if a!='--rebuild-collision']
     assert args[0]=='--isolated' and len(args) in (2,3)
-    print(export_isolated(args[1],args[2] if len(args)==3 else None),flush=True)
+    print(export_isolated(args[1],args[2] if len(args)==3 else None,rebuild),flush=True)

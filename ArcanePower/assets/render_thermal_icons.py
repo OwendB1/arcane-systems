@@ -6,6 +6,7 @@ Use the separate render process after live inspection; no authoring blend is sav
 """
 import importlib
 import json
+import runpy
 from pathlib import Path
 
 import bpy
@@ -14,8 +15,10 @@ from mathutils import Vector
 ROOT = Path(__file__).resolve().parents[1]
 COLS = importlib.import_module('space-engineers-utilities.seut_collections')
 MODELS = json.loads((ROOT/'validation/thermal-models/models.json').read_text())
+PLAYABLE = runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))['PLAYABLE']
 FOLDER = ROOT/'assets/icons/thermal'
 SCENE = 'Thermal inventory icon studio'
+badge = runpy.run_path(str(ROOT/'assets/icon_badges.py'))['badge']
 
 
 def studio():
@@ -47,47 +50,6 @@ def studio():
     return scene
 
 
-def emission(name, color):
-    material = bpy.data.materials.get(name)
-    if material is None:
-        material = bpy.data.materials.new(name)
-        material.use_nodes = True
-        nodes = material.node_tree.nodes
-        nodes.clear()
-        shader = nodes.new('ShaderNodeEmission')
-        shader.inputs['Color'].default_value = (*color, 1)
-        material.node_tree.links.new(shader.outputs[0], nodes.new('ShaderNodeOutputMaterial').inputs['Surface'])
-    return material
-
-
-def badge(scene, text, color, x):
-    scale = scene.camera.data.ortho_scale
-    mesh = bpy.data.meshes.new('Icon badge')
-    mesh.from_pydata([(x, -.46, 0), (x+.22, -.46, 0), (x+.22, -.33, 0), (x, -.33, 0)], [], [(0, 1, 2, 3)])
-    obj = bpy.data.objects.new('Icon badge', mesh)
-    scene.collection.objects.link(obj)
-    obj.parent = scene.camera
-    obj.location.z = -2
-    obj.scale = (scale, scale, scale)
-    obj.data.materials.append(emission('Icon badge dark', (.012, .020, .030)))
-    font = bpy.data.curves.new('Icon legend', 'FONT')
-    font.body = text
-    font.align_x = 'CENTER'
-    font.align_y = 'CENTER'
-    font.size = .09*scale
-    font.space_character = 1.1
-    label = bpy.data.objects.new('Icon legend', font)
-    scene.collection.objects.link(label)
-    label.parent = scene.camera
-    label.location = ((x+.11)*scale, -.395*scale, -1.99)
-    font.materials.append(emission('Icon legend '+text, color))
-    for item in (obj, label):
-        item.visible_shadow = False
-        item.visible_diffuse = False
-        item.visible_glossy = False
-        item.visible_transmission = False
-
-
 def render(subtype):
     assert Path(bpy.data.filepath).name == 'arcane-thermal-models.blend'
     name = next(name for name, spec in MODELS.items() if spec['subtype'] == subtype)
@@ -117,6 +79,8 @@ def render(subtype):
         for obj in meshes:
             obj.location -= centre
         direction = Vector((-1.2, -1.7, 1.1) if ' / ' in name else (1.2, -1.7, 1.0))
+        if 'mirrored' in name:
+            direction = Vector((1.2, 1.7, 1.0))
         if name == 'Reactor housing':
             direction = Vector((.6, -2, .65))
         scene.camera.location = direction.normalized()*span*3
@@ -132,9 +96,6 @@ def render(subtype):
             obj.location = Vector(position)*span
             obj.rotation_euler = (-obj.location).to_track_quat('-Z', 'Y').to_euler()
         if ' / ' in name:
-            circuit = name.split(' / ')[0]
-            label, color = {'PRIMARY': ('P', (.08, .8, .6)), 'CO2_HP': ('HP', (1, .5, .08)), 'CO2_LP': ('LP', (.1, .65, 1))}[circuit]
-            badge(scene, label, color, -.46)
             if 'Roll adapter' in name:
                 badge(scene, '90', (.8, .9, 1), .24)
             elif 'reactor adapter' in name.lower():
@@ -157,6 +118,7 @@ def render(subtype):
 if __name__ == '__main__':
     import sys
     selected = sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
-    for spec in MODELS.values():
+    for name, spec in MODELS.items():
+        if name not in PLAYABLE:continue
         if not selected or spec['subtype'] in selected:
             print(json.dumps(render(spec['subtype'])), flush=True)

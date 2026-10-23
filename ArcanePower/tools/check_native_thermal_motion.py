@@ -33,7 +33,7 @@ def check():
                           'sha256':hashlib.sha256((MOD/blocks[m['subtype']].findtext('Model')).read_bytes()).hexdigest()} for m in specs['models']]
         report['contract_sha256']=hashlib.sha256(contract.read_bytes()).hexdigest()
         report['runtime_pose_sha256']=hashlib.sha256(b''.join((MOD/'Data/Scripts/ArcanePower'/name).read_bytes()
-            for name in ('ThermalManifolds.cs','ThermalRotors.cs','ThermalModels.cs','ThermalPlant.cs'))).hexdigest()
+            for name in ('ThermalManifolds.cs','ThermalRotors.cs','ThermalRadiators.cs','ThermalModels.cs','ThermalPlant.cs'))).hexdigest()
         (ROOT/'validation/thermal-models/native-motion.json').write_text(json.dumps(report,indent=2)+'\n')
         print(json.dumps({k:v for k,v in report.items() if k not in ('native_mesh_sha256','models')},indent=2))
         if result.returncode:raise SystemExit(result.returncode)

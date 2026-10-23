@@ -35,6 +35,37 @@ def save(root, path):
     E.ElementTree(root).write(path, encoding='utf-8', xml_declaration=True)
 
 
+def hardware_components(block):
+    """Construction order and material costs for the reactor's required hardware."""
+    recipes = {
+        'ArcanePower_Thermal_ReactorHousing': [
+            ('SteelPlate',2400),('Construction',1000),('MetalGrid',600),('LargeTube',240),
+            ('Reactor',2000),('Motor',200),('Superconductor',1500),('BulletproofGlass',160),
+            ('Computer',400),('SteelPlate',600)],
+        'ArcanePower_ContainmentController': [
+            ('SteelPlate',240),('Construction',150),('MetalGrid',40),('SmallTube',80),
+            ('Superconductor',300),('Computer',150),('Motor',40),('SteelPlate',60)],
+        'ArcanePower_AdvancedContainmentController': [
+            ('SteelPlate',480),('Construction',300),('MetalGrid',80),('SmallTube',160),
+            ('Superconductor',3000),('Computer',500),('Motor',80),('SteelPlate',120)],
+        'ArcanePower_VentDuct': [
+            ('SteelPlate',180),('InteriorPlate',40),('Construction',120),('MetalGrid',40),
+            ('LargeTube',40),('SmallTube',40),('Computer',16),('Motor',16),
+            ('InteriorPlate',40),('SteelPlate',60)],
+        'ArcanePower_VentOutlet': [
+            ('SteelPlate',280),('InteriorPlate',60),('Construction',180),('MetalGrid',80),
+            ('LargeTube',60),('SmallTube',80),('Computer',64),('Motor',64),
+            ('InteriorPlate',60),('SteelPlate',80)],
+    }
+    subtype=block.findtext('Id/SubtypeId')
+    # The archived authoring reactor is the template for current native exports.
+    if subtype=='ArcanePower_ReactorPrototype':subtype='ArcanePower_Thermal_ReactorHousing'
+    recipe=recipes[subtype]
+    components=block.find('Components');components.clear()
+    for component,count in recipe:
+        E.SubElement(components,'Component',Subtype=component,Count=str(count))
+
+
 BUILD_BLOCKS = {
     'ArcanePower_ReactorPrototype': 'ArcanePower_ReactorPrototype.sbc',
     'ArcanePower_ContainmentController': 'ArcanePower_ContainmentController.sbc',
@@ -140,6 +171,7 @@ def definitions():
         E.SubElement(mount,'MountPoint',Side='Top',StartX=f'{2.5-half:.4f}',EndX=f'{2.5+half:.4f}',StartY=f'{y0:.4f}',EndY=f'{y1:.4f}')
     for side in ['Front','Back','Left','Right']:
         E.SubElement(mount,'MountPoint',Side=side,StartX='2',EndX='3',StartY='0',EndY='1')
+    hardware_components(reactor)
     root=E.Element('Definitions'); blocks=E.SubElement(root,'CubeBlocks');blocks.append(reactor)
     save(root,REACTOR_TEMPLATE)
     refresh_reactor_model()
@@ -156,6 +188,7 @@ def definitions():
     mount=E.SubElement(module,'MountPoints')
     for side in ['Front','Back','Left','Right','Top','Bottom']:
         E.SubElement(mount,'MountPoint',Side=side,StartX='0',StartY='0',EndX='1',EndY='1')
+    hardware_components(module)
     root=E.Element('Definitions');E.SubElement(root,'CubeBlocks').append(module)
     count=copy.deepcopy(module.find('Upgrades/MyUpgradeModuleInfo'))
     set_text(count,'UpgradeType','ArcaneControllerCount')
@@ -166,6 +199,7 @@ def definitions():
         'BlockPairName':'ArcanePower_AdvancedContainmentController',
         'Description':'Two working controllers are required. Standard + advanced: three rings, 1.5x tile speed, 90% efficiency, supports Aether/Helion. Two advanced: four rings, 2x tile speed, 99% efficiency, supports all fuels.',
         'Upgrades/MyUpgradeModuleInfo/Modifier':2}.items():set_text(advanced,path,val)
+    hardware_components(advanced)
     root.find('CubeBlocks').append(advanced)
     save(root,MOD/'Data/CubeBlocks/ArcanePower_ContainmentController.sbc')
 
@@ -202,6 +236,7 @@ def external_hardware_definitions():
                 E.SubElement(mount,'MountPoint',Side=side,StartX=str(x0),StartY=str(y0),EndX=str(x1),EndY=str(y1))
         for side in ('Front','Back','Left','Right'):
             E.SubElement(mount,'MountPoint',Side=side,StartX='0',StartY='0',EndX='3',EndY='1')
+        hardware_components(n)
         blocks.append(n)
     save(root,MOD/'Data/CubeBlocks/ArcanePower_Vents.sbc')
     p=MOD/'Data/CubeBlocks/ArcanePower_ContainmentController.sbc';r=E.parse(p).getroot()

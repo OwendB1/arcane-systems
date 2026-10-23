@@ -49,7 +49,7 @@ namespace ArcanePower
             security.Setter = (b, enabled) => SendCommand(b.EntityId, enabled ? VentCommand.SecurityOn : VentCommand.SecurityOff);
             thermalMode = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlOnOffSwitch, IMyReactor>("ArcanePower_ThermalMode");
             thermalMode.Title = MyStringId.GetOrCompute("Brayton mode");
-            thermalMode.Tooltip = MyStringId.GetOrCompute("Standalone: 20% conversion with hidden manifolds. Brayton: connected heater, recovery, train and cooling bank. Changing mode shuts down, drains paid heat, then moves the manifolds under real containment power. Restart manually when settled.");
+            thermalMode.Tooltip = MyStringId.GetOrCompute("Standalone: 20% conversion with hidden manifolds. Brayton: reactor connected directly to a turbine train and cooling bank. Changing mode shuts down, drains paid heat, then moves the manifolds under real containment power. Restart manually when settled.");
             thermalMode.OnText = MyStringId.GetOrCompute("Brayton");
             thermalMode.OffText = MyStringId.GetOrCompute("Standalone");
             thermalMode.Getter = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.Motion.Thermal != null && r.Motion.Thermal.Requested == ThermalMode.Brayton; };

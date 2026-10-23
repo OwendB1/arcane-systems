@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 M = runpy.run_path(str(ROOT/'assets/build_thermal_models.py'))
 ASSETS = Path.home()/'.local/share/blender-se1-setup/assets/Models/Decals'
 COLOURS = {'PRIMARY': 'PaintedMetal_Yellow', 'CO2_HP': 'BlueFrostedMetal',
-           'CO2_LP': 'PaintedMetal_Clean'}
+           'CO2_LP': 'PaintedMetal_Clean', 'CO2': 'PaintedMetal_Clean'}
 REVISION = 2
 
 
@@ -266,6 +266,10 @@ def manifold_stands(p):
                     break
             section = ((-.70, bottom), (-.70, -1.10), (-.35, -.86),
                        (-.130, -.86), (-.130, -1.02), (-.46, -1.24), (-.46, bottom))
+            low_mount = bottom > -1
+            if low_mount:
+                section = ((-.70,bottom),(-.70,bottom+.30),(-.35,-.60),
+                           (-.130,-.60),(-.130,-.74),(-.46,bottom+.05),(-.46,bottom))
             if existing:
                 section = ((depth, -1.24), (depth, -.86), (-.130, -.86), (-.130, -1.02))
             verts = [c+n*x+up*z+u*(side*.80+t) for t in (-.06, .06) for x, z in section]
@@ -275,6 +279,7 @@ def manifold_stands(p):
             cheek = p.mesh('manifold skid bracket', verts, faces, 'PaintedMetal_Colorable')
             cheek['thermal_bracket_port'] = port['id']
             cheek['thermal_bracket_side'] = side
+            cheek['thermal_low_mount'] = low_mount
             if existing:
                 cheek['thermal_existing_post'] = existing.name
                 continue
@@ -285,10 +290,74 @@ def manifold_stands(p):
             p.bolt('manifold bracket anchor', point+Vector((0, 0, .037)), (0, 0, 1), foot, .025)
 
 
+def mesh_markings(p):
+    # Font curves are flattened to native-material mesh markings for SEUT.
+    for old in list(p.col.objects):
+        if old.type != 'FONT':
+            continue
+        deps = bpy.context.evaluated_depsgraph_get()
+        mesh = bpy.data.meshes.new_from_object(old.evaluated_get(deps))
+        name_before = old.name
+        old.name += ' / converting'
+        obj = bpy.data.objects.new(name_before, mesh)
+        p.col.objects.link(obj)
+        obj.parent = old.parent
+        obj.matrix_world = old.matrix_world.copy()
+        for key in old.keys():
+            obj[key] = old[key]
+        obj['thermal_text'] = old.data.body
+        obj['thermal_decal_support'] = old['thermal_marking_support']
+        M['BUILD']['uv'](obj)
+        bpy.data.objects.remove(old, do_unlink=True)
+
+
+def train_series_plate(p):
+    """Match the upgraded identification plate on the standard compressor."""
+    if p.name.endswith(' upgraded') or named(p,'compressor series plate'):
+        return
+    x=M['CONTRACT']['TRAIN_CENTRES']['compressor']
+    side=1 if ' mirrored' in p.name else -1
+    p.box('compressor series mount',(x,side*1.05,-.45),(1.12,.60,.82),'PaintedMetal_Colorable')
+    plate=p.panel('compressor series plate',(x,side*1.41,-.45),(1.0,.14,.72),(0,side,0))
+    p.label(plate,'EX / 1200 B',(x,side*1.482,-.45),(-side,0,0),(0,0,1),.11)
+
+
+def train_plinth(p):
+    """Continuous foundation from the block floor to the existing deck."""
+    deck = named(p, 'equipment foundation')[0]
+    rings=[]
+    for hx,hy,z in ((6.15,2.30,-p.size.z/2),(6.15,2.30,-2.30),(6.025,2.125,-2.06)):
+        cut=.30
+        rings.extend((x,y,z) for x,y in ((-hx+cut,-hy),(hx-cut,-hy),(hx,-hy+cut),
+            (hx,hy-cut),(hx-cut,hy),(-hx+cut,hy),(-hx,hy-cut),(-hx,-hy+cut)))
+    obj=p.mesh('temporary foundation perimeter',rings,
+        [tuple(reversed(range(8))),tuple(range(16,24))]
+        +[(j+i,j+(i+1)%8,j+(i+1)%8+8,j+i+8) for j in (0,8) for i in range(8)],'PaintedMetal_Colorable')
+    obj.data.materials.append(p.native['PaintedMetal_Darker'])
+    obj.data.polygons[1].material_index=1
+    deck.data=obj.data; deck.matrix_world=obj.matrix_world.copy()
+    deck['thermal_refined_foundation']=True
+    bpy.data.objects.remove(obj,do_unlink=True)
+    for skid in named(p,'load-bearing skid')+named(p,'transverse skid'):
+        bpy.data.objects.remove(skid,do_unlink=True)
+    return deck
+
+
+def train_foundation(p):
+    deck=train_plinth(p)
+    for x,length in ((-3.0,1.25),(-1.4,1.25),(5.45,.60)):
+        for side in (-1,1):
+            cover=p.panel('foundation inspection insert',(x,side*1.83,-2.047),
+                (length,.32,.026),(0,0,1))
+            cover['thermal_seated_on']=deck.name
+
+
 def train(p):
+    shaft_z = M['CONTRACT']['TRAIN_SHAFT_Z']
+    cx,tx,gx,bx=(M['CONTRACT']['TRAIN_CENTRES'][k] for k in ('compressor','turbine','generator','cabinet'))
     for label, x, old_length, length in (
-            ('compressor', -4.25, 2.0, 2.42), ('turbine', -1.35, 2.75, 3.15),
-            ('generator', 2.05, 3.25, 3.40)):
+            ('compressor', cx, 2.0, 2.42), ('turbine', tx, 2.75, 3.15),
+            ('generator', gx, 2.0, 2.0)):
         stretch(named(p, label+' casing')[0], 0, x, length/old_length)
         for cover in named(p, label+' bolted end cover'):
             side = math.copysign(1, centre(cover).x-x)
@@ -296,27 +365,62 @@ def train(p):
         for obj in named(p, label+' fitted cradle')+named(p, label+' split casing band'):
             side = math.copysign(1, centre(obj).x-x)
             move(p, [obj], (side*(length-old_length)*.33, 0, 0))
+    # Lower saddles follow the drum and leave the inlet plenum unobstructed.
+    for cradle in named(p, 'turbine fitted cradle'):
+        move(p, [cradle], (.50 if centre(cradle).x < tx else -.50, 0, 0))
+    for cradle in named(p, 'compressor fitted cradle'):
+        if centre(cradle).x > cx:move(p, [cradle], (-.55, 0, 0))
+    for band in named(p, 'generator split casing band'):
+        move(p, [band], (math.copysign(.24*M['CONTRACT']['TRAIN_GENERATOR_STRETCH'],centre(band).x-gx),0,0))
+    for label, x, length, radius in (('compressor',cx,2.42,1.35),
+                                    ('turbine',tx,3.15,1.85),('generator',gx,2.0,1.62)):
+        for sign in (-1,1):
+            end=x+sign*length/2
+            if label=='generator':end=M['CONTRACT']['generator_x'](end)
+            ring=p.tube(label+' stepped end flange',[(end-.025,0,shaft_z),(end+.025,0,shaft_z)],
+                        radius+.035,'Metal_Dull',.09,64)
+            ring['thermal_seated_on']=named(p,label+' casing')[0].name
     motor = named(p, 'electric compressor motor')[0]
-    stretch(motor, 0, -5.55, .48/.70)
+    stretch(motor, 0, cx-1.30, .48/.70)
     move(p, [motor], (-.19, 0, 0))
     move(p, named(p, 'compressor motor cradle')+named(p, 'compressor motor terminal'), (-.19, 0, 0))
     casing = named(p, 'turbine casing')[0]
     for side in (-1, 1):
-        flange = p.box('turbine split joint', (-1.35, side*1.86, .45),
+        flange = p.box('turbine split joint', (tx, side*1.86, shaft_z),
                        (3.05, .22, .16), 'Metal_Dull', .003)
         flange['thermal_seated_on'] = casing.name
-        for x in (-2.65, -2, -1.35, -.7, -.05):
-            p.bolt('split joint stud', (x, side*1.972, .45), (0, side, 0), flange, .028)
-    pod(p, (4.4, -1.68, -.62), .76, .68)
+        for x in (tx-1.30, tx-.65, tx, tx+.65, tx+1.30):
+            p.bolt('split joint stud', (x, side*1.972, shaft_z), (0, side, 0), flange, .028)
+    train_foundation(p)
+    train_series_plate(p)
+    cabinet = named(p, 'generator switchgear')[0]
+    cabinet_centre = centre(cabinet)
+    at = lambda offset: cabinet_centre+Vector(offset)*.7
+    pod(p, at((0, -1.68, -.32)), .76*.7, .68*.7)
     door = named(p, 'supported switchgear door')[0]
-    for z in (-1.12, .62):
-        hinge = p.box('switchgear hinge', (3.64, -1.66, z), (.12, .10, .30), 'Metal_Dull', .010)
+    for z in (-.82, .92):
+        hinge = p.box('switchgear hinge', at((-.56, -1.66, z)), Vector((.12, .10, .30))*.7, 'Metal_Dull', .003)
         hinge['thermal_seated_on'] = door.name
-    p.box('switchgear latch foot', (5.02, -1.67, -.20), (.12, .10, .45), 'Metal_Dull', .010)
-    p.box('switchgear latch', (5.02, -1.74, -.20), (.075, .08, .32), 'PaintedMetal_VeryDark', .008)
-    for x in (-2.15, -.55):
-        foot = p.box('turbine inspection boss', (x, .0, 2.28), (.20, .38, .16), 'Metal_Dull', .014)
-        p.bolt('inspection boss plug', (x, 0, 2.362), (0, 0, 1), foot, .035)
+    p.box('switchgear latch foot', at((.53, -1.67, .10)), Vector((.12, .10, .45))*.7, 'Metal_Dull', .003)
+    p.box('switchgear latch', at((.53, -1.74, .10)), Vector((.075, .08, .32))*.7, 'PaintedMetal_VeryDark', .003)
+    p.label(door,'II / EX' if p.name.endswith(' upgraded') else 'STD',
+            at((0,-1.631,-1.08)),size=.085)
+    for x in (tx-.80, tx+.80):
+        foot = p.box('turbine inspection boss', (x, .0, shaft_z+1.83), (.20, .38, .16), 'Metal_Dull', .014)
+        p.bolt('inspection boss plug', (x, 0, shaft_z+1.912), (0, 0, 1), foot, .035)
+
+    start, end = cx+1.21, tx-1.575
+    sides=64
+    rings=((start,1.35),(end,1.85),(start,1.23),(end,1.73))
+    verts=[(x,r*math.cos(i*math.tau/sides),shaft_z+r*math.sin(i*math.tau/sides))
+           for x,r in rings for i in range(sides)]
+    faces=[]
+    for a,b in ((0,1),(1,3),(3,2),(2,0)):
+        faces.extend((a*sides+i,a*sides+(i+1)%sides,b*sides+(i+1)%sides,b*sides+i) for i in range(sides))
+    taper=p.mesh('compressor expanding casing',verts,faces,'PaintedMetal_Darker')
+    for f in taper.data.polygons:f.use_smooth=f.index//sides in (0,2)
+    taper['thermal_compressor_transition']=True
+    taper['thermal_pressure_wall_m']=.12
 
 
 def heater(p):
@@ -494,6 +598,10 @@ def pipe(p):
 
 
 def geometry(name):
+    if name == 'Atmospheric cooler' and M['scene_for'](name).get('cooler_integrated_revision'):
+        return M['record'](name)
+    if name in ('Space radiator','Radiator panel') and M['scene_for'](name).get('radiator_tracking_revision'):
+        return M['record'](name)
     p = parts(name)
     if p.scene.get('thermal_detail_revision') == REVISION:
         return M['record'](name)
@@ -547,6 +655,7 @@ def asset_details(p):
     """Fit native cover, intake and seam assets to settled mechanical surfaces."""
     name = p.name.removesuffix(' upgraded')
     for cheek in named(p, 'manifold skid bracket'):
+        if cheek.get('thermal_low_mount'):continue
         port = next(r for r in p.ports if r['id'] == cheek['thermal_bracket_port'])
         n, up, c = (Vector(port[k]) for k in ('normal', 'hot_axis', 'position'))
         side = cheek['thermal_bracket_side']
@@ -557,16 +666,19 @@ def asset_details(p):
             mark(p, cheek, 'Panel Line Welded', c-n*.58-up*2.2+up.cross(n)*(side*.8615),
                  up, n*side, 1.30, 'Paneling')
     if name == 'Brayton train':
+        cx,tx,gx,bx=(M['CONTRACT']['TRAIN_CENTRES'][k] for k in ('compressor','turbine','generator','cabinet'))
         cabinet = named(p, 'generator switchgear')[0]
+        c = centre(cabinet)
+        at = lambda offset: c+Vector(offset)*.7
         for y in (-.80, .80):
-            mark(p, cabinet, 'Square Vent', (5.402, y, -.55), (0, 1, 0), (0, 0, 1), .85, 'Atlas3')
-        mark(p, cabinet, 'Square Vent', (5.402, 0, .76), (0, 1, 0), (0, 0, 1), .48, 'Atlas3')
+            mark(p, cabinet, 'Square Vent', at((.727,y,-.25)), (0, 1, 0), (0, 0, 1), .85*.7, 'Atlas3')
+        mark(p, cabinet, 'Square Vent', at((.727,0,1.06)), (0, 1, 0), (0, 0, 1), .48*.7, 'Atlas3')
         door = named(p, 'supported switchgear door')[0]
-        mark(p, door, 'Square Vent', (4.4, -1.632, .75), (1, 0, 0), (0, 0, 1), .45, 'Atlas3')
+        mark(p, door, 'Square Vent', at((0,-1.632,1.05)), (1, 0, 0), (0, 0, 1), .45*.7, 'Atlas3')
         compressor = named(p, 'compressor casing')[0]
-        mark(p, compressor, 'Square Vent', (-4.25, 1.275, 0), (-1, 0, 0), (0, 0, 1), .45, 'Atlas3')
-        generator = named(p, 'generator casing')[0]
-        mark(p, generator, 'Tech Panel', (2.05, 1.622, .45), (-1, 0, 0), (0, 0, 1), .40, 'Atlas3')
+        mark(p, compressor, 'Square Vent', (cx, 1.275, M['CONTRACT']['TRAIN_SHAFT_Z']-.45), (-1, 0, 0), (0, 0, 1), .45, 'Atlas3')
+        # The generator casing is reshaped by the visibility pass. Project its
+        # service marking there, after the inspection aperture is final.
     elif name == 'Primary heater':
         for lid in named(p, 'top exchanger access'):
             mark(p, lid, 'Square Vent', lid.location+Vector((0, -1.35, .042)),
@@ -611,6 +723,10 @@ def asset_details(p):
 
 
 def textures(name):
+    if name == 'Atmospheric cooler' and M['scene_for'](name).get('cooler_integrated_revision'):
+        return M['record'](name)
+    if name in ('Space radiator','Radiator panel') and M['scene_for'](name).get('radiator_tracking_revision'):
+        return M['record'](name)
     p = parts(name)
     if p.scene.get('thermal_texture_revision') == REVISION:
         runpy.run_path(str(ROOT/'assets/refine_thermal_visibility.py'))['apply'](name)
@@ -656,14 +772,14 @@ def textures(name):
                         face.material_index = len(mesh.materials)-1
             elif obj.type == 'FONT' and obj.get('thermal_marking_support') == flange.name and obj.data.body == port['type'].replace('_', ' / '):
                 obj.location = centre+up*.92-n*.012
-        pressure = {'PRIMARY': 'PRIMARY', 'CO2_HP': '22 MPa', 'CO2_LP': '8 MPa'}[port['type']]
+        pressure = {'PRIMARY': 'PRIMARY', 'CO2_HP': '22 MPa', 'CO2_LP': '8 MPa', 'CO2': 'DUPLEX'}[port['type']]
         if port['type'] != 'PRIMARY':
             p.label(flange, pressure, centre-n*.012, u, up, .065)
     for obj in list(p.col.objects):
         if obj.type == 'FONT':
             obj.data.body = obj.data.body.replace('1200 C', '2200 C').replace('OPT / III', 'EX / 2200 C')
     for panel in named(p, 'instrument service cassette'):
-        width = .20 if name == 'Atmospheric cooler' else .36
+        width = .20 if name == 'Atmospheric cooler' else .252 if name.startswith('Brayton train') else .36
         mark(p, panel, 'Tech Panel', panel.location+Vector((0, -.072, 0)), (1, 0, 0), (0, 0, 1), width, 'Atlas3')
     for panel in named(p, 'top exchanger access'):
         mark(p, panel, 'Sign High Pressure', panel.location+Vector((0, 0, .042)), (1, 0, 0), (0, 1, 0), .32)
@@ -682,24 +798,7 @@ def textures(name):
         points = [obj.matrix_world@x.co for x in obj.data.vertices]
         radius = max(((x-Vector(obj['support_point']))-axis*(x-Vector(obj['support_point'])).dot(axis)).length for x in points)
         mark(p, obj, 'Large Screw', centre, u, v, radius*1.05, 'Atlas3')
-    # Font curves are flattened to native-material mesh markings for SEUT.
-    for old in list(p.col.objects):
-        if old.type != 'FONT':
-            continue
-        deps = bpy.context.evaluated_depsgraph_get()
-        mesh = bpy.data.meshes.new_from_object(old.evaluated_get(deps))
-        name_before = old.name
-        old.name += ' / converting'
-        obj = bpy.data.objects.new(name_before, mesh)
-        p.col.objects.link(obj)
-        obj.parent = old.parent
-        obj.matrix_world = old.matrix_world.copy()
-        for key in old.keys():
-            obj[key] = old[key]
-        obj['thermal_text'] = old.data.body
-        obj['thermal_decal_support'] = old['thermal_marking_support']
-        M['BUILD']['uv'](obj)
-        bpy.data.objects.remove(old, do_unlink=True)
+    mesh_markings(p)
     p.scene['thermal_texture_revision'] = REVISION
     p.scene['thermal_phase'] = 'textures'
     bpy.context.view_layer.update()

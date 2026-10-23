@@ -8,23 +8,34 @@ import itertools
 import math
 
 CELL = 2.5
+TRAIN_SHAFT_Z = -.10
+TRAIN_CENTRES = {"compressor": -4.40, "turbine": 1.00, "generator": 3.70, "cabinet": 5.40}
+# Lengthen the complete generator from its fixed turbine-facing seat.
+TRAIN_GENERATOR_REAR = 4.94
+TRAIN_GENERATOR_STRETCH = (TRAIN_GENERATOR_REAR-(TRAIN_CENTRES['generator']-1))/2
+
+
+def generator_x(x):
+    front = TRAIN_CENTRES['generator']-1
+    return front+(x-front)*TRAIN_GENERATOR_STRETCH
 CIRCUITS = ('PRIMARY', 'CO2_HP', 'CO2_LP')
-# Accepted external manifold positions. Internal flow changes must not move these sockets.
+# Compact train interfaces. Standard duplex bores remain unscaled; side sockets fit the 5×2×2 envelope.
 TRAIN_PORTS = [
-    {'id': 'CO2 leg -1', 'type': 'CO2_HP', 'position': [-2.5, -3.75, 1.25],
+    {'id': 'CO2', 'type': 'CO2', 'position': [-5.0, -2.5, -1.25],
      'normal': [0., -1., 0.], 'hot_axis': [0., 0., 1.]},
-    {'id': 'CO2 leg 1', 'type': 'CO2_LP', 'position': [-2.5, 3.75, 1.25],
-     'normal': [0., 1., 0.], 'hot_axis': [0., 0., 1.]},
 ]
 MACHINES = {
-    'Brayton train': (5, 3, 2),
-    'Brayton train upgraded': (5, 3, 2),
+    'Brayton train': (5, 2, 2),
+    'Brayton train upgraded': (5, 2, 2),
+    'Brayton train mirrored': (5, 2, 2),
+    'Brayton train mirrored upgraded': (5, 2, 2),
     'Primary heater': (3, 3, 3),
     'Primary heater upgraded': (3, 3, 3),
     'Recuperator': (3, 2, 3),
     'Recuperator upgraded': (3, 2, 3),
     'Atmospheric cooler': (3, 2, 3),
-    'Space radiator': (3, 2, 3),
+    'Space radiator': (3, 3, 3),
+    'Radiator panel': (3, 3, 2),
     'Reactor housing': (5, 5, 3),
 }
 # (face normal, positive/H offset direction). Negative is C, never swapped.
@@ -43,6 +54,27 @@ SPECS.update({c+' / '+shape: (1, 1, 1) for c in CIRCUITS for shape in PIPE_PORTS
 SPECS['PRIMARY / Reactor adapter'] = (1, 1, 1)
 BARE_PIPES = {name + ' bare': name for name in SPECS if ' / ' in name}
 SPECS.update({name: SPECS[base] for name, base in BARE_PIPES.items()})
+# Keep authored rebuild sources and saved-world IDs. PRIMARY supplies the single
+# public pipe family; HP/LP IDs are hidden aliases using those same assets.
+RETIRED = {'Primary heater', 'Primary heater upgraded', 'Recuperator', 'Recuperator upgraded'}
+PIPE_ALIASES = {name: 'PRIMARY / '+name.split(' / ')[1] for name in SPECS
+                if name.startswith(('CO2_HP / ', 'CO2_LP / '))}
+RUNTIME = {name: cells for name, cells in SPECS.items() if name not in RETIRED}
+PLAYABLE = {name: cells for name, cells in RUNTIME.items() if name not in PIPE_ALIASES}
+
+
+def runtime_circuit(name, circuit):
+    return circuit if circuit == 'CHAMBER' else 'CO2'
+
+
+def circuits_match(a, b):
+    return True  # All external sockets carry the same H/C duplex pair.
+
+
+def train_ports(name):
+    return [dict(p, position=[p['position'][0], -p['position'][1], p['position'][2]],
+                 normal=[p['normal'][0], -p['normal'][1], p['normal'][2]])
+            for p in TRAIN_PORTS] if 'mirrored' in name else TRAIN_PORTS
 
 
 def subtype(name):
@@ -149,8 +181,10 @@ def route(start, end, blocked):
 
 
 def self_check():
-    assert len(ROTATIONS) == 24 and len(SPECS) == 31 + len(BARE_PIPES)
+    assert len(ROTATIONS) == 24 and len(SPECS) == len(MACHINES) + 2*len(BARE_PIPES)
     assert len(BARE_PIPES) == 22
+    assert len(PLAYABLE) == 24 and len(PIPE_ALIASES) == 28
+    assert all(target in PLAYABLE and SPECS[name] == SPECS[target] for name, target in PIPE_ALIASES.items())
     assert all(SPECS[name] == SPECS[base] == (1, 1, 1) for name, base in BARE_PIPES.items())
     assert len({subtype(n) for n in SPECS}) == len(SPECS)
     for name, size in SPECS.items():
@@ -177,3 +211,8 @@ def self_check():
 
 if __name__ == '__main__':
     print(self_check())
+
+
+def circuit_type(name):
+    """PRIMARY is the reactor-side label for the direct high-pressure loop."""
+    return "CO2_HP" if name == "PRIMARY" else name

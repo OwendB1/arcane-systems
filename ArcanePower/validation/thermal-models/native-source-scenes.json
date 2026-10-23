@@ -20,7 +20,7 @@
     ],
     "cells": [
       5,
-      3,
+      2,
       2
     ],
     "moving_parts": [
@@ -37,7 +37,7 @@
     ],
     "cells": [
       5,
-      3,
+      2,
       2
     ],
     "moving_parts": [
@@ -108,14 +108,17 @@
   "Space radiator": {
     "source": "ArcanePower_Thermal_SpaceRadiator",
     "scenes": [
+      "APT_SpaceRadiator_RadiatorPanels_M",
       "APT_SpaceRadiator_M"
     ],
     "cells": [
       3,
-      2,
+      3,
       3
     ],
-    "moving_parts": []
+    "moving_parts": [
+      "Thermal_RadiatorPanels"
+    ]
   },
   "Reactor housing": {
     "source": "ArcanePower_Thermal_ReactorHousing",
@@ -685,5 +688,54 @@
       1
     ],
     "moving_parts": []
+  },
+  "Radiator panel": {
+    "source": "ArcanePower_Thermal_RadiatorPanel",
+    "scenes": [
+      "APT_RadiatorPanel_RadiatorPanels_M",
+      "APT_RadiatorPanel_M"
+    ],
+    "cells": [
+      3,
+      3,
+      2
+    ],
+    "moving_parts": [
+      "Thermal_RadiatorPanels"
+    ]
+  },
+  "Brayton train mirrored": {
+    "source": "ArcanePower_Thermal_BraytonTrainMirrored",
+    "scenes": [
+      "APT_BraytonTrainMir_TurbineRotor_M",
+      "APT_BraytonTrainMir_CompressorRotor_M",
+      "APT_BraytonTrainMir_M"
+    ],
+    "cells": [
+      5,
+      2,
+      2
+    ],
+    "moving_parts": [
+      "Thermal_TurbineRotor",
+      "Thermal_CompressorRotor"
+    ]
+  },
+  "Brayton train mirrored upgraded": {
+    "source": "ArcanePower_Thermal_BraytonTrainMirroredUpgraded",
+    "scenes": [
+      "APT_BraytonTrainMirUpgraded_TurbineRotor_M",
+      "APT_BraytonTrainMirUpgraded_CompressorRotor_M",
+      "APT_BraytonTrainMirUpgraded_M"
+    ],
+    "cells": [
+      5,
+      2,
+      2
+    ],
+    "moving_parts": [
+      "Thermal_TurbineRotor",
+      "Thermal_CompressorRotor"
+    ]
   }
 }

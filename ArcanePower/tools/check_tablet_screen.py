@@ -73,14 +73,24 @@ namespace ArcanePower {
   static float glyphHeight;
   static void Need(bool value,string message){if(!value)throw new Exception(message);}
   static void Near(float a,float b,string message){Need(Math.Abs(a-b)<.01,message);}
-  static StatusReport Report(){
-   var report=new StatusReport{Name="Arcane Reactor",State="RUNNING",Tone="green",Fuel="Aether"};
+  static StatusReport Report(bool precharging=false,bool waiting=false,bool brayton=false){
+   var report=new StatusReport{Name="Arcane Reactor",State=precharging?(waiting?"STARTUP WAITING FOR POWER  /  50%":"CHARGING STARTUP RESERVE  /  50%"):brayton?"REACTOR OVERHEATING / FAILURE RISK":"RUNNING",Tone=precharging?"white":brayton?"red":"green",Fuel="Aether",Precharging=precharging,Brayton=brayton,Reserve=.5};
    string[] labels={"Output","Heat","Reserve","Fuel stock","Spare tiles","Vent","Net","Ramp","Containment","Fuel efficiency","Fuel burn","Fuel remaining","Security mode","Integrity","Controllers","Field","Reserve energy","Tile grade","Quartet wear","Replacing","Dismantle at","Tile demand","Tile reserve","Tile stock","Startup tiles","Conveyors","Route","Doors"};
    foreach(string label in labels)report.Rows.Add(new StatusRow{Section="TEST",Label=label,Value=label=="Fuel stock"?"4991.814 units":label=="Tile stock"?"Standard 308 / Reinforced 0 / Advanced 0":"Test reading",Tone="white"});
+   if(brayton){
+    string[] coolingLabels={"Duty / standby","Conversion efficiency","Cooling capacity","Cooling required","Returned waste","Startup / cooldown draw"};
+    string[] coolingValues={"4 / 1","78%","15 GW","21 GW at design load","12345678.0 MJ","500 MW"};
+    for(int i=0;i<coolingLabels.Length;i++)report.Rows.Add(new StatusRow{Section="POWER",Label=coolingLabels[i],Value=coolingValues[i],Tone="yellow"});
+   }
+   if(precharging){
+    report.Rows.Add(new StatusRow{Section="POWER",Label="Startup charge",Value="50%",Tone="white"});
+    report.Rows.Add(new StatusRow{Section="POWER",Label="Charge rate",Value=waiting?"0 MW net":"3 MW net",Tone="white"});
+    report.Rows.Add(new StatusRow{Section="POWER",Label="Charge ETA",Value=waiting?"Waiting for surplus power":"~15 s",Tone="white"});
+   }
    return report;
   }
   static void Layout(){
-   var report=Report();
+   foreach(var report in new[]{Report(),Report(true),Report(true,true),Report(false,false,true),Report(true,false,true)})
    for(int alerts=0;alerts<=2;alerts++){
     if(alerts>0)report.Rows.Add(new StatusRow{Section=null,Label="",Value="Repair the vent route urgently; core cannot eject.",Tone="red"});
     for(int page=0;page<5;page++){
@@ -95,10 +105,30 @@ namespace ArcanePower {
       }
      }
      Need(sprites.Any(s=>s.Type==SpriteType.TEXT && s.Data.Contains(ReactorDashboard.Pages[page].ToUpperInvariant())),"every page has its title");
+     if(report.Precharging){
+      var bar=sprites.Single(s=>s.Type==SpriteType.TEXTURE && s.Size.Value==new Vector2(302,3));
+      Need(bar.Color==ReactorDashboard.Tone("white"),"tablet shows neutral charge progress on every page");
+      var heading=sprites.Single(s=>s.Type==SpriteType.TEXT && s.Data==report.State);
+      Need(heading.Position.Value.Y+heading.RotationOrScale*37<=bar.Position.Value.Y-1.5f,"charge bar clears state text");
+     }
+     var lcd=ReactorDashboard.Draw(report,page,"unused","LCD / "+ReactorDashboard.Pages[page]);
+     Need(lcd.Any(s=>s.Data==(report.Precharging?"STARTUP CHARGE":"EMERGENCY RESERVE")),"LCD identifies charge or reserve correctly");
+     if(report.Precharging && page<=1){
+      foreach(var label in new[]{"Containment","Charge rate","Charge ETA","Reserve energy","Net"}){
+       Need(sprites.Any(s=>s.Data==label) && lcd.Any(s=>s.Data==label),"both overview/power pages show "+label);
+       Need(sprites.Any(s=>s.Data==report.Value(label)) && lcd.Any(s=>s.Data==report.Value(label)),"both screens show live "+label);
+      }
+     }
+     if(report.Brayton && !report.Precharging && page==1){
+      foreach(var label in new[]{"Duty / standby","Conversion efficiency","Cooling capacity","Cooling required","Returned waste"}){
+       Need(sprites.Any(s=>s.Data==label) && lcd.Any(s=>s.Data==label),"both power pages show "+label);
+       Need(sprites.Any(s=>s.Data==report.Value(label)) && lcd.Any(s=>s.Data==report.Value(label)),"both power pages show live "+label);
+      }
+     }
     }
    }
    Need(ReactorDashboard.DrawTablet(null,0,"Suit and grid antennas must have a bidirectional connection.").Any(s=>s.Data=="DISCONNECTED"),"offline screen clears telemetry");
-   Console.WriteLine("PASS: five landscape pages fit the screen, including two alerts, stock detail and disconnected state");
+   Console.WriteLine("PASS: normal/charging/waiting/Brayton pages, progress bars and live LCD/tablet metrics fit with up to two alerts");
   }
   static void Lifetime(){
    var tool=new Sandbox.Game.Entities.MyHandToolBase();var original=tool.Render;var screen=new TabletScreen();

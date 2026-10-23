@@ -4,10 +4,10 @@ import json
 import math
 
 # Net efficiency ceiling, auxiliary draw, required hot-end temperature Celsius.
-# One recovery unit per duty train starts at 40%; sufficient exotic recovery
-# reaches 78%. Standalone generation is an alternative path for the same heat.
-STAGES={'base':(.55,.08,650),'recuperated':(.66,.07,1000),
-        'optimized':(.74,.06,1600),'exotic':(.78,.05,2200)}
+# The integrated train/compressor reaches higher tiers as source heat improves.
+# Standalone generation is an alternative path for the same heat.
+STAGES={'base':(.40,.08,650),'improved':(.55,.07,1000),
+        'optimized':(.66,.06,1600),'exotic':(.78,.05,2200)}
 
 
 def standalone(offered_mw):
@@ -38,13 +38,11 @@ def cooling_capacity(kind,rated_mw,density=1,ambient_c=25,sky_view=1,sink_c=-270
 
 
 def budget(offered_mw,stage='base',cooling_mw=None,cold_c=45,hot_c=None,
-           recovery_ratio=1,flow_capacity_mw=None):
+           flow_capacity_mw=None,duty_trains=4):
     finite(offered_mw,'Offered heat',0);finite(cold_c,'Compressor inlet',-273.15)
     ceiling,aux_ratio,required_hot=STAGES[stage]
-    finite(recovery_ratio,'Recovery capacity ratio',0)
     if flow_capacity_mw is not None:finite(flow_capacity_mw,'Flow capacity',0)
-    recovered=min(.78,.40+.40*(1-2**(-max(0,recovery_ratio-1))))
-    gross_ratio=min(ceiling,recovered)+aux_ratio
+    gross_ratio=ceiling+aux_ratio
     hot_c=required_hot if hot_c is None else finite(hot_c,'Turbine inlet',-273.15)
     if hot_c<required_hot:raise ValueError('Primary temperature is too low for this upgrade stage')
     if cooling_mw is not None:finite(cooling_mw,'Available cooling',0)
@@ -53,10 +51,11 @@ def budget(offered_mw,stage='base',cooling_mw=None,cold_c=45,hot_c=None,
     reference_carnot=1-(45+273.15)/(required_hot+273.15)
     factor=min(1,max(0,1-cold_k/hot_k)/reference_carnot)
     gross_ratio*=factor
-    efficiency=max(0,gross_ratio-aux_ratio)
-    accepted=offered_mw if efficiency>0 and recovery_ratio>0 else 0
+    bank_factor=0 if duty_trains<=0 else .2+.2*min(4,duty_trains)
+    efficiency=max(0,gross_ratio-aux_ratio)*bank_factor
+    gross_ratio=efficiency+aux_ratio
+    accepted=offered_mw if efficiency>0 else 0
     if flow_capacity_mw is not None:accepted=min(accepted,flow_capacity_mw)
-    if cooling_mw is not None:accepted=min(accepted,cooling_mw/(1-efficiency))
     gross=accepted*gross_ratio;aux=accepted*aux_ratio
     net=gross-aux;rejected=accepted-net;unaccepted=offered_mw-accepted
     assert math.isclose(offered_mw,net+rejected+unaccepted,rel_tol=1e-12,abs_tol=1e-8)
@@ -64,39 +63,32 @@ def budget(offered_mw,stage='base',cooling_mw=None,cold_c=45,hot_c=None,
     return dict(stage=stage,offered_heat_mw=offered_mw,accepted_heat_mw=accepted,
                 unaccepted_heat_mw=unaccepted,gross_mw=gross,auxiliary_mw=aux,
                 net_mw=net,rejected_mw=rejected,net_efficiency=efficiency,
-                hot_c=hot_c,cold_c=cold_c,recovery_ratio=recovery_ratio,
+                hot_c=hot_c,cold_c=cold_c,
+                bank_efficiency_factor=bank_factor,
+                sustainable_net_mw=net if cooling_mw is None else min(accepted,cooling_mw/(1-efficiency))*efficiency,
+                cooling_deficit_mw=0 if cooling_mw is None else max(0,rejected-cooling_mw),
                 equipment_efficiency_ceiling=ceiling)
 
 
 
-def bank(offered_mw,heaters=1,trains=1,recuperators=1,coolers=1,stage='base',
+def bank(offered_mw,trains=1,coolers=1,stage='base',
          environment='atmosphere',cooler_rating_mw=60,density=1,ambient_c=25,
          sky_view=1,sink_c=-270.15):
     """100 MWth modules for balance examples; native runtime remains separate."""
     finite(offered_mw,'Offered heat',0)
-    counts=dict(heaters=heaters,trains=trains,recuperators=recuperators,coolers=coolers)
+    counts=dict(trains=trains,coolers=coolers)
     for name,count in counts.items():
         if type(count) is not int or count<0:raise ValueError(name+' must be a non-negative integer')
     def point(installed):
         cooling,cold=cooling_capacity(environment,cooler_rating_mw*installed['coolers'],density,ambient_c,sky_view,sink_c)
-        maximum=min(math.ceil(offered_mw/100),installed['heaters'],installed['trains'],installed['recuperators'])
-        candidates=[]
-        for duty in range(maximum+1):
-            design_flow=duty*100
-            ratio=installed['recuperators']*100/design_flow if design_flow else 0
-            row=budget(offered_mw,stage,cooling,cold,recovery_ratio=ratio,
-                       flow_capacity_mw=min(design_flow,installed['recuperators']*100))
-            candidates.append((row['net_mw'],-duty,row))
-        _,negative_duty,row=max(candidates,key=lambda item:(item[0],item[1]))
-        duty=-negative_duty
-        limits={'heat supply':offered_mw,'heater capacity':installed['heaters']*100,
-                'train capacity':installed['trains']*100,'dispatched bank':duty*100,'recovery capacity':installed['recuperators']*100,
-                'cooling capacity':cooling/(1-row['net_efficiency'])}
+        duty=min(installed['trains'],max(4,math.ceil(offered_mw/100))) if offered_mw>0 and installed['coolers'] else 0
+        row=budget(offered_mw,stage,cooling,cold,flow_capacity_mw=duty*100,duty_trains=duty)
+        limits={'heat supply':offered_mw,'train capacity':duty*100}
         smallest=min(limits.values())
         row.update(duty_trains=duty,standby_trains=installed['trains']-duty,
-                   duty_heaters=duty,standby_heaters=installed['heaters']-duty,
                    installed=installed,available_cooling_mw=cooling,
-                   bottlenecks=[name for name,limit in limits.items() if math.isclose(limit,smallest,abs_tol=1e-8)])
+                   bottlenecks=[name for name,limit in limits.items() if math.isclose(limit,smallest,abs_tol=1e-8)],
+                   cooling_safe=row['cooling_deficit_mw']<=1e-8)
         return row
     result=point(counts)
     losses={name:point(dict(counts,**{name:count-1}))['net_mw'] for name,count in counts.items() if count}
@@ -109,34 +101,33 @@ def check():
     cases=0
     for heat in (0,1,100,25000,250000,2500000):
         for stage in STAGES:
-            assert math.isclose(budget(heat,stage)['net_mw'],heat*.4,rel_tol=1e-12,abs_tol=1e-8)
+            assert math.isclose(budget(heat,stage)['net_mw'],heat*STAGES[stage][0],rel_tol=1e-12,abs_tol=1e-8)
             cases+=1
-    assert math.isclose(bank(100,recuperators=2)['net_mw'],55)
-    assert math.isclose(bank(100,recuperators=6,stage='exotic')['net_mw'],78)
-    assert math.isclose(bank(100,recuperators=100,stage='exotic')['net_mw'],78)
     assert math.isclose(standalone(100)['net_mw'],20)
     assert math.isclose(standalone(100)['rejected_mw'],80)
-    assert math.isclose(bank(100,recuperators=6)['net_mw'],55)
-    assert math.isclose(bank(200,2,2,2,2)['net_mw'],80)
-    assert math.isclose(bank(200,trains=2)['net_mw'],40)  # one heater is still the bottleneck
-    resilient=bank(200,3,3,3,3)
+    assert math.isclose(bank(200,2,2)['net_mw'],48)
+    assert math.isclose(bank(200,trains=2)['net_mw'],48)
+    assert bank(200,trains=2)['cooling_deficit_mw']>0
+    resilient=bank(200,5,3)
     assert resilient['standby_trains']==1
     assert math.isclose(resilient['guaranteed_single_module_loss_net_mw'],80)
     assert bank(100)['guaranteed_single_module_loss_net_mw']==0
-    for key in ('heaters','trains','recuperators','coolers'):
+    for key in ('trains','coolers'):
         assert bank(100,**{key:0})['net_mw']==0
-    assert bank(100,environment='atmosphere',density=0)['net_mw']==0
-    assert bank(100,environment='atmosphere',density=0)['duty_trains']==0
-    assert bank(100,environment='atmosphere',density=.2)['net_mw']<40
-    assert bank(100,ambient_c=60)['net_mw']<40
-    assert math.isclose(bank(100,environment='space')['net_mw'],40)
-    assert bank(100,environment='space',sky_view=0)['net_mw']==0
-    assert bank(100,environment='space',sink_c=35)['net_mw']==0
-    assert 0<bank(100,environment='space',sink_c=25)['net_mw']<40
+    assert bank(100,environment='atmosphere',density=0)['sustainable_net_mw']==0
+    assert bank(100,environment='atmosphere',density=0)['duty_trains']==1
+    assert bank(100,environment='atmosphere',density=.2)['cooling_deficit_mw']>0
+    assert bank(100,ambient_c=60)['net_mw']<16
+    assert math.isclose(bank(100,environment='space')['net_mw'],16)
+    assert bank(100,environment='space',sky_view=0)['sustainable_net_mw']==0
+    assert bank(100,environment='space',sink_c=35)['sustainable_net_mw']==0
+    assert bank(100,environment='space',sink_c=25)['cooling_deficit_mw']>0
+    for count in range(1,6):
+        assert math.isclose(bank(100,count,2,stage='exotic')['net_mw'],78*min(1,.2+.2*count))
     assert budget(100,cold_c=650)['accepted_heat_mw']==0
-    outputs=[bank(q,2,2,3,3)['net_mw'] for q in (99,100,101,110,120,200)]
+    outputs=[bank(q,2,3)['net_mw'] for q in (99,100,101,110,120,200)]
     assert outputs==sorted(outputs),'Automatic dispatch must not reduce power as more heat becomes available'
-    for name in ('heaters','trains','recuperators','coolers'):
+    for name in ('trains','coolers'):
         assert bank(200,**{name:3})['net_mw']>=bank(200)['net_mw'],'Adding capacity must not reduce output'
     for value in (-1,float('nan'),float('inf')):
         try:bank(value)
@@ -163,12 +154,12 @@ if __name__=='__main__':
     parser.add_argument('--ambient-c',type=float,default=25)
     parser.add_argument('--sky-view',type=float,default=1)
     parser.add_argument('--sink-c',type=float,default=-270.15)
-    for name in ('heaters','trains','recuperators','coolers'):
+    for name in ('trains','coolers'):
         parser.add_argument('--'+name,type=int,default=1)
     args=parser.parse_args()
     print(json.dumps({'self_check':check(),'standalone':standalone(args.heat_mw),
-                      'plant':bank(args.heat_mw,args.heaters,args.trains,args.recuperators,args.coolers,args.stage,
+                      'plant':bank(args.heat_mw,args.trains,args.coolers,args.stage,
                                    args.cooler,args.cooling_mw,args.density,args.ambient_c,args.sky_view,args.sink_c),
-                      'examples':{'starter':bank(100),'more_recovery':bank(100,recuperators=2),
-                                  'premium_recovery':bank(100,recuperators=6,stage='exotic'),
-                                  'parallel':bank(200,2,2,2,2),'redundant':bank(200,3,3,3,3)}},indent=2))
+                      'examples':{'starter':bank(100),'improved':bank(100,stage='improved'),
+                                  'premium':bank(100,stage='exotic'),
+                                  'parallel':bank(200,4,2),'redundant':bank(200,5,3)}},indent=2))

@@ -14,7 +14,7 @@ namespace ArcanePower
 {
     // Registered subclasses are generated alongside their model/socket contract.
     // These subtypes are deliberately separate from the existing production art.
-    public abstract class ThermalBlock : MyGameLogicComponent
+    public abstract partial class ThermalBlock : MyGameLogicComponent
     {
         internal static readonly Guid StorageKey = new Guid("44c41f47-4bd2-431e-9a3e-817e171afde3");
         internal IMyFunctionalBlock Block;
@@ -37,6 +37,7 @@ namespace ArcanePower
         private double startupInput;
         private int environmentAt = -1000;
         private double coolingMW;
+        private double clearExhaust;
 
         public override void Init(MyObjectBuilder_EntityBase builder)
         {
@@ -72,13 +73,21 @@ namespace ArcanePower
                 Store.Rotor.TargetRpm = Store.Rotor.CompressorTargetRpm = 0;
                 receivedRotor = MyAPIGateway.Multiplayer.IsServer;
             }
-            if (Spec.Kind == ThermalKind.Heater)
+            if (Spec.Kind == ThermalKind.Train)
             {
                 startupSink = new MyResourceSinkComponent();
                 startupSink.Init(MyStringHash.GetOrCompute("ArcaneContainment"), new MyResourceSinkInfo {
                     ResourceTypeId = MyResourceDistributorComponent.ElectricityId, MaxRequiredInput = 50000,
                     RequiredInputFunc = RequiredStartup });
                 Block.ResourceSink = startupSink;
+            }
+            if (IsRadiator)
+            {
+                if (Store.Radiator == null) Store.Radiator = new ThermalRadiatorState { EntityId = Entity.EntityId };
+                Store.Radiator.RejectedMW = 0;
+                Store.Radiator.Target = Store.Radiator.Angle;
+                radiatorVisualAngle = Store.Radiator.Angle;
+                receivedRadiator = MyAPIGateway.Multiplayer.IsServer;
             }
             Block.AppendingCustomInfo += AppendInfo;
             ThermalSession.Add(this);
@@ -186,6 +195,13 @@ namespace ArcanePower
 
         internal ThermalUnit Unit()
         {
+            UpdateEnvironment();
+            return new ThermalUnit { Id = Entity.EntityId, Kind = Spec.Kind, Grade = Spec.Grade,
+                RatingMW = EffectiveRatingMW, CoolingMW = Healthy ? coolingMW : 0, ColdC = 45 };
+        }
+
+        private void UpdateEnvironment()
+        {
             int now = MyAPIGateway.Session.GameplayFrameCounter;
             if ((Spec.Kind == ThermalKind.AirCooler || Spec.Kind == ThermalKind.Radiator) && now - environmentAt >= 60)
             {
@@ -193,26 +209,26 @@ namespace ArcanePower
                 var planet = MyGamePruningStructure.GetClosestPlanet(Entity.GetPosition());
                 double density = planet == null ? 0 : planet.GetAirDensity(Entity.GetPosition());
                 double rating = Spec.RatingMW * .6;
-                if (Spec.Kind == ThermalKind.AirCooler) coolingMW = ThermalMath.AirCooling(rating, density);
-                else
+                if (Spec.Kind == ThermalKind.AirCooler)
                 {
-                    int visible = 0;
-                    Vector3D right = Block.WorldMatrix.Right, up = Block.WorldMatrix.Up;
-                    foreach (int sign in new[] { -1, 1 })
-                        foreach (int x in new[] { -1, 1 })
-                            foreach (int y in new[] { -1, 1 })
-                            {
-                                Vector3D normal = Block.WorldMatrix.Forward * sign;
-                                Vector3D from = Entity.GetPosition() + normal * (Spec.Cells.Z * 1.25 + .05)
-                                    + right * (x * Spec.Cells.X * .6) + up * (y * Spec.Cells.Y * .6);
-                                VRage.Game.ModAPI.IHitInfo hit;
-                                if (!MyAPIGateway.Physics.CastRay(from, from + normal * 250, out hit)) visible++;
-                            }
-                    coolingMW = ThermalMath.RadiativeCooling(rating, visible / 8.0, density > .001 ? 25 : -270.15);
+                    int clear = 0;
+                    foreach (Vector3 sample in ThermalModels.AirCoolerExhaustSamples)
+                    {
+                        Vector3D mouth = Vector3D.Transform(sample, Block.WorldMatrix);
+                        Vector3D outside = mouth + Block.WorldMatrix.Forward * 2.5;
+                        // Same-grid occupancy also catches armor containing the
+                        // ray origin: a physics ray alone can miss that case.
+                        if (Block.CubeGrid.RayCastBlocks(mouth, outside).HasValue) continue;
+                        VRage.Game.ModAPI.IHitInfo hit;
+                        if (MyAPIGateway.Physics.CastRay(mouth, outside, out hit)
+                            || MyAPIGateway.Physics.CastRay(outside, mouth, out hit)) continue;
+                        clear++;
+                    }
+                    clearExhaust = clear / (double)ThermalModels.AirCoolerExhaustSamples.Length;
+                    coolingMW = ThermalMath.AirCooling(rating, density, clearExhaust);
                 }
+                else coolingMW = RadiatorCooling(density);
             }
-            return new ThermalUnit { Id = Entity.EntityId, Kind = Spec.Kind, Grade = Spec.Grade,
-                RatingMW = Spec.RatingMW, CoolingMW = Healthy ? coolingMW : 0, ColdC = 45 };
         }
 
         internal void Save()
@@ -231,6 +247,26 @@ namespace ArcanePower
             if (MyAPIGateway.Multiplayer.IsServer)
                 info.Append("Stored heat: ").Append((Store.HotMJ + Store.WasteMJ).ToString("N1")).AppendLine(" MJ");
             else info.AppendLine("Heat inventories are server-owned. Use the thermal reactor dashboard for plant diagnostics.");
+            if (Spec.Kind == ThermalKind.AirCooler)
+            {
+                // Clients may inspect local clearance; server Unit() remains
+                // the sole authority for actual heat rejection and dispatch.
+                UpdateEnvironment();
+                info.Append("Exhaust clearance: ").Append((clearExhaust * 100).ToString("0")).AppendLine("%");
+                info.Append("Available cooling: ").Append((Healthy ? coolingMW : 0).ToString("N1")).AppendLine(" MW");
+                if (clearExhaust < .999) info.AppendLine("Exhaust obstructed: clear 2.5 m in front of both fan guards.");
+            }
+            if (IsRadiator && Store.Radiator != null && (MyAPIGateway.Multiplayer.IsServer || receivedRadiator))
+            {
+                var radiator = Store.Radiator;
+                info.AppendLine(Spec.Kind == ThermalKind.RadiatorPanel
+                    ? (radiator.ParentId != 0 ? "Attached to radiator axis" : "Inactive: stack above an aligned radiator (maximum two extensions)")
+                    : (Healthy ? "Automatic sun tracking: edge-on / " + radiator.Panels + " panel(s)" : "Sun tracking paused"));
+                info.Append("Panel angle: ").Append((radiator.Angle * 180 / Math.PI).ToString("0.0")).AppendLine(" degrees");
+                info.Append("Clear sky: ").Append((radiator.Exposure * 100).ToString("0")).Append("% / sunlight incidence: ")
+                    .Append((radiator.SunIncidence * 100).ToString("0")).AppendLine("%");
+                info.Append("Heat dissipated: ").Append(radiator.RejectedMW.ToString("N1")).AppendLine(" MW");
+            }
             if (Spec.Kind == ThermalKind.Train && (MyAPIGateway.Multiplayer.IsServer || receivedRotor))
             {
                 var rotor = Store.Rotor;

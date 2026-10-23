@@ -32,35 +32,60 @@ upgrade pillars and three
 construction stages for every public block. It includes the current reactor,
 fuel/voxel art, containment hardware, vents, LCD and tablet implementations.
 
-The 17 October delivery adds all 31 thermal blocks, including the latest reactor
-manifolds, internal smoked coolant glass, turbine/compressor rotors and typed pipe
-kit. All 93 thermal construction models and 186 LODs are exported. Native import
-checks validate 334 meshes, collision bytes, material dependencies, 20 manifold
-rest frames and four shaft pivots/frames. The reactor generates and pressurizes
-its own CO₂ charge during powered commissioning; no gas supply blocks are needed.
-The thermal design is now the sole playable Arcane Reactor; the old prototype
-definition is retained under `assets/definitions/` and excluded from the mod. Its
-Blender sources and accepted native comparison inputs remain outside the mod.
-Existing thermal reactor subtype IDs are unchanged.
-External pipe walls use continuous reflective glass; internal coolant plumbing
-retains its accepted finish and geometry. Socket inserts and face seals now have
-separate seats. Runtime manifold validation tolerates native export rounding,
-and reactor connection guidance is limited to incomplete, settled Brayton setups.
-Native moving meshes now share the main model's axes, correcting reversed pipe
-travel and misplaced tail anchors. Actual exported vertices and LODs pass 1,376
-runtime-pose comparisons against the authoring rig, including both train variants.
-Each thermal block has its own
-model-rendered inventory icon. Pipe icons identify
-PRIMARY, HP and LP circuits; upgraded machines carry a tier marker. All 50 block
-definitions, including seven hidden legacy blocks and the ejected core, are checked
-for icons, model references and recipes. All 42 buildable blocks have menu entries
-and three construction stages. [Block catalog check](tools/check_block_catalog.py).
-[Native delivery evidence](validation/thermal-models/delivery-check.json).
+The current thermal catalog contains 24 public blocks: 16 pipe fittings, four
+train variants, the reactor, atmospheric cooler, radiator and panel extension.
+The 28 former HP/LP pipe IDs are hidden compatibility definitions sharing current
+assets. All public blocks have icons, three construction stages and LODs where
+required. Native checks cover collision, material dependencies, the reactor's
+20 manifold subparts, eight shaft subparts and two radiator subparts.
+
+The reactor generates its own CO2 during powered commissioning. Trains and coolers
+share one duplex network, preserving H/C roll at every joint. Each train has one
+lower-cell socket and regular/mirrored variants. The shaft line is 0.55 m lower;
+close pipe runs use relieved supports. H enters the first compressor casing and
+C leaves the turbine rear. Existing two-socket trains require pipe rerouting.
+The 2×2×5 train includes a glazed compressor taper and a tightly joined generator
+with a 24-tooth copper armature driven by the existing turbine subpart. Its fixed
+magnet lining, lower inspection window and closed far wall are shared by all
+four variants. The lengthened generator, window, armature and magnets meet the
+smaller electrical cabinet through a half-round coupling cover. Rounded cable
+bends, a continuous chamfered foundation and distinct standard/upgraded casings
+complete the exterior. Low compressor saddles clear the manifold; the larger
+struts use enclosed coolant passages and round cable sockets. The foundation
+seats continuously on the block bottom without underside rails. Standard plates
+read EX / 1200 B; upgraded plates retain EX / 2200 C. Fitted service doors,
+rear cooling grilles, curved housing covers and manifold stiffeners fill the
+previously blank reverse faces. Derived stages
+and LODs follow the same source.
+The sole playable reactor keeps its thermal subtype ID. Archived authoring
+sources remain outside the shipped mod. Reactor internal plumbing is preserved.
+
+Brayton efficiency now reaches its tier ceiling with four active turbines:
+one through four provide 40%, 60%, 80% and 100% of that ceiling. Cooling deficits
+retain paid return waste in the reactor instead of silently limiting production.
+Accumulated heat feeds the existing 125% irreversible failure/ejection lifecycle.
+The Power page reports cooling capacity, required rejection and retained waste.
+Review existing one-train/one-cooler builds: at standard source power a single
+train now needs two fully effective cooling units, or use four trains with at
+least one fully effective cooler. Allow headroom for environmental losses.
+
+[Block catalog check](tools/check_block_catalog.py) and
+[native delivery evidence](validation/thermal-models/delivery-check.json) cover the
+local package. Live SE appearance, multiplayer behavior and balance remain pending.
+
+The advanced capacity, transfer and stabilizer modules and advanced containment
+controller use the same gold **II** badge as the upgraded turbine. Their icon
+renderers share `assets/icon_badges.py`; rerenders preserve the badge. Render only
+selected battery icons with `render_energy_core.py -- --icons-only SCENE_NAME`.
+Source PNGs live under `assets/icons/`; DDS conversion uses
+`tools/texture_conversion.py::convert(..., icon=True)` before packaging.
+The four 512-pixel transparent PNG/DDS pairs were visually reviewed and checked
+in the local release package. Standard and hidden legacy icons are unchanged.
 
 The 13 October runtime pass closes construction-stage startup/generation gaps,
 restricts cold-start reserve requests to eligible reactors, revokes removed storage
 module allocations immediately and finishes offline/distant storage visuals.
-The native shared menu includes eleven Power blocks and 31 thermal blocks. Earlier compact banks
+The native shared menu includes eleven Power blocks and 24 public thermal blocks. Earlier compact banks
 retain their original hidden definitions and assets, preserving existing saves.
 
 Build the runtime ZIP from the repository root:

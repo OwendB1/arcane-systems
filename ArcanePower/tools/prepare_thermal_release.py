@@ -7,12 +7,13 @@ import copy
 import hashlib
 import json
 import os
+import runpy
 from pathlib import Path
 import shutil
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
-from prepare_lab import ROOT, MOD, GAME, XSI, REACTOR_TEMPLATE, save, set_text
+from prepare_lab import ROOT, MOD, GAME, XSI, REACTOR_TEMPLATE, save, set_text, hardware_components
 from package_release import resolve
 
 STAGING=MOD/'Models/Cubes/large/.thermal-stage'
@@ -20,6 +21,7 @@ OUT=ROOT/'validation/thermal-models'
 SETUP=Path.home()/'.local/share/blender-se1-setup'
 ENV={**os.environ,'WINEDEBUG':'-all','WINEPREFIX':str(SETUP/'wineprefix')}
 NATIVE_ENV={**os.environ,'MONO_PATH':str(GAME/'Bin64')}
+CONTRACT=runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))
 
 
 def digest(path):
@@ -28,10 +30,11 @@ def digest(path):
 
 def manifest(additions=False):
     rows=json.loads((STAGING/'sources.json').read_text())
-    models=json.loads((OUT/'models.json').read_text())
+    models={name:spec for name,spec in json.loads((OUT/'models.json').read_text()).items() if name in CONTRACT['PLAYABLE']}
+    rows={stem:row for stem,row in rows.items() if row['block'] in models}
     names={r['block'] for r in rows.values()}
     if additions:
-        assert names <= set(models) and all(models[name].get('variant_of') for name in names), 'Additions must be authored variants'
+        assert names and names <= set(models), 'Incremental exports must use known authored models'
         models={name:spec for name,spec in models.items() if name in names}
     assert names==set(models),'Incomplete source export'
     scenes=json.loads((OUT/'native-source-scenes.json').read_text())
@@ -90,22 +93,12 @@ def definitions(models,mains,revision,additions=False):
     reactor=ET.parse(REACTOR_TEMPLATE).find('CubeBlocks/Definition')
     module=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_ContainmentController.sbc').find('CubeBlocks/Definition')
     root=ET.Element('Definitions');blocks=ET.SubElement(root,'CubeBlocks')
-    category=ET.Element('Definitions');classes=ET.SubElement(category,'CategoryClasses')
-    group=ET.SubElement(classes,'Category',{f'{{{XSI}}}type':'MyObjectBuilder_GuiBlockCategoryDefinition'})
-    set_text(group,'Id/TypeId','GuiBlockCategoryDefinition')
-    set_text(group,'Id/SubtypeId','ArcaneSystems_Thermal')
-    set_text(group,'DisplayName','Arcane Systems');set_text(group,'Name','ArcaneSystems')
-    ids=ET.SubElement(group,'ItemIds')
     if additions:
         root=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').getroot()
         blocks=root.find('CubeBlocks')
-        category=ET.parse(MOD/'Data/ThermalCategories.sbc').getroot()
-        ids=category.find('.//ItemIds')
-        replacing={spec['subtype'] for spec in models.values()}
+        replacing={spec['subtype'] for spec in models.values()} | {CONTRACT['subtype'](name) for name in CONTRACT['RETIRED']}
         for definition in list(blocks):
             if definition.findtext('Id/SubtypeId') in replacing:blocks.remove(definition)
-        for item in list(ids):
-            if item.text.removeprefix('UpgradeModule/') in replacing:ids.remove(item)
     for name,spec in models.items():
         ident=spec['subtype'];is_source=name=='Reactor housing';is_train=name.startswith('Brayton train')
         definition=copy.deepcopy(reactor if is_source or is_train else module)
@@ -119,22 +112,24 @@ def definitions(models,mains,revision,additions=False):
         set_text(definition,'BlockPairName',ident)
         set_text(definition,'Model',(revision/(mains[name]+'.mwm')).as_posix())
         set_text(definition,'Public','true');set_text(definition,'AvailableInSurvival','true')
+        if name=='Atmospheric cooler':set_text(definition,'IsAirTight','true')
         size=definition.find('Size');size.attrib.clear();size.attrib.update(zip(('x','y','z'),map(str,spec['cells_se'])))
         if is_source:
-            desc='Integrated CO2 generation and powered loop pressurization. Standalone: 20% net. Brayton: 40% starter, up to 78% with source tier, recovery and cooling. Two containment controllers and a working vent route required. Select the thermal mode in the reactor controls; stop and cool before changing modes.'
+            hardware_components(definition)
         elif is_train:
-            desc='Closed-loop sCO2 turbine/compressor train. The reactor generates its working fluid internally. Connect typed HP and LP sockets through recuperation and cooling, preserve H/C roll, and supply startup electricity to the primary heater. No gas generator or tank required.'
             set_text(definition,'MaxPowerOutput',1950000 if name.endswith('upgraded') else 19500)
             set_text(definition,'PCU',80)
         else:
-            desc='Closed-loop thermal '+name+'. Match typed socket faces and H/C roll on one physical large grid. Use the placement guide and cap unused sockets. The reactor supplies its own CO2; ordinary conveyors do not replace thermal pipes.'
             if definition.find('Upgrades') is not None:definition.find('Upgrades').clear()
             set_text(definition,'PCU',2 if ' / ' in name else 30)
             set_text(definition,'PrimarySound','')
-        set_text(definition,'Description',desc)
+        set_text(definition,'Description',description(name))
         if not is_source:
             components=definition.find('Components');components.clear()
             volume=__import__('math').prod(spec['cells_se'])
+            if is_train:
+                # Compact packaging retains the same machinery and power rating.
+                volume=30
             recipe=[('SteelPlate',max(6,volume*2)),('Construction',max(4,volume)),('LargeTube',max(2,volume//2)),
                     ('Motor',2 if ' / ' in name else 12),('Computer',2 if ' / ' in name else 15),('SteelPlate',4)]
             for component,count in recipe:ET.SubElement(components,'Component',Subtype=component,Count=str(count))
@@ -149,21 +144,91 @@ def definitions(models,mains,revision,additions=False):
         stages.clear()
         for i,percent in ((1,'.33'),(2,'.67'),(3,'1.00')):
             ET.SubElement(stages,'Model',BuildPercentUpperBound=percent,File=(revision/(mains[name]+'_BS'+str(i)+'.mwm')).as_posix())
-        ET.SubElement(ids,'string').text=typeid+'/'+ident
+    write_catalog(root)
+
+
+def write_catalog(root):
+    """One public pipe family, with asset-sharing aliases for saved grids."""
+    blocks=root.find('CubeBlocks')
+    names={CONTRACT['subtype'](name):name for name in CONTRACT['PLAYABLE']}
+    for block in list(blocks):
+        if block.findtext('Id/SubtypeId') not in names:blocks.remove(block)
+    canonical={block.findtext('Id/SubtypeId'):block for block in blocks}
+    assert set(canonical)==set(names), 'Incomplete public thermal catalog'
+    category=ET.Element('Definitions');classes=ET.SubElement(category,'CategoryClasses')
+    group=ET.SubElement(classes,'Category',{f'{{{XSI}}}type':'MyObjectBuilder_GuiBlockCategoryDefinition'})
+    set_text(group,'Id/TypeId','GuiBlockCategoryDefinition')
+    set_text(group,'Id/SubtypeId','ArcaneSystems_Thermal')
+    set_text(group,'DisplayName','Arcane Systems');set_text(group,'Name','ArcaneSystems')
+    ids=ET.SubElement(group,'ItemIds')
+    for ident,block in canonical.items():
+        name=names[ident]
+        set_text(block,'Description',description(name))
+        if ' / ' in name:
+            shape=name.split(' / ')[1].removesuffix(' bare')
+            style='Bare' if name in CONTRACT['BARE_PIPES'] else 'Manifold'
+            set_text(block,'DisplayName','Arcane '+shape+' Pipe ('+style+')')
+        ET.SubElement(ids,'string').text=block.findtext('Id/TypeId')+'/'+ident
+    for alias,target in CONTRACT['PIPE_ALIASES'].items():
+        ident=CONTRACT['subtype'](alias)
+        block=copy.deepcopy(canonical[CONTRACT['subtype'](target)])
+        set_text(block,'Id/SubtypeId',ident)
+        set_text(block,'BlockPairName',ident)
+        set_text(block,'Public','false');set_text(block,'GuiVisible','false')
+        # Keep survival availability so existing projections can still be welded.
+        blocks.append(block)
     save(root,MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc')
     save(category,MOD/'Data/ThermalCategories.sbc')
-    # Native variant groups expose both appearances together in the build menu.
+    variant_groups(blocks)
+    # Alias icons are no longer referenced; retain their authored PNG sources.
+    for alias in CONTRACT['PIPE_ALIASES']:
+        (MOD/'Textures/GUI/Icons/ArcanePower/Thermal'/(CONTRACT['subtype'](alias)+'.dds')).unlink(missing_ok=True)
+
+
+def trim_native_manifest(report):
+    prefixes=['APT_'+CONTRACT['subtype'](name).removeprefix('ArcanePower_Thermal_')+'_'
+              for name in CONTRACT['RETIRED'] | set(CONTRACT['PIPE_ALIASES'])]
+    report['native_models']={stem:row for stem,row in report['native_models'].items()
+                             if not any(stem.startswith(prefix) for prefix in prefixes)}
+    rows=report['native_models'].values()
+    report.update(blocks=len(CONTRACT['PLAYABLE']), compatibility_aliases=len(CONTRACT['PIPE_ALIASES']),
+                  native_meshes=len(report['native_models']),
+                  construction_models=sum(row['type']=='bs' for row in rows),
+                  lod_models=sum(row['type']=='lod' for row in rows))
+
+
+def description(name):
+    if name=='Atmospheric cooler':
+        return 'Airtight hull casing with rear cooling manifold. Only front fan guards project beyond surrounding armor. Keep 2.5 m clear beyond both exhaust fans: half-clear exhaust gives 25% cooling; fully blocked exhaust gives none. Requires atmosphere and powered circulation.'
+    if name=='Reactor housing':
+        return 'Internal CO2 generation. Standalone: 20% net. Brayton: 40% starter, up to 78% with turbine tier and cooling. Branch turbines and coolers from one shared duplex pipe network; align H/C on every face. Two containment controllers and a working vent route required. Stop and cool before changing mode.'
+    if name.startswith('Brayton train'):
+        return '2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket on a shared network with the reactor and coolers. Turbines connect as parallel branches. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.'
+    if name=='Space radiator':
+        return 'Bottom cooling socket and full-cell pedestal. Panels automatically track edge-on to the sun. Stack up to two Radiator Panel blocks directly above, aligned on the same grid, for up to triple cooling. Keep both faces open to space. Faint red-orange glow shows actual heat rejection.'
+    if name=='Radiator panel':
+        return 'Passive radiator extension. Stack directly above a Space Radiator or its first extension, with matching orientation on the same grid. Up to three panels share one rotating axis and coolant loop. Unattached or excess panels provide no cooling.'
+    return 'Shared CO2 supply/return pipe for reactor, turbines and coolers on one physical grid. Align H to H and C to C on every socket face; cap unused sockets. Ordinary conveyors do not replace thermal pipes.'
+
+
+def variant_groups(blocks):
+    # Scroll through shapes within one appearance. Read the complete installed
+    # catalog so an incremental export does not discard the other pipe members.
+    installed={block.findtext('Id/SubtypeId') for block in blocks}
+    bare=[block.findtext('Id/SubtypeId') for block in blocks
+          if block.findtext('Id/SubtypeId').endswith('Bare') and block.findtext('Public')=='true']
+    framed=[subtype.removesuffix('Bare') for subtype in bare]
+    assert set(framed)<=installed, 'Bare pipe is missing its manifold counterpart'
     variants=ET.Element('Definitions');groups=ET.SubElement(variants,'BlockVariantGroups')
-    for name,spec in models.items():
-        if not spec.get('variant_of'):continue
-        ident=spec['subtype'];base=ident.removesuffix('Bare')
+    for key,label,subtypes in (('BarePipes','Bare',bare),('ManifoldPipes','Manifold',framed)):
+        if not subtypes:continue
         group=ET.SubElement(groups,'BlockVariantGroup')
-        ET.SubElement(group,'Id',Type='MyObjectBuilder_BlockVariantGroup',Subtype=base+'Styles')
-        set_text(group,'Icon','Textures/GUI/Icons/ArcanePower/Thermal/'+ident+'.dds')
-        set_text(group,'DisplayName','Arcane '+spec['variant_of'].replace(' / ',' ').replace('CO2','CO₂')+' Pipes')
-        set_text(group,'Description','Interchangeable bare and framed thermal pipes. Match the circuit and hot/cold orientation.')
+        ET.SubElement(group,'Id',Type='MyObjectBuilder_BlockVariantGroup',Subtype='ArcanePower_Thermal_'+key)
+        set_text(group,'Icon','Textures/GUI/Icons/ArcanePower/Thermal/'+subtypes[0]+'.dds')
+        set_text(group,'DisplayName','Arcane Pipes ('+label+')')
+        set_text(group,'Description','Scroll through '+label.lower()+' thermal pipes and fittings. Connect the shared supply/return network; align H/C on every socket face.')
         members=ET.SubElement(group,'Blocks')
-        for subtype in (ident,base):ET.SubElement(members,'Block',Type='MyObjectBuilder_UpgradeModule',Subtype=subtype)
+        for subtype in subtypes:ET.SubElement(members,'Block',Type='MyObjectBuilder_UpgradeModule',Subtype=subtype)
     save(variants,MOD/'Data/CubeBlocks/ArcanePower_ThermalVariants.sbc')
 
 
@@ -198,7 +263,7 @@ def install(additions=False):
                 native[value]=True
         if row['type']=='bs':
             assert not any(fields[0]=='SUBPART' for fields in data),('Moving construction model',stem)
-            assert not any(fields[0]=='MATERIAL' and any(t in fields[1] for t in ('ThermalHot','ThermalCold','ThermalStatus','ClearChamber','CoolantGlass')) for fields in data),('Powered/glazed weld stage',stem)
+            assert not any(fields[0]=='MATERIAL' and any(t in fields[1] for t in ('ThermalHot','ThermalCold','ThermalStatus','ThermalRadiatorHeat','ClearChamber','CoolantGlass')) for fields in data),('Powered/glazed weld stage',stem)
         compiled[stem]={'sha256':digest(path),'triangles':row['triangles'],'type':row['type'],
                         'lods':[lods[key].relative_to(MOD).as_posix() for key,_ in references],
                         'subparts':[fields[1] for fields in data if fields[0]=='SUBPART']}
@@ -219,9 +284,16 @@ def install(additions=False):
                     assert key in actual,('Missing manifold subpart',key)
                     identity=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
                     assert max(abs(a-b) for a,b in zip(actual[key][0],identity))<1e-5,('Nonidentity manifold rest',key,actual[key])
+        elif name in ('Space radiator','Radiator panel'):
+            key='subpart_Thermal_RadiatorPanels'
+            expected=[1,0,0,0,0,1,0,0,0,0,1,0,0,-1.1 if name=='Space radiator' else 0,0,1]
+            assert key in actual and max(abs(a-b) for a,b in zip(actual[key][0],expected))<1e-5,('Wrong radiator pivot',actual)
         elif name.startswith('Brayton train'):
-            for part,pivot in (('TurbineRotor',(1.35,.45,0)),('CompressorRotor',(4.25,.45,0))):
-                key='subpart_Thermal_'+part
+            rotors=json.loads((ROOT/'assets/thermal-rotor-runtime.json').read_text())
+            for rotor in rotors['rotors']:
+                x,y,z=rotor['pivot_blender']
+                pivot=(-x,z,y)
+                key='subpart_'+rotor['subpart']
                 assert key in actual and max(abs(actual[key][0][12+i]-pivot[i]) for i in range(3))<1e-5,('Wrong shaft pivot',key)
                 assert max(abs(v-w) for v,w in zip(actual[key][0][:12],[1,0,0,0,0,1,0,0,0,0,1,0]))<1e-5,('Rotated shaft rest frame',key)
     bundle={stem+'.mwm':STAGING/(stem+'.mwm') for stem,row in rows.items() if row['type']!='lod'}
@@ -253,7 +325,9 @@ def install(additions=False):
         else:shutil.copy2(source,destination)
     definitions(models,mains,revision,additions)
     if previous:compiled={**previous['native_models'],**compiled}
-    report={'status':'passed','revision':revision.as_posix(),'blocks':len(json.loads((OUT/'models.json').read_text())),'native_meshes':len(compiled),
+    retired=['APT_'+CONTRACT['subtype'](name).removeprefix('ArcanePower_Thermal_')+'_' for name in CONTRACT['RETIRED']]
+    compiled={stem:row for stem,row in compiled.items() if not any(stem.startswith(prefix) for prefix in retired)}
+    report={'status':'passed','revision':revision.as_posix(),'blocks':len(CONTRACT['PLAYABLE']),'native_meshes':len(compiled),
             'construction_models':sum(r['type']=='bs' for r in compiled.values()),
             'lod_models':sum(r['type']=='lod' for r in compiled.values()),
             'native_models':compiled,'external_native_subparts':previous['external_native_subparts'] if previous else len(bundle)-sum(r['type']!='lod' for r in rows.values()),
@@ -261,12 +335,20 @@ def install(additions=False):
             'physics':'Accepted reactor collision preserved; other blocks use up to ten hulls derived from real authored solids',
             'co2':'Integrated reactor generation and powered commissioning; no separate gas supply blocks',
             'game_reloaded':False,'workshop_published':False}
+    trim_native_manifest(report)
     (OUT/'native-export.json').write_text(json.dumps(report,indent=2)+'\n')
     subprocess.run([sys.executable,str(ROOT/'tools/check_native_thermal_motion.py')],check=True)
     print('Installed',len(mains),'thermal blocks;',len(rows),'validated native meshes at',revision,flush=True)
 
 
 if __name__=='__main__':
-    additions='--additions' in sys.argv
+    if '--catalog-only' in sys.argv:
+        write_catalog(ET.parse(MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').getroot())
+        report=json.loads((OUT/'native-export.json').read_text())
+        trim_native_manifest(report)
+        (OUT/'native-export.json').write_text(json.dumps(report,indent=2)+'\n')
+        print('Updated public catalog and compatibility aliases using installed models')
+        sys.exit(0)
+    additions='--additions' in sys.argv or '--update' in sys.argv
     if '--install-only' not in sys.argv:compile_all(additions)
     install(additions)

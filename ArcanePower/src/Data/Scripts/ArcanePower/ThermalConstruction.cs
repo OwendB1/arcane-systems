@@ -9,7 +9,7 @@ namespace ArcanePower
         public readonly List<ThermalJoint> Joints = new List<ThermalJoint>();
         public readonly List<ThermalEndpoint> Nodes = new List<ThermalEndpoint>();
         public ThermalEndpoint Source;
-        public int Open, Wrong, Pending, Heaters, Trains, Recovery, Cooling;
+        public int Open, Wrong, Pending, Trains, Cooling;
         public bool Verified;
         public string Next;
     }
@@ -28,15 +28,14 @@ namespace ArcanePower
         {
             switch (model.Kind)
             {
-                case ThermalKind.Reactor: return "Stop/cool, select Brayton, deploy manifolds. Use reactor adapters; cap unused PRIMARY sockets.";
-                case ThermalKind.Heater: return "PRIMARY to reactor; CO2 HP through recuperator to train. Connect startup grid power.";
-                case ThermalKind.Train: return "CO2 HP from heater via recuperator; CO2 LP through recovery to cooling.";
-                case ThermalKind.Recuperator: return "Connect both separate HP and LP legs in their routes. A capped side branch earns no recovery.";
-                case ThermalKind.AirCooler: return "Connect CO2 LP. Keep airflow clear; needs atmosphere and powered circulation.";
-                case ThermalKind.Radiator: return "Connect CO2 LP. Expose both radiator faces to cold space; keep them unblocked.";
-                default: return model.Subtype.EndsWith("ReactorAdapter")
+                case ThermalKind.Reactor: return "Stop/cool, select Brayton, deploy manifolds. Use reactor adapters; cap unused reactor sockets.";
+                case ThermalKind.Train: return "One lower-cell duplex H/C socket on a 2x2x5 train. Branch turbines and coolers from the reactor's shared pipe network; use the mirrored turbine for the opposite side. Supply grid power for the built-in compressor startup.";
+                case ThermalKind.RadiatorPanel: return "Stack directly above a radiator on the same grid and orientation. Up to two extension panels share its axis and cooling loop.";
+                case ThermalKind.AirCooler: return "Connect the rear cooling socket. Mount casing flush in hull; keep 2.5 m clear beyond both front fan guards. Blocked exhaust stops cooling; needs atmosphere and circulation.";
+                case ThermalKind.Radiator: return "Connect cooling underneath the pedestal. Panels automatically track edge-on to the sun; keep both faces open to space and the 3x3x3 sweep clear. Red glow shows heat dissipation.";
+                default: return model.Subtype.EndsWith("ReactorAdapter") || model.Subtype.EndsWith("ReactorAdapterBare")
                     ? "Bridge the reactor's 170 mm socket offset to the standard 2.5 m pipe lattice. Keep H aligned."
-                    : "Match " + model.Ports[0].Circuit.Replace('_', ' ') + " on both faces; align H with H and C with C. Cap unused sockets.";
+                    : "Shared duplex pipe for reactor, turbines and coolers. Align H with H and C with C. Cap unused sockets.";
             }
         }
 
@@ -45,7 +44,6 @@ namespace ArcanePower
             switch (status)
             {
                 case ThermalJointStatus.Matched: return "Aligned";
-                case ThermalJointStatus.Circuit: return "Wrong circuit: match PRIMARY, CO2 HP or CO2 LP";
                 case ThermalJointStatus.Facing: return "Turn the socket faces toward each other";
                 case ThermalJointStatus.Roll: return "Rotate around the socket axis: H must meet H";
                 case ThermalJointStatus.Crowded: return "Overlapping sockets: one peer per socket";
@@ -76,7 +74,6 @@ namespace ArcanePower
                 result.Nodes.Add(node);
                 if (!health[node.Id]) result.Pending++;
                 if (node.Model.Kind == ThermalKind.Reactor) { sources++; result.Source = node; }
-                if (node.Model.Kind == ThermalKind.Heater) result.Heaters++;
                 if (node.Model.Kind == ThermalKind.Train) result.Trains++;
             }
             foreach (var joint in network.Joints)
@@ -87,20 +84,18 @@ namespace ArcanePower
                 else if (joint.Status != ThermalJointStatus.Matched) result.Wrong++;
             }
             if (anchor == null) result.Next = "Select a thermal block";
-            else if (result.Wrong > 0) result.Next = "Fix red joints: match circuit, facing and H/C roll";
+            else if (result.Wrong > 0) result.Next = "Fix red joints: match facing and H/C roll";
             else if (result.Open > 0) result.Next = "Connect or cap " + result.Open + " open socket(s); use reactor adapters at the housing";
-            else if (sources != 1) result.Next = sources == 0 ? "Connect this assembly to one reactor through a PRIMARY heater route" : "Separate supplies: one reactor per plant";
+            else if (sources != 1) result.Next = sources == 0 ? "Connect this assembly to one reactor through the shared duplex network" : "Separate supplies: one reactor per plant";
             else
             {
                 var plant = network.Plant(result.Source);
                 foreach (var node in plant.Nodes)
                 {
-                    if (node.Model.Kind == ThermalKind.Recuperator) result.Recovery++;
                     if (node.Model.Kind == ThermalKind.AirCooler || node.Model.Kind == ThermalKind.Radiator) result.Cooling++;
                 }
                 if (!plant.Ready) result.Next = plant.Diagnostic;
-                else if (result.Cooling == 0) result.Next = "Connect an atmospheric cooler or exposed space radiator to the LP route";
-                else if (result.Recovery == 0) result.Next = "Route recovery through both HP heater/train and LP train/cooler legs";
+                else if (result.Cooling == 0) result.Next = "Connect an atmospheric cooler or exposed space radiator to the shared network";
                 else if (result.Pending > 0) result.Next = "Weld/repair " + result.Pending + " unfinished or unavailable block(s)";
                 else { result.Verified = true; result.Next = "Construction verified. Check deployment, cooling and startup power on the reactor before starting."; }
             }

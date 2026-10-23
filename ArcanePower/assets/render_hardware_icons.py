@@ -1,8 +1,9 @@
 """Render model icons; pass labels after Blender's -- to render selected icons."""
-import bpy,importlib,sys
+import bpy,importlib,runpy,sys
 from pathlib import Path
 from mathutils import Vector
 ROOT=Path(__file__).resolve().parents[1]
+badge=runpy.run_path(str(ROOT/'assets/icon_badges.py'))['badge']
 COLS=importlib.import_module('space-engineers-utilities.seut_collections')
 scene=bpy.data.scenes.new('Hardware icon render')
 bpy.context.window.scene=scene
@@ -28,7 +29,7 @@ for subtype,label in [('ArcanePower_ReactorPrototype','ArcaneReactor'),('ArcaneP
  objects=[]
  reactor=label=='ArcaneReactor'
  scene.cycles.samples=128 if reactor else 24
- scene.cycles.use_denoising=reactor
+ scene.cycles.use_denoising=True
  camera.location=(0,-18,5) if reactor else (5,12,6) if 'Controller' in subtype else (8,-12,13)
  camera.rotation_euler=(-camera.location).to_track_quat('-Z','Y').to_euler()
  # Broad, balanced frontal lights reveal the chamber and lower housing without
@@ -57,6 +58,8 @@ for subtype,label in [('ArcanePower_ReactorPrototype','ArcaneReactor'),('ArcaneP
  view=camera.rotation_euler.to_matrix().transposed()
  projected=[view @ (p-center) for p in corners]
  camera.data.ortho_scale=1.2*max(max(p[i] for p in projected)-min(p[i] for p in projected) for i in (0,1))
+ if 'Advanced' in subtype:
+  objects.extend(badge(scene,'II',(1,.7,.14),.24))
  folder=ROOT/'assets/icons';folder.mkdir(exist_ok=True)
  scene.render.filepath=str(folder/(label+'.png'))
  bpy.ops.render.render(write_still=True)

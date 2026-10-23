@@ -17,7 +17,7 @@ R = runpy.run_path(str(ROOT/'assets/review_thermal_models.py'))
 C, OUT = M['CONTRACT'], M['OUT']
 
 
-def audit():
+def audit(names=None):
     previous = bpy.context.scene
     failures, models, trees = [], {}, {}
 
@@ -37,6 +37,8 @@ def audit():
         return [Vector([fn(v[i] for v in points) for i in range(3)]) for fn in (min, max)]
 
     for name, cells in C['SPECS'].items():
+        if names is not None and name not in names:
+            continue
         ident = C['subtype'](name)
         if ident not in bpy.data.scenes:
             fail(name, 'missing base', ident)
@@ -63,7 +65,9 @@ def audit():
                 if any(not math.isfinite(v) for p in points for v in p):
                     fail(name, 'finite geometry', obj.name)
                 inherited = obj.get('reactor_source_name')
-                if not inherited and any(abs(p[i]) > half[i]+.001 for p in points for i in range(3)):
+                exhaust = name == 'Atmospheric cooler' and obj.get('cooler_exhaust_part')
+                if not inherited and any(p[i] > half[i]+.001 or p[i] < (-3.06 if exhaust and i == 1 else -half[i]-.001)
+                                         for p in points for i in range(3)):
                     fail(name, '2.5 m envelope', obj.name)
                 mesh = obj.data
                 if obj.get('thermal_chamfer_m') is not None:
@@ -82,7 +86,11 @@ def audit():
                 accepted_materials = original and list(mesh.materials) == list(original.data.materials)
                 if not mesh.materials or (not accepted_materials and any(not mat or
                     (not mat.library and not (mat.name in ('ArcanePower_ClearChamber','ArcanePower_CoolantGlass','ArcanePower_InternalCoolantGlass') and mat.seut.technique == 'GLASS')
-                     and not (mat.name in ('ThermalStatus', 'ThermalHot', 'ThermalCold') and mat.get('thermal_native_emissive')))
+                     and not (mat.name == 'ArcanePower_ArmatureCopper' and mat.get('thermal_armature_copper') and mat.seut.technique == 'MESH'
+                              and all(mat.node_tree.nodes.get(n) and mat.node_tree.nodes[n].image for n in ('CM','NG','ADD')))
+                     and not (mat.name == 'ArcanePower_ArmatureSteel' and mat.get('thermal_laminated_steel') and mat.seut.technique == 'MESH'
+                              and all(mat.node_tree.nodes.get(n) and mat.node_tree.nodes[n].image for n in ('CM','NG')))
+                     and not (mat.name in ('ThermalStatus', 'ThermalHot', 'ThermalCold', 'ThermalRadiatorHeatRoot', 'ThermalRadiatorHeatMid', 'ThermalRadiatorHeatTip') and mat.get('thermal_native_emissive')))
                     for mat in mesh.materials)):
                     fail(name, 'native SEUT material', obj.name)
                 if not obj.get('thermal_decal_support') and (not inherited or obj.get('thermal_pocket_cut')):
@@ -230,10 +238,10 @@ def audit():
                     blades = [o for o in col.objects if o.name.startswith(name+' / '+label+' blade row')]
                     stators = [o for o in col.objects if o.name.startswith(name+' / '+label+' stator vane row')]
                     stats['rotor_blades'][label] = sum(o.get('thermal_blade_count', 0) for o in blades)
-                    if (len(blades) != spec['rotor_rows'] or any(o.parent != root or
+                    if (len(blades) != spec['rotor_rows']+spec.get('transition_rotor_rows',0) or any(o.parent != root or
                             o.get('thermal_blade_count') != spec['blades_per_row'] for o in blades)):
                         fail(name, 'dense solid blade rows on independent rotor', spec['subpart'])
-                    if (len(stators) != spec['stator_rows'] or any(o.parent or o.get('native_subpart') or
+                    if (len(stators) != spec['stator_rows']+spec.get('transition_stator_rows',0) or any(o.parent or o.get('native_subpart') or
                             o.get('thermal_blade_count') != spec['vanes_per_row'] for o in stators)):
                         fail(name, 'fixed interleaved stator rows', spec['subpart'])
                     ordered = sorted(blades+stators, key=lambda o: o['thermal_row_x'])
@@ -244,9 +252,14 @@ def audit():
                     stats.setdefault('stage_axial_clearance_mm', {})[label] = round(min(gaps, default=0)*1000, 2)
                     casing = next(o for o in col.objects if o.name.startswith(name+' / '+label+' casing'))
                     radius = 1.85 if label == 'turbine' else 1.35
-                    tip = max((math.hypot((o.matrix_world@v.co).y, (o.matrix_world@v.co).z-.45)
-                               for o in blades for v in o.data.vertices), default=0)
-                    clearance = (radius-casing['thermal_pressure_wall_m'])*math.cos(math.pi/48)-tip
+                    def swept_clearance(point):
+                        r, sides = radius, 48
+                        if label == 'compressor':
+                            start, end = C['TRAIN_CENTRES']['compressor']+1.21, C['TRAIN_CENTRES']['turbine']-1.575
+                            if point.x > start:
+                                r = 1.35+.50*min(1,(point.x-start)/(end-start)); sides = 96
+                        return (r-casing['thermal_pressure_wall_m'])*math.cos(math.pi/sides)-math.hypot(point.y,point.z-C['TRAIN_SHAFT_Z'])
+                    clearance = min((swept_clearance(o.matrix_world@v.co) for o in blades for v in o.data.vertices),default=0)
                     stats['rotor_clearance_mm'][label] = round(clearance*1000, 2)
                     if clearance < .025:
                         fail(name, '25 mm swept blade clearance', spec['subpart'])
@@ -256,8 +269,8 @@ def audit():
                         fail(name, 'hollow glazed inspection casing', casing.name)
                 flow = [o for o in col.objects if o.get('thermal_flow_end')]
                 stats['end_plenum_channels'] = len(flow)
-                if len(flow) != 4:
-                    fail(name, 'four seated inlet/exhaust channels', scene.name)
+                if len(flow) != 2:
+                    fail(name, 'front compressor inlet and rear turbine outlet', scene.name)
                 for pipe in flow:
                     label = pipe['thermal_flow_machine']
                     stages = [o for o in col.objects if o.get('thermal_blade_count') and
@@ -279,11 +292,26 @@ def audit():
                         fail(name, 'open nozzle through pressure wall and reinforcement bands', pipe.name)
                     if any(tree(pipe).overlap(tree(o)) for o in col.objects if 'fitted cradle' in o.name):
                         fail(name, 'flow channels clear load cradles', pipe.name)
-                if any(tree(a).overlap(tree(b)) for a, b in itertools.combinations(flow, 2)):
+                channels = [o for o in col.objects if o.get('thermal_gas_channel')]
+                if len(channels) != 2 or any(o.get('thermal_internal_flow') for o in channels):
+                    fail(name, 'two external socket channels; direct internal casing transition', scene.name)
+                for pipe in channels:
+                    if any(tree(pipe).overlap(tree(o)) for o in col.objects if 'fitted cradle' in o.name):
+                        fail(name, 'flow channels clear load cradles', pipe.name)
+                    walls = [o for o in col.objects if o.type == 'MESH' and any(
+                        part in o.name for part in (' casing', 'split casing band',
+                        'stepped end flange', 'inspection window', 'split joint'))]
+                    for wall in walls:
+                        if tree(pipe).overlap(tree(wall)):
+                            fail(name, 'flow channels clear pressure casing and reinforcement', pipe.name+' / '+wall.name)
+                if any(tree(a).overlap(tree(b)) for a, b in itertools.combinations(channels, 2)):
                     fail(name, 'separate pressure channels without intersections', scene.name)
         if scene.get('thermal_detail_revision', 0) >= 2:
-            reference = json.loads((OUT/'tight-fit-before-interfaces.json').read_text())[C['BARE_PIPES'].get(name, name)]
-            if ports != reference['ports'] or list(cells) != reference['cells']:
+            reference = json.loads((OUT/'tight-fit-before-interfaces.json').read_text())[C['BARE_PIPES'].get(name, name).replace(' mirrored', '')]
+            if name.startswith('Brayton train'):
+                if tuple(cells) != (5, 2, 2) or ports != C['train_ports'](name):
+                    fail(name, 'compact train envelope and standard duplex sockets', scene.name)
+            elif ports != reference['ports'] or list(cells) != reference['cells']:
                 fail(name, 'preserved pre-refinement cells and sockets', scene.name)
             stats['max_chamfer_mm'] = max((o.get('thermal_chamfer_m', 0)*1000 for o in col.objects), default=0)
             stats['flat_hardware'] = sum(bool(o.get('thermal_faceted_hardware')) for o in col.objects)
@@ -309,12 +337,159 @@ def audit():
                        for o in col.objects):
                     fail(name, 'pipe-only silhouette without plate or cage hardware', scene.name)
             if name.startswith('Brayton train'):
+                cabinet=next(o for o in col.objects if o.name.startswith(name+' / generator switchgear'))
+                low,high=bounds(cabinet)
+                if max(abs((high-low)[i]-v*.7) for i,v in enumerate((1.45,3.1,3.1))) > .0001:
+                    fail(name,'electrical cabinet reduced 30 percent on every axis',cabinet.name)
+                deck=next(o for o in col.objects if o.name.startswith(name+' / equipment foundation'))
+                if abs(low.z-bounds(deck)[1].z) > .0001 or any('switchgear pedestal' in o.name for o in col.objects):
+                    fail(name,'cabinet sits directly on foundation without pedestals',cabinet.name)
+                if not deck.get('thermal_refined_foundation'):
+                    fail(name,'tapered foundation perimeter',deck.name)
+                if any(' / load-bearing skid' in o.name or ' / transverse skid' in o.name for o in col.objects):
+                    fail(name,'continuous foundation replaces underslung rails',deck.name)
+                for x in (-5.8,0,5.8):
+                    for y in (-2.0,0,2.0):
+                        hit=tree(deck).ray_cast(Vector((x,y,-2.6)),Vector((0,0,1)),.55)
+                        if hit[0] is None or abs(hit[0].z+2.5)>.0001:
+                            fail(name,'foundation underside seats flat at the block bottom',deck.name)
+                cable=next(o for o in col.objects if ' / compressor supply conduit' in o.name)
+                path=list(map(Vector,json.loads(cable['pipe_path'])))
+                if max((b-a).angle(c-b) for a,b,c in zip(path,path[1:],path[2:])) > math.radians(25):
+                    fail(name,'cable uses gradual tangent bends without pinched corners',cable.name)
+                if bounds(cable)[0].z < bounds(deck)[1].z+.02:
+                    fail(name,'cable clears foundation surface',cable.name)
+                cradles=[o for o in col.objects if o.get('thermal_strut_revision')]
+                compact=[o for o in cradles if ' / compressor fitted cradle' in o.name]
+                flared=[o for o in cradles if o not in compact]
+                fittings=[o for o in col.objects if o.get('thermal_strut_fitting')]
+                if len(compact)!=2 or len(flared)!=4 or sum(bool(o.get('thermal_cable_bulkhead')) for o in fittings)!=12 or sum(bool(o.get('thermal_coolant_bulkhead')) for o in fittings)!=2:
+                    fail(name,'two compact saddles, four flared supports, four cable bulkheads and two coolant liners',scene.name)
+                cold=next(o for o in col.objects if o.get('thermal_gas_channel') and 'cold rear return' in o.name)
+                obstacles=[o for o in col.objects if o.get('thermal_gas_channel') or o.get('thermal_nozzle_collar')
+                           or o.get('thermal_cable_bend_radius') or 'manifold' in o.name.lower() and o.type=='MESH']
+                for support in compact:
+                    lo,hi=bounds(support)
+                    if hi.z > -1.1599 or max(abs(lo.y),abs(hi.y)) > 1.1301:
+                        fail(name,'compressor saddles stay low and tucked under the drum',support.name)
+                    if any(tree(support).overlap(tree(o)) for o in obstacles):
+                        fail(name,'compact compressor saddles clear pipes, cable and manifold plate',support.name)
+                for fitting in fittings:
+                    if bpy.data.objects.get(fitting['thermal_strut_fitting']) not in flared:
+                        fail(name,'bulkhead socket belongs to an existing strut',fitting.name)
+                    if any(tree(fitting).overlap(tree(pipe)) for pipe in (cold,cable)):
+                        fail(name,'bulkhead bore clears its pipe or cable',fitting.name)
+                # Test actual solids all the way around each passage at both
+                # faces and mid-depth. An open notch cannot pass this test.
+                for support in flared:
+                    low_s,high_s=bounds(support)
+                    for pipe,minimum,maximum in ((cable,.105,.125),(cold,.325,.36)):
+                        route=list(map(Vector,json.loads(pipe['pipe_path'])))
+                        for x in (low_s.x+.04,(low_s.x+high_s.x)/2,high_s.x-.04):
+                            centre=next((a+(b-a)*((x-a.x)/(b.x-a.x)) for a,b in zip(route,route[1:])
+                                if abs(b.x-a.x)>1e-6 and min(a.x,b.x)<=x<=max(a.x,b.x)),None)
+                            if centre is None:continue
+                            for i in range(32):
+                                direction=Vector((0,math.cos(i*math.tau/32),math.sin(i*math.tau/32)))
+                                hit=tree(support).ray_cast(centre,direction,maximum)
+                                if hit[0] is None or hit[3]<minimum:
+                                    fail(name,'closed strut bore encircles the complete pipe or cable',support.name)
+                                    break
+                stats['compact_compressor_saddles']=len(compact)
+                stats['flared_struts']=len(flared)
+                stats['cable_bulkheads']=sum('barrel' in o.name for o in fittings)
+                generator=next(o for o in col.objects if o.name.startswith(name+' / generator casing'))
+                rear=bounds(generator)[1].x
+                if abs(rear-C['TRAIN_GENERATOR_REAR']) > .0001 or rear < low.x+.04:
+                    fail(name,'generator casing extends directly into cabinet',generator.name)
+                hood=next(o for o in col.objects if o.get('thermal_coupling_hood'))
+                hlow,hhigh=bounds(hood)
+                if hhigh.x < low.x+.02 or hlow.x > rear:
+                    fail(name,'half-round cover seats into cabinet and extended generator',hood.name)
+                for dx in (.04,.12,.20):
+                    for i in range(16):
+                        angle=i*math.tau/16
+                        point=Vector((rear+dx,.22*math.cos(angle),C['TRAIN_SHAFT_Z']+.22*math.sin(angle)))
+                        hit,normal,_,_=tree(hood).find_nearest(point)
+                        if (point-hit).dot(normal) >= 0:
+                            fail(name,'rear shaft fully enclosed by half-round cover',hood.name)
+                            break
+                stretch=C['TRAIN_GENERATOR_STRETCH']
+                rear_cradle=max((o for o in col.objects if o.name.startswith(name+' / generator fitted cradle')),
+                                key=lambda o: bounds(o)[1].x)
+                if abs(sum(v.x for v in bounds(rear_cradle))/2-C['generator_x'](C['TRAIN_CENTRES']['generator']+.66)) > .0001:
+                    fail(name,'rear support follows longer generator',rear_cradle.name)
+                jackets=[o for o in col.objects if o.get('thermal_upgrade_jacket')]
+                if len(jackets) != (5 if name.endswith(' upgraded') else 0):
+                    fail(name,'distinct upgraded casing jackets and lower cooling fins',scene.name)
+                if any('upgraded stator fin' in o.name or 'high temperature turbine cassette' in o.name for o in col.objects):
+                    fail(name,'no legacy upgrade bars over inspection windows',scene.name)
                 casings = [next(o for o in col.objects if o.name.startswith(name+' / '+label+' casing'))
                            for label in ('compressor', 'turbine', 'generator')]
                 gaps = [bounds(b)[0].x-bounds(a)[1].x for a, b in zip(casings, casings[1:])]
                 stats['casing_gaps_mm'] = [round(v*1000, 2) for v in gaps]
-                if any(v < .10 or v > .13 for v in gaps):
-                    fail(name, 'packed train casing clearances', str(gaps))
+                if abs(gaps[0]-2.615) > .0001 or not .10 <= gaps[1] <= .13:
+                    fail(name, 'compressor transition length and generator clearance', str(gaps))
+                taper = next(o for o in col.objects if o.get('thermal_compressor_transition'))
+                low, high = bounds(taper)
+                if abs(low.x-bounds(casings[0])[1].x) > .0001 or abs(high.x-bounds(casings[1])[0].x) > .0001:
+                    fail(name, 'compressor taper must join both pressure casings', taper.name)
+                radii = [math.hypot((taper.matrix_world@v.co).y,(taper.matrix_world@v.co).z-C['TRAIN_SHAFT_Z']) for v in taper.data.vertices]
+                if abs(max(radii)-1.85) > .0001:
+                    fail(name, 'turbine outside radius stays 1.85 m', taper.name)
+                if not any(taper.data.materials[f.material_index].name == 'ArcanePower_ClearChamber' for f in taper.data.polygons):
+                    fail(name, 'glazed compressor transition', taper.name)
+                generator = casings[2]
+                if not generator.get('thermal_hollow_casing') or not any(generator.data.materials[f.material_index].name == 'ArcanePower_ClearChamber' for f in generator.data.polygons):
+                    fail(name, 'glazed generator casing', generator.name)
+                a,b,*_ = generator['thermal_window_angles_deg']
+                factor = (math.cos(math.radians(a))-math.cos(math.radians(b)))/(math.cos(math.radians(22.5))-math.cos(math.radians(82.5)))
+                if abs(factor-.8) > 1e-5 or abs(generator['thermal_window_x'][1]-generator['thermal_window_x'][0]-1.58*stretch) > 1e-5:
+                    fail(name, 'generator window retains reduced height and extends with casing', generator.name)
+                window_side = 1 if 'mirrored' in name else -1
+                if not generator.get('thermal_single_sided_window') or any(
+                        generator.data.materials[f.material_index].name == 'ArcanePower_ClearChamber'
+                        and (generator.matrix_world@f.center).y*window_side < 0
+                        for f in generator.data.polygons):
+                    fail(name, 'opaque far wall behind generator inspection bay', generator.name)
+                join = next(o for o in col.objects if o.get('thermal_generator_transition'))
+                low, high = bounds(join)
+                if abs(low.x-bounds(casings[1])[1].x) > .0001 or abs(high.x-bounds(generator)[0].x) > .0001:
+                    fail(name, 'closed turbine-generator housing joint', join.name)
+                root = next(o for o in col.objects if o.type == 'EMPTY' and o.get('native_subpart') == 'Thermal_TurbineRotor')
+                windings = [o for o in col.objects if o.get('thermal_generator_winding')]
+                armature = [o for o in col.objects if o.get('thermal_generator_armature')]
+                if (len(windings) != 96 or {(o.get('thermal_generator_pole'),o.get('thermal_winding_layer')) for o in windings} != set(itertools.product(range(24),range(4)))
+                        or any(o.get('thermal_winding_turns') != 10 or o.parent != root or o.data.materials[0].name != 'ArcanePower_ArmatureCopper' for o in windings)):
+                    fail(name, '24 turbine-driven poles with four layers of ten copper turns', generator.name)
+                poles = [o for o in armature if 'thermal_generator_pole' in o and not o.get('thermal_generator_winding')]
+                if any(abs(bounds(o)[1].x-bounds(o)[0].x-1.06*stretch) > .0001 for o in poles):
+                    fail(name,'armature poles extend with the longer generator',generator.name)
+                if len(poles) != 24 or any(tree(a).overlap(tree(b)) for a,b in itertools.combinations(poles+windings,2)):
+                    fail(name, 'flanged generator pole cores and windings have separate volumes', generator.name)
+                radius = max(math.hypot((o.matrix_world@v.co).y,(o.matrix_world@v.co).z-C['TRAIN_SHAFT_Z']) for o in armature for v in o.data.vertices)
+                if (1.62-.12)*math.cos(math.pi/48)-radius < .05:
+                    fail(name, 'generator armature swept casing clearance', generator.name)
+                magnets = [o for o in col.objects if o.get('thermal_generator_magnet')]
+                if len(magnets) != 27 or any(o.parent or o.get('native_subpart') or o.data.materials[0].name != 'Metal_Shiny' for o in magnets):
+                    fail(name, '27 shiny stationary permanent magnets on generator casing', generator.name)
+                for magnet in magnets:
+                    points = [magnet.matrix_world@v.co for v in magnet.data.vertices]
+                    angles = sorted(math.atan2(p.y,p.z-C['TRAIN_SHAFT_Z']) % math.tau for p in points)
+                    gap = max(b-a for a,b in zip(angles,angles[1:]+[angles[0]+math.tau]))
+                    if abs(math.degrees(math.tau-gap)-14) > .01:
+                        fail(name, 'one-degree circumferential magnet gaps', magnet.name)
+                    length = max(p.x for p in points)-min(p.x for p in points)
+                    if min(abs(length-.32*stretch),abs(length-1.56*stretch)) > .001:
+                        fail(name, 'extended inspection-side magnet end tiles', magnet.name)
+                    centre = sum(points,Vector())/len(points)
+                    angle = math.degrees(math.atan2(centre.y*window_side,centre.z-C['TRAIN_SHAFT_Z']))
+                    if abs(angle-30) < .01 and abs(length-1.56*stretch) > .001:
+                        fail(name, 'continuous uppermost visible magnet bar', magnet.name)
+                if 1.31*math.cos(math.radians(.875))-radius < .05:
+                    fail(name, '50 mm generator rotor-magnet swept air gap', generator.name)
+                stats['generator_windings'] = sum(o['thermal_winding_turns'] for o in windings)
+                stats['generator_magnet_air_gap_mm'] = round((1.31*math.cos(math.radians(.875))-radius)*1000,2)
             elif name.startswith('Recuperator'):
                 plates = [o for o in col.objects if o.name.startswith(name+' / counterflow plate')]
                 stats['exchange_plates'] = len(plates)
@@ -381,9 +556,69 @@ def audit():
                 fail(scene.name, 'unmated/overused socket', str((position, [x[0] for x in items])))
                 continue
             (an, a), (bn, b) = items
-            if a['type'] != b['type'] or Vector(a['normal']).dot(Vector(b['normal'])) > -.9999 or Vector(a['hot_axis']).dot(Vector(b['hot_axis'])) < .9999:
+            if not C['circuits_match'](a['type'], b['type']) or Vector(a['normal']).dot(Vector(b['normal'])) > -.9999 or Vector(a['hot_axis']).dot(Vector(b['hot_axis'])) < .9999:
                 fail(scene.name, 'circuit or H/C reversal', an+' / '+bn)
         assemblies[scene.name] = {'instances': len(instances), 'occupied_cells': len(occupied), 'mated_sockets': len(socket_map)}
+    # Stacked radiator couplings meet at cell boundaries, centred in equal
+    # frame gaps. Inspect real vertices so later panel edits cannot shift them.
+    stack = {}
+    for name, half_height in (('Space radiator', 3.75), ('Radiator panel', 2.5)):
+        bpy.context.window.scene = M['scene_for'](name)
+        bpy.context.view_layer.update()
+        col = M['main_for'](name)
+        for label, key in (('radiator top rail', 'top'), ('panel carrier beam', 'bottom')):
+            obj = next(o for o in col.objects if o.name.startswith(name+' / '+label))
+            points = [obj.matrix_world@v.co for v in obj.data.vertices]
+            stack[name, key] = max(p.z for p in points) if key == 'top' else min(p.z for p in points)
+        if abs(half_height-stack[name, 'top']-.125) > .00001:
+            fail(name, 'stack connector not centred above top rail', str(stack[name, 'top']))
+        if name == 'Radiator panel':
+            if abs(stack[name, 'bottom']+half_height-.125) > .00001:
+                fail(name, 'stack connector not centred below carrier', str(stack[name, 'bottom']))
+            for obj in col.objects:
+                if ' / fixed axial dock' not in obj.name: continue
+                zs = [(obj.matrix_world@v.co).z for v in obj.data.vertices]
+                clearance = min(zs)-stack[name, 'top'] if min(zs)>0 else stack[name, 'bottom']-max(zs)
+                if clearance < .03499: fail(name, 'axial collar overlaps frame rail', obj.name)
+        for collar in col.objects:
+            if not any(label in collar.name for label in (' / fixed axial dock', ' / stack axis collar')):
+                continue
+            points = [collar.matrix_world@v.co for v in collar.data.vertices]
+            sign = 1 if sum(p.z for p in points)>0 else -1
+            origin = Vector((0, 0, sign*(half_height+.01)))
+            inverse = collar.matrix_world.inverted()
+            hit = collar.ray_cast(inverse@origin, inverse.to_3x3()@Vector((0, 0, -sign)), distance=.12)[0]
+            if hit:
+                fail(name, 'axial collar must be annular, not a coplanar solid cap', collar.name)
+            shaft = next(o for o in col.objects if
+                         any(label in o.name for label in (' / rotating axial coupling', ' / stack axis coupling'))
+                         and sign*sum((o.matrix_world@v.co).z for v in o.data.vertices)>0)
+            shaft_points = [shaft.matrix_world@v.co for v in shaft.data.vertices]
+            recess = half_height-max(sign*p.z for p in shaft_points)
+            if not .0059 <= recess <= .0061:
+                fail(name, 'shaft end needs a separate 6 mm recessed cap', shaft.name)
+            inverse = shaft.matrix_world.inverted()
+            if not shaft.ray_cast(inverse@origin, inverse.to_3x3()@Vector((0, 0, -sign)), distance=.03)[0]:
+                fail(name, 'axial end must remain closed behind the collar', shaft.name)
+    # The hull fills its cells; only the requested exhaust hardware projects.
+    bpy.context.window.scene = M['scene_for']('Atmospheric cooler')
+    bpy.context.view_layer.update()
+    cooler = M['main_for']('Atmospheric cooler')
+    face = next(o for o in cooler.objects if ' / flush exhaust bulkhead' in o.name)
+    low, high = bounds(face)
+    if max(abs(low.x+3.75),abs(high.x-3.75),abs(low.z+3.75),abs(high.z-3.75),abs(low.y+2.5)) > .00001:
+        fail('Atmospheric cooler','flush full-cell hull perimeter',face.name)
+    samples=json.loads(cooler['air_exhaust_samples'])
+    fans=[o for o in cooler.objects if o.type=='MESH' and o.get('cooler_exhaust_part')]
+    front=min(bounds(o)[0].y for o in fans)
+    if len(samples)!=18 or any(p[1]>front-.02 for p in samples):
+        fail('Atmospheric cooler','exhaust probes must clear physical fan guards',str(samples))
+    for x in (-1.68,1.68):
+        if sum(math.hypot(p[0]-x,p[2])<1.1 for p in samples)!=9:
+            fail('Atmospheric cooler','nine probes cover each fan aperture',str(x))
+    port=json.loads(cooler['ports'])
+    if len(port)!=1 or port[0]['position']!=[0,2.5,0] or port[0]['normal']!=[0,1,0]:
+        fail('Atmospheric cooler','rear manifold on grid boundary',str(port))
     protected = json.loads((OUT/'protected-sources.json').read_text())
     hashes = {n: hashlib.sha256((ROOT/'assets'/n).read_bytes()).hexdigest() for n in protected}
     if hashes != protected:

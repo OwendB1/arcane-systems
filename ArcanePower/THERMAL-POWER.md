@@ -1,342 +1,117 @@
-# Modular Brayton power — design and model study
+# Modular Brayton power
 
-16 October 2026. Current direction: closed sCO₂ Brayton only. The earlier topping
-converter and its dedicated utility circuit have been removed from the active
-proposal, procedural sources and Blender study. Existing runtime reactors still
-generate electricity directly. A separate [C# runtime prototype](THERMAL-RUNTIME.md)
-now implements mode/manifold control and Brayton accounting. All 31 native thermal
-models and definitions, 93 construction stages and 122 LODs are delivered in the
-local 0.1.0 alpha package. World validation remains pending.
+The reactor, turbine/compressor trains and coolers share **one duplex pipe network**.
+Every socket carries separate H and C bores. Each train has one socket and connects
+as a terminal branch, so trains operate in parallel. Match H to H and C to C on
+every face; there are no separate high- and low-pressure pipe blocks.
+Heaters and recuperators are retired from the mod. Their authoring models remain
+in the production blend for future reuse, outside the shipped catalog.
 
-Accepted balance: **20% net standalone**, with primary manifolds hidden;
-**40% net starter Brayton**, upgradeable to **78% net**. These are alternative
-conversion paths for allocated reactor heat. Never award 20% plus 78% for the
-same heat. Standalone operation uses integrated heat rejection; its capacity and
-startup/shutdown behavior are implemented with finite paid heat inventories.
+[Construction instructions](THERMAL-CONSTRUCTION.md) cover adapters, H/C roll,
+placement guidance, welding, commissioning and shutdown.
 
-## The engineering loop
+The reactor generates its own sealed CO2 charge. Its eight-second commissioning
+phase draws grid electricity through the train's built-in compressor. No gas
+generator, tank, separate heater or manual valve sequence is needed. Running
+auxiliaries are deducted once; no second electrical grant is created.
 
-Build **heater → turbine/generator train → cooler**, with recuperators recovering
-exhaust heat into the compressed supply. Internally the CO₂ follows compressor →
-recuperator cold side → primary heater → turbine → recuperator hot side → cooler
-→ compressor. Primary carrier and CO₂ never mix. The train contains an electric
-compressor drive and a separate turbine/generator shaft.
-
-The reactor generates its own sealed CO₂ charge during the existing powered
-eight-second commissioning phase. This includes loop filling and pressurization;
-players need no separate CO₂ generator, tank or filling conveyor. The charge is
-abstracted by commissioning readiness rather than a consumable gas inventory.
-
-Players connect matching thermal sockets. Flow allocation, pressure and working
-inventory are automatic; no manual valve sequence, fluid recipe spreadsheet or
-real-fluid solver is required. Primary, high-pressure CO₂ and low-pressure CO₂
-remain physically separate networks. Shared headers and tees allow parallel banks.
-
-| Add more of… | Player benefit | What still limits it |
-| --- | --- | --- |
-| Primary heaters | More accepted reactor heat; spare heat-exchanger capacity | Reactor supply and downstream capacity |
-| Turbine/compressor trains | More electrical output capacity; automatic standby/failover | Heat, recuperation and cooling |
-| Recuperators | Better fuel-to-electric efficiency, with diminishing returns; capacity after damage | Hot-end hardware/temperature ceiling |
-| Fan coolers | More cooling in air; atmospheric redundancy | Air density and intake temperature |
-| Space radiators | More cooling in vacuum; radiator redundancy | Radiative sink temperature and exposed area |
-
-There is no additive generator multiplier. Two trains sharing a heater sized for
-one train still have only one train's heat available. Extra recuperators recover
-existing heat; they never create heat. More coolers remove a bottleneck or provide
-spares; they do not multiply efficiency above the cycle's limit.
-
-Start with one of each required function. Expand banks on shared headers, protect
-those headers, or build physically separate loops for fault containment. Each
-machine automatically isolates on failure. A standby train starts only if an intact
-route, cooling and startup power exist; switching cannot ignore stored heat or
-teleport heat across a destroyed pipe.
-
-## Efficiency progression
-
-The starter layout targets **40% net**, after electrical auxiliaries. Recovery
-capacity is measured against the full design flow of the dispatched train bank,
-not instantaneous throttled flow. This avoids gaining an efficiency upgrade merely
-by toggling demand or cooling. Automatically idle spare trains do not dilute the
-recovery ratio. Starting another train must never reduce net output: dispatch
-compares candidate banks before admitting additional heat.
-
-For the first balance study, one heater, train or recuperator handles 100 MWth.
-These normalized ratings scale with the eventual reactor tier. Define:
-
-- `D` is the number of duty trains selected automatically to maximize supported
-  net output; ties use fewer machines. Candidate counts are bounded by offered
-  heat, heaters, trains and available recovery capacity.
-- `R = healthy recuperator capacity / (D × 100 MWth)`.
-- Recovery target `η = min(0.78, 0.40 + 0.40 × (1 − 2^−max(0, R−1)))`.
-- Actual efficiency is capped by matched hot-end equipment and temperature, then
-  derated for a warmer compressor inlet. Missing required equipment gives zero
-  output; insufficient recovery capacity also limits accepted thermal flow.
-
-| Recuperator capacity per duty train | Recovery target |
-| --- | ---: |
-| 1× | 40% |
-| 2× | 60% |
-| 3× | 70% |
-| 4× | 75% |
-| 5× | 77.5% |
-| 6× | 78% |
-
-Six units per duty train reach the requested **78%** cap with exotic hardware.
-Adding the second recuperator is useful with ordinary hardware; reaching the
-highest targets needs a compatible heater and train as well.
-
-| Matched equipment class | Net ceiling | Electrical auxiliaries / accepted heat | Required turbine inlet |
-| --- | ---: | ---: | ---: |
-| Standard | 55% | 8% | 650°C |
-| Improved | 66% | 7% | 1,000°C |
-| Optimized | 74% | 6% | 1,600°C |
-| Exotic | 78% | 5% | 2,200°C |
-
-Equipment class is the weakest required heater/train capability, not a global
-research buff or a choice the player can use without its machinery. Recuperator
-pressure/temperature eligibility must also match. Higher-temperature primary
-supply must actually exist. The intermediate classes currently reuse the base
-and premium concept silhouettes; dedicated intermediate artwork is not authored.
-
-These are **Arcane gameplay targets**, not solved sCO₂ cycle predictions. At
-650°C hot / 45°C cold, Carnot efficiency is only about 65.5%. The new 78% net
-target needs a much hotter exotic source: 2,200°C in this balance calculator,
-where 83% gross plus 5% auxiliaries yields 78% net below the Carnot ceiling.
-This is a fictional materials/gameplay target, not a real sCO₂ prediction. Normal reference pressures
-remain 22 MPa HP and 8 MPa LP; compression and pressure allocation are abstracted.
-
-## Redundancy and power examples
-
-All examples below offer 100 MWth per duty train, use nominal cooling, and include
-auxiliaries. A normal cooler rejects 60 MW at its reference conditions.
-
-| Installation | Offered heat | Net electricity |
+| Mode / eligible turbine tier | Required hot-end temperature | Maximum net efficiency |
 | --- | ---: | ---: |
-| 1 heater, 1 train, 1 recuperator, 1 cooler | 100 MWth | 40 MWe |
-| Improved heater/train, 2 recuperators | 100 MWth | 60 MWe |
-| Exotic heater/train, 6 recuperators | 100 MWth | 78 MWe |
-| 2 heaters, 2 trains, 2 recuperators, 2 coolers | 200 MWth | 80 MWe |
-| 3 of each, with only 2 trains dispatched | 200 MWth | about 103.43 MWe |
-| Last installation after its worst single module loss | 200 MWth | at least 80 MWe |
+| Standalone | Reactor fuel tier | 20% |
+| Starter | 650°C | 40% |
+| Improved | 1,000°C | 55% |
+| Optimized | 1,600°C | 66% |
+| Exotic | 2,200°C | 78% |
 
-The last bank has one spare heater/train; all three recuperators contribute heat
-recovery. Losing a recuperator reduces efficiency to the basic two-per-two ratio,
-while preserving 80 MWe. Losing a train or heater activates its spare. Cooling
-remains sufficient after losing one of its three units. This is a steady-state capacity guarantee after successful failover, not
-uninterrupted output during the starting transient. Batteries cover that interval.
-It assumes intact connected headers and adequate external startup/containment power. A common
-pipe, reactor or electrical bus remains a common failure point.
+The standard train supports starter operation. The upgraded train can use higher
+stages when the reactor's source temperature permits. A warmer compressor inlet
+derates efficiency. These are game balance values, not a real-fluid simulation.
+The table gives the ceiling with **four active, eligible turbines**. One, two,
+three and four turbines reach **40%, 60%, 80% and 100%** of that ceiling:
 
-The terminal should show **current net output, maximum supported output, recovery
-ratio/efficiency ceiling, bottleneck(s), duty/standby counts and worst single-module
-loss output**. Provide a simple diagnostic such as “Add cooling: 18% thermal flow
-limited” or “Extra train is standby: heater capacity limits output.” Default auto
-operation handles dispatch and failover; no per-pipe flow balancing UI is needed.
+| Active turbines | Starter net | Exotic net |
+| ---: | ---: | ---: |
+| 1 | 16% | 31.2% |
+| 2 | 24% | 46.8% |
+| 3 | 32% | 62.4% |
+| 4 | 40% | 78% |
 
-## Space and atmosphere cooling
+Additional turbines provide capacity or standby without a further efficiency bonus.
+Standalone and Brayton are alternative paths for the same paid heat; their
+outputs never add together.
 
-These components are heat rejectors. Supercritical CO₂ does not condense in this
-cycle, so a steam condenser is not the right physical component. Both variants
-have the same CO₂ LP duplex pose and can replace each other or form parallel banks.
+Standard and upgraded trains each have regular and mirrored versions. All four
+fit a 2-wide × 2-high × 5-long envelope (5×5×12.5 m). The round machinery sits
+0.55 m lower and the single duplex socket occupies the lower side cell. H enters
+the first compressor casing; the compressor casing flares directly into the turbine front, and C
+returns from its rear beside the generator. Close side runs pass through relieved
+supports. Ratings, dense blade rows and inspection windows are retained.
+Existing two-socket trains need their connections rerouted to the single lower
+socket; remove or cap the abandoned branch. Older, larger trains need replacement.
 
-**Atmospheric cooler:** fin stack, two pitched solid fans, protective grille,
-mounting spiders, plenum and open exhaust. Effective capacity scales with local air
-density, clamped to its nominal rating. In vacuum its forced-convection capacity is
-zero; do not charge fan power for useful vacuum cooling that cannot happen.
-Reference air is 25°C; a 20 K approach gives 45°C compressor inlet. Hotter air raises
-the cold-end temperature and reduces conversion efficiency. Thin air limits flow
-capacity independently of the temperature penalty. More fans cannot cool below
-ambient or bypass the temperature limit.
+Parallel trains add efficiency up to four active units, then capacity or standby.
+Available source heat and train throughput limit output. Dispatch chooses the highest available output
+and uses fewer machines on ties. A broken connection prevents generation rather
+than teleporting heat. Existing inventories stay on their source and machine
+blocks and must cool before a mode change.
 
-**Space radiator:** broad two-sided dark tiles, heat-distribution pipes, framed
-panel substrates and a pump cassette. No fans or former utility/emitter bank.
-Reference radiator surface is 35°C, allowing a 10 K approach to the 45°C cold inlet.
-Capacity follows exposed area/sky view and normalized `(Tpanel⁴ − Tsink⁴)`. Blocking
-both faces or a sink as hot as the panel gives zero usable rejection. In atmosphere
-it can still radiate, but warm surroundings reduce its advantage; it receives no
-fan bonus. Solar heating and detailed directional occlusion remain future runtime
-integration work, not validated environment measurements in this study.
+Cooling must reject `reaction heat × (1 − net efficiency)`. An undersized,
+blocked or poorly exposed cooling bank no longer quietly throttles the reaction
+to a safe output. Paid waste heat returns to the reactor and builds up after the
+cooling buffers fill. Full stores stop fresh fuel use without clearing that heat.
+The terminal, LCD and tablet Power page show available and required cooling,
+returned waste and active/standby turbines. Heat warns at 100% and arms the
+existing irreversible failure sequence at **125%**. Restore cooling or shut down
+early; keep cooldown power supplied. Once critical, ejecting moves the hazard but
+cannot cancel its detonation timer.
+Act on the retained-waste warning immediately: core temperature lags the stored
+heat and can continue rising after cooling is restored.
 
-A mixed bank sums each healthy unit's environmentally valid capacity; hardware
-positions and local conditions determine contribution. There is no global free
-“space mode,” and high plant efficiency still needs enough waste-heat rejection.
+At the standard 25 GWth source, one turbine needs 21 GW of rejection: two fully
+effective 15 GW cooling units. Four standard turbines need 15 GW, so one clear
+unit meets the design point, with extra cooling recommended for obstruction or
+environmental losses. The requirement scales with source power and turbine tier.
 
-Model-sized MW/GW/TW heat rejection remains an explicit **Arcane abstraction**.
-The radiator's gameplay rating is not calculated from its visible area as if a
-few square metres could conventionally reject terawatts near room temperature.
-Temperature/exposure scaling supplies engineering trade-offs without claiming
-physically realistic compact radiators.
+Atmospheric coolers require air and powered circulation. Their airtight
+3×3×2-cell casing fits flush against surrounding armor; only the front fan
+assemblies project beyond the hull. Connect the shared duplex network at the rear. Leave 2.5 m clear
+beyond both fan guards. Cooling scales with atmospheric density and the square
+of the clear exhaust fraction: half clear gives 25% cooling, fully blocked gives
+none. Clearing an obstruction restores capacity on the next environment sample.
 
-## Energy and flow accounting
+Space radiators need a
+cold, exposed sink. The new radiator uses a bottom duplex manifold and a full
+2.5 m pedestal, with a 3×3×3-cell reserved sweep. Its panels turn automatically
+edge-on to sunlight at 3°/s. Broadside solar loading reduces rejection by 35%;
+eight rays per panel sample both actual moving faces. A faint, ribbed red-orange
+glow follows heat actually dissipated, with a three-second response.
 
-At a steady operating point, accepted heat becomes net electricity plus rejected
-heat. All auxiliaries are included once: `gross electricity − auxiliaries = net`;
-auxiliary energy returns as low-grade heat. Basic 100 MWth gives 48 MW gross,
-8 MW auxiliaries, 40 MW net and 60 MW rejected. Premium six-recuperator operation
-at the same heat gives 83 MW gross, 5 MW auxiliaries, 78 MW net and
-22 MW rejected. Standalone converts 100 MWth into 20 MWe and 80 MW rejected.
+Up to two 3×2×3-cell Radiator Panel extensions stack above one base. All sections
+share the same axis and connected side pipes. Each contributes the same 15 GW
+rated cooling; three equally exposed sections provide 45 GW. Ownership, build
+state, orientation, grid identity and consecutive placement gate attachment.
+Extra or disconnected sections cannot generate cooling or duplicate stored heat.
 
-Accepted heat is the minimum of offered supply, healthy heater/train/recovery
-capacity and available cooling divided by `(1 − efficiency)`. Unaccepted heat is
-not another radiator output or electricity source: it remains upstream, throttles
-new reactor production, and requires finite storage/fault handling for residual
-reaction heat. Startup/shutdown transients cannot erase it.
+The side members remain metal ribs. Only terminal collars use the established
+reflective glass and hot/cold emissives; opaque caps close exposed ends. Both
+stack joints have 25 cm frame gaps centered on the connection plane. The center
+collars have 35 mm clearance to each rail. Structural edges use narrow chamfers.
 
-Run from the repository root:
+The authored starter fixture contains 40 blocks; the room-perimeter fixture has
+106. Both are generated by `assets/review_thermal_models.py` and exercised against
+the compiled runtime. Standard reactor adapters preserve the native 170 mm
+manifold offset. Existing pipe socket geometry is unchanged. These one-train/one-cooler
+fixtures verify topology; add cooling before sustained full-load operation with
+the new efficiency curve.
+
+Normalized balance examples (100 MWth per train):
 
 ```sh
-python ArcanePower/tools/thermal_budget.py
-python ArcanePower/tools/thermal_budget.py --heat-mw 200 --heaters 3 --trains 3 --recuperators 3 --coolers 3
-python ArcanePower/tools/thermal_budget.py --stage exotic --recuperators 6 --cooler space
-python ArcanePower/tools/thermal_budget.py --cooler atmosphere --density 0
+python3 ArcanePower/tools/thermal_budget.py --heat-mw 200 --trains 4 --coolers 3
+python3 ArcanePower/tools/thermal_budget.py --stage exotic --cooler space
 ```
 
-The executable checks modular scaling, limits, diminishing returns, temperature
-eligibility, environment behavior and single-module-loss accounting. It is a design
-calculator, not production runtime or a real-fluid solver.
-
-Provisional reactor heat ratings stay 25 GWth / 250 GWth / 2.5 TWth, preserving
-10 GW / 100 GW / 1 TW starter net output. At 20% standalone these give 5 GW / 50 GW / 500 GW. At 78% Brayton the mathematical
-outputs would be 19.5 GW / 195 GW / 1.95 TW, only where the source temperature
-and installed hardware qualify. Do not assume every fuel can reach the exotic
-class. Existing battery bank transfer caps and native recharge losses remain.
-
-## Models and connections
-
-Production work now lives in [arcane-thermal-models.blend](assets/arcane-thermal-models.blend):
-31 main sources (eight machines, the reactor housing variant, 21 typed conduit
-pieces and one reactor transition). All eight machines and 22 pipe/transition
-models now have their main geometry and native SEUT texture/detail pass. The
-train has bolted split joints and switchgear hardware; the heater has pressure
-service hatches, isolation actuators and rear bracing; the recuperator has
-supported tie nuts and readable bank identifiers. Fan guard retainers, radiator
-tile shoes and pipe insulation clamps finish their respective families.
-Native atlas panels, warnings and screw faces preserve their source UVs. Metric
-surface UVs, restrained chamfer wear and pressure markings distinguish PRIMARY,
-22 MPa HP and 8 MPa LP connections; premium hot-end markings now read 2200 C.
-The second refinement pass replaces broad edge breaks with flat, at-most-3 mm
-single chamfers and keeps hex hardware faceted. Machine manifolds have angular
-skid brackets; existing frame posts carry the load where available. Train casing
-gaps are 115/125 mm, heater vessels and roof hatches fit more closely, each
-recuperator has 84 plates, and radiator tile joints are 10 mm. New pipe flanges
-mate across a 28 mm face gap, with sharp load webs behind them. Grid dimensions,
-socket positions, hot/cold roll and functional flow clearances stay fixed.
-Native framed vents, compact control panels, fastener plates and welded seams
-fit the settled surfaces and retain their atlas UVs.
-The maintained refinement source is `assets/refine_thermal_models.py`; rebuilding
-a finished base replays its detail and texture stages. The approved reactor
-variant stays on its separate builder. Close review uses fixed-light/lens
-1.8/2.4/3.0 m triplets, with evidence in
-the review record (report pruned).
-Native exports, LODs and construction stages are delivered. In-game thermal
-behavior remains a live-world validation gate.
-
-The reactor variant preserves its 5×5×3 Blender-cell envelope and original
-controller receivers, collars, glass, pillars and ring well. Four pairs of compact
-primary pipe heads sit behind four original curved armor sectors, beside both
-controller bays. Each sector is split into two solid leaves with its native UVs;
-the leaves inset 0.36 m and slide 0.155 rad around the drum under neighbouring
-armor. Two-stage telescopes then extend 1.41 m. A rounded twin-bore casting joins
-each pair of heads; a tapered rounded connector travels with it and seats inside
-the curved housing when deployed. The connector passes through a small internal
-bulkhead guide, while the hot and return bores stay separate. Standalone state
-fully hides the assembly; Brayton state exposes it. This is a saved mechanical
-rig. The runtime targets this motion, and its 20 native moving subparts and block
-definition are installed locally.
-
-The old conveyor-sized recess behind each controller receiver has been filled
-back to the curved housing, including its lower notch. The small native yellow
-connector retains its geometry and position within a fitted 0.60 m aperture.
-
-The original lower band centres at Z=−2.33 m, 0.17 m above the nearby grid-cell
-centre. A real 1×1×1 primary transition moves its inlet down to the pipe kit's
-standard outlet elevation. This keeps the original curved armor height and grid
-placement. The transition, unused-port caps and routed pipe blocks are included
-in the assembly bill; no off-grid pipe placement is assumed.
-
-The flat external cassettes were rejected and remain only in an undo checkpoint.
-The accepted original reactor/battery files remain unchanged. The new variant
-is maintained by `build_reactor_thermal_manifolds.py`. The focused
-curved-cover audit (report pruned) checks
-closed-assembly occlusion, separate open bores, split solids and 47 deployment positions; close review
-uses 1.8/2.4/3.0 m actual UI views. Native collision/subpart export passes; switching
-in a live world remains a validation gate.
-
-The earlier concept baseline follows for reference.
-
-[arcane-thermal-concepts.blend](assets/arcane-thermal-concepts.blend) holds editable
-component concepts, four whole-plant studies (atmosphere/space, starter/premium),
-a component lineup and a three-train expansion bank with two duty units and one
-standby. The full premium plant's single recuperator is a **topology/hardware
-study**, not a claim that one recuperator achieves 78%; its floor labels identify
-the unlocked ceiling. The expansion bank demonstrates generation/header assembly;
-its external ports connect to heater/recovery/cooling banks outside that scene.
-
-| Component | Blender X×Y×Z large-grid cells |
-| --- | --- |
-| Train, standard/premium | 5×3×2 |
-| Primary heater, standard/premium | 3×3×3 |
-| Recuperator, standard/premium | 3×2×3 |
-| Atmospheric cooler | 3×2×3 |
-| Space radiator | 3×2×3 |
-| Duplex straight, elbow and tee | 1×1×1 |
-
-Native SEUT materials/UVs, seated fasteners, hard armor edges and single-segment
-chamfers remain the style contract. Functional pipe/fan curvature is preserved.
-The tee and shared train headers have actual connected hollow bores. No magnet,
-electrode or separate cold-utility interface remains in the current component set.
-
-| Circuit | Upper H | Lower C |
-| --- | --- | --- |
-| Primary | reactor → heater | heater → reactor |
-| HP CO₂ | heater → recuperator bypass → turbine | compressor → recuperator working leg → heater |
-| LP CO₂ | turbine → recuperator working leg → cooler | cooler → recuperator bypass → compressor |
-
-Port poses/types/roll are in `validation/thermal-concepts/models.json`; routing
-records are the four environment/grade `*-layout.json` files. Concept conduit
-markings show primary service. The separate production sources now provide
-typed variants and a complete grid kit; game exports/runtime remain separate. Do not connect HP to LP or primary through a generic tee.
-
-The accepted reactor and battery are read-only visual references. The concept external
-extraction head is obsolete; the production variant uses the hidden curved-panel
-manifolds described above. Existing sockets, collisions, pillars, glazing and ejection route remain
-protected. Real conduit block bills and manifold seating are now authored in the production
-source. Native definitions, collision, construction stages, LODs and game exports
-remain production gates.
-
-## Runtime ownership and controls
-
-Use server-owned finite per-block MJ stores, not an aggregate duplicated network
-store. Transfer only what the receiver accepts. Damaged/hostile/disconnected
-hardware cannot contribute to capacity; reject pipe type mismatches. Splits,
-merges, reloads, blueprints and projectors cannot duplicate heat or stored charge.
-
-Current `Motion.Heat` is a normalized hazard value, not a temperature/MJ store.
-Fuel burn must eventually follow actual thermal production, with controller fuel
-efficiency applied once. Retain 8/9/9.9 minute current full-load endurance intent
-and deliberate migration of direct-electric reactors. Preserve the irreversible
-125% critical latch and fuse; converter loss must not pause runaway or erase heat.
-
-Controls: enable, load target, automatic dispatch, per-machine isolation and
-controlled/emergency shutdown. Grid/battery power starts cooling and compressors
-before heat admission. The earlier 2% primary rating for eight seconds remains
-only a provisional startup budget; verify actual native sink delivery and avoid
-simultaneous bank startup spikes. Failover also needs that power. Preserve
-containment priority and its real emergency reserve.
-
-When demand, cooling or topology drops, throttle new heat, then handle residual
-reaction and trapped heat explicitly. No-demand/full-battery operation cannot
-continue generating unconsumed electricity. Verify source/sink integration,
-fuel exhaustion, blackout, module loss, save/load, grid splits/merges and multiplayer
-in a separate runtime prototype before changing production definitions.
-
-## Current verification
-
-The saved study has eleven component concepts and current atmospheric/space,
-base/premium layout scenes. Seventy-five actual Blender UI captures cover 25
-joint/detail targets at 1.8/2.4/3.0 m. Geometry, typed connections, fan clearance,
-modular/environment energy checks, solution build and save/reload checks pass.
-Production reactor/battery source hashes are unchanged. See the current
-review record (report pruned),
-geometry audit (report pruned) and
-energy examples (report pruned).
+Authoring sources, named checkpoints and accepted collision inputs are retained.
+Current definitions, icons, construction stages, LODs and native motion contracts
+are checked by the release pipeline. In-game appearance, multiplayer behavior and
+survival balance still require live-world validation.

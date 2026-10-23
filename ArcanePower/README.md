@@ -28,26 +28,75 @@ production thermal builder/reviewer and remain required.
 
 Arcane Power is an SE1 reactor, fuel-processing and energy-storage mod in development. The current large-grid reactor fits **5×5×3 cells** (SE `Size=(5,3,5)`). Its rounded housing has three native-size conveyor access hatches plus a centered top conveyor connection behind the vent hatch, two base upgrade sockets and curved chamber glass. This is an engineering slice of the [mod plan](../docs/arcane-power-plan.md), not the finished progression.
 
-Bare pipe additions, 21 October 2026: 22 additional large-grid blocks cover straight,
-elbow, riser, tee, cross, roll adapter and end-cap fittings for PRIMARY, CO₂ HP and
-CO₂ LP, plus the PRIMARY reactor adapter. They retain the glass walls, circular
-collars and hot/cold indicators while removing rectangular manifold plates,
-mounting cages and their dependent hardware. Each occupies one 2.5 m cell and
-uses the same sockets, channel orientation, capacity and animated flow as its
-framed counterpart. Choose either appearance from its native build-menu variant
-group; framed and bare blocks can share a loop.
+White painted panels accept the game's normal block colors and compatible armor
+skins. While holding a block, open the paint menu (default **P**), select a color
+and skin, then paint the installed block (default middle mouse button). Clean,
+Battered, Carbon Fibre and camouflage skins target the native painted materials;
+the game carries the finish onto moving subparts and matching LOD surfaces.
+Bare silver metal, glass, seals and indicator materials retain their own finishes.
+Some vanilla skins only define replacements for armor-block materials, so their
+coverage on machinery can differ. No separate Arcane texture setting is needed.
 
-The local mod and unpublished package now contain 53 thermal blocks, 159 weld
-models, 278 LODs and dedicated icons for every block. Bare construction stages
-use the real collars and pipes. Distance collars retain regular radial sectors,
-closed bores and metric UVs. All original 31 block definitions and native assets
-are retained. The saved Blender file opens on the side-by-side comparison and
-also includes the fittings lineup and a connected route with a 1.9 m engineer.
+Reactor hardware now has explicit construction recipes instead of inherited small-reactor, productivity-module and conveyor costs. The quantities below are per block, with repeated structural layers summed. Advanced controllers have ten times the standard controller's superconductors; the vent outlet adds more actuation and control hardware than a plain duct.
+
+| Component | Reactor | Standard controller | Advanced controller | Vent duct | Vent outlet |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Steel plate | 3,000 | 300 | 600 | 240 | 360 |
+| Interior plate | — | — | — | 80 | 120 |
+| Construction | 1,000 | 150 | 300 | 120 | 180 |
+| Metal grid | 600 | 40 | 80 | 40 | 80 |
+| Large steel tube | 240 | — | — | 40 | 60 |
+| Small steel tube | — | 80 | 160 | 40 | 80 |
+| Reactor component | 2,000 | — | — | — | — |
+| Motor | 200 | 40 | 80 | 16 | 64 |
+| Computer | 400 | 150 | 500 | 16 | 64 |
+| Superconductor | 1,500 | 300 | 3,000 | — | — |
+| Bulletproof glass | 160 | — | — | — | — |
+
+`tools/prepare_lab.py::hardware_components` owns these recipes for both the shipped definitions and future generation, including the archived reactor template. Component IDs, critical components and package contents have been checked; survival balance remains provisional.
+
+The pipe catalog has one shared duplex family: straight, elbow, riser, tee,
+cross, roll adapter, reactor adapter and end cap. Each has bare and manifold
+styles, kept in separate eight-block scrolling groups. Both styles share socket
+geometry, H/C orientation and animated flow. Old HP/LP IDs remain as 28 hidden
+compatibility aliases, reusing the current models and icons.
+
+The local catalog has 24 public thermal blocks and 72 construction stages, with
+LODs and icons. Heaters and recuperators are absent from gameplay; their authoring
+sources remain available. The radiator now has a full
+3×3×3-cell base, bottom manifold and automatic sun tracking. Up to two extensions
+stack above it and share its rotation, providing up to three times the cooling.
+The atmospheric cooler now fits a 3×3-cell hull opening, two cells deep, with an
+airtight casing and rear duplex manifold. Only the fans project beyond the hull.
+Keep 2.5 m clear beyond the guards: half-clear exhaust provides 25% cooling;
+fully blocked exhaust provides none. The terminal shows clearance and available MW.
+Standard and upgraded turbines each have regular and mirrored variants, all
+2 blocks wide × 2 high × 5 long (5×5×12.5 m). Their round machinery sits 0.55 m
+lower, with one duplex socket in the lower side cell. H enters the first compressor
+casing; the compressor flares directly into the turbine and C returns from its rear.
+Close pipe runs pass through relieved, tapered supports. Glazed compressor tapers
+show the extended blade stacks; the generator window reveals a wound copper
+armature rotating inside fixed magnets. Trains connect in parallel
+to the same network as the reactor and coolers.
+The saved Blender file opens on the compact turbine comparison with scale guides;
+the cooler hull fit, three-panel radiator stack, pipe comparisons and connected
+routes remain available.
 Model, LOD and compiled runtime checks passed for this pass. Rerun the
 [model audit](assets/audit_thermal_models.py) and
 [LOD audit](assets/audit_pipe_lods.py) after geometry changes; the latest
 [delivery summary](validation/thermal-models/delivery-check.json) is retained.
 An in-game reload and visual check remain pending.
+
+Existing builds need migration: replace heater/recuperator routes with one shared
+reactor/train/cooler network. Reconnect each train at its single lower socket and
+remove or cap the abandoned branch. Reposition the
+revised radiator for its larger footprint and reconnect underneath. Reroute
+existing cooler side connections to its rear manifold. Replace old, larger
+turbine blocks and reroute their side connections for the new footprint. The current
+stack has equal 250 mm frame gaps, centred connections, annular shaft collars
+and recessed closed caps that eliminate coplanar texture overlap. Native metal
+textures, fine graphite channel detail and the quarter-strength heat glow are
+included in the source and runtime assets.
 
 `build_thermal_models.py` creates bare variants from finished framed mains.
 Use `build_base(name)` for a new scene or `rebuild_base(name)` to refresh it.
@@ -272,9 +321,11 @@ demo, not an in-game recording or the actual startup timing.
 
 [Reactor.Sound.cs](src/Data/Scripts/ArcanePower/Reactor.Sound.cs) mixes field and actuator
 3D loops from the replicated motion, load and heat. Assembly follows progress and
-actuator pauses. Assembly starts at 0.65× pitch. Resonance and load hum blend five
-native pitch levels from 0.65× at idle to 1.10× at full utilization, following the
-saved/synchronized one-second load response. Pitch falls as demand falls;
+actuator pauses. Assembly, resonance, load and instability beds use low tones and
+rumble with the sustained upper harmonics and hiss removed. Assembly stays at
+0.65× pitch. Resonance and load hum blend five native pitch levels from 0.65× at
+idle to 0.68× at full utilization: a 4.6% rise, less than one semitone, following
+the saved/synchronized one-second load response. Pitch falls as demand falls;
 reaction loops fade with residual heat during cooldown and reach silence at the
 15% dismantling threshold, even if maintenance or actuator power delays teardown.
 Ignition fires
@@ -327,9 +378,11 @@ Regenerate the thirteen mono 44.1kHz/16-bit PCM assets and twenty-one SBC cue
 definitions (pitch variants reuse their source WAVs) with
 `python3 ArcanePower/assets/build_audio.py` (NumPy required). No third-party sound
 recordings are used. `python3 ArcanePower/tools/check_audio.py` checks asset paths,
-format, headroom, DC offset and loop seams. Asset checks and the SE compatibility
-build passed; no regression suites, deployment or in-game audition have run for
-this pass. Spatial falloff, realistic mode, overlapping reactors, multiplayer
+format, headroom, DC offset, loop seams and low-frequency content. Temporary
+listening previews go in `.cache/audio/` and are removed after the pass. Audio,
+pitch-mixing, cooldown and package checks passed for the low-hum update; the local
+mod and release ZIP include it. In-game audition remains pending.
+Spatial falloff, realistic mode, overlapping reactors, multiplayer
 transitions and blast size still need in-game review.
 
 `python3 ArcanePower/tools/check_reload_retraction.py` exercises the actual changed
@@ -380,6 +433,8 @@ See the [remaining-work overview](../docs/arcane-power-remaining-work.md) for th
 [ContainmentController.cs](src/Data/Scripts/ArcanePower/ContainmentController.cs) places native electrical sinks on the two external controllers. SE pairs a generator and electrical sink in the same component container as storage, so the reactor remains a normal source while controllers draw the operating energy. The new `ArcaneContainment` sink group has priority 2 (after vanilla safe zones, before defense) and accepts partial supply. Native grid behavior and split/merge handling still require game review.
 
 [Reactor.Power.cs](src/Data/Scripts/ArcanePower/Reactor.Power.cs) uses provisional containment demand **1/10/100 MW**, a **90-second** internal shutdown reserve (**0.025/0.25/2.5 MWh**), and up to three times operating demand for charging. Full precharge therefore requests **4/40/400 MW** and takes approximately **30 seconds** with sufficient grid supply, before the existing assembly and output ramp. Startup requires grid input and a full reserve; the reserve cannot start the reactor or export electricity. Creative also requires electrical supply. Reserve charging uses actual distributed input, and persisted energy remains tied to the original entity ID.
+
+Before assembly, the housing and subpart emissives **blink white once per second** while delivered surplus power charges the reserve. Waiting for power uses a **slow, two-second white fade**. These signals are distinct from the running fuel colours; critical and vent alarms keep priority. Terminal information and the LCD/tablet Overview and Power pages show startup charge percentage, stored energy, delivered/requested input, net charging power and a remaining-time estimate. LCD and tablet progress bars follow the replicated reserve. No surplus means an explicit waiting state without a countdown; a full reserve still requires containment input before startup. `tools/check_appearance.py` exercises actual power, status and emissive methods, and `tools/check_tablet_screen.py` checks the display layouts. In-game appearance and multiplayer review remain pending.
 
 A containment-input shortfall triggers controlled shutdown and manual restart lockout. Grid input or the reserve powers cooldown, dismantling and vent actuation even after the reactor is disabled. An exhausted reserve pauses mechanisms until input returns; passive cooling continues. A destructive breach is not implemented. Older saved prototypes start with no reserve unless they have saved this version's charged state. Terminal information shows input/request, gross generation and net contribution after containment/charging, reserve seconds, and supply/shutdown reasons.
 

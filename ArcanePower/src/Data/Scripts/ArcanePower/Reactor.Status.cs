@@ -12,7 +12,9 @@ namespace ArcanePower
         // LCD, tablet and native terminal text share live values and warning priority.
         internal StatusReport ReadStatus(bool detailed)
         {
-            var text = new StatusReport { Name = reactor.CustomName, Fuel = FuelNames[Motion.FuelTier - 1], Heat = Motion.Heat, Reserve = Motion.ReserveMJ / ReserveCapacityMJ, Load = Motion.Load };
+            var text = new StatusReport { Name = reactor.CustomName, Fuel = FuelNames[Motion.FuelTier - 1], Heat = Motion.Heat,
+                Reserve = Math.Min(1, Math.Max(0, Motion.ReserveMJ / ReserveCapacityMJ)), Load = Motion.Load, Precharging = Precharging,
+                Brayton = ThermalVariant && Motion.Thermal != null && Motion.Thermal.Mode == ThermalMode.Brayton };
             bool creative = MyAPIGateway.Session.CreativeMode;
             double fuel = (double)reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1]));
             int[] tileStock = SpareTileQuartets();
@@ -33,6 +35,15 @@ namespace ArcanePower
             double output = ThermalVariant && Motion.Thermal != null ? Motion.Thermal.NetOutputMW : reactor.CurrentOutput;
             Row(text, "Output", Power(output) + " / " + Power(ThermalVariant && Motion.Thermal != null ? Motion.Thermal.SupportedMW : PowerMW[Motion.FuelTier - 1]));
             Row(text, "Net", Power(output - Motion.PowerInputMW - (ThermalVariant && Motion.Thermal != null ? Motion.Thermal.StartupMW : 0)));
+            if (text.Precharging)
+            {
+                double charge = PrechargeMW;
+                Row(text, "Startup charge", Number(Math.Floor(text.Reserve * 100), "0") + "%");
+                Row(text, "Charge rate", Power(charge) + " net");
+                Row(text, "Charge ETA", Motion.ReserveMJ >= ReserveCapacityMJ * .999999 ? "Reserve full"
+                    : charge > .000001 ? "~" + Duration(Math.Max(0, ReserveCapacityMJ - Motion.ReserveMJ) / charge)
+                    : "Waiting for surplus power");
+            }
             if (ThermalVariant && Motion.Thermal != null)
             {
                 var thermal = Motion.Thermal;
@@ -43,18 +54,24 @@ namespace ArcanePower
                 Row(text, "Reaction heat", Power(thermal.ProducedMW) + " / " + Power(ThermalHeatMW));
                 Row(text, "Trapped housing heat", Number(thermal.Store.HotMJ + thermal.Store.WasteMJ, "0.0") + " MJ");
                 Row(text, "Duty / standby", thermal.DutyTrains + " / " + thermal.StandbyTrains);
-                Row(text, "Recovery capacity", Number(thermal.RecoveryRatio, "0.00") + " x dispatched design flow");
+                if (text.Brayton)
+                {
+                    bool shortfall = thermal.CoolingMW + .001 < thermal.RequiredCoolingMW;
+                    Row(text, "Cooling capacity", Power(thermal.CoolingMW), shortfall ? "yellow" : "white");
+                    Row(text, "Cooling required", Power(thermal.RequiredCoolingMW) + " at design load");
+                    Row(text, "Returned waste", Number(thermal.Store.WasteMJ, "0.0") + " MJ", Motion.Heat > 1 ? "red" : "white");
+                }
                 Row(text, "Startup / cooldown draw", Power(thermal.StartupMW));
                 Line(text, thermalRestoreFault || thermal.Faulted ? "red" : "muted", thermal.Diagnostic);
-                Line(text, "muted", "Setup: PRIMARY -> heater; HP -> recovery -> train; LP -> recovery -> cooling. Match H/C; cap unused sockets.");
+                Line(text, "muted", "Setup: reactor, parallel turbines and coolers share one duplex network. Match H/C; cap unused sockets.");
+                Line(text, "muted", "Four active turbines reach peak efficiency. Size cooling for rejected heat; retained waste can trigger failure at 125% heat.");
                 Line(text, "muted", "Construction guide: aim at thermal blocks or select them in build mode. Verify build, then deployment, cooling and startup power.");
                 Section(text, "POWER");
             }
             if (detailed)
-            {
                 Row(text, "Ramp", Percent(Motion.PowerRamp) + "   Reaction load " + Percent(Motion.Load));
+            if (detailed || text.Precharging)
                 Row(text, "Containment", Power(Motion.PowerInputMW) + " / " + Power(Motion.PowerDemandMW) + " requested");
-            }
 
             Section(text, "CONTAINMENT");
             Row(text, "Security mode", Motion.SecurityMode ? "On / vent loss shuts down" : "Off / vent loss warns", Motion.SecurityMode ? "white" : "yellow");
@@ -62,12 +79,13 @@ namespace ArcanePower
             Row(text, "Heat", Percent(Motion.Heat) + " / critical 125%", Motion.Critical || Motion.Heat >= 1 ? "red" : Motion.Heat >= .85f ? "yellow" : "white");
             Row(text, "Reserve", Number(Motion.ReserveMJ / ContainmentMW, "0") + " / 90 s", Motion.PowerPaused ? "red" : !Motion.PowerReady ? "yellow" : "white");
             Row(text, "Field", Motion.InstalledTiles + " / 80 tiles   " + Motion.RingCount + " rings");
+            if (detailed || text.Precharging)
+                Row(text, "Reserve energy", Number(Motion.ReserveMJ / 3600, "0.000") + " / "
+                    + Number(ReserveCapacityMJ / 3600, "0.000") + " MWh");
             if (detailed)
             {
                 Row(text, "Controllers", Number(Math.Max(0, previousControllers), "0") + " / 2 required   Capacity " + controllerRingCapacity + " rings",
                     previousControllers < 2 || Motion.FuelTier + 1 > controllerRingCapacity ? "red" : "white");
-                Row(text, "Reserve energy", Number(Motion.ReserveMJ / 3600, "0.000") + " / "
-                    + Number(ReserveCapacityMJ / 3600, "0.000") + " MWh");
                 Row(text, "Tile grade", Motion.InstalledTiles > 0
                     ? TileNames[InstalledTileGrade(Motion.MaintenanceBatch)] + " / " + Percent(Motion.TileWear) + " wear"
                     : "No installed tiles");
@@ -139,6 +157,15 @@ namespace ArcanePower
             { tone = "red"; action = "Complete or repair the reactor."; return "REACTOR INCOMPLETE"; }
             if (previousControllers < 2 || Motion.FuelTier + 1 > controllerRingCapacity)
             { tone = "red"; action = "Attach two compatible, working controllers."; return "CONTAINMENT INCOMPLETE"; }
+            if (!Motion.PayloadReleased && Motion.Core != CorePhase.Off && ThermalVariant && Motion.Thermal != null
+                && Motion.Thermal.Mode == ThermalMode.Brayton)
+            {
+                var thermal = Motion.Thermal;
+                if (Motion.Heat > 1 || ThermalMath.WasteHeatLevel(thermal.Store, ThermalHeatMW) >= 1)
+                { tone = "red"; action = "Restore cooling or eject before 125% heat. Keep cooldown power supplied."; return "REACTOR OVERHEATING / FAILURE RISK"; }
+                if (thermal.CoolingMW + .001 < thermal.RequiredCoolingMW && (thermal.ProducedMW > .001 || thermal.Store.WasteMJ > .001))
+                { tone = "yellow"; action = "Add or unblock cooling units, or shut down before trapped heat becomes critical."; return "INSUFFICIENT LOOP COOLING"; }
+            }
             if (Motion.Core == CorePhase.Cooling)
             { tone = "yellow"; action = "Holding the shell until heat falls to 15%."; return "COOLING DOWN"; }
             if (Motion.Core == CorePhase.Stopping) { tone = "yellow"; return "DISMANTLING CONTAINMENT"; }
@@ -150,8 +177,19 @@ namespace ArcanePower
             }
             if (!HasUsableFuel()) { tone = "yellow"; action = "Load compatible refined fuel."; return "OUT OF FUEL"; }
             if (Motion.TileStarved) { tone = "yellow"; action = "Supply startup tiles, then switch on."; return "STARTUP TILES REQUIRED"; }
-            if (Motion.Core == CorePhase.Off && reactor.Enabled && !Motion.PowerReady)
-            { tone = "yellow"; action = "Grid power and a full reserve are required."; return "PRECHARGING"; }
+            if (Precharging)
+            {
+                string progress = Number(Math.Floor(Math.Min(1, Math.Max(0, Motion.ReserveMJ / ReserveCapacityMJ)) * 100), "0") + "%";
+                if (PrechargeMW <= .000001)
+                {
+                    action = Motion.ReserveMJ >= ReserveCapacityMJ * .999999
+                        ? "Reserve full; supply " + Power(ContainmentMW) + " for containment to start."
+                        : "Supply more than " + Power(ContainmentMW) + "; containment is powered before charging.";
+                    return "STARTUP WAITING FOR POWER  /  " + progress;
+                }
+                action = "Charging containment reserve before assembly.";
+                return "CHARGING STARTUP RESERVE  /  " + progress;
+            }
             if (Motion.Core == CorePhase.Starting) { tone = "cyan"; return "DEPLOYING CONTAINMENT"; }
             if (Motion.Core == CorePhase.Running && reactor.Enabled)
             { tone = "green"; return Motion.PowerRamp < .999f ? "RUNNING  /  RAMPING UP" : "RUNNING"; }
@@ -206,6 +244,7 @@ namespace ArcanePower
         internal string Name, State, Tone, Section;
         internal string Fuel;
         internal double Heat, Reserve, Load;
+        internal bool Precharging, Brayton;
         internal readonly List<StatusRow> Rows = new List<StatusRow>();
 
         internal string Value(string label)

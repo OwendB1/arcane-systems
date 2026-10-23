@@ -16,12 +16,16 @@
       <ModelOffset x="0" y="0" z="0" />
       <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_VentDuct.mwm</Model>
       <Components>
-        <Component Subtype="InteriorPlate" Count="10" />
-        <Component Subtype="Construction" Count="20" />
-        <Component Subtype="SmallTube" Count="20" />
-        <Component Subtype="Motor" Count="6" />
-        <Component Subtype="Construction" Count="10" />
-        <Component Subtype="InteriorPlate" Count="10" />
+        <Component Subtype="SteelPlate" Count="180" />
+        <Component Subtype="InteriorPlate" Count="40" />
+        <Component Subtype="Construction" Count="120" />
+        <Component Subtype="MetalGrid" Count="40" />
+        <Component Subtype="LargeTube" Count="40" />
+        <Component Subtype="SmallTube" Count="40" />
+        <Component Subtype="Computer" Count="16" />
+        <Component Subtype="Motor" Count="16" />
+        <Component Subtype="InteriorPlate" Count="40" />
+        <Component Subtype="SteelPlate" Count="60" />
       </Components>
       <CriticalComponent Subtype="Motor" Index="0" />
       <BlockPairName>ArcanePower_VentDuct</BlockPairName>
@@ -70,12 +74,16 @@
       <ModelOffset x="0" y="0" z="0" />
       <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_VentOutlet.mwm</Model>
       <Components>
-        <Component Subtype="InteriorPlate" Count="10" />
-        <Component Subtype="Construction" Count="20" />
-        <Component Subtype="SmallTube" Count="20" />
-        <Component Subtype="Motor" Count="6" />
-        <Component Subtype="Construction" Count="10" />
-        <Component Subtype="InteriorPlate" Count="10" />
+        <Component Subtype="SteelPlate" Count="280" />
+        <Component Subtype="InteriorPlate" Count="60" />
+        <Component Subtype="Construction" Count="180" />
+        <Component Subtype="MetalGrid" Count="80" />
+        <Component Subtype="LargeTube" Count="60" />
+        <Component Subtype="SmallTube" Count="80" />
+        <Component Subtype="Computer" Count="64" />
+        <Component Subtype="Motor" Count="64" />
+        <Component Subtype="InteriorPlate" Count="60" />
+        <Component Subtype="SteelPlate" Count="80" />
       </Components>
       <CriticalComponent Subtype="Motor" Index="0" />
       <BlockPairName>ArcanePower_VentOutlet</BlockPairName>

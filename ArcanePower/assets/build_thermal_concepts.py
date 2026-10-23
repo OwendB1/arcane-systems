@@ -18,9 +18,9 @@ OUT=ROOT/'validation/thermal-concepts'
 FILE=ROOT/'assets/arcane-thermal-concepts.blend'
 ASSETS=Path.home()/'.local/share/blender-se1-setup/assets'
 SPECS={
-    'Brayton train':(5,3,2),'Primary heater':(3,3,3),
+    'Brayton train':(5,2,2),'Primary heater':(3,3,3),
     'Recuperator':(3,2,3),'Atmospheric cooler':(3,2,3),
-    'Space radiator':(3,2,3),'Brayton train upgraded':(5,3,2),
+    'Space radiator':(3,2,3),'Brayton train upgraded':(5,2,2),
     'Primary heater upgraded':(3,3,3),'Recuperator upgraded':(3,2,3),
     'Duplex straight':(1,1,1),'Duplex elbow':(1,1,1),'Duplex tee':(1,1,1),
 }
@@ -184,8 +184,8 @@ class Parts:
 
     def saddle(self,label,x,radius,centre=.45,width=.55):
         floor=-self.size.z/2+.4;r=radius-.008
-        points=[(-r-.2,floor),(r+.2,floor),(r+.2,centre),(r,centre)]
-        points.extend((r*math.cos(i*math.pi/20),centre-r*math.sin(i*math.pi/20)) for i in range(1,21));points.append((-r-.2,centre))
+        points=[(-r+.16,floor),(r-.16,floor),(r+.08,centre-.22),(r+.08,centre),(r,centre)]
+        points.extend((r*math.cos(i*math.pi/20),centre-r*math.sin(i*math.pi/20)) for i in range(1,21));points.extend(((-r-.08,centre),(-r-.08,centre-.22)))
         verts=[(x+dx,y,z) for dx in (-width/2,width/2) for y,z in points];count=len(points)
         return self.mesh(label,verts,[tuple(reversed(range(count))),tuple(range(count,count*2))]+[(i,(i+1)%count,(i+1)%count+count,i+count) for i in range(count)],'PaintedMetal_Colorable')
 
@@ -220,41 +220,71 @@ class Parts:
 
 
 def brayton(p):
+    contract = runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))
+    shaft_z = contract['TRAIN_SHAFT_Z']
+    cx, tx, gx, bx = (contract['TRAIN_CENTRES'][k] for k in ('compressor','turbine','generator','cabinet'))
     p.base()
-    for label,x,length,r in (('compressor',-4.25,2.0,1.35),('turbine',-1.35,2.75,1.85),('generator',2.05,3.25,1.62)):
-        p.cylinder(label+' casing',(x-length/2,0,.45),(x+length/2,0,.45),r,'PaintedMetal_Darker',48)
+    for label,x,length,r in (('compressor',cx,2.0,1.35),('turbine',tx,2.75,1.85),('generator',gx,2.0,1.62)):
+        if label=='generator':
+            x=contract['generator_x'](x); length*=contract['TRAIN_GENERATOR_STRETCH']
+        rear=contract['TRAIN_GENERATOR_REAR'] if label=='generator' else x+length/2
+        p.cylinder(label+' casing',(x-length/2,0,shaft_z),(rear,0,shaft_z),r,'PaintedMetal_Darker',48)
         for sx in (x-length*.33,x+length*.33):
-            p.saddle(label+' fitted cradle',sx,r)
-            p.tube(label+' split casing band',((sx-.055,0,.45),(sx+.055,0,.45)),r+.06,'Metal_Dull',.08,48)
+            p.saddle(label+' fitted cradle',sx,r,centre=shaft_z,width=.40)
+            p.tube(label+' split casing band',((sx-.055,0,shaft_z),(sx+.055,0,shaft_z)),r+.06,'Metal_Dull',.08,48)
         for sign in (-1,1):
-            sx=x+sign*length/2
-            cover=p.cylinder(label+' bolted end cover',(sx-.035,0,.45),(sx+.035,0,.45),r*.96,'PaintedMetal_Colorable',48)
+            if (label == 'compressor' and sign == 1) or (label == 'turbine' and sign == -1):continue
+            sx=rear if sign==1 else x-length/2
+            cover=p.cylinder(label+' bolted end cover',(sx-.035,0,shaft_z),(sx+.035,0,shaft_z),r*.96,'PaintedMetal_Colorable',48)
             for i in range(12):
-                a=i*math.tau/12;p.bolt(label+' end cover stud',(sx+sign*.032,math.cos(a)*r*.83,.45+math.sin(a)*r*.83),(sign,0,0),cover,.04)
-    for a,b in ((-.02,.48),):
-        p.tube('split shaft coupling guard',((a,0,.45),(b,0,.45)),.36,'PaintedMetal_Colorable',.06)
-    p.cylinder('turbine generator shaft',(-2.725,0,.45),(4.25,0,.45),.22,'Metal_Shiny')
-    p.cylinder('independent compressor shaft',(-5.9,0,.45),(-3.25,0,.45),.18,'Metal_Shiny')
-    p.cylinder('electric compressor motor',(-5.9,0,.45),(-5.2,0,.45),.75,'PaintedMetal_Colorable',40)
-    p.saddle('compressor motor cradle',-5.55,.75,width=.42)
-    terminal=p.box('compressor motor terminal',(-5.55,-.70,.45),(.48,.35,.52),'PaintedMetal_Darker')
-    p.label(terminal,'M',(-5.55,-.877,.45),size=.16)
-    p.tube('compressor supply conduit',((4.4,-2.5,-1.98),(-5.55,-2.5,-1.98),(-5.55,-2.5,.45),(-5.55,-.72,.45)),.09,'PaintedMetal_VeryDark',.025,16)
-    for x in (4.05,4.75):
-        p.box('switchgear pedestal',(x,0,-2.0),(.50,2.4,.4),'PaintedMetal_Colorable')
-    p.box('generator switchgear',(4.4,0,-.30),(2.0,3.1,3.1),'PaintedMetal_Colorable')
-    cover=p.panel('supported switchgear door',(4.4,-1.57,-.3),(1.7,.12,2.65))
-    p.hazard(cover,(4.4,-1.631,.35),(1,0,0),(0,0,1),'Sign High Voltage',.28)
-    # Supported electrical trunk terminates in the generator cabinet.
-    p.box('bus trunk',(2.9,-1.55,-1.6),(2.0,.32,.38),'Metal_Shiny')
-    for x in (2.1,3.5):p.box('bus pedestal',(x,-1.55,-2.03),(.35,.5,.5),'PaintedMetal_VeryDark')
+                a=i*math.tau/12;p.bolt(label+' end cover stud',(sx+sign*.032,math.cos(a)*r*.83,shaft_z+math.sin(a)*r*.83),(sign,0,0),cover,.04)
+    for a,b in ((tx+1.33,tx+1.83),):
+        p.tube('split shaft coupling guard',((a,0,shaft_z),(b,0,shaft_z)),.36,'PaintedMetal_Colorable',.06)
+    p.cylinder('turbine generator shaft',(tx-1.375,0,shaft_z),(contract['TRAIN_GENERATOR_REAR']+.20,0,shaft_z),.22,'Metal_Shiny')
+    p.cylinder('independent compressor shaft',(cx-1.65,0,shaft_z),(cx+1.0,0,shaft_z),.18,'Metal_Shiny')
+    p.cylinder('electric compressor motor',(cx-1.65,0,shaft_z),(cx-.95,0,shaft_z),.75,'PaintedMetal_Colorable',40)
+    p.saddle('compressor motor cradle',cx-1.30,.75,centre=shaft_z,width=.42)
+    terminal=p.box('compressor motor terminal',(cx-1.30,-.70,shaft_z),(.48,.35,.52),'PaintedMetal_Darker')
+    p.label(terminal,'M',(cx-1.30,-.877,shaft_z),size=.16)
+    scale=.7
+    width,depth,height=(v*scale for v in (1.45,3.1,3.1))
+    bottom=-p.size.z/2+.44; top=bottom+height
+    cabinet_centre=Vector((bx,0,bottom+height/2))
+    at=lambda offset: cabinet_centre+Vector(offset)*scale
+    # The smaller enclosure bears directly on the foundation. Its forward
+    # roof slope echoes the adjoining tapered pressure housings.
+    section=[(-width/2,bottom),(width/2,bottom),(width/2,top-.08),
+             (width/2-.08,top),(-width/2+.18,top),(-width/2,top-.25)]
+    n=len(section)
+    verts=[(bx+x,y,z) for y in (-depth/2,depth/2) for x,z in section]
+    cabinet=p.mesh('generator switchgear',verts,[tuple(reversed(range(n))),tuple(range(n,2*n))]
+        +[(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)],'PaintedMetal_Colorable')
+    cabinet['thermal_cabinet_scale']=scale
+    # Keep the half-round shaft cover as the final seat into the cabinet roof.
+    profiles=[]
+    for x,r,z in ((contract['TRAIN_GENERATOR_REAR']-.04,.62,shaft_z),(bx-.24,.44,shaft_z-.05)):
+        section=[(-r,-.65),(r,-.65)]
+        section += [(r*math.cos(i*math.pi/24),z+r*math.sin(i*math.pi/24)) for i in range(25)]
+        profiles.extend((x,y,sz) for y,sz in section)
+    n=len(section)
+    hood=p.mesh('generator cabinet coupling hood',profiles,
+        [tuple(reversed(range(n))),tuple(range(n,2*n))]
+        +[(i,(i+1)%n,(i+1)%n+n,i+n) for i in range(n)],'PaintedMetal_Colorable')
+    hood['thermal_coupling_hood']=True
+    hood['thermal_seated_on']=cabinet.name
+    for face in hood.data.polygons:
+        face.use_smooth=face.index>=4 and face.index<2+n-1
+    cover=p.panel('supported switchgear door',at((0,-1.57,0)),Vector((1.2,.12,2.65))*scale)
+    p.hazard(cover,at((0,-1.631,.65)),(1,0,0),(0,0,1),'Sign High Voltage',.28*scale)
+    # The visibility pass routes the cable with tangent bends after the deck
+    # and cabinet are final, before cutting support clearances.
     contract = runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))
     for port in contract['TRAIN_PORTS']:
         p.port(port['id'], port['position'], port['normal'], port['type'], port['hot_axis'])
     # Seated end-plenum piping follows the final hollow casings in the visibility stage.
-    for x in (-1.9,-1.3,-.7):p.box('turbine inspection rib',(x,-1.65,1.55),(.30,.35,.7),'Metal_Dull',.018)
-    for x in (1.05,1.55,2.05,2.55,3.05):
-        p.box('stator cooling jacket',(x,0,2.0),(.12,1.2,.20),'Metal_Dull',.01)
+    for x in (tx-.55,tx+.05,tx+.65):p.box('turbine inspection rib',(x,-1.65,1.55),(.30,.35,.7),'Metal_Dull',.018)
+    for x in (gx-.80,gx-.40,gx,gx+.40,gx+.80):
+        p.box('stator cooling jacket',(contract['generator_x'](x),0,shaft_z+1.55),(.12,1.2,.20),'Metal_Dull',.01)
 
 
 def heater(p):
@@ -380,13 +410,13 @@ def upgraded(p,base):
     """Maximum-grade equipment shares the accepted base envelope and port poses."""
     base(p)
     if base is brayton:
-        for x in (-1.9,-.8):
-            box=p.box('high temperature turbine cassette',(x,0,2.14),(.70,1.5,.42),'PaintedMetal_Colorable')
-            p.label(box,'HT', (x,-.752,2.26),size=.12)
-        for x in (1.05,2.05,3.05):p.box('upgraded stator fin',(x,-1.50,.45),(.30,.30,1.1),'Metal_Dull')
-        p.box('optimization controller mount',(-4.25,-1.05,-.45),(1.12,.60,.82),'PaintedMetal_Colorable')
-        cover=p.panel('compressor optimization controller',(-4.25,-1.41,-.45),(1.0,.14,.72))
-        p.label(cover,'OPT / III',(-4.25,-1.482,-.45),size=.11)
+        c=runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))['TRAIN_CENTRES']
+        cx,tx,gx=c['compressor'],c['turbine'],c['generator']
+        # Production jackets follow the final hollow casings in the visibility
+        # pass, so no upgrade ribs cross the inspection apertures.
+        p.box('optimization controller mount',(cx,-1.05,-.45),(1.12,.60,.82),'PaintedMetal_Colorable')
+        cover=p.panel('compressor optimization controller',(cx,-1.41,-.45),(1.0,.14,.72))
+        p.label(cover,'OPT / III',(cx,-1.482,-.45),size=.11)
     elif base is heater:
         for x in (-1.55,1.55):
             panel=p.panel('exotic hot end service cassette',(x,2.73,.5),(1.9,.20,2.8),(0,1,0))

@@ -18,13 +18,15 @@ def build():
     old=source['thermal_manifolds_deployment']
     models=[]
     try:
-        for name in ('Reactor housing','Brayton train','Brayton train upgraded'):
+        for name in ('Reactor housing','Brayton train','Brayton train upgraded','Brayton train mirrored','Brayton train mirrored upgraded','Space radiator','Radiator panel'):
             scene=export['M']['scene_for'](name)
             bpy.context.window.scene=scene
             bpy.context.view_layer.update()
             groups=export['subparts'](name,export['M']['main_for'](name))
+            if name=='Space radiator':
+                runpy.run_path(str(ROOT/'assets/build_tracking_radiator.py'))['pose'](0)
             parts=[{'name':part,'samples':[]} for part,_,_ in groups]
-            values=[i/46 for i in range(47)] if name=='Reactor housing' else [0,math.pi/2,math.pi,3*math.pi/2,2*math.pi]
+            values=[i/46 for i in range(47)] if name=='Reactor housing' else [i*math.pi/24 for i in range(49)] if name in ('Space radiator','Radiator panel') else [0,math.pi/2,math.pi,3*math.pi/2,2*math.pi]
             for value in values:
                 if name=='Reactor housing':rig['pose'](value)
                 deps=bpy.context.evaluated_depsgraph_get()
@@ -40,7 +42,7 @@ def build():
                             points=points.reshape((-1,3))
                             transform=evaluated.matrix_world
                             if name!='Reactor housing':
-                                transform=Matrix.Translation(pivot)@Matrix.Rotation(value,4,'X')@Matrix.Translation(-pivot)@transform
+                                transform=Matrix.Translation(pivot)@Matrix.Rotation(value,4,'Z' if name in ('Space radiator','Radiator panel') else 'X')@Matrix.Translation(-pivot)@transform
                             matrix=np.array(transform)
                             points=points@matrix[:3,:3].T+matrix[:3,3]
                             # Authoring main frame, not SEUT's subpart frame.

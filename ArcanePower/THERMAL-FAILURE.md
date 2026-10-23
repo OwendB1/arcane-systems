@@ -4,7 +4,12 @@ The generated Blender previews mentioned below were pruned during repository
 cleanup on 16 October 2026. Maintained models, texture sources and runtime assets
 remain unchanged.
 
-Implemented in the local prototype; compiled and exported, **not validated in-game**. No regression suites or game control accompanied this pass. The numerical thresholds below are provisional balance values.
+Implemented in the local prototype; compiled and exported, **not validated in-game**.
+The original September asset pass did not include regression suites or game
+control. The October Brayton runtime checks now exercise paid-waste accumulation,
+cooling recovery and crossing the existing critical threshold; physical ejection
+and detonation still need live-game validation. The numerical thresholds below
+are provisional balance values.
 
 ## Accepted behavior
 
@@ -14,6 +19,14 @@ The core is the source of the catastrophic explosion. Ejecting it can save the h
 
 ## Provisional thermal balance
 
+- Brayton cooling overload now feeds this same failure path. Paid return waste
+  accumulates in the reactor when the cooling bank cannot reject it. Full stores
+  stop fresh fuel use but do not clear retained heat. Restore cooling or shut down
+  early, maintaining circulation power; once 125% is reached the existing fuse
+  remains irreversible. Standalone retains its integrated 20% conversion/cooling.
+  The retained-waste warning precedes the core's temperature response; delaying
+  recovery until the core itself reaches 100% can still let it cross 125% while
+  the accumulated heat drains.
 - Healthy heat approaches operating load (0–100%) with the existing 60-second heating / 30-second cooling response.
 - Tile wear in quartets/minute is `tierBase × (0.2 + 0.8 × reactionLoad) × (1 + 3 × heat²)`, where tierBase is 1/2/4. At 100% heat, wear is four times its cold value. Eighty initial tiles and four-tile replacement batches remain unchanged.
 - Starvation captures the actual electrical load before reduction. The reactor remains running at its reduced capacity; fuel burn uses the captured load, not its now-reduced electrical output. An explicit shutdown or fully closed vent shield stops fuel consumption/output.

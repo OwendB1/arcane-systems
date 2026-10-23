@@ -76,8 +76,10 @@ cues = {s.findtext('Id/SubtypeId'): s for s in ET.parse(ROOT / 'src/Data/Audio.s
 for name in ('Assembly', 'Resonance', 'Load'):
     for band in range(1 if name == 'Assembly' else 5):
         cue = cues['ArcaneReactor' + name + ('Pitch' + str(band) if band else '')]
-        assert math.isclose(2 ** (float(cue.findtext('Pitch')) / 12), .65 + .45 * band / 4, abs_tol=1e-6)
+        rate = 2 ** (float(cue.findtext('Pitch')) / 12)
+        assert math.isclose(rate, .65 + .03 * band / 4, abs_tol=1e-6)
+        assert .65 - 1e-6 <= rate <= .68 + 1e-6, 'Hum must remain low at every load'
         assert cue.findtext('Loopable') == 'true'
         assert cue.findtext('Waves/Wave/Loop') == 'Audio\\ArcanePower\\' + name + '.wav'
         assert cue.findtext('VolumeCurve') == 'Poly2' and cue.findtext('MaxDistance') == '24'
-print('PASS: native semitone pitches, shared WAVs and localized falloff for all hum bands')
+print('PASS: native 0.65x–0.68x pitch range, shared WAVs and localized falloff for all hum bands')

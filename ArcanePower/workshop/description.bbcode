@@ -10,39 +10,63 @@ Neither explanation makes the emergency shutters feel thick enough.[/i]
 You have learned how to wake it. You have learned how to draw power from it.
 [b]Make sure you also learn how to let it go.[/b]
 
-Arcane Power brings industrial arcane reactors, rare fuels, expendable containment and modular energy storage to Space Engineers. Build the infrastructure, feed the field, and keep a clear route to the stars when containment begins to fail.
+Build an industrial arcane power plant: mine rare fuel, maintain its containment, recover heat through a modular Brayton cycle and bank the electricity. Keep an escape route for the core when containment fails.
 
 [h2]The Reactor[/h2]
 
 [list]
-[*]A large-grid reactor with animated assembly, rotating containment rings, visible tile replacement, shutdown and core ejection
-[*]Three fuel tiers with provisional maximum outputs of [b]10 GW, 100 GW and 1 TW[/b]
-[*]Standard and advanced external containment controllers; two controllers are required, with their combination determining two, three or four deployed rings
-[*]Load-dependent fuel consumption, a gradual output ramp and heat-sensitive operation
-[*]Real grid-powered containment, startup precharge and a stored shutdown reserve
-[*]Original models, materials, icons, sound cues and three welding/grinding stages for every public block
+[*]One large-grid [b]Arcane Reactor[/b] with animated assembly, rotating rings, tile replacement and core ejection
+[*][b]20% net standalone efficiency[/b], or [b]up to 40% starter Brayton / 78% exotic[/b] with four active turbines, suitable fuel and cooling
+[*]Three fuel tiers; fuel, plant capacity and operating mode determine electrical output
+[*]Two external controllers required; standard/advanced combinations provide two, three or four rings
+[*]Demand-based fuel use, gradual output ramp, grid-powered containment and a stored shutdown reserve
+[*]Manifolds retract behind sliding curved panels in standalone mode; mode changes wait for shutdown and cooling
 [/list]
+
+[h2]Build a Brayton Plant[/h2]
+
+Connect the [b]reactor, turbine/compressor trains and coolers to one shared duplex network[/b]. Each train has one socket and branches off the network, supporting parallel plants without series plumbing. The compressor is built in; separate heaters and recuperators are no longer required or offered. Choose atmospheric coolers or automatically sun-tracked space radiators.
+
+[list]
+[*][b]One pipe family[/b] with separate H/C bores; align their orientation at every joint
+[*]Straights, elbows, risers, tees, crosses, roll adapters, end caps and a dedicated reactor adapter
+[*]Mix [b]framed and bare pipes[/b] in the same loop; choose styles in the build menu
+[*]Reflective glass pipes, spinning turbine/compressor blades, coolant/gas flow effects and status lighting
+[*]Reactor-generated CO2 during powered commissioning; no separate generator or tank
+[/list]
+
+Standard and upgraded trains each have regular and mirrored versions, all [b]2 blocks wide x 2 high x 5 long[/b] (5x5x12.5 m). The machinery sits lower, with one duplex socket in the lower side cell. H enters the first compressor casing and C returns from the turbine rear beside the generator. Close pipe runs pass through shaped support cutouts. Inspection windows reveal dense blade stacks in the expanding compressor casing and a copper-wound generator armature spinning inside fixed magnets. Existing two-socket trains need reconnecting to the lower socket; remove or cap the abandoned branch. Older, larger trains need replacement.
+
+Build on [b]one physical large grid[/b]. Use the same pipes for reactor, train and cooler branches; match H/C orientation, use reactor adapters and cap unused sockets. Conveyors and subgrid connections cannot carry thermal flow. Supply grid electricity to the train compressor for startup and cooldown. Extra turbines need matching heat and cooling capacity.
+
+One, two, three and four active turbines reach [b]40%, 60%, 80% and 100% of their tier's efficiency ceiling[/b]. At the exotic tier that is 31.2%, 46.8%, 62.4% and 78% net conversion. Extra turbines add capacity or standby. Compare [b]Cooling capacity[/b] with [b]Cooling required[/b] on the reactor Power page. Undersized or obstructed cooling returns waste heat to the reactor: heat warns at 100% and triggers irreversible core failure at [b]125%[/b]. Restore cooling or shut down early and keep cooldown power supplied.
+
+Atmospheric coolers fit flush into a [b]3x3-cell hull opening, two cells deep[/b], with an airtight casing and rear duplex manifold. Only the fans project outside. Keep [b]2.5 m clear beyond both fan guards[/b]: half-clear exhaust gives 25% cooling; fully blocked exhaust gives none. The cooler terminal shows clearance and available cooling. Existing cooler connections must be rerouted to the rear.
+
+Space radiators connect through the [b]bottom duplex socket[/b]. Stack up to [b]two Radiator Panel extensions vertically[/b] above a base with matching orientation on the same grid. Connected panels share one rotating axis and interconnecting side pipes; three equally exposed panels provide three times the cooling. Leave the 3x3-cell sweep clear and both faces open to space. A faint red-orange glow follows actual dissipated heat. Detached or excess extensions provide no cooling.
+
+A standard bank needs [b]500 MW for eight powered seconds[/b] to start, plus containment power. Retain circulation power during cooldown. Bank changes and reloads require commissioning again.
 
 
 [h2]Feed the Field[/h2]
 
-Discover [b]Aetherite, Helionite and Empyrite[/b] in procedural asteroids. Refine the ores into dense concentrates, then assemble Aether, Helion and Empyrean fuel cartridges. Higher fuels require the previous fuel tier and rarer concentrate.
+Mine [b]Aetherite, Helionite and Empyrite[/b] in asteroids and refine their concentrates. Fill crafted canisters with Aether fuel, then upgrade them to Helion and Empyrean with rarer concentrates. Spent fuel does not refund a canister.
 
-Containment uses a shell of [b]80 tiles[/b]. Standard, Reinforced and Advanced tiles provide progressively longer service life. Mixed-grade shells are supported, and the reactor replaces worn tiles in visible groups of four. Conveyors can supply fuel and replacement tiles automatically.
+The [b]80-tile containment shell[/b] accepts Standard, Reinforced and Advanced tiles with increasing lifetimes. Mixed grades work together; worn tiles are visibly replaced in groups of four. Conveyors can replenish fuel and tiles.
 
-Ordinary shutdown retains the shell. [b]Ejection loses it.[/b] Neglected maintenance reduces output, wastes fuel and can turn a manageable heat problem into an irreversible critical reaction.
+Ordinary shutdown retains the shell. [b]Ejection loses it.[/b] Neglected maintenance wastes fuel, reduces output and can trigger an irreversible critical reaction.
 
 [h2]Give It a Way Out[/h2]
 
-Install a straight, aligned stack of [b]one to fifteen vent ducts and a terminal outlet[/b] above the reactor. The route must be complete before startup. Keep the outlet clear and point it somewhere expendable.
+Fit [b]one to fifteen aligned vent ducts and a terminal outlet[/b] above the reactor before startup. Keep the outlet clear and point it somewhere expendable.
 
 [list]
 [*]Coordinated shields, reactor hatches and outlet shutters
-[*]Manual ejection and damage-triggered emergency ejection at 60% remaining reactor integrity, provided the controllers and vent route are intact
-[*]Physical spent rings, tiles and an ejected core that carry momentum into the world
+[*]Manual ejection; damage triggers automatic ejection at 60% integrity. Both require working controllers, vent route and actuation power/reserve
+[*]Physical spent rings, tiles and a core launched into the world
 [*]Heat- and load-dependent wear from venting; critical reactions retain their fuse after ejection
-[*]A broken hardware route pauses a committed launch while heat and the critical fuse continue
-[*]Security mode shuts the reactor down when its vent route is lost; disabling it allows an already-running reactor to continue with a warning
+[*]Broken routes pause a committed launch while heat and the critical fuse continue
+[*]Security mode shuts down a running reactor if its vent route is lost
 [/list]
 
 [b]Ejecting a critical core moves the danger. It does not cancel it.[/b]
@@ -50,44 +74,51 @@ Install a straight, aligned stack of [b]one to fifteen vent ducts and a terminal
 
 [h2]Arcane Energy Core[/h2]
 
-A [b]3 x 3 x 3 large-grid battery installation[/b] stores surplus power and supports startup, cooling and emergency operation.
+A [b]3 x 3 x 3 large-grid battery[/b] stores surplus power for startup, cooling and emergencies.
 
 [list]
 [*]Base capacity: [b]1,000 MWh[/b], with a [b]10 GW[/b] transfer ceiling
 [*]Two side capacity sockets: standard modules add [b]10,000 MWh[/b] each; advanced modules add [b]100,000 MWh[/b] each
 [*]A rear transfer module raises the bank ceiling to [b]100 GW or 1 TW[/b]
-[*]A front stabilizer enables matching or lower-tier expansion modules
+[*]A front stabilizer supports matching/lower-tier modules and reduces upkeep and ability recovery
 [*]Native Auto, Recharge and Discharge modes, with 90% charging efficiency
 [*]Configurable emergency reserve; an eligible reactor can release it and switch Recharge to Auto
-[*]A luminous charge-responsive sphere, reactor-style gyroscopic rings and flow-color indicators
+[*][b]Burst discharge[/b] doubles the output ceiling for ten seconds; [b]jump-drive surge[/b] spends stored energy to accelerate one drive's charging
+[*]Shared ability recovery and reactor-support priority; normal jump restrictions still apply
+[*]A charge-responsive sphere, gyroscopic rings and flow indicators
 [/list]
 
-All upgrade pillars occupy [b]1 x 3 x 1 full large-grid cells[/b], with curved backs fitted around the core. Modules must face the correct core socket, match its Up direction, be fully built and remain on the same physical grid. Charge belongs to each battery: detached capacity retains its energy, destruction loses it, and new/projected/copied storage starts empty. Vanilla batteries remain a valid startup and backup option.
+Pillars occupy [b]1 x 3 x 1 large-grid cells[/b]; align their socket and Up direction on the same grid. Detached cells retain charge and upkeep; destruction loses charge; new/projected/copied storage starts empty. Vanilla batteries also work for startup and backup.
 
 
 [h2]Know What Is Happening[/h2]
 
-Use the reactor terminal, the [b]Arcane Reactor[/b] LCD script, or the handheld reactor tablet to monitor operation, fuel, tile supplies, heat, containment power and warnings. Tablet telemetry requires an accessible antenna connection; it does not grant remote reactor control. Text HUD API is optional for the richer handheld display.
+Placement arrows, H/C markers and construction instructions identify bad connections, missing welds and machinery. The reactor shows connection guidance for incomplete Brayton setups. Verified construction still needs adequate power, fuel and cooling.
+
+Monitor supplies, heat and warnings through the terminal, [b]Arcane Reactor[/b] LCD script or handheld tablet. The tablet needs antenna access and provides telemetry only. Text HUD API adds richer text; native fallback is included.
 
 [h2]Getting Started[/h2]
 
 [olist]
-[*]Enable the mod in an experimental Space Engineers world.
-[*]Find the blocks in the shared [b]Arcane Systems[/b] build-menu category.
-[*]Fully weld the reactor, attach two suitable containment controllers and complete its duct/outlet stack.
-[*]Provide external startup power, compatible fuel and containment tiles.
-[*]Check the terminal interlocks, enable the reactor and allow precharge and assembly to finish.
+[*]Enable the mod in an experimental world. Find blocks under [b]Arcane Systems[/b].
+[*]Weld the reactor, fit two controllers and complete the duct/outlet stack.
+[*]Supply external power, compatible fuel and tiles. Standalone mode is the simplest starting point.
+[*]For Brayton, stop and cool the reactor, select the mode, wait for manifold deployment and build the three circuits using the guide.
+[*]Resolve interlocks, enable the reactor and allow startup/commissioning to finish. Connect electrical demand or storage.
 [/olist]
 
 [h2]Compatibility and Development[/h2]
 
 Arcane Power works independently of Ship Core Framework and Arcane Cores. Animation is controlled by the mod itself; Animation Engine is not required.
 
-This is an evolving release. Ratings, recipes and costs are provisional. Dedicated-server/late-join behavior, sustained rated-load balance and the complete survival progression still need broader testing. Blueprint illustrations are renders of the authored models, not in-game screenshots.
+Models, dedicated block icons, construction stages and distance LODs are included. Blueprint gallery images are authored-model renders.
+
+[b]Alpha:[/b] full in-game Brayton commissioning, save/load, multiplayer, survival balance and rated-load testing remain pending. Recipes and costs are provisional. Moving vent-door collision and arbitrary outlet-obstruction checks are unfinished.
 
 [h2]Documentation and Support[/h2]
 
 [url=https://github.com/OwendB1/arcane-systems/blob/main/ArcanePower/README.md]Reactor setup and documentation[/url]
+[url=https://github.com/OwendB1/arcane-systems/blob/main/ArcanePower/THERMAL-CONSTRUCTION.md]Brayton construction, connections and startup[/url]
 [url=https://github.com/OwendB1/arcane-systems/blob/main/ArcanePower/ENERGY-STORAGE.md]Energy Core placement, ratings and reserve settings[/url]
 [url=https://github.com/OwendB1/arcane-systems/issues]Report bugs on GitHub[/url]
 Join our [url=https://discord.gg/4esE2XuYJZ]Discord[/url].

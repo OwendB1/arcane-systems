@@ -8,11 +8,82 @@ The loadable large-block model folder now contains only current runtime
 dependencies. Accepted physics and native comparison inputs are retained outside
 `src`; packaging prunes unused model exports after resolving subparts and LODs.
 
-Updated 17 October 2026 after native thermal export and local packaging.
+Updated 24 October 2026 after Brayton efficiency and cooling-failure gameplay.
 The current status below supersedes the historical delivery notes that follow;
 the [full plan](arcane-power-plan.md) retains the wider design direction.
 
 ## Current status
+
+- **Brayton cooling and turbine efficiency, 24 October:** one through four active,
+  eligible turbines now provide 40%, 60%, 80% and 100% of their tier ceiling.
+  Standard net efficiency is 16/24/32/40%; exotic net efficiency is
+  31.2/46.8/62.4/78%. Additional turbines add capacity or standby. Insufficient
+  cooling returns conserved waste to the reactor and raises core heat into the
+  existing 125% critical latch/fuse/ejection lifecycle. Full stores stop fuel
+  admission without deleting heat. The warning appears from retained waste
+  before the core finishes heating; late restoration can still be too late.
+  Four standard turbines need 15 GW of rejection at a 25 GW thermal source;
+  one needs 21 GW, so use two fully effective 15 GW coolers and allow margin.
+  Startup demand uses dispatched heat throughput; internally paid circulation
+  uses actual bank efficiency. Shutdown keeps circulation power requested until
+  both reactor and attached-machine stores drain. Terminal, LCD, tablet and
+  construction/Workshop source instructions explain the new requirements.
+  The compiled runtime suite passes 2,172,890 checks, including sustained and
+  zero cooling, early/late recovery, conservation, persistence and the four-tier
+  bank curve. Compatibility compilation has zero warnings/errors; LCD/tablet
+  layouts and controls pass. All 1,730 native motion comparisons still pass.
+  The refreshed local 0.1.0 ZIP has 631 entries (438,362,565 bytes); the local mod
+  symlink exposes the same updated runtime sources. Delivery verifies all ZIP
+  entries against the current files. Cleanup removed the generated runtime and
+  catalog reports and native motion dump (128,407,176 bytes), preserving rebuild
+  inputs, manifests, code and package. Live SE operation, multiplayer and balance
+  remain unverified.
+
+- **Turbine refinement and native delivery, 24 October:** all four regular,
+  mirrored, standard and upgraded variants now have the lengthened generator
+  casing, window, 960-turn armature and magnet lining, with relocated rear
+  supports. Two low compressor saddles clear the pipes and manifold plate;
+  four flared turbine/generator struts have round cable bulkheads, with closed
+  coolant liners in the turbine supports. The smaller grounded cabinet retains the half-round
+  shaft cover. Rounded cable bends remove the pinched elbows; the sloped,
+  clipped foundation now extends to the block bottom with no underside rails.
+  Standard plates read EX / 1200 B; upgraded plates retain EX / 2200 C. Rear
+  electrical service doors/grilles, curved housing covers, a bearing hatch and
+  manifold stiffeners fill the blank reverse faces. Standard casings stay dark;
+  upgraded casings have white jackets, fitted crown covers and lower cooling
+  fins. Live Blender detail reviews at 1.8, 2.4 and 3.0 m, assembly/engineer-scale
+  views and derived-model inspection passed. The geometry audit covers 56
+  authored models and four connected assemblies, with protected sources intact.
+  All four icons and 64 native meshes were rebuilt, including 12 weld stages,
+  40 LODs and eight shaft subparts. Sixteen accepted collision files were
+  refreshed; the incidental electrical cable no longer generates a broad hull.
+  Native material, triangle, dependency and collision checks pass, as do 1,730
+  motion comparisons across 30 moving parts (maximum native packing error
+  below 6 mm). Compatibility compilation has zero warnings/errors; the thermal
+  runtime suite passes 1,332,750 checks. The current catalog has 24 public thermal
+  blocks, 28 hidden pipe aliases, 72 weld models and 144 LODs. The local 0.1.0 ZIP
+  contains 631 verified entries (438,360,781 bytes), including 43 runtime scripts
+  and 23 definition files. Delivery checks cover the exact current dependency
+  closure, all 71 block definitions and the 24 public thermal icons. Packaging
+  removed 286 superseded/intermediate model files (2,044,634,000 bytes) from
+  `src`; accepted collision inputs and source checkpoints are preserved.
+  Final cleanup removed another 117 disposable captures, references, logs,
+  validation dumps and task intermediates (387,684,968 bytes), with 527 retained
+  source/input/package fingerprints checked before and after removal.
+  Live SE rendering, collision, operation and multiplayer validation remain
+  pending. See the [current delivery summary](../ArcanePower/validation/thermal-models/delivery-check.json).
+
+- **Armor-skin compatibility audit, 23 October:** inspection of all 647 packaged
+  MWM files found that the white painted textures already retain the native
+  `PaintedMetal_Colorable`, `PaintedMetalScratched_Colorable` and
+  `PaintedMetal_Clean` material IDs. These match the installed game's Clean,
+  Battered, Carbon Fibre and camouflage replacements. Native render code carries
+  skin changes through subparts; no additional mod callback or re-export is
+  required. A temporary live Blender preview used the installed Digital
+  Camouflage maps on the compact turbine's existing UVs. The production finish
+  and bare silver fittings were preserved. The README now explains painting;
+  actual in-game application remains unverified, and armor-only skins retain
+  their vanilla material-coverage limits.
 
 - **Native motion axis repair, 17 October:** the thermal exporter now compensates
   both moving meshes and root dummies. This fixes reversed manifold travel and
@@ -107,16 +178,64 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   both controller recesses and their lower notches are restored. Standalone/Brayton balance targets are
   now 20% / up to 78% net. [Current source](../ArcanePower/assets/arcane-thermal-models.blend).
 
-- **Modular Brayton study, 15 October:** standalone generation targets 20% net; sCO₂ Brayton starts at 40% net,
-  with additional recuperators reaching 78% behind hot-end limits. Parallel
-  heaters/trains/cooling add capacity and automatic standby; executable examples
-  report bottlenecks and worst single-module loss output. Distinct atmospheric
-  fan cooler and two-sided space radiator replace the combined cooler. The former
-  topping converter is removed from the active design/models. Editable premium
-  hardware, branching conduit and a three-train bank accompany the four
-  environment/grade layout studies. The separate runtime prototype now exists;
-  native exports are delivered and world validation remains pending. The extraction geometry
-  is superseded by the current curved-panel manifold variant. [Design and models](../ArcanePower/THERMAL-POWER.md).
+- **Simplified Brayton loop, 23 October:** direct reactor → turbine/compressor
+  train → cooling. Heaters and recuperators are retired from gameplay; authored
+  sources remain. Standalone stays 20%; turbine/source tiers provide 40/55/66/78%.
+  Parallel trains and cooling provide capacity and standby. Bottom-fed space
+  radiators track edge-on to the sun, with up to two vertically stacked extensions
+  sharing rotation and cooling. Native/kernel validation covers the implementation;
+  live-world commissioning and multiplayer testing remain pending.
+  The stack uses equal 250 mm frame gaps, centred side-pipe connectors and
+  180 mm assembled axial collars. Annular collars clear the shafts; their closed
+  caps sit 6 mm below the ends to eliminate the overlapping surface textures.
+  Native metal textures and 2 mm single-segment edge chamfers were inspected
+  in the live Blender UI at 1.8, 2.4 and 3.0 m from both sides.
+  Fine graphite coating/channel textures were checked cold and at the retained
+  quarter-strength maximum glow. Delivery includes 50 playable thermal blocks,
+  150 construction stages and 260 LODs; the 54 authored mains and 26 native
+  moving parts pass their geometry/motion checks. The compatibility build has
+  zero warnings/errors and the runtime suite passes 1,325,520 checks.
+  [Current design](../ArcanePower/THERMAL-POWER.md).
+
+- **Hull-integrated atmospheric cooler, 23 October:** the existing 3×3×2-cell
+  footprint now has an airtight casing flush with surrounding armor. Only the
+  fan assemblies project outside; recessed front intakes allow enclosed sides
+  and back. CO2 LP connects at the rear, so existing side routes need rerouting.
+  Eighteen authored probes check 2.5 m beyond the guards once per second. Same-grid
+  occupancy and bidirectional physics rays determine clearance; cooling scales
+  with its square (half clear = 25%, blocked = zero). Terminal diagnostics show
+  clearance and available MW. Runtime tests cover derating, recovery and all 24
+  orientations; the compatibility build passes with zero warnings/errors and the
+  suite passes 1,326,011 checks. The 32-block starter and 102-block room fixtures
+  use the new port. Live Blender checks covered joints at 1.8/2.4/3.0 m, hull fit
+  with scale guides, three construction stages and two LOD levels. The updated
+  icon, collision, native models and code are installed locally and packaged;
+  delivery checks pass for all 50 thermal blocks and 869 archive entries. Actual in-game
+  obstruction, airtightness and multiplayer behavior still need world validation.
+
+- **Compact turbine trains, 23 October:** both variants now occupy 2 blocks wide,
+  2 high and 4 long (5×5×10 m; native size 4×2×2 along the existing shaft axis).
+  The generator and switchgear are shorter. Circular turbine/compressor casings,
+  dense alternating blade/stator rows, inspection windows, power ratings and
+  component costs are retained. Standard HP/LP interfaces move inward near the
+  compressor; their bores remain unscaled. Smaller side pipe routes clear the
+  supports and socket necks. Existing larger trains require replacement and
+  pipe rerouting. The compiled runtime suite passes 1,325,991 checks and the
+  compatibility build has zero warnings/errors. Updated fixtures contain 33
+  starter blocks and 101 room-loop blocks, and the three-train bank has 54.
+  Main geometry and joints were inspected in the live Blender UI at
+  1.8/2.4/3.0 m and beside engineer/grid references; construction stages and
+  LODs were also inspected. Native revision `thermal_795f6dc3be56`, refreshed
+  icons, eight resized collision inputs and both definitions are installed
+  locally and packaged in the unpublished 0.1.0 ZIP. The installer reads shaft
+  pivots from the shared rotor contract. All 1,670 native motion checks pass
+  across 26 moving parts, with less than 6 mm quantization error. Delivery
+  checks pass for 50 thermal blocks, 150 construction models, 260 LODs,
+  486 validated meshes and all 869 archive entries. Packaging removed 144
+  superseded exports (333 MB) from the loadable mod. Cleanup removed 367 MB of
+  temporary captures, reports and intermediates; hashes confirm all 1,700
+  retained files were unchanged, and delivery checks pass after cleanup.
+  In-game migration, visuals and multiplayer operation remain unverified.
 
 - **Native texture detail, 15 October:** reactor, both controllers, battery and
   all six modules now use finer metric UVs, varied panel origins, restrained

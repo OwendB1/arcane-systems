@@ -140,7 +140,7 @@ namespace ArcanePower
                 double stock = (double)reactor.GetInventory().GetItemAmount(VRage.Game.ModAPI.Ingame.MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1]));
                 availableFuelMJ = Math.Max(0, (stock - Motion.FuelDebt) * energyPerUnit - state.FuelHeatMJ);
             }
-            double admitted = ThermalMath.AdmitHeat(state.Store, ThermalHeatMW * 4,
+            double admitted = ThermalMath.AdmitReactionHeat(state.Store, ThermalHeatMW,
                 Math.Min(ThermalHeatMW, flowMW) * Motion.PowerRamp / 60, availableFuelMJ);
             state.FuelHeatMJ += admitted;
             state.ProducedMW = admitted * 60;

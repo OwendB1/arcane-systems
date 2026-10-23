@@ -1,6 +1,7 @@
 """Check definitions, menu entries, model references and DDS icons for every block."""
 import hashlib
 import json
+import runpy
 from pathlib import Path
 import xml.etree.ElementTree as ET
 
@@ -10,6 +11,8 @@ from prepare_lab import ROOT, MOD
 
 
 def check_catalog():
+    contract=runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))
+    aliases={contract['subtype'](name):contract['subtype'](target) for name,target in contract['PIPE_ALIASES'].items()}
     manifest = json.loads((ROOT/'validation/release-manifest.json').read_text())
     packaged = {entry['path']: entry for entry in manifest['files']}
     blocks, menu, rows = {}, set(), []
@@ -56,18 +59,21 @@ def check_catalog():
                 alpha = image.convert('RGBA').getchannel('A')
                 assert alpha.getbbox() is not None and alpha.getextrema()[0] < 255, ('Blank or opaque icon', ident)
         if '/ArcanePower_Thermal_' in ident:
-            expected = 'Textures/GUI/Icons/ArcanePower/Thermal/'+ident.split('/')[1]+'.dds'
+            subtype=ident.split('/')[1]
+            expected = 'Textures/GUI/Icons/ArcanePower/Thermal/'+aliases.get(subtype,subtype)+'.dds'
             assert len(icons) == 1 and icons[0].text == expected, ('Thermal icon is a placeholder', ident)
         rows.append({'id': ident, 'public': public, 'definition': path.relative_to(MOD).as_posix(),
                      'icon': icons[0].text, 'construction_stages': len(stages)})
     assert menu <= set(blocks), ('Dangling menu entries', menu-set(blocks))
-    variants={}
+    variants={};grouped=set()
     for path in sorted((MOD/'Data').rglob('*.sbc')):
         for group in ET.parse(path).findall('BlockVariantGroups/BlockVariantGroup'):
             ident=group.find('Id').get('Subtype')
             assert ident not in variants, ('Duplicate variant group',ident)
             members=[n.get('Type').removeprefix('MyObjectBuilder_')+'/'+n.get('Subtype') for n in group.findall('Blocks/Block')]
             assert members and len(members)==len(set(members)) and set(members)<=set(blocks), ('Invalid variant members',ident)
+            assert not grouped.intersection(members), ('Block belongs to multiple scroll groups',ident)
+            grouped.update(members)
             variants[ident]=members
     assert 'Reactor/ArcanePower_ReactorPrototype' not in blocks, 'Legacy reactor must remain an authoring asset'
     main = blocks['Reactor/ArcanePower_Thermal_ReactorHousing'][1]
@@ -75,14 +81,32 @@ def check_catalog():
     assert sum(b.findtext('DisplayName') == 'Arcane Reactor' for _, b in blocks.values()) == 1
     thermal = [row for row in rows if '/ArcanePower_Thermal_' in row['id']]
     models = json.loads((ROOT/'validation/thermal-models/models.json').read_text())
-    assert len(thermal) == len(models)
-    for model in models.values():
-        if not model.get('variant_of'):continue
-        bare=model['subtype'];framed=bare.removesuffix('Bare')
-        assert variants[framed+'Styles']==['UpgradeModule/'+bare,'UpgradeModule/'+framed]
-    assert len({packaged[row['icon']]['sha256'] for row in thermal}) == len(thermal), 'Thermal icons must be distinct'
+    playable=contract['PLAYABLE']
+    models={name:spec for name,spec in models.items() if name in playable}
+    assert len(thermal) == len(contract['RUNTIME'])
+    public_thermal=[row for row in thermal if row['public']]
+    assert len(public_thermal) == len(models)
+    for alias,target in aliases.items():
+        ident='UpgradeModule/'+alias
+        assert ident not in menu and ident not in grouped, ('Legacy pipe visible in menu',ident)
+        block=blocks[ident][1]
+        canonical=blocks['UpgradeModule/'+target][1]
+        assert block.findtext('Public')=='false' and block.findtext('GuiVisible')=='false'
+        assert block.findtext('AvailableInSurvival')=='true', 'Legacy projections must remain weldable'
+        for child in canonical:
+            if child.tag in ('Id','BlockPairName','Public','GuiVisible'):continue
+            # Appending GuiVisible changes the preceding element's indentation,
+            # even though its gameplay value remains identical.
+            actual=block.find(child.tag)
+            assert actual is not None and ET.canonicalize(ET.tostring(actual),strip_text=True)==ET.canonicalize(ET.tostring(child),strip_text=True), ('Alias differs from shared block',alias,child.tag)
+        assert not (MOD/'Textures/GUI/Icons/ArcanePower/Thermal'/(alias+'.dds')).exists(), 'Unused legacy DDS remains in src'
+    bare={model['subtype'] for model in models.values() if model.get('variant_of')}
+    for key,subtypes in (('BarePipes',bare),('ManifoldPipes',{name.removesuffix('Bare') for name in bare})):
+        assert set(variants['ArcanePower_Thermal_'+key])=={'UpgradeModule/'+name for name in subtypes}, ('Wrong pipe scroll group',key)
+    assert len({packaged[row['icon']]['sha256'] for row in public_thermal}) == len(public_thermal), 'Public thermal icons must be distinct'
     result = {'status': 'passed', 'blocks': len(rows), 'public_blocks': sum(row['public'] for row in rows),
-              'hidden_blocks': sum(not row['public'] for row in rows), 'thermal_icons': len(thermal),
+              'hidden_blocks': sum(not row['public'] for row in rows), 'thermal_icons': len(public_thermal),
+              'pipe_compatibility_aliases':len(aliases),
               'menu_entries': len(menu), 'all_icons_and_definitions_packaged': True, 'catalog': rows}
     (ROOT/'validation/block-catalog.json').write_text(json.dumps(result, indent=2)+'\n')
     return result

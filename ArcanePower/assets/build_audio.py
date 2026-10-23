@@ -58,22 +58,18 @@ def write_wave(path, samples):
 def sound_bank():
     t = timeline(8)
     # Integer cycle counts for carriers AND modulators keep all four beds seamless.
+    # Sustained field sounds retain the low body without upper whistles or hiss.
     breath = .72 + .28 * tone(t, .25)
-    assembly = breath * (tone(t, 110, .8 * tone(t, .5))
-                        + .36 * tone(t, 165) + .13 * tone(t, 440, tone(t, 2))
-                        + .09 * tone(t, 1320) + .045 * tone(t, 2640))
+    assembly = breath * (tone(t, 110, .8 * tone(t, .5)) + .36 * tone(t, 165))
     resonance = (.8 + .2 * tone(t, 1.5)) * (
         tone(t, 41.25, .25 * tone(t, .25)) + .48 * tone(t, 82.5)
-        + .22 * tone(t, 123.75) + .08 * tone(t, 330.75)
-        + .07 * tone(t, 1323) + .035 * tone(t, 2646))
+        + .22 * tone(t, 123.75))
     load = (.45 + .55 * (.5 + .5 * tone(t, 4)) ** 2) * (
         .65 * tone(t, 82.5, 1.8 * tone(t, 41.25)) + .35 * tone(t, 165)
-        + .18 * tone(t, 248.25) + .08 * noise(t, 262.5, 1950, 1)
-        + .11 * tone(t, 990, .3 * tone(t, 4)) + .055 * tone(t, 2970)
-        + .035 * noise(t, 2200, 8500, 14))
+        + .18 * tone(t, 248.25) + .08 * noise(t, 40, 180, 1))
     unstable = np.tanh(2 * (tone(t, 56, 2 * tone(t, 7.25))
                            + .45 * tone(t, 83.125))) * (.35 + .65 * (.5 + .5 * tone(t, 6)) ** 4)
-    unstable += .2 * noise(t, 600, 3800, 2) * (.5 + .5 * tone(t, 9.5)) ** 12
+    unstable += .2 * noise(t, 30, 180, 2) * (.5 + .5 * tone(t, 9.5)) ** 12
     bank = {name: finish(samples, True) for name, samples in
             zip(LOOPS[:4], (assembly, resonance, load, unstable))}
 
@@ -163,8 +159,9 @@ def definitions(bank):
         ET.SubElement(sound, "Volume").text = "1" if loop else ".85"
         if source in ("Assembly", "Resonance", "Load"):
             # Native Pitch is measured in semitones. Reuse the same WAVs;
-            # runtime crossfades five load points from 0.65x to 1.10x playback.
-            ET.SubElement(sound, "Pitch").text = f"{12 * np.log2(.65 + .45 * band / 4):.6f}"
+            # Keep the low idle tone: full load rises less than one semitone.
+            # Runtime crossfades five load points from 0.65x to 0.68x playback.
+            ET.SubElement(sound, "Pitch").text = f"{12 * np.log2(.65 + .03 * band / 4):.6f}"
         ET.SubElement(sound, "Loopable").text = str(loop).lower()
         waves = ET.SubElement(sound, "Waves")
         waveform = ET.SubElement(waves, "Wave", Type="D3")
@@ -187,7 +184,7 @@ def preview(bank):
             step = np.zeros(len(age)) if name == "Assembly" else 4 * np.clip((t[mask] - 13) / 8, 0, 1)
             source = np.zeros(len(age))
             for band in range(5):
-                index = np.arange(len(age)) * (.65 + .45 * band / 4) % len(bank[name])
+                index = np.arange(len(age)) * (.65 + .03 * band / 4) % len(bank[name])
                 low = index.astype(int)
                 shifted = bank[name][low] * (1 - (index - low)) + bank[name][(low + 1) % len(bank[name])] * (index - low)
                 source += shifted * np.sqrt(np.maximum(0, 1 - abs(step - band)))
@@ -206,7 +203,7 @@ def preview(bank):
     cue("Vent", 30, .85)
     cue("Explosion", 34, .85)
     cue("Shutdown", 40, .65)
-    write_wave(ROOT / "validation/audio/reactor-palette.wav", output * .7)
+    write_wave(ROOT / ".cache/audio/reactor-palette.wav", output * .7)
 
 
 def mechanism_preview(bank):
@@ -226,7 +223,7 @@ def mechanism_preview(bank):
         for name, delay in (("TileRetract", 0), ("TileLatch", 34 / 60)):
             samples = bank[name];offset = round((start + delay) * RATE)
             output[offset:offset + len(samples)] += samples * .55
-    write_wave(ROOT / "validation/audio/reactor-mechanisms.wav", output)
+    write_wave(ROOT / ".cache/audio/reactor-mechanisms.wav", output)
 
 
 if __name__ == "__main__":

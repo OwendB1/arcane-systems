@@ -103,6 +103,7 @@ def fresh(label):
 
 
 def instance(scene, name, position, rotation=None, label=None):
+    name = C['PIPE_ALIASES'].get(name, name)
     col = M['main_for'](name)
     obj = bpy.data.objects.new(label or name, None)
     scene.collection.objects.link(obj)
@@ -120,7 +121,8 @@ def ports(obj):
     def cardinal(v):
         assert all(abs(x-round(x)) < 1e-5 for x in v), ('Non-grid direction', obj.name, v)
         return [round(x) for x in v]
-    return [dict(r, position=list(m@Vector(r['position'])),
+    return [dict(r, type=C['runtime_circuit'](obj['thermal_instance'], r['type']),
+                 position=list(m@Vector(r['position'])),
                  normal=cardinal(m.to_3x3()@Vector(r['normal'])),
                  hot_axis=cardinal(m.to_3x3()@Vector(r['hot_axis'])))
             for r in json.loads(obj.instance_collection['ports'])]
@@ -153,12 +155,12 @@ def lineup():
     for name, pos in positions.items():
         instance(scene, name, pos)
         p.label(deck, name.upper(), (pos[0], pos[1]-5, .006), (1, 0, 0), (0, 1, 0), .24)
-    for row, circuit in enumerate(C['CIRCUITS']):
+    for row, bare in enumerate((False, True)):
         for col, shape in enumerate(C['PIPE_PORTS']):
             pos = (-20+7.5*col, 30+5*row, 1.25)
-            instance(scene, circuit+' / '+shape, pos)
-            p.label(deck, circuit+' / '+shape.upper(), (pos[0], pos[1]-1.8, .006), (1, 0, 0), (0, 1, 0), .15)
-    return {'scene': scene.name, 'models': len(C['SPECS'])}
+            instance(scene, 'PRIMARY / '+shape+(' bare' if bare else ''), pos)
+            p.label(deck, ('BARE / ' if bare else 'MANIFOLD / ')+shape.upper(), (pos[0], pos[1]-1.8, .006), (1, 0, 0), (0, 1, 0), .15)
+    return {'scene': scene.name, 'models': len(C['PLAYABLE'])}
 
 
 def plant(environment='atmosphere', upgraded=False, room_loop=False):
@@ -166,12 +168,10 @@ def plant(environment='atmosphere', upgraded=False, room_loop=False):
     runpy.run_path(str(ROOT/'assets/build_reactor_thermal_manifolds.py'))['pose'](1)
     scene, p = fresh('Reactor room loop' if room_loop else environment.title()+(' premium' if upgraded else ' starter'))
     suffix = ' upgraded' if upgraded else ''
-    names = {'train': 'Brayton train'+suffix, 'recovery': 'Recuperator'+suffix,
-             'heater': 'Primary heater'+suffix,
+    names = {'train': 'Brayton train'+suffix,
              'cooler': 'Atmospheric cooler' if environment == 'atmosphere' else 'Space radiator',
              'source': 'Reactor housing'}
-    positions = {'train': (-12.5, 0, 2.5), 'recovery': (0, 1.25, 3.75),
-                 'heater': (12.5, -7.5, 3.75), 'cooler': (12.5, 11.25, 3.75),
+    positions = {'train': (-10, 1.25, 2.5), 'cooler': (12.5, 11.25, 3.75),
                  'source': (-25, -12.5, 3.75)}
     units, sockets, blocked = {}, {}, set()
     for key, name in names.items():
@@ -192,15 +192,12 @@ def plant(environment='atmosphere', upgraded=False, room_loop=False):
         outer = next(r for r in ports(adapter) if r['id'] == 'socket 2')
         sockets['source', port['id']] = outer
         blocked |= C['occupied'](pos, (1, 1, 1))
-        if port['id'] != 'primary RA':
+        if port['id'] not in ('primary RA', 'primary RB'):
             cap_pos = Vector(outer['position'])+normal*1.25
             instance(scene, 'PRIMARY / End cap', cap_pos, rotation, 'Isolated '+port['id'])
             blocked |= C['occupied'](cap_pos, (1, 1, 1))
-    edges = [(('source', 'primary RA'), ('heater', 'primary')),
-             (('heater', 'CO2'), ('recovery', 'high-pressure 1')),
-             (('recovery', 'high-pressure -1'), ('train', 'CO2 leg -1')),
-             (('train', 'CO2 leg 1'), ('recovery', 'low-pressure -1')),
-             (('recovery', 'low-pressure 1'), ('cooler', 'CO2'))]
+    edges = [(('source', 'primary RA'), ('train', 'CO2')),
+             (('source', 'primary RB'), ('cooler', 'CO2'))]
     if room_loop:
         anchors = [((-27.5,-22.5,1.25), -math.pi/2), ((25,-22.5,1.25), 0),
                    ((25,20,1.25), math.pi/2), ((-12.5,20,1.25), math.pi)]
@@ -213,17 +210,19 @@ def plant(environment='atmosphere', upgraded=False, room_loop=False):
             blocked |= C['occupied'](pos,(1,1,1))
         edges = [(('source','primary RA'),('room1','socket 1'))]+[
             (('room'+str(i),'socket 2'),('room'+str(i+1),'socket 1')) for i in range(1,4)]+[
-            (('room4','socket 2'),('heater','primary'))]+edges[1:]
+            (('room4','socket 2'),('train','CO2'))]+edges[1:]
     routes = []
     for index, (a, b) in enumerate(edges):
         left, right = sockets[a], sockets[b]
-        assert left['type'] == right['type']
+        assert C['circuits_match'](left['type'], right['type'])
         try:
-            steps = C['route'](left, right, blocked)
+            reserved = {C['cell'](tuple(Vector(port['position'])+Vector(port['normal'])*1.25))
+                        for pair in edges[index+1:] for key in pair for port in [sockets[key]]}
+            steps = C['route'](left, right, blocked | reserved)
         except (ValueError, AssertionError) as error:
             raise ValueError('Route '+str(a)+' -> '+str(b)+': '+str(error)) from error
         for j, step in enumerate(steps):
-            model = left['type']+' / '+step['shape']
+            model = 'PRIMARY / '+step['shape']
             instance(scene, model, C['centre'](step['cell']), step['rotation'],
                      'Route '+str(index+1)+' / '+str(j+1)+' / '+model)
             blocked.add(tuple(step['cell']))
@@ -235,37 +234,62 @@ def plant(environment='atmosphere', upgraded=False, room_loop=False):
     path = OUT/('reactor-room-grid-bill.json' if room_loop else environment+('-premium' if upgraded else '-starter')+'-grid-bill.json')
     report = {'scene': scene.name, 'units': names, 'positions': positions, 'routes': routes,
               'pipe_blocks': sum(len(r['blocks']) for r in routes),
-              'efficiency_note': 'Hardware/topology view; premium efficiency also requires extra recovery capacity'}
+              'efficiency_note': 'Direct reactor-to-turbine loop; higher efficiencies require source temperature and train tier'}
     path.write_text(json.dumps(report, indent=2)+'\n')
-    if room_loop:
+    if room_loop or (environment == 'atmosphere' and not upgraded):
         bpy.context.view_layer.update()
         fixture = {'scene': scene.name, 'instances': [
             {'model': obj['thermal_instance'], 'matrix_blender': [list(row) for row in obj.matrix_world]}
             for obj in scene.objects if obj.get('thermal_instance')]}
-        (ROOT.parent/'tests/fixtures/thermal-room-layout.json').write_text(json.dumps(fixture, indent=2)+'\n')
+        (ROOT.parent/'tests/fixtures'/('thermal-room-layout.json' if room_loop else 'thermal-starter-layout.json')).write_text(json.dumps(fixture, indent=2)+'\n')
     return {'scene': scene.name, 'pipe_blocks': report['pipe_blocks'], 'typed_routes': len(routes)}
 
 
+def cooler_hull():
+    """Full-size adjacent armor proves the cooler's flush hull fit."""
+    scene,p=fresh('Integrated cooler / hull fit')
+    instance(scene,'Atmospheric cooler',(0,0,3.75))
+    for x in (-5,-2.5,0,2.5,5):
+        for z in (-1.25,1.25,3.75,6.25,8.75):
+            if abs(x)!=5 and z not in (-1.25,8.75):continue
+            for y in (-1.25,1.25):
+                p.box('neighbor armor',(x,y,z),(2.5,2.5,2.5),'PaintedMetal_Darker',.002)
+    OLD['engineer'](p,(-7,-4))
+    return {'scene':scene.name}
+
+
 def bank():
-    """Three machines, two typed headers built exclusively from 1-cell parts."""
+    """Single-socket turbines branch from one shared duplex header."""
     scene, p = fresh('Grid parallel bank')
-    for x in (-15, 0, 15):
-        instance(scene, 'Brayton train', (x, 0, 2.5))
-    for sign, circuit in ((-1, 'CO2_HP'), (1, 'CO2_LP')):
-        for i in range(-10, 9):
-            x = i*2.5
-            shape = 'Tee' if x in (-17.5, -2.5, 12.5) else 'Straight'
-            rot = Matrix.Rotation(math.pi if sign > 0 else 0, 3, 'Z')
-            obj = instance(scene, circuit+' / '+shape, (x, sign*7.5, 3.75), rot)
-            obj['bank_header'] = circuit
-        for x in (-17.5, -2.5, 12.5):
-            obj = instance(scene, circuit+' / Straight', (x, sign*5, 3.75), Matrix.Rotation(math.pi/2, 3, 'Z'))
-            obj['bank_branch'] = circuit
-        for x, angle in ((-27.5, math.pi), (22.5, 0)):
-            instance(scene, circuit+' / End cap', (x, sign*7.5, 3.75), Matrix.Rotation(angle, 3, 'Z'))
-    floor(p, (-2.5, 0), (62.5, 27.5))
+    branch_x = (-17.5, -2.5, 12.5)
+    for i, x in enumerate((-15, 0, 15)):
+        mirrored = i == 1
+        instance(scene, 'Brayton train mirrored' if mirrored else 'Brayton train',
+                 (x+2.5, -16.25 if mirrored else 1.25, 2.5))
+    for i in range(-10, 9):
+        x = i*2.5
+        shape = 'Tee' if x in branch_x else 'Straight'
+        rot = Matrix.Rotation(math.pi if x == -2.5 else 0, 3, 'Z')
+        instance(scene, 'PRIMARY / '+shape, (x, -7.5, 1.25), rot)
+    for x in branch_x:
+        for y in (-10, -12.5) if x == -2.5 else (-5, -2.5):
+            instance(scene, 'PRIMARY / Straight', (x, y, 1.25), Matrix.Rotation(math.pi/2, 3, 'Z'))
+    for x, angle in ((-27.5, math.pi), (22.5, 0)):
+        instance(scene, 'PRIMARY / End cap', (x, -7.5, 1.25), Matrix.Rotation(angle, 3, 'Z'))
+    floor(p, (-2.5, -7.5), (62.5, 32.5))
     scene['bank_expected_ports_closed'] = True
-    return {'scene': scene.name, 'trains': 3, 'pipe_blocks': 48}
+    return {'scene': scene.name, 'trains': 3, 'pipe_blocks': 27}
+
+
+def compact_trains():
+    """All four 2×2×5 turbine variants beside an engineer and native grid cells."""
+    scene,p=fresh('Compact turbines / size review')
+    for name,y in (('Brayton train',1.25),('Brayton train upgraded',8.75),
+                   ('Brayton train mirrored',16.25),('Brayton train mirrored upgraded',23.75)):
+        instance(scene,name,(2.5,y,2.5))
+    OLD['engineer'](p,(-5,-3))
+    floor(p,(0,12.5),(15,35))
+    return {'scene':scene.name,'cells_width_height_length':[2,2,5]}
 
 
 if __name__ == '__main__':

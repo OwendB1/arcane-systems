@@ -25,6 +25,21 @@ namespace ArcanePower
         private float ContainmentMW { get { return PowerMW[Motion.FuelTier - 1] * .0001f; } }
         private double ReserveCapacityMJ { get { return ContainmentMW * 90.0; } }
 
+        // Presentation uses the same replicated reserve/input values as power
+        // accounting. Requested power alone must never imply charging progress.
+        private bool Precharging
+        {
+            get { return receivedState && initializationFrames == 0 && reactor.Enabled
+                && Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle
+                && Motion.Status == ReactorStatus.Active && Motion.ControllersReady && Motion.VentReady
+                && !Motion.PowerReady && !Motion.PowerPaused && !Motion.Critical && !Motion.TileStarved
+                && (Motion.Thermal == null || (Motion.Thermal.Settled && !Motion.Thermal.Faulted)); }
+        }
+        private double PrechargeMW
+        {
+            get { return Precharging ? Math.Max(0, Motion.PowerInputMW - ContainmentMW) : 0; }
+        }
+
         private void UpdatePower()
         {
             bool server = MyAPIGateway.Multiplayer.IsServer;

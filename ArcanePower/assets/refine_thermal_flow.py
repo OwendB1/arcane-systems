@@ -114,6 +114,9 @@ def paths(p):
             points = list(map(Vector, json.loads(obj['pipe_path'])))
             if obj.get('thermal_internal_coolant'):
                 continue
+            if obj.get('thermal_internal_flow'):
+                rows.append(path_row(points, 'CO2', True, -1, min(.22, obj['pipe_radius']*.65), True, obj.name))
+                continue
             candidates = [(min((points[end]-(Vector(port['position'])+Vector(port['hot_axis'])*sign*.46)).length
                                for end in (0, -1)), i, sign)
                           for i, port in enumerate(p.ports) for sign in (-1, 1)]
@@ -483,6 +486,15 @@ def external_pipe_jackets(p):
                         tree = BVHTree.FromPolygons([band.matrix_world@v.co for v in band.data.vertices],
                                                     [list(f.vertices) for f in band.data.polygons])
                         blocked = False
+                        if p.name.startswith('Brayton train'):
+                            # A strut's machined liner already supports this
+                            # section; a decorative ring must not enter it.
+                            band_x=[(band.matrix_world@v.co).x for v in band.data.vertices]
+                            for support in p.col.objects:
+                                if not support.get('thermal_strut_revision') or support.get('thermal_compact_compressor_saddle'):continue
+                                xs=[(support.matrix_world@v.co).x for v in support.data.vertices]
+                                if min(band_x)<max(xs)+.08 and max(band_x)>min(xs)-.08:
+                                    blocked=True
                         for port in p.ports:
                             c, n, up = (Vector(port[k]) for k in ('position', 'normal', 'hot_axis'))
                             across = up.cross(n)

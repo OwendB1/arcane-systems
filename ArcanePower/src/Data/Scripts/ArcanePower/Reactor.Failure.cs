@@ -23,8 +23,12 @@ namespace ArcanePower
                 && (Motion.Critical || (Motion.TileStarved && Motion.TileWear >= 1));
             float target = runaway ? (Motion.Critical ? 4 : 2.5f + .5f * Motion.StarvedLoad)
                 : reactor.Enabled ? Motion.TargetLoad : 0;
-            float response = runaway ? 720 : target > Motion.Heat ? 3600 : 1800;
-            Motion.Heat = MathHelper.Clamp(Motion.Heat + (target - Motion.Heat) / response, 0, 4);
+            // Waste returned by an undersized Brayton cooling bank remains a
+            // hazard even when full stores stop new fuel or the player shuts off.
+            // Use the existing 125% critical-core/ejection/fuse lifecycle.
+            if (!Motion.PayloadReleased && Motion.Core != CorePhase.Off && ThermalVariant && Motion.Thermal != null)
+                target = Math.Max(target, (float)ThermalMath.WasteHeatLevel(Motion.Thermal.Store, ThermalHeatMW));
+            Motion.Heat = (float)ThermalMath.ApproachCoreHeat(Motion.Heat, target, runaway);
         }
 
         internal void TrackCore(CoreHazard core)

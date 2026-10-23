@@ -15,12 +15,14 @@
       <ModelOffset x="0" y="0" z="0" />
       <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_ContainmentController.mwm</Model>
       <Components>
-        <Component Subtype="SteelPlate" Count="80" />
-        <Component Subtype="Construction" Count="40" />
-        <Component Subtype="SmallTube" Count="20" />
-        <Component Subtype="Computer" Count="60" />
-        <Component Subtype="Motor" Count="4" />
-        <Component Subtype="SteelPlate" Count="20" />
+        <Component Subtype="SteelPlate" Count="240" />
+        <Component Subtype="Construction" Count="150" />
+        <Component Subtype="MetalGrid" Count="40" />
+        <Component Subtype="SmallTube" Count="80" />
+        <Component Subtype="Superconductor" Count="300" />
+        <Component Subtype="Computer" Count="150" />
+        <Component Subtype="Motor" Count="40" />
+        <Component Subtype="SteelPlate" Count="60" />
       </Components>
       <CriticalComponent Subtype="Motor" Index="0" />
       <BlockPairName>ArcanePower_ContainmentController</BlockPairName>
@@ -73,12 +75,14 @@
       <ModelOffset x="0" y="0" z="0" />
       <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_AdvancedContainmentController.mwm</Model>
       <Components>
-        <Component Subtype="SteelPlate" Count="80" />
-        <Component Subtype="Construction" Count="40" />
-        <Component Subtype="SmallTube" Count="20" />
-        <Component Subtype="Computer" Count="60" />
-        <Component Subtype="Motor" Count="4" />
-        <Component Subtype="SteelPlate" Count="20" />
+        <Component Subtype="SteelPlate" Count="480" />
+        <Component Subtype="Construction" Count="300" />
+        <Component Subtype="MetalGrid" Count="80" />
+        <Component Subtype="SmallTube" Count="160" />
+        <Component Subtype="Superconductor" Count="3000" />
+        <Component Subtype="Computer" Count="500" />
+        <Component Subtype="Motor" Count="80" />
+        <Component Subtype="SteelPlate" Count="120" />
       </Components>
       <CriticalComponent Subtype="Motor" Index="0" />
       <BlockPairName>ArcanePower_AdvancedContainmentController</BlockPairName>

@@ -1,15 +1,13 @@
-# Thermal runtime — 17 October 2026
+# Thermal runtime — 24 October 2026
 
-The first C# implementation targets the separate
-`ArcanePower_Thermal_ReactorHousing` subtype and the 30 other authored thermal
-models. Existing `ArcanePower_ReactorPrototype` definitions retain direct-electric
-operation. All 31 thermal block definitions and native models are installed locally
-and included in the unpublished 0.1.0 alpha ZIP. Their 93 construction stages,
-122 LODs and 24 moving subparts pass native import checks. Live SE world validation
-remains pending. [Delivery checks](validation/thermal-models/delivery-check.json).
+The sole playable reactor is `ArcanePower_Thermal_ReactorHousing`. The current
+catalog has 24 public thermal blocks and 28 hidden pipe compatibility aliases. The old reactor prototype, heaters and recuperators are excluded from
+the shipped definitions. Authoring sources remain available for rebuilding.
+Live SE world validation remains pending; native and kernel checks are recorded
+in the [delivery summary](validation/thermal-models/delivery-check.json).
 
-Every thermal definition references a distinct 512 px DDS icon rendered from its
-production main model. PRIMARY/HP/LP badges distinguish pipe circuits, adapter
+Each public thermal block references a distinct 512 px DDS icon rendered from its
+production main model; compatibility aliases reuse the canonical icon. Adapter
 badges distinguish roll/reactor transitions, and tier II marks upgraded machinery.
 `assets/render_thermal_icons.py` maintains the source PNGs; the existing DDS
 converter applies sRGB BC7 compression, mipmaps and premultiplied icon alpha.
@@ -23,7 +21,7 @@ references, and native export resolves the final mesh-section and subpart names.
 The native release gate rejects missing targets before installing a model revision.
 
 [Construction and commissioning instructions](THERMAL-CONSTRUCTION.md) cover the
-three circuit routes, adapters, H/C roll, welding, cooling and powered startup.
+shared duplex network, adapters, H/C roll, welding, cooling and powered startup.
 The client construction guide follows SCF's placement-arrow/HUD pattern using
 independent native texture IDs, without an SCF dependency. It shares socket
 matching and coordinate transforms with server dispatch, considers all 24 grid
@@ -41,29 +39,65 @@ Invalid stored inventories are isolated without overwriting their original recor
 The existing critical-core latch, fuse, vent, tile and containment paths remain.
 
 Standalone converts paid heat at 20%, using integrated rejection. Brayton exposes
-the manifolds and supplies separate native generator trains: 40% starter net,
-up to 78% with eligible source temperature, hardware and recovery. Running
+the manifolds and supplies separate native generator trains: up to 40% starter net,
+or 78% with eligible source temperature, turbine tier and cooling. One through four
+active eligible turbines earn 40%, 60%, 80% and 100% of the tier ceiling. Dispatch
+evaluates four even when fewer have sufficient nameplate throughput; further
+units add capacity or standby. Running
 auxiliaries are deducted internally once. Cold starting draws 2% of dispatched
-design heat rating through a real heater-mounted electrical sink for eight
+heat throughput through a real train-mounted electrical sink for eight
 delivered seconds. This also pays for the reactor's integrated CO2 generation,
 closed-loop filling and pressurization; there are no separate gas supply blocks
 or consumable gas inventory. A changed bank or reload requires another paid start. Fan
-cooling and transport depend on measured circulation support; shutdown requests
+cooling and transport depend on measured circulation support, using actual bank
+efficiency to recover the internally paid auxiliary share; shutdown requests
 external power to drain the bank. Radiator surfaces can passively reject their
 own stored heat.
 
-Both train variants have six turbine rotor rows (64 blades each), alternating
-with six fixed 68-vane rows. The independent compressor has six 56-blade rotor
-rows and seven fixed 60-vane rows. Tapered drums carry the roots within hollow
-inspection casings; static vane rows stay outside the rotating subparts. The 22 conduit variants and machine fluid headers reuse the
+Dispatch no longer caps reaction/output grants at the sustainable cooling limit.
+Every paid conversion retains its waste, which returns to the reactor's bounded
+inventory before transfer to connected coolers. Missing rejection raises core heat
+and uses the existing 125% irreversible critical latch, fuse and ejection path.
+Full inventories stop fresh fuel admission without deleting the thermal hazard;
+ordinary unused hot reserve alone does not manufacture an overheat. Shutdown
+retains waste and needs cooldown circulation; the housing's small passive
+rejection is available only when the reaction is stopped. Saved/replicated
+diagnostics include effective cooling and design-load rejection requirements.
+Terminal, LCD and tablet share cooling-shortfall/overheat warning priority.
+
+All four train variants have six turbine rotor rows (64 blades each), alternating
+with six fixed 68-vane rows. The independent compressor has fourteen 56-blade rotor
+rows and fifteen fixed 60-vane rows, including eight of each in its glazed
+expanding casing. Tapered drums carry the roots within hollow inspection casings;
+static vane rows stay outside the rotating subparts. The generator joins the
+turbine through a short, steep taper. Its turbine-driven armature has 24 laminated
+teeth and 960 rounded copper turns in four layers per tooth. Twenty-seven fixed,
+filleted shiny magnets line the casing, with one-degree circumferential gaps and
+extended end tiles beside the inspection opening and a continuous uppermost
+magnet bar. The generator body is 2.24 m long, with its window, armature and magnets
+lengthened by 12% and its rear cradle relocated to match. The 1.77 m window keeps
+80% of its former height; the opposite wall is opaque to close the upward sightline.
+The rear casing joins a cabinet reduced by 30% on each axis, seated directly on
+the chamfered foundation. A half-round coupling cover encloses the shaft at the
+cabinet roof. The electrical cable uses 0.24 m rounded bends and a fitted cabinet
+gland, with clearance above the deck. Four flared turbine/generator struts carry
+round cable sockets on both faces; the turbine struts fully enclose the coolant
+pipe in machined liners. Two low compressor saddles stay beneath the drum,
+clear of the manifold plate and pipes. The clipped,
+sloping foundation extends continuously to the block bottom, replacing the
+underside rails, and retains its recessed deck inserts.
+Standard trains retain dark casings; upgraded trains use white outer casings,
+fitted crown jackets and lower cooling fins. Standard identification plates read
+EX / 1200 B; upgraded plates retain EX / 2200 C. Rear electrical access doors,
+paired cooling grilles, curved casing inspection covers, a bearing access cover
+and reverse manifold stiffeners complete both hands. Mirrored trains reflect this arrangement.
+The 16 public pipe variants and machine fluid headers reuse the
 reactor's registered `ArcanePower_ClearChamber` glass, retaining metal interfaces,
 clamps and supporting frames. The production texture stage reapplies
 `assets/refine_thermal_visibility.py` on rebuild. The reactor housing/manifold
-rig and the accepted external train side manifolds are unchanged. Internally,
-HP H enters the turbine's front end plenum, crosses the alternating axial rows,
-and leaves its rear plenum through LP H. LP C enters the compressor front;
-HP C carries rear discharge toward the heater. Bored pressure walls and seated
-nozzles replace the previous tubes ending in the middle of the chamber.
+rig is preserved. Each train has one lower-cell socket, on the opposite side for
+mirrored variants. H enters the compressor front, its expanding casing joins directly to the turbine front, and C leaves the turbine rear. Close side
+runs, relieved supports and fitted nozzles keep the pressure paths clear.
 
 
 `ThermalRotors` drives cosmetic shaft motion from the selected bank's actual
@@ -86,18 +120,18 @@ state remain valid. Blender's explicit `preview_angle_degrees` controls and
 optional replay of compiled C# samples are inspection aids, not exported actions.
 
 The command and snapshot channels are distinct: reactor commands use 49371,
-ejected-core snapshots 49372, flow 49373, battery commands 49374 and train rotors
+ejected-core snapshots 49372, flow 49373, battery commands 49374 and train/radiator motion
 49375. The compiled runtime checks reject duplicate channels and verify game
-logic registrations for all 31 thermal subtypes. Delivery checks compare every
+logic registrations for all 52 thermal subtypes. Delivery checks compare every
 runtime script and definition with the actual ZIP and its hashed manifest.
 
-Visible circulation follows the same typed physical graph and dispatched machines.
-PRIMARY shows liquid streaks; HP/LP show soft gas wisps. H travels toward the
-heater/train/cooler for each circuit and C returns through its paired bore.
+Visible circulation follows the same shared physical graph and dispatched machines.
+Internal reactor coolant shows liquid streaks; external CO2 shows gas wisps. H travels toward the
+dispatched train/cooler branches and C returns through its paired bore.
 Capped spurs and unselected standby branches stay still. A complete room-perimeter
 example uses the existing 2.5 m pipe blocks, including the reactor adapters;
 `tests/fixtures/thermal-room-layout.json` and the generated room grid bill record
-all 122 placed blocks. This layout adds no new gameplay component or resource.
+all 106 placed blocks. This layout adds no new gameplay component or resource.
 
 The thermal reactor also has glass coolant risers, two floor-level distributor
 rings, four integrated pump heads, four guarded supply sight sections and four
@@ -138,9 +172,7 @@ additional standalone electrical path. A small passive housing rejection path
 remains available for trapped heat; it produces no electricity.
 
 Dispatch compares eligible duty banks and cold-end choices, retaining spare trains
-when they do not improve supported output. Recovery is normalized to dispatched
-design flow. Standard machinery provisionally handles 25 GWth; upgraded heaters,
-trains and recovery handle 2.5 TWth. A standard cooler rejects 15 GW at reference
+when they do not improve supported output. Standard trains provisionally handle 25 GWth; upgraded trains handle 2.5 TWth. A standard cooler rejects 15 GW at reference
 conditions. Reactor fuel tiers provide 25/250/2,500 GWth. These are editable balance
 values in the generated model contract, not claims about real compact machinery.
 Fuel is charged for newly admitted thermal MJ, including finite warm-up inventory;
@@ -148,27 +180,45 @@ stock and the saved fractional debt bound the final fuel quantum.
 
 Prototype boundaries:
 
-- One reactor supplies one connected HP/LP bank on a single physical grid.
+- One reactor supplies one connected duplex network on a single physical grid.
   Parallel machinery is supported; shared reactor supplies are rejected.
-- Socket positions, pressure circuits and hot/return roll come from all 31 model
+- Socket positions, facing and hot/return roll come from all 52 runtime model
   contracts, including the 170 mm adapter. Unused ports require caps. Failed/off
   machines close their valves; missing pipes leave an invalid route.
-- Recovery receives credit on shortest physical heater/train and train/cooler
-  routes, including equal parallel paths. Unequal recovery loops are conservative.
 - Pipes are ideal links within one simulation step. MJ resides on real source
   and machine blocks; fluid mass, per-pipe transit delay and pressure are not
   simulated. The normalized core hazard is separate from this housing/loop ledger.
 - Atmospheric density is sampled from the local planet. Ambient temperature is
-  currently the 25°C reference. Radiators sample eight exposure rays over 250 m;
-  sink temperature uses space/atmosphere reference values. Weather, solar loading,
-  detailed occlusion and material-temperature dynamics remain future work.
+  currently the 25°C reference. Atmospheric coolers sample 18 authored exhaust
+  positions (nine per fan) once per 60 simulation ticks, transformed by the
+  block's world matrix. Each checks 2.5 m forward from beyond the guard hardware.
+  Same-grid block occupancy catches armor enclosing the ray origin; forward and
+  reverse physics rays also check other grids and physical obstacles. Available
+  capacity is `rating × clamp(density) × clamp(clear fraction)²`, with both clamps
+  bounded to 0–1. Fully blocked exhaust yields zero cooling and lets waste accumulate;
+  clearing it restores capacity at the next sample. Terminal diagnostics expose
+  clearance and available MW. The server owns heat rejection; client terminal
+  inspection only samples local conditions. These discrete rays are an obstruction
+  approximation, not an airflow simulation; in-game physics remains to be verified.
+  Radiators sample eight exposure rays over 250 m;
+  sink temperature uses space/atmosphere reference values. Sun incidence reduces cooling by up to 35%; automatic tracking minimizes it.
+  Weather and material-temperature dynamics remain outside this gameplay model.
 - Per-block inventories stay on the server. Reactor motion snapshots carry
   mode, deployment and plant totals; train snapshots carry rotor state. Native multiplayer power
   behavior, physics, splits/merges and the complete coordinator need world tests.
 
+Radiator sections use `Thermal_RadiatorPanels` root subparts. The base pivots at
+native `(0,-1.1,0)`; the extension pivots at zero. `ThermalRadiators.Pose` supplies
+the native rotation. Server attachment checks accept at most two consecutive,
+healthy, accessible, equally oriented extensions on the same grid. The base owns
+the only heat store and cooling budget. Extensions contribute sampled cooling
+without duplicating MJ. Their client visuals use the base's interpolated angle
+so side-pipe joints stay together between snapshots. Motion state is entity-bound,
+validated and replicated read-only; startup behavior remains server-owned.
+
 Native authoring contract (implemented):
 
-1. Export the reactor housing and both train variants as native reactor blocks
+1. Export the reactor housing and all four train variants as native reactor blocks
    with empty `FuelInfos`; use the existing 10,000 MW base definition rating for
    the housing. Export other thermal blocks as functional upgrade-module blocks.
    Use the exact generated subtypes and SE cell dimensions in `ThermalModels.cs`.
@@ -181,14 +231,18 @@ Native authoring contract (implemented):
 3. Use `assets/thermal-manifold-runtime.json` for the exact revision-4 panel
    angles/source groups. The runtime reproduces the authored inset/slide/extension
    phases and refuses Brayton deployment if the required native rig is absent.
-4. Both train variants need two root subparts, `Thermal_TurbineRotor` and
+4. All four train variants need two root subparts, `Thermal_TurbineRotor` and
    `Thermal_CompressorRotor`. Use `assets/thermal-rotor-runtime.json` for the
-   Blender pivots. The generated native pivots are `(1.35, .45, 0)` and
-   `(4.25, .45, 0)`, with identity-oriented dummies. Bake rotor meshes in their
+   Blender pivots. The compact train's generated native pivots are `(-1.0, -.10, 0)`
+   and `(4.4, -.10, 0)`, with identity-oriented dummies. Bake rotor meshes in their
    **shaft-local** coordinates, excluding them from the static main. This differs
    from the reactor's identity-root, stowed-space manifold contract. The native
    rotation axis is -X. Preserve the existing clear-glass material ID and its
    `Data/TransparentMaterials.sbc` definition.
+   All four train definitions use native `(5,2,2)` cells: length is native X, giving
+   the requested 2-wide × 2-high × 5-long footprint. The single native socket is
+   `(5,-1.25,-2.5)` or `(5,-1.25,2.5)` for the mirrored variant. Reroute
+   existing trains to the lower socket and cap/remove abandoned branches.
 5. Complete native collision, construction/LOD and asset-dependency gates before
    installing definitions. Validate the isolated prototype in SE before migrating
    existing reactors or publishing.
@@ -203,10 +257,12 @@ dotnet build arcane-systems.sln
 ```
 
 The focused checks execute the compiled production kernel with native math. They
-cover budgets, mixed train sizes, standby/loss capacity, one-hour conservation
-scenarios at 20/40/78%, fuel exhaustion, reload/copy identity, mode/startup guards,
+cover budgets, the four-turbine efficiency curve, mixed train sizes, standby/loss capacity, one-hour conservation
+scenarios at 20/40/78%, cooling overload/recovery and the 125% heat threshold,
+stable auxiliary circulation at all bank sizes and tiers, fuel exhaustion,
+reload/copy identity, mode/startup guards,
 47 manifold poses, heat/pressure rotor response, cold compressor startup,
 coastdown, native shaft transforms, frame-size-independent phase integration,
 and the captured authored starter layout, including
-pressure/roll faults and grid separation. They do not execute the coordinator in
+facing/roll faults and grid separation. They do not execute the coordinator in
 a live SE world or establish native collision/animation compatibility.

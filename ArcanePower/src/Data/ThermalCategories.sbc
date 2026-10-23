@@ -9,14 +9,6 @@
       <DisplayName>Arcane Systems</DisplayName>
       <Name>ArcaneSystems</Name>
       <ItemIds>
-        <string>Reactor/ArcanePower_Thermal_BraytonTrain</string>
-        <string>Reactor/ArcanePower_Thermal_BraytonTrainUpgraded</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryHeater</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryHeaterUpgraded</string>
-        <string>UpgradeModule/ArcanePower_Thermal_Recuperator</string>
-        <string>UpgradeModule/ArcanePower_Thermal_RecuperatorUpgraded</string>
-        <string>UpgradeModule/ArcanePower_Thermal_AtmosphericCooler</string>
-        <string>UpgradeModule/ArcanePower_Thermal_SpaceRadiator</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryStraight</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryElbow</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryRiser</string>
@@ -24,20 +16,6 @@
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryCross</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryRollAdapter</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryEndCap</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpStraight</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpElbow</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpRiser</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpTee</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpCross</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpRollAdapter</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpEndCap</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpStraight</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpElbow</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpRiser</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpTee</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpCross</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpRollAdapter</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpEndCap</string>
         <string>Reactor/ArcanePower_Thermal_ReactorHousing</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryReactorAdapter</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryStraightBare</string>
@@ -47,21 +25,14 @@
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryCrossBare</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryRollAdapterBare</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryEndCapBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpStraightBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpElbowBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpRiserBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpTeeBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpCrossBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpRollAdapterBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2HpEndCapBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpStraightBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpElbowBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpRiserBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpTeeBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpCrossBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpRollAdapterBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_CO2LpEndCapBare</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryReactorAdapterBare</string>
+        <string>UpgradeModule/ArcanePower_Thermal_SpaceRadiator</string>
+        <string>UpgradeModule/ArcanePower_Thermal_RadiatorPanel</string>
+        <string>UpgradeModule/ArcanePower_Thermal_AtmosphericCooler</string>
+        <string>Reactor/ArcanePower_Thermal_BraytonTrain</string>
+        <string>Reactor/ArcanePower_Thermal_BraytonTrainUpgraded</string>
+        <string>Reactor/ArcanePower_Thermal_BraytonTrainMirrored</string>
+        <string>Reactor/ArcanePower_Thermal_BraytonTrainMirroredUpgraded</string>
       </ItemIds>
     </Category>
   </CategoryClasses>

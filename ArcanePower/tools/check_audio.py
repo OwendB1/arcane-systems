@@ -29,6 +29,12 @@ for sound in sounds:
     assert .05 < np.sqrt(np.mean(samples ** 2)) < .6, name
     assert np.max(np.abs(samples)) < .73, name
     assert abs(np.mean(samples)) < .002, name
+    if path.stem in ('Assembly', 'Resonance', 'Load', 'Instability'):
+        # Sustained reactor beds keep their low body at every load. This catches
+        # reintroduced bright tones/hiss even when pitch definitions stay low.
+        energy = np.abs(np.fft.rfft(samples)) ** 2
+        frequency = np.fft.rfftfreq(len(samples), 1 / 44100)
+        assert energy[frequency > 500].sum() / energy.sum() < .001, (name, 'High-frequency hum returned')
     if loop:
         # The wrap must be no steeper than ordinary steps in this waveform.
         assert abs(samples[-1] - samples[0]) <= max(.002, np.quantile(abs(np.diff(samples)), .999)), name
@@ -41,4 +47,4 @@ assert names == {"ArcaneReactor" + n for n in (
     "TileDispense", "TileLatch", "TileRetract", "DeckMotion", "HatchMotion")} | {
         "ArcaneReactor" + name + "Pitch" + str(band)
         for name in ("Resonance", "Load") for band in range(1, 5)}
-print("PASS: twenty-one cues sharing thirteen mono PCM assets, unique definitions, valid paths, headroom, DC and loop seams")
+print("PASS: twenty-one cues sharing thirteen mono PCM assets, low reactor hum spectra, valid paths, headroom, DC and loop seams")
