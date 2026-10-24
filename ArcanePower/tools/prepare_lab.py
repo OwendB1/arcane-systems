@@ -295,6 +295,16 @@ def fuel_definitions():
             'Description':'Empty platinum-lined, superconducting fuel container. Fill with 10 kg of Aether Concentrate. The container carries through Helion and Empyrean upgrades; consumed fuel does not return an empty canister.'}.items():set_text(container,key,value)
     E.SubElement(items_root,'Components').append(container)
     recipe(canister,'Aether Containment Canister (Empty)',canister_inputs,canister,1,60,'Components',result_type='Component')
+    # Recovered directly by the reactor; deliberately no assembler/refinery recipe.
+    residuum=copy.deepcopy(container)
+    for key,value in {'Id/SubtypeId':'ArcaneAetherResiduum','DisplayName':'Aether Residuum',
+            'Icon':'Textures/GUI/Icons/ArcanePower/ArcaneAetherResiduum.dds',
+            'Model':'Models/Items/ArcanePower/ArcaneAetherResiduum.mwm',
+            'Mass':1,'Volume':.001,'Size/X':.12,'Size/Y':.10,'Size/Z':.08,
+            'MaxIntegrity':100,'Health':100,'DropProbability':1,
+            'Description':'An exceptionally dense, heat-resistant material recovered from consumed Aether fuel. Requires no processing. Ten 1 kg units per fully consumed canister, in standalone or Brayton mode. Used in advanced turbines (20 units) and cooling units/panels (10 units). Inventory volume: 0.001 L per unit.'}.items():set_text(residuum,key,value)
+    items_root.find('Components').append(residuum)
+
 
     for tier,(name,ore_name,ore,fuel,concentrate,refining,preparing,weight,mined,yield_ratio,volume,seconds,rating) in enumerate(tiers):
         raw=copy.deepcopy(ore_template)
@@ -313,6 +323,8 @@ def fuel_definitions():
             item=copy.deepcopy(concentrate_template if concentrated else fuel_template)
             description=(f'Dense refined material: {volume:g} L/kg ({1/volume:g} kg/L). Ore matrix is removed during refinement. Assembler ingredient for '+name+' fuel.' if concentrated else
                          'Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires '+str(tier+2)+' containment rings. Upgrades retain the container; consumed fuel does not return an empty canister.')
+            if not concentrated:
+                description += (' Consuming Aether recovers 10 Aether Residuum per canister in standalone or Brayton mode.' if tier==0 else ' Requires Brayton mode and an advanced controller.' + (' Empyrean also requires upgraded Brayton turbines.' if tier==2 else ''))
             for key,value in {'Id/SubtypeId':subtype,'DisplayName':label,
                     'Mass':1 if concentrated else canister_mass+10*(tier+1),
                     'Volume':volume if concentrated else 24,'Description':description}.items():set_text(item,key,value)

@@ -37,8 +37,9 @@ def main():
     with tempfile.TemporaryDirectory(prefix='arcane-thermal-check-') as directory:
         work = Path(directory)
         output = work / 'mod'
+        # compile_mod.py owns the full compatibility/whitelist analyzer gate.
         result = subprocess.run(['dotnet', 'build', str(ROOT / 'ArcanePower/ArcanePower.csproj'),
-                                 '--nologo', '-o', str(output)], capture_output=True, text=True)
+                                 '--nologo', '-p:RunAnalyzersDuringBuild=false', '-o', str(output)], capture_output=True, text=True)
         if result.returncode:
             print(result.stdout, result.stderr)
             raise SystemExit(result.returncode)
@@ -57,14 +58,15 @@ def main():
             print(result.stderr, end='')
             raise SystemExit(result.returncode)
         report = dict(status='passed', scope='Compiled production kernel with native math; no live SE world',
-                      runtime_contracts=52, authored_starter_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-starter-layout.json').read_text())['instances']), manifold_samples=47,
+                      runtime_contracts=55, authored_starter_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-starter-layout.json').read_text())['instances']), manifold_samples=47,
                       authored_room_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-room-layout.json').read_text())['instances']),
                       conservation_hours_per_efficiency=1, efficiencies=[.20, .40, .78],
                       cooling_checks='Adequate/half/zero rejection, timely recovery, retained-waste critical threshold, paid-energy conservation, reload and no-load/fuel guards',
-                      bank_checks='One through four turbines at 40/60/80/100% of tier efficiency; standby beyond four; stable metered circulation at every tier/count',
+                      bank_checks='Four independent manifold circuits at fixed 25% heat allocations; unchanged tier efficiency, charge-based pressure, sealed topology, isolated failure and last-loop trip',
                       rotor_checks='Cold start, heat/pressure response, coastdown, reload/copy identity, invalid inputs, phase integration and native pivots',
                       flow_checks='Starter and room routing, opposed H/C, capped spurs, standby branches, equal parallel routes, split/facing/roll faults, path sampling and state validation',
                       construction_checks='Authored build, incomplete/detached blocks, open/facing/roll/crowded joints, 24 placement orientations, missing turbine/cooling and unchanged runtime authority',
+                      isolation_checks='Removed/damaged/split/misrolled/crowded/open-cap circuits; cross-linked manifolds, extra turbines, fixed surviving allocations, per-circuit commissioning, charge snapshots and valve timing',
                       integration_checks='Unique multiplayer channels, compatible game logic for every authored subtype, interchangeable bare/framed pipes and registered runtime sessions',
                       checks=result.stdout.strip(), native_delivery_report='thermal-models/delivery-check.json',
                       in_game_validation='not_run')

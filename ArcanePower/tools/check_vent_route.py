@@ -26,8 +26,9 @@ state = re.sub(r'\[Proto(?:Contract|Member\([^]]+\))\]', '', state)
 methods = ''.join(method('Reactor.VentRoute.cs', name) for name in ('RefreshVentRoute', 'CheckVentRoute', 'FindVentOutlet'))
 methods += ''.join(method('Reactor.Motion.cs', name) for name in ('BeginShutdown', 'BeginDismantling', 'UpdateMotion'))
 safety = (SCRIPTS / 'Reactor.Safety.cs').read_text()
-methods += safety[safety.index('        private const float AutoEjectionIntegrity'):safety.index('        private bool HasIntactControllers()')]
-methods += ''.join(method('Reactor.Safety.cs', name) for name in ('HasIntactControllers', 'UpdateSafety', 'SetSecurityMode'))
+methods += safety[safety.index('        private const float AutoEjectionIntegrity'):safety.index('        private bool IsIntactController(')]
+methods += ''.join(method('Reactor.Safety.cs', name) for name in ('IsIntactController', 'HasIntactControllers', 'UpdateSafety', 'SetSecurityMode'))
+methods = methods.replace('VRage.Game.ModAPI.IMyCubeBlock', 'Block')
 methods += method('Reactor.Motion.cs', 'RequestVent')
 power = (SCRIPTS / 'Reactor.Power.cs').read_text()
 methods += power[power.index('        private bool CanPrepareContainment'):power.index('        private readonly List<ContainmentController>')]
@@ -71,6 +72,8 @@ class Grid {
 }
 enum VentCommand { Sync }
 static class VentSession { public static void SendCommand(long id,VentCommand c){} }
+public class ThermalReactorState { public double ProducedMW; }
+static class ThermalMath { public static double Clamp(double v,double lo,double hi){return Math.Max(lo,Math.Min(hi,v));} }
 ''' + state + r'''
 class Check {
  const float CooldownHeat=.15f;
@@ -80,6 +83,9 @@ class Check {
  int controllerRingCapacity=2;
  MotionState Motion=new MotionState();
  bool receivedState=true,motionInitialized=true,hasFuel=true;
+ bool IsLive {get{return !Entity.Closed;}}
+ bool ThermalVariant=false,ThermalNeedsPowerSupport=false;
+ double ThermalHeatMW=25000;
  float previousControllers=2;
  int networkTick,appearanceRefresh,initializationFrames;
  long Id=1;
@@ -220,7 +226,7 @@ release = method('Reactor.Failure.cs', 'TryReleasePayload')
 assert 'if (!HasIntactControllers()) return;' in release
 assert release.index('if (!HasIntactControllers()) return;') < release.index('CoreHazards.Release(')
 session = (SCRIPTS / 'VentSession.cs').read_text()
-assert 'packet.Command > VentCommand.SecurityOff' in session
+assert 'packet.Command > VentCommand.Brayton' in session
 assert session.index('!r.Block.HasPlayerAccess(identity)') < session.index('Apply(r, packet.Command)')
 assert 'SendCommand(b.EntityId, enabled ? VentCommand.SecurityOn : VentCommand.SecurityOff)' in session
 print('PASS: physical handoff checks controllers; security switch uses authorized server commands')

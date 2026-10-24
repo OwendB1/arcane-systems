@@ -11,6 +11,24 @@ namespace ArcanePower
         private bool NeedsAutoEjection { get { return !Motion.PayloadReleased && Motion.Core != CorePhase.Off
             && Motion.CoreTick >= 90 && reactor.SlimBlock.Integrity <= reactor.SlimBlock.MaxIntegrity * AutoEjectionIntegrity; } }
 
+        private bool IsIntactController(VRage.Game.ModAPI.IMyCubeBlock block)
+        {
+            return block != null && !block.Closed && block.CubeGrid == reactor.CubeGrid
+                && block.IsFunctional && block.SlimBlock.BuildLevelRatio >= 1f
+                && block.GameLogic.GetAs<ContainmentController>() != null;
+        }
+
+        internal bool HasAdvancedController()
+        {
+            if (!IsLive) return false;
+            var attached = ((MyCubeBlock)Entity).CurrentAttachedUpgradeModules;
+            if (attached == null) return false;
+            foreach (var entry in attached.Values)
+                if (entry.Compatible && IsIntactController(entry.Block)
+                    && entry.Block.BlockDefinition.SubtypeName == "ArcanePower_AdvancedContainmentController") return true;
+            return false;
+        }
+
         private bool HasIntactControllers()
         {
             var attached = ((MyCubeBlock)Entity).CurrentAttachedUpgradeModules;
@@ -19,9 +37,7 @@ namespace ArcanePower
             foreach (var entry in attached.Values)
             {
                 var block = entry.Block;
-                if (!entry.Compatible || block == null || block.Closed || block.CubeGrid != reactor.CubeGrid
-                    || !block.IsFunctional || block.SlimBlock.BuildLevelRatio < 1f
-                    || block.GameLogic.GetAs<ContainmentController>() == null || block.EntityId == first) continue;
+                if (!entry.Compatible || !IsIntactController(block) || block.EntityId == first) continue;
                 if (first != 0) return true;
                 first = block.EntityId;
             }

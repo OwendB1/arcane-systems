@@ -61,7 +61,7 @@ def rounded_manifold(p, ident, side, y):
         bpy.data.objects.remove(bore, do_unlink=True)
     # The stock metric UV helper also covers the new through-bore surfaces.
     from runpy import run_path
-    run_path(str(ROOT/'assets/build_thermal_concepts.py'))['uv'](body)
+    run_path(str(ROOT/'assets/thermal_parts.py'))['uv'](body)
     body.data.materials.append(p.native['PaintedMetal_Darker'])
     for face in body.data.polygons:
         face.use_smooth = abs(face.normal.x) < .01 and abs(face.normal.z) > .01

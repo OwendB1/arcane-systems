@@ -127,7 +127,10 @@ namespace ShipCoreFramework
                 return currentCount.ToString();
 
             if (core != null && core.FactionPlayersNeededPerCore > 0)
-                return $"{currentCount}/{max} (1 per {core.FactionPlayersNeededPerCore} players, faction size {playerCount})";
+            {
+                string floor = core.MinPerFaction > 0 ? $", minimum allowance {core.MinPerFaction}" : string.Empty;
+                return $"{currentCount}/{max} (1 per {core.FactionPlayersNeededPerCore} players{floor}, faction size {playerCount})";
+            }
 
             return $"{currentCount}/{max}";
         }

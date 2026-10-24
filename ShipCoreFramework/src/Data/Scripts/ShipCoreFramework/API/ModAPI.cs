@@ -649,6 +649,7 @@ namespace ShipCoreFramework
                 MaxMass = core.MaxMass,
                 MaxPCU = core.MaxPCU,
                 MaxPerFaction = core.MaxPerFaction,
+                MinPerFaction = core.MinPerFaction,
                 MaxPerPlayer = core.MaxPerPlayer,
                 MinPlayers = core.MinPlayers,
                 MinBlocks = core.MinBlocks,

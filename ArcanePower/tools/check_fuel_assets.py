@@ -15,7 +15,7 @@ definitions = ET.parse(MOD/'Data/PhysicalItems.sbc')
 items = definitions.findall('PhysicalItems/PhysicalItem') + definitions.findall('Components/Component')
 voxels = ET.parse(MOD/'Data/VoxelMaterials_Arcane.sbc').findall('VoxelMaterials/VoxelMaterial')
 recipes = ET.parse(MOD/'Data/Blueprints.sbc').findall('Blueprints/Blueprint')
-assert len(items) == 10 and len(voxels) == 3 and len(recipes) == 7
+assert len(items) == 11 and len(voxels) == 3 and len(recipes) == 7
 textures, models = set(), set()
 
 
@@ -33,7 +33,9 @@ for item in items:
     if item.findtext('Id/TypeId') == 'Ore':
         assert item.findtext('Models/Model') == item.findtext('Model')
         assert item.findtext('VoxelMaterial') in {v.findtext('Id/SubtypeId') for v in voxels}
-    for param in ET.parse(model.with_suffix('.xml')).findall('Material/Parameter'):
+    materials = model.with_suffix('.xml')
+    if not materials.exists():materials = ROOT/'assets/fuel-materials'/(model.stem+'.xml')
+    for param in ET.parse(materials).findall('Material/Parameter'):
         if param.get('Name').endswith('Texture'):
             local_asset(param.text)
 for voxel in voxels:
@@ -81,7 +83,7 @@ class FuelModels {
             var data = importer.GetTagData();
             var info = (MyModelInfo)data["ModelInfo"];
             var size = ((BoundingBox)data["BoundingBox"]).Size;
-            if (info.TrianglesCount <= 0 || size.X < .09f || size.X > .5f || size.Y < .06f || size.Y > .5f || size.Z < .09f || size.Z > .5f)
+            if (info.TrianglesCount <= 0 || size.X < .09f || size.X > .5f || size.Y < .06f || size.Y > .5f || size.Z < .06f || size.Z > .5f)
                 throw new Exception("Invalid item geometry: "+file+" "+size);
             if ((Path.GetFileName(file).StartsWith("ArcaneFuel") || Path.GetFileName(file)=="ArcaneAetherCanister.mwm") &&
                 Vector3.Distance(size, new Vector3(.261f, .438f, .261f)) > .0001f)
@@ -121,4 +123,4 @@ report = {'items': len(items), 'voxel_materials': len(voxels), 'recipes': len(re
           'models': {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(models)},
           'in_game_validated': False}
 (ROOT/'validation/fuel-assets.json').write_text(json.dumps(report, indent=2)+'\n')
-print('PASS: ten custom models/icons, seven recipe icons, three near/far voxel materials, complete BC7 mip chains.')
+print('PASS: eleven custom models/icons, seven recipe icons, three near/far voxel materials, complete BC7 mip chains.')

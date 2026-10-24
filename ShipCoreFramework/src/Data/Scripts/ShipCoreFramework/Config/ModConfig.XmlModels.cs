@@ -168,6 +168,9 @@ namespace ShipCoreFramework
         [XmlElement("MaxPerFaction")]
         public int MaxPerFaction = -1;
 
+        [XmlElement("MinPerFaction")]
+        public int MinPerFaction = 0;
+
         [XmlElement("FactionPlayersNeededPerCore")]
         public int FactionPlayersNeededPerCore = -1;
 

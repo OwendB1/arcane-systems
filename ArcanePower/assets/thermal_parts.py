@@ -1,10 +1,9 @@
-"""Editable thermal-plant concepts; never exports or changes production assets.
+"""Shared mesh primitives and base machines for the production thermal builders.
 
-Run prepare() in the accepted reactor file, then build(name) in bounded live
-Blender calls. Model coordinates are X length, Y width, Z up, in metres.
+Scene creation, grid/socket contracts and rebuild orchestration live in
+build_thermal_models.py. Current cooler and radiator builders own their layouts.
 """
 import hashlib
-import json
 import math
 import runpy
 from pathlib import Path
@@ -13,32 +12,8 @@ import bpy
 import bmesh
 from mathutils import Matrix, Vector
 
-ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'validation/thermal-concepts'
-FILE=ROOT/'assets/arcane-thermal-concepts.blend'
-ASSETS=Path.home()/'.local/share/blender-se1-setup/assets'
-SPECS={
-    'Brayton train':(5,2,2),'Primary heater':(3,3,3),
-    'Recuperator':(3,2,3),'Atmospheric cooler':(3,2,3),
-    'Space radiator':(3,2,3),'Brayton train upgraded':(5,2,2),
-    'Primary heater upgraded':(3,3,3),'Recuperator upgraded':(3,2,3),
-    'Duplex straight':(1,1,1),'Duplex elbow':(1,1,1),'Duplex tee':(1,1,1),
-}
-
-
-def prepare():
-    assert Path(bpy.data.filepath).name=='arcane-power-prototype.blend'
-    OUT.mkdir(exist_ok=True)
-    refs={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in (
-        ROOT/'assets/arcane-power-prototype.blend',ROOT/'assets/arcane-energy-core.blend')}
-    s=bpy.data.scenes['ArcanePower_ReactorPrototype'];bpy.context.window.scene=s;bpy.context.view_layer.update()
-    import importlib
-    col=importlib.import_module('space-engineers-utilities.seut_collections').get_collections(s)['main'][0]
-    rows=[{'object':o.name,'mesh':o.data.name,'matrix':[list(r) for r in o.matrix_world]} for o in col.objects if o.type=='MESH']
-    (OUT/'reactor-reference.json').write_text(json.dumps(rows))
-    (OUT/'protected-production.json').write_text(json.dumps(refs,indent=2)+'\n')
-    bpy.ops.wm.save_as_mainfile(filepath=str(FILE))
-    return {'file':str(FILE),'models':SPECS,'production_files_preserved':True}
+ROOT = Path(__file__).resolve().parents[1]
+ASSETS = Path.home()/'.local/share/blender-se1-setup/assets'
 
 
 def uv(obj):
@@ -52,17 +27,6 @@ def uv(obj):
 
 
 class Parts:
-    def __init__(self,name):
-        assert Path(bpy.data.filepath)==FILE,'Work in the separate concept file'
-        self.name=name;self.size=Vector(SPECS[name])*2.5
-        scene_name='Thermal / '+name
-        assert scene_name not in bpy.data.scenes,'Use the existing concept; do not duplicate a build'
-        self.scene=bpy.data.scenes.new(scene_name);bpy.context.window.scene=self.scene
-        self.scene.unit_settings.system='METRIC';self.scene.unit_settings.scale_length=1
-        self.col=bpy.data.collections.new('Thermal model / '+name);self.scene.collection.children.link(self.col)
-        self.col['thermal_concept']=name;self.col['grid_cells']=SPECS[name]
-        self.native={m.name:m for m in bpy.data.materials if m.library}
-        self.ports=[];self.support=[]
 
     def mesh(self,label,verts,faces,mat='PaintedMetal_Darker'):
         mesh=bpy.data.meshes.new('Thermal / '+label);mesh.from_pydata(verts,[],faces)
@@ -203,7 +167,7 @@ class Parts:
         return obj
 
     def label(self,support,text,centre,u=(1,0,0),v=(0,0,1),size=.10):
-        """Readable markings on a real panel; keep text editable in the study."""
+        """Readable markings on a real panel; keep text editable in the source."""
         u,v=Vector(u).normalized(),Vector(v).normalized();n=u.cross(v)
         data=bpy.data.curves.new('Thermal marking / '+text,'FONT');data.body=text
         data.size=size;data.align_x='CENTER';data.align_y='CENTER'
@@ -213,10 +177,6 @@ class Parts:
         obj.matrix_world=Matrix((u,v,n)).transposed().to_4x4();obj.location=centre
         obj['thermal_marking_support']=support.name
         return obj
-
-    def finish(self):
-        self.col['ports']=json.dumps(self.ports);self.scene['thermal_concept']=self.name
-        return {'model':self.name,'cells':SPECS[self.name],'meshes':sum(o.type=='MESH' for o in self.col.objects),'ports':self.ports}
 
 
 def brayton(p):
@@ -287,57 +247,6 @@ def brayton(p):
         p.box('stator cooling jacket',(contract['generator_x'](x),0,shaft_z+1.55),(.12,1.2,.20),'Metal_Dull',.01)
 
 
-def heater(p):
-    p.base()
-    for x in (-2.6,2.6):
-        for y in (-2.6,2.6):p.box('exchanger corner post',(x,y,-.1),(.48,.48,6.5),'PaintedMetal_Colorable')
-    for z in (-2.65,2.65):p.box('exchanger end plate',(0,0,z),(5.8,5.8,.38),'PaintedMetal_Colorable')
-    for x in (-1.25,1.25):
-        for y in (-1.25,1.25):
-            p.cylinder('isolated exchanger vessel',(x,y,-2.55),(x,y,2.55),.75,'PaintedMetal_Darker',40)
-            for z in (-1.9,0,1.9):p.tube('pressure vessel band',((x,y,z-.075),(x,y,z+.075)),.82,'Metal_Dull',.09)
-    p.port('primary',(-3.75,0,0),(-1,0,0),'PRIMARY')
-    p.port('CO2',(0,-3.75,0),(0,-1,0),'CO2_HP')
-    for sign in (-1,1):
-        z=sign*.46
-        p.tube('primary distribution',((-3.6,0,z),(-1.25,0,z),(1.25,0,z)),.29)
-        for x in (-1.25,1.25):p.tube('primary vessel branches',((x,-1.25,z),(x,1.25,z)),.24)
-        # Separate CO2 headers approach the vessels at different elevations.
-        p.tube('CO2 distribution',((0,-3.6,z),(0,-3.05,z),(0,-2.15,sign*1.5),(0,1.25,sign*1.5)),.29)
-        for y in (-1.25,1.25):p.tube('CO2 vessel branches',((-1.25,y,sign*1.5),(1.25,y,sign*1.5)),.24)
-    for x in (-1.55,1.55):
-        for z in (-2.2,2.1):p.box('cassette backing rail',(x,-2.53,z),(2.1,.32,.18),'Metal_Dull')
-        panel=p.panel('front service cassette',(x,-2.73,-.05),(1.90,.20,4.6))
-        p.hazard(panel,(x,-2.832,1.35),(1,0,0),(0,0,1),'Sign High Pressure',.32)
-        p.box('cassette pull',(x,-2.90,-.8),(.55,.16,.09),'Metal_Shiny',.012)
-        p.label(panel,'HX / '+('A' if x<0 else 'B'),(x,-2.832,.65),size=.14)
-
-
-def recuperator(p):
-    p.base()
-    for x in (-3.2,3.2):
-        for y in (-2.0,2.0):p.box('counterflow frame post',(x,y,-.05),(.35,.35,6.6),'PaintedMetal_Colorable')
-    for x in (-1.55,1.55):
-        for z in (-2.6,2.6):p.box('plate bank end clamp',(x,0,z),(2.85,3.7,.30),'PaintedMetal_Darker')
-        for i in range(26):p.box('counterflow plate',(x,0,-2.4+i*.192),(2.65,3.5,.095),'Metal_Dull',.006)
-        for y in (-1.87,1.87):p.cylinder('stack tie rod',(x,y,-2.8),(x,y,2.8),.075,'Metal_Shiny',12)
-    for sign in (-1,1):
-        p.port('high-pressure '+str(sign),(sign*3.75,-1.25,0),(sign,0,0),'CO2_HP')
-        p.port('low-pressure '+str(sign),(sign*3.75,1.25,0),(sign,0,0),'CO2_LP')
-        for y in (-1.25,1.25):
-            working=-.46 if y<0 else .46
-            p.tube('working leg manifold',((sign*3.6,y,working),(sign*2.5,y,working)),.29)
-    for y,z in ((-1.25,-.46),(1.25,.46)):
-        p.tube('plate bank working bridge',((-.45,y,z),(.45,y,z)),.24,'Metal_Dull',.045)
-    # HP hot feed and LP cold return bypass the exchange banks, separately.
-    for y,z in ((-1.25,.46),(1.25,-.46)):
-        bypass_y=math.copysign(.45,y)
-        p.tube('insulated non-working bypass',((-3.6,y,z),(-3.3,y,z),(-3.3,bypass_y,z),(-3.3,bypass_y,3.05),(3.3,bypass_y,3.05),(3.3,bypass_y,z),(3.3,y,z),(3.6,y,z)),.29,'PaintedMetal_VeryDark')
-    for y in (-2.04,2.04):
-        rail=p.box('bank identifier rail',(0,y,2.1),(6.1,.12,.35),'PaintedMetal_Darker')
-        p.label(rail,'RECUPERATOR / COUNTERFLOW',(0,y+math.copysign(.062,y),2.1),(math.copysign(-1,y),0,0),(0,0,1),.13)
-
-
 def rejector(p):
     p.base()
     for x in (-3.2,3.2):
@@ -382,100 +291,14 @@ def rejector(p):
     for z in (-.46,.46):p.tube('coolant inlet stub',((-3.6,1.25,z),(-3.3,1.25,z),(-3.0,.55,z)),.29)
 
 
-def radiator(p):
-    """Two-sided framed radiation panels with exposed tiles and pump service."""
-    p.base()
-    for x in (-1.55,1.55):
-        p.box('radiator load post',(x,0,-2.975),(.38,.55,.80),'PaintedMetal_Colorable')
-        p.box('radiator panel substrate',(x,0,.25),(2.78,.16,5.75),'Metal_Dull',.018)
-        for sign in (-1,1):
-            for column in range(3):
-                for row in range(9):
-                    tile=p.box('high emissivity radiator tile',(x+(column-1)*.89,sign*.115,-2.30+row*.635),(.86,.07,.60),'PaintedMetal_VeryDark',.009)
-                    tile['radiating_surface']=True;tile['surface_side']=sign
-            for dx in (-1.40,1.40):p.box('panel edge heat pipe',(x+dx,sign*.10,.25),(.07,.20,5.9),'Metal_Dull',.012)
-    for x in (-3.05,3.05):
-        p.cylinder('radiator vertical header',(x,0,-2.8),(x,0,3.2),.17,'Metal_Dull',24)
-    for z in (-2.55,3.12):p.cylinder('radiator distribution header',(-3.05,0,z),(3.05,0,z),.14,'Metal_Dull',24)
-    rail=p.box('radiator top rail',(0,0,3.38),(6.4,.45,.25),'PaintedMetal_Colorable')
-    for sign in (-1,1):p.label(rail,'SPACE RADIATOR / CLEAR SKY',(0,sign*.227,3.38),(-sign,0,0),(0,0,1),.105)
-    p.port('CO2',(-3.75,1.25,0),(-1,0,0),'CO2_LP')
-    for z in (-.46,.46):p.tube('radiator inlet stub',((-3.6,1.25,z),(-3.3,1.25,z),(-3.05,0,z)),.29)
-    cabinet=p.panel('radiator pump service',(0,-.30,-2.85),(1.15,.35,.65))
-    p.label(cabinet,'PUMP', (0,-.477,-2.85),size=.10)
-    p.box('pump cabinet mount',(0,-.30,-3.22),(1.25,.55,.22),'PaintedMetal_Colorable')
-
-
-def upgraded(p,base):
-    """Maximum-grade equipment shares the accepted base envelope and port poses."""
-    base(p)
-    if base is brayton:
-        c=runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))['TRAIN_CENTRES']
-        cx,tx,gx=c['compressor'],c['turbine'],c['generator']
-        # Production jackets follow the final hollow casings in the visibility
-        # pass, so no upgrade ribs cross the inspection apertures.
-        p.box('optimization controller mount',(cx,-1.05,-.45),(1.12,.60,.82),'PaintedMetal_Colorable')
-        cover=p.panel('compressor optimization controller',(cx,-1.41,-.45),(1.0,.14,.72))
-        p.label(cover,'OPT / III',(cx,-1.482,-.45),size=.11)
-    elif base is heater:
-        for x in (-1.55,1.55):
-            panel=p.panel('exotic hot end service cassette',(x,2.73,.5),(1.9,.20,2.8),(0,1,0))
-            p.label(panel,'HT / 1200 C',(x,2.832,1.65),(-1,0,0),(0,0,1),.12)
-            for z in (-.3,.1,.5,.9,1.3):p.box('hot end reinforcement',(x,2.85,z),(1.5,.12,.075),'Metal_Dull')
-            for z in (-.6,1.6):p.box('rear cassette seat',(x,2.53,z),(2.1,.32,.18),'Metal_Dull')
-    else:
-        for y in (-1.94,1.94):
-            for x in (-1.55,1.55):
-                panel=p.panel('precision exchange manifold',(x,y,.4),(1.4,.20,2.8),(0,math.copysign(1,y),0))
-                for z in (-.7,1.5):p.box('manifold backing bridge',(x,y-math.copysign(.12,y),z),(1.55,.30,.18),'Metal_Dull')
-                for z in (-.5,0,.5,1):p.box('manifold heat bridge',(x,y+math.copysign(.12,y),z),(1.1,.08,.08),'Metal_Dull')
-                p.label(panel,'HX / III',(x,y+math.copysign(.102,y),1.5),(-math.copysign(1,y),0,0),(0,0,1),.10)
+def upgraded(p):
+    """Add the standard upgraded turbine controller before refinement."""
+    brayton(p)
+    c=runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))['TRAIN_CENTRES']
+    cx,tx,gx=c['compressor'],c['turbine'],c['generator']
+    # Production jackets follow the final hollow casings in the visibility
+    # pass, so no upgrade ribs cross the inspection apertures.
+    p.box('optimization controller mount',(cx,-1.05,-.45),(1.12,.60,.82),'PaintedMetal_Colorable')
+    cover=p.panel('compressor optimization controller',(cx,-1.41,-.45),(1.0,.14,.72))
+    p.label(cover,'OPT / III',(cx,-1.482,-.45),size=.11)
     p.col['upgrade_grade']=3
-
-
-def conduit(p,elbow=False):
-    if elbow:
-        path=[(-1.25,0,0),(-.6,0,0)]+[(-.6+.6*math.cos(a),.6+.6*math.sin(a),0) for a in [-math.pi/2+i*math.pi/24 for i in range(1,13)]]+[(0,1.25,0)]
-        p.port('west',(-1.25,0,0),(-1,0,0));p.port('north',(0,1.25,0),(0,1,0))
-    else:
-        path=[(-1.25,0,0),(1.25,0,0)];p.port('west',path[0],(-1,0,0));p.port('east',path[1],(1,0,0))
-    for sign in (-1,1):
-        p.tube('insulated '+('hot supply' if sign>0 else 'cold return'),[Vector(x)+Vector((0,0,sign*.46)) for x in path],.355,'PaintedMetal_Darker',.075)
-    for x in (-.70,.65) if not elbow else (-.7,):
-        for z in (-.46,.46):p.tube('insulation clamp',((x-.06,0,z),(x+.06,0,z)),.405,'Metal_Dull',.055)
-        foot=p.box('conduit stand',(x,0,-1.10),(.28,1.12,.22),'PaintedMetal_Colorable',.02)
-        for y in (-.44,.44):p.box('clamp stand web',(x,y,-.06),(.20,.14,1.85),'PaintedMetal_Colorable',.012)
-
-
-def tee(p):
-    p.port('west',(-1.25,0,0),(-1,0,0));p.port('east',(1.25,0,0),(1,0,0));p.port('north',(0,1.25,0),(0,1,0))
-    for z in (-.46,.46):p.branch_pipe('hollow tee channel',(-1.25,0,z),(1.25,0,z),[((0,0,z),(0,1.25,z))])
-    for x in (-.6,.6):
-        for z in (-.46,.46):p.tube('tee insulation clamp',((x-.06,0,z),(x+.06,0,z)),.405,'Metal_Dull',.055)
-        p.box('tee mounting foot',(x,0,-1.10),(.28,1.12,.22),'PaintedMetal_Colorable')
-        for y in (-.44,.44):p.box('tee mounting web',(x,y,-.06),(.20,.14,1.85),'PaintedMetal_Colorable')
-
-
-def build(name,rebuild=False):
-    instances=[]
-    if rebuild:
-        scene=bpy.data.scenes['Thermal / '+name];col=bpy.data.collections['Thermal model / '+name]
-        assert col.get('thermal_concept')==name
-        instances=[o for o in bpy.data.objects if o.instance_collection==col]
-        bpy.context.window.scene=bpy.data.scenes['ArcanePower_ReactorPrototype']
-        for obj in list(col.objects):bpy.data.objects.remove(obj,do_unlink=True)
-        bpy.data.scenes.remove(scene);bpy.data.collections.remove(col)
-    p=Parts(name)
-    {'Brayton train':brayton,'Primary heater':heater,'Recuperator':recuperator,
-     'Atmospheric cooler':rejector,'Space radiator':radiator,
-     'Brayton train upgraded':lambda p:upgraded(p,brayton),
-     'Primary heater upgraded':lambda p:upgraded(p,heater),
-     'Recuperator upgraded':lambda p:upgraded(p,recuperator),
-     'Duplex straight':lambda p:conduit(p),'Duplex elbow':lambda p:conduit(p,True),'Duplex tee':tee}[name](p)
-    bpy.context.view_layer.update();report=p.finish()
-    for obj in instances:obj.instance_collection=p.col
-    path=OUT/'models.json';rows=json.loads(path.read_text()) if path.exists() else {};rows[name]=report;path.write_text(json.dumps(rows,indent=2)+'\n')
-    return report
-
-
-if __name__=='__main__':result=build(globals()['MODEL_NAME'])

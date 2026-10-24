@@ -58,7 +58,7 @@
       <Volume>24</Volume>
       <Model>Models/Items/ArcanePower/ArcaneFuelI.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 2 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister.</Description>
+      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 2 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Consuming Aether recovers 10 Aether Residuum per canister in standalone or Brayton mode.</Description>
     </PhysicalItem>
     <PhysicalItem>
       <Id>
@@ -117,7 +117,7 @@
       <Volume>24</Volume>
       <Model>Models/Items/ArcanePower/ArcaneFuelII.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 3 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister.</Description>
+      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 3 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Requires Brayton mode and an advanced controller.</Description>
     </PhysicalItem>
     <PhysicalItem>
       <Id>
@@ -176,7 +176,7 @@
       <Volume>24</Volume>
       <Model>Models/Items/ArcanePower/ArcaneFuelIII.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 4 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister.</Description>
+      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 4 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Requires Brayton mode and an advanced controller. Empyrean also requires upgraded Brayton turbines.</Description>
     </PhysicalItem>
   </PhysicalItems>
   <Components>
@@ -200,6 +200,27 @@
       <DropProbability>0.5</DropProbability>
       <Health>18</Health>
       <Description>Empty platinum-lined, superconducting fuel container. Fill with 10 kg of Aether Concentrate. The container carries through Helion and Empyrean upgrades; consumed fuel does not return an empty canister.</Description>
+    </Component>
+    <Component>
+      <Id>
+        <TypeId>Component</TypeId>
+        <SubtypeId>ArcaneAetherResiduum</SubtypeId>
+      </Id>
+      <DisplayName>Aether Residuum</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/ArcaneAetherResiduum.dds</Icon>
+      <Size>
+        <X>0.12</X>
+        <Y>0.1</Y>
+        <Z>0.08</Z>
+      </Size>
+      <Mass>1</Mass>
+      <Volume>0.001</Volume>
+      <Model>Models/Items/ArcanePower/ArcaneAetherResiduum.mwm</Model>
+      <PhysicalMaterial>Metal</PhysicalMaterial>
+      <MaxIntegrity>100</MaxIntegrity>
+      <DropProbability>1</DropProbability>
+      <Health>100</Health>
+      <Description>An exceptionally dense, heat-resistant material recovered from consumed Aether fuel. Requires no processing. Ten 1 kg units per fully consumed canister, in standalone or Brayton mode. Used in advanced turbines (20 units) and cooling units/panels (10 units). Inventory volume: 0.001 L per unit.</Description>
     </Component>
   </Components>
 </Definitions>

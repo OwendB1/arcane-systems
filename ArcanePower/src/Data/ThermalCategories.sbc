@@ -33,6 +33,9 @@
         <string>Reactor/ArcanePower_Thermal_BraytonTrainUpgraded</string>
         <string>Reactor/ArcanePower_Thermal_BraytonTrainMirrored</string>
         <string>Reactor/ArcanePower_Thermal_BraytonTrainMirroredUpgraded</string>
+        <string>UpgradeModule/ArcanePower_Thermal_AtmosphericCoolerUpgraded</string>
+        <string>UpgradeModule/ArcanePower_Thermal_SpaceRadiatorUpgraded</string>
+        <string>UpgradeModule/ArcanePower_Thermal_RadiatorPanelUpgraded</string>
       </ItemIds>
     </Category>
   </CategoryClasses>

@@ -29,7 +29,9 @@ namespace ArcanePower
         {
             internal IMyEntity Entity;
             internal ThermalFlowState State;
-            internal int Updated;
+            internal int Updated, ValveRetryAt;
+            internal byte NextOpenConnectors;
+            internal ThermalIsolationVisuals Valves;
             internal double Distance, Rate, CameraDistance;
         }
         private static ThermalModel FlowSpec(IMyEntity entity)
@@ -102,11 +104,14 @@ namespace ArcanePower
             if (!flows.TryGetValue(entity.EntityId, out view))
                 flows[entity.EntityId] = view = new FlowView { Entity = entity };
             view.State = new ThermalFlowState { EntityId = entity.EntityId, Sequence = tick,
-                Mode = healthy ? ThermalFlowMode.Unconnected : ThermalFlowMode.Fault, Ports = new byte[spec.Ports.Length] };
+                Mode = healthy ? ThermalFlowMode.Unconnected : ThermalFlowMode.Fault, Ports = new byte[spec.Ports.Length],
+                OpenConnectors = view.State == null ? (byte)0 : view.State.OpenConnectors };
             view.Updated = MyAPIGateway.Session.GameplayFrameCounter;
         }
         private void BeginFlowFrame()
         {
+            if (MyAPIGateway.Multiplayer.IsServer)
+                foreach (var view in flows.Values) view.NextOpenConnectors = 0;
             captureFlow = MyAPIGateway.Multiplayer.IsServer && tick % 30 == 0;
             if (!captureFlow) return;
             foreach (var block in Blocks.Values) ResetFlow(block.Entity, block.Healthy);
@@ -143,11 +148,12 @@ namespace ArcanePower
             {
                 byte[] ports; FlowView view;
                 if (!oriented.TryGetValue(endpoint.Id, out ports) || !flows.TryGetValue(endpoint.Id, out view)) continue;
-                view.State.Ports = ports;
-                view.State.Rate = ThermalMath.Clamp(circulation, 0, 1);
+                for (int i = 0; i < ports.Length; i++)
+                    if (ports[i] != 0) view.State.Ports[i] = ports[i];
+                view.State.Rate = Math.Max(view.State.Rate, ThermalMath.Clamp(circulation, 0, 1));
                 view.State.Heat = heat;
                 view.State.Internal = endpoint.Model.Kind != ThermalKind.Pipe;
-                view.State.Mode = circulation > 0 ? ThermalFlowMode.Pumping : ThermalFlowMode.Ready;
+                view.State.Mode = view.State.Rate > 0 ? ThermalFlowMode.Pumping : ThermalFlowMode.Ready;
                 ThermalBlock radiator;
                 if (Blocks.TryGetValue(endpoint.Id, out radiator) && radiator.Spec.Kind == ThermalKind.Radiator)
                     foreach (var panel in radiator.RadiatorPanels)
@@ -163,17 +169,20 @@ namespace ArcanePower
         }
         private void UpdateFlow()
         {
-            if (captureFlow && ready) SendFlow(0);
+            if (MyAPIGateway.Multiplayer.IsServer) ApplyIsolation();
+            if ((captureFlow || isolationChanged) && ready) SendFlow(0);
+            isolationChanged = false;
             int now = MyAPIGateway.Session.GameplayFrameCounter;
             foreach (long id in new List<long>(flows.Keys))
             {
                 var view = flows[id];
-                if (view.Entity == null || view.Entity.Closed) { flows.Remove(id); continue; }
+                if (view.Entity == null || view.Entity.Closed) { if (view.Valves != null) view.Valves.Close(); flows.Remove(id); continue; }
                 bool current = now - view.Updated <= 90;
                 double target = current && view.State.Mode == ThermalFlowMode.Pumping ? view.State.Rate : 0;
                 view.Rate = target > 0 ? view.Rate + (target - view.Rate) * .12 : 0;
                 view.Distance = (view.Distance + view.Rate * 1.25 / 60) % 768;
-                if (MyAPIGateway.Utilities.IsDedicated || tick % 15 != 0) continue;
+                if (MyAPIGateway.Utilities.IsDedicated) continue;
+                if (tick % 15 != 0) { UpdateIsolation(view, current); continue; }
                 var entity = view.Entity as MyEntity;
                 if (entity == null) continue;
                 var mode = current ? view.State.Mode : ThermalFlowMode.Unconnected;
@@ -190,6 +199,7 @@ namespace ArcanePower
                     entity.SetEmissiveParts(material, color, current ? intensity : 0);
                     entity.SetEmissivePartsForSubparts(material, color, current ? intensity : 0);
                 }
+                UpdateIsolation(view, current);
             }
         }
         public override void Draw()
@@ -242,6 +252,7 @@ namespace ArcanePower
         private void UnloadFlow()
         {
             MyAPIGateway.Multiplayer.UnregisterSecureMessageHandler(FlowChannel, ReceiveFlow);
+            foreach (var view in flows.Values) if (view.Valves != null) view.Valves.Close();
             flows.Clear(); flowRequests.Clear(); visibleFlow.Clear();
         }
     }

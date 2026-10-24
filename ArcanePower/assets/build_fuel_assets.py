@@ -174,7 +174,9 @@ def studio(scene):
     data.ortho_scale = 1.22*max(max(p[i] for p in corners)-min(p[i] for p in corners) for i in (0, 1))
 
 
-def export(scene):
+def export(scene, folder=None):
+    folder = folder or MODELS
+    folder.mkdir(parents=True, exist_ok=True)
     meshes = [o for o in scene.objects if o.type == 'MESH']
     bpy.ops.object.select_all(action='DESELECT')
     for obj in meshes:
@@ -182,7 +184,7 @@ def export(scene):
     bpy.context.view_layer.objects.active = meshes[0]
     # Stock Blender FBX stores centimetres; MwmBuilder reads positions as metres.
     # SEUT's patched exporter uses a different scale, so do not copy its 0.1 here.
-    bpy.ops.export_scene.fbx(filepath=str(MODELS/(scene.name+'.fbx')), use_selection=True,
+    bpy.ops.export_scene.fbx(filepath=str(folder/(scene.name+'.fbx')), use_selection=True,
         object_types={'MESH'}, global_scale=.01, axis_forward='Z', axis_up='Y',
         bake_anim=False, use_tspace=True, use_triangles=True, mesh_smooth_type='OFF')
     root = ET.Element('Model', Name=scene.name)
@@ -194,8 +196,8 @@ def export(scene):
         for key, suffix in [('ColorMetalTexture', 'cm'), ('NormalGlossTexture', 'ng'), ('AddMapsTexture', 'add')]:
             ET.SubElement(node, 'Parameter', Name=key).text = mat['texture_folder']+'/'+mat.name+'_'+suffix+'.dds'
     ET.indent(root)
-    ET.ElementTree(root).write(MODELS/(scene.name+'.xml'), encoding='utf-8', xml_declaration=True)
-    studio(scene)
+    ET.ElementTree(root).write(folder/(scene.name+'.xml'), encoding='utf-8', xml_declaration=True)
+    if scene.camera is None:studio(scene)
     scene.render.filepath = str(ICONS/(scene.name+'.png'))
     bpy.ops.render.render(write_still=True)
 
@@ -272,11 +274,46 @@ def build_fuels():
             print('FUEL ASSET', subtype, flush=True)
 
 
-if '--canister-only' in sys.argv:
-    bpy.ops.wm.open_mainfile(filepath=str(ROOT/'assets/arcane-power-fuels.blend'))
-else:
-    build_fuels()
-build_canister()
-bpy.context.window.scene = bpy.data.scenes['ArcaneFuelI']
-bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'assets/arcane-power-fuels.blend'))
-print('Saved fuel-chain and empty-canister scenes and icons.', flush=True)
+def build_residuum(write_export=True):
+    """Recovered metallic nugget; independent of the ore and fuel scenes."""
+    name='ArcaneAetherResiduum'
+    old=bpy.data.scenes.get(name)
+    if old:
+        for obj in list(old.objects):bpy.data.objects.remove(obj,do_unlink=True)
+        bpy.data.scenes.remove(old)
+    scene=bpy.data.scenes.new(name)
+    bpy.context.window.scene=scene
+    for mat in list(bpy.data.materials):
+        if mat.name.startswith('ArcaneResiduum') and mat.users==0:bpy.data.materials.remove(mat)
+    metal=constant_material('ArcaneResiduumMetal',(.24,.32,.36),1,.70)
+    dark=constant_material('ArcaneResiduumVeins',(.17,.23,.26),1,.60)
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2,radius=.055)
+    obj=bpy.context.object
+    rng=np.random.default_rng(704)
+    for v in obj.data.vertices:
+        v.co*=float(rng.uniform(.86,1.12))
+        v.co.y*=.86
+        v.co.z*=.68
+    finish(obj,'Aether Residuum / collapsed metallic matrix',metal,.0009)
+    obj.data.materials.append(dark)
+    for face in obj.data.polygons:
+        if face.index%17==0:face.material_index=1
+    bpy.context.view_layer.update()
+    if write_export:export(scene, ROOT/'.cache/residuum/models')
+    return scene
+
+
+if __name__ == '__main__':
+    if '--residuum-only' in sys.argv:
+        bpy.ops.wm.open_mainfile(filepath=str(ROOT/'assets/arcane-power-fuels.blend'))
+        build_residuum()
+    else:
+        if '--canister-only' in sys.argv:
+            bpy.ops.wm.open_mainfile(filepath=str(ROOT/'assets/arcane-power-fuels.blend'))
+        else:
+            build_fuels()
+        build_canister()
+        if '--canister-only' not in sys.argv:build_residuum()
+    bpy.context.window.scene = bpy.data.scenes['ArcaneAetherResiduum' if '--residuum-only' in sys.argv else 'ArcaneFuelI']
+    bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'assets/arcane-power-fuels.blend'))
+    print('Saved fuel-chain assets.', flush=True)

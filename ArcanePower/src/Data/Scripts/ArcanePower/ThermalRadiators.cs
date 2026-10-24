@@ -14,6 +14,7 @@ namespace ArcanePower
         [ProtoMember(5)] public double Glow;
         [ProtoMember(6)] public double RejectedMW;
         [ProtoMember(7)] public double Exposure;
+        // Retain the saved/wire name; now includes shade and weather as well as angle.
         [ProtoMember(8)] public double SunIncidence;
         [ProtoMember(9)] public long ParentId;
         [ProtoMember(10)] public int Panels = 1;
@@ -24,7 +25,7 @@ namespace ArcanePower
                 && ThermalMath.Finite(Angle) && Angle >= 0 && Angle < Math.PI * 2
                 && ThermalMath.Finite(Target) && Target >= 0 && Target < Math.PI * 2
                 && ThermalMath.Finite(Glow) && Glow >= 0 && Glow <= 1
-                && ThermalMath.Finite(RejectedMW) && RejectedMW >= 0 && RejectedMW <= 45000.001
+                && ThermalMath.Finite(RejectedMW) && RejectedMW >= 0 && RejectedMW <= 300000.001
                 && ParentId >= 0 && Panels >= 1 && Panels <= 3
                 && ThermalMath.Finite(Exposure) && Exposure >= 0 && Exposure <= 1
                 && ThermalMath.Finite(SunIncidence) && SunIncidence >= 0 && SunIncidence <= 1;
@@ -71,13 +72,35 @@ namespace ArcanePower
             return pose;
         }
 
-        public static double Cooling(double rating, double exposure, double sinkC, double sunIncidence)
+        public static double SolarExposure(double cosine, double litFraction, double weather, bool shadow)
         {
-            if (!ThermalMath.Finite(sunIncidence)) return 0;
-            // Gameplay solar-load penalty: broadside loses 35%, edge-on keeps
-            // rated rejection. Both faces still require a clear view of space.
+            if (!ThermalMath.Finite(cosine) || !ThermalMath.Finite(litFraction) || !ThermalMath.Finite(weather)) return 1;
+            if (shadow) return 0;
+            // SE two-sided solar output: |normal dot sun| * lit pivots * weather.
+            // Bound enhanced-weather output to the requested 50% cooling floor.
+            return ThermalMath.Clamp(Math.Abs(cosine) * ThermalMath.Clamp(litFraction, 0, 1) * Math.Max(0, weather), 0, 1);
+        }
+
+        public static bool PlanetShadow(Vector3D fromCentre, double radius, Vector3D sun)
+        {
+            // MySolarOcclusionSystem: a 20-radius shadow, with its terrain margin.
+            double along = Vector3D.Dot(fromCentre, sun);
+            double safeRadius = radius > 500 ? radius - 500 : radius * .9;
+            return along <= 0 && -along <= 20 * radius
+                && (fromCentre - sun * along).LengthSquared() < safeRadius * safeRadius;
+        }
+
+        public static double SolarEfficiency(double sunExposure)
+        {
+            return ThermalMath.Finite(sunExposure) ? 1 - .5 * ThermalMath.Clamp(sunExposure, 0, 1) : 0;
+        }
+
+        public static double Cooling(double rating, double exposure, double sinkC, double sunExposure)
+        {
+            // Inverse solar response. Clearance and sink temperature remain
+            // independent: enclosing a panel cannot manufacture free cooling.
             return ThermalMath.RadiativeCooling(rating, exposure, sinkC)
-                * (1 - .35 * ThermalMath.Clamp(Math.Abs(sunIncidence), 0, 1));
+                * SolarEfficiency(sunExposure);
         }
 
         public static double HeatGlow(double previous, double rejectedMW, double rating, double seconds)

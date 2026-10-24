@@ -15,7 +15,15 @@ namespace ArcanePower
         private static readonly string[] FuelNames = { "Aether", "Helion", "Empyrean" };
         private static readonly float[] PowerMW = { 10000f, 100000f, 1000000f };
         private const float FuelUnitsPerCanister = 10f;
+        private const string ResiduumSubtype = "ArcaneAetherResiduum";
+        private const long ResiduumScale = 1000000L;
+        private const int ResiduumPerCanister = 10;
         private static readonly float[] ControllerEfficiencies = { .80f, .90f, .99f };
+        private int FuelTierLimit
+        {
+            get { return ThermalVariant && (Motion.Thermal == null || Motion.Thermal.Mode != ThermalMode.Brayton
+                || Motion.Thermal.Requested != ThermalMode.Brayton) ? 1 : controllerRingCapacity - 1; }
+        }
         private float FuelEfficiency { get { return ControllerEfficiencies[Motion.RingCount - 2]; } }
         private MyReactor nativeReactor;
         private VRage.Game.Entity.MyInventoryBase fuelInventory;
@@ -29,11 +37,12 @@ namespace ArcanePower
             // adding IDs leaves that tooltip describing the original empty filter.
             var constraint = new Sandbox.Game.MyInventoryConstraint(
                 "Accepts " + string.Join(", ", FuelNames) + " fuels and Standard, Reinforced or Advanced Containment Tiles.\n"
-                + "Refine ore before loading. Fuel use depends on attached containment controllers.");
+                + "Standalone uses Aether only. Helion and Empyrean require Brayton mode and compatible controllers. Aether recovers 10 Aether Residuum per consumed canister.");
             foreach (string fuel in Fuels)
                 constraint.Add(new MyDefinitionId(typeof(MyObjectBuilder_Ingot), fuel));
             foreach (string tile in TileSubtypes)
                 constraint.Add(new MyDefinitionId(typeof(MyObjectBuilder_Component), tile));
+            constraint.Add(new MyDefinitionId(typeof(MyObjectBuilder_Component), ResiduumSubtype));
             nativeReactor.BlockDefinition.InventoryConstraint = constraint;
             var inventory = (Sandbox.Game.MyInventory)reactor.GetInventory();
             inventory.Constraint = constraint;
@@ -51,7 +60,8 @@ namespace ArcanePower
 
         private bool HasUsableFuel()
         {
-            return IsLive && Motion.FuelTier + 1 <= controllerRingCapacity && (MyAPIGateway.Session.CreativeMode
+            return IsLive && Motion.FuelTier <= FuelTierLimit && (!ThermalVariant || ThermalFuelModeReady)
+                && (MyAPIGateway.Session.CreativeMode
                 || reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1])) > 0);
         }
 
@@ -94,17 +104,22 @@ namespace ArcanePower
                 return;
             }
             var inventory = reactor.GetInventory();
-            if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && reactor.CurrentOutput <= 0 && (!ThermalVariant || ThermalCold))
+            // Keep the old tier until retained heat and its billable fuel debit
+            // have cleared. A mode switch must not reprice already-produced heat.
+            if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && reactor.CurrentOutput <= 0
+                && (!ThermalVariant || (ThermalCold && Motion.Thermal.FuelHeatMJ == 0
+                    && Motion.FuelDebt < (double)MyFixedPoint.SmallestPossibleValue * .5)))
             {
                 int selected = -1;
                 for (int i = 0; i < Fuels.Length; i++)
-                    if (i + 2 <= controllerRingCapacity && inventory.GetItemAmount(MyItemType.MakeIngot(Fuels[i])) > 0) selected = i;
+                    if (i < FuelTierLimit && inventory.GetItemAmount(MyItemType.MakeIngot(Fuels[i])) > 0) selected = i;
                 if (selected >= 0) Motion.FuelTier = selected + 1;
-                else if (Motion.FuelTier + 1 > controllerRingCapacity) Motion.FuelTier = controllerRingCapacity - 1;
+                else if (Motion.FuelTier > FuelTierLimit) Motion.FuelTier = FuelTierLimit;
             }
             float multiplier = ElectricalRatingMW / PowerMW[0];
             if (reactor.PowerOutputMultiplier != multiplier) reactor.PowerOutputMultiplier = multiplier;
-            if (initializationFrames == 0 && Motion.FuelTier + 1 > controllerRingCapacity) reactor.Enabled = false;
+            if (initializationFrames == 0 && (Motion.FuelTier > FuelTierLimit
+                || (ThermalVariant && !ThermalFuelModeReady))) reactor.Enabled = false;
 
             // Ideal burn is one canister/10 minutes at full rated load, divided by
             // controller efficiency. The saved signed remainder retains debt or
@@ -130,11 +145,15 @@ namespace ArcanePower
                     {
                         inventory.RemoveItemsOfType(amount, new MyObjectBuilder_Ingot { SubtypeName = fuel });
                         Motion.FuelDebt -= (double)amount;
+                        // Integer carry makes many tiny burns identical to a canister.
+                        if (ThermalVariant && Motion.FuelTier == 1)
+                            Motion.ResiduumMicroUnits += (long)Math.Round((double)amount * ResiduumScale) * ResiduumPerCanister;
                     }
                     else Motion.FuelDebt = 0;
                 }
             }
             RefreshFuelCapacity();
+            RecoverResiduum();
             if (reactor.UseConveyorSystem && networkTick % 100 == 0)
             {
                 fuelSources.Clear();
@@ -149,8 +168,9 @@ namespace ArcanePower
                     for (int slot = 0; slot < block.InventoryCount; slot++)
                     {
                         var source = block.GetInventory(slot);
+                        ExportResiduum(source);
                         PullTiles(source, inventory);
-                        for (int i = 0; i <= controllerRingCapacity - 2; i++)
+                        for (int i = 0; i < FuelTierLimit; i++)
                         {
                             MyItemType type = MyItemType.MakeIngot(Fuels[i]);
                             MyFixedPoint wanted = (MyFixedPoint)10 - inventory.GetItemAmount(type);
@@ -170,5 +190,33 @@ namespace ArcanePower
         }
 
 
+        private void RecoverResiduum()
+        {
+            if (!IsLive || !MyAPIGateway.Multiplayer.IsServer) return;
+            var inventory = reactor.GetInventory();
+            var id = new MyDefinitionId(typeof(MyObjectBuilder_Component), ResiduumSubtype);
+            var type = MyItemType.MakeComponent(ResiduumSubtype);
+            // Full inventory retains saved credit. Bounded batches release a
+            // backlog when space becomes available, without stalling simulation.
+            for (int i = 0; i < 10 && Motion.ResiduumMicroUnits >= ResiduumScale; i++)
+            {
+                if (!inventory.CanItemsBeAdded((MyFixedPoint)1, id)) return;
+                MyFixedPoint before = inventory.GetItemAmount(type);
+                inventory.AddItems((MyFixedPoint)1, new MyObjectBuilder_Component { SubtypeName = ResiduumSubtype });
+                long added = (long)Math.Round((double)(inventory.GetItemAmount(type) - before) * ResiduumScale);
+                if (added <= 0) return;
+                Motion.ResiduumMicroUnits -= Math.Min(Motion.ResiduumMicroUnits, added);
+            }
+        }
+
+        private void ExportResiduum(VRage.Game.ModAPI.IMyInventory target)
+        {
+            var inventory = reactor.GetInventory();
+            var type = MyItemType.MakeComponent(ResiduumSubtype);
+            if (!inventory.CanTransferItemTo(target, type)) return;
+            transferItems.Clear();
+            inventory.GetItems(transferItems, item => item.Type == type);
+            foreach (var item in transferItems) target.TransferItemFrom(inventory, item);
+        }
     }
 }

@@ -200,9 +200,9 @@ namespace ArcanePower
                     }
                 text.Append("\n<color=235,240,245>Selected sockets: ").Append(matches).Append('/').Append(total).Append(" aligned");
                 if (issue != ThermalJointStatus.Matched) text.Append(" / ").Append(ThermalConstruction.JointHint(issue));
-                text.Append("\nAssembly: ").Append(check.Open).Append(" open / ").Append(check.Wrong)
+                text.Append("\nAssembly: ").Append(check.Open).Append(" open mouths / ").Append(check.Wrong)
                     .Append(" mismatched socket ends / ").Append(check.Pending).Append(" unfinished or unavailable blocks");
-                text.Append("\n<color=150,180,200>H = orange; C = cyan. Align both bores on every socket face; cap unused sockets.");
+                text.Append("\n<color=150,180,200>H = orange; C = cyan. Keep manifold circuits separate. Cap unused pipe mouths; unused reactor outlets stay closed.");
             }
             if (server != null) text.Append("\nServer: ").Append(server);
             text.Append("\nConstruction checks do not authorize startup. Cooling, power and reactor safeguards still apply.");

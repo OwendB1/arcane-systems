@@ -16,7 +16,8 @@ def main():
     models=json.loads((ROOT/'validation/thermal-models/models.json').read_text())
     contract=runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))
     playable=contract['PLAYABLE']
-    models={name:spec for name,spec in models.items() if name in playable}
+    authored={name:spec for name,spec in models.items() if name in playable}
+    models={name:spec for name,spec in contract['runtime_models'](models).items() if name in playable}
     report=json.loads((ROOT/'validation/thermal-models/native-export.json').read_text())
     tree=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc')
     blocks={d.findtext('Id/SubtypeId'):d for d in tree.findall('CubeBlocks/Definition')}
@@ -30,8 +31,14 @@ def main():
         assert model['sha256']==hashlib.sha256((MOD/model['path']).read_bytes()).hexdigest(),'Native moving model changed after validation'
     for path,digest in motion['native_mesh_sha256'].items():
         assert digest==hashlib.sha256((MOD/path).read_bytes()).hexdigest(),'Native moving mesh changed after motion validation'
+    isolation=json.loads((ROOT/'validation/thermal-models/isolation.json').read_text())
+    assert isolation['status']=='passed' and isolation['checks']>0, 'Valve native motion is unverified'
+    assert isolation['contract_sha256']==hashlib.sha256((ROOT/'assets/thermal-isolation.json').read_bytes()).hexdigest()
+    assert isolation['runtime_pose_sha256']==hashlib.sha256((MOD/'Data/Scripts/ArcanePower/ThermalIsolation.cs').read_bytes()).hexdigest()
+    for path,digest in isolation['native_mesh_sha256'].items():
+        assert digest==hashlib.sha256((MOD/path).read_bytes()).hexdigest(), 'Valve mesh changed after native validation'
     assert set(blocks)=={contract['subtype'](name) for name in contract['RUNTIME']}
-    assert report['status']=='passed' and report['blocks']==len(models) and report['construction_models']==3*len(models)
+    assert report['status']=='passed' and report['blocks']==len(authored) and report['construction_models']==3*len(authored)
     highlights=report['inventory_highlights']
     assert set(highlights)=={'detector_conveyor_0','detector_conveyor_2','detector_conveyor_top','detector_conveyor_bottom'}
     assert len(highlights['detector_conveyor_top'])==4 and all(len(highlights[key])==1 for key in highlights if key!='detector_conveyor_top')
@@ -55,6 +62,10 @@ def main():
         stages=d.findall('BuildProgressModels/Model')
         assert len(stages)==3
         assert [float(s.get('BuildPercentUpperBound')) for s in stages]==[.33,.67,1]
+        if name in contract['COOLER_UPGRADES']:
+            base=blocks[models[contract['COOLER_UPGRADES'][name]]['subtype']]
+            assert d.findtext('Model')==base.findtext('Model'), 'Tier variant must reuse validated geometry'
+            assert [s.attrib for s in stages]==[s.attrib for s in base.findall('BuildProgressModels/Model')]
         paths=[d.findtext('Model')]+[s.get('File') for s in stages]
         for value in paths:
             path=MOD/value
@@ -71,6 +82,7 @@ def main():
     actual_models={p.relative_to(MOD).as_posix() for p in model_folder.rglob('*') if p.is_file()}
     assert actual_models=={p for p in packaged if p.startswith('Models/Cubes/large/')},'Unused or missing loadable model exports'
     assert set(files)<=set(packaged),'Release omitted a thermal main/weld model'
+    assert set(isolation['native_mesh_sha256'])<=set(packaged),'Release omitted animated isolation valves'
     for path in files:
         assert packaged[path]['sha256']==hashlib.sha256((MOD/path).read_bytes()).hexdigest()
     # A model-only manifest check misses omitted scripts and stale ZIP contents.
@@ -107,7 +119,7 @@ def main():
     restored=json.loads((ROOT/'validation/thermal-models/internal-pipes-preserved.json').read_text())
     assert restored['status']=='passed' and restored['geometry_transforms_and_material_assignments_match']
     result={'status':'passed','blocks':len(models),'compatibility_aliases':len(contract['PIPE_ALIASES']),
-            'construction_models':3*len(models),
+            'authored_model_families':len(authored),'construction_models':3*len(authored),
             'lod_models':report['lod_models'],'validated_meshes':report['native_meshes'],
             'definitions_and_package_match':True,'co2_supply':'Integrated reactor commissioning',
             'runtime_scripts':len(scripts),'runtime_definitions':len(definitions),
@@ -119,6 +131,7 @@ def main():
     result['main_reactor']='ArcanePower_Thermal_ReactorHousing'
     result['loadable_model_folder_matches_runtime_closure']=True
     result['exported_mesh_runtime_motion_verified']=True
+    result['isolation_valve_native_checks']=isolation['checks']
     (ROOT/'validation/thermal-models/delivery-check.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
 

@@ -22,9 +22,13 @@ packaging prunes unused model exports after preserving required rebuild inputs.
 
 The current authoring sources are `assets/arcane-power-prototype.blend` (archived reactor design),
 `assets/arcane-energy-core.blend` (battery), `assets/arcane-power-fuels.blend` and
-`assets/arcane-thermal-models.blend` (Brayton family). The retained
-`build_thermal_concepts.py` and `review_thermal_concepts.py` supply helpers to the
-production thermal builder/reviewer and remain required.
+`assets/arcane-thermal-models.blend` (Brayton family). Shared thermal geometry is
+in [thermal_parts.py](assets/thermal_parts.py); current scene construction and
+review are owned by [build_thermal_models.py](assets/build_thermal_models.py) and
+[review_thermal_models.py](assets/review_thermal_models.py). The retired concept
+builders/checks, intake-vane builder and old four-hatch prototype check were
+removed. Current builders, exporters, icon tools and refinement/audit tools remain
+rebuild sources even when they are run manually.
 
 Arcane Power is an SE1 reactor, fuel-processing and energy-storage mod in development. The current large-grid reactor fits **5×5×3 cells** (SE `Size=(5,3,5)`). Its rounded housing has three native-size conveyor access hatches plus a centered top conveyor connection behind the vent hatch, two base upgrade sockets and curved chamber glass. This is an engineering slice of the [mod plan](../docs/arcane-power-plan.md), not the finished progression.
 
@@ -61,42 +65,20 @@ styles, kept in separate eight-block scrolling groups. Both styles share socket
 geometry, H/C orientation and animated flow. Old HP/LP IDs remain as 28 hidden
 compatibility aliases, reusing the current models and icons.
 
-The local catalog has 24 public thermal blocks and 72 construction stages, with
-LODs and icons. Heaters and recuperators are absent from gameplay; their authoring
-sources remain available. The radiator now has a full
-3×3×3-cell base, bottom manifold and automatic sun tracking. Up to two extensions
-stack above it and share its rotation, providing up to three times the cooling.
-The atmospheric cooler now fits a 3×3-cell hull opening, two cells deep, with an
-airtight casing and rear duplex manifold. Only the fans project beyond the hull.
-Keep 2.5 m clear beyond the guards: half-clear exhaust provides 25% cooling;
-fully blocked exhaust provides none. The terminal shows clearance and available MW.
-Standard and upgraded turbines each have regular and mirrored variants, all
-2 blocks wide × 2 high × 5 long (5×5×12.5 m). Their round machinery sits 0.55 m
-lower, with one duplex socket in the lower side cell. H enters the first compressor
-casing; the compressor flares directly into the turbine and C returns from its rear.
-Close pipe runs pass through relieved, tapered supports. Glazed compressor tapers
-show the extended blade stacks; the generator window reveals a wound copper
-armature rotating inside fixed magnets. Trains connect in parallel
-to the same network as the reactor and coolers.
-The saved Blender file opens on the compact turbine comparison with scale guides;
-the cooler hull fit, three-panel radiator stack, pipe comparisons and connected
-routes remain available.
-Model, LOD and compiled runtime checks passed for this pass. Rerun the
-[model audit](assets/audit_thermal_models.py) and
-[LOD audit](assets/audit_pipe_lods.py) after geometry changes; the latest
-[delivery summary](validation/thermal-models/delivery-check.json) is retained.
-An in-game reload and visual check remain pending.
+The current thermal catalog has 27 public blocks plus the hidden pipe aliases.
+Each reactor manifold supplies an independent circuit with one turbine and its
+own cooling. Four circuits provide full capacity; a breach isolates the affected
+circuit, and losing the final operating circuit latches shutdown.
+See [construction and recovery](THERMAL-CONSTRUCTION.md) for setup, commissioning,
+migration and cooling placement, and [power balance](THERMAL-POWER.md) for ratings
+and efficiency. Existing shared plants migrate disabled with their heat retained.
 
-Existing builds need migration: replace heater/recuperator routes with one shared
-reactor/train/cooler network. Reconnect each train at its single lower socket and
-remove or cap the abandoned branch. Reposition the
-revised radiator for its larger footprint and reconnect underneath. Reroute
-existing cooler side connections to its rear manifold. Replace old, larger
-turbine blocks and reroute their side connections for the new footprint. The current
-stack has equal 250 mm frame gaps, centred connections, annular shaft collars
-and recessed closed caps that eliminate coplanar texture overlap. Native metal
-textures, fine graphite channel detail and the quarter-strength heat glow are
-included in the source and runtime assets.
+The saved Blender file opens on the compact turbine comparison with scale guides;
+cooler hull fit, three-panel radiator stack and pipe comparisons remain available.
+Rerun the [model audit](assets/audit_thermal_models.py) and
+[LOD audit](assets/audit_pipe_lods.py) after geometry changes. The latest
+[delivery summary](validation/thermal-models/delivery-check.json) records offline
+verification; an in-game reload and visual check remain pending.
 
 `build_thermal_models.py` creates bare variants from finished framed mains.
 Use `build_base(name)` for a new scene or `rebuild_base(name)` to refresh it.
@@ -115,13 +97,14 @@ seals have separate seats, and pipe ends stop behind them. Icons are refreshed. 
 still needs an in-game reload and visual check.
 
 The thermal design is the sole playable **Arcane Reactor**, with standalone and
-Brayton modes. Manifold deployment accepts native export rounding and reports
-cooldown or motor-power interlocks. Reactor connection guidance appears only
-in settled Brayton mode while construction/connections are incomplete. Its subtype remains `ArcanePower_Thermal_ReactorHousing` so existing
-thermal builds retain their identity. The original `ArcanePower_ReactorPrototype`
-definition is archived in `assets/definitions/`, outside the mod; its blends and
-native validation baselines remain available outside the mod. Existing grids using that removed
-prototype subtype need the current reactor placed in its stead.
+Brayton modes. Standalone accepts Aether only; Brayton needs at least one advanced
+controller. The [construction guide](THERMAL-CONSTRUCTION.md) covers mode changes
+and controller-loss recovery; [runtime ownership](THERMAL-RUNTIME.md) describes
+server interlocks and retained heat. Its subtype remains
+`ArcanePower_Thermal_ReactorHousing`. The original `ArcanePower_ReactorPrototype`
+definition is archived in `assets/definitions/`, outside the mod, with its blends
+and native validation baselines retained. Grids using that removed prototype
+subtype need the current reactor placed in its stead.
 
 Native motion repair, 17 October: thermal moving meshes now use the same native
 axes as their identity-oriented dummies and runtime poses. This fixes reversed
@@ -241,6 +224,8 @@ The terminal **Security mode** switch defaults to **On**: losing the vent route 
 
 [VentSession.cs](src/Data/Scripts/ArcanePower/VentSession.cs) provides a **Vent reactor** terminal button and `ArcanePower_StartVent` / `ArcanePower_ToggleVent` actions. Commands use secure messages with server-side ownership/access validation. The server owns motion state, sends snapshots every 30 ticks and persists state in mod storage. These paths are implemented, not yet confirmed in a live multiplayer/save-load session.
 
+## Fuel selection and controllers
+
 [Reactor.cs](src/Data/Scripts/ArcanePower/Reactor.cs) enforces two functional controllers and available ring capacity. [Reactor.Fuel.cs](src/Data/Scripts/ArcanePower/Reactor.Fuel.cs) now selects and consumes actual fuel tiers:
 
 | Fuel | Minimum controller ring capacity | Colour | Rated output |
@@ -249,7 +234,7 @@ The terminal **Security mode** switch defaults to **On**: losing the vent route 
 | Helion | 3 | Amber | 100,000 MW |
 | Empyrean | 4 | Violet | 1,000,000 MW |
 
-The highest compatible fuel present is selected only while Off, vent Idle and output zero, then locked through operation/shutdown. Each filled canister holds 10 fuel units: 10 ideal full-load minutes, or **8/9/9.9 minutes** with controller tiers 1/2/3. Consumption divides by controller efficiency and falls with demand. Native inventory amounts include the remaining fraction of a canister; telemetry labels stock and burn in canisters. Refineries retain base yields of 0.1%/0.01%/0.001% for Aether/Helion/Empyrean concentrates.
+The highest mode- and controller-compatible fuel present is selected only while Off, vent Idle, output zero and thermally cold, after outstanding heat charges are accounted. Fuel stays locked through operation/shutdown. Standalone selection and automatic conveyor replenishment are limited to Aether; higher-tier canisters may remain stored for later Brayton use. Each filled canister holds 10 fuel units: 10 ideal full-load minutes, or **8/9/9.9 minutes** with controller tiers 1/2/3. Consumption divides by controller efficiency and falls with demand. Native inventory amounts include the remaining fraction of a canister; telemetry labels stock and burn in canisters. Refineries retain base yields of 0.1%/0.01%/0.001% for Aether/Helion/Empyrean concentrates.
 
 Craft an **Aether Containment Canister (Empty)** in a full assembler, then fill
 or upgrade it through the existing fuel chain:
@@ -275,6 +260,24 @@ Four **Standard Containment Tiles** now cost 20 iron, 8 cobalt, 4 silver and
 and lifetime by 10 and 100 respectively. Normal assembler efficiency applies.
 A Standard 80-tile shell costs 40 platinum ingots and 80 superconductors before
 assembler efficiency, alongside the other materials. All grades support all fuels.
+
+**Aether Residuum** is recovered directly from paid T1 fuel consumption in either
+mode: **10 one-kilogram units per canister**. Fractional recovery survives saves;
+full inventories retain pending credit. The reactor exports it to accessible,
+connected inventories when conveyors are enabled. It has no assembler recipe.
+Upgraded turbines require **20 units** each; upgraded atmospheric coolers,
+space radiator bases and extension panels require **10 units** each. This material
+is their critical construction component. Empyrean heat requires upgraded turbines;
+adding standard turbines cannot bypass that requirement.
+
+Standard coolers reject **10 GW per unit/panel**, upgraded versions **100 GW**.
+Three-panel radiator stacks provide **30 GW / 300 GW** under ideal exposure;
+mixed stacks sum each panel's rating. Atmosphere, blockage and solar exposure still
+reduce rejection. Each of four Aether circuits receives up to 6.25 GWth and needs
+3.75 GW rejection at 40% conversion. Give each circuit its own standard cooler or
+radiator connection; a single circuit can operate at one quarter of full capacity.
+Empyrean supplies ten times Helion's heat; upgraded turbines support its existing
+2.5 TWth throughput without another multiplier on top of that rating.
 
 Native `FuelInfos` is empty because multiple native entries represent concurrent inputs rather than alternative fuels. The mod allows all three fuels in its inventory, maintains native energy capacity for the selected fuel and consumes it explicitly. Conveyor replenishment uses public inventory transfers with conveyor reachability and access checks.
 

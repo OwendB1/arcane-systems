@@ -151,6 +151,15 @@ def write_catalog(root):
     """One public pipe family, with asset-sharing aliases for saved grids."""
     blocks=root.find('CubeBlocks')
     names={CONTRACT['subtype'](name):name for name in CONTRACT['PLAYABLE']}
+    for name,base in CONTRACT['COOLER_UPGRADES'].items():
+        ident=CONTRACT['subtype'](name)
+        for previous in list(blocks):
+            if previous.findtext('Id/SubtypeId')==ident:blocks.remove(previous)
+        source=next(b for b in blocks if b.findtext('Id/SubtypeId')==CONTRACT['subtype'](base))
+        block=copy.deepcopy(source)
+        for key,value in {'Id/SubtypeId':ident,'BlockPairName':ident,'DisplayName':'Arcane '+name,
+                'Icon':'Textures/GUI/Icons/ArcanePower/Thermal/'+ident+'.dds'}.items():set_text(block,key,value)
+        blocks.append(block)
     for block in list(blocks):
         if block.findtext('Id/SubtypeId') not in names:blocks.remove(block)
     canonical={block.findtext('Id/SubtypeId'):block for block in blocks}
@@ -164,6 +173,12 @@ def write_catalog(root):
     for ident,block in canonical.items():
         name=names[ident]
         set_text(block,'Description',description(name))
+        components=block.find('Components')
+        for component in list(components):
+            if component.get('Subtype')=='ArcaneAetherResiduum':components.remove(component)
+        if name.endswith('upgraded'):
+            ET.SubElement(components,'Component',Subtype='ArcaneAetherResiduum',Count='20' if name.startswith('Brayton train') else '10')
+            critical=block.find('CriticalComponent');critical.set('Subtype','ArcaneAetherResiduum');critical.set('Index','0')
         if ' / ' in name:
             shape=name.split(' / ')[1].removesuffix(' bare')
             style='Bare' if name in CONTRACT['BARE_PIPES'] else 'Manifold'
@@ -191,24 +206,25 @@ def trim_native_manifest(report):
     report['native_models']={stem:row for stem,row in report['native_models'].items()
                              if not any(stem.startswith(prefix) for prefix in prefixes)}
     rows=report['native_models'].values()
-    report.update(blocks=len(CONTRACT['PLAYABLE']), compatibility_aliases=len(CONTRACT['PIPE_ALIASES']),
+    report.update(blocks=len(CONTRACT['PLAYABLE'])-len(CONTRACT['COOLER_UPGRADES']), compatibility_aliases=len(CONTRACT['PIPE_ALIASES']),
                   native_meshes=len(report['native_models']),
                   construction_models=sum(row['type']=='bs' for row in rows),
                   lod_models=sum(row['type']=='lod' for row in rows))
 
 
 def description(name):
-    if name=='Atmospheric cooler':
-        return 'Airtight hull casing with rear cooling manifold. Only front fan guards project beyond surrounding armor. Keep 2.5 m clear beyond both exhaust fans: half-clear exhaust gives 25% cooling; fully blocked exhaust gives none. Requires atmosphere and powered circulation.'
+    base=CONTRACT['COOLER_UPGRADES'].get(name,name)
+    if base in CONTRACT['COOLER_UPGRADES'].values():
+        rating='100 GW' if name.endswith('upgraded') else '10 GW'
+        detail={'Atmospheric cooler':'Airtight hull casing, rear manifold. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires atmosphere and powered circulation.',
+                'Space radiator':'Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Stack up to two aligned panels on the same grid. Mixed tiers add their own cooling. Keep both faces exposed to space.',
+                'Radiator panel':'Attach directly above a radiator or its first extension on the same grid. Each panel has its own solar exposure: 100% cooling in shade or edge-on, 50% in full sun. Shares base rotation; maximum two extensions. Unattached panels provide no cooling.'}[base]
+        return rating+' ideal heat rejection per unit/panel. '+detail+(' Requires 10 Aether Residuum recovered from T1 fuel.' if name.endswith('upgraded') else '')
     if name=='Reactor housing':
-        return 'Internal CO2 generation. Standalone: 20% net. Brayton: 40% starter, up to 78% with turbine tier and cooling. Branch turbines and coolers from one shared duplex pipe network; align H/C on every face. Two containment controllers and a working vent route required. Stop and cool before changing mode.'
+        return 'Internal CO2 generation. Standalone: Aether only, 20% net. Helion and Empyrean require Brayton to prevent meltdown. At least one fully built, functional advanced controller unlocks Brayton. Up to 40% starter / 78% exotic conversion. Four independent manifold circuits, one turbine plus cooling each; each supplies up to 25% capacity. Circuit loss isolates that manifold; last-circuit loss latches shutdown. Align H/C and cap unused pipe mouths. Two controllers and a working vent route required. Stop and cool before changing mode.'
     if name.startswith('Brayton train'):
-        return '2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket on a shared network with the reactor and coolers. Turbines connect as parallel branches. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.'
-    if name=='Space radiator':
-        return 'Bottom cooling socket and full-cell pedestal. Panels automatically track edge-on to the sun. Stack up to two Radiator Panel blocks directly above, aligned on the same grid, for up to triple cooling. Keep both faces open to space. Faint red-orange glow shows actual heat rejection.'
-    if name=='Radiator panel':
-        return 'Passive radiator extension. Stack directly above a Space Radiator or its first extension, with matching orientation on the same grid. Up to three panels share one rotating axis and coolant loop. Unattached or excess panels provide no cooling.'
-    return 'Shared CO2 supply/return pipe for reactor, turbines and coolers on one physical grid. Align H to H and C to C on every socket face; cap unused sockets. Ordinary conveyors do not replace thermal pipes.'
+        return ('Requires 20 Aether Residuum; compatible with T3 Empyrean heat. ' if name.endswith('upgraded') else 'T1/T2 fuels only; T3 Empyrean requires upgraded turbines. ') + '2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.'
+    return 'CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.'
 
 
 def variant_groups(blocks):

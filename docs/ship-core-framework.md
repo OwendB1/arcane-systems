@@ -223,11 +223,22 @@ The no-core file and normal core files use the same schema. Manifest groups and 
 | `MaxMass` | `float` | Maximum allowed total group mass. | Uses full-definition dry block mass; inventory and construction progress are ignored. New blocks are removed if they exceed this. Negative disables. |
 | `MaxPCU` | `int` | Maximum allowed total group PCU. | New blocks are removed if they exceed this. Negative disables. |
 | `MaxPerFaction` | `int` | Fixed cap on how many groups of this core a faction may own. | `-1` disables fixed faction cap. |
-| `FactionPlayersNeededPerCore` | `int` | Player-scaled faction cap. | `N` means one allowed core per `N` faction members. If combined with `MaxPerFaction`, runtime uses the lower of the two caps. |
+| `MinPerFaction` | `int` | Minimum allowance when using the player-scaled faction cap. | Defaults to `0`; non-positive values add no floor. Applies only when `FactionPlayersNeededPerCore` is positive. `MaxPerFaction` remains a hard ceiling. This does not require a faction to build any cores or bypass `MinPlayers`, rank, player, or manifest limits. |
+| `FactionPlayersNeededPerCore` | `int` | Player-scaled faction cap. | Positive `N` allows `max(MinPerFaction, floor(faction players / N))` cores. Non-positive disables scaling. If combined with `MaxPerFaction`, runtime uses the lower of the two caps. |
 | `MinFactionRank` | `None`, `Member`, `Leader`, `Founder` | Minimum grid majority-owner faction rank required to place this core. | Optional, defaults to `None`. Invalid placement is rejected and refunded before the core activates or counts against faction limits. |
 | `MaxPerPlayer` | `int` | Cap on how many groups of this core a single player may own. | Negative disables. |
 | `MinPlayers` | `int` | Minimum faction member count required for this core. | If set and owner has no faction, placement is rejected. Negative disables. |
 | `MaxPlayers` | `int` | Maximum faction member count allowed for this core. | If faction is larger than this, placement/punishment gates fail. Negative disables. |
+
+To allow one core per three faction players while allowing small factions their first core:
+
+```xml
+<MinPerFaction>1</MinPerFaction>
+<FactionPlayersNeededPerCore>3</FactionPlayersNeededPerCore>
+<MaxPerFaction>-1</MaxPerFaction>
+```
+
+Factions with 1–5 players may own one core, 6–8 players two, and so on. A faction is still required; leave `MinPlayers` disabled (the default) if small factions should qualify.
 
 ### Upgrade-module allowance field
 

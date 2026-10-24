@@ -35,7 +35,7 @@ namespace ShipCoreFramework
         /// Increment when you add functionality in a backwards compatible way.
         /// Minor version changes remain compatible as long as the major version matches.
         /// </summary>
-        public const int API_MINOR = 6;
+        public const int API_MINOR = 7;
 
         /// <summary>
         /// Encoded API version (Major.Minor) packed into a single int.
@@ -474,6 +474,7 @@ namespace ShipCoreFramework
         [ProtoMember(40)] public float PowerOverclockDuration = 10f;
         [ProtoMember(41)] public float PowerOverclockCooldown = 60f;
         [ProtoMember(42)] public float PowerOverclockDamagePerSecond;
+        [ProtoMember(43)] public int MinPerFaction;
     }
 
     [ProtoContract]

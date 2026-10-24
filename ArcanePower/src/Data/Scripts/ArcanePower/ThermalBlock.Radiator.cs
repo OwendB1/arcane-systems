@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Sandbox.Game;
+using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using VRage.Game.Entity;
 using VRageMath;
@@ -15,7 +16,11 @@ namespace ArcanePower
         internal ThermalBlock RadiatorBase;
         internal readonly List<ThermalBlock> RadiatorPanels = new List<ThermalBlock>();
         internal double PanelCoolingMW;
-        internal double EffectiveRatingMW { get { return Spec.RatingMW * (1 + RadiatorPanels.Count); } }
+        private List<VRage.Game.ModAPI.IHitInfo> solarHits;
+        internal double EffectiveRatingMW
+        {
+            get { double total = Spec.RatingMW; foreach (var panel in RadiatorPanels) total += panel.Spec.RatingMW; return total; }
+        }
         internal bool IsRadiator { get { return Spec.Kind == ThermalKind.Radiator || Spec.Kind == ThermalKind.RadiatorPanel; } }
 
         internal void ReceiveRadiator(ThermalRadiatorState state)
@@ -52,7 +57,7 @@ namespace ArcanePower
                 else { state.Target = state.Angle; state.RejectedMW = 0; state.Exposure = 0; }
                 double ownRejection = Spec.Kind == ThermalKind.Radiator
                     ? (coolingMW > 0 ? state.RejectedMW * PanelCoolingMW / coolingMW : 0) : state.RejectedMW;
-                state.Glow = ThermalRadiators.HeatGlow(state.Glow, ownRejection, Spec.RatingMW * .6, 1.0 / 60);
+                state.Glow = ThermalRadiators.HeatGlow(state.Glow, ownRejection, Spec.CoolingMW, 1.0 / 60);
                 state.Sequence++;
                 radiatorVisualAngle = state.Angle;
             }
@@ -76,12 +81,21 @@ namespace ArcanePower
 
         private double RadiatorCooling(double density)
         {
-            double total = PanelCooling(density, Store.Radiator.Angle);
-            foreach (var panel in RadiatorPanels) total += panel.PanelCooling(density, Store.Radiator.Angle);
+            Vector3D sun = MyVisualScriptLogicProvider.GetSunDirection();
+            // Native grid eclipse state only updates for registered solar blocks.
+            // Check the same planetary shadows even on a radiator-only grid.
+            var planets = new List<VRage.ModAPI.IMyVoxelBase>();
+            MyAPIGateway.Session.VoxelMaps.GetInstances(planets, voxel => voxel is MyPlanet);
+            bool shadow = false;
+            foreach (MyPlanet planet in planets)
+                if (ThermalRadiators.PlanetShadow(Block.CubeGrid.GetPosition() - planet.PositionComp.GetPosition(), planet.AverageRadius, sun))
+                { shadow = true; break; }
+            double total = PanelCooling(density, Store.Radiator.Angle, sun, shadow);
+            foreach (var panel in RadiatorPanels) total += panel.PanelCooling(density, Store.Radiator.Angle, sun, shadow);
             return total;
         }
 
-        private double PanelCooling(double density, double angle)
+        private double PanelCooling(double density, double angle, Vector3D sun, bool shadow)
         {
             var state = Store.Radiator;
             if (state == null) return 0;
@@ -98,9 +112,41 @@ namespace ArcanePower
                         if (!MyAPIGateway.Physics.CastRay(from, from + normal * (sign * 250), out hit)) visible++;
                     }
             state.Exposure = visible / 8.0;
-            state.SunIncidence = ThermalMath.Clamp(Math.Abs(Vector3D.Dot(normal, MyVisualScriptLogicProvider.GetSunDirection())), 0, 1);
-            PanelCoolingMW = ThermalRadiators.Cooling(Spec.RatingMW * .6, state.Exposure, density > .001 ? 25 : -270.15, state.SunIncidence);
+            var planet = MyGamePruningStructure.GetClosestPlanet(Block.GetPosition());
+            shadow |= planet != null && MyVisualScriptLogicProvider.IsOnDarkSide(planet, Block.GetPosition());
+            double cosine = Vector3D.Dot(normal, sun);
+            int lit = 0;
+            if (!shadow && Math.Abs(cosine) > .000001)
+            {
+                // Vanilla solar logic: eight pivots, sun-facing side, 100 m
+                // rays on layer 15; ignore this block, not the rest of its grid.
+                // Use the moving panel frame rather than the pedestal frame.
+                foreach (double x in new[] { -2.35, -.85, .85, 2.35 })
+                    foreach (double height in extension ? new[] { -1.02, .98 } : new[] { 1.6, 3.6 })
+                    {
+                        Vector3D pivot = panel.Translation + normal * (cosine >= 0 ? .26 : -.26) + right * x + up * height;
+                        if (SolarPivotLit(pivot, sun)) lit++;
+                    }
+            }
+            state.SunIncidence = ThermalRadiators.SolarExposure(cosine, lit / 8.0,
+                MyAPIGateway.Session.WeatherEffects.GetSolarMultiplier(Block.GetPosition()), shadow);
+            PanelCoolingMW = ThermalRadiators.Cooling(Spec.CoolingMW, state.Exposure, density > .001 ? 25 : -270.15, state.SunIncidence);
             return PanelCoolingMW;
+        }
+
+        private bool SolarPivotLit(Vector3D pivot, Vector3D sun)
+        {
+            if (solarHits == null) solarHits = new List<VRage.Game.ModAPI.IHitInfo>();
+            solarHits.Clear();
+            Vector3D far = pivot + sun * 100;
+            MyAPIGateway.Physics.CastRay(pivot, far, solarHits, 15);
+            foreach (var hit in solarHits)
+            {
+                if (hit.HitEntity != Block.CubeGrid) return false;
+                Vector3I? cell = Block.CubeGrid.RayCastBlocks(far, pivot);
+                if (cell.HasValue && Block.CubeGrid.GetCubeBlock(cell.Value) != Block.SlimBlock) return false;
+            }
+            return true;
         }
 
         internal void InvalidateRadiatorCooling() { environmentAt = -1000; }

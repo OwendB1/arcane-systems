@@ -67,7 +67,7 @@ The base and roof have a 6.24 m radius inside the 12.5 m square footprint. Nativ
 
 The roof's common ceiling is Blender Z=3.750 m. Backing, plates, decals and rims end at 3.746, 3.748, 3.749 and 3.750 m respectively. This seats the complete rounded housing under blocks above it while retaining visible panel relief when uncovered. The widening pass cuts actual skin openings for the top/bottom hatches; a detector behind an uncut housing would not make the panel accessible. Roof seating.
 
-`four_inventory_ports.py` is an intermediate authoring stage, superseded on its left/right faces by `integrate_base_upgrades.py`. Local Blender QA passed: main and ten collision bodies fit within ±6.25 m XY and ±3.75 m Z; the latest expanded set of 46 rays across six interfaces hits the native hatch/frame faces before surrounding housing, and all 24 deck plates face upward; four conveyor and two upgrade detectors match their expected positions. Expanded barrel skins needed actual recess cuts to clear the fixed port faces. The earlier MWM/Havok source export passed after the spherical-field fix; no MWM error was reported. SEUT still emitted its existing root-empty W005 warning. SBC parsing and the C# solution build passed, with zero C# warnings/errors. That earlier housing-stage model was not deployed or checked in game. [Local check script](assets/check_prototype.py), recorded geometry evidence (report pruned). These checks do not prove game interaction or physics.
+`four_inventory_ports.py` is an intermediate authoring stage, superseded on its left/right faces by `integrate_base_upgrades.py`. Local Blender QA passed: main and ten collision bodies fit within ±6.25 m XY and ±3.75 m Z; the latest expanded set of 46 rays across six interfaces hits the native hatch/frame faces before surrounding housing, and all 24 deck plates face upward; four conveyor and two upgrade detectors match their expected positions. Expanded barrel skins needed actual recess cuts to clear the fixed port faces. The earlier MWM/Havok source export passed after the spherical-field fix; no MWM error was reported. SEUT still emitted its existing root-empty W005 warning. SBC parsing and the C# solution build passed, with zero C# warnings/errors. That earlier housing-stage model was not deployed or checked in game. The superseded four-hatch check script and its generated report have been pruned. These checks do not prove game interaction or physics.
 
 The trunk-removal pass removes all four original radial trunk meshes. The native conveyor frames remain at their grid faces. Thin upgrade adapter plates used at that stage have since been replaced by curved surrounds. The earlier local 30-ray visibility and bounds checks passed after removal; the later 46-ray check also samples frame edges. See remove_radial_trunks.py. This revision is Blender/export only.
 
@@ -87,7 +87,7 @@ The housing's XY-only widening also stretched the faceted field into an oval. Th
 
 The inside-out deck appearance was a mesh-winding error: all 24 deck plates had negative signed volume and their top-face normals pointed down. The shared annulus helper generated inward-facing surfaces from its cross-section order. It now reverses each generated face once; both full-ring and partial-sector checks produced positive signed volume with upward top normals.
 
-repair_surface_orientation.py migrates already-built closed solids by reversing faces only when every edge is manifold and signed volume is negative. The observed repair changed 87 generated solids across the main reactor and both ring scenes. Deliberately two-sided glass and other open meshes are not processed; native/open meshes were not changed in this migration. Regenerated geometry uses the corrected helper. [check_prototype.py](assets/check_prototype.py) now explicitly requires upward-facing top surfaces on all 24 deck plates; the migration separately asserts positive signed volume after each reversal.
+repair_surface_orientation.py migrates already-built closed solids by reversing faces only when every edge is manifold and signed volume is negative. The observed repair changed 87 generated solids across the main reactor and both ring scenes. Deliberately two-sided glass and other open meshes are not processed; native/open meshes were not changed in this migration. Regenerated geometry uses the corrected helper. The now-retired prototype check required upward-facing top surfaces on all 24 deck plates; the migration separately asserts positive signed volume after each reversal.
 
 ## Conveyor openings follow the native frame
 
@@ -195,7 +195,7 @@ Core phases are Off, Starting, Running and Stopping. The base startup spans 1,17
 
 Vent opening closes the shield over 240 ticks and then opens the intake over 90. Stop closes the intake over 90 ticks, waits for Core Off, and retracts the shield over 240. Native generation is disabled through venting/shutdown and restart remains interlocked. This is only the requested internal mechanism: ducts, exterior outlet, pressure simulation and heat removal are absent; actual discharge is reported as zero.
 
-[build_intake_vanes.py](assets/build_intake_vanes.py) authors 32 radial vane instances sharing one MWM. Their hinge radius is 1.5125 m at Blender Z=2.49 m; they rotate 80 degrees about local X, below a plenum floor at Z=2.70 m. Main and vane exports finished. No new Blender timeline or regression suites were run.
+The retired intake-vane builder authored 32 radial vane instances sharing one MWM; the later lined vent passage replaced them, and its obsolete builder has been removed. Their hinge radius is 1.5125 m at Blender Z=2.49 m; they rotate 80 degrees about local X, below a plenum floor at Z=2.70 m. Main and vane exports finished. No new Blender timeline or regression suites were run.
 
 [VentSession.cs](src/Data/Scripts/ArcanePower/VentSession.cs) adds a terminal switch and StartVent/StopVent/ToggleVent actions prefixed `ArcanePower_`. Secure commands are validated against player access on the authoritative server; snapshots are sent every 30 ticks. State persists in ModStorage under GUID `d85a5399-b527-45ac-bcc0-aa1c442b2710`. These are implemented paths, with live synchronization, save/load and rendering still unconfirmed.
 
@@ -563,3 +563,25 @@ The plasma compiler now versions the existing DDS bytes instead of automatically
 reconverting PNG authoring maps, so cache refresh cannot silently undo the chosen
 look. New model/texture paths force a fresh load on the next world reload. Earlier
 reactive/solar notes above describe superseded experiments, not current behavior.
+
+Reactor isolation uses native seat/gate subparts loaded by `ThermalIsolationVisuals`;
+package dependency scanning must include explicit C# MWM paths. Canonical SEUT
+subparts use Blender (X, Z, -Y), with an identity gate dummy. Tiny emissive chamfers
+need expanded UV islands to survive packed half precision. Check compiled triangle
+UVs and every reactor mount/pose; unused pipe-family valve samples add no coverage.
+
+Radiator solar load follows SE's two-sided solar output: absolute normal/sun dot
+product times the lit-pivot fraction and native solar weather multiplier. Clamp
+exposure to 0–1, then use `1 - 0.5 * exposure` for cooling. Sample the rotating
+panel frame on the sun-facing side; the opposite dark face is not another sample
+set. Native grid eclipse state only updates when a solar occludable is registered,
+so radiator-only grids need the equivalent planetary-shadow calculation. Keep
+clearance to space separate from sunlight: shade must not bypass enclosure.
+
+
+Remove reactor nodes from hydraulic traversal to prevent cross-linked roots
+sharing charge or output. Keep initial filling distinct from loss of the last
+operating circuit, and permit paid refill for cooldown while off. Membership
+changes reset only their circuit. Preserve full-rating core capacities and the
+existing retained-waste/125% critical path when circuits disappear. Shared starter/
+room layouts remain migration fixtures. See [runtime ownership](THERMAL-RUNTIME.md).

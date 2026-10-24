@@ -51,10 +51,11 @@ def budget(offered_mw,stage='base',cooling_mw=None,cold_c=45,hot_c=None,
     reference_carnot=1-(45+273.15)/(required_hot+273.15)
     factor=min(1,max(0,1-cold_k/hot_k)/reference_carnot)
     gross_ratio*=factor
-    bank_factor=0 if duty_trains<=0 else .2+.2*min(4,duty_trains)
-    efficiency=max(0,gross_ratio-aux_ratio)*bank_factor
+    if type(duty_trains) is not int or not 0<=duty_trains<=4:raise ValueError('Use zero through four independent circuits')
+    bank_factor=duty_trains/4
+    efficiency=max(0,gross_ratio-aux_ratio)
     gross_ratio=efficiency+aux_ratio
-    accepted=offered_mw if efficiency>0 else 0
+    accepted=offered_mw*bank_factor if efficiency>0 else 0
     if flow_capacity_mw is not None:accepted=min(accepted,flow_capacity_mw)
     gross=accepted*gross_ratio;aux=accepted*aux_ratio
     net=gross-aux;rejected=accepted-net;unaccepted=offered_mw-accepted
@@ -64,7 +65,7 @@ def budget(offered_mw,stage='base',cooling_mw=None,cold_c=45,hot_c=None,
                 unaccepted_heat_mw=unaccepted,gross_mw=gross,auxiliary_mw=aux,
                 net_mw=net,rejected_mw=rejected,net_efficiency=efficiency,
                 hot_c=hot_c,cold_c=cold_c,
-                bank_efficiency_factor=bank_factor,
+                available_loop_fraction=bank_factor,
                 sustainable_net_mw=net if cooling_mw is None else min(accepted,cooling_mw/(1-efficiency))*efficiency,
                 cooling_deficit_mw=0 if cooling_mw is None else max(0,rejected-cooling_mw),
                 equipment_efficiency_ceiling=ceiling)
@@ -79,21 +80,21 @@ def bank(offered_mw,trains=1,coolers=1,stage='base',
     counts=dict(trains=trains,coolers=coolers)
     for name,count in counts.items():
         if type(count) is not int or count<0:raise ValueError(name+' must be a non-negative integer')
+    if trains>4:raise ValueError('Exactly one turbine per manifold; at most four turbines')
     def point(installed):
         cooling,cold=cooling_capacity(environment,cooler_rating_mw*installed['coolers'],density,ambient_c,sky_view,sink_c)
-        duty=min(installed['trains'],max(4,math.ceil(offered_mw/100))) if offered_mw>0 and installed['coolers'] else 0
+        duty=min(installed['trains'],installed['coolers']) if offered_mw>0 else 0
         row=budget(offered_mw,stage,cooling,cold,flow_capacity_mw=duty*100,duty_trains=duty)
         limits={'heat supply':offered_mw,'train capacity':duty*100}
         smallest=min(limits.values())
-        row.update(duty_trains=duty,standby_trains=installed['trains']-duty,
+        row.update(duty_trains=duty,standby_trains=0,
                    installed=installed,available_cooling_mw=cooling,
                    bottlenecks=[name for name,limit in limits.items() if math.isclose(limit,smallest,abs_tol=1e-8)],
                    cooling_safe=row['cooling_deficit_mw']<=1e-8)
         return row
     result=point(counts)
-    losses={name:point(dict(counts,**{name:count-1}))['net_mw'] for name,count in counts.items() if count}
-    result['single_module_loss_net_mw']=losses
-    result['guaranteed_single_module_loss_net_mw']=min([result['net_mw']]+list(losses.values()))
+    duty=result['duty_trains']
+    result['single_circuit_loss_net_mw']=result['net_mw']*(duty-1)/duty if duty else 0
     return result
 
 
@@ -105,25 +106,24 @@ def check():
             cases+=1
     assert math.isclose(standalone(100)['net_mw'],20)
     assert math.isclose(standalone(100)['rejected_mw'],80)
-    assert math.isclose(bank(200,2,2)['net_mw'],48)
-    assert math.isclose(bank(200,trains=2)['net_mw'],48)
-    assert bank(200,trains=2)['cooling_deficit_mw']>0
-    resilient=bank(200,5,3)
-    assert resilient['standby_trains']==1
-    assert math.isclose(resilient['guaranteed_single_module_loss_net_mw'],80)
-    assert bank(100)['guaranteed_single_module_loss_net_mw']==0
+    assert math.isclose(bank(200,2,2)['net_mw'],40)
+    assert math.isclose(bank(200,trains=2)['net_mw'],20)
+    assert bank(200,trains=2,cooler_rating_mw=20)['cooling_deficit_mw']>0
+    resilient=bank(200,4,4)
+    assert math.isclose(resilient['single_circuit_loss_net_mw'],60)
+    assert bank(100)['single_circuit_loss_net_mw']==0
     for key in ('trains','coolers'):
         assert bank(100,**{key:0})['net_mw']==0
     assert bank(100,environment='atmosphere',density=0)['sustainable_net_mw']==0
     assert bank(100,environment='atmosphere',density=0)['duty_trains']==1
     assert bank(100,environment='atmosphere',density=.2)['cooling_deficit_mw']>0
-    assert bank(100,ambient_c=60)['net_mw']<16
-    assert math.isclose(bank(100,environment='space')['net_mw'],16)
+    assert bank(100,ambient_c=60)['net_mw']<10
+    assert math.isclose(bank(100,environment='space')['net_mw'],10)
     assert bank(100,environment='space',sky_view=0)['sustainable_net_mw']==0
     assert bank(100,environment='space',sink_c=35)['sustainable_net_mw']==0
     assert bank(100,environment='space',sink_c=25)['cooling_deficit_mw']>0
-    for count in range(1,6):
-        assert math.isclose(bank(100,count,2,stage='exotic')['net_mw'],78*min(1,.2+.2*count))
+    for count in range(1,5):
+        assert math.isclose(bank(100,count,count,stage='exotic')['net_mw'],78*count/4)
     assert budget(100,cold_c=650)['accepted_heat_mw']==0
     outputs=[bank(q,2,3)['net_mw'] for q in (99,100,101,110,120,200)]
     assert outputs==sorted(outputs),'Automatic dispatch must not reduce power as more heat becomes available'
@@ -136,7 +136,7 @@ def check():
     try:budget(100,'exotic',hot_c=650)
     except ValueError:pass
     else:raise AssertionError('Upgrade temperature gate bypassed')
-    for count in (-1,1.5,True):
+    for count in (-1,1.5,True,5):
         try:bank(100,trains=count)
         except ValueError:pass
         else:raise AssertionError('Invalid module count accepted')
@@ -162,4 +162,4 @@ if __name__=='__main__':
                                    args.cooler,args.cooling_mw,args.density,args.ambient_c,args.sky_view,args.sink_c),
                       'examples':{'starter':bank(100),'improved':bank(100,stage='improved'),
                                   'premium':bank(100,stage='exotic'),
-                                  'parallel':bank(200,4,2),'redundant':bank(200,5,3)}},indent=2))
+                                  'four_circuits':bank(200,4,4),'three_circuits':bank(200,3,3)}},indent=2))

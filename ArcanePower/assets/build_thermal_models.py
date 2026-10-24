@@ -19,7 +19,7 @@ from mathutils import Matrix, Vector
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT/'validation/thermal-models'
 FILE = ROOT/'assets/arcane-thermal-models.blend'
-BUILD = runpy.run_path(str(ROOT/'assets/build_thermal_concepts.py'))
+BUILD = runpy.run_path(str(ROOT/'assets/thermal_parts.py'))
 CONTRACT = runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))
 SPECS = CONTRACT['SPECS']
 COLS = importlib.import_module('space-engineers-utilities.seut_collections')
@@ -268,23 +268,9 @@ def pipe_frame(p):
                 p.box('flange load gusset', Vector(port['position'])-n*.25+u*(a*.79)+up*(b*.79), (.30, .30, .30), 'Metal_Dull', .018)
 
 
-def heat_tap(p):
-    """Upper side collector; does not reuse or obstruct native upgrade sockets."""
-    p.box('collector chassis', (0, 0, -.08), (1.90, 1.80, 1.98), 'PaintedMetal_Colorable', .04)
-    p.box('reactor contact spreader', (-1.18, 0, -.08), (.14, 2.16, 2.12), 'Metal_Dull', .025)
-    for y in (-.68, .68):
-        for z in (-.72, .58):
-            p.box('collector standoff', (-1.03, y, z), (.22, .26, .26), 'PaintedMetal_Darker')
-    for z in (-.46, .46):
-        p.tube('isolated primary collector leg', ((-.98, 0, z), (1.25, 0, z)), .355, 'Metal_Dull', .075)
-    p.port('primary', (1.25, 0, 0), (1, 0, 0), 'PRIMARY')
-    p.panel('collector service cover', (0, -.93, -.08), (1.64, .10, 1.68))
-    p.col['reactor_installation'] = json.dumps({'reactor_offset': [7.5, 0, 2.5],
-        'contact_face': '-X', 'protected_upgrade_offset': [6.22, 0, -2.33],
-        'integration': 'Mechanical collector only; reactor thermal runtime remains separate'})
-
-
 def build_base(name):
+    if name not in CONTRACT['RUNTIME']:
+        raise ValueError('No current block builder for '+name)
     if 'mirrored' in name:
         return runpy.run_path(str(ROOT/'assets/build_mirrored_train.py'))['build'](name)
     if name == 'Atmospheric cooler':
@@ -316,14 +302,10 @@ def build_base(name):
     elif ' / ' in name:
         pipe_base(p, *name.split(' / '))
     else:
-        base_name = name.removesuffix(' upgraded')
-        fn = {'Brayton train': BUILD['brayton'], 'Primary heater': BUILD['heater'],
-              'Recuperator': BUILD['recuperator'], 'Atmospheric cooler': BUILD['rejector'],
-              'Space radiator': BUILD['radiator']}[base_name]
         if name.endswith(' upgraded'):
-            BUILD['upgraded'](p, fn)
+            BUILD['upgraded'](p)
         else:
-            fn(p)
+            BUILD['brayton'](p)
     row = p.finish()
     if name == 'Reactor housing':
         runpy.run_path(str(ROOT/'assets/refine_thermal_flow.py'))['apply'](name)
@@ -395,6 +377,8 @@ def build_bare_pipe(name):
 
 
 def rebuild_base(name):
+    if name not in CONTRACT['RUNTIME']:
+        raise ValueError('No current block builder for '+name)
     if name == 'Atmospheric cooler':
         return runpy.run_path(str(ROOT/'assets/build_integrated_cooler.py'))['apply']()
     scene, col = scene_for(name), main_for(name)

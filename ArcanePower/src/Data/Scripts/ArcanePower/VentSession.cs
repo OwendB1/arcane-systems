@@ -49,9 +49,13 @@ namespace ArcanePower
             security.Setter = (b, enabled) => SendCommand(b.EntityId, enabled ? VentCommand.SecurityOn : VentCommand.SecurityOff);
             thermalMode = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlOnOffSwitch, IMyReactor>("ArcanePower_ThermalMode");
             thermalMode.Title = MyStringId.GetOrCompute("Brayton mode");
-            thermalMode.Tooltip = MyStringId.GetOrCompute("Standalone: 20% conversion with hidden manifolds. Brayton: reactor connected directly to a turbine train and cooling bank. Changing mode shuts down, drains paid heat, then moves the manifolds under real containment power. Restart manually when settled.");
+            thermalMode.Tooltip = MyStringId.GetOrCompute("Standalone: Aether only, 20% conversion. Brayton requires at least one fully built, functional advanced controller; Helion and Empyrean require Brayton to prevent meltdown. Connect parallel turbines and cooling. Changing mode shuts down, drains heat, then moves the manifolds under containment power. Restart manually when settled.");
             thermalMode.OnText = MyStringId.GetOrCompute("Brayton");
             thermalMode.OffText = MyStringId.GetOrCompute("Standalone");
+            // A lost controller must not prevent requesting safe retraction.
+            // Entering Brayton is independently checked again by the server.
+            thermalMode.Enabled = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.ThermalInitialized
+                && (r.HasAdvancedController() || r.Motion.Thermal.Requested == ThermalMode.Brayton); };
             thermalMode.Getter = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.Motion.Thermal != null && r.Motion.Thermal.Requested == ThermalMode.Brayton; };
             thermalMode.Setter = (b, enabled) => SendCommand(b.EntityId, enabled ? VentCommand.Brayton : VentCommand.Standalone);
             AddAction("ArcanePower_StartVent", "Vent reactor", VentCommand.Start);

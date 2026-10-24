@@ -23,7 +23,7 @@ namespace ArcanePower
         internal ThermalStore Store;
         internal double Efficiency;
         internal double OutputGrantMW;
-        internal double RotorCirculation, RotorHotC = 45;
+        internal double RotorCirculation, RotorCharge, RotorHotC = 45;
         private bool receivedRotor;
         internal long SourceId { get { return Store.SourceId; } set { Store.SourceId = value; } }
         internal double StartupInputMW { get { return startupInput; } }
@@ -113,7 +113,7 @@ namespace ArcanePower
             if (MyAPIGateway.Multiplayer.IsServer)
             {
                 ThermalRotors.Drive(state, Store.HotMJ, Spec.RatingMW, RotorHotC,
-                    RotorCirculation, Healthy, 1.0 / 60);
+                    RotorCirculation, Healthy, 1.0 / 60, RotorCharge);
                 state.Sequence++;
             }
             else if (receivedRotor) ThermalRotors.Advance(state, 1.0 / 60);
@@ -208,7 +208,7 @@ namespace ArcanePower
                 environmentAt = now;
                 var planet = MyGamePruningStructure.GetClosestPlanet(Entity.GetPosition());
                 double density = planet == null ? 0 : planet.GetAirDensity(Entity.GetPosition());
-                double rating = Spec.RatingMW * .6;
+                double rating = Spec.CoolingMW;
                 if (Spec.Kind == ThermalKind.AirCooler)
                 {
                     int clear = 0;
@@ -247,6 +247,10 @@ namespace ArcanePower
             if (MyAPIGateway.Multiplayer.IsServer)
                 info.Append("Stored heat: ").Append((Store.HotMJ + Store.WasteMJ).ToString("N1")).AppendLine(" MJ");
             else info.AppendLine("Heat inventories are server-owned. Use the thermal reactor dashboard for plant diagnostics.");
+            if (Spec.CoolingMW > 0)
+                info.Append("Rated cooling per unit/panel: ").Append((Spec.CoolingMW / 1000).ToString("N0")).AppendLine(" GW (ideal exposure)");
+            if (Spec.Kind == ThermalKind.Train)
+                info.AppendLine(Spec.Grade >= 3 ? "Fuel heat: Aether, Helion or Empyrean" : "Fuel heat: Aether or Helion; Empyrean requires upgraded turbines");
             if (Spec.Kind == ThermalKind.AirCooler)
             {
                 // Clients may inspect local clearance; server Unit() remains
@@ -263,8 +267,9 @@ namespace ArcanePower
                     ? (radiator.ParentId != 0 ? "Attached to radiator axis" : "Inactive: stack above an aligned radiator (maximum two extensions)")
                     : (Healthy ? "Automatic sun tracking: edge-on / " + radiator.Panels + " panel(s)" : "Sun tracking paused"));
                 info.Append("Panel angle: ").Append((radiator.Angle * 180 / Math.PI).ToString("0.0")).AppendLine(" degrees");
-                info.Append("Clear sky: ").Append((radiator.Exposure * 100).ToString("0")).Append("% / sunlight incidence: ")
+                info.Append("Clear sky: ").Append((radiator.Exposure * 100).ToString("0")).Append("% / solar exposure: ")
                     .Append((radiator.SunIncidence * 100).ToString("0")).AppendLine("%");
+                info.Append("Cooling after solar load: ").Append((ThermalRadiators.SolarEfficiency(radiator.SunIncidence) * 100).ToString("0")).AppendLine("% (before clearance/sink limits)");
                 info.Append("Heat dissipated: ").Append(radiator.RejectedMW.ToString("N1")).AppendLine(" MW");
             }
             if (Spec.Kind == ThermalKind.Train && (MyAPIGateway.Multiplayer.IsServer || receivedRotor))
@@ -272,8 +277,8 @@ namespace ArcanePower
                 var rotor = Store.Rotor;
                 info.Append("Visual turbine: ").Append(rotor.Rpm.ToString("0")).Append(" rpm / compressor: ")
                     .Append(rotor.CompressorRpm.ToString("0")).AppendLine(" rpm");
-                info.Append("Operating estimate: ").Append(rotor.PressureMPa.ToString("0.0"))
-                    .Append(" / 8.0 MPa, ").Append(rotor.HotC.ToString("0")).AppendLine(" C (gameplay model)");
+                info.Append("Circuit pressure: ").Append(rotor.PressureMPa.ToString("0.0"))
+                    .Append(" / 22.0 MPa, ").Append(rotor.HotC.ToString("0")).AppendLine(" C (gameplay model)");
             }
         }
 

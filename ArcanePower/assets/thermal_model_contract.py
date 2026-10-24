@@ -59,8 +59,18 @@ SPECS.update({name: SPECS[base] for name, base in BARE_PIPES.items()})
 RETIRED = {'Primary heater', 'Primary heater upgraded', 'Recuperator', 'Recuperator upgraded'}
 PIPE_ALIASES = {name: 'PRIMARY / '+name.split(' / ')[1] for name in SPECS
                 if name.startswith(('CO2_HP / ', 'CO2_LP / '))}
+# Gameplay variants reuse the accepted base geometry, weld stages and LODs.
+COOLER_UPGRADES = {name+' upgraded': name for name in ('Atmospheric cooler', 'Space radiator', 'Radiator panel')}
 RUNTIME = {name: cells for name, cells in SPECS.items() if name not in RETIRED}
+RUNTIME.update({name: SPECS[base] for name, base in COOLER_UPGRADES.items()})
 PLAYABLE = {name: cells for name, cells in RUNTIME.items() if name not in PIPE_ALIASES}
+
+
+def runtime_models(authored):
+    models = {name: dict(spec) for name, spec in authored.items() if name in RUNTIME}
+    for name, base in COOLER_UPGRADES.items():
+        models[name] = dict(authored[base], subtype=subtype(name), geometry_source=base)
+    return models
 
 
 def runtime_circuit(name, circuit):
@@ -183,7 +193,7 @@ def route(start, end, blocked):
 def self_check():
     assert len(ROTATIONS) == 24 and len(SPECS) == len(MACHINES) + 2*len(BARE_PIPES)
     assert len(BARE_PIPES) == 22
-    assert len(PLAYABLE) == 24 and len(PIPE_ALIASES) == 28
+    assert len(PLAYABLE) == 27 and len(PIPE_ALIASES) == 28
     assert all(target in PLAYABLE and SPECS[name] == SPECS[target] for name, target in PIPE_ALIASES.items())
     assert all(SPECS[name] == SPECS[base] == (1, 1, 1) for name, base in BARE_PIPES.items())
     assert len({subtype(n) for n in SPECS}) == len(SPECS)

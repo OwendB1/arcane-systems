@@ -91,6 +91,9 @@ def main():
             raise FileNotFoundError('Unresolved runtime asset: '+value)
 
     for path in sorted(files):
+        if path.suffix == '.cs':
+            # Native meshes explicitly loaded by the runtime are dependencies too.
+            for value in re.findall(r'"(Models/[^"\n]+\.mwm)"', path.read_text()):asset(value)
         if path.suffix != '.sbc': continue
         for node in ET.parse(path).iter():
             asset(node.text or '')

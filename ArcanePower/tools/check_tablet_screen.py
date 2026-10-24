@@ -78,8 +78,8 @@ namespace ArcanePower {
    string[] labels={"Output","Heat","Reserve","Fuel stock","Spare tiles","Vent","Net","Ramp","Containment","Fuel efficiency","Fuel burn","Fuel remaining","Security mode","Integrity","Controllers","Field","Reserve energy","Tile grade","Quartet wear","Replacing","Dismantle at","Tile demand","Tile reserve","Tile stock","Startup tiles","Conveyors","Route","Doors"};
    foreach(string label in labels)report.Rows.Add(new StatusRow{Section="TEST",Label=label,Value=label=="Fuel stock"?"4991.814 units":label=="Tile stock"?"Standard 308 / Reinforced 0 / Advanced 0":"Test reading",Tone="white"});
    if(brayton){
-    string[] coolingLabels={"Duty / standby","Conversion efficiency","Cooling capacity","Cooling required","Returned waste","Startup / cooldown draw"};
-    string[] coolingValues={"4 / 1","78%","15 GW","21 GW at design load","12345678.0 MJ","500 MW"};
+    string[] coolingLabels={"Circuits available","Conversion efficiency","Cooling capacity","Cooling required","Returned waste","Startup / cooldown draw"};
+    string[] coolingValues={"4 / 4 (100% allocation)","78%","15 GW","21 GW at design load","12345678.0 MJ","500 MW"};
     for(int i=0;i<coolingLabels.Length;i++)report.Rows.Add(new StatusRow{Section="POWER",Label=coolingLabels[i],Value=coolingValues[i],Tone="yellow"});
    }
    if(precharging){
@@ -120,7 +120,7 @@ namespace ArcanePower {
       }
      }
      if(report.Brayton && !report.Precharging && page==1){
-      foreach(var label in new[]{"Duty / standby","Conversion efficiency","Cooling capacity","Cooling required","Returned waste"}){
+      foreach(var label in new[]{"Circuits available","Conversion efficiency","Cooling capacity","Cooling required","Returned waste"}){
        Need(sprites.Any(s=>s.Data==label) && lcd.Any(s=>s.Data==label),"both power pages show "+label);
        Need(sprites.Any(s=>s.Data==report.Value(label)) && lcd.Any(s=>s.Data==report.Value(label)),"both power pages show live "+label);
       }

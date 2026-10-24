@@ -423,91 +423,6 @@ def train(p):
     taper['thermal_pressure_wall_m']=.12
 
 
-def heater(p):
-    for post in named(p, 'exchanger corner post'):
-        stretch(post, 2, -3.35, 6.17/6.5)
-    for obj in named(p, 'isolated exchanger vessel')+named(p, 'pressure vessel band'):
-        c = centre(obj)
-        inverse = obj.matrix_world.inverted()
-        factor = 1.02/.75 if 'isolated exchanger vessel' in obj.name else 1.08/.82
-        for vertex in obj.data.vertices:
-            point = obj.matrix_world@vertex.co
-            for axis in (0, 1):
-                point[axis] = math.copysign(1.12, c[axis])+(point[axis]-c[axis])*factor
-            vertex.co = inverse@point
-        obj.data.update()
-        if obj.get('pipe_path'):
-            path = json.loads(obj['pipe_path'])
-            for point in path:
-                for axis in (0, 1):
-                    point[axis] = math.copysign(1.12, c[axis])+(point[axis]-c[axis])*factor
-            obj['pipe_path'] = json.dumps(path)
-            obj['pipe_radius'] *= factor
-            uv = obj.data.uv_layers.active
-            for face in obj.data.polygons:
-                for li in face.loop_indices:
-                    if abs(face.normal.z) > .99:
-                        uv.data[li].uv *= factor
-                    else:
-                        uv.data[li].uv.y *= factor
-    for x in (-1.34, 1.34):
-        hatch = p.panel('top exchanger access', (x, 0, 2.87), (2.60, 4.80, .08), (0, 0, 1))
-        hatch['thermal_detail_role'] = 'pressure service hatch'
-    for sign in (-1, 1):
-        z = sign*.46
-        p.tube('primary isolation valve body', ((-2.94, 0, z), (-2.66, 0, z)),
-               .38, 'Metal_Dull', .10, 32)
-        valve = p.box('primary valve actuator', (-2.80, -.40, z),
-                      (.34, .30, .26), 'PaintedMetal_Darker', .015)
-        p.label(valve, 'H' if sign > 0 else 'C', (-2.80, -.552, z), size=.10)
-    pod(p, (1.55, -2.90, -1.50), .76, .58)
-    for sign in (-1, 1):
-        # Two planes clear the crossing; both ends seat inside the rear posts.
-        y = 2.63+sign*.09
-        a, b = Vector((-2.6, y, sign*2.3)), Vector((2.6, y, -sign*2.3))
-        beam = p.box('rear exchanger diagonal', (a+b)/2, (.16, .16, (b-a).length), 'Metal_Dull', .012)
-        beam.rotation_mode = 'QUATERNION'
-        beam.rotation_quaternion = (b-a).to_track_quat('Z', 'Y')
-        for end in (a, b):
-            post = min(named(p, 'exchanger corner post'),
-                       key=lambda o: (o.location-Vector((end.x, 2.6, 0))).length)
-            p.bolt('rear brace fixing', (end.x, 2.842, end.z), (0, 1, 0), post, .035)
-
-
-def recuperator(p):
-    for obj in named(p, 'counterflow plate'):
-        bpy.data.objects.remove(obj, do_unlink=True)
-    for x in (-1.55, 1.55):
-        for i in range(42):
-            p.box('counterflow plate', (x, 0, -2.4+i*4.8/41),
-                  (2.65, 3.5, .095), 'Metal_Dull', .0015)
-        p.box('plate bank foundation seat', (x, 0, -3.03), (.40, 3.30, .60), 'PaintedMetal_Colorable', .003)
-    clamps = named(p, 'plate bank end clamp')
-    for obj in clamps:
-        for vertex in obj.data.vertices:
-            vertex.co.y *= 4.0/3.7
-        obj.data.update()
-    for x in (-1.55, 1.55):
-        for y in (-1.87, 1.87):
-            for side in (-1, 1):
-                support = min(clamps, key=lambda o: (o.location-Vector((x, 0, side*2.6))).length)
-                nut = p.cylinder('plate stack tie nut', (x, y, side*2.75),
-                                 (x, y, side*2.86), .11, 'Metal_Shiny', 6)
-                nut['thermal_support'] = support.name
-                nut['support_point'] = (x, y, side*2.75)
-                nut['support_axis'] = (0, 0, side)
-    pod(p, (0, -2.17, 2.10), .76, .66)
-    # The concept's rail labels faced inward. Keep identifiers clear of the pod.
-    for obj in list(p.col.objects):
-        if obj.type == 'FONT' and obj.data.body == 'RECUPERATOR / COUNTERFLOW':
-            bpy.data.objects.remove(obj, do_unlink=True)
-    for rail in named(p, 'bank identifier rail'):
-        side = math.copysign(1, rail.location.y)
-        for text, x in (('RECUPERATOR', side*1.65), ('COUNTERFLOW', -side*1.65)):
-            p.label(rail, text, (x, rail.location.y+side*.062, 2.1),
-                    (-side, 0, 0), (0, 0, 1), .13)
-
-
 def cooler(p):
     named(p, 'fan mounting face')[0]['thermal_bore_axis'] = 1
     for obj in list(p.col.objects):
@@ -613,8 +528,7 @@ def geometry(name):
     else:
         manifold_stands(p)
         anchors(p)
-        {'Brayton train': train, 'Primary heater': heater, 'Recuperator': recuperator,
-         'Atmospheric cooler': cooler, 'Space radiator': radiator}[name.removesuffix(' upgraded')](p)
+        {'Brayton train': train, 'Atmospheric cooler': cooler, 'Space radiator': radiator}[name.removesuffix(' upgraded')](p)
     for obj in set(p.col.objects)-before:
         obj['thermal_detail_revision'] = REVISION
     p.scene['thermal_detail_revision'] = REVISION
@@ -679,35 +593,6 @@ def asset_details(p):
         mark(p, compressor, 'Square Vent', (cx, 1.275, M['CONTRACT']['TRAIN_SHAFT_Z']-.45), (-1, 0, 0), (0, 0, 1), .45, 'Atlas3')
         # The generator casing is reshaped by the visibility pass. Project its
         # service marking there, after the inspection aperture is final.
-    elif name == 'Primary heater':
-        for lid in named(p, 'top exchanger access'):
-            mark(p, lid, 'Square Vent', lid.location+Vector((0, -1.35, .042)),
-                 (1, 0, 0), (0, 1, 0), .70, 'Atlas3')
-            for dx in (-.98, .98):
-                mark(p, lid, 'Long Screw Plate', lid.location+Vector((dx, 1.62, .042)),
-                     (1, 0, 0), (0, 1, 0), .23, 'Atlas3')
-        for panel in named(p, 'front service cassette'):
-            x = panel.location.x
-            mark(p, panel, 'Square Vent', (x, -2.832, -.20), (1, 0, 0), (0, 0, 1), .45, 'Atlas3')
-            if x < 0:
-                mark(p, panel, 'Square Vent', (x, -2.832, -1.50), (1, 0, 0), (0, 0, 1), .45, 'Atlas3')
-        for panel in named(p, 'exotic hot end service cassette'):
-            x = panel.location.x
-            mark(p, panel, 'Tech Panel', (x, 2.832, -.58), (-1, 0, 0), (0, 0, 1), .16, 'Atlas3')
-            mark(p, panel, 'Sign Fire Hazard', (x+.63, 2.832, 1.70), (-1, 0, 0), (0, 0, 1), .16)
-    elif name == 'Recuperator':
-        for clamp in named(p, 'plate bank end clamp'):
-            if clamp.location.z > 0:
-                mark(p, clamp, 'Square Vent', clamp.location+Vector((0, 0, .152)),
-                     (1, 0, 0), (0, 1, 0), .62, 'Atlas3')
-        for post in named(p, 'counterflow frame post'):
-            side = math.copysign(1, post.location.y)
-            mark(p, post, 'Long Screw Plate', (post.location.x, side*2.177, 1.15),
-                 (-side, 0, 0), (0, 0, 1), .14, 'Atlas3')
-        for bridge in named(p, 'manifold heat bridge'):
-            side = math.copysign(1, bridge.location.y)
-            mark(p, bridge, 'Panel Line Welded', bridge.location+Vector((0, side*.042, 0)),
-                 (-side, 0, 0), (0, 0, 1), .80, 'Paneling')
     elif name == 'Atmospheric cooler':
         for panel in named(p, 'plenum service cover'):
             for dx in (-.72, .72):

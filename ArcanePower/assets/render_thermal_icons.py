@@ -15,7 +15,9 @@ from mathutils import Vector
 ROOT = Path(__file__).resolve().parents[1]
 COLS = importlib.import_module('space-engineers-utilities.seut_collections')
 MODELS = json.loads((ROOT/'validation/thermal-models/models.json').read_text())
-PLAYABLE = runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))['PLAYABLE']
+CONTRACT = runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))
+PLAYABLE = CONTRACT['PLAYABLE']
+MODELS = CONTRACT['runtime_models'](MODELS)
 FOLDER = ROOT/'assets/icons/thermal'
 SCENE = 'Thermal inventory icon studio'
 badge = runpy.run_path(str(ROOT/'assets/icon_badges.py'))['badge']
@@ -53,7 +55,7 @@ def studio():
 def render(subtype):
     assert Path(bpy.data.filepath).name == 'arcane-thermal-models.blend'
     name = next(name for name, spec in MODELS.items() if spec['subtype'] == subtype)
-    source = bpy.data.scenes[subtype]
+    source = bpy.data.scenes[MODELS[CONTRACT['COOLER_UPGRADES'].get(name,name)]['subtype']]
     scene = studio()
     previous = bpy.context.window.scene
     meshes = []

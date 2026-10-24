@@ -28,14 +28,14 @@ namespace ArcanePower
         {
             switch (model.Kind)
             {
-                case ThermalKind.Reactor: return "Stop/cool, select Brayton, deploy manifolds. Use reactor adapters; cap unused reactor sockets.";
-                case ThermalKind.Train: return "One lower-cell duplex H/C socket on a 2x2x5 train. Branch turbines and coolers from the reactor's shared pipe network; use the mirrored turbine for the opposite side. Supply grid power for the built-in compressor startup.";
+                case ThermalKind.Reactor: return "Four independent manifold circuits; one turbine and cooling per circuit. Each supplies up to 25% capacity. Unused reactor manifolds stay closed. Stop/cool before changing mode.";
+                case ThermalKind.Train: return "One lower-cell duplex H/C socket on a 2x2x5 train. Use exactly one turbine plus cooling per reactor manifold circuit. Keep the four circuits separate. Supply grid power for CO2 filling/compressor startup.";
                 case ThermalKind.RadiatorPanel: return "Stack directly above a radiator on the same grid and orientation. Up to two extension panels share its axis and cooling loop.";
                 case ThermalKind.AirCooler: return "Connect the rear cooling socket. Mount casing flush in hull; keep 2.5 m clear beyond both front fan guards. Blocked exhaust stops cooling; needs atmosphere and circulation.";
                 case ThermalKind.Radiator: return "Connect cooling underneath the pedestal. Panels automatically track edge-on to the sun; keep both faces open to space and the 3x3x3 sweep clear. Red glow shows heat dissipation.";
                 default: return model.Subtype.EndsWith("ReactorAdapter") || model.Subtype.EndsWith("ReactorAdapterBare")
                     ? "Bridge the reactor's 170 mm socket offset to the standard 2.5 m pipe lattice. Keep H aligned."
-                    : "Shared duplex pipe for reactor, turbines and coolers. Align H with H and C with C. Cap unused sockets.";
+                    : "Duplex H/C pipe within one manifold circuit. Align H with H and C with C. Seal unused junction mouths with end caps. A breach closes that circuit at the reactor.";
             }
         }
 
@@ -47,7 +47,7 @@ namespace ArcanePower
                 case ThermalJointStatus.Facing: return "Turn the socket faces toward each other";
                 case ThermalJointStatus.Roll: return "Rotate around the socket axis: H must meet H";
                 case ThermalJointStatus.Crowded: return "Overlapping sockets: one peer per socket";
-                default: return "Connect or cap this socket";
+                default: return "Reactor manifold stays closed; cap open pipe mouths or reconnect";
             }
         }
 
@@ -85,19 +85,33 @@ namespace ArcanePower
             }
             if (anchor == null) result.Next = "Select a thermal block";
             else if (result.Wrong > 0) result.Next = "Fix red joints: match facing and H/C roll";
-            else if (result.Open > 0) result.Next = "Connect or cap " + result.Open + " open socket(s); use reactor adapters at the housing";
-            else if (sources != 1) result.Next = sources == 0 ? "Connect this assembly to one reactor through the shared duplex network" : "Separate supplies: one reactor per plant";
+            else if (sources != 1) result.Next = sources == 0 ? "Connect this circuit to one reactor manifold" : "Separate reactor supplies";
             else
             {
                 var plant = network.Plant(result.Source);
+                var circuits = network.Loops(result.Source);
+                string fault = null;
+                int ready = 0;
+                for (int i = 0; i < circuits.Length; i++)
+                {
+                    if (circuits[i].Ready) ready++;
+                    else
+                    {
+                        var joint = network.Joints.Find(j => j.Node == result.Source && j.Port == result.Source.Ports[i]);
+                        // An unused root is safe. An attached incomplete/breached
+                        // circuit must remain visible even when peers can operate.
+                        if (joint != null && joint.Peer != null) fault = "Circuit " + (i + 1) + ": " + circuits[i].Diagnostic;
+                    }
+                }
                 foreach (var node in plant.Nodes)
                 {
                     if (node.Model.Kind == ThermalKind.AirCooler || node.Model.Kind == ThermalKind.Radiator) result.Cooling++;
                 }
-                if (!plant.Ready) result.Next = plant.Diagnostic;
-                else if (result.Cooling == 0) result.Next = "Connect an atmospheric cooler or exposed space radiator to the shared network";
+                if (fault != null) result.Next = fault;
+                else if (!plant.Ready) result.Next = plant.Diagnostic;
+                else if (result.Cooling == 0) result.Next = "Connect cooling within this manifold circuit";
                 else if (result.Pending > 0) result.Next = "Weld/repair " + result.Pending + " unfinished or unavailable block(s)";
-                else { result.Verified = true; result.Next = "Construction verified. Check deployment, cooling and startup power on the reactor before starting."; }
+                else { result.Verified = true; result.Next = ready + "/4 independent circuits verified. Check cooling and powered CO2 filling before starting."; }
             }
             foreach (var node in result.Nodes) node.Healthy = health[node.Id];
             return result;

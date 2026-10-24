@@ -399,9 +399,6 @@ ArcanePower/.cache/
 !/ArcanePower/validation/reactor-exterior-loop-01/source.json
 !/ArcanePower/validation/reactor-texture-lod-loop/energy-protected.json
 !/ArcanePower/validation/reactor-texture-lod-loop/prototype-protected.json
-!/ArcanePower/validation/thermal-concepts/battery-reference.json
-!/ArcanePower/validation/thermal-concepts/protected-production.json
-!/ArcanePower/validation/thermal-concepts/reactor-reference.json
 !/ArcanePower/validation/thermal-models/delivery-check.json
 !/ArcanePower/validation/thermal-models/flow-review-states.json
 !/ArcanePower/validation/thermal-models/internal-pipes-baseline.json
@@ -410,6 +407,7 @@ ArcanePower/.cache/
 !/ArcanePower/validation/thermal-models/native-export-sources.json
 !/ArcanePower/validation/thermal-models/native-export.json
 !/ArcanePower/validation/thermal-models/native-motion.json
+!/ArcanePower/validation/thermal-models/isolation.json
 !/ArcanePower/validation/thermal-models/native-source-scenes.json
 !/ArcanePower/validation/thermal-models/protected-sources.json
 !/ArcanePower/validation/thermal-models/tight-fit-before-interfaces.json

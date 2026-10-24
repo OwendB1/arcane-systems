@@ -18,7 +18,7 @@ namespace ArcanePower
         public Vector3I Cells;
         public ThermalKind Kind;
         public int Grade;
-        public double RatingMW;
+        public double RatingMW, CoolingMW;
         public ThermalPort[] Ports;
         public double CapacityMJ { get { return RatingMW * 8; } }
     }
@@ -52,12 +52,6 @@ namespace ArcanePower
         public ThermalJointStatus Status;
     }
 
-    public sealed class ThermalCircuit
-    {
-        public bool Closed = true;
-        public readonly List<ThermalEndpoint> Nodes = new List<ThermalEndpoint>();
-    }
-
     public sealed class ThermalConnections
     {
         public string Diagnostic;
@@ -69,6 +63,9 @@ namespace ArcanePower
     // coordinates. The 170 mm reactor adapter is part of the authored contract.
     public sealed class ThermalNetwork
     {
+        private readonly Dictionary<ThermalEndpoint, byte> openPorts = new Dictionary<ThermalEndpoint, byte>();
+        public byte OpenPorts(ThermalEndpoint node) { byte mask; return openPorts.TryGetValue(node, out mask) ? mask : (byte)0; }
+
         private readonly List<List<Socket>> socketGroups = new List<List<Socket>>();
         private List<ThermalJoint> joints;
         private Dictionary<ThermalEndpoint, List<ThermalEndpoint>> physical;
@@ -96,8 +93,6 @@ namespace ArcanePower
                 return joints;
             }
         }
-        private readonly Dictionary<ThermalEndpoint, ThermalCircuit> circuits
-            = new Dictionary<ThermalEndpoint, ThermalCircuit>();
         private readonly Dictionary<ThermalEndpoint, List<ThermalEndpoint>> links
             = new Dictionary<ThermalEndpoint, List<ThermalEndpoint>>();
 
@@ -135,19 +130,9 @@ namespace ArcanePower
                     sockets.Add(new Socket { Node = node, Port = port });
                 }
             }
-            var brokenSockets = new HashSet<ThermalEndpoint>();
-            foreach (var grid in grids.Values)
-            {
-                socketGroups.AddRange(grid.Values);
-                foreach (var sockets in grid.Values)
-                    foreach (var a in sockets)
-                    {
-                        Socket b = sockets.Count == 2 ? sockets[a == sockets[0] ? 1 : 0] : null;
-                        if (!Mates(a, b)) brokenSockets.Add(a.Node);
-                    }
-            }
-            // All sockets carry the same paired supply/return channels. A train
-            // has one socket, so only fittings can branch the shared network.
+            foreach (var grid in grids.Values) socketGroups.AddRange(grid.Values);
+            // Build the raw paired-channel graph. Loops() treats the reactor as
+            // separate roots, so its four ports cannot bridge circuits.
             foreach (var node in nodes)
                 if (node.Healthy && node.Ports.Length > 0) links[node] = new List<ThermalEndpoint>();
             foreach (var sockets in socketGroups)
@@ -155,24 +140,14 @@ namespace ArcanePower
                 {
                     if (!a.Node.Healthy) continue;
                     Socket b = sockets.Count == 2 ? sockets[a == sockets[0] ? 1 : 0] : null;
-                    // Intact disabled machines close their valves. Missing or
-                    // misaligned connections still leave the network open.
-                    if (Mates(a, b) && b.Node.Healthy) links[a.Node].Add(b.Node);
+                    // This mask describes valid joints, not automatic pipe caps.
+                    // Loops() rejects breaches; reactor valves own isolation.
+                    if (Mates(a, b) && b.Node.Healthy)
+                    {
+                        links[a.Node].Add(b.Node);
+                        openPorts[a.Node] = (byte)(OpenPorts(a.Node) | (1 << Array.IndexOf(a.Node.Ports, a.Port)));
+                    }
                 }
-            foreach (var start in links.Keys)
-            {
-                if (circuits.ContainsKey(start)) continue;
-                var group = new ThermalCircuit();
-                var queue = new Queue<ThermalEndpoint>();
-                queue.Enqueue(start); circuits[start] = group;
-                while (queue.Count > 0)
-                {
-                    var node = queue.Dequeue(); group.Nodes.Add(node);
-                    if (brokenSockets.Contains(node)) group.Closed = false;
-                    foreach (var next in links[node])
-                        if (!circuits.ContainsKey(next)) { circuits[next] = group; queue.Enqueue(next); }
-                }
-            }
         }
 
         // Construction follows coincident joints even when their facing/roll is
@@ -190,34 +165,69 @@ namespace ArcanePower
             return result;
         }
 
-        public ThermalCircuit Circuit(ThermalEndpoint node)
+        // The reactor is a heat source, not a hydraulic bridge between its ports.
+        public ThermalConnections[] Loops(ThermalEndpoint reactor)
         {
-            ThermalCircuit result;
-            return circuits.TryGetValue(node, out result) ? result : null;
+            var result = new ThermalConnections[reactor.Ports.Length];
+            for (int i = 0; i < result.Length; i++)
+            {
+                var loop = result[i] = new ThermalConnections();
+                var joint = Joints.Find(j => j.Node == reactor && j.Port == reactor.Ports[i]);
+                if (!reactor.Healthy || joint == null || joint.Status != ThermalJointStatus.Matched
+                    || joint.Peer == null || !joint.Peer.Healthy)
+                { loop.Diagnostic = "Connect a sealed circuit to this manifold; align H/C"; continue; }
+                var found = new HashSet<ThermalEndpoint>();
+                var queue = new Queue<ThermalEndpoint>();
+                found.Add(joint.Peer); queue.Enqueue(joint.Peer);
+                bool otherSource = false;
+                while (queue.Count > 0)
+                {
+                    var node = queue.Dequeue();
+                    if (node.Model.Kind == ThermalKind.Reactor) { otherSource = true; continue; }
+                    foreach (var next in links[node])
+                    {
+                        if (next == reactor) continue;
+                        if (found.Add(next)) queue.Enqueue(next);
+                    }
+                }
+                int rootPorts = 0, trains = 0, coolers = 0;
+                foreach (var root in Joints)
+                    if (root.Node == reactor && root.Status == ThermalJointStatus.Matched && found.Contains(root.Peer)) rootPorts++;
+                bool sealedCircuit = true;
+                foreach (var node in found)
+                {
+                    if (OpenPorts(node) != (1 << node.Ports.Length) - 1) sealedCircuit = false;
+                    if (node.Model.Kind == ThermalKind.Train) trains++;
+                    if (node.Model.Kind == ThermalKind.AirCooler || node.Model.Kind == ThermalKind.Radiator) coolers++;
+                }
+                if (otherSource) loop.Diagnostic = "Separate reactor supplies";
+                else if (rootPorts != 1) loop.Diagnostic = "Separate manifold circuits: two reactor outlets are cross-connected";
+                else if (!sealedCircuit) loop.Diagnostic = "Circuit breached: repair pipes/H/C alignment and cap unused mouths";
+                else if (trains != 1) loop.Diagnostic = "Connect exactly one turbine to this manifold circuit";
+                else if (coolers == 0) loop.Diagnostic = "Connect cooling to this manifold circuit";
+                if (!loop.Ready) continue;
+                loop.Nodes.Add(reactor);
+                loop.Nodes.AddRange(found);
+            }
+            return result;
         }
 
         public ThermalConnections Plant(ThermalEndpoint reactor)
         {
             var result = new ThermalConnections();
-            var circuit = Circuit(reactor);
-            if (circuit == null || !circuit.Closed)
-            { result.Diagnostic = "Connect the shared duplex network, align H/C and cap unused sockets"; return result; }
-            int sources = 0, trains = 0, coolers = 0;
-            foreach (var node in circuit.Nodes)
+            var added = new HashSet<ThermalEndpoint>();
+            string diagnostic = "Connect an independent turbine/cooling circuit";
+            foreach (var loop in Loops(reactor))
             {
-                if (node.Model.Kind == ThermalKind.Reactor) sources++;
-                if (node.Model.Kind == ThermalKind.Train) trains++;
-                if (node.Model.Kind == ThermalKind.AirCooler || node.Model.Kind == ThermalKind.Radiator) coolers++;
+                if (!loop.Ready) { diagnostic = loop.Diagnostic; continue; }
+                foreach (var node in loop.Nodes) if (added.Add(node)) result.Nodes.Add(node);
             }
-            if (sources != 1) { result.Diagnostic = "Separate supplies: one reactor per plant"; return result; }
-            if (trains == 0) { result.Diagnostic = "Connect a turbine to the shared pipe network"; return result; }
-            if (coolers == 0) { result.Diagnostic = "Connect an atmospheric cooler or space radiator to the shared network"; return result; }
-            result.Nodes.AddRange(circuit.Nodes);
+            if (result.Nodes.Count == 0) result.Diagnostic = diagnostic;
             return result;
         }
 
         // Orient only shortest physical routes between dispatched sources and sinks.
-        // Capped spurs and standby-machine branches carry no cosmetic flow.
+        // Capped spurs and unselected terminals carry no cosmetic flow.
         public Dictionary<long, byte[]> FlowDirections(HashSet<long> from, HashSet<long> to)
         {
             var result = new Dictionary<long, byte[]>();
@@ -226,8 +236,7 @@ namespace ArcanePower
             foreach (var node in adjacent.Keys) edges[node] = new HashSet<ThermalEndpoint>();
             foreach (var start in adjacent.Keys)
             {
-                var circuit = Circuit(start);
-                if (!from.Contains(start.Id) || circuit == null || !circuit.Closed) continue;
+                if (!from.Contains(start.Id)) continue;
                 var distance = new Dictionary<ThermalEndpoint, int> { { start, 0 } };
                 var queue = new Queue<ThermalEndpoint>(); queue.Enqueue(start);
                 while (queue.Count > 0)

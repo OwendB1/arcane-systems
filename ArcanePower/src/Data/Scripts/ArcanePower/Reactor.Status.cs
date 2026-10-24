@@ -49,22 +49,33 @@ namespace ArcanePower
                 var thermal = Motion.Thermal;
                 Section(text, "THERMAL PLANT");
                 Row(text, "Conversion mode", thermal.Mode + (thermal.Settled ? "" : " -> " + thermal.Requested + " / shutdown, drain, move, restart"));
+                Row(text, "Brayton access", HasAdvancedController() ? "Advanced controller installed" : "Locked / install an advanced controller",
+                    HasAdvancedController() ? "white" : "yellow");
+                Row(text, "Fuel safety", "Standalone: Aether only / Helion and Empyrean require Brayton");
                 Row(text, "Manifolds", Percent(thermal.Deployment) + " deployed");
                 Row(text, "Conversion efficiency", Percent(thermal.Efficiency));
                 Row(text, "Reaction heat", Power(thermal.ProducedMW) + " / " + Power(ThermalHeatMW));
                 Row(text, "Trapped housing heat", Number(thermal.Store.HotMJ + thermal.Store.WasteMJ, "0.0") + " MJ");
-                Row(text, "Duty / standby", thermal.DutyTrains + " / " + thermal.StandbyTrains);
+                Row(text, "Circuits available", thermal.AvailableLoops + " / 4 (" + thermal.AvailableLoops * 25 + "% allocation)");
                 if (text.Brayton)
                 {
                     bool shortfall = thermal.CoolingMW + .001 < thermal.RequiredCoolingMW;
                     Row(text, "Cooling capacity", Power(thermal.CoolingMW), shortfall ? "yellow" : "white");
                     Row(text, "Cooling required", Power(thermal.RequiredCoolingMW) + " at design load");
                     Row(text, "Returned waste", Number(thermal.Store.WasteMJ, "0.0") + " MJ", Motion.Heat > 1 ? "red" : "white");
+                    for (int i = 0; i < thermal.Loops.Length; i++)
+                    {
+                        var loop = thermal.Loops[i];
+                        Row(text, "Circuit " + (i + 1), Number(loop.PressureMPa, "0.0") + " MPa / "
+                            + Percent(loop.Charge) + " charged / valve " + (loop.Connected && loop.Charge > 0 ? "open" : "closed"),
+                            loop.Available ? "white" : "yellow");
+                        Line(text, "muted", loop.Diagnostic + " / cooling " + Power(loop.CoolingMW) + " / " + Power(loop.RequiredCoolingMW));
+                    }
                 }
                 Row(text, "Startup / cooldown draw", Power(thermal.StartupMW));
                 Line(text, thermalRestoreFault || thermal.Faulted ? "red" : "muted", thermal.Diagnostic);
-                Line(text, "muted", "Setup: reactor, parallel turbines and coolers share one duplex network. Match H/C; cap unused sockets.");
-                Line(text, "muted", "Four active turbines reach peak efficiency. Size cooling for rejected heat; retained waste can trigger failure at 125% heat.");
+                Line(text, "muted", "Setup: one turbine and cooling per manifold circuit. Keep circuits separate; cap unused pipe mouths and match H/C.");
+                Line(text, "muted", "Each circuit supplies up to 25% capacity. Retained waste still triggers the existing failure at 125% heat.");
                 Line(text, "muted", "Construction guide: aim at thermal blocks or select them in build mode. Verify build, then deployment, cooling and startup power.");
                 Section(text, "POWER");
             }
@@ -97,6 +108,13 @@ namespace ArcanePower
             }
 
             Section(text, "SUPPLIES & VENT");
+            if (ThermalVariant)
+            {
+                Row(text, "Aether Residuum", Number((double)reactor.GetInventory().GetItemAmount(MyItemType.MakeComponent(ResiduumSubtype)), "0") + " recovered units");
+                Row(text, "Residuum pending", Number(Motion.ResiduumMicroUnits / (double)ResiduumScale, "0.######") + " units / 10 per Aether canister");
+                if (Motion.ResiduumMicroUnits >= ResiduumScale)
+                    Line(text, "yellow", "Clear reactor inventory space or connect cargo to collect retained Residuum.");
+            }
             Row(text, "Fuel efficiency", Percent(FuelEfficiency) + "   Controller tier " + (Motion.RingCount - 1));
             Row(text, "Fuel stock", creative ? "Creative supply" : Number(fuel, "0.###") + " canisters", !creative && fuel <= 0 ? "yellow" : "white");
             Row(text, "Spare tiles", creative ? "Creative supply" : Number(tiles, "0")
@@ -163,8 +181,21 @@ namespace ArcanePower
                 var thermal = Motion.Thermal;
                 if (Motion.Heat > 1 || ThermalMath.WasteHeatLevel(thermal.Store, ThermalHeatMW) >= 1)
                 { tone = "red"; action = "Restore cooling or eject before 125% heat. Keep cooldown power supplied."; return "REACTOR OVERHEATING / FAILURE RISK"; }
-                if (thermal.CoolingMW + .001 < thermal.RequiredCoolingMW && (thermal.ProducedMW > .001 || thermal.Store.WasteMJ > .001))
+                if (Array.Exists(thermal.Loops, loop => loop.Available && loop.CoolingMW + .001 < loop.RequiredCoolingMW)
+                    && (thermal.ProducedMW > .001 || thermal.Store.WasteMJ > .001))
                 { tone = "yellow"; action = "Add or unblock cooling units, or shut down before trapped heat becomes critical."; return "INSUFFICIENT LOOP COOLING"; }
+            }
+            if (ThermalVariant && Motion.Thermal != null)
+            {
+                var thermal = Motion.Thermal;
+                if ((thermal.Mode == ThermalMode.Brayton || thermal.Requested == ThermalMode.Brayton) && !HasAdvancedController())
+                { tone = "yellow"; action = "Install or repair an advanced controller. Keep cooldown power supplied; restart manually."; return "BRAYTON LOCKED / ADVANCED CONTROLLER REQUIRED"; }
+                if (Motion.FuelTier > 1 && (thermal.Mode != ThermalMode.Brayton || thermal.Requested != ThermalMode.Brayton))
+                { tone = "yellow"; action = "High-tier fuel blocked to prevent meltdown. Drain retained heat, then use Aether or enable Brayton."; return "FUEL SAFETY INTERLOCK / COOLING"; }
+                if (!thermal.Settled)
+                { tone = "yellow"; action = ThermalModeTransitionHint; return "MODE CHANGE / RESTART WHEN SETTLED"; }
+                if (thermal.Mode == ThermalMode.Brayton && thermal.LoopTrip && !reactor.Enabled)
+                { tone = "yellow"; action = "Keep cooldown power supplied. Repair separate circuits, then restart manually to refill."; return "ALL CIRCUITS LOST / SHUTDOWN LATCHED"; }
             }
             if (Motion.Core == CorePhase.Cooling)
             { tone = "yellow"; action = "Holding the shell until heat falls to 15%."; return "COOLING DOWN"; }
@@ -175,7 +206,13 @@ namespace ArcanePower
                 { tone = "yellow"; action = "Repair vents; ejection is unavailable. Security mode is off."; return "RUNNING / VENT ROUTE BROKEN"; }
                 tone = "red"; action = "Build 1-15 aligned vent tubes above the roof, then an outlet. Weld fully and switch on."; return "VENT TUBE / OUTLET REQUIRED";
             }
-            if (!HasUsableFuel()) { tone = "yellow"; action = "Load compatible refined fuel."; return "OUT OF FUEL"; }
+            if (!HasUsableFuel())
+            {
+                tone = "yellow";
+                if (ThermalVariant && Motion.Thermal != null && Motion.Thermal.Mode == ThermalMode.Standalone)
+                { action = "Load Aether. Helion and Empyrean require Brayton and an advanced controller."; return "AETHER REQUIRED / STANDALONE"; }
+                action = "Load compatible refined fuel."; return "OUT OF FUEL";
+            }
             if (Motion.TileStarved) { tone = "yellow"; action = "Supply startup tiles, then switch on."; return "STARTUP TILES REQUIRED"; }
             if (Precharging)
             {

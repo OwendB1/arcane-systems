@@ -72,6 +72,8 @@ namespace ArcanePower
         [ProtoMember(51), System.ComponentModel.DefaultValue(true)] public bool SecurityMode = true;
         [ProtoMember(52)] public bool ControllersReady;
         [ProtoMember(53)] public ThermalReactorState Thermal;
+        // Millionths of one recovered component, earned only by paid T1 burn.
+        [ProtoMember(54)] public long ResiduumMicroUnits;
 
         // XML-only compatibility with saves made before fuel and hardware tiers
         // were separated. Never write the obsolete field into new saves/packets.
@@ -201,6 +203,7 @@ namespace ArcanePower
                 && state.Heat >= 0 && state.Heat <= 4 && state.VentLoad >= 0 && state.VentLoad <= 1
                 && state.VentHeat >= 0 && state.VentHeat <= 4
                 && state.FuelDebt >= -(double)VRage.MyFixedPoint.SmallestPossibleValue * .5 - 1e-12 && state.FuelDebt < 1
+                && state.ResiduumMicroUnits >= 0 && state.ResiduumMicroUnits <= 1000000000000000L
                 && state.Status >= ReactorStatus.ShutOff && state.Status <= ReactorStatus.Active
                 && (state.Thermal == null || (state.Thermal.Valid(state.EntityId)
                     && state.Thermal.Store.Valid(state.EntityId, PowerMW[state.FuelTier - 1] / .40 * 8)

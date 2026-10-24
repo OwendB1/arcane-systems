@@ -79,41 +79,40 @@ public static partial class ThermalRuntimeChecks
         double[] temperatures = { 650, 1000, 1600, 2200 };
         double[] ceilings = { 40, 55, 66, 78 };
         for (int tier = 0; tier < 4; tier++)
-            for (int count = 1; count <= 5; count++)
+            for (int count = 1; count <= 4; count++)
             {
-                var point = ThermalMath.Dispatch(100, temperatures[tier], Bank(count, 2, tier));
-                Near(point.NetMW, ceilings[tier] * Math.Min(1, .2 + .2 * count), "20 percentage-point bank efficiency steps");
-                Check(point.Trains.Count == Math.Min(4, count) && point.Standby == Math.Max(0, count - 4), "four active trains, excess on standby");
+                double net = 0;
+                for (int circuit = 0; circuit < count; circuit++)
+                {
+                    var point = ThermalMath.Dispatch(ThermalLoops.Allocation(100), temperatures[tier], Bank(1, 2, tier));
+                    Near(point.Efficiency, ceilings[tier] / 100, "surviving circuits preserve fuel/turbine efficiency");
+                    net += point.NetMW;
+                }
+                Near(net, ceilings[tier] * count / 4, "capacity scales linearly across four fixed circuit allocations");
             }
-        Near(ThermalMath.Dispatch(100, 650, Bank(4, 2, 3)).NetMW, 40, "source temperature gates higher tiers");
-        Near(ThermalMath.Dispatch(200, 650, Bank(2, 2)).NetMW, 48, "two duty trains reach 60% of tier ceiling");
-        var undersized = ThermalMath.Dispatch(200, 650, Bank(2, 1));
-        Near(undersized.NetMW, 48, "cooling shortage does not quietly throttle reaction");
-        Check(undersized.RequiredCoolingMW > undersized.CoolingMW && undersized.SustainableMW < undersized.NetMW, "undersized bank exposes unsafe heat rejection");
-        Near(ThermalMath.Dispatch(200, 650, Bank(1, 2)).NetMW, 16, "extra cooling still needs train capacity");
+        Near(ThermalMath.Dispatch(100, 650, Bank(1, 2, 3)).NetMW, 40, "source temperature gates higher tiers");
+        Check(ThermalMath.Dispatch(200, 650, Bank(2, 2)).NetMW == 0, "two turbines cannot share one manifold circuit");
+        var smallCooling = Bank(1, 1); smallCooling[1].CoolingMW = 30;
+        var undersized = ThermalMath.Dispatch(100, 650, smallCooling);
+        Near(undersized.NetMW, 40, "cooling shortage does not silently throttle away the heat hazard");
+        Check(undersized.RequiredCoolingMW > undersized.CoolingMW && undersized.SustainableMW < undersized.NetMW,
+            "undersized circuit exposes unsafe rejection");
+        Near(ThermalMath.Dispatch(200, 650, Bank(1, 2)).NetMW, 40, "turbine rating still limits its own circuit");
         Near(ThermalMath.Dispatch(100, 650, Bank(0, 1)).NetMW, 0, "train required");
         Near(ThermalMath.Dispatch(100, 650, Bank(1, 0)).NetMW, 0, "cooler required");
-        var redundant = Bank(5, 3);
-        var plan = ThermalMath.Dispatch(200, 650, redundant);
-        Check(plan.Trains.Count == 4 && plan.Standby == 1, "automatic standby");
-        double worst = plan.NetMW;
-        foreach (var module in redundant)
-        {
-            var remaining = new List<ThermalUnit>(redundant); remaining.Remove(module);
-            worst = Math.Min(worst, ThermalMath.Dispatch(200, 650, remaining).NetMW);
-        }
-        Near(worst, 80, "steady-state single-module loss capacity");
         double previous = 0;
-        foreach (double offered in new[] { 0.0, 1, 99, 100, 101, 110, 120, 200 })
+        foreach (double offered in new[] { 0.0, 1, 25, 50, 100, 200 })
         {
-            double output = ThermalMath.Dispatch(offered, 650, redundant).NetMW;
+            double output = ThermalMath.Dispatch(offered, 650, Bank(1, 2)).NetMW;
             Check(output + .00001 >= previous, "demand must not reduce output"); previous = output;
         }
+        var blockedT3 = ThermalMath.Dispatch(100, 2200, Bank(1, 2));
+        Near(blockedT3.NetMW, 0, "standard hot section cannot bypass T3 gate");
+        Check(blockedT3.Limit.Contains("upgraded"), "T3 gate reports required hardware");
         var exotic = Bank(1, 1, 3);
-        exotic.Add(new ThermalUnit { Id = 100, Kind = ThermalKind.Train, RatingMW = 100, Grade = 0 });
-        Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 31.2, "inferior train cannot count towards exotic bank efficiency");
+        Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 78, "one exotic circuit retains its grade efficiency");
         exotic.Add(new ThermalUnit { Id = 101, Kind = ThermalKind.AirCooler, RatingMW = 100, CoolingMW = 60, ColdC = 200 });
-        Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 31.2, "warm extra cooler cannot worsen selected cold bank");
+        Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 78, "warm extra cooling cannot worsen a cold circuit");
         Near(ThermalMath.AirCooling(60, 0, 1), 0, "vacuum fan cooling");
         Near(ThermalMath.AirCooling(60, .2, 1), 12, "thin atmosphere");
         Near(ThermalMath.AirCooling(60, 1, 1), 60, "unobstructed exhaust");
@@ -277,7 +276,7 @@ public static partial class ThermalRuntimeChecks
         foreach (double ceiling in new[] { .4, .55, .66, .78 })
             for (int count = 1; count <= 4; count++)
             {
-                double eta = ceiling * ThermalMath.BankEfficiency(count);
+                double eta = ceiling;
                 double circulation = 1;
                 for (int tick = 0; tick < 600; tick++)
                     circulation = ThermalMath.CirculationPower(100 * eta * circulation, eta, 0, 100);
@@ -386,26 +385,26 @@ public static partial class ThermalRuntimeChecks
         var layout = Layout();
         var reactor = layout.Find(n => n.Model.Kind == ThermalKind.Reactor);
         var plant = new ThermalNetwork(layout).Plant(reactor);
-        Check(plant.Ready, "authored starter layout: " + plant.Diagnostic);
-        Check(plant.Nodes.FindAll(n => n.Model.Kind == ThermalKind.Train).Count == 1, "direct turbine path");
-        var pipe = layout.Find(n => n.Model.Kind == ThermalKind.Pipe && n.Ports[0].Circuit == "CO2" && n.Ports.Length == 2);
+        Check(!plant.Ready, "legacy shared starter layout requires separate turbine/cooling circuits");
+        Check(new ThermalNetwork(layout).Joints.Exists(j => j.Peer != null && j.Peer.Model.Kind == ThermalKind.Train), "legacy turbine geometry still mates");
+        var turbine = layout.Find(n => n.Model.Kind == ThermalKind.Train);
+        var pipe = new ThermalNetwork(layout).Joints.Find(j => j.Peer == turbine && j.Node.Model.Kind == ThermalKind.Pipe).Node;
         pipe.GridId = 2;
         Check(!new ThermalNetwork(layout).Plant(reactor).Ready, "split cannot teleport across grids");
         pipe.GridId = 1;
         pipe.Ports[0].HotAxis = -pipe.Ports[0].HotAxis;
         Check(!new ThermalNetwork(layout).Plant(reactor).Ready, "hot/cold roll mismatch rejected");
         pipe.Ports[0].HotAxis = -pipe.Ports[0].HotAxis;
-        var turbine = layout.Find(n => n.Model.Kind == ThermalKind.Train);
         turbine.Healthy = false;
         Check(!new ThermalNetwork(layout).Plant(reactor).Ready, "failed turbine isolates generation");
         turbine.Healthy = true;
         var detached = Node(1000, turbine.Model.Subtype, Matrix.CreateTranslation(1000, 1000, 1000));
         layout.Add(detached);
         plant = new ThermalNetwork(layout).Plant(reactor);
-        Check(plant.Ready && !plant.Nodes.Contains(detached), "detached module grants no capacity");
+        Check(!plant.Ready && !plant.Nodes.Contains(detached), "detached machinery cannot commission a legacy shared plant");
         reactor.Healthy = false;
         Check(!new ThermalNetwork(layout).Plant(reactor).Ready, "projected or incomplete source cannot run");
-        Check(ThermalModels.All.Count == 52, "all model contracts generated");
+        Check(ThermalModels.All.Count == 55, "all model contracts generated");
     }
 
     private static void UniversalPipes()
@@ -440,8 +439,8 @@ public static partial class ThermalRuntimeChecks
                 node.Model = ThermalModels.All[node.Model.Subtype.Replace("Primary", node.Id % 2 == 0 ? "CO2Hp" : "CO2Lp")];
             }
             var source = layout.Find(n => n.Model.Kind == ThermalKind.Reactor);
-            Check(new ThermalNetwork(layout).Plant(source).Ready, "mixed legacy pressure IDs work on either route");
-            Check(ThermalConstruction.Inspect(layout, source.Id).Verified, "legacy plant construction remains verified");
+            Check(!new ThermalNetwork(layout).Plant(source).Ready, "legacy aliases cannot bypass independent circuit topology");
+            Check(!ThermalConstruction.Inspect(layout, source.Id).Verified, "legacy shared layout requests independent circuit plumbing");
         }
 
         foreach (var model in ThermalModels.All.Values)
@@ -484,18 +483,20 @@ public static partial class ThermalRuntimeChecks
         var cooler = nodeAt(7,ThermalKind.AirCooler,new[] {socket(5,-1)});
         var bank = new List<ThermalEndpoint> {sourceNode,tee,header,first,second,third,cooler};
         var network = new ThermalNetwork(bank);
-        Check(network.Plant(sourceNode).Ready && network.Plant(sourceNode).Nodes.Count == 7, "three turbines and cooling share one parallel duplex network");
+        Check(!network.Plant(sourceNode).Ready, "multiple turbines on one manifold are rejected");
         var flow = network.FlowDirections(new HashSet<long> {1},new HashSet<long> {4,5,6,7});
         foreach (long id in new long[] {4,5,6,7}) Check(flow.ContainsKey(id) && flow[id][0] == 1, "supply enters each active terminal; paired return leaves");
         second.Healthy = false;
         network = new ThermalNetwork(bank);
-        Check(network.Plant(sourceNode).Ready && !network.Plant(sourceNode).Nodes.Contains(second), "offline parallel turbine closes its valve without stopping peers");
+        Check(!network.Plant(sourceNode).Ready, "damaged turbine breaches only its connected circuit");
         second.Healthy = true;
         bank.Remove(second);
-        Check(!new ThermalNetwork(bank).Plant(sourceNode).Ready, "removing a terminal leaves an open socket");
+        Check(!new ThermalNetwork(bank).Plant(sourceNode).Ready, "open terminal must be capped before recharging");
         var cap = nodeAt(8,ThermalKind.Pipe,new[] {socket(2,-1)}); bank.Add(cap);
+        bank.Remove(third);
+        var cap2 = nodeAt(12,ThermalKind.Pipe,new[] {socket(3,-1)}); bank.Add(cap2);
         network = new ThermalNetwork(bank);
-        Check(network.Plant(sourceNode).Ready, "one common end cap seals the unused branch");
+        Check(network.Plant(sourceNode).Ready, "one turbine plus cooling and capped branches form a sealed circuit");
         Check(!network.FlowDirections(new HashSet<long> {1},new HashSet<long> {4,6,7}).ContainsKey(8), "capped branch stays motionless");
         var extraSource = nodeAt(9,ThermalKind.Reactor,new[] {socket(2,-1)});
         bank.Remove(cap); bank.Add(extraSource);
@@ -541,7 +542,7 @@ public static partial class ThermalRuntimeChecks
         Check(variants == 22, "public and compatibility bare pipe contracts");
         var layout = BareLayout();
         var reactor = layout.Find(n => n.Model.Kind == ThermalKind.Reactor);
-        Check(new ThermalNetwork(layout).Plant(reactor).Ready, "complete plant connects using bare pipes");
+        Check(!new ThermalNetwork(layout).Plant(reactor).Ready, "bare pipes obey independent circuit rules on old shared layouts");
         int mixed = 0;
         foreach (var node in layout)
             if (node.Model.Kind == ThermalKind.Pipe && node.Id % 2 == 0)
@@ -549,7 +550,7 @@ public static partial class ThermalRuntimeChecks
                 node.Model = ThermalModels.All[node.Model.Subtype.Substring(0, node.Model.Subtype.Length - 4)];
                 mixed++;
             }
-        Check(mixed > 0 && new ThermalNetwork(layout).Plant(reactor).Ready, "framed and bare pipes connect in the same plant");
+        Check(mixed > 0 && !new ThermalNetwork(layout).Plant(reactor).Ready, "mixing framed and bare pipes cannot bypass circuit separation");
     }
 
     private static void Rotors()
@@ -558,7 +559,7 @@ public static partial class ThermalRuntimeChecks
         for (int i = 0; i < 480; i++) ThermalRotors.Drive(cold, 0, 100, 650, 1, true, 1.0 / 60);
         Near(cold.Rpm, 0, "cold turbine cannot spin from compressor power");
         Check(cold.CompressorRpm > ThermalRotors.MaxCompressorRpm * .8, "paid cold start spools independent compressor");
-        Near(cold.PressureMPa, 8, "cold loop has no estimated expansion pressure");
+        Check(cold.PressureMPa > 21 && cold.PressureMPa <= 22, "cold commissioned loop retains its working pressure");
         var warm = new ThermalRotorState { EntityId = 1 };
         var hot = new ThermalRotorState { EntityId = 1 };
         var low = new ThermalRotorState { EntityId = 1 };
@@ -566,18 +567,18 @@ public static partial class ThermalRuntimeChecks
         {
             ThermalRotors.Drive(warm, 50, 100, 650, 1, true, 1.0 / 60);
             ThermalRotors.Drive(hot, 50, 100, 2200, 1, true, 1.0 / 60);
-            ThermalRotors.Drive(low, 50, 100, 2200, .25, true, 1.0 / 60);
+            ThermalRotors.Drive(low, 50, 100, 2200, .25, true, 1.0 / 60, .5);
             Check(hot.Valid(1) && warm.Valid(1) && low.Valid(1), "bounded rotor states and wrapped phases");
         }
         Check(hot.Rpm > warm.Rpm && hot.Rpm > low.Rpm && hot.Rpm > ThermalRotors.MaxRpm * .98,
             "heat and estimated pressure both increase shaft speed");
-        Check(low.PressureMPa < hot.PressureMPa, "circulation controls operating pressure");
+        Check(low.PressureMPa < hot.PressureMPa, "independent circuit charge controls operating pressure");
         double spinning = hot.Rpm;
         ThermalRotors.Drive(hot, 50, 100, 2200, 1, false, 1.0 / 60);
         Check(hot.Rpm > 0 && hot.Rpm < spinning && hot.TargetRpm == 0, "fault or valve closure coasts, never snaps");
-        for (int i = 0; i < 7200; i++) ThermalRotors.Drive(hot, 50, 100, 2200, 0, false, 1.0 / 60);
+        for (int i = 0; i < 7200; i++) ThermalRotors.Drive(hot, 50, 100, 2200, 0, false, 1.0 / 60, 0);
         Near(hot.Rpm, 0, "shutdown reaches rest");
-        Near(hot.PressureMPa, 8, "shutdown pressure equalizes");
+        Near(hot.PressureMPa, 0, "lost circuit pressure reaches zero");
         Check(!warm.Valid(2), "copied rotor identity rejected");
         var serializer = new XmlSerializer(typeof(ThermalStore));
         var store = new ThermalStore { EntityId = 1, Rotor = warm, HotMJ = 50 };
@@ -617,12 +618,17 @@ public static partial class ThermalRuntimeChecks
 
     private static void Construction()
     {
-        var layout = Layout();
+        var layout = IndependentLayout();
         var source = layout.Find(n => n.Model.Kind == ThermalKind.Reactor);
         var report = ThermalConstruction.Inspect(layout, source.Id);
         Check(report.Verified && report.Open == 0 && report.Wrong == 0 && report.Pending == 0,
             "authored plant passes construction independently of operating mode");
-        Check(report.Trains == 1 && report.Cooling == 1, "only routed turbine/cooling earn construction credit");
+        Check(report.Trains == 4 && report.Cooling == 4, "only routed turbine/cooling earn construction credit");
+        var capped = layout.Find(n => n.Model.Kind == ThermalKind.Pipe && n.Ports.Length == 1);
+        layout.Remove(capped);
+        report = ThermalConstruction.Inspect(layout, source.Id);
+        Check(!report.Verified && report.Open > 0, "open junction must be capped before circuit verification");
+        layout.Add(capped);
         var turbine = layout.Find(n => n.Model.Kind == ThermalKind.Train);
         turbine.Healthy = false;
         report = ThermalConstruction.Inspect(layout, source.Id);
@@ -630,7 +636,7 @@ public static partial class ThermalRuntimeChecks
             "unfinished block keeps visible topology but prevents verification");
         Check(!turbine.Healthy, "construction scan never mutates authoritative health");
         turbine.Healthy = true;
-        var pipe = layout.Find(n => n.Model.Kind == ThermalKind.Pipe && n.Ports.Length == 2 && n.Ports[0].Circuit == "CO2");
+        var pipe = new ThermalNetwork(layout).Joints.Find(j => j.Peer == turbine && j.Node.Model.Kind == ThermalKind.Pipe).Node;
         var p = pipe.Ports[0];
         p.HotAxis = -p.HotAxis;
         report = ThermalConstruction.Inspect(layout, source.Id);
@@ -644,7 +650,7 @@ public static partial class ThermalRuntimeChecks
         p.Normal = -p.Normal;
         layout.Remove(pipe);
         report = ThermalConstruction.Inspect(layout, source.Id);
-        Check(!report.Verified && report.Open > 0, "missing pipe leaves a visible open route");
+        Check(!report.Verified && report.Open > 0, "missing turbine connection leaves a visible isolated route");
         layout.Add(pipe);
         pipe.GridId = 2;
         Check(!ThermalConstruction.Inspect(layout, source.Id).Verified, "no cross-grid construction approval");
@@ -710,7 +716,7 @@ public static partial class ThermalRuntimeChecks
         Check(ThermalConstruction.Inspect(schematic, 1).Verified, "direct functional schematic verified");
         schematic[2].Model.Kind = ThermalKind.Pipe;
         report = ThermalConstruction.Inspect(schematic, 1);
-        Check(!report.Verified && report.Next.Contains("cooler"), "sealed LP without cooling gets a construction instruction");
+        Check(!report.Verified && report.Next.Contains("cooling"), "sealed LP without cooling gets a construction instruction");
         schematic[2].Model.Kind = ThermalKind.AirCooler;
         schematic[1].Model.Kind = ThermalKind.Pipe;
         Check(!ThermalConstruction.Inspect(schematic, 1).Verified, "closed route without a turbine cannot pass");
@@ -724,7 +730,7 @@ public static partial class ThermalRuntimeChecks
             var observed = new Dictionary<long, byte[]>();
             var network = new ThermalNetwork(layout);
             var source = layout.Find(n => n.Model.Kind == ThermalKind.Reactor);
-            Check(network.Plant(source).Ready, "authored circulation layout is closed: " + layout.Count + " blocks, " + network.Plant(source).Diagnostic);
+            Check(!network.Plant(source).Ready, "legacy circulation layout is safely rejected for reconfiguration");
             foreach (ThermalKind to in new[] {ThermalKind.Train,ThermalKind.AirCooler})
             {
                 ThermalKind from = ThermalKind.Reactor;
@@ -755,13 +761,15 @@ public static partial class ThermalRuntimeChecks
             foreach (var item in observed)
                 snapshot.Add("{\"id\":"+item.Key+",\"ports\":["+string.Join(",",Array.ConvertAll(item.Value,p=>p.ToString()))+"]}");
             snapshots.Add("["+string.Join(",",snapshot)+"]");
-            var pipe = layout.Find(n => n.Model.Kind == ThermalKind.Pipe && n.Ports.Length == 2 && n.Ports[0].Circuit == "CO2");
+            var terminal = layout.Find(n => n.Model.Kind == ThermalKind.Train);
+            var terminalJoint = network.Joints.Find(j => j.Peer == terminal && j.Node.Model.Kind == ThermalKind.Pipe);
+            var pipe = terminalJoint.Node;
             var a = new HashSet<long> { source.Id };
             var b = new HashSet<long> { layout.Find(n => n.Model.Kind == ThermalKind.Train).Id };
             pipe.GridId = 2;
             Check(new ThermalNetwork(layout).FlowDirections( a, b).Count == 0, "split stops room circulation");
             pipe.GridId = 1;
-            var port = pipe.Ports[0];
+            var port = terminalJoint.Port;
             port.HotAxis = -port.HotAxis;
             Check(new ThermalNetwork(layout).FlowDirections( a, b).Count == 0, "wrong H/C roll stops circulation");
             port.HotAxis = -port.HotAxis; port.Normal = -port.Normal;
@@ -796,7 +804,7 @@ public static partial class ThermalRuntimeChecks
         foreach (var entry in ThermalFlowModels.All)
         {
             var spec = ThermalModels.All[entry.Key];
-            var state = new ThermalFlowState {EntityId=1, Sequence=1, Mode=ThermalFlowMode.Pumping, Rate=1, Heat=.5, Internal=true, Ports=new byte[spec.Ports.Length]};
+            var state = new ThermalFlowState {EntityId=1, Sequence=1, Mode=ThermalFlowMode.Pumping, Rate=1, Heat=.5, Internal=true, Ports=new byte[spec.Ports.Length], OpenConnectors=(byte)((1<<spec.Ports.Length)-1)};
             for (int i=0; i<state.Ports.Length; i++) state.Ports[i]=1;
             Check(state.Valid(spec.Ports.Length), "valid authoritative flow state");
             foreach (var path in entry.Value)
@@ -810,6 +818,10 @@ public static partial class ThermalRuntimeChecks
                 Check(path.Direction(state)==expected, "H and C counterflow follows socket direction");
                 if (!path.Internal)
                 {
+                    byte connected = state.OpenConnectors;
+                    state.OpenConnectors=0;
+                    Check(path.Direction(state)==0,"auto-capped mouths suppress stale flow particles");
+                    state.OpenConnectors=connected;
                     state.Ports[path.Port]=2;
                     Check(path.Direction(state)==-expected, "reversed branch reverses visible flow");
                     state.Ports[path.Port]=1;
@@ -825,6 +837,151 @@ public static partial class ThermalRuntimeChecks
             state.Rate=1; state.Mode=ThermalFlowMode.Ready; Check(!state.Valid(spec.Ports.Length), "reject pumping rate in idle packet");
             state.Rate=0; state.Ports[0]=3; Check(!state.Valid(spec.Ports.Length), "reject malformed port direction");
             state.Ports=new byte[spec.Ports.Length+1]; Check(!state.Valid(spec.Ports.Length), "reject mismatched port count");
+        }
+    }
+
+    private static List<ThermalEndpoint> IndependentLayout()
+    {
+        Func<int,int,ThermalPort> socket=(x,sign)=>new ThermalPort("CO2",new Vector3(x,0,0),Vector3.UnitX*sign,Vector3.UnitY);
+        Func<long,ThermalKind,ThermalPort[],ThermalEndpoint> node=(id,kind,ports)=>new ThermalEndpoint {
+            Id=id,GridId=1,Healthy=true,Model=new ThermalModel{Kind=kind,Ports=ports,
+                Subtype=kind==ThermalKind.Train ? "ArcanePower_Thermal_BraytonTrain" : "test-circuit",
+                RatingMW=100, CoolingMW=kind==ThermalKind.AirCooler ? 60 : 0},Ports=ports};
+        var nodes=new List<ThermalEndpoint>();
+        nodes.Add(node(1,ThermalKind.Reactor,new[]{socket(0,1),socket(100,1),socket(200,1),socket(300,1)}));
+        for(int i=0;i<4;i++) {
+            int x=i*100; long id=10+i*10;
+            nodes.Add(node(id,ThermalKind.Pipe,new[]{socket(x,-1),socket(x+1,1)}));
+            nodes.Add(node(id+1,ThermalKind.Pipe,new[]{socket(x+1,-1),socket(x+2,1),socket(x+3,1),socket(x+4,1)}));
+            nodes.Add(node(id+2,ThermalKind.Train,new[]{socket(x+2,-1)}));
+            nodes.Add(node(id+3,ThermalKind.AirCooler,new[]{socket(x+3,-1)}));
+            nodes.Add(node(id+4,ThermalKind.Pipe,new[]{socket(x+4,-1)}));
+        }
+        return nodes;
+    }
+
+    private static void Isolation()
+    {
+        foreach(var rotation in Orientations()) {
+            var nodes=IndependentLayout();
+            foreach(var node in nodes) foreach(var port in node.Ports) {
+                port.Position=Vector3.Transform(port.Position,rotation);
+                port.Normal=Vector3.TransformNormal(port.Normal,rotation);
+                port.HotAxis=Vector3.TransformNormal(port.HotAxis,rotation);
+            }
+            var source=nodes[0];
+            var loops=new ThermalNetwork(nodes).Loops(source);
+            Check(Array.TrueForAll(loops,l=>l.Ready),"four independent sealed circuits in every grid orientation");
+            foreach(int failure in new[]{0,1,2,3,4,5}) {
+                var damaged=new List<ThermalEndpoint>(nodes);
+                var pipe=nodes.Find(n=>n.Id==10);
+                var original=pipe.Ports[0].HotAxis;
+                if(failure==0)damaged.Remove(pipe);
+                if(failure==1)pipe.Healthy=false;
+                if(failure==2)pipe.GridId=2;
+                if(failure==3)pipe.Ports[0].HotAxis=-original;
+                if(failure==4)damaged.Add(new ThermalEndpoint{Id=99,GridId=1,Healthy=true,Model=pipe.Model,Ports=new[]{pipe.Ports[0]}});
+                if(failure==5)damaged.Remove(nodes.Find(n=>n.Id==14));
+                loops=new ThermalNetwork(damaged).Loops(source);
+                Check(!loops[0].Ready && loops[1].Ready && loops[2].Ready && loops[3].Ready,
+                    "removed/damaged/split/misrolled/crowded/open-cap faults isolate exactly one circuit");
+                pipe.Healthy=true;pipe.GridId=1;pipe.Ports[0].HotAxis=original;
+            }
+            for(int lost=0;lost<=4;lost++) {
+                var remaining=new List<ThermalEndpoint>(nodes);
+                for(int i=0;i<lost;i++)remaining.Remove(nodes.Find(n=>n.Id==10+i*10));
+                loops=new ThermalNetwork(remaining).Loops(source);
+                int ready=Array.FindAll(loops,l=>l.Ready).Length;
+                Near(ready*ThermalLoops.Allocation(100),(4-lost)*25,"losses retain fixed surviving heat-flow allocations");
+                Check(ThermalLoops.LastLoopLost(4-lost+1,ready,true)==(lost==4),"only last running circuit loss trips pressure shutdown");
+            }
+        }
+        var layout=IndependentLayout(); var root=layout[0];
+        var capA=layout.Find(n=>n.Id==14); var capB=layout.Find(n=>n.Id==24);
+        layout.Remove(capA);layout.Remove(capB);
+        layout.Add(new ThermalEndpoint{Id=99,GridId=1,Healthy=true,Model=capA.Model,
+            Ports=new[]{capA.Ports[0],capB.Ports[0]}});
+        var cross=new ThermalNetwork(layout).Loops(root);
+        Check(!cross[0].Ready && !cross[1].Ready && cross[2].Ready && cross[3].Ready,
+            "cross-connecting reactor outlets cannot duplicate coolant or cooling credit");
+        layout=IndependentLayout();
+        var cap=layout.Find(n=>n.Id==14);layout.Remove(cap);
+        layout.Add(new ThermalEndpoint{Id=99,GridId=1,Healthy=true,Model=layout.Find(n=>n.Id==12).Model,Ports=cap.Ports});
+        Check(!new ThermalNetwork(layout).Loops(layout[0])[0].Ready,"exactly one turbine per circuit");
+        Check(!ThermalLoops.LastLoopLost(0,0,true) && !ThermalLoops.LastLoopLost(1,0,false),
+            "initial commissioning and ordinary cooldown do not latch a running-loop trip");
+        var units=new List<ThermalUnit>{new ThermalUnit{Id=5,Kind=ThermalKind.Train},new ThermalUnit{Id=6,Kind=ThermalKind.AirCooler},new ThermalUnit{Id=2,Kind=ThermalKind.Pipe}};
+        var charge=new ThermalCommissioning(1,units){Seconds=8};
+        Check(charge.Covers(1,units),"unchanged sealed circuit retains its charge");
+        units.RemoveAt(2);Check(!charge.Covers(1,units),"pipe destruction invalidates only that circuit commissioning");
+        units.Add(new ThermalUnit{Id=99,Kind=ThermalKind.Pipe});Check(!charge.Covers(1,units),"replacement pipe needs paid refill");
+        Check(!charge.Covers(2,units),"split grid cannot inherit charge");
+        var state=new ThermalReactorState{Store=new ThermalStore{EntityId=1,HotMJ=100,WasteMJ=50},LoopVersion=1};
+        state.Loops[0].Connected=true; state.Loops[0].Charge=.5;
+        Near(state.Loops[0].PressureMPa,11,"charge controls authoritative circuit pressure");
+        Check(!state.Loops[0].Available && state.Valid(1),"part-filled circuit cannot grant reaction capacity");
+        for(int i=0;i<4;i++){state.Loops[i].Connected=true;state.Loops[i].Charge=1;}
+        Check(state.AvailableLoops==4,"four charged circuits available");
+        for(int i=0;i<4;i++) {
+            state.Loops[i].Charge=0;state.Loops[i].Connected=false;
+            Check(state.AvailableLoops==3-i,"loop availability follows isolated charges");
+            Near(state.Store.HotMJ+state.Store.WasteMJ,150,"pressure loss never erases stored energy or fabricates heat");
+            Near(ThermalMath.WasteHeatLevel(state.Store,100),.25,"core heat normalization retains full reactor rating");
+        }
+        var xml=new XmlSerializer(typeof(ThermalReactorState));var writer=new StringWriter();xml.Serialize(writer,state);
+        var restored=(ThermalReactorState)xml.Deserialize(new StringReader(writer.ToString()));
+        Check(restored.Valid(1) && !restored.Valid(2),"loop snapshots remain identity-bound through save/reload");
+        restored.Loops[0].Charge=double.NaN;Check(!restored.Valid(1),"nonfinite loop charge rejected");
+        restored.Loops=ThermalLoops.Empty();restored.Loops[0].Charge=1;Check(!restored.Valid(1),"disconnected circuit cannot claim charge");
+        restored.Loops=new ThermalLoopState[5];Check(!restored.Valid(1),"excess loop slots rejected");
+        double opening=1;
+        for(int i=0;i<21;i++)opening=ThermalIsolation.Step(opening,false,1.0/60);
+        Near(opening,0,"reactor shut-off spring closes in 350 ms");
+        for(int i=0;i<48;i++)opening=ThermalIsolation.Step(opening,true,1.0/60);
+        Near(opening,1,"charged circuit opens smoothly over 800 ms");
+        Near(ThermalIsolation.Step(double.NaN,true,1),0,"invalid animation fails closed");
+        var flow=new ThermalFlowState{EntityId=1,Ports=new byte[2],OpenConnectors=4};
+        Check(!flow.Valid(2),"reject excess connector bits in snapshot");
+        flow.OpenConnectors=3;Check(flow.Valid(2),"connector state independent of stopped flow");
+    }
+
+    private static void LoopEnergy()
+    {
+        foreach(double eta in new[]{.4,.78}) {
+            var core=new ThermalStore{EntityId=1,HotMJ=400};
+            var trains=new ThermalStore[4];
+            for(int i=0;i<4;i++)trains[i]=new ThermalStore{EntityId=10+i};
+            double admitted=0,exported=0,rejected=0,compression=0;
+            // Meter commissioning electricity into real machinery stores.
+            double[] seconds=new double[4];
+            for(int tick=0;tick<480;tick++) for(int i=0;i<4;i++) {
+                double delivered=ThermalLoops.Allocation(100)*.02;
+                seconds[i]=ThermalMath.StartupSeconds(seconds[i],.5,delivered,1.0/60);
+                trains[i].WasteMJ+=delivered/60;compression+=delivered/60;
+            }
+            foreach(double paid in seconds)Near(paid,8,"each circuit pays independently for its full charge");
+            for(int active=4;active>=0;active--) {
+                double before=admitted;
+                for(int tick=0;tick<1200;tick++) {
+                    for(int i=0;i<active;i++) {
+                        double allocation=ThermalLoops.Allocation(100);
+                        ThermalMath.Transfer(core,trains[i],200,allocation/60,false);
+                        double output=ThermalMath.ExportLimit(trains[i],200,eta,allocation*eta,1.0/60);
+                        Check(output<=allocation*eta,"surviving turbines never inherit failed circuit allocations");
+                        Check(ThermalMath.Convert(trains[i],output/60,eta),"each native grant consumes paid heat");
+                        exported+=output/60;
+                        ThermalMath.Transfer(trains[i],core,800,allocation/60,true);
+                    }
+                    rejected+=ThermalMath.Reject(core,(active>0 ? active*25*(1-eta) : 2)/60,false);
+                    if(active>0)admitted+=ThermalMath.AdmitReactionHeat(core,100,active*25.0/60,1000000);
+                    double retained=core.HotMJ+core.WasteMJ;
+                    foreach(var train in trains)retained+=train.HotMJ+train.WasteMJ;
+                    Near(400+admitted+compression,exported+rejected+retained,"successive circuit losses conserve fuel, compression, export, rejection and trapped MJ");
+                    Check(core.Valid(1,800),"core store remains bounded while circuit availability changes");
+                }
+                if(active==0)Near(admitted,before,"last-loop shutdown admits no new reaction heat");
+            }
+            Check(core.HotMJ+core.WasteMJ>0,"shutdown preserves residual heat instead of resetting the reactor");
         }
     }
 
@@ -849,8 +1006,37 @@ public static partial class ThermalRuntimeChecks
         double wrap = ThermalRadiators.Step(Math.PI * 2 - .01, .01, 1);
         Near(wrap, .01, "tracking crosses zero on the short arc");
         Near(ThermalRadiators.Cooling(60, 1, -270.15, 0), 60, "edge-on keeps cooling rating");
-        Near(ThermalRadiators.Cooling(60, 1, -270.15, 1), 39, "broadside solar penalty");
+        Near(ThermalRadiators.Cooling(60, 1, -270.15, .5), 45, "half solar exposure retains 75% cooling");
+        Near(ThermalRadiators.Cooling(60, 1, -270.15, 1), 30, "full sun on one face retains 50% cooling");
         Near(ThermalRadiators.Cooling(60, 0, -270.15, 0), 0, "occluded tracked radiator cannot cool");
+        Near(ThermalRadiators.Cooling(60, .5, -270.15, 0), 30, "solar shade does not undo obstructed radiating area");
+        foreach (double cosine in new[] { -1.0, 1.0 })
+        {
+            Near(ThermalRadiators.SolarExposure(cosine, 1, 1, false), 1, "either face receives full solar load");
+            Near(ThermalRadiators.SolarExposure(cosine, .5, 1, false), .5, "four of eight lit pivots give half exposure");
+            Near(ThermalRadiators.SolarExposure(cosine, 1, .5, false), .5, "native weather attenuates solar load");
+            Near(ThermalRadiators.SolarExposure(cosine, 0, 1, false), 0, "complete local shadow removes solar load");
+            Near(ThermalRadiators.SolarExposure(cosine, 1, 1, true), 0, "planetary eclipse removes solar load");
+            Near(ThermalRadiators.SolarExposure(cosine, 1, 0, false), 0, "zero weather sunlight removes solar load");
+        }
+        Near(ThermalRadiators.Cooling(60,1,-270.15,ThermalRadiators.SolarExposure(.5,.5,.5,false)),56.25,
+            "oblique incidence, partial shade and weather multiply like solar panels");
+        Near(ThermalRadiators.SolarExposure(0,1,1,false),0,"edge-on receives no solar load");
+        Near(ThermalRadiators.SolarEfficiency(ThermalRadiators.SolarExposure(1,1,2,false)),.5,"enhanced weather cannot exceed 50% solar penalty");
+        Near(ThermalRadiators.SolarExposure(double.NaN,1,1,false),1,"invalid sampled sun is conservatively fully exposed");
+        Near(ThermalRadiators.Cooling(60,1,-270.15,double.NaN),0,"invalid solar state cannot grant cooling");
+        foreach (var rotation in Orientations())
+        {
+            Vector3D sun=Vector3D.TransformNormal(Vector3D.UnitX,rotation);
+            Func<Vector3D,Vector3D> rotate=v=>Vector3D.TransformNormal(v,rotation);
+            Check(ThermalRadiators.PlanetShadow(rotate(new Vector3D(-2000,0,0)),1000,sun),"native planet shadow behind planet");
+            Check(!ThermalRadiators.PlanetShadow(rotate(new Vector3D(2000,0,0)),1000,sun),"sunward side is outside planet shadow");
+            Check(ThermalRadiators.PlanetShadow(rotate(new Vector3D(-20000,499,0)),1000,sun),"native 20-radius shadow and 500 m margin");
+            Check(!ThermalRadiators.PlanetShadow(rotate(new Vector3D(-20001,0,0)),1000,sun),"shadow ends beyond native 20-radius reach");
+            Check(!ThermalRadiators.PlanetShadow(rotate(new Vector3D(-2000,500,0)),1000,sun),"grazing sun clears native terrain margin");
+            Check(ThermalRadiators.PlanetShadow(rotate(new Vector3D(-1000,449,0)),500,sun),"small planets use native 90% radius margin");
+            Check(!ThermalRadiators.PlanetShadow(rotate(new Vector3D(-1000,450,0)),500,sun),"small planet shadow boundary");
+        }
         double glow = 0;
         for (int i = 0; i < 600; i++) glow = ThermalRadiators.HeatGlow(glow, 60, 60, 1.0 / 60);
         Check(glow > .96 && glow < 1, "dissipated heat smoothly raises glow");
@@ -863,7 +1049,19 @@ public static partial class ThermalRuntimeChecks
         var text = new StringWriter(); xml.Serialize(text, store);
         var restored = (ThermalStore)xml.Deserialize(new StringReader(text.ToString()));
         Check(restored.Valid(1, 200) && restored.Radiator.Angle == 1.2, "save preserves heat and radiator angle");
+        state.RejectedMW = 300000; Check(state.Valid(1), "upgraded three-panel rejection survives state validation");
+        state.RejectedMW = 300001; Check(!state.Valid(1), "radiator rejection remains bounded");
+        state.RejectedMW = 4000;
         state.Angle = double.NaN; Check(!state.Valid(1), "reject invalid motion state");
+        foreach(string suffix in new[]{"AtmosphericCooler","SpaceRadiator","RadiatorPanel"}) {
+            var standard = ThermalModels.All["ArcanePower_Thermal_"+suffix];
+            var upgraded = ThermalModels.All["ArcanePower_Thermal_"+suffix+"Upgraded"];
+            Near(standard.CoolingMW,10000,"standard cooler/panel rejects 10 GW");
+            Near(upgraded.CoolingMW,100000,"upgraded cooler/panel rejects 100 GW");
+            Near(standard.RatingMW,25000,"standard saved thermal capacity preserved");
+            Near(upgraded.RatingMW,250000,"upgraded cooler throughput scales with cooling");
+            Check(standard.Cells==upgraded.Cells && standard.Ports.Length==upgraded.Ports.Length,"upgrades retain socket and footprint contract");
+        }
         var model = ThermalModels.All["ArcanePower_Thermal_SpaceRadiator"];
         Check(model.Cells == new Vector3I(3, 3, 3), "reserved radiator sweep cells");
         Check(model.Ports.Length == 1, "one stationary duplex radiator port");
@@ -895,7 +1093,10 @@ public static partial class ThermalRuntimeChecks
             child.Translation = ThermalRadiators.ExtensionCentre(root, index);
             Check(!ThermalRadiators.FitsExtension(root, child, index), "misoriented panels cannot attach");
         }
-        Near(3 * ThermalRadiators.Cooling(15000, 1, -270.15, 0), 45000, "three equally exposed panels give three times cooling");
+        Near(3 * ThermalRadiators.Cooling(model.CoolingMW, 1, -270.15, 0), 30000, "three standard panels reject 30 GW");
+        var upgrade = ThermalModels.All["ArcanePower_Thermal_RadiatorPanelUpgraded"];
+        Near(3 * ThermalRadiators.Cooling(upgrade.CoolingMW,1,-270.15,0),300000,"three upgraded panels reject 300 GW");
+        Near(ThermalRadiators.Cooling(model.CoolingMW,1,-270.15,0)+2*ThermalRadiators.Cooling(upgrade.CoolingMW,1,-270.15,0),210000,"mixed tier panels add individual cooling ratings");
         state.Angle = 0; state.Panels = 4;
         Check(!state.Valid(1), "reject excessive attached count");
         state.Panels = 1; state.ParentId = -1;
@@ -904,7 +1105,7 @@ public static partial class ThermalRuntimeChecks
 
     public static void Main(string[] args)
     {
-        Registrations(); Budgets(); Stores(); CoolingFailure(); ModesAndStartup(); Topology(); UniversalPipes(); BarePipes(); Rotors(); Radiators(); Construction(); Flow(args.Length > 0 ? args[0] : null);
+        Isolation(); Registrations(); Budgets(); Stores(); CoolingFailure(); ModesAndStartup(); Topology(); UniversalPipes(); BarePipes(); Rotors(); Radiators(); LoopEnergy(); Construction(); Flow(args.Length > 0 ? args[0] : null);
         Console.WriteLine("Thermal runtime: " + checks + " checks passed (registrations/channels, budget, conservation, reload, modes, 47 manifold poses, heat/pressure rotors, construction/orientation guide and authored topology)");
     }
 }

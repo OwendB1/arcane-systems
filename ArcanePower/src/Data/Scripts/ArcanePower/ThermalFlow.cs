@@ -19,12 +19,16 @@ namespace ArcanePower
         // C always travels the opposite way in the same typed duplex connection.
         [ProtoMember(6)] public byte[] Ports;
         [ProtoMember(7)] public bool Internal;
+        // Bit per duplex connector: server-authorized mate, independent of flow.
+        // Missing/old observations default to spring-closed.
+        [ProtoMember(8)] public byte OpenConnectors;
 
         public bool Valid(int ports)
         {
             if (EntityId == 0 || Sequence < 0 || Mode < ThermalFlowMode.Unconnected || Mode > ThermalFlowMode.Fault
                 || !ThermalMath.Finite(Rate) || Rate < 0 || Rate > 1
                 || !ThermalMath.Finite(Heat) || Heat < 0 || Heat > 1
+                || OpenConnectors >= (1 << ports)
                 || Ports == null || ports < 0 || ports > 8 || Ports.Length != ports
                 || (Mode != ThermalFlowMode.Pumping && Rate != 0)) return false;
             foreach (byte p in Ports) if (p > 2) return false;
@@ -59,7 +63,7 @@ namespace ArcanePower
         {
             if (state == null || state.Mode != ThermalFlowMode.Pumping || state.Rate <= 0) return 0;
             if (Internal) return state.Internal ? 1 : 0;
-            if (Port < 0 || Port >= state.Ports.Length) return 0;
+            if (Port < 0 || Port >= state.Ports.Length || (state.OpenConnectors & (1 << Port)) == 0) return 0;
             int sign = state.Ports[Port] == 1 ? 1 : state.Ports[Port] == 2 ? -1 : 0;
             return Hot ? sign : -sign;
         }

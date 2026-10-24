@@ -8,36 +8,33 @@ The loadable large-block model folder now contains only current runtime
 dependencies. Accepted physics and native comparison inputs are retained outside
 `src`; packaging prunes unused model exports after resolving subparts and LODs.
 
-Updated 24 October 2026 after Brayton efficiency and cooling-failure gameplay.
+Updated 24 October 2026 after independent Brayton circuits and inverse solar cooling.
 The current status below supersedes the historical delivery notes that follow;
 the [full plan](arcane-power-plan.md) retains the wider design direction.
 
 ## Current status
 
-- **Brayton cooling and turbine efficiency, 24 October:** one through four active,
-  eligible turbines now provide 40%, 60%, 80% and 100% of their tier ceiling.
-  Standard net efficiency is 16/24/32/40%; exotic net efficiency is
-  31.2/46.8/62.4/78%. Additional turbines add capacity or standby. Insufficient
-  cooling returns conserved waste to the reactor and raises core heat into the
-  existing 125% critical latch/fuse/ejection lifecycle. Full stores stop fuel
-  admission without deleting heat. The warning appears from retained waste
-  before the core finishes heating; late restoration can still be too late.
-  Four standard turbines need 15 GW of rejection at a 25 GW thermal source;
-  one needs 21 GW, so use two fully effective 15 GW coolers and allow margin.
-  Startup demand uses dispatched heat throughput; internally paid circulation
-  uses actual bank efficiency. Shutdown keeps circulation power requested until
-  both reactor and attached-machine stores drain. Terminal, LCD, tablet and
-  construction/Workshop source instructions explain the new requirements.
-  The compiled runtime suite passes 2,172,890 checks, including sustained and
-  zero cooling, early/late recovery, conservation, persistence and the four-tier
-  bank curve. Compatibility compilation has zero warnings/errors; LCD/tablet
-  layouts and controls pass. All 1,730 native motion comparisons still pass.
-  The refreshed local 0.1.0 ZIP has 631 entries (438,362,565 bytes); the local mod
-  symlink exposes the same updated runtime sources. Delivery verifies all ZIP
-  entries against the current files. Cleanup removed the generated runtime and
-  catalog reports and native motion dump (128,407,176 bytes), preserving rebuild
-  inputs, manifests, code and package. Live SE operation, multiplayer and balance
-  remain unverified.
+- **Progression and cooling, 24 October:** Aether Residuum recovery, upgraded
+  turbine/cooler recipes, T3 equipment eligibility and 10/100 GW cooling tiers are
+  implemented. The catalog has 27 public thermal blocks and 24 model families.
+  See [fuel progression](../ArcanePower/README.md#fuel-selection-and-controllers)
+  and [power balance](../ArcanePower/THERMAL-POWER.md).
+
+- **Asset script cleanup, 24 October:** removed five obsolete authoring scripts
+  and three orphaned references. Current primitives live in `thermal_parts.py`;
+  viewport helpers belong to `review_thermal_models.py`. Retired IDs remain in the
+  contract for export pruning; rebuild entry points reject them. Production blends,
+  checkpoints, accepted collision inputs and current assets are preserved under
+  the [asset workflow](../ArcanePower/assets/AGENTS.md).
+
+- **Four independent Brayton circuits, 24 October:** fixed quarter-capacity
+  allocations, per-circuit paid commissioning and isolation, last-loop shutdown,
+  retained-waste overheat and inverse solar cooling are implemented. Player setup,
+  migration and recovery live in the [construction guide](../ArcanePower/THERMAL-CONSTRUCTION.md);
+  [runtime ownership](../ArcanePower/THERMAL-RUNTIME.md) covers authority and state.
+  The [delivery summary](../ArcanePower/validation/thermal-models/delivery-check.json)
+  records current offline verification. Live operation, multiplayer and survival
+  balance remain unverified.
 
 - **Turbine refinement and native delivery, 24 October:** all four regular,
   mirrored, standard and upgraded variants now have the lengthened generator

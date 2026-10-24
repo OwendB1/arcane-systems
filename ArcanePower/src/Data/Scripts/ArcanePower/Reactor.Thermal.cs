@@ -16,6 +16,11 @@ namespace ArcanePower
         }
         internal bool ThermalVariant { get { return IsLive && reactor.BlockDefinition.SubtypeName == "ArcanePower_Thermal_ReactorHousing"; } }
         internal bool ThermalInitialized { get { return ThermalVariant && motionInitialized && initializationFrames == 0 && !thermalRestoreFault && Motion.Thermal != null; } }
+        private bool ThermalFuelModeReady
+        {
+            get { return Motion.Thermal != null && Motion.Thermal.Settled
+                && (Motion.Thermal.Mode != ThermalMode.Brayton || HasAdvancedController()); }
+        }
         internal double ThermalInternalCirculation
         {
             get { return ThermalInitialized && !Motion.PowerPaused && !Motion.Thermal.Faulted
@@ -52,7 +57,9 @@ namespace ArcanePower
         }
         internal string ThermalModeTransitionHint
         {
-            get { return Motion.Thermal.TransitionHint(ThermalCold, ThermalManifoldPower, ManifoldRigReady); }
+            get { return Motion.Thermal.Requested == ThermalMode.Brayton && !HasAdvancedController()
+                ? "Brayton locked: install or repair an advanced controller; keep cooldown power supplied"
+                : Motion.Thermal.TransitionHint(ThermalCold, ThermalManifoldPower, ManifoldRigReady); }
         }
 
         private void InitializeThermalRuntime()
@@ -60,7 +67,28 @@ namespace ArcanePower
             if (!ThermalVariant) return;
             if (Motion.Thermal == null) Motion.Thermal = new ThermalReactorState();
             if (Motion.Thermal.Store.EntityId == 0) Motion.Thermal.Store.EntityId = Id;
+            if (MyAPIGateway.Multiplayer.IsServer)
+            {
+                bool legacy = Motion.Thermal.LoopVersion == 0 && Motion.Thermal.Mode == ThermalMode.Brayton;
+                Motion.Thermal.Loops = ThermalLoops.Empty();
+                Motion.Thermal.LoopVersion = 1;
+                // Commissioning is revalidated and paid after reload. Preserve
+                // every MJ and the critical-core state during network migration.
+                if (legacy)
+                {
+                    Motion.Thermal.Diagnostic = "Split old shared plumbing into four independent manifold circuits; restart manually";
+                    StopForLoopLoss();
+                }
+            }
             if (thermalRestoreFault) reactor.Enabled = false;
+        }
+
+        internal void StopForLoopLoss()
+        {
+            Motion.Thermal.LoopTrip = true;
+            reactor.Enabled = false;
+            if (nativeReactor != null) nativeReactor.Capacity = 0;
+            BeginShutdown();
         }
 
         internal bool ManifoldRigReady
@@ -82,6 +110,8 @@ namespace ArcanePower
         internal void RequestThermalMode(ThermalMode mode)
         {
             if (!MyAPIGateway.Multiplayer.IsServer || !ThermalInitialized || mode < ThermalMode.Standalone || mode > ThermalMode.Brayton) return;
+            if (mode == ThermalMode.Brayton && !HasAdvancedController())
+            { Motion.Thermal.Diagnostic = "Brayton requires at least one fully built, functional advanced controller"; PublishMotion(); return; }
             if (mode == ThermalMode.Brayton && !ManifoldRigReady)
             { Motion.Thermal.Diagnostic = "Native manifold subparts are missing or use incompatible origins"; PublishMotion(); return; }
             if (Motion.Thermal.Requested == mode) return;
@@ -96,10 +126,13 @@ namespace ArcanePower
             if (!ThermalVariant || Motion.Thermal == null) return;
             if (MyAPIGateway.Multiplayer.IsServer)
             {
-                if (!Motion.Thermal.Settled) reactor.Enabled = false;
+                if (!ThermalFuelModeReady) reactor.Enabled = false;
                 // Movement requires delivered motor power or the existing paid
                 // emergency reserve. The normal containment sink owns both.
-                Motion.Thermal.AdvanceManifolds(ThermalCold, ThermalManifoldPower, ManifoldRigReady, 1.0 / 60);
+                // Controller loss stops generation/deployment, but preserves
+                // hot connected cooling. Retraction still requires a cold core.
+                if (Motion.Thermal.Requested != ThermalMode.Brayton || HasAdvancedController())
+                    Motion.Thermal.AdvanceManifolds(ThermalCold, ThermalManifoldPower, ManifoldRigReady, 1.0 / 60);
             }
             if (!MyAPIGateway.Utilities.IsDedicated && ManifoldRigReady)
                 for (int bay = 0; bay < 4; bay++)

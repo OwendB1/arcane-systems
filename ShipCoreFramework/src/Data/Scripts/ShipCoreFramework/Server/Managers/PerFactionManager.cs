@@ -475,10 +475,8 @@ namespace ShipCoreFramework
             if (core == null || core.FactionPlayersNeededPerCore <= 0)
                 return -1;
 
-            if (playerCount <= 0)
-                return 0;
-
-            return playerCount / core.FactionPlayersNeededPerCore;
+            return Math.Max(core.MinPerFaction,
+                Math.Max(0, playerCount) / core.FactionPlayersNeededPerCore);
         }
 
         internal static int GetEffectiveFactionCoreLimit(ShipCore core, int playerCount)

@@ -48,10 +48,27 @@ namespace ArcanePower
         [ProtoMember(17)] public double AttachedHeatMJ;
         [ProtoMember(18)] public double CoolingMW;
         [ProtoMember(19)] public double RequiredCoolingMW;
+        [ProtoMember(20)] public ThermalLoopState[] Loops = ThermalLoops.Empty();
+        [ProtoMember(21)] public int LoopVersion;
+        [ProtoMember(22)] public bool LoopTrip;
+
+        public int AvailableLoops
+        {
+            get { int count = 0; if (Loops != null) foreach (var loop in Loops) if (loop != null && loop.Available) count++; return count; }
+        }
+
+        private bool ValidLoops()
+        {
+            if (LoopVersion < 0 || LoopVersion > 1) return false;
+            if (Loops == null) return LoopVersion == 0;
+            if (Loops.Length != ThermalLoops.Count) return false;
+            foreach (var loop in Loops) if (loop == null || !loop.Valid()) return false;
+            return true;
+        }
 
         public bool Valid(long id)
         {
-            return Mode >= ThermalMode.Standalone && Mode <= ThermalMode.Brayton
+            return ValidLoops() && Mode >= ThermalMode.Standalone && Mode <= ThermalMode.Brayton
                 && Requested >= ThermalMode.Standalone && Requested <= ThermalMode.Brayton
                 && Deployment >= 0 && Deployment <= 1 && Store != null && Store.Valid(id, 2500000 * 8.0)
                 && ThermalMath.Finite(FuelHeatMJ) && FuelHeatMJ >= 0 && FuelHeatMJ <= 2500000 * 8.0
@@ -101,9 +118,8 @@ namespace ArcanePower
 
     public sealed class ThermalPlan
     {
-        public double AcceptedMW, NetMW, Efficiency, DesignMW, CoolingMW, SustainableMW;
+        public double AcceptedMW, NetMW, Efficiency, CoolingMW, SustainableMW;
         public double RequiredCoolingMW { get { return AcceptedMW * (1 - Efficiency); } }
-        public int Standby;
         public string Limit = "Connect reactor, turbine and cooling";
         public readonly List<ThermalUnit> Trains = new List<ThermalUnit>();
     }
@@ -113,7 +129,6 @@ namespace ArcanePower
     // cold starting draws external electricity through a native sink.
     public static class ThermalMath
     {
-        public const int PeakDutyTrains = 4;
         private static readonly double[] Ceilings = { .40, .55, .66, .78 };
         private static readonly double[] Auxiliaries = { .08, .07, .06, .05 };
         private static readonly double[] Temperatures = { 650, 1000, 1600, 2200 };
@@ -180,11 +195,6 @@ namespace ArcanePower
             return Clamp((float)next == (float)heat ? target : next, 0, 4);
         }
 
-        public static double BankEfficiency(int duty)
-        {
-            return duty <= 0 ? 0 : .2 + .2 * Math.Min(PeakDutyTrains, duty);
-        }
-
         public static double Efficiency(int grade, double hotC, double coldC)
         {
             if (grade < 0 || grade > 3
@@ -209,64 +219,47 @@ namespace ArcanePower
                 * Clamp((panel - Math.Pow(sinkC + 273.15, 4)) / (panel - 81), 0, 1);
         }
 
+        // One turbine per independent circuit. The caller supplies that circuit's
+        // fixed allocation; lost circuits never increase the remaining allocations.
         public static ThermalPlan Dispatch(double offeredMW, double hotC, IList<ThermalUnit> units)
         {
             var best = new ThermalPlan();
             if (!Finite(offeredMW) || offeredMW <= 0 || !Finite(hotC)) return best;
+            ThermalUnit train = null;
             var coldPoints = new List<double>();
-            int installedTrains = 0;
             foreach (var unit in units)
             {
-                // A connected but blocked/occluded cooler still defines a bank.
-                // Zero rejection must expose an overheating risk, not silently
-                // switch off the reaction before its waste can accumulate.
+                if (unit.Kind == ThermalKind.Train)
+                {
+                    if (train != null) { best.Limit = "Use exactly one turbine per manifold circuit"; return best; }
+                    train = unit;
+                }
                 if ((unit.Kind == ThermalKind.AirCooler || unit.Kind == ThermalKind.Radiator)
-                    && unit.CoolingMW >= 0 && Finite(unit.CoolingMW) && Finite(unit.ColdC)
+                    && Finite(unit.CoolingMW) && unit.CoolingMW >= 0 && Finite(unit.ColdC)
                     && !coldPoints.Contains(unit.ColdC)) coldPoints.Add(unit.ColdC);
-                if (unit.Kind == ThermalKind.Train && Finite(unit.RatingMW) && unit.RatingMW > 0) installedTrains++;
             }
+            if (train == null || !Finite(train.RatingMW) || train.RatingMW <= 0) return best;
+            if (hotC >= 2200 && train.Grade < 3)
+            { best.Limit = "T3 Empyrean requires an upgraded Brayton turbine"; return best; }
             coldPoints.Sort();
-            for (int grade = 0; grade < 4; grade++)
-            {
-                if (hotC < Temperatures[grade]) continue;
-                var trains = new List<ThermalUnit>();
-                foreach (var unit in units)
+            for (int grade = 0; grade <= Math.Min(3, train.Grade); grade++)
+                foreach (double cold in coldPoints)
                 {
-                    if (!Finite(unit.RatingMW) || unit.RatingMW <= 0 || unit.Grade < grade) continue;
-                    if (unit.Kind == ThermalKind.Train) trains.Add(unit);
+                    double eta = Efficiency(grade, hotC, cold);
+                    double flow = eta > 0 ? Math.Min(offeredMW, train.RatingMW) : 0;
+                    if (flow * eta <= best.NetMW) continue;
+                    double cooling = 0;
+                    foreach (var unit in units)
+                        if ((unit.Kind == ThermalKind.AirCooler || unit.Kind == ThermalKind.Radiator)
+                            && unit.ColdC <= cold && Finite(unit.CoolingMW) && unit.CoolingMW > 0) cooling += unit.CoolingMW;
+                    best = new ThermalPlan { AcceptedMW = flow, NetMW = flow * eta, Efficiency = eta,
+                        CoolingMW = cooling,
+                        SustainableMW = Math.Min(flow, cooling / (1 - eta)) * eta,
+                        Limit = cooling + .000001 < flow * (1 - eta)
+                            ? "Insufficient circuit cooling: retained waste will overheat the reactor"
+                            : flow + .000001 < offeredMW ? "Turbine rating limits this circuit" : "Circuit ready" };
+                    best.Trains.Add(train);
                 }
-                trains.Sort((a, b) => { int size = b.RatingMW.CompareTo(a.RatingMW); return size != 0 ? size : a.Id.CompareTo(b.Id); });
-                // The authored family has two train ratings. Windows in rating
-                // order cover their capacity combinations, including leaving an
-                // oversized premium train idle beside a smaller efficient bank.
-                for (int start = 0; start < trains.Count; start++)
-                {
-                  double design = 0;
-                  for (int end = start; end < trains.Count; end++)
-                  {
-                    int duty = end - start + 1;
-                    design += trains[end].RatingMW;
-                    foreach (double cold in coldPoints)
-                    {
-                        double cooling = 0;
-                        foreach (var unit in units) if (unit.ColdC <= cold && Finite(unit.CoolingMW) && unit.CoolingMW > 0) cooling += unit.CoolingMW;
-                        double eta = Efficiency(grade, hotC, cold) * BankEfficiency(duty);
-                        double flow = eta > 0 ? Math.Min(offeredMW, design) : 0;
-                        double net = flow * eta;
-                        double sustainable = Math.Min(flow, cooling / (1 - eta)) * eta;
-                        if (net <= 0 || net < best.NetMW - .000001
-                            || (Math.Abs(net - best.NetMW) <= .000001 && duty >= best.Trains.Count)) continue;
-                        best = new ThermalPlan { AcceptedMW = flow, NetMW = net, Efficiency = eta,
-                            DesignMW = design, CoolingMW = cooling, SustainableMW = sustainable, Standby = installedTrains - duty,
-                            Limit = cooling + .000001 < flow * (1 - eta) ? "Insufficient cooling: returned waste heat will overheat the reactor"
-                                : flow + .000001 < offeredMW ? "Turbine capacity limits heat flow"
-                                : duty < PeakDutyTrains ? "Add parallel turbines: four active trains reach peak efficiency" : "Four-train efficiency reached; heat supply limits output" };
-                        for (int i = start; i <= end; i++) best.Trains.Add(trains[i]);
-                    }
-                    if (design >= offeredMW && duty >= PeakDutyTrains) break;
-                  }
-                }
-            }
             return best;
         }
 

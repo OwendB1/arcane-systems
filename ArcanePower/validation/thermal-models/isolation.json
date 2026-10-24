@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "checks": 48,
+  "maximum_error_m": 0.00011920928955078125,
+  "contract_sha256": "ffb24cd91cc704097c22ebc29165f3ba4adeb09c99eda1e86422196accd9b138",
+  "runtime_pose_sha256": "4eaafb3e67b4d6f75f0103ff22f9d78f7ab18bd2d186ffb7807467baadfbdcfb",
+  "native_mesh_sha256": {
+    "Models/Cubes/large/Thermal/Isolation/ArcaneIsolationSeat.mwm": "e0c86c1e655bd1523e2ecf564d0650b60b5d6488a9499ad9ae384c07b7ccba0b",
+    "Models/Cubes/large/Thermal/Isolation/ArcaneIsolationGate.mwm": "3bcd72efb6210a825844f2aea37710de5b6fe06dc9400afe9f4764964e1baa04"
+  },
+  "in_game_validation": "not_run"
+}

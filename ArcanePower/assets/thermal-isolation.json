@@ -1,0 +1,927 @@
+{
+  "models": {
+    "ArcaneIsolationSeat": {
+      "triangles": 728
+    },
+    "ArcaneIsolationGate": {
+      "triangles": 376
+    }
+  },
+  "radius": 0.278,
+  "bore_offset": 0.46,
+  "recess": 0.3,
+  "samples": [
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": -1,
+      "model": "ArcaneIsolationSeat",
+      "opening": 0,
+      "bounds": [
+        [
+          5.894999980926514,
+          -3.1039998531341553,
+          -2.808000087738037
+        ],
+        [
+          5.950999736785889,
+          -2.4760000705718994,
+          -2.191999912261963
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0,
+      "bounds": [
+        [
+          5.934999942779541,
+          -3.0869998931884766,
+          -2.7779998779296875
+        ],
+        [
+          5.974499702453613,
+          -2.493000030517578,
+          -2.2220001220703125
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.25,
+      "bounds": [
+        [
+          5.838070392608643,
+          -3.0869998931884766,
+          -2.759134531021118
+        ],
+        [
+          6.061929225921631,
+          -2.493000030517578,
+          -2.240865468978882
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.5,
+      "bounds": [
+        [
+          5.749181270599365,
+          -3.0869998931884766,
+          -2.7008183002471924
+        ],
+        [
+          6.150818347930908,
+          -2.493000030517578,
+          -2.2991816997528076
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.75,
+      "bounds": [
+        [
+          5.6908650398254395,
+          -3.0869998931884766,
+          -2.611929416656494
+        ],
+        [
+          6.209134578704834,
+          -2.493000030517578,
+          -2.388070583343506
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 1,
+      "bounds": [
+        [
+          5.671999931335449,
+          -3.0869998931884766,
+          -2.5244998931884766
+        ],
+        [
+          6.227999687194824,
+          -2.493000030517578,
+          -2.484999895095825
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": 1,
+      "model": "ArcaneIsolationSeat",
+      "opening": 0,
+      "bounds": [
+        [
+          5.894999980926514,
+          -2.18399977684021,
+          -2.808000087738037
+        ],
+        [
+          5.950999736785889,
+          -1.5559998750686646,
+          -2.191999912261963
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0,
+      "bounds": [
+        [
+          5.934999942779541,
+          -2.1669998168945312,
+          -2.7779998779296875
+        ],
+        [
+          5.974499702453613,
+          -1.5729999542236328,
+          -2.2220001220703125
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.25,
+      "bounds": [
+        [
+          5.838070392608643,
+          -2.1669998168945312,
+          -2.759134531021118
+        ],
+        [
+          6.061929225921631,
+          -1.5729999542236328,
+          -2.240865468978882
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.5,
+      "bounds": [
+        [
+          5.749181270599365,
+          -2.1669998168945312,
+          -2.7008183002471924
+        ],
+        [
+          6.150818347930908,
+          -1.5729999542236328,
+          -2.2991816997528076
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.75,
+      "bounds": [
+        [
+          5.6908650398254395,
+          -2.1669998168945312,
+          -2.611929416656494
+        ],
+        [
+          6.209134578704834,
+          -1.5729999542236328,
+          -2.388070583343506
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 0,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 1,
+      "bounds": [
+        [
+          5.671999931335449,
+          -2.1669998168945312,
+          -2.5244998931884766
+        ],
+        [
+          6.227999687194824,
+          -1.5729999542236328,
+          -2.484999895095825
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": -1,
+      "model": "ArcaneIsolationSeat",
+      "opening": 0,
+      "bounds": [
+        [
+          5.894999980926514,
+          -3.1039998531341553,
+          2.191999912261963
+        ],
+        [
+          5.950999736785889,
+          -2.4760000705718994,
+          2.808000087738037
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0,
+      "bounds": [
+        [
+          5.934999942779541,
+          -3.0869998931884766,
+          2.2220001220703125
+        ],
+        [
+          5.974499702453613,
+          -2.493000030517578,
+          2.7779998779296875
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.25,
+      "bounds": [
+        [
+          5.838070392608643,
+          -3.0869998931884766,
+          2.240865468978882
+        ],
+        [
+          6.061929225921631,
+          -2.493000030517578,
+          2.759134531021118
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.5,
+      "bounds": [
+        [
+          5.749181270599365,
+          -3.0869998931884766,
+          2.2991816997528076
+        ],
+        [
+          6.150818347930908,
+          -2.493000030517578,
+          2.7008183002471924
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.75,
+      "bounds": [
+        [
+          5.6908650398254395,
+          -3.0869998931884766,
+          2.388070583343506
+        ],
+        [
+          6.209134578704834,
+          -2.493000030517578,
+          2.611929416656494
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 1,
+      "bounds": [
+        [
+          5.671999931335449,
+          -3.0869998931884766,
+          2.4755001068115234
+        ],
+        [
+          6.227999687194824,
+          -2.493000030517578,
+          2.515000104904175
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": 1,
+      "model": "ArcaneIsolationSeat",
+      "opening": 0,
+      "bounds": [
+        [
+          5.894999980926514,
+          -2.18399977684021,
+          2.191999912261963
+        ],
+        [
+          5.950999736785889,
+          -1.5559998750686646,
+          2.808000087738037
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0,
+      "bounds": [
+        [
+          5.934999942779541,
+          -2.1669998168945312,
+          2.2220001220703125
+        ],
+        [
+          5.974499702453613,
+          -1.5729999542236328,
+          2.7779998779296875
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.25,
+      "bounds": [
+        [
+          5.838070392608643,
+          -2.1669998168945312,
+          2.240865468978882
+        ],
+        [
+          6.061929225921631,
+          -1.5729999542236328,
+          2.759134531021118
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.5,
+      "bounds": [
+        [
+          5.749181270599365,
+          -2.1669998168945312,
+          2.2991816997528076
+        ],
+        [
+          6.150818347930908,
+          -1.5729999542236328,
+          2.7008183002471924
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.75,
+      "bounds": [
+        [
+          5.6908650398254395,
+          -2.1669998168945312,
+          2.388070583343506
+        ],
+        [
+          6.209134578704834,
+          -1.5729999542236328,
+          2.611929416656494
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 1,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 1,
+      "bounds": [
+        [
+          5.671999931335449,
+          -2.1669998168945312,
+          2.4755001068115234
+        ],
+        [
+          6.227999687194824,
+          -1.5729999542236328,
+          2.515000104904175
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": -1,
+      "model": "ArcaneIsolationSeat",
+      "opening": 0,
+      "bounds": [
+        [
+          -5.950999736785889,
+          -3.1039998531341553,
+          -2.808000087738037
+        ],
+        [
+          -5.894999980926514,
+          -2.4760000705718994,
+          -2.191999912261963
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0,
+      "bounds": [
+        [
+          -5.974499702453613,
+          -3.0869998931884766,
+          -2.7779998779296875
+        ],
+        [
+          -5.934999942779541,
+          -2.493000030517578,
+          -2.2220001220703125
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.25,
+      "bounds": [
+        [
+          -6.061929225921631,
+          -3.0869998931884766,
+          -2.759134531021118
+        ],
+        [
+          -5.838070392608643,
+          -2.493000030517578,
+          -2.240865468978882
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.5,
+      "bounds": [
+        [
+          -6.150818347930908,
+          -3.0869998931884766,
+          -2.7008183002471924
+        ],
+        [
+          -5.749181270599365,
+          -2.493000030517578,
+          -2.2991816997528076
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.75,
+      "bounds": [
+        [
+          -6.209134578704834,
+          -3.0869998931884766,
+          -2.611929416656494
+        ],
+        [
+          -5.6908650398254395,
+          -2.493000030517578,
+          -2.388070583343506
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 1,
+      "bounds": [
+        [
+          -6.227999687194824,
+          -3.0869998931884766,
+          -2.515000104904175
+        ],
+        [
+          -5.671999931335449,
+          -2.493000030517578,
+          -2.4755001068115234
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": 1,
+      "model": "ArcaneIsolationSeat",
+      "opening": 0,
+      "bounds": [
+        [
+          -5.950999736785889,
+          -2.18399977684021,
+          -2.808000087738037
+        ],
+        [
+          -5.894999980926514,
+          -1.5559998750686646,
+          -2.191999912261963
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0,
+      "bounds": [
+        [
+          -5.974499702453613,
+          -2.1669998168945312,
+          -2.7779998779296875
+        ],
+        [
+          -5.934999942779541,
+          -1.5729999542236328,
+          -2.2220001220703125
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.25,
+      "bounds": [
+        [
+          -6.061929225921631,
+          -2.1669998168945312,
+          -2.759134531021118
+        ],
+        [
+          -5.838070392608643,
+          -1.5729999542236328,
+          -2.240865468978882
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.5,
+      "bounds": [
+        [
+          -6.150818347930908,
+          -2.1669998168945312,
+          -2.7008183002471924
+        ],
+        [
+          -5.749181270599365,
+          -1.5729999542236328,
+          -2.2991816997528076
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.75,
+      "bounds": [
+        [
+          -6.209134578704834,
+          -2.1669998168945312,
+          -2.611929416656494
+        ],
+        [
+          -5.6908650398254395,
+          -1.5729999542236328,
+          -2.388070583343506
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 2,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 1,
+      "bounds": [
+        [
+          -6.227999687194824,
+          -2.1669998168945312,
+          -2.515000104904175
+        ],
+        [
+          -5.671999931335449,
+          -1.5729999542236328,
+          -2.4755001068115234
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": -1,
+      "model": "ArcaneIsolationSeat",
+      "opening": 0,
+      "bounds": [
+        [
+          -5.950999736785889,
+          -3.1039998531341553,
+          2.191999912261963
+        ],
+        [
+          -5.894999980926514,
+          -2.4760000705718994,
+          2.808000087738037
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0,
+      "bounds": [
+        [
+          -5.974499702453613,
+          -3.0869998931884766,
+          2.2220001220703125
+        ],
+        [
+          -5.934999942779541,
+          -2.493000030517578,
+          2.7779998779296875
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.25,
+      "bounds": [
+        [
+          -6.061929225921631,
+          -3.0869998931884766,
+          2.240865468978882
+        ],
+        [
+          -5.838070392608643,
+          -2.493000030517578,
+          2.759134531021118
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.5,
+      "bounds": [
+        [
+          -6.150818347930908,
+          -3.0869998931884766,
+          2.2991816997528076
+        ],
+        [
+          -5.749181270599365,
+          -2.493000030517578,
+          2.7008183002471924
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.75,
+      "bounds": [
+        [
+          -6.209134578704834,
+          -3.0869998931884766,
+          2.388070583343506
+        ],
+        [
+          -5.6908650398254395,
+          -2.493000030517578,
+          2.611929416656494
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": -1,
+      "model": "ArcaneIsolationGate",
+      "opening": 1,
+      "bounds": [
+        [
+          -6.227999687194824,
+          -3.0869998931884766,
+          2.484999895095825
+        ],
+        [
+          -5.671999931335449,
+          -2.493000030517578,
+          2.5244998931884766
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": 1,
+      "model": "ArcaneIsolationSeat",
+      "opening": 0,
+      "bounds": [
+        [
+          -5.950999736785889,
+          -2.18399977684021,
+          2.191999912261963
+        ],
+        [
+          -5.894999980926514,
+          -1.5559998750686646,
+          2.808000087738037
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0,
+      "bounds": [
+        [
+          -5.974499702453613,
+          -2.1669998168945312,
+          2.2220001220703125
+        ],
+        [
+          -5.934999942779541,
+          -1.5729999542236328,
+          2.7779998779296875
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.25,
+      "bounds": [
+        [
+          -6.061929225921631,
+          -2.1669998168945312,
+          2.240865468978882
+        ],
+        [
+          -5.838070392608643,
+          -1.5729999542236328,
+          2.759134531021118
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.5,
+      "bounds": [
+        [
+          -6.150818347930908,
+          -2.1669998168945312,
+          2.2991816997528076
+        ],
+        [
+          -5.749181270599365,
+          -1.5729999542236328,
+          2.7008183002471924
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 0.75,
+      "bounds": [
+        [
+          -6.209134578704834,
+          -2.1669998168945312,
+          2.388070583343506
+        ],
+        [
+          -5.6908650398254395,
+          -1.5729999542236328,
+          2.611929416656494
+        ]
+      ]
+    },
+    {
+      "subtype": "ArcanePower_Thermal_ReactorHousing",
+      "port": 3,
+      "side": 1,
+      "model": "ArcaneIsolationGate",
+      "opening": 1,
+      "bounds": [
+        [
+          -6.227999687194824,
+          -2.1669998168945312,
+          2.484999895095825
+        ],
+        [
+          -5.671999931335449,
+          -1.5729999542236328,
+          2.5244998931884766
+        ]
+      ]
+    }
+  ]
+}

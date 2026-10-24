@@ -769,10 +769,15 @@ Sets and saves the client HUD screen position.";
             if (!HasFactionCoreLimit(core))
                 return "Unlimited";
 
-            if (core.MaxPerFaction >= 0 && core.FactionPlayersNeededPerCore > 0)
-                return $"{core.MaxPerFaction} max and 1 per {core.FactionPlayersNeededPerCore} faction players";
+            if (core.FactionPlayersNeededPerCore <= 0)
+                return core.MaxPerFaction.ToString();
 
-            return core.MaxPerFaction >= 0 ? core.MaxPerFaction.ToString() : $"1 per {core.FactionPlayersNeededPerCore} faction players";
+            string description = $"1 per {core.FactionPlayersNeededPerCore} faction players";
+            if (core.MinPerFaction > 0)
+                description += $", minimum allowance {core.MinPerFaction}";
+            if (core.MaxPerFaction >= 0)
+                description += $", capped at {core.MaxPerFaction}";
+            return description;
         }
 
         private static bool HasFactionCoreLimit(ShipCore core)
@@ -787,7 +792,10 @@ Sets and saves the client HUD screen position.";
                 return currentCount.ToString();
 
             if (core != null && core.FactionPlayersNeededPerCore > 0)
-                return $"{currentCount}/{max} (1 per {core.FactionPlayersNeededPerCore} players, faction size {playerCount})";
+            {
+                string floor = core.MinPerFaction > 0 ? $", minimum allowance {core.MinPerFaction}" : string.Empty;
+                return $"{currentCount}/{max} (1 per {core.FactionPlayersNeededPerCore} players{floor}, faction size {playerCount})";
+            }
 
             return $"{currentCount}/{max}";
         }

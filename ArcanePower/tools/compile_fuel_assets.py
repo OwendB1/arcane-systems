@@ -20,21 +20,38 @@ win = lambda path: 'Z:'+str(path).replace('/', chr(92))
 
 
 canister_only='--canister-only' in sys.argv
+residuum_only='--residuum-only' in sys.argv
+selected = 'ArcaneAetherResiduum' if residuum_only else 'ArcaneAetherCanister' if canister_only else None
 if not canister_only:
-    for folder in (MOD/'Textures/Models/ArcanePower/Fuels', MOD/'Textures/Voxels/ArcanePower'):
+    folders = [MOD/'Textures/Models/ArcanePower/Fuels']
+    if not residuum_only:folders.append(MOD/'Textures/Voxels/ArcanePower')
+    for folder in folders:
         for channel in ('cm', 'ng', 'add'):
-            convert(folder/('*_'+channel+'.tga'), folder, linear=channel=='ng', voxel='Voxels' in folder.parts)
-convert(ROOT/('assets/icons/fuels/ArcaneAetherCanister.png' if canister_only else 'assets/icons/fuels/*.png'), MOD/'Textures/GUI/Icons/ArcanePower', icon=True)
+            convert(folder/(('ArcaneResiduum*_' if residuum_only else '*_')+channel+'.tga'), folder,
+                    linear=channel=='ng', voxel='Voxels' in folder.parts)
+convert(ROOT/'assets/icons/fuels'/((selected or '*')+'.png'), MOD/'Textures/GUI/Icons/ArcanePower', icon=True)
 models = MOD/'Models/Items/ArcanePower'
-pattern='ArcaneAetherCanister.fbx' if canister_only else '*.fbx'
-subprocess.run(['wine', str(cache/'MwmBuilder.exe'), '/f', '/s:'+win(models),
-                '/m:'+pattern, '/o:'+win(models), '/x:'+win(setup/'assets/Materials')],
-               cwd=cache, check=True, env=env)
-for source in models.glob(pattern):
-    output = source.with_suffix('.mwm')
-    if not output.is_file() or output.stat().st_mtime < source.stat().st_mtime:
-        raise RuntimeError('Missing or stale model: '+str(output))
+jobs = []
+if not residuum_only:jobs.append((models, (selected or '*')+'.fbx'))
+if not canister_only:jobs.append((ROOT/'.cache/residuum/models', 'ArcaneAetherResiduum.fbx'))
+for sources,pattern in jobs:
+    inputs=list(sources.glob(pattern))
+    if not inputs:raise RuntimeError('Export Blender fuel sources first: '+str(sources/pattern))
+    subprocess.run(['wine', str(cache/'MwmBuilder.exe'), '/f', '/s:'+win(sources),
+                    '/m:'+pattern, '/o:'+win(sources), '/x:'+win(setup/'assets/Materials')],
+                   cwd=cache, check=True, env=env)
+    for source in inputs:
+        output = source.with_suffix('.mwm')
+        if not output.is_file() or output.stat().st_mtime < source.stat().st_mtime:
+            raise RuntimeError('Missing or stale model: '+str(output))
+        if sources != models:
+            shutil.copy2(output, models/output.name)
+            materials=ROOT/'assets/fuel-materials';materials.mkdir(exist_ok=True)
+            shutil.copy2(source.with_suffix('.xml'),materials/(source.stem+'.xml'))
 fuel_definitions()
+if selected:
+    print('Compiled '+selected+' model, icon and materials; definitions refreshed.')
+    sys.exit(0)
 
 # Review the actual model renders beside each matching mineral surface.
 sheet = Image.new('RGB', (1280, 1120), '#141d29')
@@ -64,4 +81,4 @@ for row, (name, ore_name, ore, concentrate, fuel, color) in enumerate(tiers):
     draw.text((984, y+293), name+' deposit', font=small, fill=color)
 sheet.save(ROOT/'validation/fuel-assets.png')
 print('Compiled empty canister assets; definitions refreshed.' if canister_only else
-      'Compiled ten item models/icons and three near/far voxel materials; definitions refreshed.')
+      'Compiled fuel item models/icons and three near/far voxel materials; definitions refreshed.')

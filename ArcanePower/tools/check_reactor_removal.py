@@ -31,10 +31,12 @@ methods = ''.join(member(file, signature) for file, signature in [
     ('Reactor.cs', '        public override void Close()'),
     ('Reactor.Fuel.cs', '        private void FuelChanged('),
     ('Reactor.Fuel.cs', '        private bool HasUsableFuel()'),
+    ('Reactor.Fuel.cs', '        private int FuelTierLimit'),
     ('Reactor.Fuel.cs', '        private void RefreshFuelCapacity()'),
     ('Reactor.Fuel.cs', '        private double FuelUnitsPerMinute()'),
     ('Reactor.Fuel.cs', '        private void UpdateFuel()'),
     ('Reactor.Thermal.cs', '        internal bool ThermalVariant'),
+    ('Reactor.Thermal.cs', '        private bool ThermalFuelModeReady'),
     ('Reactor.Thermal.cs', '        private void RefreshThermalCapacity()'),
     ('Reactor.Safety.cs', '        private bool CanOperate'),
 ])
@@ -102,7 +104,7 @@ enum MyEntityUpdateEnum {NONE,EACH_FRAME}
 enum CorePhase {Off,Starting,Running,Cooling,Stopping}
 enum VentPhase {Idle,ShieldClosing,Ejecting}
 enum ThermalMode {Standalone,Brayton}
-class ThermalState {public double ProducedMW,FuelHeatMJ;public object Store=new object();public ThermalMode Mode;}
+class ThermalState {public double ProducedMW,FuelHeatMJ;public object Store=new object();public ThermalMode Mode,Requested;public bool Settled=true;}
 static class ThermalMath {public static double ExportLimit(object store,double capacity,double efficiency,double ramp,double dt){return 100;}}
 class State {
  public CorePhase Core=CorePhase.Running;
@@ -110,6 +112,7 @@ class State {
  public int FuelTier=1;
  public bool PowerPaused,TileStarved,VentReady=true,SecurityMode=true;
  public float PowerRamp=1,StarvedLoad;
+ public long ResiduumMicroUnits;
  public double FuelDebt;
  public ThermalState Thermal=new ThermalState();
 }
@@ -127,6 +130,8 @@ class Reactor {
  float ElectricalRatingMW=10000;
  static string[] Fuels={"ArcaneFuelI","ArcaneFuelII","ArcaneFuelIII"};
  static float[] PowerMW={10000,100000,1000000};
+ const long ResiduumScale=1000000;const int ResiduumPerCanister=10;
+ void RecoverResiduum(){} void ExportResiduum(VRage.Game.Entity.MyInventoryBase target){}
  const float FuelUnitsPerCanister=10;
  List<IMyTerminalBlock> fuelSources=new List<IMyTerminalBlock>();
  List<MyInventoryItem> transferItems=new List<MyInventoryItem>();
@@ -142,6 +147,7 @@ class Reactor {
  void DrawMotion(){steps++;} void DrawVentOutlet(){steps++;}
  void CloseSound(){soundStops++;} void SaveMotion(){saves++;}
  void PullTiles(VRage.Game.Entity.MyInventoryBase source,VRage.Game.Entity.MyInventoryBase target){}
+ bool HasAdvancedController(){return true;}
 ''' + methods + r'''
  static void Need(bool condition,string message){if(!condition)throw new Exception(message);}
  static void Main(){

@@ -28,7 +28,7 @@ materials = keyed(materials)
 weights = keyed(weights)
 classes = {n.get('BlueprintSubtypeId'): n.get('Class') for n in
            ET.parse(ROOT / 'src/Data/Blueprints.sbc').findall('BlueprintClassEntries/Entry')}
-assert len(items) == 10 and len(recipes) == 7 and len(materials) == 3
+assert len(items) == 11 and len(recipes) == 7 and len(materials) == 3
 canister = items['ArcaneAetherCanister']
 assert canister.findtext('Id/TypeId') == 'Component'
 assert Decimal(canister.findtext('Volume')) == 24
@@ -136,3 +136,29 @@ with tempfile.TemporaryDirectory(prefix='arcane-fuel-recipes-') as directory:
     finally:
         prepare_lab.MOD = original_mod
 print('PASS: regeneration preserves canister, filling/upgrade recipes and exotic tile grades')
+
+residuum = items['ArcaneAetherResiduum']
+assert residuum.findtext('Id/TypeId') == 'Component'
+assert Decimal(residuum.findtext('Mass')) == 1 and Decimal(residuum.findtext('Volume')) == Decimal('.001')
+assert not any(b.find('Result').get('SubtypeId') == 'ArcaneAetherResiduum' for b in recipes.values())
+thermal = ET.parse(ROOT/'src/Data/CubeBlocks/ArcanePower_Thermal.sbc').getroot()
+upgrades = 0
+for block in thermal.findall('CubeBlocks/Definition'):
+    name = block.findtext('Id/SubtypeId')
+    required = block.findall("Components/Component[@Subtype='ArcaneAetherResiduum']")
+    if name.endswith('Upgraded'):
+        upgrades += 1
+        assert len(required)==1 and int(required[0].get('Count'))==(20 if 'BraytonTrain' in name else 10), name
+        assert block.find('CriticalComponent').attrib=={'Subtype':'ArcaneAetherResiduum','Index':'0'}, name
+    else:assert not required, name
+assert upgrades==5
+# Repeated catalog regeneration cannot duplicate or remove the progression gate.
+import prepare_thermal_release as release
+with tempfile.TemporaryDirectory(prefix='arcane-thermal-catalog-') as directory:
+    original=release.MOD;release.MOD=Path(directory)
+    try:
+        release.write_catalog(thermal)
+        release.write_catalog(ET.parse(release.MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').getroot())
+        assert (release.MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').read_bytes()==(original/'Data/CubeBlocks/ArcanePower_Thermal.sbc').read_bytes()
+    finally:release.MOD=original
+print('PASS: uncraftable Residuum, five material-gated upgrades, idempotent block catalog')

@@ -11,22 +11,47 @@ ROOT = Path(__file__).resolve().parents[1]
 M = runpy.run_path(str(ROOT/'assets/build_thermal_models.py'))
 C = M['CONTRACT']
 OUT = M['OUT']
-OLD = runpy.run_path(str(ROOT/'assets/review_thermal_concepts.py'))
 
 
-def view(scene, target=(0, 0, 0), direction=(1, -1, .65), distance=18, light_rotation=.5):
+def view(scene,target=(0,0,0),direction=(1,-1,.65),distance=18,light_rotation=.5):
     assert -math.pi <= light_rotation <= math.pi, 'Studio light rotation is limited to +/- pi'
-    row = OLD['view'](scene, target, direction, distance)
+    bpy.context.window.scene=bpy.data.scenes[scene]
+    bpy.context.view_layer.update()
     for area in bpy.context.screen.areas:
-        if area.type == 'VIEW_3D':
-            area.spaces.active.shading.studiolight_rotate_z = light_rotation
-    row['light_rotation'] = light_rotation
-    return row
+        if area.type!='VIEW_3D':continue
+        s=area.spaces.active;s.region_3d.view_location=target
+        s.region_3d.view_rotation=Vector(direction).to_track_quat('Z','Y')
+        s.region_3d.view_distance=distance;s.region_3d.view_perspective='PERSP'
+        s.lens=48;s.overlay.show_overlays=False;s.shading.type='MATERIAL'
+        s.shading.studio_light='studio.exr';s.shading.studiolight_rotate_z=light_rotation
+        s.shading.studiolight_intensity=.8;s.clip_start=.015;s.clip_end=500
+        area.tag_redraw()
+    return {'scene':scene,'target':list(target),'direction':list(direction),'distance_m':distance,'lens_mm':48,'light_rotation':light_rotation}
 
 
 def snapshot(filename):
-    OLD['snapshot'].__globals__['OUT'] = OUT
-    return OLD['snapshot'](filename)
+    """Capture the settled live UI, called after a separate view-setting call."""
+    area=next(a for a in bpy.context.screen.areas if a.type=='VIEW_3D')
+    path=OUT/filename
+    with bpy.context.temp_override(area=area):bpy.ops.screen.screenshot_area(filepath=str(path))
+    s=area.spaces.active;r=s.region_3d;eye=r.view_matrix.inverted().translation
+    row={'image':path.name,'scene':bpy.context.scene.name,'target':list(r.view_location),
+         'eye':list(eye),'distance_m':(eye-r.view_location).length,'lens_mm':s.lens,
+         'studio_light':s.shading.studio_light,'light_rotation':s.shading.studiolight_rotate_z,
+         'light_intensity':s.shading.studiolight_intensity}
+    manifest=OUT/'ui-reviews.json';rows=json.loads(manifest.read_text()) if manifest.exists() else {}
+    rows[path.name]=row;manifest.write_text(json.dumps(rows,indent=2)+'\n')
+    return row
+
+
+def engineer(p,xy=(0,0)):
+    """Simple 1.9 m scale mannequin, explicitly a review guide."""
+    x,y=xy
+    p.box('engineer torso',(x,y,1.22),(.48,.27,.61),'PaintedMetal_Colorable',.025)
+    p.box('engineer helmet',(x,y,1.745),(.28,.29,.31),'Metal_Dull',.035)
+    for sign in (-1,1):
+        p.box('engineer leg',(x+sign*.15,y,.45),(.20,.24,.90),'PaintedMetal_Darker')
+        p.box('engineer arm',(x+sign*.33,y,1.19),(.14,.22,.62),'PaintedMetal_Darker')
 
 
 def start_review(plan, label):
@@ -136,7 +161,7 @@ def floor(p, centre, size):
         p.box('5 m grid', (gx, y, .002), (.012, d, .003), 'Metal_Dull', 0)
     for gy in range(round(y-d/2+1), round(y+d/2), 5):
         p.box('5 m grid', (x, gy, .002), (w, .012, .003), 'Metal_Dull', 0)
-    OLD['engineer'](p, (x, y-d/2+3))
+    engineer(p, (x, y-d/2+3))
     for dx in (-1.25, 1.25):
         p.box('2.5 m cell upright', (x+dx, y-d/2+3, 1.25), (.02, .02, 2.5), 'Metal_Dull', 0)
     p.box('2.5 m cell cap', (x, y-d/2+3, 2.5), (2.5, .02, .02), 'Metal_Dull', 0)
@@ -147,8 +172,8 @@ def lineup():
     scene, p = fresh('Main model lineup')
     deck = floor(p, (0, 9), (65, 65))
     positions = {'Brayton train': (-20, -10, 2.5), 'Brayton train upgraded': (0, -10, 2.5),
-                 'Primary heater': (-22.5, 5, 3.75), 'Primary heater upgraded': (-10, 5, 3.75),
-                 'Recuperator': (2.5, 6.25, 3.75), 'Recuperator upgraded': (15, 6.25, 3.75),
+                 'Brayton train mirrored': (-20, 5, 2.5), 'Brayton train mirrored upgraded': (0, 5, 2.5),
+                 'Radiator panel': (-7.5, 18.75, 10.0),
                  'Atmospheric cooler': (-20, 18.75, 3.75), 'Space radiator': (-7.5, 18.75, 3.75),
                  'Reactor housing': (12.5, 22.5, 3.75),
                  'PRIMARY / Reactor adapter': (22.5, 20, 1.25)}
@@ -254,7 +279,7 @@ def cooler_hull():
             if abs(x)!=5 and z not in (-1.25,8.75):continue
             for y in (-1.25,1.25):
                 p.box('neighbor armor',(x,y,z),(2.5,2.5,2.5),'PaintedMetal_Darker',.002)
-    OLD['engineer'](p,(-7,-4))
+    engineer(p,(-7,-4))
     return {'scene':scene.name}
 
 
@@ -287,7 +312,7 @@ def compact_trains():
     for name,y in (('Brayton train',1.25),('Brayton train upgraded',8.75),
                    ('Brayton train mirrored',16.25),('Brayton train mirrored upgraded',23.75)):
         instance(scene,name,(2.5,y,2.5))
-    OLD['engineer'](p,(-5,-3))
+    engineer(p,(-5,-3))
     floor(p,(0,12.5),(15,35))
     return {'scene':scene.name,'cells_width_height_length':[2,2,5]}
 

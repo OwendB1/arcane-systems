@@ -82,7 +82,7 @@ def check_catalog():
     thermal = [row for row in rows if '/ArcanePower_Thermal_' in row['id']]
     models = json.loads((ROOT/'validation/thermal-models/models.json').read_text())
     playable=contract['PLAYABLE']
-    models={name:spec for name,spec in models.items() if name in playable}
+    models={name:spec for name,spec in contract['runtime_models'](models).items() if name in playable}
     assert len(thermal) == len(contract['RUNTIME'])
     public_thermal=[row for row in thermal if row['public']]
     assert len(public_thermal) == len(models)
