@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 import runpy
 import bpy
+import bmesh
 from mathutils import Matrix, Vector
 from mathutils.bvhtree import BVHTree
 
@@ -161,8 +162,11 @@ def apply(name):
         p.scene['thermal_flow_revision'] = REVISION
     coolant_glass(p)
     uniform_glass_materials()
-    runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))['pressure_seal_fit'](p)
+    fittings = runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))
+    fittings['pressure_seal_fit'](p)
+    fittings['reactor_coupling_fit'](p)
     external_pipe_jackets(p)
+    pipe_end_materials(p)
     row = record(p)
     M['record'](name)
     return row
@@ -315,7 +319,7 @@ def reactor_sight_frames(p):
 
 
 def coolant_glass(p, internal=False):
-    """Reflective external glass; preserve the accepted internal coolant finish."""
+    """Use the shared glass finish while retaining separate coolant material IDs."""
     name = 'ArcanePower_InternalCoolantGlass' if internal else 'ArcanePower_CoolantGlass'
     glass = bpy.data.materials.get(name)
     if glass is None:
@@ -323,32 +327,8 @@ def coolant_glass(p, internal=False):
         glass.name = name
     glass['thermal_native_glass'] = True
     p.native[name] = glass
-    active = bpy.context.view_layer.objects.active
-    mesh = bpy.data.meshes.new('Temporary coolant glass context')
-    host = bpy.data.objects.new('Temporary coolant glass context', mesh)
-    p.col.objects.link(host)
-    mesh.materials.append(glass)
-    bpy.context.view_layer.objects.active = host
-    try:
-        glass.seut.color = (.42, .60, .68, .62)
-        glass.seut.color_add = (.006, .009, .012, .16 if internal else .10)
-        glass.seut.reflectivity = .22 if internal else .45
-        glass.seut.fresnel = .70 if internal else .90
-        glass.seut.specular_color_factor = 6 if internal else 8
-    finally:
-        bpy.context.view_layer.objects.active = active
-        bpy.data.objects.remove(host, do_unlink=True)
-        bpy.data.meshes.remove(mesh)
-    nodes = glass.node_tree.nodes
-    preview = nodes['Arcane clear glass preview']
-    preview.inputs['Base Color'].default_value = (.10, .18, .22, 1) if internal else (.28, .42, .48, 1)
-    preview.inputs['Roughness'].default_value = .19 if internal else .075
-    preview.inputs['IOR'].default_value = 1.48 if internal else 1.50
-    nodes['AP glass dirt alpha'].inputs[1].default_value = .35
-    nodes['AP glass dirt alpha'].inputs[2].default_value = .24 if internal else .18
-    nodes['AP glass preview opacity'].inputs[1].default_value = .20 if internal else .40
-    glass.diffuse_color = (.10, .18, .22, .40) if internal else (.28, .42, .48, .30)
-    # The native glass ID has its own definition; the outer chamber stays clear.
+    runpy.run_path(str(ROOT/'assets/tune_chamber_glass.py'))['apply_material'](glass)
+    # The native glass ID has its own definition; material slots stay unchanged.
     file = ROOT/'src/Data/TransparentMaterials.sbc'
     tree = ET.parse(file)
     definitions = tree.getroot().find('TransparentMaterials')
@@ -393,8 +373,8 @@ def uniform_glass_materials():
         nodes = mat.node_tree.nodes
         nodes['CM'].image = images['ca']
         nodes['NG'].image = images['ng']
-        # The existing preview alpha expression now samples constant zero CA.
-        mat['thermal_uniform_glass_revision'] = 1
+        # Native glass uses ColorAdd for its body; keep the live preview in sync.
+    runpy.run_path(str(ROOT/'assets/tune_chamber_glass.py'))['apply']()
     file = ROOT/'src/Data/TransparentMaterials.sbc'
     tree = ET.parse(file)
     for definition in tree.getroot().find('TransparentMaterials'):
@@ -513,6 +493,103 @@ def external_pipe_jackets(p):
                         break
                     remaining -= length
     p.col['thermal_external_jacket_revision'] = 2
+
+
+def pipe_end_materials(p):
+    """Short, solid metal ferrules; identical inner/outer glass boundaries.
+
+    The old spherical distance from an endpoint classified inner and outer
+    faces differently. Cut an axial boundary so a long face cannot carry metal
+    into the sight length. Preserve the reactor's accepted internal plumbing.
+    """
+    changed = []
+    for obj in p.col.objects:
+        if obj.type != 'MESH' or not obj.get('thermal_pressure_glass') or obj.get('thermal_internal_coolant'):
+            continue
+        if obj.get('thermal_pipe_end_revision') == 2:
+            continue
+        if obj.get('pipe_path'):
+            path = list(map(Vector, json.loads(obj['pipe_path'])))
+            if obj.get('thermal_motion_group'):
+                # Manifold paths stay in their authored mesh frame when the
+                # parent carriage previews deployment in the live viewport.
+                path = [obj.matrix_world@point for point in path]
+            ends = [(path[i], (path[i]-path[j]).normalized()) for i,j in ((0,1),(-1,-2))]
+            radius = obj['pipe_radius']
+        elif p.col.get('pipe_shape') in ('Tee', 'Cross') and ' / connected ' in obj.name:
+            sign = 1 if 'connected H ' in obj.name else -1
+            ends = [(Vector(port['position'])+Vector(port['hot_axis'])*(sign*.46),
+                     Vector(port['normal'])) for port in p.ports]
+            radius = .355
+        else:
+            continue
+        cuts = []
+        for end, normal in ends:
+            cut = end-normal*.10
+            # Every duplex socket uses the same 150 mm shoulder depth,
+            # regardless of whether its wall was shortened by the seal pass.
+            for port in p.ports:
+                for sign in (-1,1):
+                    socket = Vector(port['position'])+Vector(port['hot_axis'])*(sign*.46)
+                    if (end-socket).length < .12 and normal.dot(Vector(port['normal'])) > .99:
+                        cut = socket-normal*.15
+            cuts.append((cut,normal))
+        if obj.data.users > 1:
+            obj.data = obj.data.copy()
+        matrix, inverse = obj.matrix_world, obj.matrix_world.inverted()
+        bm = bmesh.new();bm.from_mesh(obj.data)
+        for cut, normal in cuts:
+            faces = []
+            for face in bm.faces:
+                points = [matrix@v.co-cut for v in face.verts]
+                axial = [v.dot(normal) for v in points]
+                if min(axial) < -1e-5 and max(axial) > 1e-5 and min((v-normal*v.dot(normal)).length for v in points) < radius+.02:
+                    faces.append(face)
+            if faces:
+                geom = list({v for f in faces for v in f.verts}|{e for f in faces for e in f.edges})+faces
+                bmesh.ops.bisect_plane(bm, geom=geom, dist=1e-6, plane_co=inverse@cut,
+                    plane_no=(matrix.to_3x3().transposed()@normal).normalized())
+        bm.to_mesh(obj.data);bm.free();obj.data.update()
+        for material in (bpy.data.materials['ArcanePower_CoolantGlass'],p.native['Metal_Dull']):
+            if material.name not in obj.data.materials:obj.data.materials.append(material)
+        glass, metal = (obj.data.materials.find(n) for n in ('ArcanePower_CoolantGlass','Metal_Dull'))
+        for face in obj.data.polygons:
+            point = matrix@face.center
+            ferrule = any((point-cut).dot(normal) > -1e-5 and
+                          ((point-cut)-normal*(point-cut).dot(normal)).length < radius+.02
+                          for cut,normal in cuts)
+            face.material_index = metal if ferrule else glass
+        # Close each material as its own pressure-wall solid. A material change
+        # alone leaves the metal's wall thickness open when seen through glass.
+        bm = bmesh.new();bm.from_mesh(obj.data)
+        seams = [e for e in bm.edges if len(e.link_faces)==2 and
+                 e.link_faces[0].material_index != e.link_faces[1].material_index]
+        bmesh.ops.split_edges(bm,edges=seams)
+        for cut, normal in cuts:
+            for material in (metal,glass):
+                edges = [e for e in bm.edges if e.is_boundary and
+                         e.link_faces[0].material_index==material and
+                         all(abs((matrix@v.co-cut).dot(normal))<1e-5 for v in e.verts)]
+                if not edges:continue
+                caps = bmesh.ops.bridge_loops(bm,edges=edges)['faces']
+                assert caps, ('Unclosed pipe shoulder',obj.name)
+                uv = bm.loops.layers.uv.active
+                u = normal.cross(Vector((0,0,1)) if abs(normal.z)<.95 else Vector((0,1,0)))
+                u.normalize();v = normal.cross(u)
+                for face in caps:
+                    face.material_index=material;face.smooth=False
+                    for loop in face.loops:
+                        point=matrix@loop.vert.co-cut
+                        loop[uv].uv=(point.dot(u)*.8+.17,point.dot(v)*.8+.41)
+                if material==glass:
+                    # A 2 mm seating seam avoids coincident metal/glass caps.
+                    for vertex in {v for face in caps for v in face.verts}:
+                        vertex.co=inverse@(matrix@vertex.co-normal*.002)
+        bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces))
+        bm.to_mesh(obj.data);bm.free();obj.data.update()
+        obj['thermal_pipe_end_revision'] = 2
+        changed.append(obj.name)
+    return changed
 
 
 def reactor_tube_contrast(p):

@@ -39,8 +39,11 @@ assets. All public blocks have icons, three construction stages and LODs where
 required. Native checks cover collision, material dependencies, the reactor's
 20 manifold subparts, eight shaft subparts and two radiator subparts.
 
-The reactor generates its own CO2 during powered commissioning. Trains and coolers
-share one duplex network, preserving H/C roll at every joint. Each train has one
+The reactor supplies CO2 automatically, without timed filling or a pressure gate.
+Its four independent duplex circuits each connect one train and its cooling,
+preserving H/C roll at every joint. Cold startup and hot cooldown retain metered
+compressor power. Repairs and reloads revalidate connections without refilling.
+Each train has one
 lower-cell socket and regular/mirrored variants. The shaft line is 0.55 m lower;
 close pipe runs use relieved supports. H enters the first compressor casing and
 C leaves the turbine rear. Existing two-socket trains require pipe rerouting.
@@ -59,6 +62,11 @@ previously blank reverse faces. Derived stages
 and LODs follow the same source.
 The sole playable reactor keeps its thermal subtype ID. Archived authoring
 sources remain outside the shipped mod. Reactor internal plumbing is preserved.
+Reactor adapters have square-edged receiving lips that overlap the deployed
+manifold noses. External pipe ends use short metal ferrules with matching inner
+and outer glass boundaries, including framed/bare pipes and moving manifolds.
+Metal annular faces close the ferrule walls toward the glass while keeping the
+flow bore open; the glass is seated 2 mm behind each shoulder.
 
 Brayton efficiency now reaches its tier ceiling with four active turbines:
 one through four provide 40%, 60%, 80% and 100% of that ceiling. Cooling deficits

@@ -8,8 +8,9 @@ namespace ArcanePower
     {
         public string Circuit;
         public Vector3 Position, Normal, HotAxis;
-        public ThermalPort(string circuit, Vector3 position, Vector3 normal, Vector3 hotAxis)
-        { Circuit = circuit; Position = position; Normal = normal; HotAxis = hotAxis; }
+        public bool ReactorOnly;
+        public ThermalPort(string circuit, Vector3 position, Vector3 normal, Vector3 hotAxis, bool reactorOnly = false)
+        { Circuit = circuit; Position = position; Normal = normal; HotAxis = hotAxis; ReactorOnly = reactorOnly; }
     }
 
     public sealed class ThermalModel
@@ -37,13 +38,13 @@ namespace ArcanePower
             {
                 var p = model.Ports[i];
                 ports[i] = new ThermalPort(p.Circuit, Vector3.Transform(p.Position, rotation) + centre,
-                    Vector3.TransformNormal(p.Normal, rotation), Vector3.TransformNormal(p.HotAxis, rotation));
+                    Vector3.TransformNormal(p.Normal, rotation), Vector3.TransformNormal(p.HotAxis, rotation), p.ReactorOnly);
             }
             return new ThermalEndpoint { Id = id, GridId = gridId, Model = model, Ports = ports, Healthy = healthy };
         }
     }
 
-    public enum ThermalJointStatus { Open, Matched, Facing, Roll, Crowded }
+    public enum ThermalJointStatus { Open, Matched, Facing, Roll, Crowded, ReactorOnly }
 
     public sealed class ThermalJoint
     {
@@ -57,6 +58,50 @@ namespace ArcanePower
         public string Diagnostic;
         public readonly List<ThermalEndpoint> Nodes = new List<ThermalEndpoint>();
         public bool Ready { get { return Diagnostic == null; } }
+    }
+
+    // Circuit validity belongs to the physical assembly, independently of Start.
+    // Copy the inputs so later health/placement changes cannot mutate the cache.
+    public sealed class ThermalCircuitCache
+    {
+        public readonly List<ThermalEndpoint> Nodes = new List<ThermalEndpoint>();
+        public readonly ThermalNetwork Network;
+        public readonly ThermalConnections[] Circuits;
+
+        public ThermalCircuitCache(IList<ThermalEndpoint> nodes)
+        {
+            foreach (var node in nodes)
+            {
+                var ports = new ThermalPort[node.Ports.Length];
+                for (int i = 0; i < ports.Length; i++)
+                {
+                    var port = node.Ports[i];
+                    ports[i] = new ThermalPort(port.Circuit, port.Position, port.Normal, port.HotAxis, port.ReactorOnly);
+                }
+                Nodes.Add(new ThermalEndpoint { Id = node.Id, GridId = node.GridId,
+                    Healthy = node.Healthy, Model = node.Model, Ports = ports });
+            }
+            Network = new ThermalNetwork(Nodes);
+            Circuits = Network.Loops(Nodes[0]);
+        }
+
+        public bool Matches(IList<ThermalEndpoint> nodes)
+        {
+            if (nodes.Count != Nodes.Count) return false;
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                var a = nodes[i]; var b = Nodes[i];
+                if (a.Id != b.Id || a.GridId != b.GridId || a.Healthy != b.Healthy
+                    || a.Model != b.Model || a.Ports.Length != b.Ports.Length) return false;
+                for (int j = 0; j < a.Ports.Length; j++)
+                {
+                    var p = a.Ports[j]; var q = b.Ports[j];
+                    if (p.Circuit != q.Circuit || p.Position != q.Position || p.Normal != q.Normal
+                        || p.HotAxis != q.HotAxis || p.ReactorOnly != q.ReactorOnly) return false;
+                }
+            }
+            return true;
+        }
     }
 
     // Socket positions are measured in grid-local metres, never rounded world
@@ -109,6 +154,8 @@ namespace ArcanePower
                 return ThermalJointStatus.Open;
             if (!(Vector3.Dot(p.Normal, q.Normal) <= -.9999f)) return ThermalJointStatus.Facing;
             if (!(Vector3.Dot(p.HotAxis, q.HotAxis) >= .9999f)) return ThermalJointStatus.Roll;
+            if ((p.ReactorOnly && (b.Model == null || b.Model.Kind != ThermalKind.Reactor))
+                || (q.ReactorOnly && (a.Model == null || a.Model.Kind != ThermalKind.Reactor))) return ThermalJointStatus.ReactorOnly;
             return ThermalJointStatus.Matched;
         }
 
@@ -160,8 +207,14 @@ namespace ArcanePower
             var queue = new Queue<ThermalEndpoint>();
             result.Add(start); queue.Enqueue(start);
             while (queue.Count > 0)
-                foreach (var next in physical[queue.Dequeue()])
+            {
+                var node = queue.Dequeue();
+                // Inspect one circuit when aiming at its pipes/machines. The
+                // selected vessel itself may inspect all four attached circuits.
+                if (node != start && node.Model.Kind == ThermalKind.Reactor) continue;
+                foreach (var next in physical[node])
                     if (result.Add(next)) queue.Enqueue(next);
+            }
             return result;
         }
 

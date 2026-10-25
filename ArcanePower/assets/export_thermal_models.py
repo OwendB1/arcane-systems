@@ -18,6 +18,7 @@ from contextlib import nullcontext
 import bpy
 import bmesh
 from mathutils import Matrix, Vector
+from mathutils.bvhtree import BVHTree
 
 ROOT=Path(__file__).resolve().parents[1]
 STAGING=ROOT/'src/Models/Cubes/large/.thermal-stage'
@@ -198,13 +199,39 @@ def collision(s, col, root):
         points=[o.matrix_world@v.co for v in o.data.vertices]
         dims=[max(v[i] for v in points)-min(v[i] for v in points) for i in range(3)]
         return math.prod(dims) if min(dims)>.045 else 0
-    selected=sorted(meshes,key=volume,reverse=True)[:10]
+    moving_radiator=s.seut.sceneType=='subpart' and '_RadiatorPanels_' in s.seut.subtypeId
+    if moving_radiator:
+        selected=[o for o in meshes if any(part in o.get('thermal_export_source','') for part in (
+            ' / radiator panel substrate', ' / panel carrier beam',
+            ' / radiator top rail', ' / side pipe metal rib'))]
+        assert len(selected)==6, 'Missing rotating radiator face/frame collision sources'
+    else:
+        selected=sorted(meshes,key=volume,reverse=True)[:10]
+    radiator = s.seut.subtypeId in ('APT_SpaceRadiator_M', 'APT_RadiatorPanel_M')
+    extension = s.seut.subtypeId == 'APT_RadiatorPanel_M'
+    if radiator and not extension:
+        # The panels are subparts, so the static main otherwise has collision
+        # only at the pedestal. Its rotation-invariant top dock must be aimable
+        # when placing the first extension. Use the real axial collar, not a
+        # broad invisible slab across the moving panel or its cooling rays.
+        docks=[o for o in M['main_for']('Space radiator').objects
+               if o.type=='MESH' and ' / stack axis collar' in o.name]
+        assert len(docks)==1, 'Missing radiator stack docking collider source'
+        selected=selected[:9]+docks  # SEUT supports at most ten hulls per model.
     template=next(o for o in bpy.data.objects if o.type=='MESH' and o.rigid_body)
     for source in selected:
         if volume(source)<=0:continue
         mesh=bpy.data.meshes.new('Thermal collision hull')
         bm=bmesh.new()
         points=[source.matrix_world@v.co for v in source.data.vertices]
+        if radiator:
+            # Leave 50 mm between adjoining collider faces, retaining the full
+            # visual couplings and occupied grid cells. Convex margins must not
+            # obstruct placement of the next block at a shared cell boundary.
+            height=2.5 if extension else 3.75
+            for point in points:
+                point.z=min(point.z,height-.025)
+                if extension:point.z=max(point.z,-height+.025)
         for point in points:bm.verts.new(point)
         bmesh.ops.remove_doubles(bm,verts=list(bm.verts),dist=.00001)
         bmesh.ops.convex_hull(bm,input=list(bm.verts),use_existing_faces=False)
@@ -216,6 +243,20 @@ def collision(s, col, root):
         obj.name='Thermal collider / '+source.name;target.objects.link(obj)
         obj.rigid_body.collision_shape='CONVEX_HULL'
         obj.rigid_body.use_margin=True;obj.rigid_body.collision_margin=.01
+    if moving_radiator:
+        # Both faces must be reachable by native tools, while the actual
+        # outward cooling rays must start clear of our own moving hulls.
+        trees=[BVHTree.FromPolygons([v.co for v in o.data.vertices],
+               [tuple(p.vertices) for p in o.data.polygons]) for o in target.objects]
+        heights=(-1.02,.98) if 'APT_RadiatorPanel_' in s.seut.subtypeId else (1.6,3.6)
+        for height in heights:
+            for x in (-2.35,-1.55,-.85,.85,1.55,2.35):
+                for sign in (-1,1):
+                    direction=Vector((0,sign,0))
+                    assert any(tree.ray_cast(Vector((x,sign*2,height)),-direction,4)[0] is not None
+                               for tree in trees), ('Untargetable radiator face',s.name,x,height,sign)
+                    assert not any(tree.ray_cast(Vector((x,sign*.26,height)),direction,250)[0] is not None
+                                   for tree in trees), ('Radiator collision blocks own cooling ray',s.name)
     return target
 
 
@@ -253,6 +294,7 @@ def prepare(name):
             s['thermal_mesh_frame']='reactor-local (-X,Z,Y)'
             bpy.context.view_layer.update()
             LOD['build_lods'](s,batch=True)
+            if part=='Thermal_RadiatorPanels':collision(s,col,root)
             generated.append(s.name)
         s,col,root=scene(ident,cells)
         copies={}
@@ -305,8 +347,10 @@ def export(name, only_stems=None, preserve_collision=False):
     for key in rows[name]['scenes']:
         s=bpy.data.scenes[key];bpy.context.window.scene=s;bpy.context.view_layer.update()
         cols=C.get_collections(s)
-        if preserve_collision and s.seut.sceneType=='mainScene':
-            for suffix in ('','_BS1','_BS2','_BS3'):
+        # The reactor inherits accepted physics and deliberately has no
+        # generated HKT collection. Its main/stages still need those files.
+        if preserve_collision and (cols['hkt'] or s.seut.sceneType=='mainScene'):
+            for suffix in (('','_BS1','_BS2','_BS3') if s.seut.sceneType=='mainScene' else ('',)):
                 filename=s.seut.subtypeId+suffix+'.hkt'
                 shutil.copy2(COLLISIONS/'Thermal'/filename,STAGING/filename)
         if only_stems is not None and not any(EXPORT.get_col_filename(col) in only_stems
@@ -392,6 +436,8 @@ def export_isolated(name, staging=None, rebuild_collision=False):
     # accepted inputs just like the established thermal family.
     preserve=all((COLLISIONS/'Thermal'/(native_id(M['CONTRACT']['subtype'](name))+suffix+'.hkt')).is_file()
                  for suffix in ('','_BS1','_BS2','_BS3'))
+    if name in ('Space radiator','Radiator panel'):
+        preserve=preserve and (COLLISIONS/'Thermal'/(native_id(M['CONTRACT']['subtype'](name)+'_Thermal_RadiatorPanels')+'.hkt')).is_file()
     if rebuild_collision:preserve=False
     return export(name,preserve_collision=preserve)
 

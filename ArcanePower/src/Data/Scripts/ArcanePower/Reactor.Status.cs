@@ -56,19 +56,20 @@ namespace ArcanePower
                 Row(text, "Conversion efficiency", Percent(thermal.Efficiency));
                 Row(text, "Reaction heat", Power(thermal.ProducedMW) + " / " + Power(ThermalHeatMW));
                 Row(text, "Trapped housing heat", Number(thermal.Store.HotMJ + thermal.Store.WasteMJ, "0.0") + " MJ");
-                Row(text, "Circuits available", thermal.AvailableLoops + " / 4 (" + thermal.AvailableLoops * 25 + "% allocation)");
+                Row(text, "Circuits available", thermal.ConnectedLoops + " / 4 (" + thermal.ConnectedLoops * 25 + "% allocation)");
                 if (text.Brayton)
                 {
                     bool shortfall = thermal.CoolingMW + .001 < thermal.RequiredCoolingMW;
                     Row(text, "Cooling capacity", Power(thermal.CoolingMW), shortfall ? "yellow" : "white");
                     Row(text, "Cooling required", Power(thermal.RequiredCoolingMW) + " at design load");
                     Row(text, "Returned waste", Number(thermal.Store.WasteMJ, "0.0") + " MJ", Motion.Heat > 1 ? "red" : "white");
+                    byte valves = ThermalLoops.OpenValves(thermal);
                     for (int i = 0; i < thermal.Loops.Length; i++)
                     {
                         var loop = thermal.Loops[i];
-                        Row(text, "Circuit " + (i + 1), Number(loop.PressureMPa, "0.0") + " MPa / "
-                            + Percent(loop.Charge) + " charged / valve " + (loop.Connected && loop.Charge > 0 ? "open" : "closed"),
-                            loop.Available ? "white" : "yellow");
+                        Row(text, "Circuit " + (i + 1), (loop.Connected ? "Ready" : "Unavailable")
+                            + " / valve " + ((valves & (1 << i)) != 0 ? "open" : "closed"),
+                            loop.Connected ? "white" : "yellow");
                         Line(text, "muted", loop.Diagnostic + " / cooling " + Power(loop.CoolingMW) + " / " + Power(loop.RequiredCoolingMW));
                     }
                 }
@@ -181,7 +182,7 @@ namespace ArcanePower
                 var thermal = Motion.Thermal;
                 if (Motion.Heat > 1 || ThermalMath.WasteHeatLevel(thermal.Store, ThermalHeatMW) >= 1)
                 { tone = "red"; action = "Restore cooling or eject before 125% heat. Keep cooldown power supplied."; return "REACTOR OVERHEATING / FAILURE RISK"; }
-                if (Array.Exists(thermal.Loops, loop => loop.Available && loop.CoolingMW + .001 < loop.RequiredCoolingMW)
+                if (Array.Exists(thermal.Loops, loop => loop.Connected && loop.CoolingMW + .001 < loop.RequiredCoolingMW)
                     && (thermal.ProducedMW > .001 || thermal.Store.WasteMJ > .001))
                 { tone = "yellow"; action = "Add or unblock cooling units, or shut down before trapped heat becomes critical."; return "INSUFFICIENT LOOP COOLING"; }
             }
@@ -195,7 +196,7 @@ namespace ArcanePower
                 if (!thermal.Settled)
                 { tone = "yellow"; action = ThermalModeTransitionHint; return "MODE CHANGE / RESTART WHEN SETTLED"; }
                 if (thermal.Mode == ThermalMode.Brayton && thermal.LoopTrip && !reactor.Enabled)
-                { tone = "yellow"; action = "Keep cooldown power supplied. Repair separate circuits, then restart manually to refill."; return "ALL CIRCUITS LOST / SHUTDOWN LATCHED"; }
+                { tone = "yellow"; action = "Repair at least one separate circuit, then start manually to refill. Keep cooldown power supplied."; return "STARTUP BLOCKED / ALL FOUR CIRCUITS DEFECTIVE"; }
             }
             if (Motion.Core == CorePhase.Cooling)
             { tone = "yellow"; action = "Holding the shell until heat falls to 15%."; return "COOLING DOWN"; }

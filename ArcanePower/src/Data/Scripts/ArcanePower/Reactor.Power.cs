@@ -10,7 +10,7 @@ namespace ArcanePower
     {
         private bool CanPrepareContainment
         {
-            get { return CanOperate && reactor.Enabled && previousControllers >= 2
+            get { return CanOperate && reactor.Enabled && !thermalStartRequested && previousControllers >= 2
                 && HasIntactControllers() && HasUsableFuel(); }
         }
 

@@ -30,10 +30,10 @@
         <W>0.28</W>
       </Color>
       <ColorAdd>
-        <X>0.008</X>
-        <Y>0.009</Y>
-        <Z>0.01</Z>
-        <W>0.025</W>
+        <X>0.02</X>
+        <Y>0.03</Y>
+        <Z>0.038</Z>
+        <W>0.24</W>
       </ColorAdd>
       <ShadowMultiplier>
         <X>0</X>
@@ -47,12 +47,12 @@
         <Z>0.055</Z>
         <W>0.055</W>
       </LightMultiplier>
-      <Reflectivity>0.1</Reflectivity>
-      <Fresnel>0.45</Fresnel>
+      <Reflectivity>0.18</Reflectivity>
+      <Fresnel>0.65</Fresnel>
       <ReflectionShadow>0.2</ReflectionShadow>
       <Gloss>0.4</Gloss>
       <GlossTextureAdd>0.55</GlossTextureAdd>
-      <SpecularColorFactor>3.0</SpecularColorFactor>
+      <SpecularColorFactor>3</SpecularColorFactor>
       <IsFlareOccluder>false</IsFlareOccluder>
     </TransparentMaterial>
     <TransparentMaterial>
@@ -64,7 +64,7 @@
       <AlphaSaturation>1</AlphaSaturation>
       <CanBeAffectedByOtherLights>false</CanBeAffectedByOtherLights>
       <IgnoreDepth>true</IgnoreDepth>
-      <Texture>Textures\Particles\arrow_red.dds</Texture>
+      <Texture>Textures\Particles\arrow.dds</Texture>
       <UseAtlas>false</UseAtlas>
       <UVOffset>
         <X>0</X>
@@ -74,6 +74,12 @@
         <X>1</X>
         <Y>1</Y>
       </UVSize>
+      <Color>
+        <X>1</X>
+        <Y>0.025</Y>
+        <Z>0.035</Z>
+        <W>1</W>
+      </Color>
     </TransparentMaterial>
     <TransparentMaterial>
       <Id>
@@ -84,7 +90,7 @@
       <AlphaSaturation>1</AlphaSaturation>
       <CanBeAffectedByOtherLights>false</CanBeAffectedByOtherLights>
       <IgnoreDepth>true</IgnoreDepth>
-      <Texture>Textures\Particles\arrow_green.dds</Texture>
+      <Texture>Textures\Particles\arrow.dds</Texture>
       <UseAtlas>false</UseAtlas>
       <UVOffset>
         <X>0</X>
@@ -94,6 +100,12 @@
         <X>1</X>
         <Y>1</Y>
       </UVSize>
+      <Color>
+        <X>0.025</X>
+        <Y>1</Y>
+        <Z>0.1</Z>
+        <W>1</W>
+      </Color>
     </TransparentMaterial>
     <TransparentMaterial>
       <Id>
@@ -104,7 +116,7 @@
       <AlphaSaturation>1</AlphaSaturation>
       <CanBeAffectedByOtherLights>false</CanBeAffectedByOtherLights>
       <IgnoreDepth>true</IgnoreDepth>
-      <Texture>Textures\Particles\arrow_blue.dds</Texture>
+      <Texture>Textures\Particles\arrow.dds</Texture>
       <UseAtlas>false</UseAtlas>
       <UVOffset>
         <X>0</X>
@@ -114,6 +126,12 @@
         <X>1</X>
         <Y>1</Y>
       </UVSize>
+      <Color>
+        <X>0.015</X>
+        <Y>0.48</Y>
+        <Z>1</Z>
+        <W>1</W>
+      </Color>
     </TransparentMaterial>
     <TransparentMaterial>
       <Id>
@@ -124,7 +142,7 @@
       <AlphaSaturation>1</AlphaSaturation>
       <CanBeAffectedByOtherLights>false</CanBeAffectedByOtherLights>
       <IgnoreDepth>true</IgnoreDepth>
-      <Texture>Textures\Particles\arrow_left_blue.dds</Texture>
+      <Texture>Textures\Particles\arrow_left.dds</Texture>
       <UseAtlas>false</UseAtlas>
       <UVOffset>
         <X>0</X>
@@ -134,6 +152,12 @@
         <X>1</X>
         <Y>1</Y>
       </UVSize>
+      <Color>
+        <X>0.015</X>
+        <Y>0.48</Y>
+        <Z>1</Z>
+        <W>1</W>
+      </Color>
     </TransparentMaterial>
     <TransparentMaterial>
       <Id>
@@ -144,7 +168,7 @@
       <AlphaSaturation>1</AlphaSaturation>
       <CanBeAffectedByOtherLights>false</CanBeAffectedByOtherLights>
       <IgnoreDepth>true</IgnoreDepth>
-      <Texture>Textures\Particles\arrow_right_blue.dds</Texture>
+      <Texture>Textures\Particles\arrow_right.dds</Texture>
       <UseAtlas>false</UseAtlas>
       <UVOffset>
         <X>0</X>
@@ -154,6 +178,12 @@
         <X>1</X>
         <Y>1</Y>
       </UVSize>
+      <Color>
+        <X>0.015</X>
+        <Y>0.48</Y>
+        <Z>1</Z>
+        <W>1</W>
+      </Color>
     </TransparentMaterial>
     <TransparentMaterial>
       <Id>
@@ -226,10 +256,10 @@
         <W>0.62</W>
       </Color>
       <ColorAdd>
-        <X>0.006</X>
-        <Y>0.009</Y>
-        <Z>0.012</Z>
-        <W>0.1</W>
+        <X>0.022</X>
+        <Y>0.034</Y>
+        <Z>0.043</Z>
+        <W>0.36</W>
       </ColorAdd>
       <ShadowMultiplier>
         <X>0</X>
@@ -243,12 +273,12 @@
         <Z>0.055</Z>
         <W>0.055</W>
       </LightMultiplier>
-      <Reflectivity>0.45</Reflectivity>
-      <Fresnel>0.9</Fresnel>
+      <Reflectivity>0.2</Reflectivity>
+      <Fresnel>0.65</Fresnel>
       <ReflectionShadow>0.2</ReflectionShadow>
       <Gloss>0.4</Gloss>
       <GlossTextureAdd>0.55</GlossTextureAdd>
-      <SpecularColorFactor>8.0</SpecularColorFactor>
+      <SpecularColorFactor>4</SpecularColorFactor>
       <IsFlareOccluder>false</IsFlareOccluder>
     </TransparentMaterial>
     <TransparentMaterial>
@@ -280,10 +310,10 @@
         <W>0.62</W>
       </Color>
       <ColorAdd>
-        <X>0.006</X>
-        <Y>0.009</Y>
-        <Z>0.012</Z>
-        <W>0.16</W>
+        <X>0.018</X>
+        <Y>0.027</Y>
+        <Z>0.034</Z>
+        <W>0.3</W>
       </ColorAdd>
       <ShadowMultiplier>
         <X>0</X>
@@ -297,12 +327,12 @@
         <Z>0.055</Z>
         <W>0.055</W>
       </LightMultiplier>
-      <Reflectivity>0.22</Reflectivity>
-      <Fresnel>0.7</Fresnel>
+      <Reflectivity>0.18</Reflectivity>
+      <Fresnel>0.6</Fresnel>
       <ReflectionShadow>0.2</ReflectionShadow>
       <Gloss>0.4</Gloss>
       <GlossTextureAdd>0.55</GlossTextureAdd>
-      <SpecularColorFactor>6.0</SpecularColorFactor>
+      <SpecularColorFactor>3</SpecularColorFactor>
       <IsFlareOccluder>false</IsFlareOccluder>
     </TransparentMaterial>
   </TransparentMaterials>

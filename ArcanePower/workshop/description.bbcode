@@ -25,7 +25,7 @@ Build an industrial arcane power plant: mine rare fuel, maintain its containment
 
 [h2]Build a Brayton Plant[/h2]
 
-Build up to [b]four independent circuits[/b], each with one turbine and its own cooling. One to four commissioned circuits provide [b]25/50/75/100% capacity[/b] at their normal tier efficiency. Keep reactor outlets separate, align H/C bores, use reactor adapters and cap unused pipe mouths. Build on one physical large grid; conveyors and subgrids cannot carry heat.
+Build up to [b]four independent circuits[/b], each with one turbine and its own cooling. One to four complete circuits provide [b]25/50/75/100% capacity[/b] at their normal tier efficiency. Keep reactor outlets separate, align H/C bores, use reactor adapters and cap unused pipe mouths. Build on one physical large grid; conveyors and subgrids cannot carry heat.
 
 [list]
 [*]One duplex pipe family with framed/bare straights, elbows, risers, tees, crosses, adapters and caps
@@ -34,15 +34,15 @@ Build up to [b]four independent circuits[/b], each with one turbine and its own 
 [*]Built-in compressors and reactor-generated CO2; no separate tank, generator, heater or recuperator
 [/list]
 
-Each Aether circuit needs [b]125 MW for eight powered seconds[/b] to fill/compress to 22 MPa, plus containment. Changes refill only that circuit; reloads require paid filling. Old shared plants migrate disabled with heat retained: separate their circuits and restart. Replace older oversized turbines and reroute two-socket trains to the lower socket.
+Complete circuits are ready immediately, with [b]no filling or pressure gate[/b]. Each Aether circuit requests [b]125 MW for cold compressor startup and hot shutdown circulation[/b], plus containment. Partial delivery gives reduced circulation. Adding/removing blocks and repairing connections updates circuit validity even while the reactor is off. Repairs and reloads require no refilling. Old shared plants migrate disabled with heat retained: separate their circuits and restart. Replace older oversized turbines and reroute two-socket trains to the lower socket.
 
 Atmospheric coolers fit a [b]3x3x2-cell hull opening[/b], with rear manifolds. Leave [b]2.5 m beyond both fan guards[/b]: half-clear exhaust gives 25% cooling; blocked fans give none.
 
-Space radiators connect underneath and track edge-on to the sun. Stack up to [b]two aligned extensions[/b] on the same grid; keep the 3x3-cell sweep and both faces clear. Each panel retains [b]100/75/50% cooling at 0/50/100% sun[/b], including shade/weather. Faint red-orange glow follows actual rejection; detached/excess panels add no cooling.
+Space radiators connect underneath and track edge-on to the sun. Stack up to [b]two extensions[/b] on the same grid: aim at the top shaft coupling and match the base Up axis; [b]any yaw works[/b]. The guide marks the dock and tilt correction. Grind either panel face to remove a section. Keep the 3x3-cell sweep and both faces clear. Each panel retains [b]100/75/50% cooling at 0/50/100% sun[/b], including shade/weather. Faint red-orange glow follows actual rejection; detached/excess panels add no cooling.
 
 Standard coolers/panels reject [b]10 GW each[/b], upgraded units [b]100 GW[/b]. Three equally exposed radiator sections provide 30/300 GW; mixed stacks add each rating. Compare Cooling capacity/required on the Power page. Shortfalls store waste: heat warns at 100%, with irreversible failure at [b]125%[/b]. Restore cooling or stop early; retain cooldown power.
 
-Reactor shut-offs isolate breaches while survivors keep their charge. Losing the final operating circuit [b]latches shutdown[/b]; repair and restart manually. Stored heat and an armed fuse remain. Repaired circuits can refill for cooldown while off. Advanced-controller loss stops Brayton generation, retaining connected cooling. No automatic standalone fallback.
+Reactor shut-offs open each complete checked circuit even while cold or unfilled, and close invalid/unused circuits. The reactor adapter's offset end connects only to the vessel; use its opposite end for normal pipes. Losing all valid circuits stops generation; repair and restart manually. [b]Only a manual Start with all four circuits defective latches a circuit-loss fault.[/b] One valid circuit allows startup, even before pressure builds. Normal Stop and cooldown do not latch. Stored heat and an armed fuse remain. Repaired circuits can refill for cooldown while off. Advanced-controller loss stops Brayton generation, retaining connected cooling. No automatic standalone fallback.
 
 [h2]Feed the Field[/h2]
 
@@ -74,7 +74,7 @@ Align 1x3x1 modules on the same grid. Detached cells retain charge/upkeep; destr
 
 [h2]Know What Is Happening[/h2]
 
-Placement arrows, H/C markers and construction instructions identify bad joints, missing welds and machines. Verify power, fuel and cooling too. Monitor the terminal, [b]Arcane Reactor[/b] LCD or read-only antenna-linked tablet. Text HUD API is optional; native fallback is included.
+Placement arrows, H/C markers and construction instructions identify bad joints, missing welds and machines. [b]Solid red pipe rings[/b] warn of disconnected or invalid circuits. Each complete circuit restores its own colours, including capped ends; one complete circuit permits startup at 25% capacity while the other three remain incomplete. Valid idle circuits show amber status and pumping circuits show green. Verify power, fuel and cooling too. Monitor the terminal, [b]Arcane Reactor[/b] LCD or read-only antenna-linked tablet. Text HUD API is optional; native fallback is included.
 
 [h2]Getting Started[/h2]
 
@@ -83,7 +83,7 @@ Placement arrows, H/C markers and construction instructions identify bad joints,
 [*]Weld the reactor, fit two controllers and complete its duct/outlet stack.
 [*]Supply external power, Aether and tiles; start in standalone.
 [*]For Brayton, fit an advanced controller, stop/cool the reactor, select the mode, wait for deployment and build independent circuits using the guide.
-[*]Resolve interlocks, enable the reactor and wait for commissioning. Connect electrical demand or storage.
+[*]Resolve interlocks, enable the reactor and allow startup to complete. Connect electrical demand or storage.
 [/olist]
 
 [h2]Compatibility and Development[/h2]

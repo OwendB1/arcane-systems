@@ -147,13 +147,9 @@ namespace ArcanePower
             foreach (var endpoint in endpoints)
             {
                 byte[] ports; FlowView view;
-                if (!oriented.TryGetValue(endpoint.Id, out ports) || !flows.TryGetValue(endpoint.Id, out view)) continue;
-                for (int i = 0; i < ports.Length; i++)
-                    if (ports[i] != 0) view.State.Ports[i] = ports[i];
-                view.State.Rate = Math.Max(view.State.Rate, ThermalMath.Clamp(circulation, 0, 1));
-                view.State.Heat = heat;
-                view.State.Internal = endpoint.Model.Kind != ThermalKind.Pipe;
-                view.State.Mode = view.State.Rate > 0 ? ThermalFlowMode.Pumping : ThermalFlowMode.Ready;
+                if (!flows.TryGetValue(endpoint.Id, out view)) continue;
+                oriented.TryGetValue(endpoint.Id, out ports);
+                view.State.ObserveCircuit(ports, circulation, heat, endpoint.Model.Kind != ThermalKind.Pipe);
                 ThermalBlock radiator;
                 if (Blocks.TryGetValue(endpoint.Id, out radiator) && radiator.Spec.Kind == ThermalKind.Radiator)
                     foreach (var panel in radiator.RadiatorPanels)
@@ -186,16 +182,20 @@ namespace ArcanePower
                 var entity = view.Entity as MyEntity;
                 if (entity == null) continue;
                 var mode = current ? view.State.Mode : ThermalFlowMode.Unconnected;
-                Color status = mode == ThermalFlowMode.Fault ? new Color(255, 65, 40)
+                var spec = FlowSpec(view.Entity);
+                bool pipeFault = current && spec != null && spec.Kind == ThermalKind.Pipe
+                    && (mode == ThermalFlowMode.Unconnected || mode == ThermalFlowMode.Fault);
+                Color status = pipeFault ? Color.Red : mode == ThermalFlowMode.Fault ? new Color(255, 65, 40)
                     : mode == ThermalFlowMode.Pumping ? new Color(45, 230, 140)
                     : mode == ThermalFlowMode.Ready ? new Color(255, 185, 55) : new Color(35, 50, 60);
-                entity.SetEmissiveParts("ThermalStatus", status, current ? .65f : 0);
-                entity.SetEmissivePartsForSubparts("ThermalStatus", status, current ? .65f : 0);
-                float intensity = (float)(.08 + view.Rate * .65);
+                float statusIntensity = pipeFault ? .325f : .65f;
+                entity.SetEmissiveParts("ThermalStatus", status, current ? statusIntensity : 0);
+                entity.SetEmissivePartsForSubparts("ThermalStatus", status, current ? statusIntensity : 0);
+                float intensity = pipeFault ? statusIntensity : (float)(.08 + view.Rate * .65);
                 Color hot = Color.Lerp(new Color(50, 150, 220), new Color(255, 130, 40), (float)view.State.Heat);
                 foreach (string material in new[] { "ThermalHot", "ThermalCold" })
                 {
-                    Color color = material == "ThermalHot" ? hot : new Color(35, 175, 220);
+                    Color color = pipeFault ? Color.Red : material == "ThermalHot" ? hot : new Color(35, 175, 220);
                     entity.SetEmissiveParts(material, color, current ? intensity : 0);
                     entity.SetEmissivePartsForSubparts(material, color, current ? intensity : 0);
                 }

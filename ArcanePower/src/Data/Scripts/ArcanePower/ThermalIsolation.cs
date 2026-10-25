@@ -1,30 +1,8 @@
 using System;
-using System.Collections.Generic;
 using VRageMath;
 
 namespace ArcanePower
 {
-    // A commissioned charge belongs to one sealed circuit, including its pipes.
-    // Changes refill that circuit only. Reloads require fresh paid commissioning.
-    public sealed class ThermalCommissioning
-    {
-        private readonly long grid;
-        private readonly HashSet<long> machines = new HashSet<long>();
-        public double Seconds;
-        public ThermalCommissioning(long gridId, IList<ThermalUnit> units)
-        {
-            grid = gridId;
-            foreach (var unit in units) machines.Add(unit.Id);
-        }
-        public bool Covers(long gridId, IList<ThermalUnit> units)
-        {
-            if (grid != gridId || units.Count != machines.Count) return false;
-            foreach (var unit in units)
-                if (!machines.Contains(unit.Id)) return false;
-            return true;
-        }
-    }
-
     public static class ThermalIsolation
     {
         public const float BoreOffset = .46f, Recess = .30f;

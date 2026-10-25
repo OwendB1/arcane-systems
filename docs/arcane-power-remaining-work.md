@@ -28,7 +28,7 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   the [asset workflow](../ArcanePower/assets/AGENTS.md).
 
 - **Four independent Brayton circuits, 24 October:** fixed quarter-capacity
-  allocations, per-circuit paid commissioning and isolation, last-loop shutdown,
+  allocations, immediate circuit availability and isolation, powered startup/cooldown, last-loop shutdown,
   retained-waste overheat and inverse solar cooling are implemented. Player setup,
   migration and recovery live in the [construction guide](../ArcanePower/THERMAL-CONSTRUCTION.md);
   [runtime ownership](../ArcanePower/THERMAL-RUNTIME.md) covers authority and state.
@@ -102,7 +102,7 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
   inserts sit in stepped counterbores, with abutting seals and recessed pipe ends.
   All 31 thermal icons were refreshed. Reactor tubes retain metal backing and
   guard rails; weld stages retain opaque supporting pipe bodies. CO₂ supply is
-  integrated into powered commissioning. Native assets supersede the earlier
+  supplied automatically to complete circuits, with powered startup/cooldown. Native assets supersede the earlier
   export gates below; live SE rendering, commissioning and multiplayer validation
   remain pending. [Delivery check](../ArcanePower/validation/thermal-models/delivery-check.json).
 

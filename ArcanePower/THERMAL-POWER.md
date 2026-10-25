@@ -12,9 +12,11 @@ in the production blend for future reuse, outside the shipped catalog.
 [Construction instructions](THERMAL-CONSTRUCTION.md) cover adapters, H/C roll,
 placement guidance, welding, commissioning and shutdown.
 
-The reactor generates its own sealed CO2 charge. Its eight-second commissioning
-phase draws grid electricity through the train's built-in compressor. No gas
-generator, tank, separate heater or manual valve sequence is needed. Running
+The reactor supplies CO2 automatically to complete circuits, without a fill timer
+or pressure requirement. Cold startup draws grid electricity through the train's
+built-in compressor; hot shutdowns retain powered circulation. Partial delivery
+supports proportional flow. No gas generator, tank, separate heater or manual
+valve sequence is needed. Running
 auxiliaries are deducted once; no second electrical grant is created.
 
 | Mode / eligible turbine tier | Required hot-end temperature | Maximum net efficiency |
@@ -28,7 +30,7 @@ auxiliaries are deducted once; no second electrical grant is created.
 The standard train supports starter operation. The upgraded train can use higher
 stages when the reactor's source temperature permits. A warmer compressor inlet
 derates efficiency. These are game balance values, not a real-fluid simulation.
-Each commissioned circuit keeps its eligible conversion efficiency and receives
+Each complete circuit keeps its eligible conversion efficiency and receives
 at most one quarter of the reactor's nominal heat flow. Four equal circuits provide
 100% capacity; three provide 75%, two 50%, one 25%. There is no additional
 turbine-count efficiency penalty, standby pool or redistribution to surviving
@@ -37,10 +39,10 @@ Standalone and Brayton are alternative paths for the same paid heat; their
 outputs never add together.
 
 Standard and upgraded trains have regular and mirrored versions, with one duplex
-socket each. Each circuit pays for its own CO2 charge; survivors retain theirs
-after a breach. See [construction and recovery](THERMAL-CONSTRUCTION.md) for
-placement, filling, shutdown and migration, and [runtime ownership](THERMAL-RUNTIME.md)
-for topology validation, saved state and commissioning authority.
+socket each. A breach isolates its circuit; repaired circuits resume as soon as
+their connections validate and circulation is powered. See [construction and recovery](THERMAL-CONSTRUCTION.md) for
+placement, startup, shutdown and migration, and [runtime ownership](THERMAL-RUNTIME.md)
+for topology validation, saved state and circulation authority.
 
 Cooling must reject `reaction heat × (1 − net efficiency)`. An undersized,
 blocked or poorly exposed cooling bank no longer quietly throttles the reaction

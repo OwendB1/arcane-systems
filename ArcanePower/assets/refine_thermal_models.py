@@ -185,6 +185,64 @@ def pressure_seal_fit(p):
     p.col['thermal_seal_fit_revision'] = 1
 
 
+def reactor_coupling_fit(p):
+    """Female adapter lips receive the reactor's 80 mm long, R273 male noses.
+
+    The seal stays on the socket plane. A recessed seat clears its outside,
+    while the 65 mm lip overlaps the nose without reaching the rear manifold.
+    Bare adapters inherit this fitting, or can refresh it in place.
+    """
+    for port in p.ports:
+        if not port.get('reactor_transition'):
+            continue
+        c, n, up = (Vector(port[k]) for k in ('position', 'normal', 'hot_axis'))
+        u = up.cross(n)
+        # Closed cross-section: outer seat, square-shouldered sleeve, bore,
+        # gasket recess, then the original bore and rear seating face.
+        profile = ((-.055, .385), (-.010, .385), (-.010, .325),
+                   (.065, .325), (.065, .283), (.002, .283), (.002, .313),
+                   (-.009, .313), (-.009, .275), (-.055, .275))
+        sides = 32
+        for sign in (-1, 1):
+            insert = next(o for o in p.col.objects if o.name.startswith(
+                p.name+' / '+port['id']+' pressure lip '+str(sign)))
+            if insert.get('thermal_reactor_coupling') == 2:
+                continue
+            bore = c+up*(sign*.46)
+            verts = [bore+n*axial+radius*(u*math.cos(j*math.tau/sides)
+                     +up*math.sin(j*math.tau/sides))
+                     for axial, radius in profile for j in range(sides)]
+            faces = [(k*sides+j, k*sides+(j+1)%sides,
+                      ((k+1)%len(profile))*sides+(j+1)%sides,
+                      ((k+1)%len(profile))*sides+j)
+                     for k in range(len(profile)) for j in range(sides)]
+            temp = p.mesh('temporary reactor receiving lip', verts, faces, 'Metal_Dull')
+            uv = temp.data.uv_layers.active
+            for face in temp.data.polygons:
+                k = face.index//sides
+                cap = profile[k][0] == profile[(k+1)%len(profile)][0]
+                face.use_smooth = not cap
+                for li in face.loop_indices:
+                    vertex = temp.data.loops[li].vertex_index
+                    ring, j = divmod(vertex, sides)
+                    axial, radius = profile[ring]
+                    angle = j*math.tau/sides
+                    if cap:
+                        coords = (radius*math.cos(angle), radius*math.sin(angle))
+                    else:
+                        if face.index%sides == sides-1 and j == 0:
+                            angle = math.tau
+                        coords = (axial, angle*.325)
+                    uv.data[li].uv = (coords[0]*.8+.17, coords[1]*.8+.41)
+            temp.data.transform(insert.matrix_world.inverted())
+            insert.data = temp.data
+            insert['pipe_path'] = json.dumps([list(bore-n*.055), list(bore+n*.065)])
+            insert['pipe_radius'] = .385
+            insert['thermal_reactor_coupling'] = 2
+            insert['uv_method'] = 'metric cylindrical sleeve and planar shoulders; 0.8 tiles/m'
+            bpy.data.objects.remove(temp, do_unlink=True)
+
+
 def mark(p, support, asset, centre, u, v, width, library='Atlas2'):
     """Project a native atlas asset onto real backing, preserving its UVs."""
     key = 'Thermal detail template / '+library+' / '+asset

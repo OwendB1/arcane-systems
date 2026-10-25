@@ -23,7 +23,7 @@ namespace ArcanePower
         internal ThermalStore Store;
         internal double Efficiency;
         internal double OutputGrantMW;
-        internal double RotorCirculation, RotorCharge, RotorHotC = 45;
+        internal double RotorCirculation, RotorHotC = 45;
         private bool receivedRotor;
         internal long SourceId { get { return Store.SourceId; } set { Store.SourceId = value; } }
         internal double StartupInputMW { get { return startupInput; } }
@@ -68,8 +68,8 @@ namespace ArcanePower
             if (Spec.Kind == ThermalKind.Train)
             {
                 if (Store.Rotor == null) Store.Rotor = new ThermalRotorState { EntityId = Entity.EntityId };
-                // A reload requires a newly paid start. Preserve shaft pose and
-                // inertia, but never restore a stale source's drive command.
+                // Preserve shaft pose and inertia on reload, but never restore
+                // a stale source's drive command before circuit validation.
                 Store.Rotor.TargetRpm = Store.Rotor.CompressorTargetRpm = 0;
                 receivedRotor = MyAPIGateway.Multiplayer.IsServer;
             }
@@ -113,7 +113,7 @@ namespace ArcanePower
             if (MyAPIGateway.Multiplayer.IsServer)
             {
                 ThermalRotors.Drive(state, Store.HotMJ, Spec.RatingMW, RotorHotC,
-                    RotorCirculation, Healthy, 1.0 / 60, RotorCharge);
+                    RotorCirculation, Healthy, 1.0 / 60);
                 state.Sequence++;
             }
             else if (receivedRotor) ThermalRotors.Advance(state, 1.0 / 60);
@@ -277,8 +277,7 @@ namespace ArcanePower
                 var rotor = Store.Rotor;
                 info.Append("Visual turbine: ").Append(rotor.Rpm.ToString("0")).Append(" rpm / compressor: ")
                     .Append(rotor.CompressorRpm.ToString("0")).AppendLine(" rpm");
-                info.Append("Circuit pressure: ").Append(rotor.PressureMPa.ToString("0.0"))
-                    .Append(" / 22.0 MPa, ").Append(rotor.HotC.ToString("0")).AppendLine(" C (gameplay model)");
+                info.Append("Working temperature: ").Append(rotor.HotC.ToString("0")).AppendLine(" C (gameplay model)");
             }
         }
 

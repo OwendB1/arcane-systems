@@ -18,8 +18,8 @@ namespace ArcanePower
                 return "Finish welding the panel and enable it to attach";
             var state = block.Store.Radiator;
             if (!MyAPIGateway.Multiplayer.IsServer && state.Sequence == 0) return "Waiting for radiator connection state";
-            return state.ParentId != 0 ? "Attached: shares the base's rotation and cooling loop"
-                : "Unattached: align directly above an enabled base or its first panel; maximum two extensions";
+            return state.ParentId != 0 ? "Attached: yaw aligned automatically; shares the base's rotation and cooling loop"
+                : "Unattached: centre above the base or first panel, point Up the same way, weld and enable; any yaw; maximum two extensions";
         }
 
         private static void LinkRadiators()
@@ -37,7 +37,8 @@ namespace ArcanePower
                     for (int i = 0; i < 2; i++)
                     {
                         // Extension height is two large-grid cells. Require exact
-                        // face contact, orientation, grid, ownership and build state.
+                        // face contact, upright axis, grid, ownership and build state.
+                        // Placed yaw is compensated by the moving panel's pose.
                         Vector3D target = ThermalRadiators.ExtensionCentre(root.Block.WorldMatrix, i);
                         var slim = root.Block.CubeGrid.GetCubeBlock(root.Block.CubeGrid.WorldToGridInteger(target));
                         ThermalBlock panel;

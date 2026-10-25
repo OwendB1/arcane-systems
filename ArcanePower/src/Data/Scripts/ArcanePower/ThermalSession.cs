@@ -18,16 +18,30 @@ namespace ArcanePower
     public sealed partial class ThermalSession : MySessionComponentBase
     {
         private static readonly Dictionary<long, ThermalBlock> Blocks = new Dictionary<long, ThermalBlock>();
-        private readonly Dictionary<long, ThermalCommissioning[]> starts = new Dictionary<long, ThermalCommissioning[]>();
+        private static readonly Dictionary<long, ThermalCircuitCache> circuitGraphs = new Dictionary<long, ThermalCircuitCache>();
         private int tick;
         private const ushort RotorChannel = 49375;
         private static bool ready;
         internal static void Add(ThermalBlock block)
         {
             Blocks[block.Entity.EntityId] = block;
+            InvalidateCircuits(block.Block.CubeGrid.EntityId);
             if (ready && !MyAPIGateway.Multiplayer.IsServer && HasMotion(block)) RequestRotor(block);
         }
-        internal static void Remove(ThermalBlock block) { Blocks.Remove(block.Entity.EntityId); }
+        internal static void Remove(ThermalBlock block)
+        {
+            Blocks.Remove(block.Entity.EntityId);
+            InvalidateCircuits(block.Block.CubeGrid.EntityId);
+        }
+        internal static void Remove(Reactor source) { circuitGraphs.Remove(source.Id); }
+
+        private static void InvalidateCircuits(long gridId)
+        {
+            var stale = new List<long>();
+            foreach (var entry in circuitGraphs)
+                if (entry.Value.Nodes[0].GridId == gridId) stale.Add(entry.Key);
+            foreach (long id in stale) circuitGraphs.Remove(id);
+        }
 
         public override void BeforeStart()
         {
@@ -84,7 +98,7 @@ namespace ArcanePower
             catch (Exception error)
             {
                 VRage.Utils.MyLog.Default.WriteLine("ArcanePower: thermal runtime isolated after fault: " + error);
-                foreach (var block in Blocks.Values) { block.SetOutput(0); block.StopStartup(); block.RotorCirculation = block.RotorCharge = 0; block.RadiatorRejectedMW = 0; }
+                foreach (var block in Blocks.Values) { block.SetOutput(0); block.StopStartup(); block.RotorCirculation = 0; block.RadiatorRejectedMW = 0; }
                 foreach (var source in VentSession.All) if (source.ThermalVariant) source.FailThermalRuntime();
             }
             foreach (var block in Blocks.Values)
@@ -112,7 +126,7 @@ namespace ArcanePower
                 machine.AccountOutput();
                 machine.AccountStartup();
                 machine.OutputGrantMW = 0;
-                machine.RotorCirculation = machine.RotorCharge = 0;
+                machine.RotorCirculation = 0;
                 machine.RotorHotC = 45;
                 machine.RadiatorRejectedMW = 0;
                 if (machine.Healthy)
@@ -151,8 +165,7 @@ namespace ArcanePower
                 state.DutyTrains = state.StandbyTrains = 0;
                 if (state.Mode == ThermalMode.Standalone)
                 {
-                    starts.Remove(source.Id);
-                    if (state.AvailableLoops > 0 || Array.Exists(state.Loops, loop => loop.Connected)) state.Loops = ThermalLoops.Empty();
+                    if (state.ConnectedLoops > 0) state.Loops = ThermalLoops.Empty();
                     state.Efficiency = .20;
                     state.RejectedMW = ThermalMath.Reject(state.Store, source.ThermalHeatMW * .8 / 60, false) * 60;
                     // Integrated rejection also drains paid hot inventory on a
@@ -186,9 +199,6 @@ namespace ArcanePower
                 if (!startupHosts.Contains(machine.Entity.EntityId)) machine.StopStartup();
                 machine.SetOutput(machine.Healthy ? machine.OutputGrantMW : 0);
             }
-            var active = new HashSet<long>();
-            foreach (var source in sources) active.Add(source.Id);
-            foreach (long id in new List<long>(starts.Keys)) if (!active.Contains(id)) starts.Remove(id);
         }
 
         public override VRage.Game.MyObjectBuilder_SessionComponent GetObjectBuilder() { SaveData(); return base.GetObjectBuilder(); }
@@ -198,7 +208,7 @@ namespace ArcanePower
             if (ready) MyAPIGateway.Multiplayer.UnregisterSecureMessageHandler(RotorChannel, ReceiveRotor);
             UnloadFlow();
             ready = false;
-            Blocks.Clear(); starts.Clear();
+            Blocks.Clear(); circuitGraphs.Clear();
         }
     }
 }

@@ -62,7 +62,8 @@ def generate():
             {k:v for k,v in p.items() if k != 'type'} for p in source['ports']]
         for p in source['ports']:
             circuit = contract['runtime_circuit'](name, p['type'])
-            rows.append(f'                    new ThermalPort("{circuit}", {vector(p["position"])}, {vector(p["normal"])}, {vector(p["hot_axis"])}),')
+            role = ', true' if p.get('reactor_transition') else ''
+            rows.append(f'                    new ThermalPort("{circuit}", {vector(p["position"])}, {vector(p["normal"])}, {vector(p["hot_axis"])}{role}),')
         rows.append('                } });')
     rows += ['            return models;', '        }', '    }']
     for kind, base_type, class_name in [('Train', 'Reactor', 'ThermalTrain'), ('Other', 'UpgradeModule', 'ThermalMachine')]:

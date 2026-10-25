@@ -23,7 +23,8 @@ namespace ArcanePower
         private readonly StringBuilder text = new StringBuilder();
         private readonly List<IMySlimBlock> blocks = new List<IMySlimBlock>();
         private readonly List<ThermalEndpoint> nodes = new List<ThermalEndpoint>();
-        private readonly MyStringId lineMaterial = MyStringId.GetOrCompute("SquareFullColor");
+        // Square is opaque white; SquareFullColor bakes in grey-blue tint/alpha.
+        private readonly MyStringId lineMaterial = MyStringId.GetOrCompute("Square");
         private readonly MyStringId greenArrow = MyStringId.GetOrCompute("ArcaneThermal_ArrowGreen");
         private readonly MyStringId redArrow = MyStringId.GetOrCompute("ArcaneThermal_ArrowRed");
         private readonly MyStringId blueArrow = MyStringId.GetOrCompute("ArcaneThermal_ArrowBlue");
@@ -39,6 +40,9 @@ namespace ArcanePower
         private Vector3 centre;
         private Vector3D previewWorld;
         private bool preview, fullHud, active, loggedError;
+        private bool radiatorGuide, radiatorAligned;
+        private MatrixD radiatorFrame;
+        private Vector3D radiatorDock;
         private int tick;
         private string fallbackText;
 
@@ -107,9 +111,7 @@ namespace ArcanePower
             { Show(model, "Thermal blocks require a 2.5 m large grid", null); return; }
             if (model.Kind == ThermalKind.RadiatorPanel)
             {
-                check = null;
-                Show(model, preview ? "Align both side pipes with the panel directly below; use the same block orientation"
-                    : ThermalSession.RadiatorConnection(aimed.FatBlock == null ? 0 : aimed.FatBlock.EntityId), null);
+                Show(model, RadiatorGuide(model, aimed), null);
                 return;
             }
 
@@ -153,15 +155,70 @@ namespace ArcanePower
             Show(model, next, ServerStatus());
         }
 
+        private string RadiatorGuide(ThermalModel model, IMySlimBlock aimed)
+        {
+            if (!preview)
+            {
+                aimed.Orientation.GetMatrix(out rotation);
+                centre = aimed.FatBlock == null ? (Vector3)(aimed.Min + aimed.Max) * (grid.GridSize * .5f)
+                    : ((MyEntity)aimed.FatBlock).PositionComp.LocalMatrixRef.Translation;
+            }
+            MatrixD panel = (MatrixD)rotation * grid.WorldMatrix;
+            panel.Translation = Vector3D.Transform(centre, grid.WorldMatrix);
+            blocks.Clear();
+            grid.GetBlocks(blocks, b => ThermalModels.All.ContainsKey(b.BlockDefinition.Id.SubtypeName)
+                && ThermalModels.All[b.BlockDefinition.Id.SubtypeName].Kind == ThermalKind.Radiator);
+            double nearest = 25;
+            IMySlimBlock source = null;
+            int slot = 0;
+            foreach (var block in blocks)
+            {
+                if (block.FatBlock == null) continue;
+                var terminal = block.FatBlock as IMyTerminalBlock;
+                if (terminal != null && !terminal.HasPlayerAccess(MyAPIGateway.Session.Player.IdentityId)) continue;
+                for (int i = 0; i < 3; i++)
+                {
+                    double distance = Vector3D.DistanceSquared(panel.Translation,
+                        ThermalRadiators.ExtensionCentre(block.FatBlock.WorldMatrix, i));
+                    if (distance >= nearest) continue;
+                    nearest = distance; source = block; slot = i;
+                }
+            }
+            if (source == null) return "Aim at the TOP shaft coupling of a radiator base or first panel. Stack on the same grid; any yaw works.";
+            radiatorFrame = source.FatBlock.WorldMatrix;
+            radiatorDock = ThermalRadiators.ExtensionCentre(radiatorFrame, slot) - radiatorFrame.Up * 2.5;
+            radiatorGuide = true;
+            selected = ThermalEndpoint.At(0, grid.EntityId, model, rotation, centre, false);
+            radiatorAligned = ThermalRadiators.FitsExtension(radiatorFrame, panel, slot);
+            if (slot >= 2) return "Maximum two extensions per base. Start another radiator stack.";
+            if (Vector3D.Dot(radiatorFrame.Up, panel.Up) <= .99999)
+                return "Tilt until RED axis matches GREEN. BLUE shows panel Up; yaw aligns automatically.";
+            if (!radiatorAligned)
+                return "Centre the shaft over the highlighted TOP coupling. Keep BLUE pointing Up with the base; any yaw works.";
+            if (slot == 1)
+            {
+                var lower = grid.GetCubeBlock(grid.WorldToGridInteger(ThermalRadiators.ExtensionCentre(radiatorFrame, 0)));
+                ThermalModel lowerModel;
+                if (lower == null || lower.FatBlock == null
+                    || !ThermalModels.All.TryGetValue(lower.BlockDefinition.Id.SubtypeName, out lowerModel)
+                    || lowerModel.Kind != ThermalKind.RadiatorPanel
+                    || !ThermalRadiators.FitsExtension(radiatorFrame, lower.FatBlock.WorldMatrix, 0))
+                {
+                    radiatorAligned = false;
+                    return "Place the first panel below this one. Extensions must touch consecutively; any yaw works.";
+                }
+            }
+            return preview ? "Stack alignment correct. Any yaw works; weld and enable the base and panels to align their moving parts."
+                : ThermalSession.RadiatorConnection(aimed.FatBlock == null ? 0 : aimed.FatBlock.EntityId);
+        }
+
         private IMySlimBlock Aim()
         {
             var camera = MyAPIGateway.Session.Camera.WorldMatrix;
             Vector3D start = camera.Translation + camera.Forward * .3, end = camera.Translation + camera.Forward * 20;
             VRage.Game.ModAPI.IHitInfo hit;
             if (!MyAPIGateway.Physics.CastRay(start, end, out hit) || hit == null || hit.HitEntity == null) return null;
-            var target = hit.HitEntity as IMyCubeGrid;
-            var block = hit.HitEntity as IMyCubeBlock;
-            if (target == null) target = block != null ? block.CubeGrid : hit.HitEntity.Parent as IMyCubeGrid;
+            var target = hit.HitEntity.GetTopMostParent() as IMyCubeGrid;
             if (target == null) return null;
             Vector3I? at = target.RayCastBlocks(start, end);
             return at.HasValue ? target.GetCubeBlock(at.Value) : null;
@@ -200,8 +257,10 @@ namespace ArcanePower
                     }
                 text.Append("\n<color=235,240,245>Selected sockets: ").Append(matches).Append('/').Append(total).Append(" aligned");
                 if (issue != ThermalJointStatus.Matched) text.Append(" / ").Append(ThermalConstruction.JointHint(issue));
-                text.Append("\nAssembly: ").Append(check.Open).Append(" open mouths / ").Append(check.Wrong)
-                    .Append(" mismatched socket ends / ").Append(check.Pending).Append(" unfinished or unavailable blocks");
+                text.Append(selected.Model.Kind == ThermalKind.Reactor ? "\nReactor circuits: " : "\nSelected circuit: ")
+                    .Append(check.Open).Append(" open mouths / ").Append(check.Wrong)
+                    .Append(check.Wrong == 1 ? " mismatched connection / " : " mismatched connections / ")
+                    .Append(check.Pending).Append(" unfinished or unavailable blocks");
                 text.Append("\n<color=150,180,200>H = orange; C = cyan. Keep manifold circuits separate. Cap unused pipe mouths; unused reactor outlets stay closed.");
             }
             if (server != null) text.Append("\nServer: ").Append(server);
@@ -224,7 +283,10 @@ namespace ArcanePower
             try
             {
                 MatrixD world = grid.WorldMatrix;
-                foreach (var joint in check.Joints)
+                if (radiatorGuide)
+                    Ring(radiatorDock, radiatorFrame.Right, radiatorFrame.Backward, .38,
+                        (radiatorAligned ? new Color(20, 255, 85) : new Color(255, 180, 0)).ToVector4());
+                else foreach (var joint in check.Joints)
                 {
                     if (joint.Node.Id != selected.Id && joint.Status == ThermalJointStatus.Matched) continue;
                     var port = joint.Port;
@@ -235,11 +297,11 @@ namespace ArcanePower
                     if (Vector3D.DistanceSquared(at, MyAPIGateway.Session.Camera.WorldMatrix.Translation) > 25 * 25) continue;
                     bool aligned = joint.Status == ThermalJointStatus.Matched;
                     Vector4 color = aligned && joint.Node.Healthy && joint.Peer != null && joint.Peer.Healthy
-                        ? new Color(90, 240, 130).ToVector4()
-                        : aligned || joint.Status == ThermalJointStatus.Open ? new Color(255, 195, 65).ToVector4() : new Color(255, 65, 65).ToVector4();
+                        ? new Color(20, 255, 85).ToVector4()
+                        : aligned || joint.Status == ThermalJointStatus.Open ? new Color(255, 180, 0).ToVector4() : new Color(255, 25, 35).ToVector4();
                     Ring(at, hot, across, .85, color);
-                    Ring(at + hot * .46, hot, across, .28, new Color(255, 125, 45).ToVector4());
-                    Ring(at - hot * .46, hot, across, .28, new Color(50, 210, 255).ToVector4());
+                    Ring(at + hot * .46, hot, across, .28, new Color(255, 85, 0).ToVector4());
+                    Ring(at - hot * .46, hot, across, .28, new Color(0, 200, 255).ToVector4());
                 }
                 if (!fullHud) return;
                 var camera = MyAPIGateway.Session.Camera.WorldMatrix;
@@ -249,7 +311,17 @@ namespace ArcanePower
                 double distance = ThermalMath.Clamp(ray.Length() * .35, .5, 6);
                 Vector3D cluster = camera.Translation + Vector3D.Normalize(ray) * distance;
                 double size = distance * .03;
-                if (rotation != suggested)
+                Vector3D blue = Vector3D.TransformNormal(rotation.Up, world);
+                if (radiatorGuide)
+                {
+                    if (Vector3D.Dot(blue, radiatorFrame.Up) <= .99999)
+                    {
+                        Arrow(redArrow, blue, cluster, camera, size);
+                        Arrow(greenArrow, radiatorFrame.Up, cluster, camera, size);
+                        Turn(blue, radiatorFrame.Up, cluster, camera, size);
+                    }
+                }
+                else if (rotation != suggested)
                 {
                     Vector3 from = rotation.Forward, to = suggested.Forward;
                     if (Vector3.Dot(from, to) > .9999) { from = rotation.Up; to = suggested.Up; }
@@ -258,7 +330,7 @@ namespace ArcanePower
                     Arrow(greenArrow, correct, cluster, camera, size);
                     Turn(current, correct, cluster, camera, size);
                 }
-                Arrow(blueArrow, Vector3D.TransformNormal(selected.Ports[0].HotAxis, world), cluster, camera, size);
+                Arrow(blueArrow, radiatorGuide ? blue : Vector3D.TransformNormal(selected.Ports[0].HotAxis, world), cluster, camera, size);
             }
             catch (Exception error) { Log(error); }
         }
@@ -288,7 +360,7 @@ namespace ArcanePower
                 Vector3D end = point + (up * Math.Cos(b) + across * Math.Sin(b)) * radius;
                 Vector3D delta = end - start;
                 MyTransparentGeometry.AddLineBillboard(lineMaterial, color, start, (Vector3)Vector3D.Normalize(delta),
-                    (float)delta.Length(), .018f, BlendTypeEnum.PostPP);
+                    (float)delta.Length(), .030f, BlendTypeEnum.PostPP);
             }
         }
 
@@ -322,7 +394,7 @@ namespace ArcanePower
 
         private void Hide()
         {
-            active = false; selected = null; check = null;
+            active = false; selected = null; check = null; radiatorGuide = radiatorAligned = false;
             if (panel != null) panel.Visible = false;
             if (fallback != null) fallback.Hide();
         }

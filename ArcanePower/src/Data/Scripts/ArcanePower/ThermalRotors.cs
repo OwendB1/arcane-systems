@@ -15,7 +15,7 @@ namespace ArcanePower
         [ProtoMember(6)] public double CompressorRpm;
         [ProtoMember(7)] public double TargetRpm;
         [ProtoMember(8)] public double CompressorTargetRpm;
-        [ProtoMember(9)] public double PressureMPa;
+        // ProtoMember(9) was cosmetic pressure; retired, never reuse.
         [ProtoMember(10)] public double HotC = 45;
 
         public bool Valid(long id)
@@ -27,20 +27,19 @@ namespace ArcanePower
                 && ThermalMath.Finite(TargetRpm) && TargetRpm >= 0 && TargetRpm <= ThermalRotors.MaxRpm
                 && ThermalMath.Finite(CompressorRpm) && CompressorRpm >= 0 && CompressorRpm <= ThermalRotors.MaxCompressorRpm
                 && ThermalMath.Finite(CompressorTargetRpm) && CompressorTargetRpm >= 0 && CompressorTargetRpm <= ThermalRotors.MaxCompressorRpm
-                && ThermalMath.Finite(PressureMPa) && PressureMPa >= 0 && PressureMPa <= 22
                 && ThermalMath.Finite(HotC) && HotC >= 45 && HotC <= 2200;
         }
     }
 
     // Cosmetic state only: this never grants power or consumes/creates MJ.
-    // Pressure follows the authoritative circuit charge; visual inertia never grants MW.
+    // Heat and circulation drive the shafts; visual inertia never grants MW.
     public static class ThermalRotors
     {
         // Cosmetic speeds keep the 64/56-blade rows below 24 blade passes/s.
         // Actual engineering shaft speeds are deliberately not simulated.
         public const double MaxRpm = 20, MaxCompressorRpm = 24;
         public static void Drive(ThermalRotorState state, double hotMJ, double ratingMW,
-            double hotC, double circulation, bool running, double seconds, double charge = 1)
+            double hotC, double circulation, bool running, double seconds)
         {
             if (!ThermalMath.Finite(seconds) || seconds <= 0 || seconds > 1) return;
             bool valid = running && ThermalMath.Finite(hotMJ) && hotMJ >= 0
@@ -49,10 +48,8 @@ namespace ArcanePower
             double flow = valid ? ThermalMath.Clamp(circulation, 0, 1) : 0;
             double heat = valid ? ThermalMath.Clamp(hotMJ / (ratingMW * .5), 0, 1) : 0;
             state.HotC = 45 + (valid ? ThermalMath.Clamp(hotC, 45, 2200) - 45 : 0) * heat;
-            double pressure = ThermalMath.Finite(charge) ? ThermalLoops.OperatingPressureMPa * ThermalMath.Clamp(charge, 0, 1) : 0;
-            state.PressureMPa = pressure + (state.PressureMPa - pressure) * Math.Exp(-seconds / 2);
             state.TargetRpm = flow > 0 && heat > 0
-                ? MaxRpm * Math.Sqrt(flow * ThermalMath.Span(state.PressureMPa, 8, 22) * ThermalMath.Span(state.HotC, 45, 2200)) : 0;
+                ? MaxRpm * Math.Sqrt(flow * ThermalMath.Span(state.HotC, 45, 2200)) : 0;
             // The independent electric compressor can spool during a paid cold start.
             state.CompressorTargetRpm = MaxCompressorRpm * Math.Sqrt(flow);
             Advance(state, seconds);

@@ -23,6 +23,21 @@ namespace ArcanePower
         // Missing/old observations default to spring-closed.
         [ProtoMember(8)] public byte OpenConnectors;
 
+        // Called only for members of a validated, dispatched circuit. A capped
+        // spur is connected even though it has no shortest flow path to a load.
+        public void ObserveCircuit(byte[] directions, double circulation, double heat, bool inside)
+        {
+            if (directions != null)
+            {
+                for (int i = 0; i < directions.Length; i++)
+                    if (directions[i] != 0) Ports[i] = directions[i];
+                Rate = Math.Max(Rate, ThermalMath.Clamp(circulation, 0, 1));
+                Internal |= inside;
+            }
+            Heat = heat;
+            Mode = Rate > 0 ? ThermalFlowMode.Pumping : ThermalFlowMode.Ready;
+        }
+
         public bool Valid(int ports)
         {
             if (EntityId == 0 || Sequence < 0 || Mode < ThermalFlowMode.Unconnected || Mode > ThermalFlowMode.Fault

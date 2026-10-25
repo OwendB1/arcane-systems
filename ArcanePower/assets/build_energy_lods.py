@@ -89,13 +89,17 @@ def build_lods(scene, reference=None, batch=False):
     bpy.context.window.scene=scene;bpy.context.view_layer.update()
     cols=COLS.get_collections(scene);main=reference or cols['main'][0]
     meshes=[o for o in main.objects if o.type=='MESH']
+    exact={o: bool(o.get('thermal_reactor_coupling')) or
+           o.name.startswith(('Energy / chamber glazing','Curved chamber / pane')) or
+           any(m and any(t in m.name for t in ('Emissive','EnergyGlow','EnergyFill','EnergyStatus','ArcanePlasma','ClearChamber','Glass','ThermalHot','ThermalCold','ThermalStatus')) for m in o.data.materials)
+           for o in meshes}
     field=meshes and all(all(m and m.name.startswith(('ArcanePlasma','EnergyGlow','EnergyFill')) for m in o.data.materials) for o in meshes)
-    if field or sum(triangles(o.data) for o in meshes)<1000:
+    if field or sum(triangles(o.data) for o in meshes)<1000 or (meshes and all(exact.values())):
         for col in list(cols['lod'] or []):
             if col.seut.ref_col==main:
                 for obj in list(col.objects):bpy.data.objects.remove(obj,do_unlink=True)
                 bpy.data.collections.remove(col)
-        return {'lods':[],'reason':'Keep exact driven field silhouette' if field else 'Already small; keep exact main'}
+        return {'lods':[],'reason':'Keep exact driven field silhouette' if field else 'Keep exact glass/fitting assembly' if all(exact.values()) else 'Already small; keep exact main'}
     existing={}
     for col in cols['lod'] or []:
         if col.seut.ref_col!=main:continue
@@ -111,7 +115,7 @@ def build_lods(scene, reference=None, batch=False):
         col.hide_viewport=False;col.hide_render=False
         reducible=[]
         for source in meshes:
-            powered=any(m and any(t in m.name for t in ('Emissive','EnergyGlow','EnergyFill','EnergyStatus','ArcanePlasma','ClearChamber','Glass','ThermalHot','ThermalCold','ThermalStatus')) for m in source.data.materials)
+            powered=exact[source]
             decal=source.get('texture_support') or source.get('fastener_body') or source.name.startswith(('Texture detail /','Marking /'))
             native_decal=source.get('source_asset') and all(m and m.name.startswith(('Atlas','TextAtlas','Paneling','Decals','Button')) for m in source.data.materials)
             if not powered and (decal or native_decal or max(source.dimensions)<(.12 if level==1 else .24)):continue
@@ -119,7 +123,7 @@ def build_lods(scene, reference=None, batch=False):
             normalize_uv(obj.data)
             col.objects.link(obj);obj.parent=None;obj.matrix_world=source.matrix_world.copy()
             obj['lod_source']=source.name;obj['lod_level']=level
-            protected=powered or source.name.startswith(('Energy / chamber glazing','Curved chamber / pane'))
+            protected=powered
             if not protected and reduce_collar(obj,level):
                 continue
             # Small structural boxes retain their exact hard faces and chamfers.

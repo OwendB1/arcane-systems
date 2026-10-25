@@ -52,9 +52,9 @@ namespace ArcanePower
         [ProtoMember(21)] public int LoopVersion;
         [ProtoMember(22)] public bool LoopTrip;
 
-        public int AvailableLoops
+        public int ConnectedLoops
         {
-            get { int count = 0; if (Loops != null) foreach (var loop in Loops) if (loop != null && loop.Available) count++; return count; }
+            get { int count = 0; if (Loops != null) foreach (var loop in Loops) if (loop != null && loop.Connected) count++; return count; }
         }
 
         private bool ValidLoops()
@@ -136,13 +136,6 @@ namespace ArcanePower
         public static bool Finite(double value) { return !double.IsNaN(value) && !double.IsInfinity(value); }
         public static double Clamp(double value, double low, double high) { return Math.Max(low, Math.Min(high, value)); }
         public static double Span(double value, double start, double end) { return Clamp((value - start) / (end - start), 0, 1); }
-
-        public static double StartupSeconds(double previous, double requiredMW, double deliveredMW, double seconds)
-        {
-            if (!Finite(previous) || !Finite(requiredMW) || !Finite(deliveredMW) || !Finite(seconds)
-                || requiredMW <= 0 || deliveredMW < requiredMW * .999 || seconds <= 0 || seconds > 1) return 0;
-            return Math.Min(8, Math.Max(0, previous) + seconds);
-        }
 
         public static double CirculationPower(double netMW, double efficiency, double externalMW, double designMW)
         {

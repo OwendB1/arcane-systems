@@ -9,7 +9,6 @@ namespace ArcanePower
             HashSet<long> claimed, HashSet<long> startupHosts)
         {
             var state = source.Motion.Thermal;
-            int previous = state.AvailableLoops;
             bool running = source.ThermalCanRun;
             var endpoints = new List<ThermalEndpoint> { source.ThermalEndpoint() };
             foreach (var machine in machines)
@@ -18,15 +17,14 @@ namespace ArcanePower
             foreach (var other in sources)
                 if (other != source && other.ThermalInitialized && other.Block.CubeGrid == source.Block.CubeGrid)
                     endpoints.Add(other.ThermalEndpoint());
-            var network = new ThermalNetwork(endpoints);
-            var circuits = network.Loops(endpoints[0]);
-            ThermalCommissioning[] charges;
-            if (!starts.TryGetValue(source.Id, out charges))
-                starts[source.Id] = charges = new ThermalCommissioning[ThermalLoops.Count];
+            ThermalCircuitCache graph;
+            if (!circuitGraphs.TryGetValue(source.Id, out graph) || !graph.Matches(endpoints))
+                circuitGraphs[source.Id] = graph = new ThermalCircuitCache(endpoints);
+            endpoints = graph.Nodes;
+            var network = graph.Network;
+            var circuits = graph.Circuits;
             double allocation = ThermalLoops.Allocation(source.ThermalHeatMW);
             double freshMW = 0, availableHeatMW = 0;
-            byte valves = 0;
-            bool filling = false;
             for (int index = 0; index < circuits.Length; index++)
             {
                 var circuit = circuits[index];
@@ -52,76 +50,60 @@ namespace ArcanePower
                 if (!loop.Connected || host == null || plan.AcceptedMW <= 0)
                 {
                     if (loop.Connected) loop.Diagnostic = plan.Limit;
-                    loop.Connected = false; loop.Charge = 0; charges[index] = null;
+                    loop.Connected = false;
                     continue;
                 }
                 foreach (var machine in bank)
                 { claimed.Add(machine.Entity.EntityId); machine.SourceId = source.Id; }
-                if (charges[index] == null || !charges[index].Covers(source.Block.CubeGrid.EntityId, units))
-                    charges[index] = new ThermalCommissioning(source.Block.CubeGrid.EntityId, units);
-                var charge = charges[index];
                 bool hasHeat = state.Store.HotMJ + state.Store.WasteMJ > .001;
                 foreach (var machine in bank) hasHeat |= machine.Store.HotMJ + machine.Store.WasteMJ > .001;
-                bool fill = charge.Seconds < 8;
                 double delivered = 0;
-                if ((running && (fill || host.Store.HotMJ <= .001)) || (!running && hasHeat))
+                bool needsPump = (running && host.Store.HotMJ <= .001) || (!running && hasHeat);
+                // Bootstrap a cold turbine and keep hot shutdown circulation
+                // powered. Running auxiliaries are already paid by conversion.
+                if (needsPump)
                 {
                     delivered = host.RequestStartup(source.Id, plan.AcceptedMW * .02);
                     startupHosts.Add(host.Entity.EntityId);
                 }
-                if (fill && (running || hasHeat))
-                    charge.Seconds = ThermalMath.StartupSeconds(charge.Seconds, plan.AcceptedMW * .02, delivered, 1.0 / 60);
-                loop.Charge = charge.Seconds / 8;
-                host.RotorCharge = loop.Charge;
                 double net = host.Generator == null ? 0 : host.Generator.CurrentOutput;
                 double circulation = ThermalMath.CirculationPower(net, plan.Efficiency, delivered, plan.AcceptedMW);
-                // A depressurized circuit cannot circulate core energy. Powered
-                // filling still deposits its actual startup electricity as heat.
-                circulation *= loop.Charge;
                 host.RotorCirculation = circulation; host.RotorHotC = source.ThermalHotC;
                 state.RejectedMW += DrainLoop(source, bank, allocation * circulation / 60, circulation);
                 loop.CoolingMW = plan.CoolingMW * circulation;
                 state.CoolingMW += loop.CoolingMW;
-                if (loop.Available || (fill && delivered > 0)) valves |= (byte)(1 << index);
-                if (!loop.Available)
+                loop.HeatMW = plan.AcceptedMW;
+                loop.NetMW = plan.NetMW;
+                loop.RequiredCoolingMW = plan.RequiredCoolingMW * source.Motion.PowerRamp;
+                loop.Diagnostic = circulation <= 0 && needsPump
+                    ? (running ? "Waiting for compressor power" : "Cooldown waiting for circulation power") : plan.Limit;
+                state.SupportedMW += loop.NetMW;
+                state.RequiredCoolingMW += loop.RequiredCoolingMW;
+                availableHeatMW += loop.HeatMW;
+                host.Efficiency = plan.Efficiency;
+                if (running)
                 {
-                    filling |= running || hasHeat;
-                    loop.Diagnostic = "CO2 filling/compression: " + charge.Seconds.ToString("0.0") + " / 8 s powered";
-                }
-                else
-                {
-                    loop.HeatMW = plan.AcceptedMW;
-                    loop.NetMW = plan.NetMW;
-                    loop.RequiredCoolingMW = plan.RequiredCoolingMW * source.Motion.PowerRamp;
-                    loop.Diagnostic = plan.Limit;
-                    state.SupportedMW += loop.NetMW;
-                    state.RequiredCoolingMW += loop.RequiredCoolingMW;
-                    availableHeatMW += loop.HeatMW;
-                    host.Efficiency = plan.Efficiency;
-                    if (running)
-                    {
-                        ThermalMath.Transfer(state.Store, host.Store, host.Spec.CapacityMJ,
-                            plan.AcceptedMW * circulation / 60, false);
-                        host.OutputGrantMW = ThermalMath.ExportLimit(host.Store, host.Spec.CapacityMJ, plan.Efficiency,
-                            plan.NetMW * source.Motion.PowerRamp, 1.0 / 60);
-                        freshMW += plan.AcceptedMW * circulation;
-                    }
+                    ThermalMath.Transfer(state.Store, host.Store, host.Spec.CapacityMJ,
+                        plan.AcceptedMW * circulation / 60, false);
+                    host.OutputGrantMW = ThermalMath.ExportLimit(host.Store, host.Spec.CapacityMJ, plan.Efficiency,
+                        plan.NetMW * source.Motion.PowerRamp, 1.0 / 60);
+                    freshMW += plan.AcceptedMW * circulation;
                 }
                 // Restrict flow tracing to this circuit. Keeping the full root
                 // port array preserves the existing four-port network packet.
-                CapturePlantFlow(source, new ThermalNetwork(circuit.Nodes), circuit.Nodes, bank, plan, circulation);
+                if (captureFlow)
+                    CapturePlantFlow(source, new ThermalNetwork(circuit.Nodes), circuit.Nodes, bank, plan, circulation);
             }
-            CaptureIsolation(network, endpoints, valves);
-            int active = state.AvailableLoops;
+            // Checked, sealed circuits open even while cold or off.
+            CaptureIsolation(network, endpoints, ThermalLoops.OpenValves(state));
+            int active = state.ConnectedLoops;
             state.DutyTrains = active;
             state.Efficiency = availableHeatMW > 0 ? state.SupportedMW / availableHeatMW : 0;
-            if (ThermalLoops.LastLoopLost(previous, active, running)) source.StopForLoopLoss();
-            if (source.ThermalCanRun && active > 0) state.LoopTrip = false;
+            source.CheckLoopSafety();
             source.ProduceThermal(freshMW);
             state.Diagnostic = state.LoopTrip && !source.Block.Enabled
-                ? "All operating circuits lost: shutdown latched; retain cooldown power, repair/refill and restart manually"
-                : active + "/4 circuits ready / " + (active * 25) + "% maximum reactor allocation"
-                    + (filling ? " / commissioning circuits with delivered power" : "");
+                ? "Startup blocked: all four circuits defective; repair at least one and restart manually"
+                : active + "/4 circuits ready / " + (active * 25) + "% maximum reactor allocation";
         }
 
         private static double DrainLoop(Reactor source, List<ThermalBlock> bank, double coreBudgetMJ, double circulation)

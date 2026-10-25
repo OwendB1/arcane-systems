@@ -580,8 +580,23 @@ clearance to space separate from sunlight: shade must not bypass enclosure.
 
 
 Remove reactor nodes from hydraulic traversal to prevent cross-linked roots
-sharing charge or output. Keep initial filling distinct from loss of the last
-operating circuit, and permit paid refill for cooldown while off. Membership
-changes reset only their circuit. Preserve full-rating core capacities and the
+sharing heat-flow allocation or output. Circuit availability follows validated
+topology, with no filling or pressure gate. Preserve metered cold compressor
+startup and hot cooldown power: removing the fill timer must not remove the
+power that bootstraps circulation. Membership changes revalidate only their circuit. Preserve full-rating core capacities and the
 existing retained-waste/125% critical path when circuits disappear. Shared starter/
 room layouts remain migration fixtures. See [runtime ownership](THERMAL-RUNTIME.md).
+
+Pipe end materials need an axial boundary, not spherical distance from an end:
+the latter leaves long metal faces inside a section whose outside is glass.
+`refine_thermal_flow.pipe_end_materials` splits the existing pressure wall and
+uses matching inner/outer metal up to 150 mm behind a duplex socket (100 mm at
+other exposed ends). Close metal and glass as separate solids with annular end
+faces at that boundary; a material reassignment alone exposes the metal wall
+through glass. Recess the glass face 2 mm to avoid coincident surfaces, retain
+the open bore, and verify the metal face points into the glass. Moving manifold
+paths use authored mesh coordinates and need the object's world transform.
+Preserve the reactor's flagged internal coolant plumbing.
+The framed and bare reactor adapters use a square-edged receiving lip with
+65 mm overlap, a recessed gasket seat and an R283 bore around the R273 reactor
+nose. Keep the lip exact in LODs; socket positions and collision remain unchanged.

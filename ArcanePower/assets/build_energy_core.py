@@ -1,7 +1,7 @@
 """Author/export three-cell pillar storage and its three construction stages.
 Run with the prototype .blend open; saves a separate energy-core .blend.
 """
-import bpy, bmesh, importlib, json, math, shutil, subprocess, sys
+import bpy, bmesh, importlib, json, math, runpy, shutil, subprocess, sys
 from pathlib import Path
 from mathutils import Matrix, Vector
 
@@ -11,6 +11,7 @@ native={m.name:m for m in bpy.data.materials if m.library}
 collision_template=next(o for o in bpy.data.objects if o.type=='MESH' and o.rigid_body)
 materials=dict(native)
 materials['GlassInside']=materials['GlassOutside']=bpy.data.materials['ArcanePower_ClearChamber']
+runpy.run_path(str(ROOT/'assets/tune_chamber_glass.py'))['apply']()
 for name in ['EnergyGlow']+['EnergyFill'+str(i) for i in range(1,5)]:
     material=native['Emissive'].copy();material.name=name;materials[name]=material
 # The field needs a continuous luminous surface, not the patterned lamp atlas.

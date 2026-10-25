@@ -66,10 +66,22 @@ def audit(names=None):
                     fail(name, 'finite geometry', obj.name)
                 inherited = obj.get('reactor_source_name')
                 exhaust = name == 'Atmospheric cooler' and obj.get('cooler_exhaust_part')
-                if not inherited and any(p[i] > half[i]+.001 or p[i] < (-3.06 if exhaust and i == 1 else -half[i]-.001)
+                coupling = name in ('PRIMARY / Reactor adapter', 'PRIMARY / Reactor adapter bare') and obj.get('thermal_reactor_coupling') == 2
+                # Only the receiving sleeve crosses the reactor socket plane;
+                # cell size and the accepted placement collision stay unchanged.
+                if not inherited and any(p[i] > half[i]+.001 or p[i] < (-3.06 if exhaust and i == 1 else -half[i]-.001-(.065 if coupling and i == 0 else 0))
                                          for p in points for i in range(3)):
                     fail(name, '2.5 m envelope', obj.name)
                 mesh = obj.data
+                if obj.get('thermal_pipe_end_revision') and {mesh.materials[f.material_index].name for f in mesh.polygons} != {'Metal_Dull','ArcanePower_CoolantGlass'}:
+                    fail(name, 'short metal ends retain a glass sight length', obj.name)
+                if obj.get('thermal_pipe_end_revision'):
+                    bm = bmesh.new();bm.from_mesh(mesh)
+                    # Every material must close independently: a watertight
+                    # combined tube can still expose the metal wall via glass.
+                    if any(len(e.link_faces)!=2 or e.link_faces[0].material_index!=e.link_faces[1].material_index for e in bm.edges):
+                        fail(name, 'metal ferrules and glass have closed annular end faces', obj.name)
+                    bm.free()
                 if obj.get('thermal_chamfer_m') is not None:
                     axis = obj.get('thermal_bore_axis')
                     faces = [f for f in mesh.polygons if axis is None or abs(f.normal[axis]) > .01]
@@ -173,8 +185,19 @@ def audit(names=None):
                     insert = next(o for o in col.objects if o.name.startswith(prefix+' pressure lip '+str(sign)))
                     seal_z = [(seal.matrix_world@v.co-bore).dot(n) for v in seal.data.vertices]
                     insert_z = [(insert.matrix_world@v.co-bore).dot(n) for v in insert.data.vertices]
-                    if abs(min(seal_z)+.008)>1e-5 or abs(max(seal_z))>1e-5 or max(insert_z)>min(seal_z)+1e-5:
+                    receiving = bool(port.get('reactor_transition') and insert.get('thermal_reactor_coupling'))
+                    if abs(min(seal_z)+.008)>1e-5 or abs(max(seal_z))>1e-5 or (not receiving and max(insert_z)>min(seal_z)+1e-5):
                         fail(name,'face seal abuts insert without overlap',seal.name)
+                    if receiving:
+                        if abs(min(insert_z)+.055)>1e-5 or abs(max(insert_z)-.065)>1e-5 or tree(insert).overlap(tree(seal)):
+                            fail(name,'receiving lip overlaps nose only, with recessed gasket clearance',insert.name)
+                        for axial, minimum in ((-.004, .311), (.030, .281)):
+                            for j in range(64):
+                                radial = up*math.cos(j*math.tau/64)+across*math.sin(j*math.tau/64)
+                                hit = tree(insert).ray_cast(bore+n*axial,radial,.5)[0]
+                                if hit is None or (hit-bore-n*axial).length < minimum:
+                                    fail(name,'sleeve clears gasket and R273 reactor nose around full bore',insert.name)
+                                    break
                     for j in range(8) if flange else ():
                         radial = (up*math.cos(j*math.tau/8)+across*math.sin(j*math.tau/8))*.378
                         hit = tree(flange).ray_cast(bore+radial+n*.05,-n,.20)[0]
@@ -182,6 +205,31 @@ def audit(names=None):
                             fail(name,'pressure insert has recessed counterbore shoulder',flange.name)
                             break
                     for wall in walls:
+                        if wall.get('thermal_pipe_end_revision'):
+                            for depth, material in ((.11,'Metal_Dull'),(.20,'ArcanePower_CoolantGlass')):
+                                for j in range(8):
+                                    # Sample face interiors, clear of axial rings
+                                    # and cylinder edges that a BVH ray can graze.
+                                    angle = (j+.37)*math.tau/8
+                                    radial = up*math.cos(angle)+across*math.sin(angle)
+                                    centre = bore-n*depth
+                                    inner = tree(wall).ray_cast(centre,radial,.36)
+                                    if inner[0] is None:continue
+                                    outer = tree(wall).ray_cast(centre+radial*.40,-radial,.20)
+                                    if outer[0] is None or any(wall.data.materials[wall.data.polygons[wall.data.loop_triangles[hit[2]].polygon_index].material_index].name != material for hit in (inner,outer)):
+                                        fail(name,'short metal ferrule has matching inside/outside material',wall.name)
+                                        break
+                                    if depth == .11 and outer[0] is not None:
+                                        # Shoot through the wall thickness from
+                                        # the sight length toward its ferrule.
+                                        metal_faces=[list(t.vertices) for t in wall.data.loop_triangles if wall.data.materials[wall.data.polygons[t.polygon_index].material_index].name=='Metal_Dull']
+                                        metal_tree=BVHTree.FromPolygons([wall.matrix_world@v.co for v in wall.data.vertices],metal_faces,all_triangles=True)
+                                        shoulder=(inner[0]+outer[0])*.5-n*.09
+                                        hit=metal_tree.ray_cast(shoulder,n,.09)
+                                        if hit[0] is None or abs((hit[0]-bore).dot(n)+.15)>1e-4 or hit[1].dot(-n)<.99:
+                                            fail(name,'metal shoulder faces glass across full wall thickness',wall.name)
+                                        if metal_tree.ray_cast(bore-n*.20,n,.09)[0] is not None:
+                                            fail(name,'annular shoulder keeps central bore open',wall.name)
                         for vertex in wall.data.vertices:
                             delta = wall.matrix_world@vertex.co-bore
                             axial = delta.dot(n)

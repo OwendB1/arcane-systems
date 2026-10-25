@@ -105,6 +105,13 @@ def main():
     for name in ('ArcanePower_ClearChamber','ArcanePower_CoolantGlass','ArcanePower_InternalCoolantGlass'):
         definition=next(d for d in glass.findall('TransparentMaterials/TransparentMaterial')
                         if d.findtext('Id/SubtypeId')==name)
+        # Zero CA removes dirt, so ColorAdd supplies the visible body/opacity.
+        # Color.W has no effect here. Keep the tint premultiplied and avoid
+        # the old high-reflection, almost invisible pressure-wall finish.
+        opacity=float(definition.findtext('ColorAdd/W'))
+        assert .20<=opacity<=.45,('Glass body too transparent or opaque',name)
+        assert all(0<float(definition.findtext('ColorAdd/'+axis))<=opacity for axis in 'XYZ')
+        assert 0<float(definition.findtext('Reflectivity'))<=.30,('Mirror-like glass reflection',name)
         for tag,suffix in (('Texture','ca'),('GlossTexture','ng')):
             value=definition.findtext(tag).replace('\\','/')
             assert value=='Textures/Models/ArcanePower/Thermal/UniformGlass_'+suffix+'.dds'
@@ -112,16 +119,12 @@ def main():
             with Image.open(MOD/value) as image:
                 assert max(ImageStat.Stat(image).stddev)==0,('Nonuniform glass texture',value)
                 if suffix=='ca':assert image.getextrema()==((0,0),(0,0),(0,0),(0,0))
-    external=next(d for d in glass.findall('TransparentMaterials/TransparentMaterial') if d.findtext('Id/SubtypeId')=='ArcanePower_CoolantGlass')
-    internal=next(d for d in glass.findall('TransparentMaterials/TransparentMaterial') if d.findtext('Id/SubtypeId')=='ArcanePower_InternalCoolantGlass')
-    assert abs(float(external.findtext('Reflectivity'))-.45)<1e-5
-    assert abs(float(internal.findtext('Reflectivity'))-.22)<1e-5
     restored=json.loads((ROOT/'validation/thermal-models/internal-pipes-preserved.json').read_text())
     assert restored['status']=='passed' and restored['geometry_transforms_and_material_assignments_match']
     result={'status':'passed','blocks':len(models),'compatibility_aliases':len(contract['PIPE_ALIASES']),
             'authored_model_families':len(authored),'construction_models':3*len(authored),
             'lod_models':report['lod_models'],'validated_meshes':report['native_meshes'],
-            'definitions_and_package_match':True,'co2_supply':'Integrated reactor commissioning',
+            'definitions_and_package_match':True,'co2_supply':'Automatic reactor supply; powered startup/cooldown circulation',
             'runtime_scripts':len(scripts),'runtime_definitions':len(definitions),
             'archive_entries_verified':len(packaged),'code_and_definitions_packaged':True,
             'all_block_definitions':catalog['blocks'],'dedicated_thermal_icons':catalog['thermal_icons'],

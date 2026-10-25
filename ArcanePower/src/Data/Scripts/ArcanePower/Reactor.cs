@@ -64,6 +64,7 @@ namespace ArcanePower
             CheckContainment();
             InitializeFuel();
             InitializeThermalRuntime();
+            reactor.EnabledChanged += ThermalEnabledChanged;
         }
 
         public override void UpdateBeforeSimulation()
@@ -237,6 +238,8 @@ namespace ArcanePower
             }
             if (reactor == null) return;
             reactor.OnUpgradeValuesChanged -= CheckContainment;
+            reactor.EnabledChanged -= ThermalEnabledChanged;
+            ThermalSession.Remove(this);
             reactor.AppendingCustomInfo -= AppendInfo;
             if (fuelInventory != null)
             {

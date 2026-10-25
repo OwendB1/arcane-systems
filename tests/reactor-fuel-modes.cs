@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using VRage;
+using VRageMath;
 using ArcanePower;
 using IMyTerminalBlock = Block;
 using IMyReactor = ReactorBlock;
@@ -13,13 +14,14 @@ namespace ArcanePower {
  public class ThermalRotorState { public bool Valid(long id){return true;} }
  public class ThermalRadiatorState { public bool Valid(long id){return true;} }
 }
+class Grid { public long EntityId=1; }
 class Definition { public string SubtypeName; }
 class Slim { public float BuildLevelRatio=1; }
 class Logic { public object Component=new ContainmentController(); public T GetAs<T>() where T:class{return Component as T;} }
 class ContainmentController {}
 class Block {
  public long EntityId,OwnerId;
- public object CubeGrid;
+ public Grid CubeGrid;
  public bool Closed,IsFunctional=true,HasInventory=true,Accessible=true;
  public int InventoryCount=1;
  public Slim SlimBlock=new Slim();
@@ -32,7 +34,10 @@ class Block {
 class Attachment { public bool Compatible=true; public Block Block; }
 class MyCubeBlock : Block { public Dictionary<int,Attachment> CurrentAttachedUpgradeModules=new Dictionary<int,Attachment>(); }
 class ReactorBlock : MyCubeBlock {
- public bool Enabled=true,UseConveyorSystem;
+ bool enabled=true;
+ public bool Enabled {get{return enabled;}set{if(enabled==value)return;enabled=value;if(EnabledChanged!=null)EnabledChanged(this);}}
+ public event Action<Block> EnabledChanged;
+ public bool UseConveyorSystem;
  public float CurrentOutput,PowerOutputMultiplier=1;
 }
 class NativeReactor { public float Capacity; }
@@ -89,18 +94,21 @@ static class ThermalManifolds {
 }
 // PRODUCTION_STATE
 class Reactor {
- ReactorBlock reactor=new ReactorBlock();
+ internal ReactorBlock reactor=new ReactorBlock();
+ internal ReactorBlock Block {get{return reactor;}}
+ internal ThermalEndpoint CircuitEndpoint;
+ internal ThermalEndpoint ThermalEndpoint(){return CircuitEndpoint;}
  MyCubeBlock Entity;
  NativeReactor nativeReactor=new NativeReactor();
- MotionState Motion=new MotionState{Thermal=new ThermalReactorState()};
+ internal MotionState Motion=new MotionState{Thermal=new ThermalReactorState()};
  int controllerRingCapacity=4,initializationFrames,networkTick=1,appearanceRefresh;
  float previousControllers=2;
- bool restoreLegacyHardware;
+ bool restoreLegacyHardware,thermalStartRequested;
  bool IsLive=true,ThermalVariant=true,motionInitialized=true,thermalRestoreFault,CanOperate=true,ManifoldRigReady=true;
  List<IMyTerminalBlock> fuelSources=new List<IMyTerminalBlock>();
  List<MyInventoryItem> transferItems=new List<MyInventoryItem>();
  const float CooldownHeat=.15f;
- long Id=1;
+ internal long Id=1;
  int publications;
  static bool ValidTileGrades(int[] grades){return grades!=null && grades.Length==20;}
  void PublishMotion(){publications++;}
@@ -110,7 +118,7 @@ class Reactor {
  static int checks;
  static void Need(bool value,string message){checks++;if(!value)throw new Exception(message);}
  static void Near(double actual,double expected,string message){Need(Math.Abs(actual-expected)<1e-7*Math.Max(1,Math.Abs(expected)),message+": "+actual+" != "+expected);}
- Reactor(){Entity=reactor;reactor.CubeGrid=new object();Motion.RingCount=4;Controllers(true);}
+ Reactor(){Entity=reactor;reactor.CubeGrid=new Grid();Motion.RingCount=4;Controllers(true);reactor.EnabledChanged+=ThermalEnabledChanged;}
  void Controllers(bool advanced){
   Entity.CurrentAttachedUpgradeModules.Clear();
   for(int i=0;i<2;i++)Entity.CurrentAttachedUpgradeModules[i]=new Attachment{Block=new Block{EntityId=i+2,CubeGrid=reactor.CubeGrid}};
@@ -170,7 +178,7 @@ class Reactor {
    c=>c.Entity.CurrentAttachedUpgradeModules[0].Block.Closed=true,
    c=>c.Entity.CurrentAttachedUpgradeModules[0].Block.IsFunctional=false,
    c=>c.Entity.CurrentAttachedUpgradeModules[0].Block.SlimBlock.BuildLevelRatio=.99f,
-   c=>c.Entity.CurrentAttachedUpgradeModules[0].Block.CubeGrid=new object(),
+   c=>c.Entity.CurrentAttachedUpgradeModules[0].Block.CubeGrid=new Grid(),
    c=>c.Entity.CurrentAttachedUpgradeModules[0].Block.GameLogic.Component=null,
    c=>c.Entity.CurrentAttachedUpgradeModules.Clear()}){
    r=new Reactor();damage(r);Need(!r.HasAdvancedController() && !TerminalEnabled(r),"unavailable advanced does not unlock terminal");
@@ -213,11 +221,11 @@ class Reactor {
    r.Motion.Thermal.FuelHeatMJ=125;r.Motion.FuelDebt=.25;r.Motion.Critical=critical;r.Motion.CriticalSeconds=17;
    r.Motion.Heat=critical?1.3f:.8f;r.nativeReactor.Capacity=9;
    r.StopForLoopLoss();
-   Need(!r.reactor.Enabled && !r.ThermalCanRun && r.Motion.Thermal.LoopTrip,"last-loop loss disables generation and latches shutdown");
+   Need(!r.reactor.Enabled && !r.ThermalCanRun && !r.Motion.Thermal.LoopTrip,"all-circuit running loss stops generation without a startup latch");
    Need(r.nativeReactor.Capacity==0 && r.Motion.Core==CorePhase.Cooling,"last-loop loss uses normal powered cooldown");
-   Near(r.Motion.Thermal.Store.HotMJ+r.Motion.Thermal.Store.WasteMJ+r.Motion.Thermal.AttachedHeatMJ,1700,"pressure trip retains every attached MJ");
+   Near(r.Motion.Thermal.Store.HotMJ+r.Motion.Thermal.Store.WasteMJ+r.Motion.Thermal.AttachedHeatMJ,1700,"circuit trip retains every attached MJ");
    Need(r.Motion.Thermal.Mode==ThermalMode.Brayton && r.Motion.Thermal.Deployment==1,"no standalone fallback or manifold retraction");
-   Need(r.Motion.Critical==critical && r.Motion.CriticalSeconds==17,"pressure trip cannot cancel or restart a critical fuse");
+   Need(r.Motion.Critical==critical && r.Motion.CriticalSeconds==17,"circuit trip cannot cancel or restart a critical fuse");
    r.ProduceThermal(r.ThermalHeatMW);Near(r.Motion.Thermal.FuelHeatMJ,125,"shutdown cannot admit fresh fuel heat");
    Near(r.Motion.FuelDebt,.25,"pending fuel debt survives trip");
    Need(r.NeedsStorageSupport,"last-loop shutdown retains containment support");
@@ -228,10 +236,52 @@ class Reactor {
   Need(old.Motion.Thermal.LoopVersion==1 && !old.reactor.Enabled,"legacy shared save migrates disabled");
   Near(old.Motion.Thermal.Store.HotMJ+old.Motion.Thermal.Store.WasteMJ,1400,"legacy migration preserves heat");
   var loaded=new Reactor();loaded.Mode(ThermalMode.Brayton);loaded.Motion.Thermal.LoopVersion=1;
-  loaded.Motion.Thermal.Loops[0].Connected=true;loaded.Motion.Thermal.Loops[0].Charge=1;
+  loaded.Motion.Thermal.Loops[0].Connected=true;
   loaded.Motion.Thermal.Store.WasteMJ=50;loaded.InitializeThermalRuntime();
-  Need(loaded.Motion.Thermal.AvailableLoops==0,"reload requires topology validation and paid filling");
-  Near(loaded.Motion.Thermal.Store.WasteMJ,50,"reload never trades retained heat for charge");
+  Need(loaded.Motion.Thermal.ConnectedLoops==0,"reload requires fresh topology validation");
+  Near(loaded.Motion.Thermal.Store.WasteMJ,50,"reload retains every saved MJ");
+  Need(!loaded.Motion.Thermal.LoopTrip,"reload before topology validation is not a manual start");
+  foreach(CorePhase phase in Enum.GetValues(typeof(CorePhase)))for(int connected=0;connected<=4;connected++){
+   var r=new Reactor();r.Mode(ThermalMode.Brayton);r.Stock(1,10);r.Motion.Core=phase;
+   for(int i=0;i<connected;i++)r.Motion.Thermal.Loops[i].Connected=true;
+   r.reactor.Enabled=false;r.BeginShutdown();r.CheckLoopSafety();
+   Need(!r.Motion.Thermal.LoopTrip,"normal Off/starting/running/cooling/stopping shutdown never latches for any defect count");
+  }
+  for(int connected=0;connected<=4;connected++){
+   var r=new Reactor();r.Mode(ThermalMode.Brayton);r.Stock(1,10);
+   for(int i=0;i<connected;i++)r.Motion.Thermal.Loops[i].Connected=true;
+   r.CheckLoopSafety();Need(!r.Motion.Thermal.LoopTrip,"passive topology checks without manual On do not latch");
+   r.reactor.Enabled=false;r.reactor.Enabled=true;
+   Need(r.thermalStartRequested && !r.CanPrepareContainment,"manual On defers containment preparation until topology is checked");
+   r.CheckLoopSafety();
+   Need(r.Motion.Thermal.LoopTrip==(connected==0) && r.reactor.Enabled==(connected>0),"manual startup latches only with four defective circuits");
+   Need(!r.thermalStartRequested,"one manual On produces exactly one startup validation");
+   if(connected>0){
+    Need(r.Motion.Thermal.ConnectedLoops==connected,"complete circuits are available immediately");
+    r.Running();r.CheckLoopSafety();Need(r.reactor.Enabled && !r.Motion.Thermal.LoopTrip,"valid circuits do not trigger a running loss");
+    r.Motion.Thermal.Loops=ThermalLoops.Empty();r.CheckLoopSafety();
+    Need(!r.reactor.Enabled && !r.Motion.Thermal.LoopTrip,"last structural circuit loss stops without latching");
+   }
+  }
+  var retry=new Reactor();retry.Mode(ThermalMode.Brayton);retry.reactor.Enabled=false;retry.reactor.Enabled=true;retry.CheckLoopSafety();
+  retry.Motion.Thermal.Loops[0].Connected=true;retry.CheckLoopSafety();
+  Need(retry.Motion.Thermal.LoopTrip && !retry.reactor.Enabled,"repair alone cannot restart a rejected startup");
+  retry.reactor.Enabled=true;retry.CheckLoopSafety();Need(!retry.Motion.Thermal.LoopTrip && retry.reactor.Enabled,"manual retry clears the startup latch after one circuit is repaired");
+  for(int working=0;working<4;working++){
+   var single=new Reactor();single.Mode(ThermalMode.Brayton);single.Stock(1,10);
+   single.Motion.Thermal.Loops[working].Connected=true;
+   single.reactor.Enabled=false;single.reactor.Enabled=true;single.CheckLoopSafety();
+   Need(single.reactor.Enabled && !single.Motion.Thermal.LoopTrip && single.Motion.Thermal.ConnectedLoops==1,
+    "manual startup accepts any one of the four complete circuits");
+   single.Running();single.CheckLoopSafety();Need(single.ThermalCanRun,"one complete circuit remains operational with three incomplete circuits");
+  }
+  var cancelled=new Reactor();cancelled.Mode(ThermalMode.Brayton);cancelled.reactor.Enabled=false;cancelled.reactor.Enabled=true;cancelled.reactor.Enabled=false;cancelled.CheckLoopSafety();
+  Need(!cancelled.Motion.Thermal.LoopTrip,"manual Stop cancels a queued startup check");
+  var stale=new Reactor();stale.Mode(ThermalMode.Brayton);stale.Motion.Thermal.LoopVersion=1;stale.Motion.Thermal.LoopTrip=true;stale.reactor.Enabled=false;stale.InitializeThermalRuntime();
+  Need(!stale.Motion.Thermal.LoopTrip && !stale.reactor.Enabled,"old false saved latch clears on reload without re-enabling the reactor");
+  MyAPIGateway.Multiplayer.IsServer=false;
+  var client=new Reactor();client.Mode(ThermalMode.Brayton);client.reactor.Enabled=false;client.reactor.Enabled=true;
+  Need(!client.thermalStartRequested,"clients cannot arm the server startup latch");MyAPIGateway.Multiplayer.IsServer=true;
  }
  static void Residuum(){
   foreach(var mode in new[]{ThermalMode.Standalone,ThermalMode.Brayton}){
@@ -275,5 +325,99 @@ class Reactor {
   }
   MyAPIGateway.TerminalActionsHelper.Terminal.Blocks.Clear();
  }
- static void Main(){Residuum();FuelMatrix();ControllerAndCommands();CoolingAndAccounting();CircuitShutdown();Console.WriteLine("PASS: "+checks+" production fuel/mode/controller checks; survival/creative, terminal/server, inventory/conveyors, restore, cooldown and paid-heat accounting");}
+ static void Circulation(){
+  var r=new Reactor();r.Mode(ThermalMode.Brayton);r.Stock(1,10);r.Running();
+  r.Motion.Thermal.Store.EntityId=r.Id;
+  var session=new ThermalSession();var machines=new List<ThermalBlock>();var hosts=new List<ThermalBlock>();
+  Func<int,int,ThermalPort> port=(x,sign)=>new ThermalPort("CO2",new Vector3(x,0,0),Vector3.UnitX*sign,Vector3.UnitY);
+  var roots=new ThermalPort[4];
+  for(int i=0;i<4;i++){
+   int x=i*10;roots[i]=port(x,1);
+   var ports=new[]{new[]{port(x,-1),port(x+1,-1),port(x+2,-1)},new[]{port(x+1,1)},new[]{port(x+2,1)}};
+   for(int j=0;j<3;j++){
+    var spec=new ThermalModel{Kind=j==0?ThermalKind.Pipe:j==1?ThermalKind.Train:ThermalKind.AirCooler,
+     RatingMW=r.ThermalHeatMW,CoolingMW=j==2?10000:0,Ports=ports[j]};
+    var machine=new ThermalBlock{Spec=spec,Block=new Block{EntityId=10+i*3+j,CubeGrid=r.Block.CubeGrid}};
+    machine.Node=new ThermalEndpoint{Id=machine.Block.EntityId,GridId=1,Healthy=true,Model=spec,Ports=spec.Ports};
+    machine.Store.EntityId=machine.Block.EntityId;
+    if(j==1){machine.Generator=new ReactorBlock();hosts.Add(machine);}
+    machines.Add(machine);session.Blocks.Add(machine.Block.EntityId,machine);
+   }
+  }
+  r.CircuitEndpoint=new ThermalEndpoint{Id=r.Id,GridId=1,Healthy=true,
+   Model=new ThermalModel{Kind=ThermalKind.Reactor,Ports=roots},Ports=roots};
+  r.reactor.Enabled=false;r.Motion.Core=CorePhase.Off;
+  session.Step(r,machines);
+  Need(r.Motion.Thermal.ConnectedLoops==4 && session.Valves==15,"complete circuits validate before powerup");
+  foreach(var host in hosts)Near(host.Requested,0,"validating a cold stopped circuit consumes no power");
+  var removed=machines[0];machines.Remove(removed);session.Blocks.Remove(removed.Block.EntityId);session.Changed(1);
+  Need(ThermalSession.circuitGraphs.Count==0,"block removal invalidates the affected grid cache");
+  session.Step(r,machines);
+  Need(r.Motion.Thermal.ConnectedLoops==3 && session.Valves==14,"removal updates circuit validity while reactor is off");
+  machines.Insert(0,removed);session.Blocks.Add(removed.Block.EntityId,removed);session.Changed(1);
+  session.Step(r,machines);
+  Need(r.Motion.Thermal.ConnectedLoops==4 && !r.reactor.Enabled,"addition restores validity without starting reactor");
+  var cached=ThermalSession.circuitGraphs[r.Id];
+  r.reactor.Enabled=true;r.Running();session.Step(r,machines);
+  Need(Object.ReferenceEquals(cached,ThermalSession.circuitGraphs[r.Id]),"powerup uses the existing validated physical graph");
+  Need(r.Motion.Thermal.ConnectedLoops==4 && session.Valves==15,"cold circuits are immediately ready with open valves");
+  Near(r.Motion.Thermal.ProducedMW,0,"zero delivered pump power cannot start fresh reaction heat");
+  Need(r.Motion.Thermal.Loops[0].Diagnostic.Contains("compressor power"),"unpowered cold circuit explains its wait");
+  foreach(var host in hosts){Near(host.Requested,125,"T1 cold compressor still requests metered power");host.Delivered=62.5;}
+  session.Step(r,machines);
+  foreach(var host in hosts)Near(host.RotorCirculation,.5,"partial delivery starts proportional circulation immediately");
+  Need(r.Motion.Thermal.ProducedMW>0,"first delivered interval admits paid reaction heat without filling");
+  session.Step(r,machines);
+  foreach(var host in hosts){Need(host.OutputGrantMW>0,"turbines receive paid output before eight seconds");host.Generator.CurrentOutput=(float)host.OutputGrantMW;host.Delivered=0;}
+  session.Step(r,machines);
+  foreach(var host in hosts){Near(host.Requested,0,"hot turbine releases external startup sink");Need(host.RotorCirculation>0,"actual generated power sustains circulation");}
+  var broken=machines[0];broken.Block.IsFunctional=false;session.Step(r,machines);
+  Need(r.Motion.Thermal.ConnectedLoops==3 && session.Valves==14,"breach isolates only its quarter allocation");
+  broken.Block.IsFunctional=true;broken.Block.EntityId=99;broken.Node.Id=99;session.Blocks.Remove(10);session.Blocks.Add(99,broken);
+  session.Step(r,machines);
+  Need(r.Motion.Thermal.ConnectedLoops==4 && session.Valves==15,"replacement pipe restores its circuit without a refill");
+  double paid=r.Motion.Thermal.FuelHeatMJ;r.reactor.Enabled=false;r.BeginShutdown();
+  foreach(var host in hosts){host.Generator.CurrentOutput=0;host.Delivered=125;}
+  double before=r.Motion.Thermal.Store.HotMJ+r.Motion.Thermal.Store.WasteMJ;
+  session.Step(r,machines);
+  foreach(var host in hosts){Near(host.Requested,125,"hot shutdown retains external circulation support");Near(host.OutputGrantMW,0,"shutdown grants no new electrical conversion");}
+  Need(r.Motion.Thermal.Store.HotMJ+r.Motion.Thermal.Store.WasteMJ<before,"powered cooldown drains retained housing heat");
+  Near(r.Motion.Thermal.FuelHeatMJ,paid,"shutdown circulation admits no new fuel heat");
+  r.Motion.Thermal.Store.HotMJ=r.Motion.Thermal.Store.WasteMJ=0;
+  foreach(var machine in machines)machine.Store.HotMJ=machine.Store.WasteMJ=0;
+  session.Step(r,machines);
+  foreach(var host in hosts)Near(host.Requested,0,"cold stopped plant requests no pump power");
+ }
+ static void Main(){Residuum();FuelMatrix();ControllerAndCommands();CoolingAndAccounting();CircuitShutdown();Circulation();Console.WriteLine("PASS: "+checks+" production fuel/mode/controller checks; survival/creative, terminal/server, inventory/conveyors, restore, cooldown and paid-heat accounting");}
+}
+
+// Recording engine doubles; the circuit dispatcher and heat transport are injected unchanged.
+class ThermalBlock {
+ internal Block Block,Entity;
+ internal ReactorBlock Generator;
+ internal ThermalModel Spec;
+ internal ThermalStore Store=new ThermalStore();
+ internal ThermalEndpoint Node;
+ internal List<ThermalBlock> RadiatorPanels=new List<ThermalBlock>();
+ internal long SourceId {get{return Store.SourceId;}set{Store.SourceId=value;}}
+ internal double RotorCirculation,RotorHotC,Efficiency,OutputGrantMW,RadiatorRejectedMW,Requested,Delivered;
+ internal double EffectiveRatingMW {get{return Spec.RatingMW;}}
+ internal ThermalUnit Unit(){return new ThermalUnit{Id=Block.EntityId,Kind=Spec.Kind,Grade=Spec.Grade,RatingMW=Spec.RatingMW,CoolingMW=Spec.CoolingMW};}
+ internal ThermalEndpoint Endpoint(long owner){Node.Healthy=Block.IsFunctional;return Node;}
+ internal double RequestStartup(long owner,double demand){Requested=demand;return Math.Min(Delivered,demand);}
+}
+class ThermalSession {
+ internal Dictionary<long,ThermalBlock> Blocks=new Dictionary<long,ThermalBlock>();
+ internal static Dictionary<long,ThermalCircuitCache> circuitGraphs=new Dictionary<long,ThermalCircuitCache>();
+ internal void Changed(long grid){InvalidateCircuits(grid);}
+ bool captureFlow;
+ internal byte Valves;
+ void CapturePlantFlow(Reactor source,ThermalNetwork network,List<ThermalEndpoint> endpoints,List<ThermalBlock> bank,ThermalPlan plan,double circulation){}
+ void CaptureIsolation(ThermalNetwork network,List<ThermalEndpoint> endpoints,byte valves){Valves=valves;}
+ internal void Step(Reactor source,List<ThermalBlock> machines){
+  source.Motion.Thermal.ProducedMW=source.Motion.Thermal.SupportedMW=source.Motion.Thermal.CoolingMW=source.Motion.Thermal.RequiredCoolingMW=0;
+  foreach(var machine in machines){machine.Entity=machine.Block;machine.Requested=machine.OutputGrantMW=0;}
+  AdvanceLoops(source,new List<Reactor>{source},machines,new HashSet<long>(),new HashSet<long>());
+ }
+ // PRODUCTION_LOOPS
 }

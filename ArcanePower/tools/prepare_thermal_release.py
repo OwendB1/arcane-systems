@@ -96,13 +96,17 @@ def definitions(models,mains,revision,additions=False):
     if additions:
         root=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').getroot()
         blocks=root.find('CubeBlocks')
-        replacing={spec['subtype'] for spec in models.values()} | {CONTRACT['subtype'](name) for name in CONTRACT['RETIRED']}
+        replacing={CONTRACT['subtype'](name) for name in CONTRACT['RETIRED']}
         for definition in list(blocks):
             if definition.findtext('Id/SubtypeId') in replacing:blocks.remove(definition)
     for name,spec in models.items():
         ident=spec['subtype'];is_source=name=='Reactor housing';is_train=name.startswith('Brayton train')
         definition=copy.deepcopy(reactor if is_source or is_train else module)
-        blocks.append(definition)
+        previous=next((b for b in blocks if b.findtext('Id/SubtypeId')==ident),None)
+        if previous is None:blocks.append(definition)
+        else:
+            index=list(blocks).index(previous)
+            blocks.remove(previous);blocks.insert(index,definition)
         typeid='Reactor' if is_source or is_train else 'UpgradeModule'
         set_text(definition,'Id/TypeId',typeid);set_text(definition,'Id/SubtypeId',ident)
         set_text(definition,'DisplayName','Arcane '+('Reactor' if is_source else name.replace(' / ',' ').replace('CO2','CO₂')))
@@ -217,13 +221,15 @@ def description(name):
     if base in CONTRACT['COOLER_UPGRADES'].values():
         rating='100 GW' if name.endswith('upgraded') else '10 GW'
         detail={'Atmospheric cooler':'Airtight hull casing, rear manifold. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires atmosphere and powered circulation.',
-                'Space radiator':'Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Stack up to two aligned panels on the same grid. Mixed tiers add their own cooling. Keep both faces exposed to space.',
-                'Radiator panel':'Attach directly above a radiator or its first extension on the same grid. Each panel has its own solar exposure: 100% cooling in shade or edge-on, 50% in full sun. Shares base rotation; maximum two extensions. Unattached panels provide no cooling.'}[base]
+                'Space radiator':'Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Aim at the top shaft coupling to stack up to two panels on the same grid; match Up, any yaw works. Grind either panel face to remove a section. Mixed tiers add their own cooling. Keep both faces exposed to space.',
+                'Radiator panel':'Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling.'}[base]
         return rating+' ideal heat rejection per unit/panel. '+detail+(' Requires 10 Aether Residuum recovered from T1 fuel.' if name.endswith('upgraded') else '')
     if name=='Reactor housing':
-        return 'Internal CO2 generation. Standalone: Aether only, 20% net. Helion and Empyrean require Brayton to prevent meltdown. At least one fully built, functional advanced controller unlocks Brayton. Up to 40% starter / 78% exotic conversion. Four independent manifold circuits, one turbine plus cooling each; each supplies up to 25% capacity. Circuit loss isolates that manifold; last-circuit loss latches shutdown. Align H/C and cap unused pipe mouths. Two controllers and a working vent route required. Stop and cool before changing mode.'
+        return 'Internal CO2 generation. Standalone: Aether only, 20% net. Helion and Empyrean require Brayton to prevent meltdown. At least one fully built, functional advanced controller unlocks Brayton. Up to 40% starter / 78% exotic conversion. Four independent manifold circuits, one turbine plus cooling each; each supplies up to 25% capacity. Circuit loss isolates that manifold; losing all valid circuits stops generation. Only a manual Start with all four circuits defective latches a fault. Normal Stop does not latch. Align H/C and cap unused pipe mouths. Two controllers and a working vent route required. Stop and cool before changing mode.'
     if name.startswith('Brayton train'):
         return ('Requires 20 Aether Residuum; compatible with T3 Empyrean heat. ' if name.endswith('upgraded') else 'T1/T2 fuels only; T3 Empyrean requires upgraded turbines. ') + '2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.'
+    if name in ('PRIMARY / Reactor adapter', 'PRIMARY / Reactor adapter bare'):
+        return '170 mm reactor offset adapter. The offset end connects only to the Arcane Reactor vessel; use the opposite end for normal duplex pipes. Align H with H and C with C. Keep each reactor manifold circuit separate and cap unused pipe mouths.'
     return 'CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.'
 
 
@@ -269,6 +275,8 @@ def install(additions=False):
                             *[lods[key].relative_to(MOD).as_posix() for key,_ in references]],env=NATIVE_ENV,check=True,stdout=subprocess.DEVNULL)
             fixed.replace(path)
         hkt=path.with_suffix('.hkt')
+        if row['type']=='main' and '_RadiatorPanels_' in stem:
+            assert hkt.is_file() and hkt.stat().st_size>0, ('Missing rotating panel collision',stem)
         data=probe(exe,path,row['triangles'],hkt if hkt.exists() else None)
         if stem==mains.get('Reactor housing'):
             assert any(f[0]=='MATERIAL' and f[1]=='ArcanePower_CoolantGlass' for f in data),'Native reactor lacks current coolant glass'
@@ -348,8 +356,8 @@ def install(additions=False):
             'lod_models':sum(r['type']=='lod' for r in compiled.values()),
             'native_models':compiled,'external_native_subparts':previous['external_native_subparts'] if previous else len(bundle)-sum(r['type']!='lod' for r in rows.values()),
             'inventory_highlights':highlights or (previous['inventory_highlights'] if previous else {}),
-            'physics':'Accepted reactor collision preserved; other blocks use up to ten hulls derived from real authored solids',
-            'co2':'Integrated reactor generation and powered commissioning; no separate gas supply blocks',
+            'physics':'Accepted reactor collision preserved; radiator axial docks retain stacking clearance; rotating panel faces and frames have native subpart hulls',
+            'co2':'Automatic reactor CO2 supply; metered startup/cooldown circulation; no filling or pressure gate',
             'game_reloaded':False,'workshop_published':False}
     trim_native_manifest(report)
     (OUT/'native-export.json').write_text(json.dumps(report,indent=2)+'\n')

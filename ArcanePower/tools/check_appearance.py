@@ -39,6 +39,7 @@ methods = ''.join(member(source, signature) for source, signature in [
     (power, '        private double PrechargeMW'),
     (power, '        private void UpdatePower()'),
     (fuel, '        private bool HasUsableFuel()'),
+    ((SRC / 'Reactor.Thermal.cs').read_text(), '        private bool ThermalFuelModeReady'),
     (safety, '        private bool CanOperate'),
     (safety, '        private bool NeedsAutoEjection'),
 ])
@@ -51,6 +52,7 @@ using System;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Text;
+using ArcanePower;
 using ProtoBuf;
 namespace ProtoBuf {
  class ProtoContractAttribute:Attribute {}
@@ -77,7 +79,7 @@ class Logic { public ContainmentController Controller=new ContainmentController(
 class ContainmentController { public float Supply,Requested; public float Request(long id,float demand){Requested=demand;return Math.Min(Supply,demand);} }
 class Slim { public float BuildLevelRatio=1,Integrity=100,MaxIntegrity=100; }
 class Inventory { public double Stock=10; public double GetItemAmount(string type){return Stock;} }
-static class MyItemType { public static string MakeIngot(string type){return type;} }
+static class MyItemType { public static string MakeIngot(string type){return type;} public static string MakeComponent(string type){return type;} }
 class IMyReactor:MyCubeBlock {
  public bool Enabled=true,MarkedForClose,IsFunctional=true,UseConveyorSystem=true;
  public string CustomName="Test reactor"; public float CurrentOutput;
@@ -89,22 +91,22 @@ static class MyAPIGateway {
  public static class Multiplayer { public static bool IsServer=true; }
  public static class Session { public static bool CreativeMode; }
 }
-public class ThermalStore { public double HotMJ,WasteMJ; }
-public class ThermalReactorState {
- public bool Settled=true,Faulted; public string Mode="Standalone",Requested="Standalone",Diagnostic="Ready";
- public double NetOutputMW,SupportedMW,StartupMW,Deployment,Efficiency,ProducedMW,RecoveryRatio;
- public int DutyTrains,StandbyTrains; public ThermalStore Store=new ThermalStore();
+namespace ArcanePower {
+ public class ThermalRotorState { public bool Valid(long id){return true;} }
+ public class ThermalRadiatorState { public bool Valid(long id){return true;} }
 }
 static class CoreHazards { public static float EjectedCountdown(long id,out int count){count=0;return 0;} }
 class Reactor {
  public MyEntity Entity;
- MotionState Motion=new MotionState(); bool receivedState=true,thermalRestoreFault;
+ MotionState Motion=new MotionState(); bool receivedState=true,thermalRestoreFault,thermalStartRequested;
  bool ThermalVariant {get{return Motion.Thermal!=null;}} double ThermalHeatMW=25000;
  const float CooldownHeat=.15f,AutoEjectionIntegrity=.60f;
  readonly List<ContainmentController> powerControllers=new List<ContainmentController>();
  long Id=1;
  string[] TileNames={"Standard","Reinforced","Advanced"};
  bool HasIntactControllers(){return Motion.ControllersReady;}
+ bool HasAdvancedController(){return true;}
+ string ThermalModeTransitionHint {get{return "Mode transition";}}
  int[] SpareTileQuartets(){return new[]{20,0,0};} int NeededTileQuartets(){return 20;}
  int InstalledTileGrade(int batch){return 0;} double TileWearRate(){return 1;}
  double TileReserveSeconds(){return 60;} double FuelUnitsPerMinute(){return 0;}
@@ -118,6 +120,7 @@ checks = r'''
   reactor=new IMyReactor();Entity=reactor;initializationFrames=0;previousControllers=2;controllerRingCapacity=4;
   Motion.FuelTier=tier;Motion.ControllersReady=true;Motion.VentReady=true;
   Motion.Thermal=new ThermalReactorState();
+  if(tier>1){Motion.Thermal.Mode=Motion.Thermal.Requested=ThermalMode.Brayton;Motion.Thermal.Deployment=1;}
   reactor.CurrentAttachedUpgradeModules.Add(0,new Upgrade());reactor.CurrentAttachedUpgradeModules.Add(1,new Upgrade());
   for(int i=1;i<=4;i++)Entity.Subparts["Ring"+i]=new MyEntitySubpart();
   UpdateStatus();
@@ -172,11 +175,24 @@ checks = r'''
   Console.WriteLine("PASS: measured startup charge, rate/ETA, partial/no supply, full reserve and all fuel tiers");
  }
  static void Priority(){
+  for(int connected=0;connected<=4;connected++){
+   var stopped=new Reactor();stopped.Motion.Thermal.Mode=stopped.Motion.Thermal.Requested=ThermalMode.Brayton;
+   stopped.Motion.Thermal.Deployment=1;stopped.reactor.Enabled=false;stopped.Motion.Core=CorePhase.Cooling;
+   for(int i=0;i<connected;i++)stopped.Motion.Thermal.Loops[i].Connected=true;
+   Need(stopped.ReadStatus(false).State=="COOLING DOWN","normal shutdown shows cooldown for every circuit defect count");
+   var circuitReport=stopped.ReadStatus(false);
+   Need(circuitReport.Value("Circuits available")==connected+" / 4 ("+connected*25+"% allocation)","available count follows validated circuits immediately");
+   for(int i=0;i<4;i++)Need(circuitReport.Value("Circuit "+(i+1))==(i<connected?"Ready / valve open":"Unavailable / valve closed"),"dashboard valve state matches the actual valve mask");
+   Need(!circuitReport.Text().Contains("MPa") && !circuitReport.Text().Contains("charged / valve"),"circuit diagnostics contain no retired pressure or filling state");
+
+   stopped.Motion.Thermal.LoopTrip=true;
+   Need(stopped.ReadStatus(false).State=="STARTUP BLOCKED / ALL FOUR CIRCUITS DEFECTIVE","only explicit rejected startup shows the circuit latch");
+  }
   foreach(Action<Reactor> change in new Action<Reactor>[]{
    r=>r.reactor.Enabled=false, r=>r.receivedState=false, r=>r.initializationFrames=120,
    r=>r.reactor.Inventory.Stock=0, r=>r.Motion.TileStarved=true, r=>r.Motion.PowerPaused=true,
    r=>r.Motion.ControllersReady=false, r=>r.Motion.VentReady=false,
-   r=>r.Motion.Thermal.Settled=false, r=>r.Motion.Thermal.Faulted=true,
+   r=>r.Motion.Thermal.Requested=ThermalMode.Brayton, r=>r.Motion.Thermal.Faulted=true,
    r=>r.Motion.Critical=true, r=>r.Motion.Vent=VentPhase.Ejecting,
    r=>r.reactor.IsFunctional=false, r=>r.Motion.Core=CorePhase.Starting,
    r=>r.Motion.Core=CorePhase.Running, r=>r.Motion.Core=CorePhase.Cooling,
@@ -212,5 +228,6 @@ with tempfile.TemporaryDirectory(prefix='arcane-appearance-') as folder:
     path = Path(folder) / 'check.cs'
     path.write_text(stubs + fields + methods + checks + state + types)
     exe = path.with_suffix('.exe')
-    subprocess.run(['mcs', '-warn:0', '-out:' + str(exe), str(path)], check=True)
+    subprocess.run(['mcs', '-warn:0', '-out:' + str(exe), str(path),
+                    str(SRC/'ThermalPlant.cs'), str(SRC/'ThermalLoops.cs')], check=True)
     subprocess.run(['mono', str(exe)], check=True)

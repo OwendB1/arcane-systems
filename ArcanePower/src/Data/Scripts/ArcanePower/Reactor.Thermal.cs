@@ -7,6 +7,7 @@ namespace ArcanePower
     public sealed partial class Reactor
     {
         private bool thermalRestoreFault;
+        private bool thermalStartRequested;
         internal void FailThermalRuntime()
         {
             reactor.Enabled = false;
@@ -72,8 +73,10 @@ namespace ArcanePower
                 bool legacy = Motion.Thermal.LoopVersion == 0 && Motion.Thermal.Mode == ThermalMode.Brayton;
                 Motion.Thermal.Loops = ThermalLoops.Empty();
                 Motion.Thermal.LoopVersion = 1;
-                // Commissioning is revalidated and paid after reload. Preserve
-                // every MJ and the critical-core state during network migration.
+                // A saved diagnostic is not a new manual startup attempt.
+                Motion.Thermal.LoopTrip = false;
+                // Revalidate topology after reload. Preserve every MJ and the
+                // critical-core state during network migration.
                 if (legacy)
                 {
                     Motion.Thermal.Diagnostic = "Split old shared plumbing into four independent manifold circuits; restart manually";
@@ -85,10 +88,37 @@ namespace ArcanePower
 
         internal void StopForLoopLoss()
         {
-            Motion.Thermal.LoopTrip = true;
             reactor.Enabled = false;
             if (nativeReactor != null) nativeReactor.Capacity = 0;
             BeginShutdown();
+        }
+
+        private void ThermalEnabledChanged(IMyTerminalBlock block)
+        {
+            if (!MyAPIGateway.Multiplayer.IsServer) return;
+            // Restored Enabled state is loaded before this event is subscribed.
+            // Internal safety paths only disable the reactor; an explicit On
+            // action while Off is the startup request, including toolbar/PB On.
+            thermalStartRequested = ThermalVariant && Motion.Thermal != null && reactor.Enabled
+                && Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle
+                && Motion.Thermal.Settled && Motion.Thermal.Mode == ThermalMode.Brayton;
+        }
+
+        internal void CheckLoopSafety()
+        {
+            var state = Motion.Thermal;
+            bool start = thermalStartRequested;
+            thermalStartRequested = false;
+            if (start && reactor.Enabled && Motion.Core == CorePhase.Off
+                && state.Settled && state.Mode == ThermalMode.Brayton)
+            {
+                // One valid sealed circuit is enough to start at its normal
+                // quarter allocation; pump power governs actual circulation.
+                state.LoopTrip = state.ConnectedLoops == 0;
+                if (state.LoopTrip) StopForLoopLoss();
+            }
+            else if (ThermalCanRun && state.ConnectedLoops == 0)
+                StopForLoopLoss(); // Running loss stops safely without a startup latch.
         }
 
         internal bool ManifoldRigReady

@@ -4,6 +4,7 @@ using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using VRage.Game.Entity;
+using VRage.Game.Components;
 using VRageMath;
 
 namespace ArcanePower
@@ -51,7 +52,8 @@ namespace ArcanePower
                 else if (RadiatorBase != null)
                 {
                     var parent = RadiatorBase.Store.Radiator;
-                    state.Target = parent.Target; state.Angle = parent.Angle;
+                    state.Target = ThermalRadiators.PanelAngle(RadiatorBase.Block.WorldMatrix, Block.WorldMatrix, parent.Target);
+                    state.Angle = ThermalRadiators.PanelAngle(RadiatorBase.Block.WorldMatrix, Block.WorldMatrix, parent.Angle);
                     state.RejectedMW = RadiatorBase.coolingMW > 0 ? parent.RejectedMW * PanelCoolingMW / RadiatorBase.coolingMW : 0;
                 }
                 else { state.Target = state.Angle; state.RejectedMW = 0; state.Exposure = 0; }
@@ -67,13 +69,30 @@ namespace ArcanePower
                 // side-pipe joints cannot separate between network snapshots.
                 var parent = ThermalSession.RadiatorParent(state.ParentId);
                 radiatorVisualAngle = parent != null && parent.receivedRadiator
-                    ? parent.radiatorVisualAngle : ThermalRadiators.Step(radiatorVisualAngle, state.Angle, 1.0 / 60);
+                    ? ThermalRadiators.PanelAngle(parent.Block.WorldMatrix, Block.WorldMatrix, parent.radiatorVisualAngle)
+                    : ThermalRadiators.Step(radiatorVisualAngle, state.Angle, 1.0 / 60);
             }
-            if (MyAPIGateway.Utilities.IsDedicated) return;
             MyEntitySubpart part;
             if (!((MyEntity)Entity).Subparts.TryGetValue(ThermalRadiators.Subpart, out part)) return;
             Matrix pose = ThermalRadiators.Pose(radiatorVisualAngle, Spec.Kind == ThermalKind.RadiatorPanel);
             part.PositionComp.SetLocalMatrix(ref pose);
+            // The native tool ray resolves subpart hits to the owning grid and
+            // section. Keep real panel hulls in the same frame on servers too;
+            // entity/model removal owns their physics cleanup.
+            if (Block.CubeGrid.Physics != null && part.Physics == null)
+                MyAPIGateway.Physics.CreateModelPhysics(MyAPIGateway.Physics.CreateSettingsForPhysics(
+                    part, part.WorldMatrix, Vector3.Zero, rigidBodyFlags:
+                    RigidBodyFlag.RBF_KINEMATIC | RigidBodyFlag.RBF_NO_POSITION_UPDATES));
+            if (part.Physics != null)
+            {
+                part.Physics.Enabled = Block.CubeGrid.Physics != null;
+                if (part.Physics.Enabled)
+                {
+                    part.Physics.LinearVelocity = Block.CubeGrid.Physics.LinearVelocity;
+                    part.Physics.AngularVelocity = Block.CubeGrid.Physics.AngularVelocity;
+                }
+            }
+            if (MyAPIGateway.Utilities.IsDedicated) return;
             part.SetEmissiveParts("ThermalRadiatorHeatRoot", new Color(255, 41, 18), (float)(state.Glow * .12));
             part.SetEmissiveParts("ThermalRadiatorHeatMid", new Color(255, 19, 9), (float)(state.Glow * .07));
             part.SetEmissiveParts("ThermalRadiatorHeatTip", new Color(255, 9, 5), (float)(state.Glow * .0325));
@@ -91,7 +110,9 @@ namespace ArcanePower
                 if (ThermalRadiators.PlanetShadow(Block.CubeGrid.GetPosition() - planet.PositionComp.GetPosition(), planet.AverageRadius, sun))
                 { shadow = true; break; }
             double total = PanelCooling(density, Store.Radiator.Angle, sun, shadow);
-            foreach (var panel in RadiatorPanels) total += panel.PanelCooling(density, Store.Radiator.Angle, sun, shadow);
+            foreach (var panel in RadiatorPanels)
+                total += panel.PanelCooling(density, ThermalRadiators.PanelAngle(Block.WorldMatrix,
+                    panel.Block.WorldMatrix, Store.Radiator.Angle), sun, shadow);
             return total;
         }
 

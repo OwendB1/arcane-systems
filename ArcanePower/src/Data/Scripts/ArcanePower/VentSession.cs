@@ -35,23 +35,23 @@ namespace ArcanePower
             MyAPIGateway.Multiplayer.RegisterSecureMessageHandler(Channel, Receive);
             control = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlButton, IMyReactor>("ArcanePower_Venting");
             control.Title = MyStringId.GetOrCompute("Vent reactor");
-            control.Tooltip = MyStringId.GetOrCompute("Eject containment and leave the reactor off. Requires two fully built, functional controllers and a complete vent route. Ejection starts automatically at 60% reactor integrity. Broken controllers or vents pause the cycle; heat and fuse continue.");
+            control.Tooltip = MyStringId.GetOrCompute("Eject the core and shut down. Requires working controllers and a vent route.");
             control.SupportsMultipleBlocks = true;
             control.Enabled = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.Motion.Vent == VentPhase.Idle && r.Motion.VentReady && r.Motion.ControllersReady; };
             control.Action = b => SendCommand(b.EntityId, VentCommand.Start);
             security = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlOnOffSwitch, IMyReactor>("ArcanePower_SecurityMode");
             security.Title = MyStringId.GetOrCompute("Security mode");
-            security.Tooltip = MyStringId.GetOrCompute("On: shut down if a running reactor loses its vent route. Off: continue running with a warning. Startup always requires intact vents. Automatic ejection at 60% integrity always remains active and requires intact controllers and vents.");
-            security.OnText = MyStringId.GetOrCompute("Shutdown");
-            security.OffText = MyStringId.GetOrCompute("Warning only");
+            security.Tooltip = MyStringId.GetOrCompute("On: stop if the vent route fails. Off: warn and keep running.");
+            security.OnText = MyStringId.GetOrCompute("On");
+            security.OffText = MyStringId.GetOrCompute("Off");
             security.SupportsMultipleBlocks = true;
             security.Getter = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.Motion.SecurityMode; };
             security.Setter = (b, enabled) => SendCommand(b.EntityId, enabled ? VentCommand.SecurityOn : VentCommand.SecurityOff);
             thermalMode = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlOnOffSwitch, IMyReactor>("ArcanePower_ThermalMode");
             thermalMode.Title = MyStringId.GetOrCompute("Brayton mode");
-            thermalMode.Tooltip = MyStringId.GetOrCompute("Standalone: Aether only, 20% conversion. Brayton requires at least one fully built, functional advanced controller; Helion and Empyrean require Brayton to prevent meltdown. Connect parallel turbines and cooling. Changing mode shuts down, drains heat, then moves the manifolds under containment power. Restart manually when settled.");
-            thermalMode.OnText = MyStringId.GetOrCompute("Brayton");
-            thermalMode.OffText = MyStringId.GetOrCompute("Standalone");
+            thermalMode.Tooltip = MyStringId.GetOrCompute("On: Brayton. Off: standalone. Needs an advanced controller; stops and cools before switching.");
+            thermalMode.OnText = MyStringId.GetOrCompute("On");
+            thermalMode.OffText = MyStringId.GetOrCompute("Off");
             // A lost controller must not prevent requesting safe retraction.
             // Entering Brayton is independently checked again by the server.
             thermalMode.Enabled = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.ThermalInitialized

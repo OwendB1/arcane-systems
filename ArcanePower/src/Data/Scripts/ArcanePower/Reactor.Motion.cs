@@ -271,7 +271,7 @@ namespace ArcanePower
                 bool ejecting = Motion.Vent != VentPhase.Idle && !Motion.PayloadReleased;
                 Motion.Paused = Motion.PowerPaused || (Motion.Vent == VentPhase.Idle && !reactor.IsFunctional)
                     || (ejecting && (!Motion.ControllersReady || !Motion.VentReady));
-                if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && reactor.Enabled && Motion.VentReady && HasUsableFuel() && Motion.PowerReady && !PrepareTiles())
+                if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && reactor.Enabled && !thermalStartRequested && Motion.VentReady && HasUsableFuel() && Motion.PowerReady && !PrepareTiles())
                     reactor.Enabled = false;
                 UpdateStatus();
                 Motion.TargetLoad = reactor.MaxOutput > 0
@@ -283,7 +283,7 @@ namespace ArcanePower
                 if (ventPowerCut || ((Motion.Core == CorePhase.Stopping || Motion.Core == CorePhase.Cooling) && Motion.Vent == VentPhase.Idle))
                     reactor.Enabled = false;
                 if ((!reactor.Enabled || !reactor.IsFunctional || !CanOperate || !HasUsableFuel()) && Motion.Vent == VentPhase.Idle) BeginShutdown();
-                else if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && Motion.VentReady && Motion.PowerReady)
+                else if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && Motion.VentReady && Motion.PowerReady && !thermalStartRequested)
                 {
                     Motion.PayloadReleased = false;
                     Motion.RingCount = controllerRingCapacity;

@@ -1,4 +1,4 @@
-"""Run production fuel/mode/controller interlocks with recording SE doubles."""
+"""Run production fuel/mode interlocks and circuit dispatch with recording SE doubles."""
 from pathlib import Path
 import os
 import re
@@ -32,12 +32,13 @@ members = ''.join(member(file, signature) for file, signatures in {
     'Reactor.Motion.cs': ['private void BeginShutdown()', 'private void BeginDismantling()',
                          'private void RestoreMotionState(', 'internal static bool Valid('],
     'Reactor.Thermal.cs': ['internal bool ThermalInitialized', 'private bool ThermalFuelModeReady',
-                          'internal double ThermalHeatMW', 'private bool ThermalNeedsPowerSupport',
+                          'internal double ThermalHeatMW', 'internal double ThermalHotC', 'private bool ThermalNeedsPowerSupport',
                           'internal bool ThermalCanRun', 'private float ElectricalRatingMW',
                           'private bool ThermalCold', 'private bool ThermalManifoldPower',
                           'internal string ThermalModeTransitionHint', 'internal void RequestThermalMode(',
                           'private void UpdateThermalMode()', 'internal void ProduceThermal(',
                           'private void RefreshThermalCapacity()', 'internal void StopForLoopLoss()',
+                          'private void ThermalEnabledChanged(', 'internal void CheckLoopSafety()',
                           'private void InitializeThermalRuntime()'],
 }.items() for signature in signatures)
 # Engine interface replacement only; all predicates and state changes are shipped code.
@@ -54,11 +55,14 @@ gate = session[start:session.index('};', start) + 1]
 fixture = (ROOT / 'tests/reactor-fuel-modes.cs').read_text()
 fixture = fixture.replace('// PRODUCTION_MEMBERS', members).replace('// PRODUCTION_STATE', state)
 fixture = fixture.replace('/* TERMINAL_GATE */', gate)
+fixture = fixture.replace('// PRODUCTION_LOOPS', ''.join(member('ThermalSession.Loops.cs', signature)
+    for signature in ('private void AdvanceLoops(', 'private static double DrainLoop('))
+    + member('ThermalSession.cs', 'private static void InvalidateCircuits('))
 with tempfile.TemporaryDirectory(prefix='arcane-fuel-modes-') as folder:
     path = Path(folder) / 'check.cs'
     path.write_text(fixture)
     exe = path.with_suffix('.exe')
     subprocess.run(['mcs', '-warn:0', '-langversion:6', '-out:' + str(exe),
-                    '-r:/usr/lib/mono/4.5/Facades/netstandard.dll', '-r:' + str(GAME / 'VRage.Library.dll'),
-                    str(path), str(SRC / 'ThermalPlant.cs'), str(SRC / 'ThermalLoops.cs')], check=True)
+                    '-r:/usr/lib/mono/4.5/Facades/netstandard.dll', '-r:' + str(GAME / 'VRage.Library.dll'), '-r:' + str(GAME / 'VRage.Math.dll'),
+                    str(path), str(SRC / 'ThermalPlant.cs'), str(SRC / 'ThermalLoops.cs'), str(SRC / 'ThermalNetwork.cs')], check=True)
     subprocess.run(['mono', str(exe)], env={**os.environ, 'MONO_PATH': str(GAME)}, check=True)

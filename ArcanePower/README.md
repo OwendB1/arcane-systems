@@ -68,7 +68,9 @@ compatibility aliases, reusing the current models and icons.
 The current thermal catalog has 27 public blocks plus the hidden pipe aliases.
 Each reactor manifold supplies an independent circuit with one turbine and its
 own cooling. Four circuits provide full capacity; a breach isolates the affected
-circuit, and losing the final operating circuit latches shutdown.
+circuit, and losing all valid circuits stops generation. Only an explicit manual
+startup with all four circuits defective sets the circuit-loss latch; normal
+shutdown and unfilled circuits do not.
 See [construction and recovery](THERMAL-CONSTRUCTION.md) for setup, commissioning,
 migration and cooling placement, and [power balance](THERMAL-POWER.md) for ratings
 and efficiency. Existing shared plants migrate disabled with their heat retained.
@@ -99,7 +101,10 @@ still needs an in-game reload and visual check.
 The thermal design is the sole playable **Arcane Reactor**, with standalone and
 Brayton modes. Standalone accepts Aether only; Brayton needs at least one advanced
 controller. The [construction guide](THERMAL-CONSTRUCTION.md) covers mode changes
-and controller-loss recovery; [runtime ownership](THERMAL-RUNTIME.md) describes
+and controller-loss recovery. Complete circuits are available immediately, without
+filling or pressure gates; cold startup and hot cooldown still need powered
+circulation. Circuit validity updates as blocks and connections change, even
+while the reactor is off; startup uses the current result. [Runtime ownership](THERMAL-RUNTIME.md) describes
 server interlocks and retained heat. Its subtype remains
 `ArcanePower_Thermal_ReactorHousing`. The original `ArcanePower_ReactorPrototype`
 definition is archived in `assets/definitions/`, outside the mod, with its blends

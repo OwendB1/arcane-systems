@@ -89,6 +89,7 @@ class IMyReactor : IMyTerminalBlock {
  public Slim SlimBlock=new Slim();
  public float CurrentOutput=10000,PowerOutputMultiplier=1;
  public event Action OnUpgradeValuesChanged;
+ public event Action<IMyTerminalBlock> EnabledChanged;
  public event Action<IMyTerminalBlock,StringBuilder> AppendingCustomInfo;
  public void ClearSubscribers(){OnUpgradeValuesChanged=null;AppendingCustomInfo=null;}
 }
@@ -140,6 +141,7 @@ class Reactor {
  Reactor(bool thermal=false){reactor=nativeReactor;if(thermal)nativeReactor.Definition.SubtypeName="ArcanePower_Thermal_ReactorHousing";fuelInventory=reactor.Inventory;fuelInventory.ContentsChanged+=FuelChanged;}
  void CheckContainment(){steps++;}
  void InitializeMotion(){steps++;} void InitializeFuel(){steps++;} void InitializeThermalRuntime(){steps++;}
+ void ThermalEnabledChanged(IMyTerminalBlock b){}
  void AppendInfo(IMyTerminalBlock b,StringBuilder s){}
  void RefreshRestPoses(){steps++;} void CheckVentRoute(){steps++;} void UpdatePower(){steps++;}
  void UpdateSafety(){steps++;} void UpdateThermalMode(){steps++;} void UpdateTiles(){steps++;}

@@ -82,7 +82,7 @@ class Check {
  Dictionary<string,int> restPoses=new Dictionary<string,int>{{"VentHatch4",0}};
  int controllerRingCapacity=2;
  MotionState Motion=new MotionState();
- bool receivedState=true,motionInitialized=true,hasFuel=true;
+ bool receivedState=true,motionInitialized=true,hasFuel=true,thermalStartRequested;
  bool IsLive {get{return !Entity.Closed;}}
  bool ThermalVariant=false,ThermalNeedsPowerSupport=false;
  double ThermalHeatMW=25000;
@@ -120,6 +120,8 @@ class Check {
  static void Main(){
   var c=new Check();c.Motion.PowerReady=true;c.Tick();
   Need(!c.Motion.VentReady && !c.reactor.Enabled && c.tiles==0 && c.Motion.Core==CorePhase.Off,"no route must block startup before tile debit");
+  var pending=new Check();pending.Route(1);pending.Controllers(2);pending.Motion.PowerReady=true;pending.thermalStartRequested=true;pending.Tick();
+  Need(pending.tiles==0 && pending.Motion.Core==CorePhase.Off,"pending manual circuit validation blocks tile debit and containment deployment");
   c.Section(0,"ArcanePower_VentOutlet");c.RefreshVentRoute();Need(!c.Motion.VentReady,"outlet alone cannot replace tube");
   c.Section(0);c.RefreshVentRoute();Need(!c.Motion.VentReady,"tube without outlet");
   c.Section(2,"ArcanePower_VentOutlet");c.RefreshVentRoute();Need(!c.Motion.VentReady,"gap");

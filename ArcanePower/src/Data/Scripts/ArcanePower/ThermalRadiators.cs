@@ -43,8 +43,15 @@ namespace ArcanePower
         {
             return index >= 0 && index < 2
                 && Vector3D.DistanceSquared(panel.Translation, ExtensionCentre(root, index)) < .0001
-                && Vector3D.Dot(root.Up, panel.Up) > .99999
-                && Vector3D.Dot(root.Right, panel.Right) > .99999;
+                && Vector3D.Dot(root.Up, panel.Up) > .99999;
+        }
+
+        // Counter the extension block's placed yaw so its moving panel, H/C
+        // pipes and sampled radiating faces share the base's world orientation.
+        public static double PanelAngle(MatrixD root, MatrixD panel, double angle)
+        {
+            return Wrap(angle + Math.Atan2(Vector3D.Dot(root.Backward, panel.Right),
+                Vector3D.Dot(root.Right, panel.Right)));
         }
 
         public static double Wrap(double angle) { return (angle % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2); }
