@@ -180,7 +180,8 @@ export function installFieldHelp(doc) {
     field.setAttribute("aria-description", help);
     // Replace the few old native titles to avoid a second tooltip over this one.
     field.removeAttribute("title");
-    if (!field.labels?.length && !field.hasAttribute("aria-label"))
+    // Native labels.length can scan the whole document. Most fields wrap in a label.
+    if (!field.hasAttribute("aria-label") && field.closest("label")?.control !== field && !field.labels?.length)
       field.setAttribute("aria-label", field.placeholder || field.dataset.action || field.id);
   }
 

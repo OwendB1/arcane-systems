@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { getFieldHelp } from "./field-help.js";
+import { getFieldHelp, installFieldHelp } from "./field-help.js";
 
 const app = readFileSync(new URL("./app.js", import.meta.url), "utf8");
 const html = readFileSync(new URL("./index.html", import.meta.url), "utf8");
@@ -55,4 +55,37 @@ test("upgrade stat selectors describe every recognized stat and preserve runtime
   assert.match(help("upgrade-mod-stat", null, "ActiveDefenseDuration"), /not those live timers/);
   assert.match(help("bt-subtype"), /empty\/base subtype/);
   assert.match(help("limit-group-directions"), /Forward=0, Backward=1, Up=2, Down=3, Left=4, Right=5, or Any=6/);
+});
+
+test("field help avoids global label scans and still names secondary controls", () => {
+  const field = () => ({
+    dataset: { action: "limit-group-directions" }, placeholder: "Directions override",
+    attributes: {},
+    setAttribute(name, value) { this.attributes[name] = value; },
+    hasAttribute(name) { return name in this.attributes; },
+    removeAttribute() {}, closest() { return null; }
+  });
+  const wrapped = field();
+  wrapped.closest = () => ({ control: wrapped });
+  Object.defineProperty(wrapped, "labels", { get() { assert.fail("Unnecessary document-wide label lookup"); } });
+  const secondary = field();
+  secondary.closest = () => ({ control: wrapped });
+  secondary.labels = [];
+  const external = field();
+  external.labels = [{}];
+  const observer = globalThis.MutationObserver;
+  globalThis.MutationObserver = class { observe() {} };
+  try {
+    installFieldHelp({
+      createElement: () => ({ setAttribute() {} }), body: { append() {} },
+      querySelectorAll: () => [wrapped, secondary, external],
+      addEventListener() {}, defaultView: { addEventListener() {} }
+    });
+  } finally {
+    globalThis.MutationObserver = observer;
+  }
+  assert.ok(wrapped.attributes["aria-description"]);
+  assert.equal(wrapped.attributes["aria-label"], undefined);
+  assert.equal(secondary.attributes["aria-label"], "Directions override");
+  assert.equal(external.attributes["aria-label"], undefined);
 });

@@ -1,5 +1,5 @@
-// app.js build v1021
-import { installFieldHelp } from "./field-help.js";
+// app.js build v1022
+import { installFieldHelp } from "./field-help.js?v=1022";
 import { installWorkspace, renderWorkspaceStatus, restoreCoreTab } from "./workspace.js";
 import {
   VALID_DIRECTIONS,
@@ -1473,6 +1473,60 @@ function renderCoreSelector() {
   selector.disabled = false;
 }
 
+// Closed limits keep only their summaries; at most two editors need group controls.
+function blockLimitContent(coreIndex, limitIndex, limit) {
+  return `
+          <div class="row wrap">
+            <input data-action="limit-name" data-c="${coreIndex}" data-l="${limitIndex}" class="small" placeholder="Limit Name" value="${escapeXml(limit.name)}" />
+            <label class="inline">MaxCount <input data-action="limit-max" data-c="${coreIndex}" data-l="${limitIndex}" class="small" type="number" step="0.1" value="${limit.maxCount}" /></label>
+            <label class="inline">MaxCountPerDirection <input data-action="limit-max-direction" data-c="${coreIndex}" data-l="${limitIndex}" class="small" type="number" min="-1" step="0.1" value="${limit.maxCountPerDirection}" /></label>
+            <label class="inline">LimitVisibility
+              <select data-action="limit-visibility" data-c="${coreIndex}" data-l="${limitIndex}" class="small">
+                ${LIMIT_VISIBILITIES.map((value) => `<option ${limit.limitVisibility === value ? "selected" : ""}>${value}</option>`).join("")}
+              </select>
+            </label>
+            <button data-action="duplicate-limit" data-c="${coreIndex}" data-l="${limitIndex}">Duplicate Limit</button>
+            <button data-action="remove-limit" data-c="${coreIndex}" data-l="${limitIndex}">Delete Limit</button>
+          </div>
+          <p class="block-limit-warning" data-limit-direction-warning data-c="${coreIndex}" data-l="${limitIndex}" ${limitNeedsDirectionWarning(limit) ? "" : "hidden"}>Warning: MaxCountPerDirection requires a valid AllowedDirections value or per-group Directions override.</p>
+          <div class="row wrap">
+            <label class="inline">CrossConnectorPunishment (no-core grids) <input data-action="limit-cross-connector" data-c="${coreIndex}" data-l="${limitIndex}" type="checkbox" ${limit.crossConnectorPunishment ? "checked" : ""}/></label>
+            <label class="inline">PunishByNoFlyZone <input data-action="limit-punish" data-c="${coreIndex}" data-l="${limitIndex}" type="checkbox" ${limit.punishByNoFlyZone ? "checked" : ""}/></label>
+            <label class="inline">IsCriticalLimit <input data-action="limit-critical" data-c="${coreIndex}" data-l="${limitIndex}" type="checkbox" ${limit.isCriticalLimit ? "checked" : ""}/></label>
+            <label class="inline">IgnoredByNpc <input data-action="limit-ignore-npc" data-c="${coreIndex}" data-l="${limitIndex}" type="checkbox" ${limit.ignoredByNpc ? "checked" : ""}/></label>
+            <label class="inline">Punishment Type
+              <select data-action="limit-type" data-c="${coreIndex}" data-l="${limitIndex}" class="small">
+                ${["ShutOff", "Damage", "Delete", "Explode", "DeleteWithoutRefund"].map((value) => `<option ${limit.punishmentType === value ? "selected" : ""}>${value}</option>`).join("")}
+              </select>
+            </label>
+          </div>
+          <div>
+            <label>Valid Directions</label>
+            <div class="group-checklist">
+              ${directionCheckboxes(coreIndex, limitIndex, limit.allowedDirections || [])}
+            </div>
+          </div>
+          <div data-direction-budgets data-c="${coreIndex}" data-l="${limitIndex}">
+            ${directionBudgetInputs(coreIndex, limitIndex, limit)}
+          </div>
+          <div>
+            <label>Included Reusable Block Groups</label>
+            <input data-action="limit-group-search" data-c="${coreIndex}" data-l="${limitIndex}" class="small group-search" placeholder="Search block groups" value="${escapeXml(limit.groupSearch || "")}" />
+            <div class="group-checklist" data-limit-group-list data-c="${coreIndex}" data-l="${limitIndex}">
+              ${blockGroupCheckboxes(coreIndex, limitIndex, limit.blockGroups, limit.groupSearch || "", "limit-group-toggle", limit.blockGroupDirections)}
+            </div>
+          </div>
+          <div>
+            <label>Excluded Reusable Block Groups</label>
+            <p class="muted">Matching exclusions are subtracted before weight and direction checks.</p>
+            <input data-action="limit-excluded-group-search" data-c="${coreIndex}" data-l="${limitIndex}" class="small group-search" placeholder="Search excluded block groups" value="${escapeXml(limit.excludedGroupSearch || "")}" />
+            <div class="group-checklist" data-limit-excluded-group-list data-c="${coreIndex}" data-l="${limitIndex}">
+              ${blockGroupCheckboxes(coreIndex, limitIndex, limit.excludedBlockGroups, limit.excludedGroupSearch || "", "limit-excluded-group-toggle")}
+            </div>
+          </div>
+  `;
+}
+
 function renderShipCores() {
   ensureValidSelectedIndexes();
   normalizeBlockGroupReferences();
@@ -1560,56 +1614,7 @@ function renderShipCores() {
       ${core.blockLimits.map((limit, limitIndex) => `
         <details class="card block-limit-panel" data-action="limit-toggle" data-c="${coreIndex}" data-l="${limitIndex}" ${expandedLimitPanels.includes(limitIndex) ? "open" : ""}>
           <summary class="block-limit-summary ${Array.isArray(limit.blockGroups) && limit.blockGroups.length === 0 ? "block-limit-summary--missing-groups" : ""} ${limitNeedsDirectionWarning(limit) ? "block-limit-summary--warning" : ""}">${escapeXml(limit.name?.trim() || `Block Limit ${limitIndex + 1}`)}</summary>
-          <div class="block-limit-content">
-          <div class="row wrap">
-            <input data-action="limit-name" data-c="${coreIndex}" data-l="${limitIndex}" class="small" placeholder="Limit Name" value="${escapeXml(limit.name)}" />
-            <label class="inline">MaxCount <input data-action="limit-max" data-c="${coreIndex}" data-l="${limitIndex}" class="small" type="number" step="0.1" value="${limit.maxCount}" /></label>
-            <label class="inline">MaxCountPerDirection <input data-action="limit-max-direction" data-c="${coreIndex}" data-l="${limitIndex}" class="small" type="number" min="-1" step="0.1" value="${limit.maxCountPerDirection}" /></label>
-            <label class="inline">LimitVisibility
-              <select data-action="limit-visibility" data-c="${coreIndex}" data-l="${limitIndex}" class="small">
-                ${LIMIT_VISIBILITIES.map((value) => `<option ${limit.limitVisibility === value ? "selected" : ""}>${value}</option>`).join("")}
-              </select>
-            </label>
-            <button data-action="duplicate-limit" data-c="${coreIndex}" data-l="${limitIndex}">Duplicate Limit</button>
-            <button data-action="remove-limit" data-c="${coreIndex}" data-l="${limitIndex}">Delete Limit</button>
-          </div>
-          <p class="block-limit-warning" data-limit-direction-warning data-c="${coreIndex}" data-l="${limitIndex}" ${limitNeedsDirectionWarning(limit) ? "" : "hidden"}>Warning: MaxCountPerDirection requires a valid AllowedDirections value or per-group Directions override.</p>
-          <div class="row wrap">
-            <label class="inline">CrossConnectorPunishment (no-core grids) <input data-action="limit-cross-connector" data-c="${coreIndex}" data-l="${limitIndex}" type="checkbox" ${limit.crossConnectorPunishment ? "checked" : ""}/></label>
-            <label class="inline">PunishByNoFlyZone <input data-action="limit-punish" data-c="${coreIndex}" data-l="${limitIndex}" type="checkbox" ${limit.punishByNoFlyZone ? "checked" : ""}/></label>
-            <label class="inline">IsCriticalLimit <input data-action="limit-critical" data-c="${coreIndex}" data-l="${limitIndex}" type="checkbox" ${limit.isCriticalLimit ? "checked" : ""}/></label>
-            <label class="inline">IgnoredByNpc <input data-action="limit-ignore-npc" data-c="${coreIndex}" data-l="${limitIndex}" type="checkbox" ${limit.ignoredByNpc ? "checked" : ""}/></label>
-            <label class="inline">Punishment Type
-              <select data-action="limit-type" data-c="${coreIndex}" data-l="${limitIndex}" class="small">
-                ${["ShutOff", "Damage", "Delete", "Explode", "DeleteWithoutRefund"].map((value) => `<option ${limit.punishmentType === value ? "selected" : ""}>${value}</option>`).join("")}
-              </select>
-            </label>
-          </div>
-          <div>
-            <label>Valid Directions</label>
-            <div class="group-checklist">
-              ${directionCheckboxes(coreIndex, limitIndex, limit.allowedDirections || [])}
-            </div>
-          </div>
-          <div data-direction-budgets data-c="${coreIndex}" data-l="${limitIndex}">
-            ${directionBudgetInputs(coreIndex, limitIndex, limit)}
-          </div>
-          <div>
-            <label>Included Reusable Block Groups</label>
-            <input data-action="limit-group-search" data-c="${coreIndex}" data-l="${limitIndex}" class="small group-search" placeholder="Search block groups" value="${escapeXml(limit.groupSearch || "")}" />
-            <div class="group-checklist" data-limit-group-list data-c="${coreIndex}" data-l="${limitIndex}">
-              ${blockGroupCheckboxes(coreIndex, limitIndex, limit.blockGroups, limit.groupSearch || "", "limit-group-toggle", limit.blockGroupDirections)}
-            </div>
-          </div>
-          <div>
-            <label>Excluded Reusable Block Groups</label>
-            <p class="muted">Matching exclusions are subtracted before weight and direction checks.</p>
-            <input data-action="limit-excluded-group-search" data-c="${coreIndex}" data-l="${limitIndex}" class="small group-search" placeholder="Search excluded block groups" value="${escapeXml(limit.excludedGroupSearch || "")}" />
-            <div class="group-checklist" data-limit-excluded-group-list data-c="${coreIndex}" data-l="${limitIndex}">
-              ${blockGroupCheckboxes(coreIndex, limitIndex, limit.excludedBlockGroups, limit.excludedGroupSearch || "", "limit-excluded-group-toggle")}
-            </div>
-          </div>
-          </div>
+          <div class="block-limit-content">${expandedLimitPanels.includes(limitIndex) ? blockLimitContent(coreIndex, limitIndex, limit) : ""}</div>
         </details>
       `).join("")}
     </div>
@@ -3161,24 +3166,32 @@ document.addEventListener("change", (event) => {
 document.addEventListener("toggle", (event) => {
   const target = event.target;
   if (!(target instanceof HTMLDetailsElement)) return;
-  if (target.dataset.action !== "limit-toggle") return;
+  if (target.dataset.action !== "limit-toggle" || !target.isConnected) return;
 
   const coreIndex = Number(target.dataset.c);
   const limitIndex = Number(target.dataset.l);
   if (!Number.isInteger(coreIndex) || !Number.isInteger(limitIndex)) return;
 
+  const limit = getCoreBySelectorIndex(coreIndex)?.blockLimits[limitIndex];
+  if (!limit) return;
+  const content = target.querySelector(".block-limit-content");
   const expanded = normalizeExpandedLimitPanelsForCore(coreIndex);
   if (target.open) {
+    if (!content.hasChildNodes()) content.innerHTML = blockLimitContent(coreIndex, limitIndex, limit);
     const nextExpanded = [...expanded.filter((index) => index !== limitIndex), limitIndex];
     while (nextExpanded.length > 2) {
       const removedLimitIndex = nextExpanded.shift();
       const detailsToClose = document.querySelector(`details[data-action="limit-toggle"][data-c="${coreIndex}"][data-l="${removedLimitIndex}"]`);
-      if (detailsToClose instanceof HTMLDetailsElement) detailsToClose.open = false;
+      if (detailsToClose instanceof HTMLDetailsElement) {
+        detailsToClose.open = false;
+        detailsToClose.querySelector(".block-limit-content").replaceChildren();
+      }
     }
     state.expandedLimitPanelsByCore[coreIndex] = nextExpanded;
     return;
   }
 
+  content.replaceChildren();
   state.expandedLimitPanelsByCore[coreIndex] = expanded.filter((index) => index !== limitIndex);
 }, true);
 
