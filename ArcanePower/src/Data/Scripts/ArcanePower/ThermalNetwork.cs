@@ -21,7 +21,12 @@ namespace ArcanePower
         public int Grade;
         public double RatingMW, CoolingMW;
         public ThermalPort[] Ports;
-        public double CapacityMJ { get { return RatingMW * 8; } }
+        // Keep accepting pre-rebalance saved heat; admission and dispatch use RatingMW.
+        public double CapacityMJ
+        {
+            get { return (Kind == ThermalKind.Reactor || (Kind == ThermalKind.Train && Grade == 3)
+                ? 2500000 : Kind == ThermalKind.Train ? 25000 : RatingMW) * 8; }
+        }
     }
 
     public sealed class ThermalEndpoint

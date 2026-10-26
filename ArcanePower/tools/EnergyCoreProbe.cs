@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
+using ProtoBuf;
 using System.Xml.Serialization;
 using VRageMath;
 using MyDefinitionId=System.Int32;
@@ -43,8 +45,8 @@ class EnergyCore {
  List<EnergyCore> cells=new List<EnergyCore>(),previousCells=new List<EnergyCore>();List<IMyReactor> reactors=new List<IMyReactor>();
  bool IsController {get {return BaseSubtype(block)==CoreSubtype;}}
  IMyTerminalBlock Entity {get {return block;}}
- int stabilizationTier,upkeepTier,surgeDuration=600;float upkeepMW,replicatedStored=float.NaN;double upkeepDebt;
- EnergyGameplayState gameplay=new EnergyGameplayState();JumpDriveSurge activeDrive;List<IMyJumpDrive> jumpDrives=new List<IMyJumpDrive>();
+ const int SurgeDuration=300;int stabilizationTier,upkeepTier;float upkeepMW,replicatedStored=float.NaN;double upkeepDebt;
+ EnergyGameplayState gameplay=new EnergyGameplayState();List<IMyJumpDrive> jumpDrives=new List<IMyJumpDrive>();
  static readonly Guid GameplayKey=new Guid("f2451ae5-ea04-47b8-a5f5-59f75583cdb4");
  float StoredEnergy {get {return MyAPIGateway.Multiplayer.IsServer || float.IsNaN(replicatedStored)?block.CurrentStoredPower:replicatedStored;}}
  bool Ready {get {return initialized && Healthy(block) && !emergency && gameplay.RecoveryTicks==0 && block.ChargeMode!=ChargeMode.Recharge;}}
@@ -140,7 +142,7 @@ class EnergyCore {
 
     cap.block.Orientation.Up=Base6Directions.GetDirection(-uv);pc.UpdateBank();Need(pc.cells.Count==1,"upside-down pillar rejected");cap.block.Orientation.Up=u;
     cap.block.BlockDefinition.SubtypeName="ArcanePower_EnergyCapacityAdvanced";pc.UpdateBank();Need(pc.cells.Count==1,"compact and pillar banks cannot mix");cap.block.BlockDefinition.SubtypeName+="_Pillar";
-    g.Blocks.Remove(fv*2);st.Position=uv*2;g.Blocks[st.Position]=new Slim{FatBlock=st};pc.UpdateBank();Need(pc.cells.Count==1,"pillar stabilizer belongs on front, not roof");
+    g.Blocks.Remove(fv*2);st.Position=uv*2;g.Blocks[st.Position]=new Slim{FatBlock=st};pc.UpdateBank();Need(pc.cells.Count==1,"pillar modules do not attach to the roof");
    }
   // Field scale must remain uniform, bounded and independent of last pose.
   Matrix rest=Matrix.CreateFromYawPitchRoll(.4f,.2f,-.3f);rest.Translation=new Vector3(2,3,-4);
@@ -154,13 +156,205 @@ class EnergyCore {
   Need(Math.Abs(StoredFieldPose(rest,0,0).Right.Length()-.18f)<.00001f,"empty field seed");
   Need(Math.Abs(StoredFieldPose(rest,1,0).Right.Length()-1)<.00001f,"full field authored size");
   Need(Math.Abs(StoredFieldPose(rest,.5f,0).Right.Length()-.59f)<.00001f,"half-charge field");
+  CheckUniversalBays();
   CheckGameplay();
+  CheckBatchSurge();
+  CheckSurgeWindow();
   Console.WriteLine("PASS energy bank: tiers, allocation, native clamp, reserve boundary, emergency/modes, orientation, access, construction, detach/split, charge preservation");
+ }
+ static void CheckUniversalBays(){
+  int layouts=0;
+  foreach(Base6Directions.Direction f in Enum.GetValues(typeof(Base6Directions.Direction)))
+   foreach(Base6Directions.Direction u in Enum.GetValues(typeof(Base6Directions.Direction))){
+    var fv=Base6Directions.GetIntVector(f);var uv=Base6Directions.GetIntVector(u);Vector3I side;Vector3I.Cross(ref fv,ref uv,out side);
+    if(side==Vector3I.Zero)continue;
+    var bays=new[]{fv,-fv,side,-side};
+    for(int stableBay=0;stableBay<4;stableBay++)
+     for(int transferBay=0;transferBay<4;transferBay++){
+      if(stableBay==transferBay)continue;
+      for(int tier=1;tier<=2;tier++)
+       for(int swap=0;swap<2;swap++){
+        var grid=new Grid();var core=Cell(grid,Vector3I.Zero,CoreSubtype+"_Pillar",1000,f);core.block.Orientation.Up=u;
+        string suffix=tier==2?"Advanced_Pillar":"_Pillar";
+        var stable=Module(grid,bays[stableBay]*2,"ArcanePower_EnergyStabilizer"+suffix,Base6Directions.GetDirection(-bays[stableBay]));stable.Orientation.Up=u;
+        var transfer=Module(grid,bays[transferBay]*2,"ArcanePower_EnergyTransfer"+suffix,Base6Directions.GetDirection(-bays[transferBay]));transfer.Orientation.Up=u;
+        int index=0;EnergyCore standard=null,advanced=null;
+        for(int bay=0;bay<4;bay++){
+         if(bay==stableBay || bay==transferBay)continue;
+         bool high=index++==swap;
+         var cell=Cell(grid,bays[bay]*2,"ArcanePower_EnergyCapacity"+(high?"Advanced_Pillar":"_Pillar"),high?100000:10000,Base6Directions.GetDirection(-bays[bay]));cell.block.Orientation.Up=u;
+         Need(cell.FindController()==core,"reverse lookup works from every bay");
+         if(high)advanced=cell;else standard=cell;
+        }
+        core.UpdateBank();
+        Need(core.cells.Contains(standard) && core.cells.Contains(advanced)==(tier==2),"any bay accepts supported capacity tiers");
+        Near(core.capacity,tier==2?111000:11000,"capacity aggregates across universal bays");
+        Near(core.transfer,tier==2?1000000:100000,"transfer tier works from any bay");
+        Need(core.IsModuleRunning(stable) && core.IsModuleRunning(transfer),"module activity follows universal attachment");
+        stable.Enabled=false;
+        Need(!core.IsModuleRunning(transfer),"transfer immediately loses activity without a stabilizer in any bay");
+        core.UpdateBank();Need(core.cells.Count==1,"stabilizer loss disconnects all bay positions");
+        Near(standard.inputLimit,0,"removed capacity allocation revoked");Near(advanced.inputLimit,0,"unsupported advanced allocation revoked");
+        layouts++;
+       }
+     }
+   }
+  var g=new Grid();var c=Cell(g,Vector3I.Zero,CoreSubtype+"_Pillar",1000);
+  var lowStable=Module(g,new Vector3I(0,0,-2),"ArcanePower_EnergyStabilizer_Pillar",Base6Directions.Direction.Backward);
+  var highStable=Module(g,new Vector3I(0,0,2),"ArcanePower_EnergyStabilizerAdvanced_Pillar",Base6Directions.Direction.Forward);
+  Module(g,new Vector3I(-2,0,0),"ArcanePower_EnergyTransfer_Pillar",Base6Directions.Direction.Right);
+  Module(g,new Vector3I(2,0,0),"ArcanePower_EnergyTransferAdvanced_Pillar",Base6Directions.Direction.Left);
+  c.UpdateBank();Need(c.stabilizationTier==2,"strongest stabilizer wins");Near(c.transfer,1000000,"duplicate transfer tiers do not stack");
+  highStable.Enabled=false;c.UpdateBank();Need(c.stabilizationTier==1,"fallback to remaining stabilizer");Near(c.transfer,100000,"strongest transfer remains bounded by stabilization");
+  lowStable.Enabled=false;c.UpdateBank();Near(c.transfer,10000,"no stabilization restores base transfer");
+  var full=new Grid();var bank=Cell(full,Vector3I.Zero,CoreSubtype+"_Pillar",1000);
+  Module(full,new Vector3I(0,0,-2),"ArcanePower_EnergyStabilizerAdvanced_Pillar",Base6Directions.Direction.Backward);
+  Cell(full,new Vector3I(0,0,2),"ArcanePower_EnergyCapacityAdvanced_Pillar",100000);
+  var b=Cell(full,new Vector3I(-2,0,0),"ArcanePower_EnergyCapacityAdvanced_Pillar",100000,Base6Directions.Direction.Right);
+  Cell(full,new Vector3I(2,0,0),"ArcanePower_EnergyCapacityAdvanced_Pillar",100000,Base6Directions.Direction.Left);
+  bank.UpdateBank();Need(bank.cells.Count==4,"three capacity modules can share a stabilizer");Near(bank.capacity,301000,"all supported physical cells aggregate");
+  float input=0;foreach(var cell in bank.cells)input+=cell.inputLimit;Near(input,10000,"extra capacity does not multiply transfer ceiling");
+  b.block.Access=false;bank.UpdateBank();Need(bank.cells.Count==3,"universal bays preserve ownership checks");Near(b.inputLimit,0,"lost access revokes capacity allocation");
+  Console.WriteLine("PASS universal bays: "+layouts+" rotated tier/layout combinations, module activity, duplicate tiers, three capacities and revocation");
  }
  static IMyJumpDrive Drive(Grid grid){
   var d=new IMyJumpDrive{CubeGrid=grid};var logic=new JumpDriveSurge{Entity=d};d.GameLogic.Value=logic;
   logic.Init(null);logic.UpdateOnceBeforeFrame();MyAPIGateway.Entities.Items[d.EntityId]=d;
   MyAPIGateway.TerminalActionsHelper.Terminal.Drives.Add(d);return d;
+ }
+ static EnergyCore BatchCore(out Grid grid){
+  MyAPIGateway.TerminalActionsHelper.Terminal.Items.Clear();MyAPIGateway.TerminalActionsHelper.Terminal.Drives.Clear();
+  MyAPIGateway.Entities.Items.Clear();EnergySession.Drives.Clear();
+  grid=new Grid();var bank=Cell(grid,Vector3I.Zero,CoreSubtype,1000);bank.InitializeGameplay(false);bank.UpdateBank();return bank;
+ }
+ static void FinishBatch(EnergyCore bank,int limit=1000){
+  for(int step=0;step<limit && bank.gameplay.SurgeTicks>0;step++){
+   bank.UpdateBank();bank.UpdateSurge();
+   if(bank.gameplay.SurgeTicks==0)break;
+   for(int frame=0;frame<10;frame++){
+    bank.UpdateRecovery();foreach(var drive in EnergySession.Drives.Values)drive.UpdateBeforeSimulation();
+   }
+  }
+  Need(bank.gameplay.SurgeTicks==0,"batch finishes within available transfer time");
+ }
+ static void CheckSurgeWindow(){
+  foreach(int tier in new[]{0,1,2})foreach(int count in new[]{1,12,64}){
+   Grid grid;var bank=BatchCore(out grid);bank.block.CurrentStoredPower=1000;
+   if(tier>0){
+    string suffix=tier==2?"Advanced":"";
+    Module(grid,new Vector3I(0,2,0),"ArcanePower_EnergyStabilizer"+suffix,Base6Directions.Direction.Down);
+    Module(grid,new Vector3I(0,0,2),"ArcanePower_EnergyTransfer"+suffix,Base6Directions.Direction.Forward);
+   }
+   bank.UpdateBank();bank.block.CurrentOutput=Math.Min(bank.transfer,10000);
+   var drives=new List<IMyJumpDrive>();double charge=0;
+   for(int i=0;i<count;i++){
+    var drive=Drive(grid);drive.MaxStoredPower=i%2==0?3:6;drive.CurrentStoredPower=i%3;
+    charge+=drive.MaxStoredPower-drive.CurrentStoredPower;drives.Add(drive);
+   }
+   float before=bank.block.CurrentStoredPower,normalInput=bank.inputLimit,normalOutput=bank.outputLimit;
+   bank.RequestSurge();Need(bank.gameplay.SurgeDriveCount==count && bank.gameplay.SurgeTicks==300,"all tiers accept a five-second batch");
+   Need(Math.Abs(bank.gameplay.SurgeRate-charge/.9*720*1.01)<.02,"boost scales with actual deficits and modded drive capacities");
+   for(int step=0;step<30 && bank.gameplay.SurgeTicks>0;step++){
+    bank.UpdateBank();bank.UpdateSurge();
+    if(step==0){
+     foreach(var drive in drives)Need(drive.CurrentStoredPower>0,"selected drives charge concurrently");
+     Near(bank.inputLimit,normalInput,"surge leaves ordinary input unchanged");
+     Near(bank.outputLimit,normalOutput,"dedicated surge allowance leaves ordinary grid throughput available");
+    }
+   }
+   Need(bank.gameplay.SurgeTicks==0 && bank.gameplay.SurgeCompleted==count,"five-second completion tier="+tier+" count="+count+" ticks="+bank.gameplay.SurgeTicks+" completed="+bank.gameplay.SurgeCompleted);
+   foreach(var drive in drives)Need(drive.CurrentStoredPower==drive.MaxStoredPower,"every accepted drive reaches full charge");
+   Need(Math.Abs((before-bank.block.CurrentStoredPower)*.9-charge)<.05,"five-second batch pays for all delivered energy");
+   Need(bank.block.CurrentStoredPower>=100 && bank.gameplay.SurgeRate==0,"reserve protected and temporary boost removed on completion");
+   bank.UpdateBank();Near(bank.inputLimit,normalInput,"normal input restored after surge");
+   Need(bank.outputLimit<=normalOutput,"normal output ceiling restored after surge");
+  }
+  Console.WriteLine("PASS five-second surge: all transfer tiers, mixed capacities/deficits, 1/12/64 drives, concurrent grid output, conservation and boost removal");
+ }
+ static void CheckBatchSurge(){
+  Grid grid;var bank=BatchCore(out grid);bank.block.CurrentStoredPower=110;
+  var expensive=Drive(grid);expensive.MaxStoredPower=6;expensive.CurrentStoredPower=1;
+  var medium=Drive(grid);var small=Drive(grid);small.CurrentStoredPower=2;var second=Drive(grid);second.CurrentStoredPower=1;
+  var full=Drive(grid);full.CurrentStoredPower=full.MaxStoredPower;
+  var held=Drive(grid);held.GameLogic.GetAs<JumpDriveSurge>().StartRecovery(60);
+  double cost;int eligible=bank.AffordableDrives(bank.jumpDrives,out cost);
+  Need(eligible==4 && bank.jumpDrives.Count==3,"largest affordable subset excludes full/recovering drives");
+  Need(bank.jumpDrives[0]==small && bank.jumpDrives[1]==second && bank.jumpDrives[2]==medium,"smallest deficits charged first");
+  Need(Math.Abs(cost-6/.9)<.00001,"preview includes the full 90 percent efficiency cost");
+  var text=new StringBuilder();bank.AppendGameplayInfo(text);Need(text.ToString().Contains("Surge batch: 3 / 4 available drives"),"terminal previews affordable batch");
+  float before=bank.block.CurrentStoredPower;bank.RequestSurge();Need(bank.gameplay.SurgeDriveCount==3,"surge accepts previewed subset");
+  Need(bank.gameplay.SurgeRecoveryTicks==10800,"three-drive bare recovery is 180 seconds");
+  FinishBatch(bank);
+  Need(small.CurrentStoredPower==3 && second.CurrentStoredPower==3 && medium.CurrentStoredPower==3,"selected subset fills completely");
+  Need(expensive.CurrentStoredPower==1,"unaffordable drive receives no partial surge");
+  Need(Math.Abs((before-bank.block.CurrentStoredPower)*.9-6)<.005 && bank.block.CurrentStoredPower>=100,"batch pays efficiency and protects reserve");
+  Need(bank.gameplay.RecoveryTicks==10800,"full scaled recovery starts when batch ends");
+  foreach(var d in new[]{small,second,medium})Need(!d.GameLogic.GetAs<JumpDriveSurge>().Claim(999),"every selected drive owns cooldown");
+
+  bank=BatchCore(out grid);bank.block.CurrentStoredPower=103;var empty=Drive(grid);bank.RequestSurge();
+  Need(bank.gameplay.SurgeTicks==0 && bank.gameplay.RecoveryTicks==0 && empty.CurrentStoredPower==0,"cannot afford an entire drive: no debit or cooldown");
+  var near=Drive(grid);near.CurrentStoredPower=2.5f;bank.RequestSurge();FinishBatch(bank);
+  Need(near.CurrentStoredPower==3 && empty.CurrentStoredPower==0,"only affordable near-full drive selected");
+  bank=BatchCore(out grid);bank.block.CurrentStoredPower=104;var first=Drive(grid);Drive(grid);
+  MyAPIGateway.TerminalActionsHelper.Terminal.Drives.Reverse();bank.RequestSurge();
+  Need(bank.gameplay.SurgeTargets.Count==1 && bank.gameplay.SurgeTargets[0].DriveId==first.EntityId,"equal deficits use stable entity IDs");
+
+  bank=BatchCore(out grid);var batch=new List<IMyJumpDrive>();for(int i=0;i<12;i++)batch.Add(Drive(grid));
+  bank.RequestSurge();Need(bank.gameplay.SurgeDriveCount==12 && bank.gameplay.SurgeTicks==300,"large batch targets five seconds");
+  before=bank.block.CurrentStoredPower;bank.block.CurrentOutput=4000;float boost=bank.gameplay.SurgeRate;
+  for(int step=0;step<30 && bank.gameplay.SurgeTicks>0;step++){
+   float previous=bank.block.CurrentStoredPower;bank.UpdateBank();bank.UpdateSurge();
+   Need(previous-bank.block.CurrentStoredPower<=boost/21600f+.0001f,"batch debit stays within its temporary discharge allowance");
+   if(step==0)foreach(var d in batch)Need(d.CurrentStoredPower>0,"batch charges drives concurrently");
+   if(bank.gameplay.SurgeTicks==0)break;
+   for(int frame=0;frame<10;frame++){
+    bank.UpdateRecovery();foreach(var component in EnergySession.Drives.Values)component.UpdateBeforeSimulation();
+   }
+  }
+  Need(bank.gameplay.SurgeTicks==0 && bank.gameplay.SurgeCompleted==12,"all large-batch drives finish in five seconds despite grid load");
+  foreach(var d in batch)Need(d.CurrentStoredPower==3,"large batch fully fills every drive");
+  Need(Math.Abs((before-bank.block.CurrentStoredPower)*.9-36)<.02,"boosted throughput conserves batch energy");
+  Need(bank.gameplay.RecoveryTicks==27000,"twelve drives retain 450 seconds of post-surge recovery");
+
+  bank=BatchCore(out grid);var lost=Drive(grid);var split=Drive(grid);var surviving=Drive(grid);
+  bank.RequestSurge();bank.UpdateSurge();float lostCharge=lost.CurrentStoredPower,splitCharge=split.CurrentStoredPower;
+  lost.Access=false;split.CubeGrid=new Grid();var late=Drive(grid);FinishBatch(bank);
+  Need(lost.CurrentStoredPower==lostCharge && split.CurrentStoredPower==splitCharge,"access/grid loss stops only affected drives");
+  Need(surviving.CurrentStoredPower==3 && late.CurrentStoredPower==0,"survivors finish without adding later arrivals");
+  Need(bank.gameplay.SurgeCompleted==1 && bank.gameplay.RecoveryTicks==10800,"partial cancellation does not reduce accepted-batch cooldown");
+
+  bank=BatchCore(out grid);Module(grid,new Vector3I(0,2,0),"ArcanePower_EnergyStabilizerAdvanced",Base6Directions.Direction.Down);bank.UpdateBank();
+  Need(bank.BatchRecoveryDuration(1)==3600 && bank.BatchRecoveryDuration(2)==4500 && bank.BatchRecoveryDuration(4)==6300 && bank.BatchRecoveryDuration(8)==9900,"approved advanced cooldown examples");
+  batch.Clear();for(int i=0;i<8;i++)batch.Add(Drive(grid));bank.RequestSurge();bank.block.Enabled=false;bank.UpdateSurge();
+  Need(bank.gameplay.RecoveryTicks==9900,"interruption keeps original batch penalty");
+  bank.SaveGameplay();bank.InitializeGameplay(true);Need(bank.gameplay.RecoveryTicks==9900,"bank cooldown above old limit survives reload");
+  var restored=new JumpDriveSurge{Entity=batch[0]};restored.Init(null);restored.UpdateOnceBeforeFrame();
+  for(int i=0;i<7801;i++)restored.UpdateBeforeSimulation();Need(!restored.Claim(999),"drive cooldown above old limit survives reload");
+  for(int i=7801;i<9900;i++)restored.UpdateBeforeSimulation();Need(restored.Claim(999),"drive available after full scaled cooldown");restored.Release(999);
+
+  bank=BatchCore(out grid);batch.Clear();for(int i=0;i<12;i++)batch.Add(Drive(grid));bank.RequestSurge();bank.UpdateSurge();
+  batch[0].CurrentStoredPower=3;bank.UpdateSurge();Need(bank.gameplay.SurgeCompleted==1,"native recharge can finish a selected drive early");
+  bank.SaveGameplay();int remaining=bank.gameplay.SurgeTicks;int accepted=bank.gameplay.SurgeDriveCount;
+  foreach(var d in batch){d.GameLogic.GetAs<JumpDriveSurge>().SaveRecovery();var logic=new JumpDriveSurge{Entity=d};logic.Init(null);d.GameLogic.Value=logic;if(d!=batch[1])logic.UpdateOnceBeforeFrame();}
+  bank.gameplay=new EnergyGameplayState();bank.InitializeGameplay(true);
+  Need(bank.gameplay.SurgeTargets.Count==12 && bank.gameplay.SurgeTicks==remaining && bank.gameplay.SurgeDriveCount==accepted,"active batch persists all targets and remaining timing");
+  before=bank.block.CurrentStoredPower;bank.UpdateSurge();Need(bank.block.CurrentStoredPower==before && bank.gameplay.SurgeTicks==remaining,"reload waits for uninitialized drive components");
+  Need(!batch[0].GameLogic.GetAs<JumpDriveSurge>().ResumeClaim(999),"already-finished drive stays claimed during resumed batch");
+  batch[1].GameLogic.GetAs<JumpDriveSurge>().UpdateOnceBeforeFrame();FinishBatch(bank);
+  Need(bank.gameplay.SurgeCompleted==12 && bank.gameplay.RecoveryTicks==27000,"resumed batch finishes without changing its penalty");
+  foreach(var d in batch)Need(!d.GameLogic.GetAs<JumpDriveSurge>().Claim(999),"resumed batch preserves every drive's recovery");
+
+  bank=BatchCore(out grid);var legacy=Drive(grid);
+  bank.block.Storage[GameplayKey]=MyAPIGateway.Utilities.SerializeToXML(new EnergyGameplayState{EntityId=bank.block.EntityId,DriveId=legacy.EntityId,SurgeTicks=600,RecoveryTicks=7800,SurgeRate=1212});
+  bank.InitializeGameplay(true);Need(bank.gameplay.SurgeTargets.Count==1 && bank.gameplay.SurgeRecoveryTicks==7200,"legacy single-drive saves migrate with recovery intact");FinishBatch(bank);Need(legacy.CurrentStoredPower==3,"legacy surge resumes");
+
+  var snapshot=new EnergyGameplayState{EntityId=bank.block.EntityId,SurgeDriveCount=10000,SurgeTicks=600,RecoveryTicks=99900};
+  for(int i=1;i<=10000;i++)snapshot.SurgeTargets.Add(new EnergySurgeTarget{DriveId=i});
+  using(var stream=new MemoryStream()){
+   var wire=ProtoBuf.Meta.RuntimeTypeModel.Create();wire.Serialize(stream,snapshot);Need(stream.Length<256,"large batch snapshots fit existing packet limit");stream.Position=0;
+   var client=(EnergyGameplayState)wire.Deserialize(stream,null,typeof(EnergyGameplayState));Need(client.SurgeDriveCount==10000 && client.SurgeTargets.Count==0,"clients receive summary without server target list");
+  }
+  Console.WriteLine("PASS batch surge: affordable subsets, 90% cost, boosted throughput, scaled cooldown, cancellation, reload/legacy migration and compact native protobuf snapshots");
  }
  static void CheckGameplay(){
   MyAPIGateway.TerminalActionsHelper.Terminal.Items.Clear();MyAPIGateway.TerminalActionsHelper.Terminal.Drives.Clear();
@@ -176,49 +370,49 @@ class EnergyCore {
   c.block.CurrentStoredPower=1000;MyAPIGateway.Multiplayer.IsServer=false;c.UpdateUpkeep();Near(c.block.CurrentStoredPower,1000,"clients never debit upkeep");MyAPIGateway.Multiplayer.IsServer=true;
   MyAPIGateway.Session.CreativeMode=true;c.UpdateUpkeep();Near(c.block.CurrentStoredPower,1000,"creative does not leak");MyAPIGateway.Session.CreativeMode=false;
   c.upkeepDebt=0;c.block.CurrentStoredPower=500;c.UpdateBank();var drive=Drive(grid);
-  c.RequestSurge(drive.EntityId);Need(c.gameplay.SurgeTicks==600,"base surge ten seconds");Need(!c.Ready,"surge starts bank recovery");
+  c.RequestSurge();Need(c.gameplay.SurgeTicks==300,"base surge five seconds");Need(!c.Ready,"surge starts bank recovery");
   Need(!drive.GameLogic.GetAs<JumpDriveSurge>().Claim(999),"drive cooldown blocks another bank");
   float start=c.block.CurrentStoredPower;
-  for(int i=0;i<60 && c.gameplay.SurgeTicks>0;i++){c.UpdateBank();c.UpdateSurge();}
-  Need(drive.CurrentStoredPower==3,"surge fills native drive within ten seconds: "+drive.CurrentStoredPower.ToString("R")+" "+c.gameplay.Result);
+  for(int i=0;i<30 && c.gameplay.SurgeTicks>0;i++){c.UpdateBank();c.UpdateSurge();}
+  Need(drive.CurrentStoredPower==3,"surge fills native drive within five seconds: "+drive.CurrentStoredPower.ToString("R")+" "+c.gameplay.Result);
   Need(start-c.block.CurrentStoredPower>=drive.CurrentStoredPower,"surge cannot create energy");
   Need(Math.Abs((start-c.block.CurrentStoredPower)*.9f-3)<.005,"surge has 90 percent efficiency");
   Need(c.block.CurrentStoredPower>=100,"surge protects reserve");
-  c.gameplay.RecoveryTicks=0;drive.CurrentStoredPower=0;c.RequestSurge(drive.EntityId);Need(c.gameplay.SurgeTicks==0,"drive recovery prevents changing bank");
+  c.gameplay.RecoveryTicks=0;drive.CurrentStoredPower=0;c.RequestSurge();Need(c.gameplay.SurgeTicks==0,"drive recovery prevents changing bank");
   for(int i=0;i<7800;i++)drive.GameLogic.GetAs<JumpDriveSurge>().UpdateBeforeSimulation();
-  var other=Drive(new Grid());c.RequestSurge(other.EntityId);Need(c.gameplay.SurgeTicks==0,"cross-grid target rejected");
-  drive.Access=false;c.RequestSurge(drive.EntityId);Need(c.gameplay.SurgeTicks==0,"foreign target rejected");drive.Access=true;
-  drive.Recharge=false;c.RequestSurge(drive.EntityId);Need(c.gameplay.SurgeTicks==0,"recharge-disabled drive rejected");drive.Recharge=true;
-  drive.Status=MyJumpDriveStatus.Jumping;c.RequestSurge(drive.EntityId);Need(c.gameplay.SurgeTicks==0,"jumping drive rejected");drive.Status=MyJumpDriveStatus.Charging;
-  c.block.ChargeMode=ChargeMode.Recharge;c.RequestSurge(drive.EntityId);Need(c.gameplay.SurgeTicks==0,"Recharge bank cannot surge");c.block.ChargeMode=ChargeMode.Auto;
-  c.block.CurrentStoredPower=100;c.RequestSurge(drive.EntityId);Need(c.gameplay.SurgeTicks==0,"reserve cannot fund surge");
+  drive.Enabled=false;Drive(new Grid());c.RequestSurge();Need(c.gameplay.SurgeTicks==0,"cross-grid target rejected");drive.Enabled=true;
+  drive.Access=false;c.RequestSurge();Need(c.gameplay.SurgeTicks==0,"foreign target rejected");drive.Access=true;
+  drive.Recharge=false;c.RequestSurge();Need(c.gameplay.SurgeTicks==0,"recharge-disabled drive rejected");drive.Recharge=true;
+  drive.Status=MyJumpDriveStatus.Jumping;c.RequestSurge();Need(c.gameplay.SurgeTicks==0,"jumping drive rejected");drive.Status=MyJumpDriveStatus.Charging;
+  c.block.ChargeMode=ChargeMode.Recharge;c.RequestSurge();Need(c.gameplay.SurgeTicks==0,"Recharge bank cannot surge");c.block.ChargeMode=ChargeMode.Auto;
+  c.block.CurrentStoredPower=100;c.RequestSurge();Need(c.gameplay.SurgeTicks==0,"reserve cannot fund surge");
   c.UpdateUpkeep();Need(c.block.CurrentStoredPower<100,"reserve does not bypass passive loss");
-  c.block.CurrentStoredPower=500;c.RequestSurge(drive.EntityId);Need(c.gameplay.SurgeTicks>0,"second surge after recovery");
+  c.block.CurrentStoredPower=500;c.RequestSurge();Need(c.gameplay.SurgeTicks>0,"second surge after recovery");
   drive.CubeGrid=new Grid();original=c.block.CurrentStoredPower;c.UpdateSurge();Need(c.gameplay.SurgeTicks==0 && c.block.CurrentStoredPower==original,"split cancels surge without spending");drive.CubeGrid=grid;
   var saved=drive.Storage[JumpDriveSurge.RecoveryKey];var restored=new JumpDriveSurge{Entity=drive};restored.Init(null);restored.UpdateOnceBeforeFrame();Need(!restored.Claim(999),"drive recovery survives reload");
   drive.Storage[JumpDriveSurge.RecoveryKey]="999:7200";var copied=new JumpDriveSurge{Entity=drive};copied.Init(null);copied.UpdateOnceBeforeFrame();Need(copied.Claim(999),"copied identity does not inherit cooldown");copied.Release(999);drive.Storage[JumpDriveSurge.RecoveryKey]=saved;
   c.gameplay.RecoveryTicks=0;c.RequestBurst();Need(c.gameplay.BurstTicks==600,"burst lasts ten seconds");Near(c.outputLimit,20000,"burst doubles base discharge");Near(c.inputLimit,10000,"burst leaves charge ceiling unchanged");
-  c.RequestSurge(drive.EntityId);Need(c.gameplay.SurgeTicks==0,"burst and surge share recovery");
+  c.RequestSurge();Need(c.gameplay.SurgeTicks==0,"burst and surge share recovery");
   c.SaveGameplay();var state=c.block.Storage[GameplayKey];c.gameplay=new EnergyGameplayState();c.InitializeGameplay(true);Need(c.gameplay.BurstTicks==600 && c.gameplay.RecoveryTicks>0,"bank recovery and burst survive reload");
   for(int i=0;i<600;i++)c.UpdateRecovery();Near(c.outputLimit,10000,"burst ends at normal ceiling");Need(c.gameplay.RecoveryTicks>0,"recovery continues after burst");
   c.gameplay.RecoveryTicks=0;c.RequestBurst();c.block.Enabled=false;c.UpdateRecovery();Need(c.gameplay.BurstTicks==0,"offline cancels burst");Near(c.outputLimit,0,"offline bank supplies nothing");c.block.Enabled=true;
   c.gameplay.RecoveryTicks=0;c.block.CurrentStoredPower=500;c.UpdateBank();
   var r=new IMyReactor{CubeGrid=grid};r.GameLogic.Value=new Reactor{NeedsStorageSupport=true};MyAPIGateway.TerminalActionsHelper.Terminal.Items.Add(r);
-  c.RequestBurst();Need(c.gameplay.BurstTicks==0,"containment takes priority over burst");c.RequestSurge(drive.EntityId);Need(c.gameplay.SurgeTicks==0,"containment takes priority over surge");
+  c.RequestBurst();Need(c.gameplay.BurstTicks==0,"containment takes priority over burst");c.RequestSurge();Need(c.gameplay.SurgeTicks==0,"containment takes priority over surge");
   MyAPIGateway.TerminalActionsHelper.Terminal.Items.Clear();
   c.InitializeGameplay(false);Need(c.gameplay.EntityId==c.block.EntityId && c.gameplay.RecoveryTicks==0 && c.gameplay.BurstTicks==0,"new identity resets saved operations");
   c.block.CurrentStoredPower=500;c.block.CurrentOutput=10000;c.UpdateBank();
-  var saturated=Drive(grid);c.RequestSurge(saturated.EntityId);original=c.block.CurrentStoredPower;c.UpdateSurge();Need(c.gameplay.SurgeTicks==0 && c.block.CurrentStoredPower==original,"saturated native grid cannot double spend transfer");
+  var saturated=Drive(grid);c.RequestSurge();original=c.block.CurrentStoredPower;FinishBatch(c,30);Need(saturated.CurrentStoredPower==3 && c.block.CurrentStoredPower<original,"surge adds throughput even when ordinary grid output is saturated");saturated.Enabled=false;
   c.block.CurrentOutput=0;c.gameplay.RecoveryTicks=0;
-  var active=Drive(grid);c.RequestSurge(active.EntityId);c.UpdateSurge();original=c.block.CurrentStoredPower;float filled=active.CurrentStoredPower;
+  var active=Drive(grid);c.RequestSurge();c.UpdateSurge();original=c.block.CurrentStoredPower;float filled=active.CurrentStoredPower;
   active.Access=false;c.UpdateSurge();Need(c.gameplay.SurgeTicks==0 && c.block.CurrentStoredPower==original && active.CurrentStoredPower==filled,"ownership change stops further debit without refund");
-  c.gameplay.RecoveryTicks=0;var clientDrive=Drive(grid);MyAPIGateway.Multiplayer.IsServer=false;c.RequestSurge(clientDrive.EntityId);c.RequestBurst();Need(c.gameplay.SurgeTicks==0 && c.gameplay.BurstTicks==0,"clients cannot start operations");MyAPIGateway.Multiplayer.IsServer=true;
+  c.gameplay.RecoveryTicks=0;Drive(grid);MyAPIGateway.Multiplayer.IsServer=false;c.RequestSurge();c.RequestBurst();Need(c.gameplay.SurgeTicks==0 && c.gameplay.BurstTicks==0,"clients cannot start operations");MyAPIGateway.Multiplayer.IsServer=true;
   var stability=Module(grid,new Vector3I(0,2,0),"ArcanePower_EnergyStabilizer",Base6Directions.Direction.Down);
   var transfer=Module(grid,new Vector3I(0,0,2),"ArcanePower_EnergyTransfer",Base6Directions.Direction.Forward);
-  c.UpdateBank();Need(c.surgeDuration==450 && c.RecoveryDuration()==5400,"standard speed and recovery");
+  c.UpdateBank();Need(SurgeDuration==300 && c.RecoveryDuration()==5400,"standard surge window and recovery");
   stability.BlockDefinition.SubtypeName+="Advanced";transfer.BlockDefinition.SubtypeName+="Advanced";
-  c.UpdateBank();Need(c.surgeDuration==300 && c.RecoveryDuration()==3600,"advanced speed and recovery");
-  var advanced=Drive(grid);c.RequestSurge(advanced.EntityId);for(int i=0;i<30 && c.gameplay.SurgeTicks>0;i++){c.UpdateBank();c.UpdateSurge();}Need(advanced.CurrentStoredPower==3,"advanced surge fills in five seconds");
+  c.UpdateBank();Need(SurgeDuration==300 && c.RecoveryDuration()==3600,"advanced surge window and recovery");
+  var advanced=Drive(grid);c.RequestSurge();for(int i=0;i<30 && c.gameplay.SurgeTicks>0;i++){c.UpdateBank();c.UpdateSurge();}Need(advanced.CurrentStoredPower==3,"advanced surge fills in five seconds");
   c.gameplay.RecoveryTicks=0;c.RequestBurst();Near(c.outputLimit,(c.block.CurrentStoredPower-100)*2160,"burst respects energy-backed native interval bound");
   var left=Cell(grid,new Vector3I(-2,0,0),"ArcanePower_EnergyCapacity",10000,Base6Directions.Direction.Right);
   var right=Cell(grid,new Vector3I(2,0,0),"ArcanePower_EnergyCapacityAdvanced",100000,Base6Directions.Direction.Left);

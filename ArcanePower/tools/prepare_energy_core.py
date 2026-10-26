@@ -17,6 +17,32 @@ BLOCKS = {
 }
 
 
+def icon_path(name):
+ """Avoid retaining a cached compact/older icon across in-game reloads."""
+ source=MOD/'Textures/GUI/Icons/ArcanePower'/(name+'.dds')
+ content=source.read_bytes()
+ target=source.parent/'Energy'/(name+'_r'+hashlib.sha256(content).hexdigest()[:12]+'.dds')
+ target.parent.mkdir(exist_ok=True)
+ if not target.exists():target.write_bytes(content)
+ assert target.read_bytes()==content, 'Immutable energy icon collision'
+ return target.relative_to(MOD).as_posix()
+
+
+def refresh_icons():
+ path=MOD/'Data/CubeBlocks/ArcanePower_EnergyCore.sbc'
+ tree=E.parse(path);blocks=tree.find('CubeBlocks')
+ for block in blocks:
+  name=block.findtext('Id/SubtypeId').removesuffix('_Pillar')
+  if name in BLOCKS:block.find('Icon').text=icon_path(name)
+ save(tree.getroot(),path)
+ energy_block_menu(blocks)
+ # Only this tool's immutable icon copies are disposable; stable DDS files
+ # still serve the hidden legacy block definitions and remain build inputs.
+ referenced={n.text for p in (MOD/'Data').rglob('*.sbc') for n in E.parse(p).iter('Icon')}
+ for p in (MOD/'Textures/GUI/Icons/ArcanePower/Energy').glob('ArcanePower_Energy*_r*.dds'):
+  if p.relative_to(MOD).as_posix() not in referenced:p.unlink()
+
+
 def model_revision():
  folder=MOD/'Models/Cubes/large'
  # Reuse the exact reactor hoops, including their original UVs/materials.
@@ -57,13 +83,13 @@ def main():
   core=name=='ArcanePower_EnergyCore'
   kind='BatteryBlock' if capacity else 'UpgradeModule'
   definition=E.SubElement(blocks,'Definition',{'{'+XSI+'}type':'MyObjectBuilder_'+kind+'Definition'})
-  description=('3x3x3 storage controller. Upright 1x3x1 pillars: sides capacity; rear transfer; front stabilizer. Align module Up with core Up and its connector/forward face toward the core. Base 1,000 MWh / 10 GW; capacities add 10,000 or 100,000 MWh. Transfer modules raise the bank ceiling to 100 GW / 1 TW. Standard/advanced stabilizers support matching or lower tier modules. Native Auto/Recharge/Discharge. Starts empty; 90% charge efficiency. Default 10% emergency reserve; Custom Data [ArcaneEnergyCore] ReservePercent=10, EmergencySupport=true. Recharge switches visibly to Auto for reactor startup/cooldown/venting and stays Auto. Stored-charge upkeep rises with fill; stabilizers reduce loss. Terminal/toolbar: surge one jump drive in 5-10 seconds at 90% efficiency, or double discharge for 10 seconds. Shared recovery; reserve protected. Passive loss continues while disabled or detached.' if core else
-   'Attach to a side-center Energy Core socket, with the connector/forward face toward the core. Requires a matching or stronger front stabilizer. Stores '+str(capacity)+' MWh in this block; removal retains its charge, destruction loses it, new/projected/copied blocks start empty. The core sets bank transfer limits and charge mode.' if capacity else
-   'Attach to the rear-center Energy Core socket, with the connector/forward face toward the core. Raises bank charge/discharge ceiling to '+('1 TW' if multiplier==10 else '100 GW')+'. Requires matching or stronger front stabilizer; does not add capacity.' if 'Transfer' in name else
-   'Attach to the front-center Energy Core socket, connector/forward face toward the core. Supports '+('both standard and advanced' if multiplier==10 else 'standard')+' capacity and transfer modules. Loss disables unsupported modules without deleting stored charge.')
+  description=('3x3x3 storage controller. Four upright 1x3x1 bays accept any capacity, transfer or stabilizer module. Align module Up with core Up and its connector/forward face toward the core. Base 1,000 MWh / 10 GW; capacities add 10,000 or 100,000 MWh. Transfer modules raise the bank ceiling to 100 GW / 1 TW. Standard/advanced stabilizers support matching or lower tier modules. Duplicate stabilizer/transfer modules use the strongest tier without stacking. Native Auto/Recharge/Discharge. Starts empty; 90% charge efficiency. Default 10% emergency reserve; Custom Data [ArcaneEnergyCore] ReservePercent=10, EmergencySupport=true. Recharge switches visibly to Auto for reactor startup/cooldown/venting and stays Auto. Stored-charge upkeep rises with fill; stabilizers reduce loss. Terminal/toolbar: surge all affordable jump drives in 5 seconds at 90% efficiency, with batch-scaled discharge boost and 25% extra base recovery per additional drive, or double discharge for 10 seconds. Shared recovery; reserve protected. Passive loss continues while disabled or detached.' if core else
+   'Attach to any of the four Energy Core bays, with the connector/forward face toward the core. Requires a matching or stronger attached stabilizer. Stores '+str(capacity)+' MWh in this block; removal retains its charge, destruction loses it, new/projected/copied blocks start empty. The core sets bank transfer limits and charge mode.' if capacity else
+   'Attach to any of the four Energy Core bays, with the connector/forward face toward the core. Raises bank charge/discharge ceiling to '+('1 TW' if multiplier==10 else '100 GW')+'. Effective transfer tier is limited by the strongest attached stabilizer; does not add capacity. Duplicate transfer modules do not stack.' if 'Transfer' in name else
+   'Attach to any of the four Energy Core bays, connector/forward face toward the core. Supports '+('both standard and advanced' if multiplier==10 else 'standard')+' capacity and transfer modules. The strongest attached stabilizer tier applies; duplicates do not stack. Loss disables unsupported modules without deleting stored charge.')
   if not core:description='Full 1x3x1 large-grid pillar; align Up with core Up. '+description
   for path,value in {'Id/TypeId':kind,'Id/SubtypeId':name+'_Pillar','DisplayName':label,'Description':description,
-   'Icon':'Textures/GUI/Icons/ArcanePower/'+name+'.dds','CubeSize':'Large','BlockTopology':'TriangleMesh',
+   'Icon':icon_path(name),'CubeSize':'Large','BlockTopology':'TriangleMesh',
    'Model':(revision/(name+'.mwm')).relative_to(MOD).as_posix(),'BlockPairName':name+'_Pillar','EdgeType':'Light',
    'BuildTimeSeconds':180 if core else 60*multiplier,'PCU':100 if core else 25,'IsAirTight':'false','Public':'true',
    'DamageEffectName':'Damage_Electrical_Damaged','DamagedSound':'ParticleElectrical',
@@ -99,5 +125,6 @@ def main():
  print('Connected seven energy blocks, 21 construction models and rotor:',revision.relative_to(MOD))
 
 if __name__=='__main__':
- if '--models-only' in sys.argv:print('Connected new model family:',refresh_models().relative_to(MOD))
+ if '--icons-only' in sys.argv:refresh_icons()
+ elif '--models-only' in sys.argv:print('Connected new model family:',refresh_models().relative_to(MOD))
  else:main()

@@ -495,9 +495,11 @@ def drum_service_seating(s,main,parent):
 def terminal(pos,normal,main,parent,label):
     rotation=Vector(normal).to_track_quat('Z','Y').to_matrix().to_4x4()
     pose=Matrix.Translation(pos) @ rotation
-    for key in ('Terminal LG','Terminal Screen'):native_part(key,label+' / '+key,pose,main,parent,4)
+    body=native_part('Terminal LG',label+' / Terminal LG',pose,main,parent,4)
+    native_part('Terminal Screen',label+' / Terminal Screen',pose,main,parent,4)
     dummy=bpy.data.objects.new('detector_terminal',None);main.objects.link(dummy);dummy.parent=parent
     dummy.matrix_world=pose;dummy.scale=(.25,.50,.08)
+    runpy.run_path(str(ROOT/'assets/build_control_access.py'))['highlight_terminal'](dummy,body)
 
 def main_details(s,main,parent):
     """Engineer-scale service assemblies; finished meshes only."""
@@ -891,6 +893,90 @@ def connection_details(s,main,parent):
             box('Module / harness saddle',(.80,-.445,bay),(.07,.055,.10),'Metal_Dull',main,parent,3,.004)
     s['connection_detail_revision']=1
 
+def surface_clearances(s,main,parent):
+    """Seat adjoining parts at distinct depths without moving native sockets.
+
+    Also applies to an existing main scene; derived geometry is rebuilt afterward.
+    Coordinates below are in the authored root frame, before the SE orientation.
+    """
+    if s.get('surface_clearance_revision')==1:return
+    bpy.context.window.scene=s;bpy.context.view_layer.update()
+    meshes=[o for o in main.objects if o.type=='MESH']
+    def matching(prefix):return [o for o in meshes if o.name.startswith(prefix)]
+    def reshape(obj,change):
+        obj.data=obj.data.copy()
+        inverse=obj.matrix_basis.inverted()
+        for vertex in obj.data.vertices:
+            p=obj.matrix_basis @ vertex.co
+            change(p)
+            vertex.co=inverse @ p
+        obj.data.update()
+    def local_scale(obj,axis,factor):
+        obj.data=obj.data.copy()
+        for vertex in obj.data.vertices:vertex.co[axis]*=factor
+        obj.data.update()
+    def move(obj,delta):
+        obj.location+=Vector(delta)
+        for face in meshes:
+            if face.get('fastener_body')==obj.name:face.location+=Vector(delta)
+    if s.name.endswith('Core'):
+        for obj in matching('Energy / curved dock root'):
+            ps=[obj.matrix_basis @ v.co for v in obj.data.vertices]
+            center=sum(ps,Vector())/len(ps);n=Vector((center.x,center.y,0)).normalized()
+            def recess_face(p):
+                if p.dot(n)>3.719:p-=n*.015
+            reshape(obj,recess_face)
+        stations=[]
+        for obj in matching('Energy / inset service receiver'):
+            ps=[obj.matrix_basis @ v.co for v in obj.data.vertices]
+            center=sum(ps,Vector())/len(ps)
+            stations.append((math.atan2(center.y,center.x),center.z))
+        for obj in matching('Energy / segmented drum armor'):
+            ps=[obj.matrix_basis @ v.co for v in obj.data.vertices]
+            anchor=math.atan2(ps[0].y,ps[0].x)
+            angles=[anchor+(math.atan2(p.y,p.x)-anchor+math.pi)%math.tau-math.pi for p in ps]
+            low,high=min(angles),max(angles)
+            def open_aperture(p):
+                r=math.hypot(p.x,p.y);angle=math.atan2(p.y,p.x)
+                for a,z in stations:
+                    x=((angle-a+math.pi)%math.tau-math.pi)*3.61;h=p.z-z
+                    if abs(x)<.425 and abs(h)<.189:
+                        angle=a+x*(.430/.424)/3.61
+                        angle=anchor+(angle-anchor+math.pi)%math.tau-math.pi
+                        angle=max(low,min(high,angle))
+                        p.x=r*math.cos(angle);p.y=r*math.sin(angle);p.z=z+h*(.193/.188)
+                        break
+            reshape(obj,open_aperture)
+        for obj in matching('Energy / service pocket floor'):
+            ps=[obj.matrix_basis @ v.co for v in obj.data.vertices]
+            center=sum(ps,Vector())/len(ps);a=math.atan2(center.y,center.x)
+            def inset_floor(p):
+                r=math.hypot(p.x,p.y);angle=a+((math.atan2(p.y,p.x)-a+math.pi)%math.tau-math.pi)*.94
+                if r<3.451:r-=.005
+                p.x=r*math.cos(angle);p.y=r*math.sin(angle);p.z=center.z+(p.z-center.z)*.94
+            reshape(obj,inset_floor)
+        for obj in matching('Energy / panel pull grip'):local_scale(obj,0,.93)
+    else:
+        for obj in matching('Module / perimeter trim'):
+            local_scale(obj,0,.99);local_scale(obj,1,.99)
+        for obj in matching('Module / front spine'):local_scale(obj,2,2.12/2.14)
+        for obj in matching('Module / service crossrail'):move(obj,(0,.008,0))
+        for obj in matching('Module / armored endcap'):
+            def widen_lift_pocket(p):
+                if abs(p.x)<.301 and abs(p.y+.06)<.201 and abs(p.z)>3.60:
+                    p.x*=.296/.29;p.y=-.06+(p.y+.06)*(.196/.19)
+            reshape(obj,widen_lift_pocket)
+        for obj in matching('Module / cell clamp saddle')+matching('Module / cassette clamp bolt'):move(obj,(0,-.006,0))
+        for obj in matching('Module / recessed lift bar'):local_scale(obj,0,.96)
+        for obj in matching('Module / service pull grip'):local_scale(obj,0,.93)
+        for obj in matching('Module / radiator fin'):
+            def seat_fin(p):
+                if p.y>-.58:p.y=-.56+(p.y+.57)
+            reshape(obj,seat_fin)
+        for obj in matching('Module / return hex union'):local_scale(obj,2,.086/.07)
+    s['surface_clearance_revision']=1
+
+
 def readable_equipment_markings(s,main,parent):
     """Use matte-backed native text where chrome-like safety decals disappear."""
     if s.get('readable_marking_revision')==1:return
@@ -1117,6 +1203,9 @@ for block_scene in [s for s in created if s.seut.sceneType=='mainScene']:
     native_label_details(block_scene,main,next(o for o in main.objects if o.parent is None))
     drum_service_seating(block_scene,main,next(o for o in main.objects if o.parent is None))
     fastener_face_details(block_scene,main,next(o for o in main.objects if o.parent is None))
+    surface_clearances(block_scene,main,next(o for o in main.objects if o.parent is None))
+    if block_scene.name=='ArcanePower_EnergyCore':
+        runpy.run_path(str(ROOT/'assets/build_control_access.py'))['apply_energy'](block_scene)
     stages(block_scene,COLS.get_collections(block_scene),None)
     # SEUT mainScene exports Blender (-X, Z, Y). Rotate the authored assembly
     # so its module connector becomes SE Forward (-Z), and core transfer is rear.

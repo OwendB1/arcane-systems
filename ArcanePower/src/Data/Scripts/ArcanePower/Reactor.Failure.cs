@@ -13,6 +13,7 @@ namespace ArcanePower
     public sealed partial class Reactor
     {
         private readonly Random ejectRandom = new Random();
+        private ThermalForecast heatForecast;
 
         private void UpdateThermal()
         {
@@ -29,6 +30,30 @@ namespace ArcanePower
             if (!Motion.PayloadReleased && Motion.Core != CorePhase.Off && ThermalVariant && Motion.Thermal != null)
                 target = Math.Max(target, (float)ThermalMath.WasteHeatLevel(Motion.Thermal, ThermalHeatMW));
             Motion.Heat = (float)ThermalMath.ApproachCoreHeat(Motion.Heat, target, runaway);
+            if (!ThermalVariant) UpdateThermalForecast();
+        }
+
+        internal void UpdateThermalForecast()
+        {
+            if (!MyAPIGateway.Multiplayer.IsServer) return;
+            if (Motion.PayloadReleased || Motion.Core == CorePhase.Off)
+            {
+                heatForecast = null;
+                Motion.ForecastPeakHeat = 0; Motion.ForecastWarning = false;
+                Motion.ForecastOverheatSeconds = Motion.ForecastMeltdownSeconds = -1;
+                Motion.ForecastCircuit = 0;
+                return;
+            }
+            if (heatForecast == null) heatForecast = new ThermalForecast(Motion.ForecastWarning);
+            bool runaway = Motion.Critical || (Motion.TileStarved && Motion.TileWear >= 1);
+            double target = runaway ? (Motion.Critical ? 4 : 2.5 + .5 * Motion.StarvedLoad) : Motion.TargetLoad;
+            heatForecast.Update(Motion.Heat, target, runaway, ThermalVariant ? Motion.Thermal : null,
+                ThermalHeatMW, ThermalVariant ? ThermalCanRun : reactor.Enabled);
+            Motion.ForecastPeakHeat = (float)heatForecast.PeakHeat;
+            Motion.ForecastOverheatSeconds = (float)heatForecast.OverheatSeconds;
+            Motion.ForecastMeltdownSeconds = (float)heatForecast.MeltdownSeconds;
+            Motion.ForecastCircuit = heatForecast.Circuit;
+            Motion.ForecastWarning = heatForecast.Warning;
         }
 
         internal void TrackCore(CoreHazard core)

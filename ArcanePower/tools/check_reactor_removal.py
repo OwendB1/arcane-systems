@@ -21,7 +21,7 @@ def member(file, signature):
     while depth:
         depth += (source[end] == '{') - (source[end] == '}')
         end += 1
-    return source[start:end].replace('public override ', 'public ') + '\n'
+    return source[start:end].replace('public override ', 'public ').replace('Sandbox.Game.Entities.MyCubeBlock', 'MyCubeBlock') + '\n'
 
 
 methods = ''.join(member(file, signature) for file, signature in [
@@ -83,7 +83,12 @@ class IMyTerminalBlock {
 }
 class Slim {public float BuildLevelRatio=1;}
 class Definition {public string SubtypeName="ArcanePower_ReactorPrototype";}
-class IMyReactor : IMyTerminalBlock {
+class MyCubeBlock : IMyTerminalBlock {
+ public bool HandleEmissiveStateChange=true;
+ public bool NativeWarningApplied;
+ public void CheckNativeEmissives(){if(HandleEmissiveStateChange)NativeWarningApplied=true;}
+}
+class IMyReactor : MyCubeBlock {
  public bool MarkedForClose,Closed,TornDown,Enabled=true,UseConveyorSystem;
  public bool IsFunctional {get{if(TornDown)throw new NullReferenceException("removed native block");return true;}}
  public Definition Definition=new Definition();
@@ -115,7 +120,7 @@ class State {
  public CorePhase Core=CorePhase.Running;
  public VentPhase Vent=VentPhase.Idle;
  public int FuelTier=1;
- public bool PowerPaused,TileStarved,VentReady=true,SecurityMode=true;
+ public bool PowerPaused,PowerStarved,TileStarved,VentReady=true,SecurityMode=true;
  public float PowerRamp=1,StarvedLoad;
  public long ResiduumMicroUnits;
  public double FuelDebt;
@@ -123,12 +128,16 @@ class State {
 }
 class Reactor {
  IMyReactor reactor;
+ MyCubeBlock Entity {get{return reactor;}}
  MyReactor nativeReactor=new MyReactor();
  bool closing;
  VRage.Game.Entity.MyInventoryBase fuelInventory;
  MyLight coreGlow=new MyLight();
  State Motion=new State();
- int initializationFrames,controllerRingCapacity=2,networkTick=1;
+ int initializationFrames,controllerRingCapacity=2,networkTick=1,controllerDiscoveryFrames=600,reloadPowerFrames;
+ float previousControllers=2;
+ bool HasIntactControllers(){return true;}
+ void UpdateCriticalCore(){}
  float FuelEfficiency=.8f;
  class Grant {public double MaximumMW;}
  Grant standaloneGrant;
@@ -160,7 +169,9 @@ class Reactor {
  static void Main(){
   foreach(bool creative in new[]{true,false})foreach(bool thermal in new[]{false,true}) {
    MyAPIGateway.Session.CreativeMode=creative;
-   var live=new Reactor(thermal);live.UpdateBeforeSimulation();
+   var live=new Reactor(thermal);live.UpdateOnceBeforeFrame();live.reactor.CheckNativeEmissives();live.UpdateBeforeSimulation();
+   Need(!live.reactor.HandleEmissiveStateChange && !live.reactor.NativeWarningApplied,
+    "native reactor status cannot overwrite mod-owned fuel/thermal emissives");
    Need(live.steps>0 && live.nativeReactor.CapacityWrites>0,"live running reactor must still update/generate");
    if(!creative && !thermal)Need(live.reactor.Inventory.Debits>0,"live survival fuel still consumed");
    foreach(string phase in new[]{"marked","closed","inventory","slim","cleanup"}) {

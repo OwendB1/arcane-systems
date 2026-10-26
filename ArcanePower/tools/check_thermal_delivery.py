@@ -22,7 +22,7 @@ def main():
     tree=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc')
     blocks={d.findtext('Id/SubtypeId'):d for d in tree.findall('CubeBlocks/Definition')}
     motion=json.loads((ROOT/'validation/thermal-models/native-motion.json').read_text())
-    assert motion['status']=='passed' and motion['moving_parts']==30 and motion['failed_checks']==0,'Native moving meshes do not match authoring motion'
+    assert motion['status']=='passed' and motion['moving_parts']==34 and motion['failed_checks']==0,'Native moving meshes do not match authoring motion'
     assert motion['contract_sha256']==hashlib.sha256((ROOT/'assets/thermal-native-motion-contract.json').read_bytes()).hexdigest(),'Native motion contract changed after validation'
     assert motion['runtime_pose_sha256']==hashlib.sha256(b''.join((MOD/'Data/Scripts/ArcanePower'/name).read_bytes()
         for name in ('ThermalManifolds.cs','ThermalRotors.cs','ThermalRadiators.cs','ThermalModels.cs','ThermalPlant.cs'))).hexdigest(),'Runtime poses changed after native motion validation'
@@ -42,6 +42,11 @@ def main():
     highlights=report['inventory_highlights']
     assert set(highlights)=={'detector_conveyor_0','detector_conveyor_2','detector_conveyor_top','detector_conveyor_bottom'}
     assert len(highlights['detector_conveyor_top'])==4 and all(len(highlights[key])==1 for key in highlights if key!='detector_conveyor_top')
+    panels=report['control_panel_highlights']
+    assert set(panels)=={'detector_terminal_control','detector_terminal_control_opposite'}
+    for suffix,label in (('', 'control terminal_section'),('_opposite','control opposite terminal_section')):
+        panel=panels['detector_terminal_control'+suffix]
+        assert len(panel)==1 and label in panel[0], 'Missing dedicated reactor control-panel highlight'
     category=ET.parse(MOD/'Data/ThermalCategories.sbc')
     items={n.text for n in category.findall('.//ItemIds/string')}
     reachable=set(items)
@@ -125,7 +130,10 @@ def main():
                 assert max(ImageStat.Stat(image).stddev)==0,('Nonuniform glass texture',value)
                 if suffix=='ca':assert image.getextrema()==((0,0),(0,0),(0,0),(0,0))
     restored=json.loads((ROOT/'validation/thermal-models/internal-pipes-preserved.json').read_text())
-    assert restored['status']=='passed' and restored['geometry_transforms_and_material_assignments_match']
+    assert restored['status']=='passed' and restored['pillar_geometry_transforms_uvs_and_materials_match']
+    assert restored['pillar_pipes']==8 and restored['pillar_objects']==48
+    assert restored['chamber_pipe_bodies_removed']==16 and restored['chamber_pipe_clamps_removed']==48
+    assert restored['floor_vents']==4
     result={'status':'passed','blocks':len(models),'compatibility_aliases':len(contract['PIPE_ALIASES']),
             'authored_model_families':len(authored),'construction_models':3*len(authored),
             'lod_models':report['lod_models'],'validated_meshes':report['native_meshes'],

@@ -5,7 +5,7 @@ namespace ArcanePower
 {
     public static class ThermalManifolds
     {
-        public static readonly string[] Parts = { "Carriage", "Intermediate", "CoverMinus", "CoverPlus", "ConnectorTail" };
+        public static readonly string[] Parts = { "Carriage", "Intermediate", "CoverMinus", "CoverPlus", "ConnectorTail", "ChamberVent" };
         public static string Name(int bay, string part) { return "Thermal_" + ThermalModels.ManifoldBays[bay] + "_" + part; }
 
         public static bool CompatibleRest(Matrix rest)
@@ -25,6 +25,15 @@ namespace ArcanePower
         // the long tail gets its own fixed-anchor nonuniform scale.
         public static Matrix Pose(int bay, string part, double deployment)
         {
+            if (part == "ChamberVent")
+            {
+                double ventAngle = bay * Math.PI / 2;
+                var hinge = new Vector3((float)(-4.70 * Math.Cos(ventAngle)), -1.270f, (float)(4.70 * Math.Sin(ventAngle)));
+                var axis = new Vector3((float)Math.Sin(ventAngle), 0, (float)Math.Cos(ventAngle));
+                return Matrix.CreateTranslation(-hinge)
+                    * Matrix.CreateFromAxisAngle(axis, (float)(-Math.PI / 2 * ThermalMath.Span(deployment, .15, .90)))
+                    * Matrix.CreateTranslation(hinge);
+            }
             double pipes = ThermalMath.Span(deployment, .45, 1);
             int side = bay < 2 ? -1 : 1;
             if (part == "Carriage" || part == "Intermediate")

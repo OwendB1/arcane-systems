@@ -76,8 +76,9 @@ public static partial class ThermalRuntimeChecks
 
     private static void Budgets()
     {
+        TurbineRatings();
         double[] temperatures = { 650, 1000, 1600, 2200 };
-        double[] ceilings = { 40, 55, 66, 78 };
+        double[] ceilings = { 40, 55, 66, 80 };
         for (int tier = 0; tier < 4; tier++)
             for (int count = 1; count <= 4; count++)
             {
@@ -110,9 +111,9 @@ public static partial class ThermalRuntimeChecks
         Near(blockedT3.NetMW, 0, "standard hot section cannot bypass T3 gate");
         Check(blockedT3.Limit.Contains("upgraded"), "T3 gate reports required hardware");
         var exotic = Bank(1, 1, 3);
-        Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 78, "one exotic circuit retains its grade efficiency");
+        Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 80, "one exotic circuit retains its grade efficiency");
         exotic.Add(new ThermalUnit { Id = 101, Kind = ThermalKind.AirCooler, RatingMW = 100, CoolingMW = 60, ColdC = 200 });
-        Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 78, "warm extra cooling cannot worsen a cold circuit");
+        Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 80, "warm extra cooling cannot worsen a cold circuit");
         Near(ThermalMath.AirCooling(60, 0, 1), 0, "vacuum fan cooling");
         Near(ThermalMath.AirCooling(60, .2, 1), 12, "thin atmosphere");
         Near(ThermalMath.AirCooling(60, 1, 1), 60, "unobstructed exhaust");
@@ -150,9 +151,31 @@ public static partial class ThermalRuntimeChecks
             Near(ThermalMath.Dispatch(invalid, 650, Bank(1, 1)).NetMW, 0, "invalid offered heat");
     }
 
+    private static void TurbineRatings()
+    {
+        foreach (var model in ThermalModels.All.Values)
+        {
+            if (model.Kind != ThermalKind.Train) continue;
+            bool upgraded = model.Grade == 3;
+            double sourceMW = upgraded ? 250 : 2.5;
+            double outputMW = upgraded ? 50 : .25;
+            var units = new List<ThermalUnit> {
+                new ThermalUnit { Kind = ThermalKind.Train, Grade = model.Grade, RatingMW = model.RatingMW },
+                new ThermalUnit { Kind = ThermalKind.AirCooler, CoolingMW = 100 }
+            };
+            var plan = ThermalMath.Dispatch(ThermalLoops.Allocation(sourceMW), upgraded ? 2200 : 650, units);
+            Near(plan.NetMW, outputMW, "per-port electrical rating: " + model.Subtype);
+            Near(plan.NetMW * ThermalLoops.Count, upgraded ? 200 : 1, "four-port electrical maximum");
+            Near(ThermalMath.Dispatch(sourceMW, upgraded ? 2200 : 650, units).NetMW, outputMW,
+                "turbine cannot exceed rating with excess source heat");
+            Check(new ThermalStore { EntityId = 1, HotMJ = upgraded ? 20000000 : 200000 }.Valid(1, model.CapacityMJ),
+                "pre-rebalance turbine heat remains valid");
+        }
+    }
+
     private static void Stores()
     {
-        foreach (double eta in new[] { .20, .40, .78 })
+        foreach (double eta in new[] { .20, .40, .80 })
             foreach (double load in new[] { 0.0, .01, .1, .25, .5, 1.0 })
             {
                 var state = new ThermalReactorState { Store = new ThermalStore { EntityId = 1, HotMJ = 100 }, LoopVersion = 2 };
@@ -169,7 +192,7 @@ public static partial class ThermalRuntimeChecks
         foreach (double output in new[] { -1.0, double.NaN, double.PositiveInfinity, 1000 })
         {
             var state = new ThermalReactorState { Store = new ThermalStore { EntityId = 1, HotMJ = 1 } };
-            Check(!new ThermalOutputGrant(state, state.Loops[0], 1, .78).Settle(output), "invalid or unfunded output rejected");
+            Check(!new ThermalOutputGrant(state, state.Loops[0], 1, .80).Settle(output), "invalid or unfunded output rejected");
             Near(state.Store.HotMJ, 1, "rejection does not lose credit");
         }
         var legacy = new ThermalReactorState { Mode = ThermalMode.Brayton, LoopVersion = 1,
@@ -278,11 +301,21 @@ public static partial class ThermalRuntimeChecks
         Check(state.Valid(1) && !state.Valid(2), "saved mode identity");
         for (int bay = 0; bay < 4; bay++)
         {
+            double ventAngle = bay * Math.PI / 2;
+            var ventHinge = new Vector3((float)(-4.70 * Math.Cos(ventAngle)), -1.270f, (float)(4.70 * Math.Sin(ventAngle)));
+            var closedVentCentre = new Vector3((float)(-4.45 * Math.Cos(ventAngle)), -1.270f, (float)(4.45 * Math.Sin(ventAngle)));
+            Matrix openVent = ThermalManifolds.Pose(bay, "ChamberVent", 1);
+            Check(Vector3.Distance(Vector3.Transform(ventHinge, openVent), ventHinge) < .00001f, "vent hinge stays on floor mount");
+            Vector3 openVentCentre = Vector3.Transform(closedVentCentre, openVent);
+            Near(openVentCentre.Y, -1.520, "open vent folds below the floor");
+            Check(Vector2.Distance(new Vector2(openVentCentre.X, openVentCentre.Z), new Vector2(ventHinge.X, ventHinge.Z)) < .00001f,
+                "open vent leaves its aperture clear");
+            Check(ThermalManifolds.Pose(bay, "ChamberVent", .15) == Matrix.Identity, "vent remains closed before deployment clearance");
             var anchor = new Vector3((bay < 2 ? 1 : -1) * 4.12f, -2.33f, bay % 2 == 0 ? -2.5f : 2.5f);
             foreach (string part in ThermalManifolds.Parts)
             {
                 Check(ThermalManifolds.Pose(bay, part, 0) == Matrix.Identity, "stowed identity pose");
-                Vector3 probe = part == "ConnectorTail" ? anchor + new Vector3(.345f, 0, 0) : new Vector3(6, -2, 2);
+                Vector3 probe = part == "ChamberVent" ? closedVentCentre : part == "ConnectorTail" ? anchor + new Vector3(.345f, 0, 0) : new Vector3(6, -2, 2);
                 Vector3 previous = Vector3.Transform(probe, ThermalManifolds.Pose(bay, part, 0));
                 for (int sample = 0; sample <= 46; sample++)
                 {
@@ -534,9 +567,39 @@ public static partial class ThermalRuntimeChecks
     private static void Rotors()
     {
         var cold = new ThermalRotorState { EntityId = 1 };
-        for (int i = 0; i < 480; i++) ThermalRotors.Drive(cold, 0, 650, true, 1.0 / 60);
-        Near(cold.Rpm, 0, "cold turbine cannot spin from compressor power");
-        Near(cold.CompressorRpm, 0, "no demand leaves both shafts stopped");
+        var startingLoaded = new ThermalRotorState { EntityId = 1 };
+        for (int i = 1; i <= 300; i++)
+        {
+            ThermalRotors.Drive(cold, 0, 650, true, 1.0 / 60);
+            ThermalRotors.Drive(startingLoaded, 1, 650, true, 1.0 / 60);
+            if (i == 60 || i == 150 || i == 300)
+            {
+                Near(cold.Rpm, i / 3.0, "unloaded startup reaches 20, 50 and 100 RPM at 1, 2.5 and 5 seconds");
+                Near(cold.CompressorRpm, cold.Rpm, "both shafts share the idle startup ramp");
+                Near(startingLoaded.Rpm, 4000 * (1 - Math.Exp(-i / 240.0)),
+                    "existing load immediately uses the normal response toward its target");
+                Near(startingLoaded.CompressorRpm, startingLoaded.Rpm, "both shafts share the loaded response");
+            }
+        }
+        Near(cold.Rpm, 100, "healthy enabled turbine idles at 100 RPM without generating power");
+        Near(cold.CompressorRpm, 100, "both shafts share the idle speed");
+        var interrupted = new ThermalRotorState { EntityId = 1 };
+        for (int i = 0; i < 150; i++) ThermalRotors.Drive(interrupted, 0, 650, true, 1.0 / 60);
+        ThermalRotors.Drive(interrupted, 0, 650, false, 1);
+        double coast = interrupted.Rpm;
+        Check(coast > 0 && coast < 50 && interrupted.TargetRpm == 0, "turning off during startup immediately coasts");
+        ThermalRotors.Drive(interrupted, 0, 650, true, 1);
+        Near(interrupted.Rpm, coast + 20, "restarting resumes the idle ramp from the current speed");
+        double beforeLoad = interrupted.Rpm;
+        ThermalRotors.Drive(interrupted, .5, 650, true, 1);
+        Near(interrupted.Rpm, 2050 + (beforeLoad - 2050) * Math.Exp(-.25),
+            "load arriving during idle startup immediately takes over without waiting for 100 RPM");
+        var idleA = new ThermalRotorState { Rpm = 93, TargetRpm = 100 };
+        var idleB = new ThermalRotorState { Rpm = 93, TargetRpm = 100 };
+        ThermalRotors.Advance(idleA, 1);
+        for (int i = 0; i < 60; i++) ThermalRotors.Advance(idleB, 1.0 / 60);
+        Near(idleA.Rpm, idleB.Rpm, "idle ramp settles identically across frame sizes");
+        Near(idleA.Phase, idleB.Phase, "idle-boundary phase integration is independent of frame size");
         var warm = new ThermalRotorState { EntityId = 1 };
         var hot = new ThermalRotorState { EntityId = 1 };
         var low = new ThermalRotorState { EntityId = 1 };
@@ -549,11 +612,19 @@ public static partial class ThermalRuntimeChecks
         }
         Check(hot.Rpm == warm.Rpm && hot.Rpm > low.Rpm && hot.Rpm > ThermalRotors.MaxRpm * .98,
             "load drives shaft speed independently of fuel temperature");
-        Near(low.TargetRpm, hot.TargetRpm * .25, "quarter load gives quarter target speed");
+        Near(low.TargetRpm, 1075, "quarter utilization gives 100 plus one quarter of the 3900 RPM range");
+        Near(hot.TargetRpm, 4000, "full utilization targets 4000 RPM");
+        Near(hot.CompressorTargetRpm, hot.TargetRpm, "compressor and turbine share the load response");
+        ThermalRotors.Drive(low, .5, 650, true, 1.0 / 60);
+        Near(low.TargetRpm, 2050, "half utilization targets 2050 RPM");
+        ThermalRotors.Drive(low, 2, 650, true, 1.0 / 60);
+        Near(low.TargetRpm, 4000, "overload cannot exceed maximum RPM");
+        ThermalRotors.Drive(low, 0, 650, true, 1.0 / 60);
+        Near(low.TargetRpm, 100, "load removal returns to idle without stopping");
         double spinning = hot.Rpm;
         ThermalRotors.Drive(hot, 1, 2200, false, 1.0 / 60);
-        Check(hot.Rpm > 0 && hot.Rpm < spinning && hot.TargetRpm == 0, "fault or valve closure coasts, never snaps");
-        for (int i = 0; i < 7200; i++) ThermalRotors.Drive(hot, 0, 2200, false, 1.0 / 60);
+        Check(hot.Rpm > 0 && hot.Rpm < spinning && hot.TargetRpm == 0, "disabled or faulted turbine coasts, never snaps");
+        for (int i = 0; i < 7800; i++) ThermalRotors.Drive(hot, 0, 2200, false, 1.0 / 60);
         Near(hot.Rpm, 0, "shutdown reaches rest");
         Check(!warm.Valid(2), "copied rotor identity rejected");
         var serializer = new XmlSerializer(typeof(ThermalStore));
@@ -574,8 +645,8 @@ public static partial class ThermalRuntimeChecks
         Check(!warm.Valid(1), "nonfinite snapshot rejected");
         var a = new ThermalRotorState { TargetRpm = ThermalRotors.MaxRpm * .6 };
         var b = new ThermalRotorState { TargetRpm = ThermalRotors.MaxRpm * .6 };
-        for (int i = 0; i < 600; i++) ThermalRotors.Advance(a, 1.0 / 60);
-        for (int i = 0; i < 1200; i++) ThermalRotors.Advance(b, 1.0 / 120);
+        for (int i = 0; i < 1800; i++) ThermalRotors.Advance(a, 1.0 / 60);
+        for (int i = 0; i < 3600; i++) ThermalRotors.Advance(b, 1.0 / 120);
         Near(a.Rpm, b.Rpm, "spool rate independent of frame size");
         Near(a.Phase, b.Phase, "integrated phase independent of frame size");
         Check(ThermalRotors.CorrectPhase(6.27, .01) < .02, "network correction wraps shortest arc");
@@ -812,6 +883,21 @@ public static partial class ThermalRuntimeChecks
             {
                 Check(path.Length > 0 && ThermalMath.Finite(path.Length), "finite nonzero authored flow path");
                 Check(path.Sample(-1) == path.Points[0] && Vector3.Distance(path.Sample(path.Length+1),path.Points[path.Points.Length-1]) < .00001f, "path clamps at tube ends");
+                if (path.Circuit != "CHAMBER")
+                    for (double at = 0; at < path.Length; at += .025)
+                    {
+                        double end = Math.Min(path.Length, at + .30);
+                        Vector3 start = path.Sample(at), finish = path.Sample(end);
+                        float width = Math.Min(.11f, path.Radius * .50f);
+                        for (int i = 1; i < path.Distances.Length; i++)
+                        {
+                            double vertex = path.Distances[i];
+                            if (vertex <= at || vertex >= end) continue;
+                            Vector3 chord = Vector3.Lerp(start, finish, (float)((vertex - at) / (end - at)));
+                            Check(Vector3.Distance(chord, path.Points[i]) + width < path.Radius,
+                                "continuous 30 cm glob fits the curved bore: " + entry.Key);
+                        }
+                    }
                 for (int i=1; i<path.Points.Length; i++)
                     Check(Vector3.Distance(path.Sample((path.Distances[i]+path.Distances[i-1])/2),
                         (path.Points[i]+path.Points[i-1])/2) < .0001f, "arc-length sampler stays on authored tube");
@@ -1009,7 +1095,7 @@ public static partial class ThermalRuntimeChecks
 
     private static void LoopEnergy()
     {
-        foreach (double eta in new[] { .4, .78 })
+        foreach (double eta in new[] { .4, .80 })
         {
             var state = new ThermalReactorState { LoopVersion = 2 };
             double paid = 0, exported = 0, rejected = 0;
@@ -1200,6 +1286,118 @@ public static partial class ThermalRuntimeChecks
         Check(!state.Valid(1), "reject invalid parent identity");
     }
 
+    private static ThermalForecast Forecast(double heat, double target, ThermalReactorState state = null,
+        bool generating = true, bool runaway = false)
+    {
+        var forecast = new ThermalForecast();
+        for (int i = 0; i < 300; i++) forecast.Update(heat, target, runaway, state, 100, generating);
+        return forecast;
+    }
+
+    private static void ThermalForecasts()
+    {
+        foreach (double initial in new[] { 0.0, .5, .85, 1.0 })
+            Check(Forecast(initial, 1).PeakHeat <= 1, "normal full-load warmup never forecasts overheating");
+        Near(Forecast(1.1, 0, null, false).PeakHeat, 1.1, "cooling residual heat has no predicted rise");
+        Check(Forecast(.2, 2.5, null, true, true).Warning, "failed containment immediately warns");
+        foreach (double initial in new[] { .2, .8, 1.0, 1.1 })
+            foreach (double retained in new[] { 0.0, 20.0, 100.0 })
+                foreach (double rate in new[] { -5.0, 0.0, .01, .5, 5.0 })
+                {
+                    var state = new ThermalReactorState { Mode = ThermalMode.Brayton, ProducedMW = 80, RequiredCoolingMW = 20 };
+                    var loop = state.Loops[0]; loop.Connected = true;
+                    loop.ExcessMJ = retained; loop.RequiredCoolingMW = 20; loop.CoolingMW = 20 - rate;
+                    // Rejection is what this interval actually removed; spare
+                    // capacity must still be available to the future forecast.
+                    loop.RejectedMW = state.RejectedMW = Math.Min(20 + retained * 60, loop.CoolingMW);
+                    var forecast = Forecast(initial, .8, state);
+                    float actual = (float)initial; double peak = actual, waste = retained;
+                    double overheat = -1, meltdown = -1;
+                    for (int frame = 1; frame <= 3600; frame++)
+                    {
+                        waste = Math.Max(0, waste + rate / 60.0);
+                        bool critical = actual >= 1.25;
+                        actual = (float)ThermalMath.ApproachCoreHeat(actual,
+                            Math.Max(critical ? 4 : .8, Math.Min(4, waste / 50)), critical);
+                        peak = Math.Max(peak, actual);
+                        if (overheat < 0 && actual > 1.001) overheat = frame / 60.0;
+                        if (meltdown < 0 && actual >= 1.25) meltdown = frame / 60.0;
+                    }
+                    Check(Math.Abs(forecast.PeakHeat - peak) < .02, "projection matches independent live integration");
+                    Check((forecast.PeakHeat > Math.Max(initial, 1) + .001) == (peak > Math.Max(initial, 1) + .001),
+                        "projection detects the same rising overheat risk");
+                    Check((forecast.OverheatSeconds < 0) == (overheat < 0)
+                        && (overheat < 0 || Math.Abs(forecast.OverheatSeconds - overheat) < .3), "overheat ETA agrees with live integration");
+                    Check((forecast.MeltdownSeconds < 0) == (meltdown < 0)
+                        && (meltdown < 0 || Math.Abs(forecast.MeltdownSeconds - meltdown) < .3), "critical ETA agrees with live integration");
+                    Near(loop.ExcessMJ, retained, "forecast never changes physical heat inventories");
+                }
+        var balanced = new ThermalReactorState { Mode = ThermalMode.Brayton, ProducedMW = 80, RequiredCoolingMW = 20 };
+        var first = balanced.Loops[0]; first.Connected = true; first.RequiredCoolingMW = first.CoolingMW = 20;
+        var stable = Forecast(.8, .8, balanced);
+        first.CoolingMW = 18.3;
+        for (int i = 1; i <= 120; i++)
+        {
+            stable.Update(.8, .8, false, balanced, 100, true);
+            Check(stable.PeakHeat > 1.001 && stable.MeltdownSeconds < 0, "moderate deficit is an ordinary overheat prediction");
+            Check(stable.Warning == (i == 120), "ordinary warning needs two continuous seconds");
+        }
+        first.CoolingMW = 20;
+        for (int i = 1; i <= 300; i++)
+        {
+            stable.Update(.8, .8, false, balanced, 100, true);
+            Check(stable.Warning == (i < 300), "safe forecast must persist for five seconds before clearing");
+        }
+        first.CoolingMW = 25;
+        for (int i = 0; i < 12; i++)
+        {
+            balanced.ProducedMW = 100; first.RequiredCoolingMW = balanced.RequiredCoolingMW = 60;
+            first.ExcessMJ += 35.0 / 60;
+            stable.Update(.8, 1, false, balanced, 100, true);
+            Check(!stable.Warning && stable.PeakHeat <= 1, "200 ms load spike is not projected for a full minute");
+        }
+        balanced.ProducedMW = 80; first.RequiredCoolingMW = balanced.RequiredCoolingMW = 20;
+        for (int i = 0; i < 300; i++)
+        {
+            first.ExcessMJ = Math.Max(0, first.ExcessMJ - 5.0 / 60);
+            stable.Update(.8, .8, false, balanced, 100, true);
+            Check(!stable.Warning, "brief spike clears within spare cooling without a delayed flash");
+        }
+        first.CoolingMW = 0;
+        stable.Update(.8, .8, false, balanced, 100, true);
+        Check(stable.Warning && stable.MeltdownSeconds > 0 && stable.Circuit == 1,
+            "cooler loss immediately recomputes the forecast and bypasses confirmation for critical risk");
+        first.Connected = false;
+        stable.Update(.8, 0, false, balanced, 100, false);
+        Check(stable.PeakHeat <= .8 && stable.MeltdownSeconds < 0,
+            "shutdown and circuit isolation stop projected production immediately despite recent load");
+        var isolated = new ThermalReactorState { Mode = ThermalMode.Brayton, ProducedMW = 80, RequiredCoolingMW = 40 };
+        isolated.Loops[0].Connected = isolated.Loops[1].Connected = true;
+        isolated.Loops[0].RequiredCoolingMW = isolated.Loops[1].RequiredCoolingMW = 20;
+        isolated.Loops[0].CoolingMW = 100; isolated.Loops[1].CoolingMW = 0;
+        var hot = Forecast(.8, .8, isolated);
+        Check(hot.Warning && hot.Circuit == 2 && hot.MeltdownSeconds > 0, "cold circuit surplus cannot mask circuit 2");
+        var standalone = new ThermalReactorState { ProducedMW = 100, RequiredCoolingMW = 80, CoolingMW = 80 };
+        standalone.Store.HotMJ = 1000000;
+        Check(!Forecast(1, 1, standalone).Warning, "balanced standalone and paid fuel credit never warn");
+        var cooling = new ThermalReactorState { Mode = ThermalMode.Brayton };
+        cooling.Loops[0].ExcessMJ = cooling.Loops[1].ExcessMJ = 50;
+        var passive = Forecast(.8, 0, cooling, false);
+        Check(passive.PeakHeat <= 1 && !passive.Warning, "shared passive cooldown cannot manufacture heat");
+        Near(cooling.Loops[0].ExcessMJ + cooling.Loops[1].ExcessMJ, 100, "cooldown projection preserves real retained energy");
+        var invalid = new ThermalForecast(); invalid.Update(double.NaN, 0, false, null, 100, false);
+        Check(invalid.Warning && invalid.PeakHeat == 4, "invalid forecast inputs fail visibly");
+        var motion = new MotionState { Core = CorePhase.Running, Heat = .8f, ForecastPeakHeat = 1.1f };
+        var warning = typeof(MotionState).GetProperty("ThermalWarning", BindingFlags.Instance | BindingFlags.NonPublic);
+        Check(!(bool)warning.GetValue(motion, null), "unconfirmed peak cannot light client emissives");
+        motion.ForecastWarning = true;
+        Check((bool)warning.GetValue(motion, null), "server-confirmed warning drives all presentation");
+        motion.ForecastPeakHeat = motion.Heat;
+        Check((bool)warning.GetValue(motion, null), "recovery hold survives safe forecast replication");
+        motion.Critical = true;
+        Check(!(bool)warning.GetValue(motion, null), "armed meltdown retains critical red priority");
+    }
+
     private static void MeltdownCountdown()
     {
         Type hazards = typeof(CoreHazard).Assembly.GetType("ArcanePower.CoreHazards");
@@ -1270,11 +1468,18 @@ public static partial class ThermalRuntimeChecks
         Check((bool)valid.Invoke(null, new object[] { motion }), "sixty-second countdown survives motion packet/save validation");
         motion.CriticalSeconds = 60.1f;
         Check(!(bool)valid.Invoke(null, new object[] { motion }), "countdown validation remains bounded");
+        motion.CriticalSeconds = 60; motion.ForecastPeakHeat = 4;
+        Check((bool)valid.Invoke(null, new object[] { motion }), "bounded heat forecast survives save/packet validation");
+        foreach (float bad in new[] { -.1f, 4.1f, float.NaN, float.PositiveInfinity })
+        {
+            motion.ForecastPeakHeat = bad;
+            Check(!(bool)valid.Invoke(null, new object[] { motion }), "invalid heat forecasts are rejected");
+        }
     }
 
     public static void Main(string[] args)
     {
-        Isolation(); Registrations(); Budgets(); Stores(); CoolingFailure(); ModesAndStartup(); Topology(); UniversalPipes(); ReactorAdapters(); BarePipes(); Rotors(); Radiators(); LoopEnergy(); Construction(); MeltdownCountdown(); Flow(args.Length > 0 ? args[0] : null);
+        Isolation(); Registrations(); Budgets(); Stores(); CoolingFailure(); ModesAndStartup(); Topology(); UniversalPipes(); ReactorAdapters(); BarePipes(); Rotors(); Radiators(); LoopEnergy(); Construction(); ThermalForecasts(); MeltdownCountdown(); Flow(args.Length > 0 ? args[0] : null);
         Console.WriteLine("Thermal runtime: " + checks + " checks passed (registrations/channels, budget, conservation, reload, modes, 47 manifold poses, linear load rotors, construction/orientation guide and authored topology)");
     }
 }

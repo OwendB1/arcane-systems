@@ -215,7 +215,7 @@ Aim at a block in the assembly and resolve the guide's next instruction:
    **Cooling capacity**; use **Full-load cooling** when sizing the plant. Monitor
    **Accumulated heat** and **Heat removed** during recovery and shutdown.
 
-Eligible turbines retain 40% starter conversion, then 55%, 66% or 78% with
+Eligible turbines retain 40% starter conversion, then 55%, 66% or 80% with
 suitable temperature/equipment. Circuit count changes capacity rather than
 conversion efficiency: 25%, 50%, 75% or 100% of nominal reactor allocation.
 There is exactly one turbine per circuit. Standalone remains a separate 20% mode.

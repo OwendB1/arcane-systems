@@ -12,12 +12,12 @@ def method(source,name):
  return source[start:end]+'\n'
 
 source=(MOD/'Data/Scripts/ArcanePower/EnergyCore.cs').read_text()
-methods=''.join(method(source,n) for n in ('IsPillar','BaseSubtype','Healthy','Socket','IsModuleRunning','StoredFieldPose','Tier','FindController','UpdateBank','Disconnect','ApplyLimits','RequiredInput','ClampNativeOutput'))
+methods=''.join(method(source,n) for n in ('IsPillar','BaseSubtype','Healthy','Socket','AttachedModules','HighestTier','IsModuleRunning','StoredFieldPose','Tier','FindController','UpdateBank','Disconnect','ApplyLimits','RequiredInput','ClampNativeOutput'))
 gameplay=(MOD/'Data/Scripts/ArcanePower/EnergyCore.Gameplay.cs').read_text()
 policy=gameplay.split('    // The drive owns')[0]
-gameplay_methods=''.join(method(policy,n) for n in ('InitializeGameplay','UpkeepPower','UpdateUpkeep','ReceiveGameplay','SaveGameplay','EligibleDrive','GetJumpDrives','RequestSurge','RequestBurst','RecoveryDuration','AvailableEnergy','SpendableEnergy','DebitEnergy','UpdateSurge','EndSurge','ReleaseDrive','UpdateRecovery'))
+gameplay_methods=''.join(method(policy,n) for n in ('InitializeGameplay','UpkeepPower','UpdateUpkeep','ReceiveGameplay','SaveGameplay','EligibleDrive','GetJumpDrives','AffordableDrives','SurgePower','ChargeTicks','BatchRecoveryDuration','HoldSurgeRecovery','RequestSurge','RequestBurst','RecoveryDuration','AvailableEnergy','SpendableEnergy','DebitEnergy','UpdateSurge','EndSurge','ReleaseDrives','UpdateRecovery','AppendGameplayInfo'))
 state=gameplay[gameplay.index('    public sealed class EnergyGameplayState'):gameplay.index('    public sealed partial class EnergyCore')]
-state=re.sub(r'\[ProtoMember\(\d+\)\] ', '', state)
+state='[ProtoContract]\n'+state
 drive=gameplay[gameplay.index('    public sealed class JumpDriveSurge'):].rsplit('}',1)[0]
 drive=drive.replace('public sealed class JumpDriveSurge','sealed class JumpDriveSurge')
 harness=(ROOT/'tools/EnergyCoreProbe.cs').read_text().replace('// METHODS',methods).replace('// GAMEPLAY METHODS',gameplay_methods)+'\n'+state+drive
@@ -38,7 +38,7 @@ if '--policy-only' not in sys.argv:
 with tempfile.TemporaryDirectory(prefix='arcane-energy-check-') as directory:
  cs=Path(directory)/'Check.cs';cs.write_text(harness);exe=cs.with_suffix('.exe')
  subprocess.run(['mcs','-out:'+str(exe),'-r:/usr/lib/mono/4.5/Facades/netstandard.dll',
-                 '-r:'+str(game/'VRage.Math.dll'),'-r:'+str(game/'VRage.Library.dll'),str(cs)],check=True)
+                 *['-r:'+str(game/name) for name in ('VRage.Math.dll','VRage.Library.dll','ProtoBuf.Net.Core.dll','ProtoBuf.Net.dll')],str(cs)],check=True)
  subprocess.run(['mono',str(exe)],check=True,env={**os.environ,'MONO_PATH':str(game)})
 path=MOD/'Data/CubeBlocks/ArcanePower_EnergyCore.sbc'
 for filename in ('ArcanePower_EnergyCore.sbc','ArcanePower_EnergyCoreLegacy.sbc'):

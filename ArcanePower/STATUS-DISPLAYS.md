@@ -6,6 +6,12 @@ visible above five pages: Overview, Power, Containment, Supplies and Vent.
 Critical and ejected-core countdown warnings remain visible on every page.
 The native reactor terminal sidebar is a short grouped summary.
 
+Heat warnings use the server's 60-second projection of each circuit's net heat
+buildup and the core's temperature response. The heat readout and housing turn
+yellow only when that projection rises into overheating; healthy full-load heat
+and safely cooling residual heat remain neutral. Critical cores remain red.
+The terminal and Containment pages show `60 s heat peak` at current load/cooling.
+
 ## LCD setup
 
 Select **Arcane Reactor** under the screen's Scripts content mode. A single
@@ -88,6 +94,13 @@ supercritical threshold. Reserve reports available seconds and MWh. Supplies
 show stock, current fuel burn/endurance, heat/load-driven tile demand, startup
 shortfall and conveyor mode. Estimates exclude future conveyor deliveries.
 Venting includes route state and shield/intake progress.
+
+Containment includes the 60-second heat peak and a thermal outlook identifying
+the limiting circuit and estimated time to overheating or critical heat. The
+forecast uses four seconds of paid production and current cooling capacity.
+Yellow confirms ordinary risk for two seconds and clears after five safe seconds;
+failed containment and predicted critical heat warn immediately. Recovery is
+labelled explicitly, and clients use the server's warning state.
 
 Unavoidable detonation begins only after crossing the supercritical threshold.
 Ejection relocates that hazard; it does not cancel it. Cooler ejections decay.

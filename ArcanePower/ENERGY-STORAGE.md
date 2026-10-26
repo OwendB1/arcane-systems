@@ -16,39 +16,71 @@ Full-height docking supports connect the compartment backplates to the core,
 with inter-bay bulkheads, power buses and coolant fittings behind the equipment.
 The [storage blueprint](workshop/images/energy-blueprint.png) shows a mounted bank.
 
-Distance meshes were refreshed from the current seven mains on 15 October 2026.
+The 26 October surface pass separates the module trim, bay rails and clamp
+faces, and recesses the core dock roots behind their socket receivers. Service
+pockets have distinct rim and floor surfaces. Native sockets, grid dimensions
+and accepted collision inputs are unchanged. Close-up Blender views were checked
+at 1.8, 2.4 and 3.0 m, including the chamber-facing surfaces.
+
+Distance meshes were refreshed from the current seven mains on 26 October 2026.
 They preserve glazing and charge/status surfaces while reducing equipment detail
 at 75 and 150 m. The small fan and driven field retain their exact main meshes.
-All 21 current construction stages keep their validated exported bytes.
-Current native delivery (report pruned).
+All 21 construction stages were rebuilt from the repaired mains and passed the
+native importer, material, bounds and embedded-collision checks. Export locks
+cut-panel triangulation to Blender's evaluated mesh.
+
+The refreshed local mod and release ZIP passed dependency and native-model
+checks. In the existing Prototype Lab world, disabling the core left a faint
+blue field with zero input/output power; re-enabling restored the charge glow.
 
 ## Placement and provisional balance
 
-Place modules at the center of the corresponding core face, two grid cells from
+All four upgrade bays accept any capacity, transfer or stabilizer module, in
+either tier. Place modules at the center of a core face, two grid cells from
 the core's center. Each module's connector/Forward face must point toward the
-core, and its Up direction must match the core. All pillars stand upright; the
-stabilizer occupies the front socket. Modules must be fully welded, functional, enabled, accessible to the core
+core, and its Up direction must match the core. All pillars stand upright.
+Modules must be fully welded, functional, enabled, accessible to the core
 owner and on the same physical grid. Connector-linked grids do not form a bank.
+
+A dedicated blue keypad on the exposed side of the lower docking frame opens
+the core's control panel. It remains reachable with all four modules installed
+and highlights separately from the upgrade sockets. The roof console remains.
+The control-access pass preserved all 5,126 existing main and collision objects,
+including mesh topology, UVs, materials and world transforms, compared with the
+named pre-access checkpoint. Only three keypad meshes and its detector were
+added. The geometry audit passed before refreshing the thermal workflow's
+protected Energy Core file fingerprint to this intentionally updated source.
+
+Public pillar icons use content-versioned DDS paths so a world reload picks up
+updated artwork instead of a previously cached compact icon. After rendering
+and converting icons, run `tools/prepare_energy_core.py --icons-only`; this also
+refreshes the battery-upgrade group's icon without changing block balance.
+The reloaded lab's build menu was checked visually and through its live variant
+grid: all six upgrade-module entries resolve the new versioned pillar icons,
+and the battery-upgrade group uses the current capacity-module artwork.
 
 Native `detector_upgrade` sockets mate at the grid faces. Transfer and stabilizer
 blocks advertise native upgrade compatibility with the Energy Core. Capacity
 modules remain batteries; the bank's existing placement, access and tier checks
 still control all allocations. Native connection feedback alone does not bypass
-the required socket role or stabilizer tier.
+the required alignment or stabilizer tier.
 
 | Block | Position | Capacity or capability |
 | --- | --- | --- |
 | Energy Core | Center | 1,000 MWh; base 10 GW bank transfer |
-| Capacity Module | Left/right; up to two | +10,000 MWh each |
-| Advanced Capacity Module | Left/right; up to two | +100,000 MWh each |
-| Transfer Module | Rear; one | 100 GW bank transfer |
-| Advanced Transfer Module | Rear; one | 1 TW bank transfer |
-| Stabilizer | Front; one | Supports standard modules |
-| Advanced Stabilizer | Front; one | Supports standard and advanced modules |
+| Capacity Module | Any bay | +10,000 MWh each |
+| Advanced Capacity Module | Any bay | +100,000 MWh each |
+| Transfer Module | Any bay | 100 GW bank transfer |
+| Advanced Transfer Module | Any bay | 1 TW bank transfer |
+| Stabilizer | Any bay | Supports standard modules |
+| Advanced Stabilizer | Any bay | Supports standard and advanced modules |
 
-The bare core operates without a stabilizer. Both capacity sockets may use the
-same tier or mixed tiers. Losing the stabilizer disables unsupported expansions;
-losing the transfer module restores the base transfer ceiling. Component costs,
+The bare core operates without a stabilizer. Capacity modules may use the same
+tier or mixed tiers; up to three can share one stabilizer. The strongest attached
+stabilizer and transfer tiers apply; duplicates do not stack. The transfer tier
+is limited by stabilization. Losing a module falls back to the remaining tiers,
+or disables unsupported expansions and restores the base transfer ceiling when
+no stabilizer remains. Component costs,
 capacity, PCU and transfer ratings are provisional. Ratings align with the
 reactor's 10/100/1,000 GW tiers; they are not final survival balance.
 
@@ -56,8 +88,9 @@ reactor's 10/100/1,000 GW tiers; they are not final survival balance.
 
 Previously placed 3×3×3 cores and one-cell modules retain their original geometry,
 sockets, capacities and stored charge. Their definitions are hidden from the build
-menu; new construction uses the pillar family. Compact banks still use a top
-stabilizer. Compact and pillar modules cannot be mixed.
+menu; new construction uses the pillar family. Compact banks retain their top
+bay in place of the pillar family's front bay; all four bays accept any module.
+Compact and pillar modules cannot be mixed.
 
 ## Native energy accounting
 
@@ -65,7 +98,7 @@ Each storage cell is a native battery with fixed capacity. The core reports the
 aggregate and divides the bank transfer allowance proportionally among attached
 cells. It never changes shared definitions or copies charge between storage cells.
 Upkeep consumes each physical cell's charge; a surge debits those cells and credits
-one jump drive through the public Mod API.
+an affordable batch of jump drives through the public Mod API.
 Charging demand follows actual stored charge through the public resource sink,
 so a previously full cell can replenish upkeep and direct surge debits even when
 the native battery's internal full flag has not yet changed.
@@ -88,7 +121,7 @@ and supply. Vanilla batteries remain usable for reactor startup and backup.
 
 Generate power, accumulate a reserve, spend energy on rapid jump-drive charging
 or burst discharge, then recharge while the equipment recovers. Capacity extends
-endurance, transfer modules shorten surge time, and stabilizers reduce both
+endurance, transfer modules raise ordinary transfer limits, and stabilizers reduce both
 storage upkeep and recovery. A charged bank can also operate a ship with its
 reactor shut down. Docked grids exchange ordinary electrical power through the
 native connector/grid system; connected grids remain separate storage banks.
@@ -101,7 +134,7 @@ half-full costs one quarter of full-cell upkeep. More capacity can spread stored
 energy over a larger installation. Supported cells receive their active bank's
 stabilizer reduction; isolated cells use the bare rate.
 
-| Stabilization | Full-cell loss per minute | Full 1,000 MWh cell upkeep | Recovery after ability ends |
+| Stabilization | Full-cell loss per minute | Full 1,000 MWh cell upkeep | Base recovery after ability ends |
 | --- | --- | --- | --- |
 | Bare | 1% | 600 MW equivalent | 120 s |
 | Standard | 0.5% | 300 MW equivalent | 90 s |
@@ -117,26 +150,45 @@ flow. Fractional native float rounding is carried between upkeep updates.
 
 ### Jump-drive surge
 
-Select a drive in the core's **Surge target** list, then use **Surge jump drive**
-in the terminal or toolbar. Automatic selection chooses an available drive in
-stable entity-ID order. Only one fully built, enabled, accessible drive on the
-same physical grid is eligible; its Recharge switch must be on and it must not
-be jumping. The bank must be in Auto or Discharge.
+Use **Surge jump drives** in the terminal or toolbar. The core automatically
+selects every affordable, fully built, enabled, accessible drive on the same
+physical grid. Drives must have Recharge on, need charge, and be neither jumping
+nor recovering from another surge. The bank must be in Auto or Discharge.
 
-Bare/standard/advanced transfer tiers target a full charge in **10/7.5/5 seconds**.
-Only missing charge is transferred, at approximately 90% efficiency subject to
-native float precision. Actual stored energy funds every increment. Surging
-shares the normal bank transfer ceiling with grid output and holds back the
-emergency reserve plus an allowance for native output already committed in its
-100-tick accounting interval. Heavy demand or insufficient energy can stop the
-surge with partial charge retained; ordinary drive recharging then continues.
+The energy budget excludes emergency reserve, committed native output and an
+upkeep allowance. Each drive costs its missing charge divided by **0.9**. When
+the bank cannot fill every drive, it selects the largest affordable subset by
+smallest missing charge first, with entity ID breaking ties. Unselected drives
+receive no surge charge. The core's custom information previews the affordable
+count, energy cost and recovery; the single-drive picker is removed. Existing
+toolbar actions keep their IDs.
 
-The normal jump countdown, range and jump restrictions still apply. The bank
-and drive enter recovery when the surge starts, lasting the surge window plus
-the stabilization-dependent recovery above. Drive recovery belongs to the
-physical drive, preventing another bank from surging it during recovery. Losing
-access, grid connection, hardware, Recharge eligibility or bank discharge mode
-stops further transfer without refunding energy already spent.
+Every transfer tier targets **5 seconds** for the selected batch. Drives charge
+together; temporary bank discharge throughput scales with their total missing
+charge, including the 90% efficiency cost. A 1% rate margin absorbs native float
+rounding. The extra throughput is reserved for direct jump-drive charging, so
+ordinary grid demand cannot consume it. Normal grid output and charging input
+retain their existing limits. The active batch summary shows the temporary boost
+and combined discharge ceiling; the boost ends when the batch finishes or stops.
+Actual stored energy funds every increment, with native float rounding paid from
+the bank. If stored energy above reserve becomes unavailable, charging stops with
+paid partial charge retained; ordinary drive recharging then continues. Drives
+attached after activation wait for the next batch.
+
+Post-surge recovery is **base recovery × (1 + 0.25 × (accepted drives − 1))**.
+The accepted count and stabilization tier are fixed at activation. With advanced
+stabilization, one/two/four/eight drives incur **60/75/105/165 seconds** after the
+batch ends. The bank and every accepted physical drive remain unavailable during
+charging and then receive that full recovery, including completed or skipped
+targets. Cancelling early, losing a drive, changing banks or reloading cannot
+reduce the batch penalty. Burst discharge retains its existing base recovery.
+
+The normal jump countdown, range and jump restrictions still apply. Losing access,
+grid connection, functional hardware or Recharge eligibility stops charging only
+the affected drive; other selected drives continue. Disabling the bank, changing
+it to Recharge, or needing reactor emergency support stops the whole batch.
+Energy already spent is never refunded. Active batches and per-drive recovery
+survive save/reload; saved single-drive surges resume as one-drive batches.
 
 ### Burst discharge and controls
 
@@ -242,9 +294,13 @@ engineer-scale inspection
 and native export proof (report pruned).
 
 Stored fraction controls field radius, glow intensity and four fill markers.
+Base emission is 0.03 for the field and 0.40 for online rings, with the existing
+charge-dependent gain and state colours preserved.
 Radius interpolates from 18% of the authored size when empty to 100% when full,
 with the field pivot and surrounding rings fixed. An offline field retains its
-stored-energy size while its emissive switches off. Cyan indicates
+stored-energy size and a baseline emissive on a fully built,
+functional core, including while disabled or waiting for modules. Online charge
+still raises the field's brightness. Cyan indicates
 charging, amber discharge and blue idle. The sphere uses a dedicated continuous
 emissive material. Seated status strips share these colors; transfer/stabilizer
 strips extinguish when detached or inactive. Three physical stabilizer fans turn
@@ -254,7 +310,8 @@ tilt, axial spin and secondary-axis transform code, including the reactor's
 time-varying secondary rotation rate. Battery transfer utilization sets their
 smoothly changing speed; an offline core slows them to a stop. The modulation clock
 continues across cosmetic tick wraps and outside the drawing range. Offline
-or disconnected cells extinguish their glow and fill markers. Drawing stops
+or disconnected cells extinguish their status lamps and fill markers; the
+completed core's stored-energy field retains its faint baseline. Drawing stops
 beyond 300 m while cosmetic phases continue; emissives refresh six times per second. This is independent of the reactor's restored original dark, static core
 texture. No reactive plasma was reintroduced.
 

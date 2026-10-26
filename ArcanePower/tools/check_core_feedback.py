@@ -79,7 +79,7 @@ for channel, parameter in (('cm', 'ColorMetalTexture'), ('ng', 'NormalGlossTextu
     assert (ROOT/'src'/texture.replace('\\', '/')).read_bytes() == canonical.read_bytes()
 print('PASS: revised material binds the original dark static DDS maps')
 
-mechanisms = {'DeckMotion', 'HatchMotion', 'TileDispense', 'TileLatch', 'TileRetract'}
+mechanisms = {'DeckMotion', 'HatchMotion', 'TileDispense', 'TileLatch', 'TileRetract', 'TileStore'}
 for sound in ET.parse(ROOT / 'src/Data/Audio.sbc').findall('Sounds/Sound'):
     name = sound.findtext('Id/SubtypeId').removeprefix('ArcaneReactor')
     distance = 1500 if name == 'Explosion' else 60 if name == 'Vent' else 18 if name in mechanisms else 24

@@ -28,6 +28,7 @@ state = motion[motion.index('    public enum CorePhase'):motion.index('    publi
 state = re.sub(r'\[Proto(?:Contract|Member\([^]]+\))\]', '', state)
 source = '''using System; using System.Collections.Generic; using VRageMath;
 using IMyCubeBlock = Block;
+public class ThermalReactorState {}
 ''' + state + (SRC / 'MechanismEvents.cs').read_text() + r'''
 static class MyAPIGateway {
  public static class Utilities { public static bool IsDedicated; }
@@ -126,7 +127,7 @@ class Check {
   audio.MixLoop(4,.5f);Need(audio.soundLoops[4].Starts==2,"motor resumes");
 
   foreach(Base6Directions.Direction axis in Enum.GetValues(typeof(Base6Directions.Direction))){
-   var grid=new Grid();var up=Base6Directions.GetIntVector(axis);var r=Add(grid,Vector3I.Zero,"ArcanePower_ReactorPrototype").FatBlock;
+   var grid=new Grid();var up=Base6Directions.GetIntVector(axis);var r=Add(grid,Vector3I.Zero,"ArcanePower_Thermal_ReactorHousing").FatBlock;
    r.Orientation.Up=axis;r.GameLogic.Owner=new Reactor();r.GameLogic.Owner.Motion.VentReady=true;
    grid.Blocks[up]=grid.Blocks[Vector3I.Zero];
    var section=Add(grid,up*2,"ArcanePower_VentDuct").FatBlock;section.Orientation.Up=axis;
@@ -143,7 +144,7 @@ class Check {
    grid.Blocks.Remove(up);grid.Blocks.Remove(Vector3I.Zero);Lamp(section,false,"orphan tube");Lamp(outlet,false,"orphan hatch");
   }
   // Maximum permitted stack, and a piece beyond the terminal cap.
-  var g=new Grid();var root=Add(g,Vector3I.Zero,"ArcanePower_ReactorPrototype").FatBlock;g.Blocks[Vector3I.Up]=g.Blocks[Vector3I.Zero];
+  var g=new Grid();var root=Add(g,Vector3I.Zero,"ArcanePower_Thermal_ReactorHousing").FatBlock;g.Blocks[Vector3I.Up]=g.Blocks[Vector3I.Zero];
   root.GameLogic.Owner=new Reactor();root.GameLogic.Owner.Motion.VentReady=true;
   for(int n=2;n<=16;n++)Add(g,Vector3I.Up*n,"ArcanePower_VentDuct");
   var cap=Add(g,Vector3I.Up*17,"ArcanePower_VentOutlet").FatBlock;Lamp(cap,true,"maximum-length cap");
@@ -158,9 +159,9 @@ with tempfile.TemporaryDirectory(prefix='arcane-feedback-') as directory:
     subprocess.run(['mcs','-out:'+str(exe),'-r:'+str(game/'VRage.Math.dll'),'-r:'+str(game/'VRage.Library.dll'),'-r:/usr/lib/mono/4.5/Facades/netstandard.dll',str(target)],check=True)
     subprocess.run(['mono',str(exe)],env=dict(os.environ,MONO_PATH=str(game)),check=True)
 
-# Validate the four new assets and the native disconnected fallback.
+# Validate mechanical assets and the native disconnected fallback.
 sounds=ET.parse(ROOT/'src/Data/Audio.sbc').findall('Sounds/Sound')
-for name in ('TileDispense','TileLatch','DeckMotion','HatchMotion'):
+for name in ('TileDispense','TileLatch','TileRetract','TileStore','DeckMotion','HatchMotion'):
     sound=next(s for s in sounds if s.findtext('Id/SubtypeId')=='ArcaneReactor'+name)
     loop=name.endswith('Motion');assert (sound.findtext('Loopable')=='true')==loop
     path=ROOT/'src'/sound.findtext('Waves/Wave/'+('Loop' if loop else 'Start')).replace('\\','/')

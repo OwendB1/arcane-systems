@@ -96,25 +96,7 @@ def fit_roof_surfaces(col):
             bpy.context.view_layer.objects.active = obj
             bpy.ops.object.modifier_apply(modifier=mod.name)
         bpy.data.objects.remove(cutter, do_unlink=True)
-    # Boolean walls need their own projected UVs; retain all usable old UVs.
-    for obj in targets:
-        mesh = obj.data
-        bm = bmesh.new(); bm.from_mesh(mesh)
-        bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=.00001)
-        bmesh.ops.dissolve_degenerate(bm, edges=list(bm.edges), dist=.000005)
-        bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
-        assert all(e.is_manifold for e in bm.edges), obj.name+': open roof solid'
-        bm.to_mesh(mesh); bm.free()
-        mesh.calc_loop_triangles(); uv = mesh.uv_layers.active.data
-        collapsed = {t.polygon_index for t in mesh.loop_triangles if t.area > 1e-8
-            and abs((uv[t.loops[1]].uv-uv[t.loops[0]].uv).cross(
-                    uv[t.loops[2]].uv-uv[t.loops[0]].uv)) < 1e-11}
-        for index in collapsed:
-            face = mesh.polygons[index]
-            axes = [i for i in range(3) if i != max(range(3), key=lambda j: abs(face.normal[j]))]
-            for loop in face.loop_indices:
-                p = mesh.vertices[mesh.loops[loop].vertex_index].co
-                uv[loop].uv = (p[axes[0]]*.8+.17, p[axes[1]]*.8+.41)
+    finish_recess_meshes(targets)
     screws = 0
     for obj in col.objects:
         if not source(obj).startswith('Reactor exterior / native screw face'): continue
@@ -129,6 +111,215 @@ def fit_roof_surfaces(col):
         obj.data.update(); screws += 1
     col['roof_surface_fit_revision'] = 1
     return {'receiver_recesses': len(receivers), 'screw_faces': screws, 'cap_opening_radius_m': 2.05}
+
+
+def finish_recess_meshes(targets):
+    """Keep existing UVs; give newly cut walls nondegenerate metric mapping."""
+    for obj in targets:
+        mesh = obj.data
+        bm = bmesh.new(); bm.from_mesh(mesh)
+        bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=.00001)
+        bmesh.ops.dissolve_degenerate(bm, edges=list(bm.edges), dist=.000005)
+        bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
+        assert all(e.is_manifold for e in bm.edges), obj.name+': open recessed solid'
+        bm.to_mesh(mesh); bm.free()
+        mesh.calc_loop_triangles(); uv = mesh.uv_layers.active.data
+        collapsed = {t.polygon_index for t in mesh.loop_triangles if t.area > 1e-8
+            and abs((uv[t.loops[1]].uv-uv[t.loops[0]].uv).cross(
+                    uv[t.loops[2]].uv-uv[t.loops[0]].uv)) < 1e-11}
+        for index in collapsed:
+            face = mesh.polygons[index]
+            axes = [i for i in range(3) if i != max(range(3), key=lambda j: abs(face.normal[j]))]
+            for loop in face.loop_indices:
+                p = mesh.vertices[mesh.loops[loop].vertex_index].co
+                uv[loop].uv = (p[axes[0]]*.8+.17, p[axes[1]]*.8+.41)
+
+
+def fit_pillar_side_covers(col):
+    """Clear the complete side receiver instead of hiding jacket faces 2 mm below it."""
+    revision = col.get('pillar_side_cover_fit_revision', 0)
+    if revision == 2:
+        return {'already_fitted': True}
+    bpy.context.view_layer.update()
+    source = lambda o: o.get('reactor_source_name', o.name)
+    bodies = [o for o in col.objects if source(o).startswith(PREFIX+'chamfered pillar jacket')]
+    receivers = [o for o in col.objects if source(o).startswith(PREFIX+'pillar inspection receiver')
+                 and max(v.co.x for v in o.data.vertices)-min(v.co.x for v in o.data.vertices) < .5]
+    assert len(bodies) == 4 and len(receivers) == 8
+    for receiver in receivers if not revision else []:
+        frame = receiver.matrix_world.copy()
+        body = min(bodies, key=lambda o:(o.matrix_world.translation-frame.translation).length_squared)
+        bpy.ops.mesh.primitive_cube_add(size=1)
+        cutter = bpy.context.object
+        cutter.dimensions = (.48,3.02,.13)
+        cutter.data.materials.append(bpy.data.materials['PaintedMetal_Colorable'])
+        bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
+        cutter.matrix_world = frame @ Matrix.Translation((0,0,-.045))
+        bpy.context.view_layer.update()
+        if body.data.users > 1: body.data = body.data.copy()
+        mod = body.modifiers.new('Full side receiver recess','BOOLEAN')
+        mod.operation = 'DIFFERENCE';mod.solver = 'EXACT';mod.object = cutter
+        bpy.context.view_layer.objects.active = body
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+        bpy.data.objects.remove(cutter,do_unlink=True)
+    # The middle seat and receiver shoulder also shared their exposed plane.
+    # End the seat inside the clear bore; the inspection floor backs the seam.
+    seats = [o for o in col.objects if source(o).startswith(PREFIX+'side cover cross seat')]
+    assert len(seats) == 8
+    for seat in seats:
+        if not revision:
+            seat.data = seat.data.copy()
+            for vertex in seat.data.vertices:
+                vertex.co.x *= .318/.40
+            seat.data.update()
+        # The cover back is at -30 mm. Its ledge must be below that surface,
+        # including at the middle joint, rather than intersecting the sidewall.
+        seat.matrix_world = seat.matrix_world @ Matrix.Translation((0,0,-.015))
+    for receiver in receivers:
+        receiver.data = receiver.data.copy()
+        for vertex in receiver.data.vertices:
+            if abs(vertex.co.z+.025) < .00001:
+                vertex.co.z = -.040
+        receiver.data.update()
+    if not revision:
+        finish_recess_meshes(bodies)
+    col['pillar_side_cover_fit_revision'] = 2
+    bpy.context.view_layer.update()
+    return {'side_receiver_recesses':len(receivers),'cross_seats':len(seats)}
+
+
+def fit_pillar_pipe_sockets(p):
+    """Replace the old transverse yokes with seated, bored pipe-end sockets."""
+    if p.col.get('pillar_pipe_socket_revision') == 1:
+        return {'already_fitted':True}
+    source = lambda o:o.get('reactor_source_name',o.name)
+    retired = {o.name for o in p.col.objects if source(o).startswith(PREFIX+'pillar end yoke')}
+    assert len(retired) == 8, 'Expected the eight original pillar yokes'
+    yokes = len(retired)
+    # Remove their screw bodies and native screw faces as a dependency chain.
+    while True:
+        dependents = {o.name for o in p.col.objects if any(o.get(k) in retired
+                      for k in ('support','fastener_body','texture_support'))}
+        if dependents <= retired:break
+        retired.update(dependents)
+    for name in retired:
+        bpy.data.objects.remove(bpy.data.objects[name],do_unlink=True)
+    root = next(o for o in p.col.objects if source(o) == 'ArcanePower_ReactorPrototype root')
+    pipes = sorted((o for o in p.col.objects if source(o).startswith('Coolant riser pipe')),
+                   key=lambda o:o.name)
+    assert len(pipes) == 8
+    sockets = []
+    for i,pipe in enumerate(pipes):
+        ends = [Vector(v) for v in json.loads(pipe['pipe_path'])]
+        assert len(ends) == 2 and abs(ends[0].x-ends[1].x)+abs(ends[0].y-ends[1].y) < .00001
+        for end,label,direction,mouth in ((ends[0],'lower',1,.080),(ends[-1],'upper',-1,.170)):
+            # The flange embeds in the accepted foot/roof seat. A stepped bore
+            # receives the unchanged 252 mm riser, with 4 mm hidden radial
+            # seating overlap and a 200 mm continuation into the support.
+            profile = [(.173,-.090),(.180,-.083),(.180,-.055),(.162,-.047),
+                       (.162,mouth-.015),(.154,mouth-.006),(.148,mouth),
+                       (.122,mouth),(.122,-.006),(.100,-.006),(.100,-.090)]
+            sides = 32
+            vertices = [(r*math.cos(j*math.tau/sides),r*math.sin(j*math.tau/sides),z)
+                        for r,z in profile for j in range(sides)]
+            faces = [(k*sides+j,k*sides+(j+1)%sides,((k+1)%len(profile))*sides+(j+1)%sides,
+                      ((k+1)%len(profile))*sides+j) for k in range(len(profile)) for j in range(sides)]
+            socket = p.mesh('pillar pipe socket '+str(i+1)+' '+label,vertices,faces,'Metal_Dull')
+            socket.data.materials.append(p.native['PaintedMetal_Darker'])
+            for face in socket.data.polygons:
+                face.material_index = 1 if face.index//sides in (0,1,2) else 0
+            socket.parent = root
+            socket.matrix_world = Matrix.Translation(end) @ (Matrix.Identity(4) if direction == 1 else Matrix.Rotation(math.pi,4,'X'))
+            socket['pillar_pipe_socket'] = pipe.name
+            socket['pillar_pipe_end'] = label
+            # Like the other fitted reactor couplings, preserve the bore in LODs.
+            socket['thermal_reactor_coupling'] = True
+            sockets.append(socket.name)
+    p.col['pillar_pipe_socket_revision'] = 1
+    bpy.context.view_layer.update()
+    return {'removed_yokes':yokes,'removed_yokes_and_fasteners':len(retired),'sockets':len(sockets)}
+
+
+def fit_pillar_labels(col):
+    """Remove buried legacy decals and retain the visible number/stock in LODs."""
+    if col.get('pillar_label_revision') == 1:
+        return {'already_fitted':True}
+    source = lambda o:o.get('reactor_source_name',o.name)
+    old = [o for o in col.objects if source(o).startswith('SEUT / Tech Panel')]
+    assert len(old) == 4, 'Expected four obsolete pillar tech-panel decals'
+    def center(obj):
+        return sum((obj.matrix_world@v.co for v in obj.data.vertices),Vector())/len(obj.data.vertices)
+    for decal in old:
+        for kind in ('native equipment number','equipment number stock'):
+            candidates = [o for o in col.objects if source(o).startswith(PREFIX+kind)]
+            number = min(candidates,key=lambda o:(center(o)-center(decal)).length_squared)
+            assert (center(number)-center(decal)).length < .1, ('Unmatched pillar number',decal.name)
+            number['lod_keep'] = True
+            number['pillar_number'] = True
+        bpy.data.objects.remove(decal,do_unlink=True)
+    col['pillar_label_revision'] = 1
+    return {'removed_legacy_decals':4,'retained_number_parts':8}
+
+
+def fit_pillar_surfaces(col):
+    """Recess the exterior receivers and clear the louver backs on all four pillars."""
+    side_covers = fit_pillar_side_covers(col)
+    fit_pillar_labels(col)
+    if col.get('pillar_surface_fit_revision') == 1:
+        return {'already_fitted': True, 'side_covers': side_covers}
+    bpy.context.view_layer.update()
+    source = lambda o: o.get('reactor_source_name', o.name)
+    bodies = [o for o in col.objects if source(o).startswith(PREFIX+'chamfered pillar jacket')]
+    receivers = [o for o in col.objects if source(o).startswith(PREFIX+'service receiver')
+                 and -.4 < o.matrix_world.translation.z < 2.2
+                 and 6.09 < o.matrix_world.translation.xy.length < 6.11]
+    assert len(bodies) == 4 and len(receivers) == 8
+    for receiver in receivers:
+        frame = receiver.matrix_world.copy()
+        body = min(bodies, key=lambda o:(o.matrix_world.translation-frame.translation).length_squared)
+        w = max(v.co.x for v in receiver.data.vertices)-min(v.co.x for v in receiver.data.vertices)
+        h = max(v.co.y for v in receiver.data.vertices)-min(v.co.y for v in receiver.data.vertices)
+        bpy.ops.mesh.primitive_cube_add(size=1)
+        cutter = bpy.context.object
+        cutter.dimensions = (w+.020,h+.020,.20)
+        cutter.data.materials.clear()
+        cutter.data.materials.append(bpy.data.materials['PaintedMetal_Colorable'])
+        bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
+        bevel = cutter.modifiers.new('Receiver perimeter clearance','BEVEL')
+        bevel.width = .024; bevel.segments = 1
+        bpy.ops.object.modifier_apply(modifier=bevel.name)
+        cutter.matrix_world = frame @ Matrix.Translation((0,0,-.080))
+        bpy.context.view_layer.update()
+        if body.data.users > 1: body.data = body.data.copy()
+        mod = body.modifiers.new('Full pillar receiver recess','BOOLEAN')
+        mod.operation = 'DIFFERENCE'; mod.solver = 'EXACT'; mod.object = cutter
+        bpy.context.view_layer.objects.active = body
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+        bpy.data.objects.remove(cutter,do_unlink=True)
+        if frame.translation.z > 1:
+            floor = min((o for o in col.objects if source(o).startswith(PREFIX+'pocket floor')),
+                        key=lambda o:(o.matrix_world.translation-frame.translation).length_squared)
+            # The original floor intersects the tilted vanes by 11 mm.
+            # Its deeper seat retains solid backing and gives 22 mm clearance.
+            floor.matrix_world = Matrix.Translation(frame.to_3x3()@Vector((0,0,-.033))) @ floor.matrix_world
+    # Native half-precision vertices cannot retain a 0.5 mm decal standoff.
+    screws = 0
+    for obj in col.objects:
+        if not source(obj).startswith(PREFIX+'native screw face'): continue
+        body = bpy.data.objects.get(obj.get('fastener_body',''))
+        if body is None: continue
+        centre = body.matrix_world.translation
+        if not (-1.1 < centre.z < 2.7 and 5.95 < centre.xy.length < 6.2): continue
+        normal = body.matrix_world.to_3x3()@Vector((0,0,1))
+        top = max((body.matrix_world@v.co).dot(normal) for v in body.data.vertices)
+        obj.data = obj.data.copy(); inverse = obj.matrix_world.inverted()
+        for vertex in obj.data.vertices:
+            point = obj.matrix_world@vertex.co
+            vertex.co = inverse@(point+normal*(top+.002-point.dot(normal)))
+        obj.data.update(); screws += 1
+    col['pillar_surface_fit_revision'] = 1
+    bpy.context.view_layer.update()
+    return {'receiver_recesses':len(receivers),'vent_floors':4,'screw_faces':screws}
 
 
 def main():

@@ -55,6 +55,29 @@ def main():
                 require(sum(abs((frame @ o.matrix_world.translation).z-height)<.001 for o in sockets)==expected//3,scene.name+': sockets must use 2.5 m cell pitch')
         inventory[scene.name]={'meshes':len(meshes),'triangles':sum(len(p.vertices)-2 for o in meshes for p in o.data.polygons)}
         def matching(prefix):return [o for o in meshes if o.name.startswith(prefix)]
+        if scene.get('surface_clearance_revision')==1:
+            if scene.name.endswith('Core'):
+                for obj in matching('Energy / curved dock root'):
+                    ps=points(obj,frame);center=sum(ps,Vector())/len(ps)
+                    normal=Vector((center.x,center.y,0)).normalized()
+                    require(abs(max(p.dot(normal) for p in ps)-3.705)<.0001,
+                            obj.name+': root face overlaps the socket receiver')
+                for obj in matching('Energy / service pocket floor'):
+                    lo,hi=bounds(obj,frame)
+                    require(hi.z-lo.z<.424,obj.name+': floor sides overlap the receiver')
+            else:
+                for obj in matching('Module / perimeter trim'):
+                    lo,hi=bounds(obj,frame)
+                    require(hi.x-lo.x<2.28,obj.name+': trim overlaps the endcap side')
+                for obj in matching('Module / front spine'):
+                    lo,hi=bounds(obj,frame)
+                    require(2.119<hi.z-lo.z<2.121,obj.name+': spine end overlaps the side armor')
+                for obj in matching('Module / cell clamp saddle'):
+                    lo,hi=bounds(obj,frame)
+                    require(lo.y< -1.035,obj.name+': clamp face overlaps the retention rail')
+                for obj in matching('Module / radiator fin'):
+                    lo,hi=bounds(obj,frame)
+                    require(hi.y>-.561,obj.name+': fin rear overlaps the header face')
         if scene.get('dock_integration_revision')==1:
             receivers=[o for o in meshes if ' / integrated socket receiver' in o.name]
             backing=[o for o in meshes if ' / opaque socket backing' in o.name]

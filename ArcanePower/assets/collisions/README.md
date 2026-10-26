@@ -9,3 +9,49 @@ FBX/XML/MWM staging: material and fitted-detail exports reuse the accepted physi
 including the 22 bare pipe variants. Their hulls follow actual pipe solids;
 the removed cages and manifold plates do not leave collision surfaces behind.
 The native export and construction validators read them from here.
+
+The thermal reactor main and its three construction stages contain **ten flat
+convex hulls**: the original deck and roof, four glass quadrants and four fitted
+pillars. The original `Cubes/large/ArcanePower_ReactorPrototype.hkt` stays unchanged;
+`Thermal/APT_ReactorHousing_Pillars.hkt` retains the pillar-only export. The merger
+combines adjacent original glass hulls into four convex quadrants. Their outside
+boundary stays at the glass; their inner chords extend further into the chamber.
+The exterior walkway, platform and pillars retain their accepted bounds.
+
+Do not wrap additional hulls in one top-level list. SE loads at most ten top-level
+shapes. Its block collector expands a list's children but records the original
+array length; the grid consumes only that recorded count. The previous list of
+fourteen hulls therefore lost all but its first hull in actual grid physics.
+The native probe now rejects nested shapes and validates the count consumed by
+the grid, plus deck/roof/glass contacts, pillar faces and character/walkway sweeps.
+
+To rebuild after changing pillar geometry, run `apply()` from
+`assets/build_reactor_pillar_collision.py` in the production Blender scene, then
+export and merge before the regular model export:
+
+```sh
+blender -b ArcanePower/assets/arcane-thermal-models.blend --python-exit-code 1 \
+  --python ArcanePower/assets/build_reactor_pillar_collision.py -- \
+  --export ArcanePower/src/Models/Cubes/large/.pillar-collision-stage
+PYTHONDONTWRITEBYTECODE=1 python3 ArcanePower/tools/build_reactor_pillar_collision.py \
+  ArcanePower/src/Models/Cubes/large/.pillar-collision-stage/ArcanePower_Thermal_ReactorHousing.hkt
+```
+
+SEUT requires this temporary export directory under the mod's `Models` directory;
+remove it after validation. The merge installs the main/stage inputs only after
+native Havok checks pass. After compiling the models, run
+`tools/check_reactor_havok.py` to verify the delivered MWM embeds the accepted HKT
+and passes the same contacts. This does not replace an in-game reload check.
+
+For a collision-only rebuild, the maintained merger can also replace just the
+collision tags in the installed main and construction MWMs. It verifies the
+native roundtrip and unchanged interfaces, and selects a fresh content-hashed
+model folder so the game cannot reuse the broken physics cache:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 ArcanePower/tools/build_reactor_pillar_collision.py \
+  ArcanePower/assets/collisions/Cubes/large/Thermal/APT_ReactorHousing_Pillars.hkt --install
+```
+
+Refresh native motion validation and the unpublished release package after
+installing, then run delivery and Havok checks.

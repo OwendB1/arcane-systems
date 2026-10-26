@@ -3,7 +3,7 @@
   <BlockVariantGroups>
     <BlockVariantGroup>
       <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Energy_BatteryUpgrades" />
-      <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCapacity.dds</Icon>
+      <Icon>Textures/GUI/Icons/ArcanePower/Energy/ArcanePower_EnergyCapacity_r96376ca0af39.dds</Icon>
       <DisplayName>Arcane Battery Upgrades</DisplayName>
       <Description>Scroll through capacity, transfer and stabilizer modules, including advanced versions.</Description>
       <Blocks>

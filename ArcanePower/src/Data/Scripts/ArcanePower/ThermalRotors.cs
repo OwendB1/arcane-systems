@@ -35,17 +35,16 @@ namespace ArcanePower
     // Electrical load drives the shafts; visual inertia never grants MW.
     public static class ThermalRotors
     {
-        // Cosmetic speeds keep the 64/56-blade rows below 24 blade passes/s.
-        // Actual engineering shaft speeds are deliberately not simulated.
-        public const double MaxRpm = 20, MaxCompressorRpm = 24;
+        public const double IdleRpm = 100, MaxRpm = 4000, MaxCompressorRpm = MaxRpm;
+        private const double IdleRampSeconds = 5;
         public static void Drive(ThermalRotorState state, double load, double hotC, bool running, double seconds)
         {
             if (!ThermalMath.Finite(seconds) || seconds <= 0 || seconds > 1) return;
-            bool valid = running && ThermalMath.Finite(load) && ThermalMath.Finite(hotC);
+            bool valid = running && ThermalMath.Finite(load) && load >= 0 && ThermalMath.Finite(hotC);
             double demand = valid ? ThermalMath.Clamp(load, 0, 1) : 0;
             state.HotC = 45 + (valid ? ThermalMath.Clamp(hotC, 45, 2200) - 45 : 0) * demand;
-            state.TargetRpm = MaxRpm * demand;
-            state.CompressorTargetRpm = MaxCompressorRpm * demand;
+            state.TargetRpm = valid ? IdleRpm + (MaxRpm - IdleRpm) * demand : 0;
+            state.CompressorTargetRpm = state.TargetRpm;
             Advance(state, seconds);
         }
 
@@ -58,9 +57,21 @@ namespace ArcanePower
 
         private static double Integrate(ref double rpm, double target, double phase, double seconds)
         {
+            double turns = 0;
+            if (rpm < IdleRpm && target == IdleRpm)
+            {
+                // Unloaded startup takes five seconds to idle. Any load uses
+                // the normal response immediately, with no idle-speed gate.
+                double acceleration = IdleRpm / IdleRampSeconds;
+                double startupSeconds = Math.Min(seconds, (IdleRpm - rpm) / acceleration);
+                double next = Math.Min(IdleRpm, rpm + acceleration * startupSeconds);
+                turns = (rpm + next) * .5 * startupSeconds / 60;
+                rpm = next;
+                seconds -= startupSeconds;
+            }
             double tau = target > rpm ? 4 : 8;
             double decay = Math.Exp(-seconds / tau);
-            double turns = (target * seconds + (rpm - target) * tau * (1 - decay)) / 60;
+            turns += (target * seconds + (rpm - target) * tau * (1 - decay)) / 60;
             rpm = target + (rpm - target) * decay;
             if (target == 0 && rpm < .001) rpm = 0;
             return (phase + turns * Math.PI * 2) % (Math.PI * 2);

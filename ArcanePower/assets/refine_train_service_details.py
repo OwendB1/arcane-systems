@@ -4,9 +4,81 @@ from pathlib import Path
 import runpy
 
 import bpy
-from mathutils import Vector
+from mathutils import Matrix, Vector
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def finish(p):
+    """Tier-specific windings and recessed lamps; safe on accepted main meshes."""
+    detail = runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))
+    runpy.run_path(str(ROOT/'assets/refine_thermal_flow.py'))['materials'](p)
+    copper = bpy.data.materials['ArcanePower_ArmatureCopper']
+    winding = copper
+    if p.name.endswith(' upgraded'):
+        winding = bpy.data.materials.get('ArcanePower_ArmatureCyan')
+        if winding is None:
+            winding = copper.copy(); winding.name = 'ArcanePower_ArmatureCyan'
+            image = bpy.data.images.new('Armature cyan cm', width=16, height=16, alpha=True)
+            image.colorspace_settings.name = 'sRGB'; image.alpha_mode = 'CHANNEL_PACKED'
+            image.pixels.foreach_set([.035, .55, .65, 1] * 256)
+            image.filepath_raw = str(ROOT/'src/Textures/Models/ArcanePower/Thermal/ArmatureCyan_cm.png')
+            image.file_format = 'PNG'; image.save()
+            winding.node_tree.nodes['CM'].image = image
+            winding['thermal_armature_cyan'] = True
+        # CM alpha retains full metalness; ADD retains zero emission/skin mask.
+    windings = [o for o in p.col.objects if o.get('thermal_generator_winding')]
+    assert len(windings) == 96
+    for obj in windings:
+        if obj.data.users > 1: obj.data = obj.data.copy()
+        obj.data.materials[0] = winding
+    for obj in list(p.col.objects):
+        if obj.get('thermal_turbine_light'): bpy.data.objects.remove(obj, do_unlink=True)
+
+    def lamp(label, support, pose, length):
+        # A closed metal jacket with a 3 mm recessed luminous face. The rim,
+        # well walls and backing are real faces, without stacked coplanar skins.
+        width, height, inset, depth = .048, .012, .007, .003
+        def ring(x, y, z): return [(-x,-y,z),(x,-y,z),(x,y,z),(-x,y,z)]
+        verts = (ring(length/2,width/2,0) + ring(length/2,width/2,height)
+                 + ring(length/2-inset,width/2-inset,height)
+                 + ring(length/2-inset,width/2-inset,height-depth))
+        faces = [(3,2,1,0)]
+        for a,b in ((0,4),(4,8),(8,12)):
+            faces.extend((a+i,a+(i+1)%4,b+(i+1)%4,b+i) for i in range(4))
+        faces.append((12,13,14,15))
+        obj = p.mesh(label,verts,faces,'PaintedMetal_VeryDark')
+        obj.data.materials.append(p.native['ThermalStatus'])
+        obj.data.polygons[-1].material_index = 1
+        obj.matrix_world = pose
+        obj['thermal_turbine_light'] = 1
+        obj['thermal_seated_on'] = support.name
+        return obj
+
+    # Mirrored mains bake transforms into vertices. Derive the seating frame
+    # from world geometry so both hands follow the same outward-facing surface.
+    rails = [o for o in p.col.objects if o.type == 'MESH' and any(
+        o.name.startswith(p.name+' / '+label+' inspection window rail')
+        for label in ('compressor','turbine','generator'))]
+    for rail in rails:
+        points = [rail.matrix_world@v.co for v in rail.data.vertices]
+        centre = Vector([(min(v[i] for v in points)+max(v[i] for v in points))/2 for i in range(3)])
+        length = max(v.x for v in points)-min(v.x for v in points)
+        normal = Vector((0,centre.y,centre.z-detail['M']['CONTRACT']['TRAIN_SHAFT_Z'])).normalized()
+        along = Vector((1,0,0))
+        pose = Matrix((along,normal.cross(along),normal)).transposed().to_4x4()
+        top = max((v-centre).dot(normal) for v in points)
+        for sign in (-1,1):
+            pose.translation = centre + normal*(top-.001) + along*(sign*length/4)
+            lamp('window rail status light',rail,pose,length/2-.25)
+    hatch = detail['named'](p,'rear switchgear access door')[0]
+    face = max((hatch.matrix_world@v.co).x for v in hatch.data.vertices)
+    pose = Matrix(((0,0,1,face-.001),(1,0,0,0),(0,1,0,-.71),(0,0,0,1)))
+    lamp('switchgear status light',hatch,pose,.72)
+    p.scene['thermal_turbine_finish_revision'] = 1
+    bpy.context.view_layer.update()
+    return {'windings':len(windings),'material':winding.name,
+            'recessed_lamps':sum(bool(o.get('thermal_turbine_light')) for o in p.col.objects)}
 
 
 def apply(p):
@@ -97,4 +169,5 @@ def apply(p):
         if obj.type=='MESH':obj['thermal_surface_revision']=detail['REVISION']
     p.scene['thermal_rear_service_revision']=1
     bpy.context.view_layer.update()
+    finish(p)
     return {'added':len(set(p.col.objects)-before)}

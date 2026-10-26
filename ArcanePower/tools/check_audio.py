@@ -10,7 +10,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sounds = ET.parse(ROOT / "src/Data/Audio.sbc").findall("Sounds/Sound")
-assert len(sounds) == 21
+assert len(sounds) == 22
 names = set()
 for sound in sounds:
     name = sound.findtext("Id/SubtypeId")
@@ -26,7 +26,8 @@ for sound in sounds:
         assert (audio.getnchannels(), audio.getsampwidth(), audio.getframerate()) == (1, 2, 44100)
         samples = np.frombuffer(audio.readframes(audio.getnframes()), dtype="<i2").astype(float) / 32768
     assert np.isfinite(samples).all()
-    assert .05 < np.sqrt(np.mean(samples ** 2)) < .6, name
+    minimum_rms = .015 if path.stem in ('TileDispense', 'TileRetract') else .05
+    assert minimum_rms < np.sqrt(np.mean(samples ** 2)) < .6, name
     assert np.max(np.abs(samples)) < .73, name
     assert abs(np.mean(samples)) < .002, name
     if path.stem in ('Assembly', 'Resonance', 'Load', 'Instability'):
@@ -35,6 +36,11 @@ for sound in sounds:
         energy = np.abs(np.fft.rfft(samples)) ** 2
         frequency = np.fft.rfftfreq(len(samples), 1 / 44100)
         assert energy[frequency > 500].sum() / energy.sum() < .001, (name, 'High-frequency hum returned')
+    if path.stem.startswith('Tile'):
+        energy = np.abs(np.fft.rfft(samples)) ** 2
+        frequency = np.fft.rfftfreq(len(samples), 1 / 44100)
+        assert energy[frequency > 1500].sum() / energy.sum() < .001, (name, 'Bright tile clicks returned')
+        assert len(samples) / 44100 < .60, (name, 'Tile cue overlaps the next quartet')
     if loop:
         # The wrap must be no steeper than ordinary steps in this waveform.
         assert abs(samples[-1] - samples[0]) <= max(.002, np.quantile(abs(np.diff(samples)), .999)), name
@@ -44,7 +50,7 @@ for sound in sounds:
 
 assert names == {"ArcaneReactor" + n for n in (
     "Assembly", "Resonance", "Load", "Instability", "Ignition", "Shutdown", "Vent", "Explosion",
-    "TileDispense", "TileLatch", "TileRetract", "DeckMotion", "HatchMotion")} | {
+    "TileDispense", "TileLatch", "TileRetract", "TileStore", "DeckMotion", "HatchMotion")} | {
         "ArcaneReactor" + name + "Pitch" + str(band)
         for name in ("Resonance", "Load") for band in range(1, 5)}
-print("PASS: twenty-one cues sharing thirteen mono PCM assets, low reactor hum spectra, valid paths, headroom, DC and loop seams")
+print("PASS: twenty-two cues sharing fourteen mono PCM assets, low hum/tile spectra, valid paths, headroom, DC and loop seams")

@@ -29,6 +29,11 @@ an audit. Inspect report readers and writers before changing retention rules;
 some files named like reports are required build inputs. Documentation links alone
 do not make an old report a build dependency.
 
+The Energy Core entry in `thermal-models/protected-sources.json` records its
+separately accepted control-access revision. Before updating that stale entry,
+all 15,349 mesh instances matched the untouched UI safety snapshot, including
+geometry, UVs, materials and parent transforms. The reactor pass did not edit it.
+
 After cleanup, run these commands from the repository root:
 
 ```sh

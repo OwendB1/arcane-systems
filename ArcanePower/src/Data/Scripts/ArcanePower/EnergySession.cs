@@ -17,7 +17,7 @@ namespace ArcanePower
     {
         [ProtoMember(1)] public long EntityId;
         [ProtoMember(2)] public EnergyCommand Command;
-        [ProtoMember(3)] public long DriveId;
+        // Protocol tag 3 belonged to the retired single-drive selector.
         [ProtoMember(4)] public float Value;
         [ProtoMember(5)] public EnergyGameplayState State;
         [ProtoMember(6)] public float Stored;
@@ -32,34 +32,11 @@ namespace ArcanePower
         private static bool ready;
         private readonly List<IMyTerminalControl> controls = new List<IMyTerminalControl>();
         private readonly List<IMyTerminalAction> actions = new List<IMyTerminalAction>();
-        private readonly List<IMyJumpDrive> candidates = new List<IMyJumpDrive>();
 
         public override void BeforeStart()
         {
             MyAPIGateway.Multiplayer.RegisterSecureMessageHandler(Channel, Receive);
-            var target = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlListbox, IMyBatteryBlock>("ArcanePower_SurgeTarget");
-            target.Title = MyStringId.GetOrCompute("Surge target");
-            target.Tooltip = MyStringId.GetOrCompute("One accessible, enabled jump drive on this physical grid, with Recharge on. Automatic selection uses the first available drive.");
-            target.Multiselect = false;
-            target.VisibleRowsCount = 4;
-            target.ListContent = (b, list, selected) =>
-            {
-                var core = Find(b.EntityId);
-                if (core == null) return;
-                candidates.Clear(); core.GetJumpDrives(candidates);
-                var automatic = new MyTerminalControlListBoxItem(MyStringId.GetOrCompute("Automatic"), MyStringId.NullOrEmpty, 0L);
-                list.Add(automatic);
-                if (core.SelectedDrive == 0) selected.Add(automatic);
-                foreach (var drive in candidates)
-                {
-                    var item = new MyTerminalControlListBoxItem(MyStringId.GetOrCompute(drive.CustomName), MyStringId.NullOrEmpty, drive.EntityId);
-                    list.Add(item);
-                    if (core.SelectedDrive == drive.EntityId) selected.Add(item);
-                }
-            };
-            target.ItemSelected = (b, list) => { var core = Find(b.EntityId); if (core != null && list.Count > 0) core.SelectedDrive = (long)list[0].UserData; };
-            controls.Add(target);
-            AddButton("ArcanePower_Surge", "Surge jump drive", "Fill one drive in 5–10 seconds from stored energy at 90% efficiency. Protects reserve; requires Auto or Discharge. Normal jump rules remain. Bank and drive enter recovery.", EnergyCommand.Surge);
+            AddButton("ArcanePower_Surge", "Surge jump drives", "Charge all affordable drives on this physical grid in 5 seconds at 90% efficiency, smallest deficits first. Temporarily boosts bank discharge for the selected batch. Protects reserve; requires Auto or Discharge and drive Recharge on. Recovery increases 25% per extra drive; see the core's batch summary.", EnergyCommand.Surge);
             AddButton("ArcanePower_Burst", "Burst discharge", "Double the bank discharge ceiling for 10 seconds. Input ceiling stays normal. Protects reserve; shares surge recovery. Reactor containment support takes priority.", EnergyCommand.Burst);
             var reserve = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlSlider, IMyBatteryBlock>("ArcanePower_EnergyReserve");
             reserve.Title = MyStringId.GetOrCompute("Emergency reserve");
@@ -72,6 +49,8 @@ namespace ArcanePower
             var emergency = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlOnOffSwitch, IMyBatteryBlock>("ArcanePower_EmergencySupport");
             emergency.Title = MyStringId.GetOrCompute("Reactor emergency support");
             emergency.Tooltip = MyStringId.GetOrCompute("Release reserve and switch Recharge to Auto for Arcane reactor startup, cooldown or venting. Released energy supplies the whole grid.");
+            emergency.OnText = MyStringId.GetOrCompute("On");
+            emergency.OffText = MyStringId.GetOrCompute("Off");
             emergency.Getter = b => { var core = Find(b.EntityId); return core != null && core.EmergencySupport; };
             emergency.Setter = (b, value) => Send(b.EntityId, value ? EnergyCommand.EmergencyOn : EnergyCommand.EmergencyOff);
             controls.Add(emergency);
@@ -124,7 +103,7 @@ namespace ArcanePower
             if (!ready) return;
             var core = Find(id);
             if (core == null) return;
-            var packet = new EnergyPacket { EntityId = id, Command = command, DriveId = core.SelectedDrive, Value = value };
+            var packet = new EnergyPacket { EntityId = id, Command = command, Value = value };
             if (MyAPIGateway.Multiplayer.IsServer)
             {
                 var player = MyAPIGateway.Session.Player;
@@ -136,7 +115,7 @@ namespace ArcanePower
         private static void Apply(EnergyCore core, EnergyPacket packet)
         {
             if (!core.Controller) return;
-            if (packet.Command == EnergyCommand.Surge) core.RequestSurge(packet.DriveId);
+            if (packet.Command == EnergyCommand.Surge) core.RequestSurge();
             else if (packet.Command == EnergyCommand.Burst) core.RequestBurst();
             else if (packet.Command == EnergyCommand.Reserve) core.SetPolicy(packet.Value, null);
             else if (packet.Command == EnergyCommand.EmergencyOn || packet.Command == EnergyCommand.EmergencyOff)

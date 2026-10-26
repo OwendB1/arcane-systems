@@ -111,6 +111,8 @@ def subparts(name, source):
                 groups.append(('Thermal_'+bay['id']+'_'+part,objects,Vector((0,0,0))))
             tails=[o for o in source.objects if o.get('thermal_extending_connector')==bay['id']]
             groups.append(('Thermal_'+bay['id']+'_ConnectorTail',tails,Vector((0,0,0))))
+            vent=next(o for o in source.objects if o.get('native_subpart')=='Thermal_'+bay['id']+'_ChamberVent')
+            groups.append((vent['native_subpart'],list(vent.children),Vector((0,0,0))))
     elif name.startswith('Brayton train') or name in ('Space radiator','Radiator panel'):
         for root in source.objects:
             if root.type=='EMPTY' and root.get('native_subpart'):
@@ -277,7 +279,7 @@ def prepare(name):
     assert len({part for part,_,_ in groups})==len(groups),'Duplicate native moving-part IDs'
     assert all(any(o.type=='MESH' for o in members) for _,members,_ in groups),'Empty native moving part'
     if name.startswith('Brayton train'):assert len(groups)==2
-    if name=='Reactor housing':assert len(groups)==20
+    if name=='Reactor housing':assert len(groups)==24
     matrices={o:o.matrix_world.copy() for o in objects}
     ident=M['CONTRACT']['subtype'](name);cells=M['CONTRACT']['SPECS'][name]
     generated=[]
@@ -347,8 +349,8 @@ def export(name, only_stems=None, preserve_collision=False):
     for key in rows[name]['scenes']:
         s=bpy.data.scenes[key];bpy.context.window.scene=s;bpy.context.view_layer.update()
         cols=C.get_collections(s)
-        # The reactor inherits accepted physics and deliberately has no
-        # generated HKT collection. Its main/stages still need those files.
+        # The reactor's authored HKT collection holds only its four pillars.
+        # Reuse the accepted combined housing/pillar inputs for main and stages.
         if preserve_collision and (cols['hkt'] or s.seut.sceneType=='mainScene'):
             for suffix in (('','_BS1','_BS2','_BS3') if s.seut.sceneType=='mainScene' else ('',)):
                 filename=s.seut.subtypeId+suffix+'.hkt'
@@ -396,7 +398,7 @@ def export(name, only_stems=None, preserve_collision=False):
             for o,(matrix,size) in transforms.items():
                 o.matrix_basis=matrix;o.empty_display_size=size
         if name=='Reactor housing' and s.seut.sceneType=='mainScene' and only_stems is None and not preserve_collision:
-            shutil.copy2(COLLISIONS/'ArcanePower_ReactorPrototype.hkt',STAGING/(s.seut.subtypeId+'.hkt'))
+            shutil.copy2(COLLISIONS/'Thermal'/(s.seut.subtypeId+'.hkt'),STAGING/(s.seut.subtypeId+'.hkt'))
         if s.seut.sceneType=='mainScene' and only_stems is None:
             assert (STAGING/(s.seut.subtypeId+'.hkt')).is_file(), 'Missing accepted block collision'
             for stage in (1,2,3):
@@ -415,6 +417,7 @@ def export_isolated(name, staging=None, rebuild_collision=False):
     Live authoring scenes and the full derived blend remain intact.
     """
     global STAGING
+    assert not (name == 'Reactor housing' and rebuild_collision), 'Rebuild reactor physics with build_reactor_pillar_collision.py before exporting models'
     assert bpy.app.background, 'Isolation must never discard scenes in the live session'
     # SEUT's GUI error popup crashes background Blender before logging the
     # underlying error. Keep its reporting and cancellation, without the popup.

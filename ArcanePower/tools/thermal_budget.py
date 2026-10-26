@@ -7,7 +7,7 @@ import math
 # The integrated train/compressor reaches higher tiers as source heat improves.
 # Standalone generation is an alternative path for the same heat.
 STAGES={'base':(.40,.08,650),'improved':(.55,.07,1000),
-        'optimized':(.66,.06,1600),'exotic':(.78,.05,2200)}
+        'optimized':(.66,.06,1600),'exotic':(.80,.05,2200)}
 
 
 def standalone(offered_mw):
@@ -123,7 +123,7 @@ def check():
     assert bank(100,environment='space',sink_c=35)['sustainable_net_mw']==0
     assert bank(100,environment='space',sink_c=25)['cooling_deficit_mw']>0
     for count in range(1,5):
-        assert math.isclose(bank(100,count,count,stage='exotic')['net_mw'],78*count/4)
+        assert math.isclose(bank(100,count,count,stage='exotic')['net_mw'],80*count/4)
     assert budget(100,cold_c=650)['accepted_heat_mw']==0
     outputs=[bank(q,2,3)['net_mw'] for q in (99,100,101,110,120,200)]
     assert outputs==sorted(outputs),'Automatic dispatch must not reduce power as more heat becomes available'

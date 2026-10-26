@@ -185,7 +185,7 @@ namespace ArcanePower
             { Fault = "Thermal train requires an empty native FuelInfos list"; mw = 0; }
             float nativeRating = Generator.BlockDefinition.MaxPowerOutput;
             if (nativeRating <= 0) { Fault = "Invalid native train rating"; Generator.Capacity = 0; return; }
-            float multiplier = (float)(Spec.RatingMW * .78 / nativeRating);
+            float multiplier = (float)(Spec.RatingMW * (Spec.Grade == 3 ? .80 : .40) / nativeRating);
             if (((IMyReactor)Generator).PowerOutputMultiplier != multiplier) ((IMyReactor)Generator).PowerOutputMultiplier = multiplier;
             Generator.Capacity = (float)(Math.Max(0, mw) / 216000.0);
         }
@@ -275,7 +275,7 @@ namespace ArcanePower
             if (Spec.Kind == ThermalKind.Train && (MyAPIGateway.Multiplayer.IsServer || receivedRotor))
             {
                 var rotor = Store.Rotor;
-                info.Append("Visual turbine: ").Append(rotor.Rpm.ToString("0")).Append(" rpm / built-in compressor: ")
+                info.Append("Turbine/generator shaft: ").Append(rotor.Rpm.ToString("0")).Append(" rpm / built-in compressor: ")
                     .Append(rotor.CompressorRpm.ToString("0")).AppendLine(" rpm");
                 info.Append("Working temperature: ").Append(rotor.HotC.ToString("0")).AppendLine(" C (gameplay model)");
             }

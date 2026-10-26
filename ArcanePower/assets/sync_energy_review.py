@@ -37,22 +37,23 @@ def refresh(source_names=None):
             mesh_data = {o.data for o in meshes}
             for review in reviews:
                 activate(review)
-                poses = [o.matrix_world.copy() @ inverse for o in review.objects
-                         if o.type == 'MESH' and (o.data == marker.data or
-                            (o.get('review_scene') == source.name and o.get('review_source') == marker.name))]
-                if not poses:
-                    # Appended older review files can have different numeric
-                    # object suffixes. Use the complete marker set's centre;
-                    # choosing an arbitrary spine would shift by one bay.
+                poses = []
+                copies=[o for o in review.objects if o.get('review_scene')==source.name and o.get('review_source','').startswith(prefix)]
+                if copies:
+                    # Suffixes can be reassigned when an older review is
+                    # appended. Even an exact name match may then identify the
+                    # opposite spine/bay. Always use the full tagged marker set.
                     markers=[o for o in meshes if o.name.startswith(prefix)]
-                    copies=[o for o in review.objects if o.get('review_scene')==source.name and o.get('review_source','').startswith(prefix)]
                     for index in sorted({o.get('review_instance',0) for o in copies}):
                         group=[o for o in copies if o.get('review_instance',0)==index]
                         assert len(group)==len(markers),(review.name,source.name,'incomplete pose markers')
-                        pose=(group[0].matrix_world.to_3x3() @ marker.matrix_world.to_3x3().inverted()).to_4x4()
-                        centre=sum((o.matrix_world.translation for o in markers),Vector())/len(markers)
+                        pose=(group[0].matrix_world.to_3x3() @ matrices[marker].to_3x3().inverted()).to_4x4()
+                        centre=sum((matrices[o].translation for o in markers),Vector())/len(markers)
                         pose.translation=sum((o.matrix_world.translation for o in group),Vector())/len(group)-pose.to_3x3() @ centre
                         poses.append(pose)
+                else:
+                    poses = [o.matrix_world.copy() @ inverse for o in review.objects
+                             if o.type == 'MESH' and o.data == marker.data]
                 if not poses:
                     continue
                 # Each complete assembly has exactly one copy of this marker.

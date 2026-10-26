@@ -151,6 +151,22 @@
     <Sound>
       <Id>
         <TypeId>MyObjectBuilder_AudioDefinition</TypeId>
+        <SubtypeId>ArcaneReactorTileStore</SubtypeId>
+      </Id>
+      <Category>SHIP</Category>
+      <MaxDistance>18</MaxDistance>
+      <VolumeCurve>Poly2</VolumeCurve>
+      <Volume>.85</Volume>
+      <Loopable>false</Loopable>
+      <Waves>
+        <Wave Type="D3">
+          <Start>Audio\ArcanePower\TileStore.wav</Start>
+        </Wave>
+      </Waves>
+    </Sound>
+    <Sound>
+      <Id>
+        <TypeId>MyObjectBuilder_AudioDefinition</TypeId>
         <SubtypeId>ArcaneReactorIgnition</SubtypeId>
       </Id>
       <Category>SHIP</Category>

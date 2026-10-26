@@ -46,7 +46,7 @@ namespace ArcanePower
         }
         private float ElectricalRatingMW
         {
-            get { return ThermalVariant ? (float)(ThermalHeatMW * (Motion.Thermal != null && Motion.Thermal.Mode == ThermalMode.Standalone ? .20 : .78)) : PowerMW[Motion.FuelTier - 1]; }
+            get { return ThermalVariant ? (float)(ThermalHeatMW * (Motion.Thermal != null && Motion.Thermal.Mode == ThermalMode.Standalone ? .20 : .80)) : PowerMW[Motion.FuelTier - 1]; }
         }
         private bool ThermalCold
         {

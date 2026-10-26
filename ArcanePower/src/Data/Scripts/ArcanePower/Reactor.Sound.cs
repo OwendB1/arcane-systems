@@ -46,7 +46,7 @@ namespace ArcanePower
             if ((mechanisms & 1) != 0) PlayTileEvent(ref dispenseSound, "TileDispense", true);
             if ((mechanisms & 2) != 0) PlayTileEvent(ref latchSound, "TileLatch");
             if ((mechanisms & 4) != 0) PlayTileEvent(ref latchSound, "TileRetract");
-            if ((mechanisms & 8) != 0) PlayTileEvent(ref dispenseSound, "TileLatch", true);
+            if ((mechanisms & 8) != 0) PlayTileEvent(ref dispenseSound, "TileStore", true);
             soundStateKnown = true;
             soundCore = Motion.Core;
             soundVent = Motion.Vent;
@@ -69,8 +69,8 @@ namespace ArcanePower
             float age = Motion.CoreTick + Motion.CoreSubtick;
             float plasma = PlasmaScale(age);
             float load = Motion.Core == CorePhase.Cooling ? Math.Min(1, Motion.Heat) : Motion.Load;
-            float strain = Motion.Critical ? 1 : MathHelper.Clamp((Motion.Heat - .8f) / .45f, 0, 1);
-            if (Motion.TileStarved) strain = Math.Max(strain, .45f);
+            float strain = Motion.Critical ? 1 : Motion.ThermalWarning
+                ? MathHelper.Clamp((Motion.ForecastPeakHeat - 1) / .25f, .15f, 1) : 0;
             float assembly = present && (Motion.Core == CorePhase.Starting || Motion.Core == CorePhase.Stopping)
                 && !Motion.Paused ? (.12f + .28f * Span(age, 90, PlasmaStartTick)) * (1 - plasma) : 0;
             float field = FieldSoundGain(Motion.Core, Motion.Heat);

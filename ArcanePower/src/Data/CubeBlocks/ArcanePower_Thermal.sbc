@@ -302,12 +302,12 @@
       </Id>
       <DisplayName>Arcane Reactor</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_ReactorHousing.dds</Icon>
-      <Description>Internal CO2 generation. Standalone: Aether only, 20% net. Helion and Empyrean require Brayton to prevent meltdown. At least one fully built, functional advanced controller unlocks Brayton. Up to 40% starter / 78% exotic conversion. Four independent manifold circuits, one turbine plus cooling each; each supplies up to 25% capacity. Circuit loss isolates that manifold; losing all valid circuits stops generation. Only a manual Start with all four circuits defective latches a fault. Normal Stop does not latch. Align H/C and cap unused pipe mouths. Two controllers and a working vent route required. Stop and cool before changing mode.</Description>
+      <Description>Internal CO2 generation. Standalone: Aether only, 20% net. Helion and Empyrean require Brayton to prevent meltdown. At least one fully built, functional advanced controller unlocks Brayton. Up to 40% starter / 80% exotic conversion. Four independent manifold circuits, one turbine plus cooling each; each supplies up to 25% capacity. Circuit loss isolates that manifold; losing all valid circuits stops generation. Only a manual Start with all four circuits defective latches a fault. Normal Stop does not latch. Align H/C and cap unused pipe mouths. Two controllers and a working vent route required. Stop and cool before changing mode.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="3" z="5" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_4dafbdfd5573/APT_ReactorHousing_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_e9bd91568ccd/APT_ReactorHousing_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="2400" />
         <Component Subtype="Construction" Count="1000" />
@@ -325,7 +325,7 @@
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>10000</MaxPowerOutput>
+      <MaxPowerOutput>1</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -374,9 +374,9 @@
         <MountPoint Side="Right" StartX="2" EndX="3" StartY="0" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_4dafbdfd5573/APT_ReactorHousing_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_4dafbdfd5573/APT_ReactorHousing_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_4dafbdfd5573/APT_ReactorHousing_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_e9bd91568ccd/APT_ReactorHousing_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_e9bd91568ccd/APT_ReactorHousing_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_e9bd91568ccd/APT_ReactorHousing_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -890,14 +890,14 @@
         <TypeId>Reactor</TypeId>
         <SubtypeId>ArcanePower_Thermal_BraytonTrain</SubtypeId>
       </Id>
-      <DisplayName>Arcane Brayton train</DisplayName>
+      <DisplayName>Arcane Turbine</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrain.dds</Icon>
       <Description>T1/T2 fuels only; T3 Empyrean requires upgraded turbines. 2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrain_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -911,7 +911,7 @@
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>19500</MaxPowerOutput>
+      <MaxPowerOutput>0.25</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -939,9 +939,9 @@
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrain_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrain_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrain_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -951,14 +951,14 @@
         <TypeId>Reactor</TypeId>
         <SubtypeId>ArcanePower_Thermal_BraytonTrainUpgraded</SubtypeId>
       </Id>
-      <DisplayName>Arcane Brayton train upgraded</DisplayName>
+      <DisplayName>Arcane Turbine Upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainUpgraded.dds</Icon>
       <Description>Requires 20 Aether Residuum; compatible with T3 Empyrean heat. 2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainUpgraded_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -973,7 +973,7 @@
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>1950000</MaxPowerOutput>
+      <MaxPowerOutput>50</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -1001,9 +1001,9 @@
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainUpgraded_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainUpgraded_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainUpgraded_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1013,14 +1013,14 @@
         <TypeId>Reactor</TypeId>
         <SubtypeId>ArcanePower_Thermal_BraytonTrainMirrored</SubtypeId>
       </Id>
-      <DisplayName>Arcane Brayton train mirrored</DisplayName>
+      <DisplayName>Arcane Turbine Mirrored</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainMirrored.dds</Icon>
       <Description>T1/T2 fuels only; T3 Empyrean requires upgraded turbines. 2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMir_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -1034,7 +1034,7 @@
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>19500</MaxPowerOutput>
+      <MaxPowerOutput>0.25</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -1062,9 +1062,9 @@
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMir_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMir_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMir_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1074,14 +1074,14 @@
         <TypeId>Reactor</TypeId>
         <SubtypeId>ArcanePower_Thermal_BraytonTrainMirroredUpgraded</SubtypeId>
       </Id>
-      <DisplayName>Arcane Brayton train mirrored upgraded</DisplayName>
+      <DisplayName>Arcane Turbine Mirrored Upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainMirroredUpgraded.dds</Icon>
       <Description>Requires 20 Aether Residuum; compatible with T3 Empyrean heat. 2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMirUpgraded_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -1096,7 +1096,7 @@
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>1950000</MaxPowerOutput>
+      <MaxPowerOutput>50</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -1124,9 +1124,9 @@
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMirUpgraded_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMirUpgraded_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMirUpgraded_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>

@@ -80,6 +80,19 @@ equipment, sunlight, density, clearance and availability, independently of load.
 Actual rejection is limited by heat present. Cooling shortfalls accumulate per
 circuit and drive the existing 125% irreversible critical latch. The hottest
 circuit determines the warning contribution; three cold circuits cannot hide it.
+After each completed accounting interval the server samples paid production into
+a four-second rolling window. Four times per second, and immediately on changes
+to cooling capacity, connectivity or operation, it projects retained heat against
+current cooling capacity for 60 seconds. The forecast applies the live core
+response in 0.1-second steps without changing physical stores; inventories stop at
+zero and housing production excludes loop totals. Shutdown stops projected new
+heat immediately and shares the existing passive cooldown budget across stores.
+Motion snapshots carry the peak, limiting circuit, danger ETAs and warning state.
+Yellow requires a projected rise above both current heat and the healthy 100%
+limit, with a 0.1-percentage-point rounding margin, sustained for two seconds.
+Failed containment and predicted critical heat warn immediately. Five safe seconds
+clear the warning; displays identify this recovery hold. Stable or cooling residual
+heat and normal warmup do not initiate it. Critical/ejection red retains priority.
 No cooling-based output throttle makes an undersized plant silently safe.
 Shutdown stops new reaction heat, retains excess, and permits connected cooling;
 the small passive housing rejection also drains isolated heat and unused fuel
@@ -132,8 +145,27 @@ to review the native appearance after material-definition changes.
 `ThermalRotors` drives both cosmetic shafts linearly from delivered output divided
 by the circuit's allocated electrical rating. Temperature colour follows the same
 load and the fuel tier. No stored-heat or circulation multiplier controls speed.
-Shafts accelerate over four seconds and coast over eight, without altering energy
-accounting. Visual speeds remain capped at 20/24 rpm to avoid dense-blade aliasing.
+Healthy enabled turbines idle at 100 RPM. Both shafts target
+`100 + 3900 × utilization` RPM, reaching 4,000 RPM at full utilization.
+With no load, both shafts ramp from rest to idle over five seconds (20 RPM per
+second). Load present at startup or arriving during that ramp immediately uses
+the existing four-second response toward its load-dependent target; it never waits
+to reach idle first. Disabled, damaged or faulted turbines coast to rest with the
+existing eight-second response; an unloaded restart below idle resumes the gentle
+ramp from the current speed. Shaft motion does not alter energy accounting.
+The displayed block name is **Arcane Turbine**; subtype IDs remain unchanged for
+existing grids. Dense blades can appear to strobe at these speeds as frames sample
+the actual shaft angle.
+
+Standard turbines retain copper armature windings; upgraded turbines use cyan
+metallic windings with the same packed metalness/gloss and no armor-skin mask.
+All four variants have 21 recessed status lights on the inspection rails and rear
+switchgear hatch. They use the existing circuit-status emissive, including fault,
+ready and pumping states. The visible finish is maintained by
+`assets/refine_train_service_details.py:finish`, also called during regeneration.
+The finish was inspected in live Blender at 1.8, 2.4 and 3.0 m, with the armature
+exposed temporarily to check the winding material; the production glazing and
+magnet geometry are preserved.
 
 The server saves phase/inertia with the train's entity-bound visual state.
 Reload preserves the pose but clears drive until validated power delivery resumes. A secure
@@ -150,26 +182,86 @@ logic registrations for all 52 thermal subtypes. Delivery checks compare every
 runtime script and definition with the actual ZIP and its hashed manifest.
 
 Visible circulation follows each validated circuit graph and dispatched machinery.
-Internal reactor coolant shows liquid streaks; external CO2 shows gas wisps. H travels toward the
+Internal reactor coolant and external CO2 show broad, luminous moving streaks.
+Supply is amber through orange with increasing heat; return is cyan. The pipe
+streak material is independent of scene lighting so circulation stays readable
+through the smoked glass in dark machinery rooms. Streaks are spaced 0.50 m
+apart, each spanning up to 0.30 m of its path with one continuous texture.
+Curved paths retain the same glob size without restarting the texture at every
+authored vertex. Bore-clearance checks cover the full streak width on all shipped
+paths. Each streak counts once against the shared billboard budget; chamber injector
+wisps retain their softer treatment. H travels toward the
 dispatched train/cooler branches and C returns through its paired bore.
 Capped spurs and unavailable circuits stay still. The historical 40-block starter
 and 106-block room fixtures retain the old shared routing as migration/geometry
 checks. They are rejected for operation until replumbed into independent circuits.
 Current checks use independent circuits in all 24 grid orientations.
 
-The thermal reactor also has glass coolant risers, two floor-level distributor
-rings, four integrated pump heads, four guarded supply sight sections and four
-warm pickups. Short cold wisps emerge from the upper chamber injector mouths.
-Internal streaks also work in standalone mode. External wisps follow verified
-Brayton routes. Their speed follows load, with a slow cosmetic flow while heat is
-being removed during cooldown. These effects never determine cooling or output.
+The chamber's distributor rings, pump heads, injector pipes, mouths and clamps
+have been removed. Four recessed floor vents replace them. Each metal cover
+hinges down into its own well as Brayton mode deploys, then closes during
+retraction. They share the existing powered mode transition, saved deployment
+state and native rig checks; no separate animation state is required. Fixed
+grilles and the accepted floor collider preserve walkability.
 
-Internal coolant tubes use independent smoked blue-grey `ArcanePower_CoolantGlass`
-sight sections, metal pressure-jacket backing and seated collars. Vertical risers
-also have paired guard rails. Their visible apertures face out past the pillars;
-the distributor apertures face the chamber. Native glass parameters and the
-Blender preview are maintained together in `refine_thermal_flow.py`. Flow paths,
-grid sockets and accepted reactor collision are preserved.
+The eight pillar coolant risers, their metal jackets, clamps and guard rails
+retain their geometry, UVs and material assignments. Their streaks still work
+in standalone mode. Floor-vent wisps require settled Brayton mode; external
+wisps follow verified Brayton routes. Speed follows load, with slow cosmetic
+flow during cooldown. These effects never determine cooling or output.
+
+`build_reactor_chamber_vents.py` owns the floor openings and covers;
+`refine_thermal_flow.py` records the remaining paths. The native export checks
+sample all four new covers under the compiled runtime matrices. Exterior pillar
+receivers also use full recesses, with deeper vent backing to clear their louvers.
+
+Floor vents now use a continuous rebated rim with 6 mm cover overlap and 2 mm
+vertical clearance. The existing lid dimensions and hinge stay unchanged, so the
+covers seal the visible aperture and still swing clear into their wells. Pillar
+side inspection frames have full jacket recesses with a 10 mm perimeter reveal.
+Their ledges and middle seats now sit 10 mm behind the cover backs, clearing the
+complete sidewall as well as the upper/lower edges and middle joint.
+The maintained builders reproduce both fixes. The geometry audit checks 572
+closed-aperture rays, 101 travel positions per vent, and all eight pillar side
+receivers. Live material views were inspected at 1.8, 2.4 and 3.0 m, including
+closed/open vents and upper/lower/middle pillar joints. After native packing, the
+main and both LODs passed 1,716 closure rays, 564 cover/fixed-mesh collision checks
+using the compiled runtime poses, and 192 pillar surface-clearance checks.
+The vent repair passed native import and the existing 1,918 native motion checks.
+
+The eight obsolete pillar end yokes and their dependent fasteners are replaced
+by sixteen annular sockets fitted to the original eight coolant risers. The
+risers, their UVs and clamps remain unchanged. The socket flanges seat in the
+existing feet and roof supports; their bores remain open and exact in both LODs.
+All four pillars' upper/lower sockets, side covers and number plates were reviewed
+in the live material viewport at 1.8, 2.4 and 3.0 m.
+
+Four buried `SEUT / Tech Panel` decals caused the white control-panel pattern to
+show over the numbered covers as viewing distance changed. Those legacy decals
+are removed; pillar paint is unchanged. The four original number glyphs and their
+backing plates are retained in both LODs rather than being culled with small
+hardware and atlas decals. `fit_pillar_labels()` and the shared LOD builder own
+this behavior. The packed main and both LODs retain all eight number/stock parts
+(400 checked face corners per mesh, maximum position error 2.14 mm); all four
+glyphs retain their atlas UVs. No legacy tech-panel triangles remain over the
+numbered covers.
+
+The original collision contained the base, roof and glazing but no pillars.
+Thermal main and construction models now add four hulls fitted to the pillar
+jackets, while retaining the original ten housing hulls. A single top-level Havok
+list holds all fourteen convex children to avoid SE's ten-top-level-shape limit.
+Native Havok validation checks 1,664 base/deck/roof contacts, 64 pillar-face
+contacts, eight blocked character-sized capsule sweeps and four clear walkway
+sweeps. The original housing-only HKT remains an unchanged rebuild input; see
+[`assets/collisions/README.md`](assets/collisions/README.md). In-game reload review
+is pending. Local revision `thermal_7765322cc0b9` contains all 42 rebuilt reactor
+meshes, passes 1,918 native motion checks and the delivered-HKT contact/sweep
+checks above, and is included in the validated 662-entry release ZIP.
+
+Each blast shield's lower metal seal is joined to its sleeve as one closed shell.
+This removes the coincident 45 mm inner strip while preserving bore diameter,
+outer envelope, pivots and travel. All six inner joints were reviewed in the live
+material viewport at 1.8, 2.4 and 3.0 m; both distance meshes derive from the repair.
 
 `ThermalHot`, `ThermalCold` and `ThermalStatus` are independent native-derived
 emissive materials. Hot bands respond to source heat, returns stay blue, and
@@ -186,6 +278,8 @@ remain red independently. A single complete circuit can start at 25% capacity.
 The server sends validated read-only flow observations twice per second on
 channel 49373; clients stop stale flow after 90 frames. Rendering uses native
 depth-tested billboards, an 80 m cutoff and a shared 768-particle limit.
+Gas and liquid billboards are self-lit, with a 1.5× RGB brightness boost that
+preserves their existing opacity and endpoint fades.
 No fluid inventory, pressure authority or electrical grant is created by drawing.
 
 `assets/refine_thermal_flow.py` maintains the fixtures and shared centreline
@@ -204,8 +298,13 @@ additional standalone electrical path. A small passive housing rejection path
 remains available for trapped heat; it produces no electricity.
 
 Dispatch selects an eligible tier and cold-end temperature within each circuit.
-Standard trains handle 25 GWth; upgraded trains handle 2.5 TWth. Reactor fuel tiers
-provide 25/250/2,500 GWth. Generated model contracts own equipment ratings.
+Standard trains handle 0.625 MWth and export up to 0.25 MW; upgraded trains
+handle 62.5 MWth and export up to 50 MW. Reactor fuel tiers provide
+2.5/25/250 MWth, with 40/55/80% eligible conversion. Four upgraded Empyrean
+circuits provide 200 MW. Generated model contracts own equipment ratings;
+native definitions and runtime multipliers use the same per-turbine ceilings.
+Pre-rebalance saved heat remains valid and retained; new admission and dispatch
+use the rebalanced ratings.
 Fuel is debited into the one-interval native output reserve; stock and saved
 fractional debt bound the final quantum. Displayed burn follows actual reaction
 heat, while unused paid credit remains saved until used or drained at shutdown.
@@ -361,7 +460,7 @@ dotnet build arcane-systems.sln
 
 The focused checks execute the compiled production kernel with native math. They
 cover budgets, fixed four-circuit capacity, per-loop equipment limits, isolated losses, conservation
-scenarios at 20/40/78%, cooling overload/recovery and the 125% heat threshold,
+scenarios at 20/40/80%, cooling overload/recovery and the 125% heat threshold,
 linear load response, per-circuit cooling isolation, fuel exhaustion,
 reload/copy identity, mode/startup guards,
 47 manifold poses, linear rotor response, cold startup without pump power,

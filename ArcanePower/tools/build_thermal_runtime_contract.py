@@ -48,7 +48,14 @@ def generate():
                 else 'RadiatorPanel' if name.startswith('Radiator panel') else 'Pipe')
         grade = 3 if 'upgraded' in name or kind == 'Pipe' else 0
         cooler = kind in ('AirCooler', 'Radiator', 'RadiatorPanel')
-        rating = (250000 if grade == 3 else 25000) if cooler else (2500000 if grade == 3 or kind == 'Reactor' else 25000)
+        if kind == 'Train':
+            rating = 62.5 if grade == 3 else .625
+        elif kind == 'Reactor':
+            rating = 250
+        elif cooler:
+            rating = 250000 if grade == 3 else 25000
+        else:
+            rating = 2500000
         cooling = (100000 if grade == 3 else 10000) if cooler else 0
         if kind == 'AirCooler':
             cooling = 250000 if grade == 3 else 25000

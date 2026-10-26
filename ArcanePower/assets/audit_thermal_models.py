@@ -17,6 +17,199 @@ R = runpy.run_path(str(ROOT/'assets/review_thermal_models.py'))
 C, OUT = M['CONTRACT'], M['OUT']
 
 
+def audit_blast_shields():
+    """Check the unified seal without changing the accepted sleeve envelope."""
+    stages = json.loads((ROOT/'assets/vent.json').read_text())['stages']
+    for stage in stages:
+        name = stage['name']
+        obj = bpy.data.objects[name+' / armored sleeve']
+        assert bpy.data.objects.get(name+' / lower seal') is None, ('Duplicate inner seal', name)
+        bm = bmesh.new()
+        bm.from_mesh(obj.data)
+        try:
+            assert all(e.is_manifold for e in bm.edges), ('Open shield', name)
+            remaining = set(bm.verts)
+            pending = [remaining.pop()]
+            while pending:
+                vertex = pending.pop()
+                for edge in vertex.link_edges:
+                    other = edge.other_vert(vertex)
+                    if other in remaining:
+                        remaining.remove(other)
+                        pending.append(other)
+            assert not remaining, ('Disconnected seal', name)
+            inner, outer = stage['inner_radius'], stage['outer_radius']
+            # Both authored rings have 128 sides; preserve their exact union.
+            area = 64*math.sin(math.tau/128)
+            volume = area*((outer**2-inner**2)*(.82-.045)+((outer+.018)**2-inner**2)*.055)
+            assert abs(bm.calc_volume()-volume) < 1e-5, ('Changed sleeve envelope', name)
+            assert min(v.co.xy.length for v in bm.verts) >= inner-1e-6, ('Narrowed shield bore', name)
+        finally:
+            bm.free()
+    return {'status':'passed', 'continuous_seals':len(stages)}
+
+
+def audit_internal_plumbing(col):
+    """Prove retained pillar plumbing is untouched and chamber plumbing is removed."""
+    import re
+    checkpoint = ROOT/'assets/arcane-thermal-before-chamber-pipe-glass.blend'
+    names = list(json.loads((OUT/'internal-pipes-baseline.json').read_text()))
+    objects_before = set(bpy.data.objects)
+    with bpy.data.libraries.load(str(checkpoint),link=False) as (_, loaded):
+        loaded.objects = list(names)
+    originals = dict(zip(names,loaded.objects))
+
+    def geometry(obj):
+        mesh = obj.data
+        poses = []
+        while obj is not None:
+            poses.append((tuple(v for row in obj.matrix_basis for v in row),
+                          tuple(v for row in obj.matrix_parent_inverse for v in row)))
+            obj = obj.parent
+        return (poses,[tuple(v.co) for v in mesh.vertices],
+                [tuple(f.vertices) for f in mesh.polygons],
+                [[tuple(v.uv) for v in layer.data] for layer in mesh.uv_layers])
+
+    def material(obj, face):
+        return re.sub(r'\.\d{3}$','',obj.data.materials[face.material_index].name)
+
+    pillars, retained, removed = [], [], []
+    try:
+        for name, original in originals.items():
+            assert original is not None, name
+            chamber = all((original.matrix_world@v.co).xy.length < 5.5 for v in original.data.vertices)
+            current = col.objects.get(name)
+            if chamber:
+                assert current is None, ('Retired chamber plumbing remains',name)
+                removed.append(name)
+                continue
+            assert current is not None and geometry(current) == geometry(original), ('Pillar geometry/UV/pose changed',name)
+            retained.append(name)
+            if current.get('thermal_internal_coolant'): pillars.append(name)
+            assert [material(current,f) for f in current.data.polygons] == [material(original,f) for f in original.data.polygons], ('Pillar material changed',name)
+        assert len(removed) == 64 and len(pillars) == 8 and len(retained) == 48
+        report = {'status':'passed','checkpoint':checkpoint.name,
+                  'checkpoint_sha256':hashlib.sha256(checkpoint.read_bytes()).hexdigest(),
+                  'pillar_geometry_transforms_uvs_and_materials_match':True,
+                  'pillar_pipes':len(pillars),'pillar_objects':len(retained),
+                  'chamber_pipe_bodies_removed':16,'chamber_pipe_clamps_removed':48,
+                  'floor_vents':sum(o.get('native_subpart','').endswith('ChamberVent') for o in col.objects)}
+        (OUT/'internal-pipes-preserved.json').write_text(json.dumps(report,indent=2)+'\n')
+        return report
+    finally:
+        for obj in set(bpy.data.objects)-objects_before:
+            bpy.data.objects.remove(obj,do_unlink=True)
+
+
+def audit_chamber_vents(col):
+    """Closed covers occlude the well; moving covers never intersect its fittings."""
+    rig = runpy.run_path(str(ROOT/'assets/build_reactor_thermal_manifolds.py'))
+    scene = M['scene_for']('Reactor housing')
+    previous = bpy.context.scene
+    deployment = scene['thermal_manifolds_deployment']
+
+    def tree(objects):
+        vertices, faces = [], []
+        for obj in objects:
+            offset = len(vertices)
+            vertices.extend(obj.matrix_world@v.co for v in obj.data.vertices)
+            faces.extend([offset+i for i in f.vertices] for f in obj.data.polygons)
+        return BVHTree.FromPolygons(vertices, faces)
+
+    samples = 0
+    try:
+        rig['pose'](0)
+        bays = []
+        for i, bay in enumerate(('LA','LB','RA','RB')):
+            hinge = next(o for o in col.objects if o.get('native_subpart') == 'Thermal_'+bay+'_ChamberVent')
+            lid = next(o for o in hinge.children if o.type == 'MESH')
+            fixed = [o for o in col.objects if o.type == 'MESH' and o.get('thermal_floor_vent')
+                     and 'floor vent '+bay+' ' in o.name and o != lid]
+            closed = tree([lid]+fixed)
+            angle = i*math.pi/2
+            n = Vector((math.cos(angle),math.sin(angle),0));t = Vector((-n.y,n.x,0))
+            # Include the old 10/30 mm side gaps, corners and new lip edges.
+            xs = (-.445,-.435,-.430,-.425,-.420,0,.420,.425,.430,.435,.445)
+            ys = (-.275,-.265,-.255,-.250,-.245,-.240,0,.240,.245,.250,.255,.265,.275)
+            for x in xs:
+                for y in ys:
+                    origin = n*(4.45-y)+t*x+Vector((0,0,-1.16))
+                    hit,_,_,_ = closed.ray_cast(origin,Vector((0,0,-1)),.12)
+                    assert hit is not None, ('Unsealed chamber vent',bay,x,y)
+                    samples += 1
+            bays.append((bay,lid,tree(fixed)))
+        for i in range(101):
+            rig['pose'](i/100)
+            for bay,lid,fixed in bays:
+                assert not tree([lid]).overlap(fixed), ('Vent clips fixed fitting',bay,i/100)
+        return {'closed_surface_samples':samples,'travel_samples':101*len(bays)}
+    finally:
+        rig['pose'](deployment)
+        bpy.context.window.scene = previous
+        bpy.context.view_layer.update()
+
+
+def audit_pillar_side_covers(col):
+    source = lambda o: o.get('reactor_source_name',o.name)
+    assert not any(source(o).startswith('SEUT / Tech Panel') for o in col.objects), 'Buried legacy pillar decals remain'
+    numbers = [o for o in col.objects if o.get('pillar_number')]
+    assert len(numbers) == 8 and all(o.get('lod_keep') for o in numbers), 'Retain four pillar numbers and their backing plates in LODs'
+    bodies = [o for o in col.objects if source(o).startswith('Reactor exterior / chamfered pillar jacket')]
+    receivers = [o for o in col.objects if source(o).startswith('Reactor exterior / pillar inspection receiver')
+                 and max(v.co.x for v in o.data.vertices)-min(v.co.x for v in o.data.vertices) < .5]
+    assert len(receivers) == 8
+    covers = [o for o in col.objects if source(o).startswith('Reactor exterior / pillar side cover')]
+    assert len(covers) == 16
+    def tree(obj):
+        return BVHTree.FromPolygons([obj.matrix_world@v.co for v in obj.data.vertices],
+                                   [list(f.vertices) for f in obj.data.polygons])
+    for cover in covers:
+        receiver = min(receivers,key=lambda o:(o.matrix_world.translation-cover.matrix_world.translation).length_squared)
+        transform = receiver.matrix_world.inverted()@cover.matrix_world
+        back = min((transform@v.co).z for v in cover.data.vertices)
+        ledge = max(v.co.z for v in receiver.data.vertices if v.co.z < -.001)
+        assert back-ledge >= .009, ('Receiver cuts through cover sidewall',cover.name,back-ledge)
+        assert not tree(cover).overlap(tree(receiver)), ('Cover/receiver surface intersection',cover.name)
+    for receiver in receivers:
+        body = min(bodies,key=lambda o:(o.matrix_world.translation-receiver.matrix_world.translation).length_squared)
+        to_body = body.matrix_world.inverted()@receiver.matrix_world
+        to_receiver = to_body.inverted()
+        for x,y in ((0,-1.48),(0,1.48),(-.21,-1.48),(.21,-1.48),(-.21,1.48),(.21,1.48),(-.21,0),(.21,0)):
+            hit,point,_,_ = body.ray_cast(to_body@Vector((x,y,.02)),to_body.to_3x3()@Vector((0,0,-1)),distance=.3)
+            assert hit and (to_receiver@point).z < -.09, ('Jacket overlaps side receiver',receiver.name,x,y)
+    seats = [o for o in col.objects if source(o).startswith('Reactor exterior / side cover cross seat')]
+    assert len(seats) == 8
+    for seat in seats:
+        assert max(abs(v.co.x) for v in seat.data.vertices) <= .15901, ('Coincident cross seat/receiver faces',seat.name)
+        for cover in covers:
+            assert not tree(cover).overlap(tree(seat)), ('Cover/cross-seat surface intersection',cover.name,seat.name)
+    return {'recesses':len(receivers),'cross_seats':len(seats),'clear_cover_perimeters':len(covers)}
+
+
+def audit_pillar_pipe_sockets(col):
+    assert not any('pillar end yoke' in o.name for o in col.objects), 'Obsolete yokes remain'
+    sockets = [o for o in col.objects if o.get('pillar_pipe_socket')]
+    pipes = [o for o in col.objects if o.get('thermal_internal_coolant')]
+    assert len(sockets) == 16 and len(pipes) == 8
+    for pipe in pipes:
+        pair = [o for o in sockets if o['pillar_pipe_socket'] == pipe.name]
+        assert {o['pillar_pipe_end'] for o in pair} == {'lower','upper'}
+        ends = json.loads(pipe['pipe_path'])
+        for socket in pair:
+            endpoint = Vector(ends[0 if socket['pillar_pipe_end'] == 'lower' else -1])
+            assert (socket.matrix_world.translation-endpoint).length < .00001, ('Unseated socket',socket.name)
+            assert min(v.co.xy.length for v in socket.data.vertices) >= .0999, ('Blocked socket bore',socket.name)
+            assert socket.get('thermal_reactor_coupling'), ('Socket fit lost in LOD',socket.name)
+            # The end flange must sit inside the existing foot/roof support.
+            support_name = 'fitted curved pillar foot' if socket['pillar_pipe_end'] == 'lower' else 'fitted pillar roof seat'
+            supports = [o for o in col.objects if support_name in o.name]
+            axis = socket.matrix_world.to_3x3()@Vector((0,0,-1))
+            origin = socket.matrix_world@Vector((.16,0,max(v.co.z for v in socket.data.vertices)+.01))
+            assert any(o.ray_cast(o.matrix_world.inverted()@origin,o.matrix_world.to_3x3().inverted()@axis,distance=.4)[0]
+                       for o in supports), ('Unsupported pipe socket',socket.name)
+    return {'sockets':len(sockets),'unchanged_risers':len(pipes)}
+
+
 def audit(names=None):
     previous = bpy.context.scene
     failures, models, trees = [], {}, {}
@@ -98,14 +291,22 @@ def audit(names=None):
                 accepted_materials = original and list(mesh.materials) == list(original.data.materials)
                 if not mesh.materials or (not accepted_materials and any(not mat or
                     (not mat.library and not (mat.name in ('ArcanePower_ClearChamber','ArcanePower_CoolantGlass','ArcanePower_InternalCoolantGlass') and mat.seut.technique == 'GLASS')
-                     and not (mat.name == 'ArcanePower_ArmatureCopper' and mat.get('thermal_armature_copper') and mat.seut.technique == 'MESH'
+                     and not (mat.name in ('ArcanePower_ArmatureCopper','ArcanePower_ArmatureCyan') and mat.get('thermal_armature_copper') and mat.seut.technique == 'MESH'
                               and all(mat.node_tree.nodes.get(n) and mat.node_tree.nodes[n].image for n in ('CM','NG','ADD')))
                      and not (mat.name == 'ArcanePower_ArmatureSteel' and mat.get('thermal_laminated_steel') and mat.seut.technique == 'MESH'
                               and all(mat.node_tree.nodes.get(n) and mat.node_tree.nodes[n].image for n in ('CM','NG')))
                      and not (mat.name in ('ThermalStatus', 'ThermalHot', 'ThermalCold', 'ThermalRadiatorHeatRoot', 'ThermalRadiatorHeatMid', 'ThermalRadiatorHeatTip') and mat.get('thermal_native_emissive')))
                     for mat in mesh.materials)):
                     fail(name, 'native SEUT material', obj.name)
-                if not obj.get('thermal_decal_support') and (not inherited or obj.get('thermal_pocket_cut')):
+                if obj.get('thermal_turbine_light'):
+                    backing = bpy.data.objects.get(obj.get('thermal_seated_on',''))
+                    if not backing or any(tree(backing).find_nearest(obj.matrix_world@v.co)[3] > .003
+                                          for v in mesh.vertices[:4]):
+                        fail(name, 'recessed turbine light seated on its rail or hatch', obj.name)
+                native_terminal = obj.get('control_access') and obj.get('source_asset', '').startswith('SEUT Common.blend / Terminal')
+                # Native terminals include open decal/screen surfaces. Their
+                # authored mounting backings remain subject to the solid gate.
+                if not obj.get('thermal_decal_support') and not native_terminal and (not inherited or obj.get('thermal_pocket_cut')):
                     bm = bmesh.new()
                     bm.from_mesh(mesh)
                     if any(not e.is_manifold for e in bm.edges) or bm.calc_volume(signed=True) <= 1e-10:
@@ -170,6 +371,30 @@ def audit(names=None):
                 if buried:
                     fail(name, 'projected decal clears curved backing between vertices', obj.name)
         ports = json.loads(col['ports'])
+        if name == 'Reactor housing':
+            audit_internal_plumbing(col)
+            terminals = [o for o in col.objects if o.type == 'EMPTY' and o.get('control_access')]
+            if len(terminals) != 2:
+                fail(name, 'two opposite control access panels', scene.name)
+            for terminal in terminals:
+                body = bpy.data.objects.get(terminal.get('highlight', ''))
+                if body is None or not body.get('control_access') or '_section' not in body.name:
+                    fail(name, 'native keypad highlight target', terminal.name)
+                    continue
+                if min(abs((body.matrix_world@v.co).x) for v in body.data.vertices) < 1.15:
+                    fail(name, 'keypad clears conveyor frame by 15 cm', body.name)
+            assert sum(bool(o.get('thermal_internal_coolant')) for o in col.objects) == 8
+            vents = [o for o in col.objects if o.get('native_subpart','').endswith('ChamberVent')]
+            if len(vents) != 4:
+                fail(name,'four mode-controlled floor vents',scene.name)
+            for check in (audit_chamber_vents,audit_pillar_side_covers,audit_pillar_pipe_sockets):
+                try:
+                    check(col)
+                except AssertionError as error:
+                    fail(name,check.__name__,str(error))
+            for obj in col.objects:
+                if obj.get('thermal_coolant_pump') or obj.name.startswith((name+' / injector ',name+' / pickup ',name+' / pump ')):
+                    fail(name,'retired chamber fittings removed',obj.name)
         if name != 'Reactor housing' and scene.get('thermal_flow_revision'):
             walls = [o for o in col.objects if o.type=='MESH' and o.get('thermal_pressure_glass')]
             for port in ports:
@@ -274,6 +499,12 @@ def audit(names=None):
                 if owner and owner.get('thermal_motion_group'):
                     fail(name, 'unobstructed telescoping pressure sleeves', obj.name)
             if name.startswith('Brayton train'):
+                compressor=next(o for o in col.objects if o.name.startswith(name+' / compressor tapered rotor drum'))
+                turbine=next(o for o in col.objects if o.name.startswith(name+' / turbine tapered rotor drum'))
+                engagement=bounds(compressor)[1].x-bounds(turbine)[0].x
+                if abs(engagement-.020)>.0001 or not turbine.get('thermal_rotor_joint_revision'):
+                    fail(name,'closed compressor/turbine rotor joint with 20 mm engagement',turbine.name)
+                stats['rotor_joint_engagement_mm']=round(engagement*1000,2)
                 rig = json.loads((ROOT/'assets/thermal-rotor-runtime.json').read_text())
                 stats['rotor_blades'] = {}
                 stats['rotor_clearance_mm'] = {}
@@ -512,8 +743,9 @@ def audit(names=None):
                 root = next(o for o in col.objects if o.type == 'EMPTY' and o.get('native_subpart') == 'Thermal_TurbineRotor')
                 windings = [o for o in col.objects if o.get('thermal_generator_winding')]
                 armature = [o for o in col.objects if o.get('thermal_generator_armature')]
+                winding_material = 'ArcanePower_ArmatureCyan' if name.endswith(' upgraded') else 'ArcanePower_ArmatureCopper'
                 if (len(windings) != 96 or {(o.get('thermal_generator_pole'),o.get('thermal_winding_layer')) for o in windings} != set(itertools.product(range(24),range(4)))
-                        or any(o.get('thermal_winding_turns') != 10 or o.parent != root or o.data.materials[0].name != 'ArcanePower_ArmatureCopper' for o in windings)):
+                        or any(o.get('thermal_winding_turns') != 10 or o.parent != root or o.data.materials[0].name != winding_material for o in windings)):
                     fail(name, '24 turbine-driven poles with four layers of ten copper turns', generator.name)
                 poles = [o for o in armature if 'thermal_generator_pole' in o and not o.get('thermal_generator_winding')]
                 if any(abs(bounds(o)[1].x-bounds(o)[0].x-1.06*stretch) > .0001 for o in poles):
@@ -584,15 +816,6 @@ def audit(names=None):
                     fail(name, 'central hatch seam has continuous housing backing', str(i))
             stats['hatch_cap_seat_clearance_mm'] = round(clearance*1000, 3)
         if name == 'Reactor housing' and scene.get('thermal_flow_revision'):
-            pumps=[o for o in col.objects if o.get('thermal_coolant_pump')]
-            if len(pumps)!=4:
-                fail(name,'four seated chamber pump heads',str(len(pumps)))
-            for pump in pumps:
-                index=int(pump.name.rsplit(' ',1)[1])
-                expected=Vector((4.78*math.cos(index*math.pi/2),4.78*math.sin(index*math.pi/2),-.915))
-                low,high=bounds(pump)
-                if (pump.matrix_world.translation-expected).length>1e-5 or low.z>-.80 or high.z<-.60:
-                    fail(name,'pump encloses distributor junctions',pump.name)
             for obj in col.objects:
                 if obj.get('thermal_flow_fixture') and any(obj.name.startswith(name+' / '+port['id']+' ') for port in ports):
                     if not obj.parent or obj.get('thermal_motion_group')!=obj.parent.name:
@@ -687,6 +910,11 @@ def audit(names=None):
     port=json.loads(cooler['ports'])
     if len(port)!=1 or port[0]['position']!=[0,2.5,0] or port[0]['normal']!=[0,1,0]:
         fail('Atmospheric cooler','rear manifold on grid boundary',str(port))
+    if names is None or 'Reactor housing' in names:
+        try:
+            audit_blast_shields()
+        except AssertionError as error:
+            fail('Reactor housing', 'continuous blast-shield seals', str(error))
     protected = json.loads((OUT/'protected-sources.json').read_text())
     hashes = {n: hashlib.sha256((ROOT/'assets'/n).read_bytes()).hexdigest() for n in protected}
     if hashes != protected:

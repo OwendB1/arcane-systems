@@ -74,14 +74,20 @@ namespace ArcanePower
         [ProtoMember(53)] public ThermalReactorState Thermal;
         // Millionths of one recovered component, earned only by paid T1 burn.
         [ProtoMember(54)] public long ResiduumMicroUnits;
+        [ProtoMember(55)] public float ForecastPeakHeat;
+        [ProtoMember(56)] public bool ForecastWarning;
+        [ProtoMember(57)] public float ForecastOverheatSeconds = -1;
+        [ProtoMember(58)] public float ForecastMeltdownSeconds = -1;
+        [ProtoMember(59)] public int ForecastCircuit;
 
-        // Healthy full-load operation can reach 100%; it is not a heat alarm.
-        // This presentation predicate does not drive the runaway heat model.
+        // Timing is decided on the server; clients display the same confirmed
+        // warning throughout its recovery hold instead of toggling independently.
         internal bool ThermalWarning
         {
-            get { return !PayloadReleased && Core != CorePhase.Off
-                && (Critical || Heat > 1 || (TileStarved && TileWear >= 1)); }
+            get { return !PayloadReleased && Core != CorePhase.Off && !Critical
+                && ForecastWarning; }
         }
+        internal bool ForecastRising { get { return ForecastPeakHeat > Math.Max(1, Heat) + .001f; } }
 
         // XML-only compatibility with saves made before fuel and hardware tiers
         // were separated. Never write the obsolete field into new saves/packets.
@@ -208,14 +214,19 @@ namespace ArcanePower
                 && state.EjectTick >= 0 && state.EjectTick <= 120
                 && state.StarvedLoad >= 0 && state.StarvedLoad <= 1
                 && state.CriticalSeconds >= 0 && state.CriticalSeconds <= 60
+                && state.ForecastPeakHeat >= 0 && state.ForecastPeakHeat <= 4
+                && state.ForecastOverheatSeconds >= -1 && state.ForecastOverheatSeconds <= 60
+                && state.ForecastMeltdownSeconds >= -1 && state.ForecastMeltdownSeconds <= 60
+                && state.ForecastCircuit >= 0 && state.ForecastCircuit <= 4
                 && state.Heat >= 0 && state.Heat <= 4 && state.VentLoad >= 0 && state.VentLoad <= 1
                 && state.VentHeat >= 0 && state.VentHeat <= 4
                 && state.FuelDebt >= -(double)VRage.MyFixedPoint.SmallestPossibleValue * .5 - 1e-12 && state.FuelDebt < 1
                 && state.ResiduumMicroUnits >= 0 && state.ResiduumMicroUnits <= 1000000000000000L
                 && state.Status >= ReactorStatus.ShutOff && state.Status <= ReactorStatus.Active
+                // Retain the old per-tier saved-heat bounds across the 10,000:1 rebalance.
                 && (state.Thermal == null || (state.Thermal.Valid(state.EntityId)
-                    && state.Thermal.Store.Valid(state.EntityId, PowerMW[state.FuelTier - 1] / .40 * 8)
-                    && state.Thermal.FuelHeatMJ <= PowerMW[state.FuelTier - 1] / .40 * 8));
+                    && state.Thermal.Store.Valid(state.EntityId, PowerMW[state.FuelTier - 1] * 10000 / .40 * 8)
+                    && state.Thermal.FuelHeatMJ <= PowerMW[state.FuelTier - 1] * 10000 / .40 * 8));
         }
 
         internal void ReceiveState(MotionState state)

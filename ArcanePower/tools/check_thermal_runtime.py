@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import subprocess
 import tempfile
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
 GAME = Path.home() / '.local/share/Steam/steamapps/common/SpaceEngineers/Bin64'
@@ -33,6 +34,16 @@ def fixture(filename, method, bare=False):
 
 
 def main():
+    definitions = ET.parse(ROOT / 'ArcanePower/src/Data/CubeBlocks/ArcanePower_Thermal.sbc').findall('CubeBlocks/Definition')
+    generators = {block.findtext('Id/SubtypeId'): float(block.findtext('MaxPowerOutput'))
+                  for block in definitions if block.find('MaxPowerOutput') is not None}
+    assert generators == {
+        'ArcanePower_Thermal_ReactorHousing': 1,
+        'ArcanePower_Thermal_BraytonTrain': .25,
+        'ArcanePower_Thermal_BraytonTrainMirrored': .25,
+        'ArcanePower_Thermal_BraytonTrainUpgraded': 50,
+        'ArcanePower_Thermal_BraytonTrainMirroredUpgraded': 50,
+    }, generators
     subprocess.run(['python3', str(ROOT / 'ArcanePower/tools/build_thermal_runtime_contract.py'), '--check'], check=True)
     with tempfile.TemporaryDirectory(prefix='arcane-thermal-check-') as directory:
         work = Path(directory)
@@ -61,7 +72,7 @@ def main():
         report = dict(status='passed', scope='Compiled production kernel with native math; no live SE world',
                       runtime_contracts=55, authored_starter_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-starter-layout.json').read_text())['instances']), manifold_samples=47,
                       authored_room_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-room-layout.json').read_text())['instances']),
-                      conservation_hours_per_efficiency=1, efficiencies=[.20, .40, .78],
+                      conservation_hours_per_efficiency=1, efficiencies=[.20, .40, .80],
                       cooling_checks='Per-circuit adequate/half/zero rejection, early recovery, hottest-circuit critical threshold, paid-energy conservation, idempotent migration, reload and idle credit',
                       bank_checks='Four independent manifold circuits at fixed 25% heat allocations; unchanged tier efficiency, immediate availability, sealed topology, isolated failure and last-loop trip',
                       rotor_checks='Linear load targets, no-demand idle, coastdown, reload/copy identity, invalid inputs, phase integration and native pivots',

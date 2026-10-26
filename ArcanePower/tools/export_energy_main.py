@@ -146,6 +146,11 @@ def main(prototype=False, update=False):
             assert len(lods)==len(specs[name]['collections'])-1,'Missing compiled LOD descriptor: '+name
             if name in BLOCKS and not prototype:
                 subprocess.run(['mono', str(probes['EnergySocketProbe']), str(path)], check=True, env=probe_env)
+            if name in BLOCKS and not prototype:
+                highlights=subprocess.check_output(['mono',str(probes['EnergyModelProbe']),'--highlights',str(path)],env=probe_env,text=True)
+                assert 'HIGHLIGHT\tdetector_terminal\t' in highlights, 'Missing native terminal highlight: '+name
+                if name=='ArcanePower_EnergyCore':
+                    assert 'HIGHLIGHT\tdetector_terminal_control\tEnergy / control terminal_section' in highlights, 'Missing dedicated core terminal highlight'
             rows[name] = {'triangles': specs[name]['triangles'], 'sha256': digest(path),
                           'materials': sorted({line[1] for line in lines if line[0] == 'MATERIAL'}),
                           'textures': textures, 'subparts': subparts, 'native_import_passed': True,

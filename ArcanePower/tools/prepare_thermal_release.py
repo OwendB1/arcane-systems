@@ -120,8 +120,9 @@ def definitions(models,mains,revision,additions=False):
         size=definition.find('Size');size.attrib.clear();size.attrib.update(zip(('x','y','z'),map(str,spec['cells_se'])))
         if is_source:
             hardware_components(definition)
+            set_text(definition,'MaxPowerOutput',1)
         elif is_train:
-            set_text(definition,'MaxPowerOutput',1950000 if name.endswith('upgraded') else 19500)
+            set_text(definition,'MaxPowerOutput',50 if name.endswith('upgraded') else .25)
             set_text(definition,'PCU',80)
         else:
             if definition.find('Upgrades') is not None:definition.find('Upgrades').clear()
@@ -170,6 +171,9 @@ def write_catalog(root):
     assert set(canonical)==set(names), 'Incomplete public thermal catalog'
     for ident,block in canonical.items():
         name=names[ident]
+        if name.startswith('Brayton train'):
+            # Keep subtype IDs stable for existing grids and projections.
+            set_text(block,'DisplayName','Arcane '+name.replace('Brayton train','Turbine').title())
         set_text(block,'Description',description(name))
         components=block.find('Components')
         for component in list(components):
@@ -218,7 +222,7 @@ def description(name):
                 'Radiator panel':'Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling.'}[base]
         return rating+' ideal heat rejection per unit/panel. '+detail+(' Requires 10 Aether Residuum recovered from T1 fuel.' if name.endswith('upgraded') else '')
     if name=='Reactor housing':
-        return 'Internal CO2 generation. Standalone: Aether only, 20% net. Helion and Empyrean require Brayton to prevent meltdown. At least one fully built, functional advanced controller unlocks Brayton. Up to 40% starter / 78% exotic conversion. Four independent manifold circuits, one turbine plus cooling each; each supplies up to 25% capacity. Circuit loss isolates that manifold; losing all valid circuits stops generation. Only a manual Start with all four circuits defective latches a fault. Normal Stop does not latch. Align H/C and cap unused pipe mouths. Two controllers and a working vent route required. Stop and cool before changing mode.'
+        return 'Internal CO2 generation. Standalone: Aether only, 20% net. Helion and Empyrean require Brayton to prevent meltdown. At least one fully built, functional advanced controller unlocks Brayton. Up to 40% starter / 80% exotic conversion. Four independent manifold circuits, one turbine plus cooling each; each supplies up to 25% capacity. Circuit loss isolates that manifold; losing all valid circuits stops generation. Only a manual Start with all four circuits defective latches a fault. Normal Stop does not latch. Align H/C and cap unused pipe mouths. Two controllers and a working vent route required. Stop and cool before changing mode.'
     if name.startswith('Brayton train'):
         return ('Requires 20 Aether Residuum; compatible with T3 Empyrean heat. ' if name.endswith('upgraded') else 'T1/T2 fuels only; T3 Empyrean requires upgraded turbines. ') + '2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.'
     if name in ('PRIMARY / Reactor adapter', 'PRIMARY / Reactor adapter bare'):
@@ -293,11 +297,16 @@ def install(additions=False):
             sections=[line.split('\t') for line in evidence.splitlines() if line.startswith('SECTION\t')]
             highlights={parts[1]:parts[2].split(';') for line in evidence.splitlines()
                         if (parts:=line.split('\t'))[0]=='HIGHLIGHT'}
-            assert len(sections)==3 and all(int(row[2])==1146 for row in sections),'Inventory hatch sections differ from accepted native access meshes'
-            assert set(highlights)=={'detector_conveyor_0','detector_conveyor_2','detector_conveyor_top','detector_conveyor_bottom'}
+            hatches=[row for row in sections if 'control ' not in row[1]]
+            assert len(hatches)==3 and all(int(row[2])==1146 for row in hatches),'Inventory hatch sections differ from accepted native access meshes'
+            assert set(highlights)=={'detector_conveyor_0','detector_conveyor_2','detector_conveyor_top','detector_conveyor_bottom','detector_terminal_control','detector_terminal_control_opposite'}
+            assert len(highlights['detector_terminal_control'])==1 and 'control terminal_section' in highlights['detector_terminal_control'][0]
+            assert len(highlights['detector_terminal_control_opposite'])==1 and 'control opposite terminal_section' in highlights['detector_terminal_control_opposite'][0]
+            positions=[actual[key][0][12:15] for key in ('detector_terminal_control','detector_terminal_control_opposite')]
+            assert abs(positions[0][0]+positions[1][0])<1e-5 and abs(positions[0][2]+positions[1][2])<1e-5, 'Control panels must be opposite around the reactor axis'
             assert highlights['detector_conveyor_top']==['subpart_VentHatch'+str(i) for i in range(1,5)]
             for bay in ('LA','LB','RA','RB'):
-                for part in ('Carriage','Intermediate','CoverMinus','CoverPlus','ConnectorTail'):
+                for part in ('Carriage','Intermediate','CoverMinus','CoverPlus','ConnectorTail','ChamberVent'):
                     key='subpart_Thermal_'+bay+'_'+part
                     assert key in actual,('Missing manifold subpart',key)
                     identity=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
@@ -349,8 +358,9 @@ def install(additions=False):
             'construction_models':sum(r['type']=='bs' for r in compiled.values()),
             'lod_models':sum(r['type']=='lod' for r in compiled.values()),
             'native_models':compiled,'external_native_subparts':previous['external_native_subparts'] if previous else len(bundle)-sum(r['type']!='lod' for r in rows.values()),
-            'inventory_highlights':highlights or (previous['inventory_highlights'] if previous else {}),
-            'physics':'Accepted reactor collision preserved; radiator axial docks retain stacking clearance; rotating panel faces and frames have native subpart hulls',
+            'inventory_highlights':{k:v for k,v in highlights.items() if k.startswith('detector_conveyor_')} or (previous['inventory_highlights'] if previous else {}),
+            'control_panel_highlights':{k:v for k,v in highlights.items() if k.startswith('detector_terminal_control')} or (previous.get('control_panel_highlights',{}) if previous else {}),
+            'physics':'Reactor uses ten flat hulls: unchanged deck/roof, four glass quadrants and four fitted pillars; radiator axial docks retain stacking clearance; rotating panel faces and frames have native subpart hulls',
             'co2':'Automatic reactor CO2 supply; metered startup/cooldown circulation; no filling or pressure gate',
             'game_reloaded':False,'workshop_published':False}
     trim_native_manifest(report)

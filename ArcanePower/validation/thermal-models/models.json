@@ -17,8 +17,8 @@
       5.0
     ],
     "phase": "textures",
-    "meshes": 670,
-    "triangles": 549149,
+    "meshes": 691,
+    "triangles": 549929,
     "ports": [
       {
         "id": "CO2",
@@ -80,8 +80,8 @@
       5.0
     ],
     "phase": "textures",
-    "meshes": 683,
-    "triangles": 549704,
+    "meshes": 704,
+    "triangles": 550484,
     "ports": [
       {
         "id": "CO2",
@@ -2151,8 +2151,8 @@
       7.5
     ],
     "phase": "base",
-    "meshes": 1824,
-    "triangles": 226726,
+    "meshes": 1754,
+    "triangles": 178318,
     "ports": [
       {
         "id": "primary LA",
@@ -3974,8 +3974,8 @@
       5.0
     ],
     "phase": "textures",
-    "meshes": 670,
-    "triangles": 549207,
+    "meshes": 691,
+    "triangles": 549987,
     "ports": [
       {
         "id": "CO2",
@@ -4037,8 +4037,8 @@
       5.0
     ],
     "phase": "textures",
-    "meshes": 683,
-    "triangles": 549762,
+    "meshes": 704,
+    "triangles": 550542,
     "ports": [
       {
         "id": "CO2",

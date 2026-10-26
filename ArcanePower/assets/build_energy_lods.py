@@ -89,7 +89,7 @@ def build_lods(scene, reference=None, batch=False):
     bpy.context.window.scene=scene;bpy.context.view_layer.update()
     cols=COLS.get_collections(scene);main=reference or cols['main'][0]
     meshes=[o for o in main.objects if o.type=='MESH']
-    exact={o: bool(o.get('thermal_reactor_coupling')) or
+    exact={o: bool(o.get('lod_keep')) or bool(o.get('thermal_reactor_coupling')) or
            o.name.startswith(('Energy / chamber glazing','Curved chamber / pane')) or
            any(m and any(t in m.name for t in ('Emissive','EnergyGlow','EnergyFill','EnergyStatus','ArcanePlasma','ClearChamber','Glass','ThermalHot','ThermalCold','ThermalStatus')) for m in o.data.materials)
            for o in meshes}

@@ -11,6 +11,34 @@ import math
 from pathlib import Path
 from mathutils import Matrix, Vector
 
+
+def join_lower_seal(sleeve, seal):
+    """One continuous bore, rather than two coplanar inner walls.
+
+    Preserve the seal's metal material and all exterior dimensions. The exact
+    union removes the shared 45 mm strip without narrowing the shield bore.
+    """
+    bpy.context.view_layer.objects.active = sleeve
+    if sleeve.data.users > 1:
+        sleeve.data = sleeve.data.copy()
+    for material in seal.data.materials:
+        if material.name not in sleeve.data.materials:
+            sleeve.data.materials.append(material)
+    modifier = sleeve.modifiers.new('Continuous lower seal', 'BOOLEAN')
+    modifier.operation = 'UNION'
+    modifier.solver = 'EXACT'
+    modifier.object = seal
+    bpy.ops.object.modifier_apply(modifier=modifier.name)
+    bm = bmesh.new()
+    bm.from_mesh(sleeve.data)
+    try:
+        assert all(edge.is_manifold for edge in bm.edges), 'Open blast sleeve joint'
+        assert bm.calc_volume() > 0, 'Inverted blast sleeve joint'
+    finally:
+        bm.free()
+    bpy.data.objects.remove(seal, do_unlink=True)
+
+
 ROOT = Path(__file__).resolve().parents[1]
 COLS = importlib.import_module('space-engineers-utilities.seut_collections')
 s = bpy.data.scenes['ArcanePower_ReactorPrototype']
@@ -104,9 +132,11 @@ for i in range(6):
     parent=bpy.data.objects.new(scene_name+' root',None);target.objects.link(parent)
     inner=1.924+.115*(5-i);outer=inner+.055
     park=2.48+.025*i;height=.82;travel=(i+1)*(3.845/6)
-    annulus(name+' / armored sleeve',inner,outer,0,height,native['PaintedMetal_Darker'],target,parent)
+    sleeve=annulus(name+' / armored sleeve',inner,outer,0,height,native['PaintedMetal_Darker'],target,parent)
     annulus(name+' / upper guide flange',outer,inner+.110,height-.035,height,native['Metal_Dull'],target,parent)
-    annulus(name+' / lower seal',inner,outer+.018,-.01,.045,native['Metal_Dull'],target,parent)
+    seal=annulus(name+' / lower seal',inner,outer+.018,-.01,.045,native['Metal_Dull'],target,parent)
+    bpy.context.window.scene=scene
+    join_lower_seal(sleeve,seal)
     for sector in range(16):
         a=sector*math.tau/16
         annulus(name+' / raised panel %02d'%sector,outer,outer+.009,.105,.72,

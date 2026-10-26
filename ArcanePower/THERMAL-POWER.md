@@ -30,7 +30,7 @@ continued idle fuel consumption.
 | Starter | 650°C | 40% |
 | Improved | 1,000°C | 55% |
 | Optimized | 1,600°C | 66% |
-| Exotic | 2,200°C | 78% |
+| Exotic | 2,200°C | 80% |
 
 The standard train supports starter operation. The upgraded train can use higher
 stages when the reactor's source temperature permits. A warmer compressor inlet
@@ -53,7 +53,9 @@ Cooling capacity is independent of turbine load. Each circuit accumulates waste
 that its own cooling cannot reject; another circuit's spare cooling cannot offset
 that shortage. Output is not silently throttled to make an undersized installation
 safe. Stopping generation preserves heat and allows cooldown. The hottest circuit
-feeds the existing core-temperature response: heat warns at 100% and arms irreversible
+feeds the existing core-temperature response. Yellow warns when a 60-second
+projection of current net heat buildup predicts a rise into overheating; stable
+full-load heat and safe cooldown remain neutral. Actual heat still arms irreversible
 failure at **125%**. Restore cooling or shut down early; retain containment power for
 active coolers. An already armed critical fuse cannot be cancelled by cooling.
 
@@ -62,8 +64,13 @@ waste-heat requirements, actual heat removal and accumulated heat. Full-load coo
 requirements remain a separate planning figure. Cooling unit terminals show their
 own environment, capacity, connection/power state and heat removal.
 
-At a 25 GWth Aether source, each standard circuit admits up to 6.25 GWth,
-exports up to 2.5 GW and needs 3.75 GW rejection. Install at least one fully
+Fuel heat ratings are **2.5 / 25 / 250 MWth** for Aether / Helion / Empyrean.
+Each T1 turbine admits up to **0.625 MWth** and exports **0.25 MW** at 40% conversion;
+four provide **1 MW**. Each T2 turbine admits up to **62.5 MWth** and exports
+**50 MW** at 80% conversion; four Empyrean circuits provide **200 MW**.
+Regular and mirrored turbines share these limits. Helion reaches 55% conversion,
+providing 13.75 MW across four T2 turbines. Standalone Aether provides 0.5 MW.
+At full Aether load, each standard circuit needs **0.375 MW** rejection. Install at least one fully
 exposed 10 GW standard radiator panel or a 25 GW standard atmospheric cooler in
 each circuit: four circuits need four
 separate cooling connections. Leave headroom for sunlight, atmosphere and blockage.

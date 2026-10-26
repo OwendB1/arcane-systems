@@ -55,6 +55,53 @@ def write_wave(path, samples):
         output.writeframes(np.round(samples * 32767).astype("<i2").tobytes())
 
 
+def magnetic_lock(seed, home=False):
+    """Approved low magnetic contact: pressure transient and damped housing."""
+    t = timeline(.26)
+    width = .0055 if home else .0048
+    x = (t - .023) / width
+    sound = .52 * (1 - 2 * x * x) * np.exp(-x * x)
+    sound += .19 * envelope(t, .003, .028) * noise(t, 55, 650, seed)
+    sound += .055 * envelope(t, .002, .012) * noise(t, 220, 1050, seed + 1)
+    body = 83 if home else 103
+    for ratio, gain, decay in ((1, .13, .043), (1.71, .07, .028), (2.43, .035, .018)):
+        sound += gain * envelope(t, .003, decay) * tone(t, body * ratio)
+    sound[-661:] *= np.linspace(1, 0, 661)
+    return sound
+
+
+def magnetic_pull(seed, retract=False):
+    t = timeline(.48)
+    sound = np.zeros(len(t))
+    contact = magnetic_lock(seed, home=retract)
+    sound[:len(contact)] += contact * (.28 if retract else .20)
+    shape = np.sin(np.pi * np.clip((t - .035) / .38, 0, 1)) ** 2
+    sound += shape * (.043 * noise(t, 45, 420, seed + 2)
+                      + .010 * tone(t, 82) + .004 * tone(t, 164))
+    sound[-661:] *= np.linspace(1, 0, 661)
+    return sound
+
+
+def magnetic_tile_sounds(seed=400):
+    bank = {
+        'TileDispense': magnetic_pull(seed),
+        'TileLatch': magnetic_lock(seed + 5),
+        'TileRetract': magnetic_pull(seed + 200, True),
+        'TileStore': magnetic_lock(seed + 205, True),
+    }
+    for name, sound in bank.items():
+        frequency = np.fft.rfftfreq(len(sound), 1 / RATE)
+        sound = np.fft.irfft(np.fft.rfft(sound) * np.exp(-(frequency / 1250) ** 6), n=len(sound))
+        sound -= np.mean(sound)
+        ramp = round(.003 * RATE)
+        sound[:ramp] *= np.linspace(0, 1, ramp)
+        sound[-ramp:] *= np.linspace(1, 0, ramp)
+        bank[name] = sound
+    # Preserve the approved quiet pull / firm lock balance across separate cues.
+    gain = .72 / max(np.max(np.abs(sound)) for sound in bank.values())
+    return {name: sound * gain for name, sound in bank.items()}
+
+
 def sound_bank():
     t = timeline(8)
     # Integer cycle counts for carriers AND modulators keep all four beds seamless.
@@ -85,28 +132,7 @@ def sound_bank():
     bank["DeckMotion"] = finish(deck, True)
     bank["HatchMotion"] = finish(hatch, True)
 
-    t = timeline(.26)
-    dispense = envelope(t, .002, .035) * noise(t, 800, 10500, 12)
-    dispense += .5 * envelope(t, .003, .05) * np.sin(TAU * (240 * t + 450 * t * t))
-    bank["TileDispense"] = finish(dispense, attack=.001)
-    t = timeline(.22)
-    # A damped structural thunk with a brief hard catch. No sustained metallic
-    # 880/1320 Hz ring; retain the high-frequency click only at initial contact.
-    latch = 1.2 * envelope(t, .001, .04) * tone(t, 115)
-    latch += .45 * envelope(t, .001, .025) * tone(t, 230)
-    latch += .4 * envelope(t, .001, .025) * noise(t, 60, 650, 13)
-    latch += .65 * envelope(t, .0004, .0035) * noise(t, 1600, 11000, 17)
-    bank["TileLatch"] = finish(latch, attack=.0005)
-
-    t = timeline(.48)
-    # Short release click followed by a descending geared pull. The separate
-    # TileLatch cue supplies the deeper catch when the quartet reaches home.
-    retract = .6 * envelope(t, .0005, .009) * noise(t, 1200, 10000, 18)
-    pull = envelope(t, .015, .12)
-    retract += pull * (.7 * np.sin(TAU * (310 * t - 170 * t * t))
-        + .24 * np.sin(TAU * (1240 * t - 680 * t * t))
-        + .15 * noise(t, 300, 7000, 19))
-    bank["TileRetract"] = finish(retract, attack=.0005)
+    bank.update(magnetic_tile_sounds())
 
     t = timeline(3.5)
     ignition = envelope(t, .008, .65) * (tone(t, 55) + .5 * tone(t, 110))
@@ -150,7 +176,7 @@ def definitions(bank):
         ET.SubElement(identity, "TypeId").text = "MyObjectBuilder_AudioDefinition"
         ET.SubElement(identity, "SubtypeId").text = "ArcaneReactor" + name
         ET.SubElement(sound, "Category").text = "SHIP"
-        mechanical = name in ("DeckMotion", "HatchMotion", "TileDispense", "TileLatch", "TileRetract")
+        mechanical = name in ("DeckMotion", "HatchMotion", "TileDispense", "TileLatch", "TileRetract", "TileStore")
         ET.SubElement(sound, "MaxDistance").text = "1500" if name == "Explosion" else "60" if name == "Vent" else "18" if mechanical else "24"
         # Poly2 is SE's steep (1-distance)^2 falloff. The default Custom_1
         # stays almost full-volume through most of the audible radius.
@@ -215,12 +241,12 @@ def mechanism_preview(bank):
         fade = np.minimum(np.minimum(np.arange(count) / (.05 * RATE), np.arange(count)[::-1] / (.05 * RATE)), 1)
         offset = round(start * RATE)
         output[offset:offset + count] += samples * fade * .55
-    for start in (3, 3.7, 4.4):
-        for name, delay in (("TileDispense", 0), ("TileLatch", .4)):
+    for start in (3, 3.6, 4.2):
+        for name, delay in (("TileDispense", 0), ("TileLatch", 34 / 60)):
             samples = bank[name];offset = round((start + delay) * RATE)
             output[offset:offset + len(samples)] += samples * .55
-    for start in (12, 12.7, 13.4):
-        for name, delay in (("TileRetract", 0), ("TileLatch", 34 / 60)):
+    for start in (12, 12.6, 13.2):
+        for name, delay in (("TileRetract", 0), ("TileStore", 34 / 60)):
             samples = bank[name];offset = round((start + delay) * RATE)
             output[offset:offset + len(samples)] += samples * .55
     write_wave(ROOT / ".cache/audio/reactor-mechanisms.wav", output)
@@ -233,4 +259,4 @@ if __name__ == "__main__":
     definitions(bank)
     preview(bank)
     mechanism_preview(bank)
-    print("Wrote thirteen original WAVs, twenty-one cue definitions and both listening previews")
+    print("Wrote fourteen original WAVs, twenty-two cue definitions and both listening previews")

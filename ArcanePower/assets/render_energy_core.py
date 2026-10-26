@@ -37,14 +37,16 @@ for source in scenes:
  cam.rotation_euler=(-cam.location).to_track_quat('-Z','Y').to_euler();cam.data.ortho_scale=11 if core else 8.5
  for col,path in groups:
   copies=[];collections=[(col,Matrix.Identity(4))]
-  if core and col==cols['main'][0]:
+  if col==cols['main'][0]:
    for dummy in col.objects:
     if not dummy.name.startswith('subpart_') or dummy.get('file') not in bpy.data.scenes:continue
     pose=dummy.matrix_world.copy()
     if dummy.name.startswith('subpart_EnergyRing'):
      spec=RINGS[int(dummy.name[-1])+1]
      pose=pose @ Matrix.Rotation(math.radians(spec['tilt_degrees']),4,Vector(spec['axis']))
-    collections.append((COLS.get_collections(bpy.data.scenes[dummy['file']])['main'][0],pose))
+    part=bpy.data.scenes[dummy['file']]
+    bpy.context.window.scene=part;bpy.context.view_layer.update()
+    collections.append((COLS.get_collections(part)['main'][0],pose))
   for collection,pose in collections:
    for mesh in collection.objects:
     if mesh.type!='MESH':continue

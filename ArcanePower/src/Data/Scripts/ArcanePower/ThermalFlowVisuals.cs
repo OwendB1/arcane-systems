@@ -24,7 +24,7 @@ namespace ArcanePower
         private readonly Dictionary<ulong, int> flowRequests = new Dictionary<ulong, int>();
         private readonly List<FlowView> visibleFlow = new List<FlowView>();
         private readonly MyStringId gasMaterial = MyStringId.GetOrCompute("ArcaneThermal_Gas");
-        private readonly MyStringId liquidMaterial = MyStringId.GetOrCompute("ArcaneThermal_Liquid");
+        private readonly MyStringId flowMaterial = MyStringId.GetOrCompute("ArcaneThermal_Liquid");
         private sealed class FlowView
         {
             internal IMyEntity Entity;
@@ -231,26 +231,47 @@ namespace ArcanePower
                 {
                     int sign = path.Direction(view.State);
                     if (sign == 0) continue;
-                    double spacing = path.Circuit == "CHAMBER" ? .125 : .75;
+                    bool chamber = path.Circuit == "CHAMBER";
+                    if (chamber)
+                    {
+                        var source = VentSession.Find(view.Entity.EntityId);
+                        if (source == null || source.Motion.Thermal.Mode != ThermalMode.Brayton
+                            || !source.Motion.Thermal.Settled) continue;
+                    }
+                    double spacing = chamber ? .125 : .50;
                     double phase = view.Distance * sign % spacing;
                     if (phase < 0) phase += spacing;
                     for (double at = phase; at < path.Length; at += spacing)
                     {
-                        if (remaining-- <= 0) return;
                         float fade = (float)Math.Min(1, Math.Min(at, path.Length - at) / Math.Min(.20, path.Length * .25));
                         if (fade <= .01f) continue;
                         Vector3D point = Vector3D.Transform(path.Sample(at), world);
-                        Vector3D delta = Vector3D.TransformNormal(path.Sample(Math.Min(path.Length, at + .20)) - path.Sample(at), world);
-                        if (delta.LengthSquared() < .000001) continue;
-                        Vector4 color = (path.Hot ? Color.Lerp(new Color(60, 165, 225), new Color(255, 145, 55), (float)view.State.Heat)
-                            : new Color(45, 195, 230)).ToVector4();
-                        color *= fade * (float)(.10 + .18 * view.Rate);
-                        if (path.Circuit == "PRIMARY")
-                            MyTransparentGeometry.AddLineBillboard(liquidMaterial, color, point,
-                                (Vector3)Vector3D.Normalize(delta), (float)delta.Length(), Math.Min(.035f, path.Radius * .18f));
-                        else MyTransparentGeometry.AddPointBillboard(gasMaterial, color, point,
-                            path.Circuit == "CHAMBER" ? .025f + .065f * (float)(at / path.Length)
-                                : Math.Min(.11f, path.Radius * .52f), (float)(at * .7 + view.Distance));
+                        // Supply/return colours are deliberately readable even at low load.
+                        Vector4 color = (path.Hot ? Color.Lerp(new Color(255, 190, 75), new Color(255, 105, 40), (float)view.State.Heat)
+                            : new Color(40, 205, 255)).ToVector4();
+                        color *= fade * (float)(chamber ? .10 + .18 * view.Rate : .50 + .30 * view.Rate);
+                        // Brighter gas and liquid emission without increasing opacity.
+                        color *= new Vector4(1.5f, 1.5f, 1.5f, 1f);
+                        if (chamber)
+                        {
+                            if (remaining-- <= 0) return;
+                            MyTransparentGeometry.AddPointBillboard(gasMaterial, color, point,
+                                .025f + .065f * (float)(at / path.Length), (float)(at * .7 + view.Distance));
+                        }
+                        else
+                        {
+                            // One texture per glob; splitting at path vertices shrinks
+                            // and repeats the texture on densely sampled curves.
+                            double end = Math.Min(path.Length, at + .30);
+                            Vector3D tip = Vector3D.Transform(path.Sample(end), world);
+                            Vector3D delta = tip - point;
+                            if (delta.LengthSquared() > .000001)
+                            {
+                                if (remaining-- <= 0) return;
+                                MyTransparentGeometry.AddLineBillboard(flowMaterial, color, point,
+                                    (Vector3)Vector3D.Normalize(delta), (float)delta.Length(), Math.Min(.11f, path.Radius * .50f));
+                            }
+                        }
                     }
                 }
             }

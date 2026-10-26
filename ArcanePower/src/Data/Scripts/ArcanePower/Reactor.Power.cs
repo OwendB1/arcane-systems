@@ -77,8 +77,18 @@ namespace ArcanePower
             Motion.PowerPaused = active && !reserveCovers;
             Motion.PowerReady = powerControllers.Count >= 2 && input >= ContainmentMW * .999f
                 && Motion.ReserveMJ >= ReserveCapacityMJ * .999999;
+            // Let the first thermal dispatch reach the native distributor and
+            // controller sinks. End recovery on measured input after two frames,
+            // or after two seconds at most. Every bridged MJ is debited above.
+            bool restoringPower = reloadPowerFrames > 0 && reactor.Enabled && !Motion.PowerStarved && !Motion.Critical;
+            if (reloadPowerFrames > 0)
+            {
+                if (!restoringPower || (reloadPowerFrames < 119 && input >= operating * .999f)) reloadPowerFrames = 0;
+                else reloadPowerFrames--;
+            }
             if (active && input < operating * .999f && Motion.Vent == VentPhase.Idle
-                && (Motion.Core == CorePhase.Starting || Motion.Core == CorePhase.Running))
+                && (Motion.Core == CorePhase.Starting || Motion.Core == CorePhase.Running)
+                && !(restoringPower && reserveCovers))
             {
                 Motion.PowerStarved = true;
                 reactor.Enabled = false;

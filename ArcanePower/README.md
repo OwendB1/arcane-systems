@@ -20,6 +20,21 @@ The source export ledger remains in `validation/thermal-models/`.
 FBX/XML staging from production blends before another native build; successful
 packaging prunes unused model exports after preserving required rebuild inputs.
 
+The reactor has dedicated blue control keypads on opposite sides of its lower
+housing. Both sit clear of the conveyor frames, with at least 15 cm keypad clearance.
+The Energy Core has a matching keypad on an exposed lower docking-frame side,
+clear of installed modules. Each keypad highlights independently and opens its
+own block's native control panel; inventory and upgrade access remain separate.
+The Energy Core's original roof console and all six module consoles also use
+panel-only contour highlights. Their terminal bodies export as mesh sections,
+and each detector points to its own section instead of showing the old yellow
+detector-volume overlay. Native export validation checks every terminal link.
+The module contour was verified in the live prototype lab after reload; all
+eight energy-family terminal links passed native mesh-section checks.
+The original reactor/core keypads were checked in the existing Prototype Lab: their separate yellow
+highlights resolve, and pressing K selects the owning core/reactor in Control Panel.
+The relocated reactor pair retains that native detector/mesh-section setup.
+
 The current authoring sources are `assets/arcane-power-prototype.blend` (archived reactor design),
 `assets/arcane-energy-core.blend` (battery), `assets/arcane-power-fuels.blend` and
 `assets/arcane-thermal-models.blend` (Brayton family). Shared thermal geometry is
@@ -131,6 +146,17 @@ the production Blender scene after intentional rig changes. Native installation
 runs `tools/check_native_thermal_motion.py`; delivery verifies its model and pose
 fingerprints. The repaired motion still needs an SE world reload and in-game check.
 
+The compressor-to-turbine rotor joint now has 20 mm of engagement across all
+four turbine variants, closing the former 200 mm axial gap. The tapered turbine
+nose retains the existing drum surfaces, blade seating and separate rotor pivots.
+Live Blender checks covered 1.8, 2.4 and 3.0 m views, a cutaway and four relative
+rotation poses; the main geometry audit passed for all four variants.
+All four are installed as `thermal_f0a29e82270f`, with refreshed weld stages and
+LODs. The exported-motion gate passed 1,730 samples across 30 moving parts with
+no failures (maximum native vertex-packing error 5.94 mm). After reloading the
+existing lab, the repaired joint was also inspected on its mirrored upgraded
+turbine. The native checks cover all four variants; the live check sampled one.
+
 ## Construction and Energy Core delivery — updated 15 October 2026
 
 All twelve public blocks now have **three native construction stages**, 36 models
@@ -155,8 +181,9 @@ controller tiers and all four turbine variants, with matching native LODs and
 construction stages. Front, side and chamber-facing Blender views were checked
 at 1.8, 2.4 and 3.0 m; accepted collision inputs remain unchanged.
 
-The **3×3×3 Energy Core** uses full-block **1×3×1 upgrade pillars**, with two side
-capacity sockets, a rear transfer socket and a front stabilizer. Pillars face the
+The **3×3×3 Energy Core** uses full-block **1×3×1 upgrade pillars**. All four
+upgrade bays accept any capacity, transfer or stabilizer module in either tier.
+The strongest stabilizer and transfer tiers apply without stacking. Pillars face the
 core and share its Up direction. Existing compact banks retain their geometry and charge. Standard/advanced expansions provide
 fixed native storage and 10/100/1,000 GW bank transfer tiers. It includes native
 charge modes, emergency reserve controls, charge-dependent glow, slow rotation,
@@ -250,9 +277,9 @@ The terminal **Security mode** switch defaults to **On**: losing the vent route 
 
 | Fuel | Minimum controller ring capacity | Colour | Rated output |
 | --- | --- | --- | --- |
-| Aether | 2 | Cyan | 10,000 MW |
-| Helion | 3 | Amber | 100,000 MW |
-| Empyrean | 4 | Violet | 1,000,000 MW |
+| Aether | 2 | Cyan | 1 MW |
+| Helion | 3 | Amber | 10 MW |
+| Empyrean | 4 | Violet | 100 MW |
 
 The highest mode- and controller-compatible fuel present is selected only while Off, vent Idle, output zero and thermally cold, after outstanding heat charges are accounted. Fuel stays locked through operation/shutdown. Standalone selection and automatic conveyor replenishment are limited to Aether; higher-tier canisters may remain stored for later Brayton use. Each filled canister holds 10 fuel units. Aether lasts **2.5 ideal full-load minutes**, or **2/2.25/2.475 minutes** with controller tiers 1/2/3. Helion and Empyrean retain 10 ideal minutes, scaled by their compatible controllers' 90%/99% efficiency. Consumption divides by controller efficiency and falls with demand. Native inventory amounts include the remaining fraction of a canister; telemetry labels stock and burn in canisters. Refineries retain base yields of 0.1%/0.01%/0.001% for Aether/Helion/Empyrean concentrates.
 
@@ -305,11 +332,13 @@ sections retain **10 GW per T1 panel** or **100 GW per T2 panel**.
 Three-panel radiator stacks provide **30 GW / 300 GW** under ideal exposure;
 mixed stacks sum each panel's rating. Atmospheric radiator losses scale smoothly
 with measured density; blockage and solar exposure also reduce rejection.
-Each of four Aether circuits receives up to 6.25 GWth and needs
-3.75 GW rejection at 40% conversion. Give each circuit its own standard cooler or
+Reactor fuel heat ratings are **2.5 / 25 / 250 MWth**. Each of four Aether
+circuits receives up to 0.625 MWth, exports **0.25 MW** and needs
+0.375 MW rejection at 40% conversion. Give each circuit its own standard cooler or
 radiator connection; a single circuit can operate at one quarter of full capacity.
-Empyrean supplies ten times Helion's heat; upgraded turbines support its existing
-2.5 TWth throughput without another multiplier on top of that rating.
+Empyrean supplies ten times Helion's heat. Each upgraded turbine accepts up to
+62.5 MWth and exports **50 MW** at 80% conversion: **200 MW** across four ports.
+Regular and mirrored turbines have matching native and effective output limits.
 
 Native `FuelInfos` is empty because multiple native entries represent concurrent inputs rather than alternative fuels. The mod allows all three fuels in its inventory, maintains native energy capacity for the selected fuel and consumes it explicitly. Conveyor replenishment uses public inventory transfers with conveyor reachability and access checks.
 
@@ -327,7 +356,7 @@ Controller count and ring capacity are separate values; one advanced controller 
 
 ## Status colours and load-driven motion
 
-Emissives pulse red/black over 120 ticks when construction is incomplete, the block is nonfunctional or fewer than two controllers are attached. A complete reactor is steady red when off, white when out of fuel, and uses its selected fuel colour during healthy operation. Yellow pulses indicate failed worn containment or core heat above 100%; critical cores and active ejection retain red priority. Idle coolant status and closed reactor valves use cyan. Fuel-starvation status remains visible through automatic shutdown without a yellow alarm. Parent emissives can update before Ring1 renders. Emissives now use twelve-times intensity (up from four), and an active vent pulses bright red. The reactor and terminal vent outlet share that intensity. One client-only, shadowless light with a 4.5 m range follows the visible plasma to illuminate nearby chamber surfaces in the current fuel/alarm colour. Its strength follows the core emission and growth/shrink envelope; it turns off with the hidden core and is released when the reactor closes. Surface bloom depends on the player's graphics settings; the mod does not alter them.
+Emissives pulse red/black over 120 ticks when construction is incomplete, the block is nonfunctional or fewer than two controllers are attached. A complete reactor is steady red when off, white when out of fuel, and uses its selected fuel colour during healthy operation. Yellow pulses indicate a confirmed 60-second overheating forecast, using four seconds of paid production, current circuit cooling capacity and retained heat. Ordinary risk confirms for two seconds and clears after five safe seconds; failed containment and predicted critical heat warn immediately. The thermal outlook identifies the circuit and estimated time to danger. Stable heat and safe cooldown do not initiate a warning; critical cores and active ejection retain red priority. Idle coolant status and closed reactor valves use cyan. Fuel-starvation status remains visible through automatic shutdown without a yellow alarm. Parent emissives can update before Ring1 renders. Emissives now use twelve-times intensity (up from four), and an active vent pulses bright red. The reactor and terminal vent outlet share that intensity. One client-only, shadowless light with a 4.5 m range follows the visible plasma to illuminate nearby chamber surfaces in the current fuel/alarm colour. Its strength follows the core emission and growth/shrink envelope; it turns off with the hidden core and is released when the reactor closes. Surface bloom depends on the player's graphics settings; the mod does not alter them.
 
 The server derives load from native `CurrentOutput / MaxOutput`, smoothed with a 60-tick response. Running ring speed ranges from three times the original speed at zero load to nine times at full load. Both primary and secondary phase/rate are saved and synchronized. Each ring has a perpendicular second rotation axis with distinct alternating signed rates (magnitudes 0.07/0.09/0.11/0.13), driven by smooth phase modulation; shutdown brakes both axes from their captured speeds. Tiles and plasma share a smooth irregular drift and gentle vertical bob that grows with load, stays below 6 cm, starts near the end of startup and settles during shutdown. The plasma keeps its rest orientation relative to the reactor while sharing the field's drift/bob and ejection translation. The containment shell tumbles around multiple axes: slow continuous yaw/roll spin is combined with unequal broad sweeps that reverse direction and carry the shell through half-turns, plus the smaller 6°–9.25° irregular tilt. The saved load-driven spin phase drives this motion without per-frame randomness or jumps at phase wrapping. Shutdown brakes the tumbling, then aligns the intact shell before reverse assembly releases its first quartet. Translational wiggle/bob and ring movement are unchanged. This motion is presentation; the separate normalized heat state drives vent purging/damage.
 
@@ -382,16 +411,17 @@ radius. Native explosion replication carries both sound and effect, including
 detonations after carrier removal. Damage, fuse and safety checks are unchanged.
 Ordinary block damage/destruction retains its native sounds/effects.
 
-Tile placement has a crisp dispenser release and a damped, low thunk with a short
-catch click, once per simultaneous quartet. Short attack fades preserve the
-contact transient without a sustained metallic ring. Initial assembly follows the authored release/contact
+Tile placement uses the approved low magnetic pull and damped housing lock,
+once per simultaneous quartet. The 0.48 s travel and 0.26 s contact cues share
+one gain balance, with softened attacks and an upper-frequency rolloff that
+removes the old bright clicks and pitch sweeps. Initial assembly follows the authored release/contact
 points at 320 + 36×batch and 34 ticks later. Replacement releases at maintenance
 tick 24 and latches at completion (90); both follow the controller installation’s tile deployment rate.
 The local observer suppresses replay after first snapshots, approaching from
 outside earshot and prediction corrections. Separate emitters let release and
 latch tails overlap without interrupting ignition/ejection sounds.
-Normal disassembly has a geared release/pull cue as each quartet leaves the field
-and a deeper catch at its dispenser. These follow the reverse tile timeline,
+Normal disassembly has a rounded magnetic release/pull as each quartet leaves
+the field and a separate, deeper `TileStore` catch at its dispenser. These follow the reverse tile timeline,
 including interrupted startup, with silent reload/approach baselines and no replay
 after prediction corrections. Ejected tiles do not play retraction cues.
 
@@ -409,7 +439,7 @@ checks in `tools/check_mechanism_feedback.py` and the mod compatibility build
 passed; in-game levels, realistic-sound hearing and multiplayer audition remain
 unverified.
 
-Regenerate the thirteen mono 44.1kHz/16-bit PCM assets and twenty-one SBC cue
+Regenerate the fourteen mono 44.1kHz/16-bit PCM assets and twenty-two SBC cue
 definitions (pitch variants reuse their source WAVs) with
 `python3 ArcanePower/assets/build_audio.py` (NumPy required). No third-party sound
 recordings are used. `python3 ArcanePower/tools/check_audio.py` checks asset paths,
@@ -467,7 +497,7 @@ See the [remaining-work overview](../docs/arcane-power-remaining-work.md) for th
 
 [ContainmentController.cs](src/Data/Scripts/ArcanePower/ContainmentController.cs) places native electrical sinks on the two external controllers. SE pairs a generator and electrical sink in the same component container as storage, so the reactor remains a normal source while controllers draw the operating energy. The new `ArcaneContainment` sink group has priority 2 (after vanilla safe zones, before defense) and accepts partial supply. Native grid behavior and split/merge handling still require game review.
 
-[Reactor.Power.cs](src/Data/Scripts/ArcanePower/Reactor.Power.cs) uses provisional containment demand **1/10/100 MW**, a **90-second** internal shutdown reserve (**0.025/0.25/2.5 MWh**), and up to three times operating demand for charging. Full precharge therefore requests **4/40/400 MW** and takes approximately **30 seconds** with sufficient grid supply, before the existing assembly and output ramp. Startup requires grid input and a full reserve; the reserve cannot start the reactor or export electricity. Creative also requires electrical supply. Reserve charging uses actual distributed input, and persisted energy remains tied to the original entity ID.
+[Reactor.Power.cs](src/Data/Scripts/ArcanePower/Reactor.Power.cs) uses provisional containment demand **0.1/1/10 kW**, a **90-second** internal shutdown reserve (**2.5/25/250 Wh**), and up to three times operating demand for charging. Full precharge therefore requests **0.4/4/40 kW** and takes approximately **30 seconds** with sufficient grid supply, before the existing assembly and output ramp. Startup requires grid input and a full reserve; the reserve cannot start the reactor or export electricity. Creative also requires electrical supply. Reserve charging uses actual distributed input, and persisted energy remains tied to the original entity ID.
 
 Before assembly, the housing and subpart emissives **blink white once per second** while delivered surplus power charges the reserve. Waiting for power uses a **slow, two-second white fade**. These signals are distinct from the running fuel colours; critical and vent alarms keep priority. Terminal information and the LCD/tablet Overview and Power pages show startup charge percentage, stored energy, delivered/requested input, net charging power and a remaining-time estimate. LCD and tablet progress bars follow the replicated reserve. No surplus means an explicit waiting state without a countdown; a full reserve still requires containment input before startup. `tools/check_appearance.py` exercises actual power, status and emissive methods, and `tools/check_tablet_screen.py` checks the display layouts. In-game appearance and multiplayer review remain pending.
 
@@ -484,6 +514,21 @@ The scoped JSON graph, interactive view and audit report index these documents a
 ## Thermal failure and plasma delivery — 16 September 2026
 
 The local mod now contains `lab_64ff9a73f168`: updated smooth plasma, open thick containment frames, seven embedded collision models, generated CM/NG/ADD textures, spent-part definitions and direct-script thermal/physical ejection. The native upgrade empties and housing retain the selected fit. The final script build passed with zero warnings/errors; 54 delivery files were copied. Static fuel-colour preview, [behavior and remaining limits](THERMAL-FAILURE.md), deployment record (report pruned). No game reload, destructive test or regression suite was run.
+
+## Reactor platform collision repair — 27 October 2026
+
+The added pillar collision used one list containing fourteen convex hulls. SE's
+collector expanded those hulls but recorded only one shape for the grid, dropping
+the platform and most of the housing collision. The repair uses ten flat hulls:
+unchanged deck/roof and four pillars, plus four merged glass quadrants. Native
+checks now cover grid shape counts, 1,664 platform/roof contacts, 128 glass
+contacts, 64 pillar contacts, eight blocked character sweeps and four clear
+walkway sweeps. All three construction stages embed the same repaired collision.
+
+The native collision tags were replaced without changing render geometry,
+materials, sockets, subpart poses or animation. The new content-hashed model path
+requires a world reload to replace the cached broken collision. An in-game
+walk/landing check is still pending.
 
 ## Reactor housing collision repair — 9 October 2026
 

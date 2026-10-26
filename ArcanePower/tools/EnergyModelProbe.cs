@@ -20,6 +20,47 @@ class EnergyModelProbe
     {
         return new[] { m.M11,m.M12,m.M13,m.M14,m.M21,m.M22,m.M23,m.M24,m.M31,m.M32,m.M33,m.M34,m.M41,m.M42,m.M43,m.M44 };
     }
+    static void RewriteTag(string input, string output, string tag, Action<BinaryWriter> write)
+    {
+        var bytes = File.ReadAllBytes(input);
+        long pointer = -1;
+        using (var reader = new BinaryReader(new MemoryStream(bytes)))
+        {
+            if (reader.ReadString() != "Debug") throw new Exception("Unsupported native model header");
+            int count = reader.ReadInt32();
+            if (count < 0 || count > 10000) throw new Exception("Invalid native debug array");
+            bool indexed = false;
+            for (int i = 0; i < count; i++)
+            {
+                string debugValue = reader.ReadString();
+                if (debugValue.StartsWith("Version:") && int.Parse(debugValue.Substring(8)) >= 1066002) indexed = true;
+            }
+            if (!indexed) throw new Exception("Native model has no indexed tags");
+            count = reader.ReadInt32();
+            if (count < 1 || count > 1000) throw new Exception("Invalid native tag index");
+            for (int i = 0; i < count; i++)
+            {
+                string name = reader.ReadString();
+                long position = reader.BaseStream.Position;
+                int offset = reader.ReadInt32();
+                if (offset < 0 || offset >= bytes.Length) throw new Exception("Native tag offset outside file");
+                if (name == tag)
+                {
+                    if (pointer >= 0) throw new Exception("Duplicate native tag index");
+                    pointer = position;
+                }
+            }
+        }
+        if (pointer < 0) throw new Exception("Missing native tag index");
+        using (var stream = new MemoryStream())
+        using (var writer = new BinaryWriter(stream))
+        {
+            writer.Write(bytes);
+            writer.Write(tag); write(writer);
+            stream.Position = pointer; writer.Write(bytes.Length);
+            File.WriteAllBytes(output, stream.ToArray());
+        }
+    }
     static void Main(string[] args)
     {
         if (args[0] == "--highlights")
@@ -29,12 +70,13 @@ class EnergyModelProbe
             var dummies = (Dictionary<string,MyModelDummy>)highlightTags["Dummies"];
             foreach (var section in sections)
                 Console.WriteLine("SECTION\t" + section.Name + "\t" + section.Meshes.Sum(m => m.IndexCount));
-            foreach (var entry in dummies.Where(d => d.Key.StartsWith("detector_conveyor_")))
+            foreach (var entry in dummies.Where(d => d.Key.StartsWith("detector_conveyor_")
+                || d.Key == "detector_terminal" || d.Key.StartsWith("detector_terminal_")))
             {
                 object highlightValue;
                 string highlight = entry.Value.CustomData.TryGetValue("highlight", out highlightValue) ? highlightValue as string : null;
                 Console.WriteLine("HIGHLIGHT\t" + entry.Key + "\t" + highlight);
-                if (string.IsNullOrEmpty(highlight)) throw new Exception("Missing hatch highlight: " + entry.Key);
+                if (string.IsNullOrEmpty(highlight)) throw new Exception("Missing interaction highlight: " + entry.Key);
                 foreach (string target in highlight.Split(';'))
                     if (target.StartsWith("subpart_"))
                     {
@@ -73,50 +115,32 @@ class EnergyModelProbe
                 return;
             }
             for (int i = 0; i < lods.Length; i++) lods[i].Model = args[i + 3];
-            var bytes = File.ReadAllBytes(args[1]);
-            long pointer = -1;
-            using (var reader = new BinaryReader(new MemoryStream(bytes)))
-            {
-                if (reader.ReadString() != "Debug") throw new Exception("Unsupported native model header");
-                int count = reader.ReadInt32();
-                if (count < 0 || count > 10000) throw new Exception("Invalid native debug array");
-                bool indexed = false;
-                for (int i = 0; i < count; i++)
-                {
-                    string debugValue = reader.ReadString();
-                    if (debugValue.StartsWith("Version:") && int.Parse(debugValue.Substring(8)) >= 1066002) indexed = true;
-                }
-                if (!indexed) throw new Exception("Native model has no indexed tags");
-                count = reader.ReadInt32();
-                if (count < 1 || count > 1000) throw new Exception("Invalid native tag index");
-                for (int i = 0; i < count; i++)
-                {
-                    string tag = reader.ReadString();
-                    long position = reader.BaseStream.Position;
-                    int offset = reader.ReadInt32();
-                    if (offset < 0 || offset >= bytes.Length) throw new Exception("Native tag offset outside file");
-                    if (tag == "LODs")
-                    {
-                        if (pointer >= 0) throw new Exception("Duplicate LOD index");
-                        pointer = position;
-                    }
-                }
-            }
-            if (pointer < 0) throw new Exception("Missing native LOD index");
-            using (var stream = new MemoryStream())
-            using (var writer = new BinaryWriter(stream))
-            {
-                writer.Write(bytes);
-                writer.Write("LODs"); writer.Write(lods.Length);
+            RewriteTag(args[1], args[2], "LODs", writer => {
+                writer.Write(lods.Length);
                 foreach (var lod in lods) lod.Write(writer);
-                stream.Position = pointer; writer.Write(bytes.Length);
-                File.WriteAllBytes(args[2], stream.ToArray());
-            }
+            });
             var restored = (MyLODDescriptor[])Read(args[2], "LODs").GetTagData()["LODs"];
             if (!restored.Select(l => l.Model).SequenceEqual(lods.Select(l => l.Model)) ||
                 !restored.Select(l => l.Distance).SequenceEqual(lods.Select(l => l.Distance)))
                 throw new Exception("Native LOD roundtrip failed");
             Console.WriteLine("LOD paths remapped; all other native tag payloads preserved");
+            return;
+        }
+        if (args[0] == "--set-collision")
+        {
+            var collision = File.ReadAllBytes(args[3]);
+            if (((byte[])Read(args[1], "HavokCollisionGeometry").GetTagData()["HavokCollisionGeometry"]).SequenceEqual(collision))
+            {
+                File.Copy(args[1], args[2], true);
+                Console.WriteLine("Collision already matches; native bytes preserved");
+                return;
+            }
+            RewriteTag(args[1], args[2], "HavokCollisionGeometry", writer => {
+                writer.Write(collision.Length); writer.Write(collision);
+            });
+            var restored = (byte[])Read(args[2], "HavokCollisionGeometry").GetTagData()["HavokCollisionGeometry"];
+            if (!restored.SequenceEqual(collision)) throw new Exception("Native collision roundtrip failed");
+            Console.WriteLine("Collision replaced; all other native tag payloads preserved");
             return;
         }
         if (args[0] == "--collision")

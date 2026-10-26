@@ -13,7 +13,8 @@ import bpy
 
 ROOT = Path(__file__).resolve().parents[1]
 LAB = runpy.run_path(str(ROOT/'tools/prepare_lab.py'))
-PROTOTYPE = Path(bpy.data.filepath).name == 'arcane-power-prototype.blend'
+THERMAL_SUBPARTS = Path(bpy.data.filepath).name == 'arcane-thermal-models.blend'
+PROTOTYPE = THERMAL_SUBPARTS or Path(bpy.data.filepath).name == 'arcane-power-prototype.blend'
 STAGING = ROOT/'src/Models/Cubes/large'/('.prototype-main-stage' if PROTOTYPE else '.energy-main-stage')
 COLS = importlib.import_module('space-engineers-utilities.seut_collections')
 EXPORT = importlib.import_module('space-engineers-utilities.export.seut_export_utils')
@@ -25,11 +26,23 @@ class Reporter:
 
 
 def export_sources(names):
-    assert Path(bpy.data.filepath).name in ('arcane-energy-core.blend', 'arcane-power-prototype.blend'), 'Export production, not the review assembly'
+    assert Path(bpy.data.filepath).name in ('arcane-energy-core.blend', 'arcane-power-prototype.blend', 'arcane-thermal-models.blend'), 'Export production, not the review assembly'
+    if THERMAL_SUBPARTS:
+        assert set(names) <= {'ArcanePower_BlastShield'+str(i) for i in range(1, 7)}, 'Thermal blocks use export_thermal_models.py'
+        runpy.run_path(str(ROOT/'assets/audit_thermal_models.py'))['audit_blast_shields']()
+        if bpy.app.background:
+            # In this disposable export process, unrelated linked materials and
+            # review instances make SEUT's global remapping needlessly costly.
+            scenes = [bpy.data.scenes[name] for name in names]
+            bpy.context.window.scene = scenes[0]
+            keep = {obj for scene in scenes for obj in scene.objects}
+            bpy.data.batch_remove(ids=[obj for obj in bpy.data.objects if obj not in keep])
+            bpy.data.batch_remove(ids=[scene for scene in bpy.data.scenes if scene not in scenes])
+            bpy.data.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
     if bpy.app.background:
         # SEUT popup menus crash background Blender; retain the full report in stdout.
         importlib.import_module('space-engineers-utilities.seut_errors').show_popup_report = lambda *args: print('SEUT', args, flush=True)
-    for audit in (('audit_reactor_exterior.py', 'audit_controller_details.py') if PROTOTYPE else ('audit_energy_geometry.py',)):
+    for audit in (() if THERMAL_SUBPARTS else ('audit_reactor_exterior.py', 'audit_controller_details.py') if PROTOTYPE else ('audit_energy_geometry.py',)):
         runpy.run_path(str(ROOT/'assets'/audit))['main']()
     STAGING.mkdir(parents=True, exist_ok=True)
     rows = {}
@@ -65,11 +78,10 @@ def export_sources(names):
                             shared_meshes.append((obj,obj.data));obj.data=obj.data.copy()
                     # Lock concave/boolean polygon tessellation to Blender's
                     # evaluated surface instead of MWMBuilder's FBX importer.
-                    if PROTOTYPE:
-                        for obj in collection.objects:
-                            if obj.type=='MESH' and any(len(p.vertices)>3 for p in obj.data.polygons):
-                                modifier=obj.modifiers.new('Export triangulation','TRIANGULATE')
-                                triangulators.append((obj,modifier))
+                    for obj in collection.objects:
+                        if obj.type=='MESH' and any(len(p.vertices)>3 for p in obj.data.polygons):
+                            modifier=obj.modifiers.new('Export triangulation','TRIANGULATE')
+                            triangulators.append((obj,modifier))
                     bpy.context.view_layer.update();deps=bpy.context.evaluated_depsgraph_get();count=0
                     for obj in collection.objects:
                         if obj.type!='MESH':continue
@@ -118,13 +130,14 @@ def export_sources(names):
 
 
 def main(names):
-    original=bpy.context.scene
+    original=bpy.context.scene.name
     try:return export_sources(names)
     finally:
-        bpy.context.window.scene=original
+        if original in bpy.data.scenes:
+            bpy.context.window.scene=bpy.data.scenes[original]
         bpy.context.view_layer.update()
 
 
 if __name__ == '__main__':
-    names = globals().get('EXPORT_NAMES') or [s.name for s in bpy.data.scenes if s.name.startswith('ArcanePower_' if PROTOTYPE else 'ArcanePower_Energy')]
+    names = globals().get('EXPORT_NAMES') or (['ArcanePower_BlastShield'+str(i) for i in range(1, 7)] if THERMAL_SUBPARTS else [s.name for s in bpy.data.scenes if s.name.startswith('ArcanePower_' if PROTOTYPE else 'ArcanePower_Energy')])
     result = {'exported_sources': main(names), 'staging': str(STAGING)}

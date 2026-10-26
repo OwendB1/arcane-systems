@@ -1,8 +1,11 @@
 {
   "status": "passed",
-  "internal_tubes": 24,
-  "internal_objects": 112,
-  "checkpoint": "arcane-thermal-before-full-glass-pipes.blend",
-  "geometry_transforms_and_material_assignments_match": true,
-  "internal_glass_reflectivity": 0.2199999988079071
+  "checkpoint": "arcane-thermal-before-chamber-pipe-glass.blend",
+  "checkpoint_sha256": "e1cc426a0dc6a1180c09c9b7cf3b1fb163da5d84c2a233f891aec858c2f932ac",
+  "pillar_geometry_transforms_uvs_and_materials_match": true,
+  "pillar_pipes": 8,
+  "pillar_objects": 48,
+  "chamber_pipe_bodies_removed": 16,
+  "chamber_pipe_clamps_removed": 48,
+  "floor_vents": 4
 }

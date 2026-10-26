@@ -28,7 +28,15 @@ motion = (SRC / 'Reactor.Motion.cs').read_text()
 state = motion[motion.index('    public enum CorePhase'):motion.index('    public sealed partial class Reactor')]
 state = re.sub(r'\[Proto(?:Contract|Member\([^]]+\))\]', '', state)
 safety = (SRC / 'Reactor.Safety.cs').read_text()
-source = '''using System; using System.Collections.Generic; using System.IO; using System.Xml.Serialization; using VRage.Utils;
+source = '''using System; using System.Collections.Generic; using System.IO; using System.Xml.Serialization; using VRage.Utils; using ArcanePower;
+namespace ProtoBuf {
+ public class ProtoContractAttribute:Attribute {}
+ public class ProtoMemberAttribute:Attribute { public bool OverwriteList; public ProtoMemberAttribute(int id){} }
+}
+namespace ArcanePower {
+ public class ThermalRotorState { public bool Valid(long id){return true;} }
+ public class ThermalRadiatorState { public bool Valid(long id){return true;} }
+}
 ''' + state + (SRC / 'MechanismEvents.cs').read_text() + r'''
 class GatewayRole { public bool IsServer=true; }
 class GatewayUtilities {
@@ -55,9 +63,11 @@ class Block {
 class Check {
  Block Entity=new Block(),reactor;
  MotionState Motion=new MotionState();
- int initializationFrames=120,controllerRingCapacity=2;
+ int initializationFrames=120,controllerRingCapacity=2,controllerDiscoveryFrames=600,reloadPowerFrames;
  float previousControllers=-1;
  bool restoreLegacyHardware,motionInitialized=true,routeReady;
+ bool IsLive=true,ThermalVariant,thermalRestoreFault;
+ static float[] PowerMW={10000,100000,1000000};
  long Id {get{return reactor.EntityId;}}
  Guid MotionStorage=Guid.NewGuid();
  static int[] TileTypes=new int[3];
@@ -67,6 +77,8 @@ class Check {
  void UpdateSafety(){} void UpdateFuel(){} void UpdatePower(){} void UpdateTiles(){} void UpdateMotion(){}
  void UpdateAppearance(){} void UpdateSound(){} void DrawMotion(){} void DrawVentOutlet(){}
  void RefreshRestPoses(){}
+ void UpdateThermalMode(){} void UpdateCriticalCore(){}
+ bool HasIntactControllers(){return reactor.UpgradeValues["ArcaneControllerCount"]>=2;}
 ''' + ''.join(method(file, name) for file, name in (
     ('Reactor.Motion.cs', 'RestoreMotionState'), ('Reactor.Motion.cs', 'Valid'),
     ('Reactor.Motion.cs', 'SaveMotion'), ('Reactor.Tiles.cs', 'ValidTileGrades'),
@@ -160,6 +172,7 @@ with tempfile.TemporaryDirectory(prefix='arcane-reload-retract-') as directory:
     target.write_text(source)
     exe = target.with_suffix('.exe')
     subprocess.run(['mcs', '-warn:0', '-r:/usr/lib/mono/4.5/Facades/netstandard.dll',
-                    '-r:' + str(GAME / 'VRage.Library.dll'), '-out:' + str(exe), str(target)], check=True)
+                    '-r:' + str(GAME / 'VRage.Library.dll'), '-out:' + str(exe), str(target),
+                    str(SRC / 'ThermalPlant.cs'), str(SRC / 'ThermalLoops.cs')], check=True)
     subprocess.run(['mono', str(exe), str(ROOT / 'tools/fixtures/reactor-running-rounding.xml')], check=True,
                    env={**os.environ, 'MONO_PATH': str(GAME)})

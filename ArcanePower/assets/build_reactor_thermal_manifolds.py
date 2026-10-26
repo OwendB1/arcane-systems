@@ -568,8 +568,11 @@ def build(p):
             obj.parent = root
     bpy.context.view_layer.update()
     runpy.run_path(str(ROOT/'assets/refine_reactor_exterior.py'))['fit_roof_surfaces'](p.col)
+    runpy.run_path(str(ROOT/'assets/refine_reactor_exterior.py'))['fit_pillar_surfaces'](p.col)
+    runpy.run_path(str(ROOT/'assets/build_reactor_pillar_collision.py'))['apply']()
     fit_closed_covers()
     fit_ceiling_hatch(p.col)
+    runpy.run_path(str(ROOT/'assets/build_control_access.py'))['apply_reactor'](p.scene,p.col)
     return {'manifolds': len(motion), 'original_curved_armor_halves': 8, 'pipe_stroke_m': STROKE,
             'sideways_slide_rad': SLIDE, 'pocket_inset_m': INSET, 'retired_old_details': len(removed)}
 

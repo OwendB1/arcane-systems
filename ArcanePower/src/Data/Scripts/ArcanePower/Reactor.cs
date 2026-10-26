@@ -28,9 +28,12 @@ namespace ArcanePower
                     && reactor.SlimBlock != null && reactor.GetInventory() != null;
             }
         }
-        // Native upgrade modules refresh connections on their 100-frame update.
-        // Keep the saved pose parked until that pass, then prime power for two ticks.
+        // Native attachment discovery can take several 100-frame passes on load.
+        // Wait for real connections, with a deadline for missing/broken hardware,
+        // then leave two ticks to prime controller sinks before enforcing power.
         private int initializationFrames = 120;
+        private int controllerDiscoveryFrames = 600;
+        private int reloadPowerFrames;
         private bool motionInitialized;
         private float previousControllers = -1;
         private int controllerRingCapacity = 2;
@@ -57,6 +60,10 @@ namespace ArcanePower
         public override void UpdateOnceBeforeFrame()
         {
             if (!IsLive) return;
+            // Brayton exports through turbines, so the native reactor reports
+            // not-working and repeatedly paints its own yellow warning. Our
+            // containment/fuel/thermal presentation owns these materials.
+            ((Sandbox.Game.Entities.MyCubeBlock)Entity).HandleEmissiveStateChange = false;
             reactor.OnUpgradeValuesChanged += CheckContainment;
             reactor.AppendingCustomInfo += AppendInfo;
             NeedsUpdate = MyEntityUpdateEnum.EACH_FRAME;
@@ -73,9 +80,14 @@ namespace ArcanePower
             RefreshRestPoses();
             if (initializationFrames > 0)
             {
+                CheckContainment();
+                if (--controllerDiscoveryFrames > 0 && (previousControllers < 2 || !HasIntactControllers()))
+                    initializationFrames = System.Math.Max(initializationFrames, 4);
                 if (--initializationFrames > 0)
                 {
-                    CheckContainment();
+                    // A restored critical core must keep its independent fuse
+                    // even while native controller discovery is pending.
+                    if (MyAPIGateway.Multiplayer.IsServer) UpdateCriticalCore();
                     if (initializationFrames <= 2)
                     {
                         CheckVentRoute();
@@ -91,6 +103,12 @@ namespace ArcanePower
                     UpdateSound();
                     return;
                 }
+                // The thermal session validates circuits and grants paid output
+                // after this frame. Bridge the native distributor handoff using
+                // the saved containment reserve; never restart a saved Off core.
+                if (reactor.Enabled && !Motion.PowerStarved && Motion.Vent == VentPhase.Idle
+                    && (Motion.Core == CorePhase.Starting || Motion.Core == CorePhase.Running))
+                    reloadPowerFrames = 120;
             }
             // Native module connection events update the value. The enabled guard also
             // catches manual/toolbar attempts to start without the two controllers.

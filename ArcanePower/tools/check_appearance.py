@@ -32,6 +32,8 @@ state = motion[motion.index('    public enum CorePhase'):motion.index('    publi
 methods = ''.join(member(source, signature) for source, signature in [
     (reactor, '        private void UpdateAppearance()'),
     (reactor, '        private void UpdateStatus()'),
+    ((SRC / 'Reactor.Failure.cs').read_text(), '        private void UpdateThermal()'),
+    ((SRC / 'Reactor.Failure.cs').read_text(), '        internal void UpdateThermalForecast()'),
     (power, '        private bool CanPrepareContainment'),
     (power, '        private float ContainmentMW'),
     (power, '        private double ReserveCapacityMJ'),
@@ -99,6 +101,8 @@ static class CoreHazards { public static float EjectedCountdown(long id,out int 
 class Reactor {
  public MyEntity Entity;
  MotionState Motion=new MotionState(); bool receivedState=true,thermalRestoreFault,thermalStartRequested;
+ ThermalForecast heatForecast;
+ bool ThermalCanRun {get{return reactor.Enabled && Motion.Core==CorePhase.Running;}}
  bool ThermalVariant {get{return Motion.Thermal!=null;}} double ThermalHeatMW=25000;
  const float CooldownHeat=.15f,AutoEjectionIntegrity=.60f;
  readonly List<ContainmentController> powerControllers=new List<ContainmentController>();
@@ -225,28 +229,45 @@ checks = r'''
   for(int tier=1;tier<=3;tier++){
    var r=new Reactor(tier);r.RenderReady();r.Motion.Core=CorePhase.Running;r.Motion.PowerReady=true;
    foreach(float heat in new[]{0f,.5f,.85f,1f}){
-    r.Motion.Heat=heat;r.UpdateStatus();r.UpdateAppearance();
+    r.Motion.Heat=heat;r.Motion.TargetLoad=1;r.UpdateThermal();r.UpdateThermalForecast();r.UpdateStatus();r.UpdateAppearance();
     Need(r.Entity.Color.Equals(FuelColors[tier-1]),"healthy heat keeps the running fuel colour, including full load");
+    Need(r.ReadStatus(false).HeatTone=="white","healthy warmup and full load do not colour terminal/LCD heat as a warning");
    }
    r.reactor.Inventory.Stock=0;r.UpdateStatus();r.UpdateAppearance();
    Need(r.Motion.Status==ReactorStatus.OutOfFuel && r.Entity.Color.Equals(Color.White),"fuel starvation is neutral white, not a thermal alarm");
    r.reactor.Enabled=false;r.UpdateStatus();r.UpdateAppearance();
    Need(r.Motion.Status==ReactorStatus.OutOfFuel && r.Entity.Color.Equals(Color.White),"automatic shutdown cannot latch yellow for missing fuel");
    r.reactor.Inventory.Stock=10;r.reactor.Enabled=true;r.Motion.TileStarved=true;r.Motion.TileWear=1;r.Motion.Heat=.6f;
-   r.UpdateStatus();r.UpdateAppearance();
+   r.UpdateThermal();r.UpdateThermalForecast();r.UpdateStatus();r.UpdateAppearance();
    Need(r.Entity.Color.Equals(Color.Yellow) && r.Entity.Subparts["Ring1"].Color.Equals(Color.Yellow),"failed worn tiles warn on housing and subparts before heat crosses 100%");
-   r.Motion.TileStarved=false;r.Motion.TileWear=0;r.UpdateStatus();r.UpdateAppearance();
-   Need(r.Entity.Color.Equals(FuelColors[tier-1]),"repair clears yellow immediately without a renderer timeout");
-   r.Motion.Core=CorePhase.Cooling;r.reactor.Enabled=false;r.Motion.Heat=1.1f;r.UpdateStatus();r.UpdateAppearance();
-   Need(r.Entity.Color.Equals(Color.Yellow),"retained overheating remains visible during shutdown");
+   Need(r.ReadStatus(false).HeatTone=="yellow" && r.ReadStatus(false).State=="MELTDOWN RISK / NEXT 60 S","status and heat tone use the same predictive warning");
+   r.Motion.TileStarved=false;r.Motion.TileWear=0;r.UpdateThermal();r.UpdateThermalForecast();r.UpdateStatus();r.UpdateAppearance();
+   Need(r.Entity.Color.Equals(Color.Yellow) && r.ReadStatus(false).State=="THERMAL WARNING / RECOVERING","repair begins a stable recovery hold");
+   for(int i=0;i<315;i++){r.UpdateThermal();r.UpdateThermalForecast();}r.UpdateStatus();r.UpdateAppearance();
+   Need(r.Entity.Color.Equals(FuelColors[tier-1]),"safe forecast clears yellow after recovery confirmation");
+   r.Motion.Core=CorePhase.Cooling;r.reactor.Enabled=false;r.Motion.Heat=1.1f;r.UpdateThermal();r.UpdateThermalForecast();r.UpdateStatus();r.UpdateAppearance();
+   Need(!r.Entity.Color.Equals(Color.Yellow) && r.ReadStatus(false).HeatTone=="white","hot residual core cooling safely does not claim runaway");
+   r.Motion.Thermal.Loops[0].ExcessMJ=50000;r.Motion.Thermal.Loops[0].RequiredCoolingMW=5000;
+   r.Motion.Thermal.RequiredCoolingMW=5000;
+   for(int i=0;i<135;i++){r.UpdateThermal();r.UpdateThermalForecast();}r.UpdateAppearance();
+   Need(r.Entity.Color.Equals(Color.Yellow),"retained circuit heat that will drive the core higher still warns during shutdown");
    r.Motion.Critical=true;r.UpdateAppearance();Need(r.Entity.Color.Equals(Color.Red),"critical warning takes priority over yellow");
    r.Motion.Critical=false;r.Motion.Vent=VentPhase.ShieldClosing;r.UpdateAppearance();Need(r.Entity.Color.Equals(Color.Red),"ejection takes priority over yellow");
-   r.Motion.Vent=VentPhase.Idle;r.Motion.Heat=1;r.UpdateAppearance();Need(!r.Entity.Color.Equals(Color.Yellow),"cooling below the alarm threshold clears yellow immediately");
+   r.Motion.Vent=VentPhase.Idle;r.Motion.Heat=1;r.Motion.ForecastPeakHeat=1;r.Motion.ForecastWarning=false;r.UpdateAppearance();Need(!r.Entity.Color.Equals(Color.Yellow),"server-cleared warning restores the normal colour");
+   r.Motion.ForecastPeakHeat=3;MyAPIGateway.Multiplayer.IsServer=false;r.UpdateThermal();r.UpdateThermalForecast();
+   Need(r.Motion.ForecastPeakHeat==3,"clients present the server forecast rather than inventing their own");MyAPIGateway.Multiplayer.IsServer=true;
    r.Motion.Heat=2;r.Motion.PayloadReleased=true;r.UpdateAppearance();Need(!r.Entity.Color.Equals(Color.Yellow),"released core does not leave a stale housing alarm");
    r.Motion.PayloadReleased=false;r.Motion.Core=CorePhase.Off;r.Motion.TileStarved=true;r.Motion.TileWear=1;
    r.UpdateStatus();r.UpdateAppearance();Need(!r.Entity.Color.Equals(Color.Yellow),"missing startup tiles without a core are not runaway");
   }
-  Console.WriteLine("PASS: yellow reserved for thermal danger, fuel/idle states, recovery and critical/ejection priority");
+  var named=new Reactor();named.Motion.Core=CorePhase.Running;named.Motion.ForecastWarning=true;
+  named.Motion.ForecastPeakHeat=1.1f;named.Motion.ForecastOverheatSeconds=42.3f;named.Motion.ForecastCircuit=2;
+  Need(named.ReadStatus(false).Value("Thermal outlook")=="Circuit 2 / overheating in ~43 s","terminal forecast names the limiting circuit and rounds ETA up");
+  named.Motion.ForecastMeltdownSeconds=50;named.Motion.ForecastPeakHeat=2;
+  Need(named.ReadStatus(false).Value("Thermal outlook")=="Circuit 2 / critical heat in ~50 s","critical forecast has its own ETA");
+  named.Motion.Critical=true;
+  Need(named.ReadStatus(false).Value("Thermal outlook")=="Supercritical / countdown active","armed hazard cannot claim a safe outlook");
+  Console.WriteLine("PASS: rolling forecasts, warning/recovery timing, circuit ETAs, server authority and critical/ejection priority");
  }
  static void Main(){Charging();Priority();RenderRecovery();ThermalWarnings();}
 }
@@ -256,5 +277,5 @@ with tempfile.TemporaryDirectory(prefix='arcane-appearance-') as folder:
     path.write_text(stubs + fields + methods + checks + state + types)
     exe = path.with_suffix('.exe')
     subprocess.run(['mcs', '-warn:0', '-out:' + str(exe), str(path),
-                    str(SRC/'ThermalPlant.cs'), str(SRC/'ThermalLoops.cs')], check=True)
+                    str(SRC/'ThermalPlant.cs'), str(SRC/'ThermalLoops.cs'), str(SRC/'ThermalForecast.cs')], check=True)
     subprocess.run(['mono', str(exe)], check=True)

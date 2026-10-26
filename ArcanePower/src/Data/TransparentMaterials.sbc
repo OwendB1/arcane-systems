@@ -192,7 +192,7 @@
       </Id>
       <AlphaMistingEnable>false</AlphaMistingEnable>
       <AlphaSaturation>1</AlphaSaturation>
-      <CanBeAffectedByOtherLights>true</CanBeAffectedByOtherLights>
+      <CanBeAffectedByOtherLights>false</CanBeAffectedByOtherLights>
       <IgnoreDepth>false</IgnoreDepth>
       <Texture>Textures\Particles\Smoke_lit.dds</Texture>
       <UseAtlas>false</UseAtlas>
@@ -213,7 +213,7 @@
       </Id>
       <AlphaMistingEnable>false</AlphaMistingEnable>
       <AlphaSaturation>1</AlphaSaturation>
-      <CanBeAffectedByOtherLights>true</CanBeAffectedByOtherLights>
+      <CanBeAffectedByOtherLights>false</CanBeAffectedByOtherLights>
       <IgnoreDepth>false</IgnoreDepth>
       <Texture>Textures\Particles\ProjectileTrailLine.dds</Texture>
       <UseAtlas>false</UseAtlas>
@@ -278,7 +278,7 @@
       <ReflectionShadow>0.2</ReflectionShadow>
       <Gloss>0.4</Gloss>
       <GlossTextureAdd>0.55</GlossTextureAdd>
-      <SpecularColorFactor>4</SpecularColorFactor>
+      <SpecularColorFactor>4.0</SpecularColorFactor>
       <IsFlareOccluder>false</IsFlareOccluder>
     </TransparentMaterial>
     <TransparentMaterial>
@@ -332,7 +332,7 @@
       <ReflectionShadow>0.2</ReflectionShadow>
       <Gloss>0.4</Gloss>
       <GlossTextureAdd>0.55</GlossTextureAdd>
-      <SpecularColorFactor>3</SpecularColorFactor>
+      <SpecularColorFactor>3.0</SpecularColorFactor>
       <IsFlareOccluder>false</IsFlareOccluder>
     </TransparentMaterial>
   </TransparentMaterials>

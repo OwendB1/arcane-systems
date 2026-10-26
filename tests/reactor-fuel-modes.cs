@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using VRage;
 using VRageMath;
 using ArcanePower;
+using VRage.Utils;
 using IMyTerminalBlock = Block;
 using IMyReactor = ReactorBlock;
 namespace ProtoBuf {
@@ -29,7 +30,10 @@ class ComponentStack {
 }
 class Slim { public float BuildLevelRatio=1; public Block FatBlock; public ComponentStack ComponentStack=new ComponentStack(); }
 class Logic { public object Component=new ContainmentController(); public T GetAs<T>() where T:class{return Component as T;} }
-class ContainmentController {}
+class ContainmentController {
+ public float Input,Requested;
+ public float Request(long id,float demand){Requested=demand;return Input;}
+}
 class Block {
  public long EntityId,OwnerId;
  public Grid CubeGrid;
@@ -54,6 +58,8 @@ class MyCubeBlock : Block { public Dictionary<int,Attachment> CurrentAttachedUpg
 class ReactorBlock : MyCubeBlock {
  public bool UseConveyorSystem;
  public float CurrentOutput,Capacity,PowerOutputMultiplier=1;
+ public Dictionary<string,float> UpgradeValues=new Dictionary<string,float>();
+ public void RefreshCustomInfo(){}
 }
 class NativeReactor { public float Capacity; }
 class MyObjectBuilder_Ingot { public string SubtypeName; }
@@ -121,11 +127,13 @@ class Reactor {
  NativeReactor nativeReactor=new NativeReactor();
  internal MotionState Motion=new MotionState{Thermal=new ThermalReactorState()};
  int controllerRingCapacity=4,initializationFrames,networkTick=1,appearanceRefresh;
+ int controllerDiscoveryFrames=600,reloadPowerFrames,criticalChecks;
  float previousControllers=2;
  bool restoreLegacyHardware,thermalStartRequested;
  bool IsLive=true,ThermalVariant=true,motionInitialized=true,thermalRestoreFault,CanOperate=true,ManifoldRigReady=true;
  List<IMyTerminalBlock> fuelSources=new List<IMyTerminalBlock>();
  List<MyInventoryItem> transferItems=new List<MyInventoryItem>();
+ readonly List<ContainmentController> powerControllers=new List<ContainmentController>();
  const float CooldownHeat=.15f;
  internal long Id=1;
  int publications;
@@ -133,6 +141,12 @@ class Reactor {
  void PublishMotion(){publications++;}
  void Part(string name,int pose){}
  void PullTiles(Inventory source,Inventory target){}
+ void RefreshRestPoses(){} void DrawMotion(){} void DrawVentOutlet(){}
+ void UpdateAppearance(){} void UpdateSound(){} void UpdateTiles(){}
+ void UpdateCriticalCore(){criticalChecks++;}
+ void CheckVentRoute(){if(initializationFrames==0 && !CanOperate)reactor.Enabled=false;}
+ void UpdateSafety(){Motion.ControllersReady=HasIntactControllers();}
+ void UpdateMotion(){if(!reactor.Enabled)BeginShutdown();}
  // PRODUCTION_MEMBERS
  static int checks;
  static void Need(bool value,string message){checks++;if(!value)throw new Exception(message);}
@@ -142,11 +156,85 @@ class Reactor {
   Entity.CurrentAttachedUpgradeModules.Clear();
   for(int i=0;i<2;i++)Entity.CurrentAttachedUpgradeModules[i]=new Attachment{Block=new Block{EntityId=i+2,CubeGrid=reactor.CubeGrid}};
   Entity.CurrentAttachedUpgradeModules[0].Block.BlockDefinition.SubtypeName=advanced?"ArcanePower_AdvancedContainmentController":"ArcanePower_ContainmentController";
+  reactor.UpgradeValues["ArcaneControllerCount"]=2;reactor.UpgradeValues["ArcaneContainment"]=4;
  }
+ void Supply(float mw){foreach(var entry in reactor.CurrentAttachedUpgradeModules.Values)entry.Block.GameLogic.GetAs<ContainmentController>().Input=mw/2;}
  void Mode(ThermalMode mode){Motion.Thermal.Mode=Motion.Thermal.Requested=mode;Motion.Thermal.Deployment=mode==ThermalMode.Brayton?1:0;}
  void Stock(int tier,double amount){reactor.Inventory.Stock[Fuels[tier-1]]=(MyFixedPoint)amount;}
  double Stock(int tier){return (double)reactor.Inventory.GetItemAmount(MyItemType.MakeIngot(Fuels[tier-1]));}
  void Running(){Motion.Core=CorePhase.Running;Motion.CoreTick=1170;Motion.Heat=.8f;Motion.PowerRamp=1;Motion.ReserveMJ=10000;}
+ static void RebalancedRatings(){
+  var r=new Reactor();
+  for(int tier=1;tier<=3;tier++){
+   r.Motion.FuelTier=tier;
+   Near(r.ThermalHeatMW,new[]{2.5,25,250}[tier-1],"fuel heat rating");
+   r.Mode(ThermalMode.Brayton);
+   Near(r.ElectricalRatingMW,new[]{2.0,20,200}[tier-1],"Brayton native electrical ceiling");
+  }
+  foreach(bool upgraded in new[]{false,true}){
+   double expected=upgraded?50:.25;
+   var block=new ThermalBlock{Block=new Block(),Generator=new ReactorBlock(),
+    Spec=new ThermalModel{Grade=upgraded?3:0,RatingMW=upgraded?62.5:.625}};
+   block.Generator.BlockDefinition.MaxPowerOutput=(float)expected;
+   block.SetOutput(expected);
+   Near(block.Generator.PowerOutputMultiplier*block.Generator.BlockDefinition.MaxPowerOutput,expected,"native theoretical turbine maximum");
+   Near(block.Generator.Capacity*216000,expected,"native effective turbine maximum");
+  }
+  r.Motion.EntityId=r.Id;r.Motion.Thermal.Store.EntityId=r.Id;r.Motion.ReserveMJ=0;
+  r.Motion.Thermal.Store.HotMJ=1000000;
+  Need(Valid(r.Motion),"pre-rebalance paid heat remains loadable");
+ }
+ static void ReloadInitialization(){
+  var snapshot=new MotionState{EntityId=1};
+  Need(Valid(snapshot),"older snapshots default to an unconfirmed forecast with unknown ETAs");
+  foreach(float seconds in new[]{-2f,61f,float.NaN,float.PositiveInfinity}){
+   snapshot.ForecastOverheatSeconds=seconds;Need(!Valid(snapshot),"reject invalid overheat ETA");snapshot.ForecastOverheatSeconds=-1;
+   snapshot.ForecastMeltdownSeconds=seconds;Need(!Valid(snapshot),"reject invalid critical ETA");snapshot.ForecastMeltdownSeconds=-1;
+  }
+  snapshot.ForecastCircuit=5;Need(!Valid(snapshot),"reject nonexistent forecast circuit");
+  var r=new Reactor();r.Mode(ThermalMode.Brayton);r.Stock(2,10);r.Motion.FuelTier=2;r.Running();
+  r.Motion.ReserveMJ=r.ReserveCapacityMJ;r.initializationFrames=120;
+  r.Entity.CurrentAttachedUpgradeModules.Clear();r.reactor.UpgradeValues.Clear();
+  for(int frame=0;frame<180;frame++){
+   r.UpdateBeforeSimulation();
+   Need(r.reactor.Enabled && r.Motion.Core==CorePhase.Running && !r.ThermalInitialized,"delayed native discovery preserves restored state without dispatch");
+  }
+  Need(r.criticalChecks==180,"critical-core tracking continues during discovery");
+  r.Controllers(true);r.reactor.UpgradeValues["ArcaneControllerCount"]=1;
+  r.UpdateBeforeSimulation();Need(!r.ThermalInitialized,"partial upgrade registration is not ready");
+  r.reactor.UpgradeValues["ArcaneControllerCount"]=2;
+  r.UpdateBeforeSimulation();Need(!r.ThermalInitialized,"controller sinks get a priming interval");
+  r.UpdateBeforeSimulation();Need(!r.ThermalInitialized,"both priming ticks follow complete controller discovery");
+  r.UpdateBeforeSimulation();
+  Need(r.ThermalInitialized && r.reactor.Enabled && !r.Motion.PowerPaused && !r.Motion.PowerStarved,"paid reserve bridges the first restored dispatch frame");
+  Near(r.Motion.ReserveMJ,r.ReserveCapacityMJ-r.ContainmentMW/60.0,"reload debits actual missing containment energy");
+  r.UpdateBeforeSimulation();r.Supply(r.ContainmentMW);r.UpdateBeforeSimulation();
+  Need(r.reactor.Enabled && r.reloadPowerFrames==0,"measured native input completes reload handoff");
+  r.Supply(0);r.UpdateBeforeSimulation();
+  Need(!r.reactor.Enabled && r.Motion.PowerStarved,"normal post-recovery power loss still shuts down immediately");
+  foreach(bool staleCounts in new[]{false,true}){
+   r=new Reactor();r.Mode(ThermalMode.Brayton);r.Stock(1,10);r.Running();r.initializationFrames=120;
+   r.Entity.CurrentAttachedUpgradeModules.Clear();if(!staleCounts)r.reactor.UpgradeValues.Clear();
+   for(int frame=0;frame<650;frame++)r.UpdateBeforeSimulation();
+   Need(r.initializationFrames==0 && !r.reactor.Enabled,"missing physical controllers fail closed by bounded deadline even with stale counts");
+  }
+  foreach(bool critical in new[]{false,true}){
+   r=new Reactor();r.Stock(1,10);r.Running();r.initializationFrames=1;
+   r.Motion.Critical=critical;r.Motion.ReserveMJ=critical?r.ReserveCapacityMJ:0;
+   r.UpdateBeforeSimulation();
+   Need(!r.reactor.Enabled && r.Motion.PowerStarved,"empty reserve or critical core never gets a power bypass");
+  }
+  r=new Reactor();r.Stock(1,10);r.Running();r.initializationFrames=1;r.reactor.Enabled=false;
+  r.UpdateBeforeSimulation();Need(!r.reactor.Enabled && r.reloadPowerFrames==0,"saved disabled core never auto-restarts");
+  r=new Reactor();r.Stock(1,10);r.initializationFrames=1;r.UpdateBeforeSimulation();
+  Need(r.Motion.Core==CorePhase.Off && r.reloadPowerFrames==0,"cold startup gets no reload allowance");
+  r=new Reactor();r.Stock(1,10);r.Running();r.initializationFrames=1;r.Motion.ReserveMJ=r.ReserveCapacityMJ;
+  for(int frame=0;frame<121;frame++)r.UpdateBeforeSimulation();
+  Need(!r.reactor.Enabled && r.Motion.PowerStarved && r.Motion.ReserveMJ>0,"handoff deadline stops a persistent outage even with remaining reserve");
+  r=new Reactor();r.Mode(ThermalMode.Brayton);r.Stock(1,10);r.Running();r.initializationFrames=1;
+  r.UpdateBeforeSimulation();r.CheckLoopSafety();
+  Need(!r.reactor.Enabled && !r.Motion.Thermal.LoopTrip,"reload allowance cannot bypass all-circuit loss or create a manual-start latch");
+ }
  static bool TerminalEnabled(Reactor target){
   var Reactors=new Dictionary<long,Reactor>{{1,target}};
   Func<Block,bool> gate=/* TERMINAL_GATE */;
@@ -326,7 +414,7 @@ class Reactor {
   for(int rings=2;rings<=4;rings++)for(int tier=1;tier<rings;tier++){
    if((mode==ThermalMode.Standalone && tier!=1) || (mode==ThermalMode.Brayton && rings==2))continue;
    double minutes=tier==1?2.5:10,efficiency=new[]{.8,.9,.99}[rings-2];
-   double rating=new[]{25000.0,250000.0,2500000.0}[tier-1];
+   double rating=new[]{2.5,25,250}[tier-1];
    foreach(double load in new[]{0.0,.25,.5,.75,1.0}){
     var r=new Reactor();r.Mode(mode);r.Motion.RingCount=rings;r.Motion.FuelTier=tier;r.Stock(tier,10);r.Running();
     double admitted=0;
@@ -437,7 +525,17 @@ class Reactor {
   session.Step(r,machines);
   Need(r.Motion.Thermal.ConnectedLoops==4 && !r.reactor.Enabled,"addition restores validity without starting reactor");
   var cached=ThermalSession.circuitGraphs[r.Id];
-  r.reactor.Enabled=true;r.Running();session.Step(r,machines);
+  r.reactor.Enabled=true;r.Running();r.Motion.ReserveMJ=r.ReserveCapacityMJ;
+  r.initializationFrames=1;r.Motion.Thermal.LoopVersion=2;r.InitializeThermalRuntime();
+  Need(r.Motion.Thermal.ConnectedLoops==0,"reload discards saved connection claims");
+  r.UpdateBeforeSimulation();
+  Need(r.reactor.Enabled && r.ThermalCanRun,"before-simulation handoff permits validated after-simulation dispatch");
+  double reserveAfter=r.Motion.ReserveMJ;
+  session.Step(r,machines);
+  Need(r.reactor.Enabled && !r.Motion.Thermal.LoopTrip,"restored valid circuits keep running without a manual startup latch");
+  r.UpdateBeforeSimulation();Near(r.Motion.ReserveMJ,reserveAfter-r.ContainmentMW/60.0,"next native interval still pays containment deficit");
+  r.Supply(r.ContainmentMW);r.UpdateBeforeSimulation();
+  Need(r.reloadPowerFrames==0 && r.reactor.Enabled,"native power ends recovery after circuit dispatch");
   Need(Object.ReferenceEquals(cached,ThermalSession.circuitGraphs[r.Id]),"powerup uses the existing validated physical graph");
   Need(r.Motion.Thermal.ConnectedLoops==4 && session.Valves==15,"cold circuits are immediately ready with open valves");
   Near(r.Motion.Thermal.ProducedMW,0,"an unused native grant produces no reaction heat");
@@ -583,7 +681,7 @@ class Reactor {
   Need(root.CircuitRevision==4 && panel.CircuitRevision==2,"removed extension unsubscribes even after GameLogic.Entity is released");
   ThermalSession.Blocks.Clear();
  }
- static void Main(){OutputLifetime();ReservationSafety();FuelBalance();Residuum();FuelMatrix();ControllerAndCommands();CoolingAndAccounting();CircuitShutdown();CircuitAccounting();RadiatorRemoval();Console.WriteLine("PASS: "+checks+" production fuel/mode/controller checks; survival/creative, terminal/server, inventory/conveyors, restore, cooldown and paid-heat accounting");}
+ static void Main(){RebalancedRatings();ReloadInitialization();OutputLifetime();ReservationSafety();FuelBalance();Residuum();FuelMatrix();ControllerAndCommands();CoolingAndAccounting();CircuitShutdown();CircuitAccounting();RadiatorRemoval();Console.WriteLine("PASS: "+checks+" production fuel/mode/controller checks; survival/creative, terminal/server, inventory/conveyors, restore, cooldown and paid-heat accounting");}
 }
 
 // Recording engine doubles; the circuit dispatcher and heat transport are injected unchanged.

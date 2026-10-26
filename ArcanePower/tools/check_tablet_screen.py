@@ -76,7 +76,7 @@ namespace ArcanePower {
   static void Near(float a,float b,string message){Need(Math.Abs(a-b)<.01,message);}
   static StatusReport Report(bool precharging=false,bool waiting=false,bool brayton=false){
    var report=new StatusReport{Name="Arcane Reactor",State=precharging?(waiting?"STARTUP WAITING FOR POWER  /  50%":"CHARGING STARTUP RESERVE  /  50%"):brayton?"REACTOR OVERHEATING / FAILURE RISK":"RUNNING",Tone=precharging?"white":brayton?"red":"green",Fuel="Aether",Precharging=precharging,Brayton=brayton,Reserve=.5};
-   string[] labels={"Output","Heat","Reserve","Fuel stock","Spare tiles","Vent","Net","Ramp","Containment","Fuel efficiency","Fuel burn","Fuel remaining","Security mode","Integrity","Controllers","Field","Reserve energy","Tile grade","Quartet wear","Replacing","Dismantle at","Tile demand","Tile reserve","Tile stock","Startup tiles","Conveyors","Route","Doors"};
+   string[] labels={"Output","Heat","60 s heat peak","Reserve","Fuel stock","Spare tiles","Vent","Net","Ramp","Containment","Fuel efficiency","Fuel burn","Fuel remaining","Security mode","Integrity","Controllers","Field","Reserve energy","Tile grade","Quartet wear","Replacing","Dismantle at","Tile demand","Tile reserve","Tile stock","Startup tiles","Conveyors","Route","Doors"};
    foreach(string label in labels)report.Rows.Add(new StatusRow{Section="TEST",Label=label,Value=label=="Fuel stock"?"4991.814 units":label=="Tile stock"?"Standard 308 / Reinforced 0 / Advanced 0":"Test reading",Tone="white"});
    if(brayton){
     string[] coolingLabels={"Circuits available","Conversion efficiency","Cooling capacity","Cooling required","Reaction heat","Full-load cooling","Heat removed","Accumulated heat"};
@@ -91,11 +91,23 @@ namespace ArcanePower {
    return report;
   }
   static void Layout(){
+   foreach(string tone in new[]{"white","yellow","red"}){
+    var report=Report();report.Heat=1;report.HeatTone=tone;
+    var heat=report.Rows.Single(row=>row.Label=="Heat");heat.Value="100% / critical 125%";heat.Tone=tone;
+    Need(ReactorDashboard.Draw(report,0,"","test").Single(s=>s.Type==SpriteType.TEXTURE && s.Size.Value==new Vector2(3,77) && s.Position.Value.X>300 && s.Position.Value.Y<270).Color==ReactorDashboard.Tone(tone),"LCD heat card uses shared warning tone, not an independent percentage threshold");
+    Need(ReactorDashboard.DrawTablet(report,0,"").Single(s=>s.Data==heat.Value).Color==ReactorDashboard.Tone(tone),"tablet heat row uses the same warning tone");
+    Need(ReactorDashboard.Draw(report,2,"","test").Any(s=>s.Data=="60 s heat peak") && ReactorDashboard.DrawTablet(report,2,"").Any(s=>s.Data=="60 s heat peak"),"both containment pages explain the forecast");
+   }
    foreach(var report in new[]{Report(),Report(true),Report(true,true),Report(false,false,true),Report(true,false,true)})
    for(int alerts=0;alerts<=2;alerts++){
     if(alerts>0)report.Rows.Add(new StatusRow{Section=null,Label="",Value="Repair the vent route urgently; core cannot eject.",Tone="red"});
     for(int page=0;page<5;page++){
      var sprites=ReactorDashboard.DrawTablet(report,page,"unused");
+     foreach(var line in sprites.Where(s=>s.Type==SpriteType.TEXT).GroupBy(s=>s.Position.Value.Y)){
+      var columns=line.OrderBy(s=>s.Position.Value.X).ToArray();
+      for(int i=1;i<columns.Length;i++)
+       Need(columns[i-1].Position.Value.X+columns[i-1].Data.Length*20*columns[i-1].RotationOrScale+12<=columns[i].Position.Value.X,"tablet label and value retain a clear gap: "+columns[i-1].Data);
+     }
      foreach(var sprite in sprites){
       if(sprite.Type==SpriteType.TEXT){
        var p=sprite.Position.Value;

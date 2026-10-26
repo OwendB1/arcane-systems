@@ -13,7 +13,7 @@ namespace ArcanePower
     {
         private static readonly string[] Fuels = { "ArcaneFuelI", "ArcaneFuelII", "ArcaneFuelIII" };
         private static readonly string[] FuelNames = { "Aether", "Helion", "Empyrean" };
-        private static readonly float[] PowerMW = { 10000f, 100000f, 1000000f };
+        private static readonly float[] PowerMW = { 1f, 10f, 100f };
         // Ideal full-load endurance; controller efficiency scales usable energy.
         private float FuelFullLoadMinutes { get { return Motion.FuelTier == 1 ? 2.5f : 10f; } }
         private const string ResiduumSubtype = "ArcaneAetherResiduum";

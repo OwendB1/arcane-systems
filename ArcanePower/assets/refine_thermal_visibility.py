@@ -420,6 +420,50 @@ def blade_row(p, label, x, hub, tip, chord, pitch, count, stage):
     return obj
 
 
+def close_rotor_joint(p):
+    """Seat the turbine nose over the compressor drum with 20 mm engagement.
+
+    Preserve the blade-bearing drum surface, UVs, pivots and separate rotors.
+    The small tapered nose covers the former 200 mm open axial gap.
+    """
+    obj = next(o for o in p.col.objects if o.name.startswith(p.name+' / turbine tapered rotor drum'))
+    if obj.get('thermal_rotor_joint_revision') == 1:
+        return obj
+    bpy.context.view_layer.update()
+    old = obj.data
+    world = [obj.matrix_world @ v.co for v in old.vertices]
+    front = min(v.x for v in world)
+    caps = [f for f in old.polygons if all(abs(world[i].x-front)<1e-5 for i in f.vertices)]
+    assert len(caps)==1 and len(caps[0].vertices)==96, 'Unexpected turbine nose topology'
+    ring = sorted(caps[0].vertices, key=lambda i:math.atan2(world[i].z-SHAFT_Z,world[i].y))
+    vertices = [v.co.copy() for v in old.vertices]
+    inverse = obj.matrix_world.inverted()
+    for i in ring:
+        radial = Vector((0,world[i].y,world[i].z-SHAFT_Z)).normalized()*1.15
+        vertices.append(inverse @ Vector((CENTRES['turbine']-1.72,radial.y,SHAFT_Z+radial.z)))
+    retained = [f for f in old.polygons if f!=caps[0]]
+    faces = [tuple(f.vertices) for f in retained]
+    start, count = len(old.vertices), len(ring)
+    faces.append(tuple(reversed(range(start,start+count))))
+    faces += [(start+j,start+(j+1)%count,ring[(j+1)%count],ring[j]) for j in range(count)]
+    mesh = bpy.data.meshes.new(old.name+' / seated nose')
+    mesh.from_pydata(vertices,[],faces)
+    for material in old.materials:mesh.materials.append(material)
+    for layer in old.uv_layers:
+        uv = mesh.uv_layers.new(name=layer.name)
+        for face, source in zip(mesh.polygons,retained):
+            face.material_index=source.material_index;face.use_smooth=source.use_smooth
+            for li, old_li in zip(face.loop_indices,source.loop_indices):uv.data[li].uv=layer.data[old_li].uv
+        for face in list(mesh.polygons)[len(retained):]:
+            cap = face.index==len(retained);face.use_smooth=not cap
+            for li in face.loop_indices:
+                v=obj.matrix_world @ mesh.vertices[mesh.loops[li].vertex_index].co
+                uv.data[li].uv=(v.y*.8,v.z*.8) if cap else (v.x*.8,math.atan2(v.z-SHAFT_Z,v.y)*1.15*.8)
+    obj.data=mesh
+    obj['thermal_rotor_joint_revision']=1
+    return obj
+
+
 def rotor(p, spec):
     label, pivot = spec['id'], Vector(spec['pivot_blender'])
     root = bpy.data.objects.new(p.name+' / '+spec['subpart'], None)
@@ -508,6 +552,7 @@ def rotor(p, spec):
     var.targets[0].data_path = '["preview_angle_degrees"]'
     driver.expression = 'angle*pi/180'
     root['thermal_rotor_tip_clearance_m'] = radius-.12-tip
+    if turbine:close_rotor_joint(p)
     return root
 
 

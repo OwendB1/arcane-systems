@@ -45,7 +45,7 @@ namespace ArcanePower
                     { Wrapped(sprites, row.Value, 22, y, .48f, Tone(row.Tone), 63); y += 36; }
                 // Keep alert space reserved; cards and page body never jump around.
                 Card(sprites, "OUTPUT / " + report.Fuel.ToUpperInvariant(), report.Value("Output"), 22, 196, report.Load, "cyan");
-                Card(sprites, "HEAT / CRITICAL AT 125%", report.Value("Heat"), 330, 196, report.Heat / 1.25, report.Heat > 1 ? "red" : "yellow");
+                Card(sprites, "HEAT / CRITICAL AT 125%", report.Value("Heat"), 330, 196, report.Heat / 1.25, report.HeatTone);
                 Card(sprites, report.Precharging ? "STARTUP CHARGE" : "EMERGENCY RESERVE",
                     report.Value(report.Precharging ? "Startup charge" : "Reserve"), 22, 285, report.Reserve,
                     report.Precharging ? report.Tone : report.Reserve < .2 ? "red" : "green");
@@ -57,11 +57,11 @@ namespace ArcanePower
                     : page == 0 ? new[] { "Net", "Field", "Fuel stock", "Vent" }
                     : page == 1 && report.Brayton ? new[] { "Circuits available", "Reaction heat", "Cooling capacity", "Cooling required", "Full-load cooling", "Heat removed", "Accumulated heat" }
                     : page == 1 ? new[] { "Net", "Ramp", "Containment", "Fuel burn", "Fuel remaining" }
-                    : page == 2 ? new[] { "Controllers", "Field", "Reserve energy", "Tile grade", "Replacing", "Dismantle at" }
+                    : page == 2 ? new[] { "60 s heat peak", "Thermal outlook", "Controllers", "Field", "Reserve energy", "Tile grade", "Replacing", "Dismantle at" }
                     : page == 3 ? new[] { "Fuel stock", "Fuel remaining", "Tile demand", "Tile reserve", "Tile stock", "Conveyors" }
                     : new[] { "Vent", "Route", "Doors" };
                 y = 432;
-                float rowSpacing = labels.Length > 6 ? 24 : 27;
+                float rowSpacing = Math.Min(labels.Length > 6 ? 24 : 27, 174f / labels.Length);
                 foreach (var label in labels)
                 {
                     foreach (var row in report.Rows)
@@ -109,7 +109,7 @@ namespace ArcanePower
                     : page == 0 ? new[] { "Output", "Heat", "Reserve", "Fuel stock", "Spare tiles", "Vent" }
                     : page == 1 && report.Brayton ? new[] { "Output", "Circuits available", "Reaction heat", "Cooling capacity", "Cooling required", "Full-load cooling", "Heat removed", "Accumulated heat" }
                     : page == 1 ? new[] { "Output", "Net", "Ramp", "Containment", "Fuel efficiency", "Fuel burn", "Fuel remaining" }
-                    : page == 2 ? new[] { "Security mode", "Integrity", "Controllers", "Field", "Reserve energy", "Tile grade", "Quartet wear", "Replacing", "Dismantle at" }
+                    : page == 2 ? new[] { "60 s heat peak", "Thermal outlook", "Security mode", "Integrity", "Controllers", "Field", "Reserve energy", "Tile grade", "Quartet wear", "Replacing", "Dismantle at" }
                     : page == 3 ? new[] { "Fuel efficiency", "Fuel stock", "Fuel burn", "Fuel remaining", "Spare tiles", "Tile demand", "Tile reserve", "Tile stock", "Startup tiles", "Conveyors" }
                     : new[] { "Vent", "Route", "Doors", "Security mode", "Integrity" };
                 var rows = new List<StatusRow>();
@@ -123,8 +123,8 @@ namespace ArcanePower
                     var row = rows[i];
                     Rect(sprites, 12, y - 1, 616, spacing - 2, i % 2 == 0 ? new Color(16, 20, 26) : new Color(22, 27, 34));
                     Text(sprites, row.Label, 18, y, Math.Min(.5f, rowFont), Tone("muted"));
-                    float font = Math.Min(rowFont, 442f / (Math.Max(1, row.Value.Length) * 20));
-                    Text(sprites, row.Value, 180, y, font, Tone(row.Tone));
+                    float font = Math.Min(rowFont, 412f / (Math.Max(1, row.Value.Length) * 20));
+                    Text(sprites, row.Value, 210, y, font, Tone(row.Tone));
                     y += spacing;
                 }
             }

@@ -144,7 +144,6 @@ def apply(name):
     materials(p)
     if name == 'Reactor housing':
         reactor_plumbing(p)
-        reactor_sight_frames(p)
         reactor_tube_contrast(p)
         if p.scene.get('thermal_manifold_indicator_revision') != 2:
             for obj in list(p.col.objects):
@@ -173,149 +172,33 @@ def apply(name):
 
 
 def reactor_plumbing(p):
-    """Floor-level distributor, paired pump heads and visible chamber injection."""
-    if p.col.get('thermal_chamber_coolant_revision') == REVISION:
-        return
-    V = runpy.run_path(str(ROOT/'assets/refine_thermal_visibility.py'))
+    """Preserve pillar risers; replace the retired chamber plumbing with floor vents."""
     rows = []
-    # Preserve the established riser envelope and couplings, opening only these
-    # solid authoring cylinders into actual hollow pressure-glass sight lengths.
     risers = [o for o in p.col.objects if o.type == 'MESH' and
               o.get('reactor_source_name', '').startswith('Coolant riser pipe')]
     for i, old in enumerate(sorted(risers, key=lambda o:o.name)):
-        ps = [old.matrix_world@v.co for v in old.data.vertices]
-        x, y = sum(v.x for v in ps)/len(ps), sum(v.y for v in ps)/len(ps)
-        path = [(x, y, min(v.z for v in ps)), (x, y, max(v.z for v in ps))]
-        obj = p.tube('temporary hollow riser', path, .126, 'Metal_Shiny', .026, 48)
-        obj.data.transform(old.matrix_world.inverted())
-        old.data = obj.data
-        for key in ('pipe_path', 'pipe_radius'): old[key] = obj[key]
-        old['thermal_internal_coolant'] = True
-        bpy.data.objects.remove(obj, do_unlink=True)
-        rows.append(path_row(path if i%2 else path[::-1], 'PRIMARY', bool(i%2==0), -1, .075, True, old.name))
-    radius = 4.78
-    def at(angle, r, z): return Vector((r*math.cos(angle), r*math.sin(angle), z))
-    for hot, z in ((True, -.70), (False, -.98)):
-        for quarter in range(4):
-            path = [at((quarter+i/32)*math.pi/2, radius, z) for i in range(33)]
-            if not hot: path.reverse()
-            obj = p.tube(('hot collection' if hot else 'cold supply')+' distributor quadrant '+str(quarter),
-                         path, .10, 'Metal_Dull', .025, 24)
-            obj['thermal_internal_coolant'] = True
-            rows.append(path_row(path, 'PRIMARY', hot, -1, .06, True, obj.name))
+        if not old.get('thermal_internal_coolant'):
+            points = [old.matrix_world@v.co for v in old.data.vertices]
+            x, y = sum(v.x for v in points)/len(points), sum(v.y for v in points)/len(points)
+            path = [(x,y,min(v.z for v in points)),(x,y,max(v.z for v in points))]
+            obj = p.tube('temporary hollow riser',path,.126,'Metal_Shiny',.026,48)
+            obj.data.transform(old.matrix_world.inverted())
+            old.data = obj.data
+            for key in ('pipe_path','pipe_radius'): old[key] = obj[key]
+            old['thermal_internal_coolant'] = True
+            bpy.data.objects.remove(obj,do_unlink=True)
+        path = json.loads(old['pipe_path'])
+        old['thermal_pressure_glass'] = True
+        rows.append(path_row(path if i%2 else path[::-1], 'PRIMARY',bool(i%2==0),-1,.075,True,old.name))
+    vents = runpy.run_path(str(ROOT/'assets/build_reactor_chamber_vents.py'))
+    vents['apply'](p)
+    runpy.run_path(str(ROOT/'assets/refine_reactor_exterior.py'))['fit_pillar_pipe_sockets'](p)
     for i in range(4):
         angle = i*math.pi/2
-        n = Vector((math.cos(angle), math.sin(angle), 0));t = Vector((-n.y,n.x,0))
-        body = p.box('chamber circulation pump '+str(i), at(angle,radius,-.915),
-                     (.56,.56,.65), 'PaintedMetal_Darker', .003)
-        body['thermal_coolant_pump'] = True
-        # The four distributor joints live within these sealed pump bodies.
-        cap = p.box('pump service lid '+str(i),at(angle,radius,-.574),
-                    (.46,.46,.032),'Metal_Dull',.003)
-        p.bolt('pump lid captive stud', at(angle,radius,-.556), (0,0,1), cap, .025)
-        for hot in (False,True):
-            a = angle+math.radians(2 if hot else -2)
-            height = .16 if hot else .62
-            ring_z = -.70 if hot else -.98
-            path = [at(a,4.78,ring_z),at(a,4.78,height),at(a,4.54,height)]
-            path = V['rounded_path'](path,.14)
-            if hot: path.reverse()
-            obj = p.tube(('warm chamber pickup ' if hot else 'chamber injector feed ')+str(i),
-                          path,.085,'Metal_Dull',.022,32)
-            obj['thermal_internal_coolant'] = True
-            rows.append(path_row(path,'PRIMARY',hot,-1,.045,True,obj.name))
-            tip = at(a,4.54,height)
-            collar = p.tube(('pickup' if hot else 'injector')+' mouth '+str(i),
-                           [tip+n*.015,tip-n*.030],.105,'Metal_Dull',.042,32)
-            collar['thermal_flow_fixture'] = True
-            band = p.tube('chamber '+('return' if hot else 'feed')+' emissive '+str(i),
-                         [tip+n*.055,tip+n*.085],.090,'ThermalHot' if hot else 'ThermalCold',.010,32)
-            band['thermal_flow_fixture'] = True
-            if not hot:
-                rows.append(path_row([tip-n*.035,tip-n*.30], 'CHAMBER',False,-1,.045,True,'chamber injection mist '+str(i)))
-        lens=p.box('pump running light '+str(i),at(angle,radius,-.552)+t*.13,
-                   (.045,.09,.012),'ThermalStatus',.002)
-        lens['thermal_flow_fixture']=True
-    V['transparent_pipes'](p)
-    # Small 170 mm injector feeds also need visible sight lengths.
-    for obj in p.col.objects:
-        if obj.type!='MESH' or not obj.get('thermal_internal_coolant') or obj.get('thermal_pressure_glass'): continue
-        slot,_=V['glass_slots'](p,obj)
-        path=list(map(Vector,json.loads(obj['pipe_path'])))
-        for face in obj.data.polygons:
-            point=obj.matrix_world@face.center
-            if min((point-path[0]).length,(point-path[-1]).length)>.14:
-                face.material_index=slot
-        obj['thermal_pressure_glass']=True
-    p.col['thermal_internal_flow_paths']=json.dumps(rows)
-    p.col['thermal_chamber_coolant_revision']=REVISION
-
-
-def reactor_sight_frames(p):
-    """Seated metal elbows and guarded windows keep clear feeds legible."""
-    if p.col.get('thermal_sight_frames_revision') == 5:
-        return
-    for obj in list(p.col.objects):
-        if obj.name.startswith((p.name+' / injector sight window seat',p.name+' / injector sight window guard')):
-            bpy.data.objects.remove(obj,do_unlink=True)
-    for obj in list(p.col.objects):
-        if obj.name.startswith(p.name+' / chamber circulation pump '):
-            a=int(obj.name.rsplit(' ',1)[1])*math.pi/2
-            position=(4.78*math.cos(a),4.78*math.sin(a),-.915)
-            temp=p.box('temporary seated pump',position,(.56,.56,.65),'PaintedMetal_Darker',.003)
-            obj.data=temp.data;obj.matrix_world=Matrix.Translation(Vector(position))
-            bpy.data.objects.remove(temp,do_unlink=True)
-        if obj.name.startswith(p.name+' / pump service lid '):
-            a=int(obj.name.rsplit(' ',1)[1])*math.pi/2
-            position=(4.78*math.cos(a),4.78*math.sin(a),-.574)
-            temp=p.box('temporary seated pump lid',position,(.46,.46,.032),'Metal_Dull',.003)
-            obj.data=temp.data;obj.matrix_world=Matrix.Translation(Vector(position))
-            bpy.data.objects.remove(temp,do_unlink=True)
-        if obj.name.startswith(p.name+' / pump lid captive stud'):
-            support=bpy.data.objects[obj['thermal_support']]
-            a=int(support.name.rsplit(' ',1)[1])*math.pi/2
-            point=Vector((4.78*math.cos(a),4.78*math.sin(a),-.556))
-            temp=p.cylinder('temporary seated pump stud',point-Vector((0,0,.009)),
-                            point+Vector((0,0,.009)),.025,'Metal_Shiny',6)
-            obj.data=temp.data;obj.matrix_world=Matrix.Identity(4);obj['support_point']=tuple(point)
-            bpy.data.objects.remove(temp,do_unlink=True)
-        if obj.name.startswith(p.name+' / pump running light '):
-            obj.location.z = -.552
-        if not obj.name.startswith((p.name+' / chamber injector feed ', p.name+' / warm chamber pickup ')):
-            continue
-        path = list(map(Vector, json.loads(obj['pipe_path'])))
-        low, high = max(-.49,min(v.z for v in path)+.20), max(v.z for v in path)-.22
-        # Sight boundaries must be real mesh rings. A long unsplit quad cannot
-        # carry metal ends and a glass centre based on its face centroid.
-        split = [path[0]]
-        for a,b in zip(path,path[1:]):
-            cuts = [((z-a.z)/(b.z-a.z),z) for z in (low,high)
-                    if abs(b.z-a.z)>1e-6 and min(a.z,b.z)<z<max(a.z,b.z)]
-            split.extend(a.lerp(b,t) for t,z in sorted(cuts))
-            split.append(b)
-        temp=p.tube('temporary framed sight tube',split,.085,'Metal_Dull',.022,32)
-        temp.data.transform(obj.matrix_world.inverted())
-        obj.data=temp.data
-        bpy.data.objects.remove(temp,do_unlink=True)
-        runpy.run_path(str(ROOT/'assets/refine_thermal_visibility.py'))['glass_slots'](p,obj)
-        metal = next(i for i, mat in enumerate(obj.data.materials) if mat and mat.name == 'Metal_Dull')
-        glass = obj.data.materials.find('ArcanePower_ClearChamber')
-        for face in obj.data.polygons:
-            c = obj.matrix_world@face.center
-            face.material_index = glass if low < c.z < high else metal
-        base = min(path, key=lambda v:v.z).copy()
-        radial = Vector((base.x,base.y,0)).normalized()
-        tangent = Vector((-radial.y,radial.x,0))
-        for z in (low,high):
-            centre=Vector((base.x,base.y,z))
-            clamp=p.tube('injector sight window seat',[centre-Vector((0,0,.018)),centre+Vector((0,0,.018))],
-                         .098,'Metal_Dull',.033,32)
-            clamp['thermal_flow_fixture']=True
-        for side in (-1,1):
-            rail=base+tangent*(side*.087)
-            p.tube('injector sight window guard',[(rail.x,rail.y,low),(rail.x,rail.y,high)],
-                   .010,'Metal_Dull',.004,12)['thermal_flow_fixture']=True
-    p.col['thermal_sight_frames_revision']=5
+        x,y = 4.45*math.cos(angle),4.45*math.sin(angle)
+        rows.append(path_row([(x,y,-1.245),(x,y,-.875)],'CHAMBER',False,-1,.08,True,'Brayton floor vent '+str(i)))
+    p.col['thermal_internal_flow_paths'] = json.dumps(rows)
+    p.col['thermal_chamber_coolant_revision'] = 2
 
 
 def coolant_glass(p, internal=False):
@@ -593,11 +476,11 @@ def pipe_end_materials(p):
 
 
 def reactor_tube_contrast(p):
-    """Smoked sight glass inside a metal pressure jacket, with seated clamps."""
+    """Retain the accepted pillar sight glass, metal jackets and seated clamps."""
     glass = coolant_glass(p, internal=True)
     name = glass.name
     tubes = [o for o in p.col.objects if o.type == 'MESH' and o.get('thermal_internal_coolant')]
-    if p.col.get('thermal_tube_contrast_revision') == 2: return
+    if p.col.get('thermal_tube_contrast_revision', 0) >= 2: return
     for obj in list(p.col.objects):
         if obj.get('thermal_tube_jacket'): bpy.data.objects.remove(obj,do_unlink=True)
     V = runpy.run_path(str(ROOT/'assets/refine_thermal_visibility.py'))
@@ -612,7 +495,7 @@ def reactor_tube_contrast(p):
             material = obj.data.materials[face.material_index]
             point = obj.matrix_world@face.center
             sight = riser and min((point-end).length for end in (path[0],path[-1])) > .14
-            if not material or not (material.seut.technique == 'GLASS' or sight): continue
+            if not riser or not material or not (material.seut.technique == 'GLASS' or sight): continue
             centre = V['nearest'](point,path)
             inward = -Vector((centre.x,centre.y,0)).normalized()
             visible = -inward if riser else inward

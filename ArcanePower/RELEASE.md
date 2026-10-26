@@ -32,6 +32,19 @@ upgrade pillars and three
 construction stages for every public block. It includes the current reactor,
 fuel/voxel art, containment hardware, vents, LCD and tablet implementations.
 
+Energy Core bays now accept any module type in any of the four positions. The
+strongest attached stabilizer and transfer tiers apply without stacking; alignment,
+access, construction and stabilizer support checks remain. Up to three capacity
+modules can share one stabilizer. Existing modules reconnect after a world reload.
+
+Jump-drive surge now charges an automatic affordable batch, selecting the smallest
+charge deficits first and accounting for 90% efficiency and protected reserve.
+All selected drives share the bank's existing transfer ceiling; large batches
+can take longer. Recovery after the batch is the current stabilization base plus
+25% of that base per additional accepted drive, retained across cancellation and
+reload. The single-drive picker is replaced by a batch summary in core details;
+existing terminal/toolbar action IDs remain valid.
+
 The current thermal catalog contains 24 public blocks: 16 pipe fittings, four
 train variants, the reactor, atmospheric cooler, radiator and panel extension.
 The 28 former HP/LP pipe IDs are hidden compatibility definitions sharing current
@@ -88,7 +101,9 @@ selected battery icons with `render_energy_core.py -- --icons-only SCENE_NAME`.
 Source PNGs live under `assets/icons/`; DDS conversion uses
 `tools/texture_conversion.py::convert(..., icon=True)` before packaging.
 The four 512-pixel transparent PNG/DDS pairs were visually reviewed and checked
-in the local release package. Standard and hidden legacy icons are unchanged.
+in the local release package. First-tier capacity, transfer and stabilizer icons
+now use the finished module models, including the stabilizer's separate fan
+meshes. Hidden legacy icons are unchanged.
 
 The 13 October runtime pass closes construction-stage startup/generation gaps,
 restricts cold-start reserve requests to eligible reactors, revokes removed storage

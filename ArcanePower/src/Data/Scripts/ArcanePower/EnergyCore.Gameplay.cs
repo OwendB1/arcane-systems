@@ -27,6 +27,21 @@ namespace ArcanePower
         [ProtoMember(5)] public int RecoveryTicks;
         [ProtoMember(6)] public float SurgeRate;
         [ProtoMember(7)] public string Result = "Ready";
+        [ProtoMember(8)] public int SurgeDriveCount;
+        [ProtoMember(9)] public int SurgeCompleted;
+        [ProtoMember(10)] public int SurgeRecoveryTicks;
+        [ProtoMember(11)] public int SurgeEligible;
+        [ProtoMember(12)] public int SurgeAffordable;
+        [ProtoMember(13)] public float SurgeEnergy;
+        // XML persists targets; multiplayer snapshots only need the summary.
+        public List<EnergySurgeTarget> SurgeTargets = new List<EnergySurgeTarget>();
+    }
+
+    public sealed class EnergySurgeTarget
+    {
+        public long DriveId;
+        public bool Finished;
+        internal JumpDriveSurge Drive;
     }
 
     public sealed partial class EnergyCore
@@ -36,12 +51,11 @@ namespace ArcanePower
         internal bool Controller { get { return IsController; } }
         internal EnergyGameplayState Gameplay { get { return gameplay; } }
         private EnergyGameplayState gameplay = new EnergyGameplayState();
-        private int stabilizationTier, upkeepTier, surgeDuration = 600;
+        private const int SurgeDuration = 300;
+        private int stabilizationTier, upkeepTier;
         private float upkeepMW, replicatedStored = float.NaN;
         private double upkeepDebt;
-        private JumpDriveSurge activeDrive;
         private readonly List<IMyJumpDrive> jumpDrives = new List<IMyJumpDrive>();
-        internal long SelectedDrive;
         internal float ReservePercent { get { ReadSettings(); return reserve * 100; } }
         internal bool EmergencySupport { get { ReadSettings(); return emergencyEnabled; } }
         private float StoredEnergy { get { return MyAPIGateway.Multiplayer.IsServer || float.IsNaN(replicatedStored) ? block.CurrentStoredPower : replicatedStored; } }
@@ -49,6 +63,7 @@ namespace ArcanePower
 
         private void InitializeGameplay(bool original)
         {
+            ReleaseDrives();
             gameplay = new EnergyGameplayState();
             string saved;
             if (original && IsController && Entity.Storage.TryGetValue(GameplayKey, out saved))
@@ -58,11 +73,23 @@ namespace ArcanePower
                     var state = MyAPIGateway.Utilities.SerializeFromXML<EnergyGameplayState>(saved);
                     if (state != null && state.EntityId == Entity.EntityId)
                     {
-                        state.SurgeTicks = Math.Max(0, Math.Min(600, state.SurgeTicks));
+                        state.SurgeTicks = Math.Max(0, state.SurgeTicks);
                         state.BurstTicks = Math.Max(0, Math.Min(600, state.BurstTicks));
-                        state.RecoveryTicks = Math.Max(0, Math.Min(7800, state.RecoveryTicks));
+                        state.RecoveryTicks = Math.Max(0, state.RecoveryTicks);
                         state.RecoveryTicks = Math.Max(state.RecoveryTicks, Math.Max(state.SurgeTicks, state.BurstTicks));
                         if (float.IsNaN(state.SurgeRate) || float.IsInfinity(state.SurgeRate) || state.SurgeRate < 0) state.SurgeTicks = 0;
+                        if (state.SurgeTargets == null) state.SurgeTargets = new List<EnergySurgeTarget>();
+                        // Resume old single-drive saves without resetting recovery.
+                        if (state.SurgeTicks > 0 && state.SurgeTargets.Count == 0 && state.DriveId != 0)
+                        {
+                            state.SurgeTargets.Add(new EnergySurgeTarget { DriveId = state.DriveId });
+                            state.SurgeRecoveryTicks = state.RecoveryTicks - state.SurgeTicks;
+                        }
+                        var identities = new HashSet<long>();
+                        state.SurgeTargets.RemoveAll(t => t == null || t.DriveId == 0 || !identities.Add(t.DriveId));
+                        state.SurgeRecoveryTicks = Math.Max(0, state.SurgeRecoveryTicks);
+                        if (state.SurgeTicks > 0) state.SurgeDriveCount = state.SurgeTargets.Count;
+                        state.SurgeCompleted = Math.Max(0, Math.Min(state.SurgeDriveCount, state.SurgeCompleted));
                         gameplay = state;
                     }
                 }
@@ -133,34 +160,90 @@ namespace ArcanePower
 
         internal void GetJumpDrives(List<IMyJumpDrive> list)
         {
+            list.Clear();
             var terminal = MyAPIGateway.TerminalActionsHelper.GetTerminalSystemForGrid(block.CubeGrid);
             if (terminal != null) terminal.GetBlocksOfType(list, EligibleDrive);
-            list.Sort((a, b) => a.EntityId.CompareTo(b.EntityId));
+            list.RemoveAll(d => d.GameLogic.GetAs<JumpDriveSurge>() == null || !d.GameLogic.GetAs<JumpDriveSurge>().Available);
+            list.Sort((a, b) =>
+            {
+                int cost = (a.MaxStoredPower - a.CurrentStoredPower).CompareTo(b.MaxStoredPower - b.CurrentStoredPower);
+                return cost != 0 ? cost : a.EntityId.CompareTo(b.EntityId);
+            });
         }
 
-        internal void RequestSurge(long targetId)
+        private int AffordableDrives(List<IMyJumpDrive> list, out double energy)
+        {
+            GetJumpDrives(list);
+            int eligible = list.Count;
+            double budget = AvailableEnergy();
+            energy = 0;
+            for (int i = 0; i < list.Count; i++)
+            {
+                double cost = (list[i].MaxStoredPower - list[i].CurrentStoredPower) / .9;
+                if (cost > budget)
+                {
+                    list.RemoveRange(i, list.Count - i);
+                    break;
+                }
+                budget -= cost;
+                energy += cost;
+            }
+            return eligible;
+        }
+
+        private float SurgePower()
+        {
+            float output = 0;
+            foreach (var cell in cells) output += cell.block.CurrentOutput;
+            // Reserve extra discharge throughput for this paid batch. Native
+            // grid output keeps its normal limit and cannot consume the boost.
+            return Math.Max(0, transfer + (gameplay.SurgeTicks > 0 ? gameplay.SurgeRate : 0) - output);
+        }
+
+        private static int ChargeTicks(double energy, float power)
+        {
+            return (int)Math.Min(int.MaxValue, Math.Ceiling(energy * 21600 / power) * 10);
+        }
+
+        private int BatchRecoveryDuration(int count)
+        {
+            return (int)Math.Min(int.MaxValue, RecoveryDuration() * (1 + .25 * Math.Max(0, count - 1)));
+        }
+
+        private void HoldSurgeRecovery()
+        {
+            gameplay.RecoveryTicks = (int)Math.Min(int.MaxValue, (long)gameplay.SurgeTicks + gameplay.SurgeRecoveryTicks);
+            foreach (var target in gameplay.SurgeTargets)
+                if (target.Drive != null && !target.Drive.Block.Closed) target.Drive.HoldRecovery(gameplay.RecoveryTicks);
+        }
+
+        internal void RequestSurge()
         {
             if (!MyAPIGateway.Multiplayer.IsServer || !IsController) return;
             UpdateBank();
             if (!Ready) { gameplay.Result = "Surge unavailable: core, mode, containment support or recovery"; return; }
-            jumpDrives.Clear(); GetJumpDrives(jumpDrives);
+            double energy;
+            int eligible = AffordableDrives(jumpDrives, out energy);
+            gameplay.SurgeTargets.Clear();
+            energy = 0;
             foreach (var drive in jumpDrives)
             {
-                if (targetId != 0 && drive.EntityId != targetId) continue;
                 var surge = drive.GameLogic.GetAs<JumpDriveSurge>();
                 if (surge == null || !surge.Claim(Entity.EntityId)) continue;
-                if (AvailableEnergy() <= 0) { surge.Release(Entity.EntityId); break; }
-                activeDrive = surge;
-                gameplay.DriveId = drive.EntityId;
-                gameplay.SurgeTicks = surgeDuration;
-                gameplay.SurgeRate = (drive.MaxStoredPower - drive.CurrentStoredPower) * 216000f / surgeDuration / .9f * 1.01f;
-                gameplay.RecoveryTicks = surgeDuration + RecoveryDuration();
-                surge.StartRecovery(gameplay.RecoveryTicks);
-                gameplay.Result = "Jump-drive surge active";
-                SaveGameplay();
-                return;
+                gameplay.SurgeTargets.Add(new EnergySurgeTarget { DriveId = drive.EntityId, Drive = surge });
+                energy += (drive.MaxStoredPower - drive.CurrentStoredPower) / .9;
             }
-            gameplay.Result = "No available drive or energy above reserve";
+            if (gameplay.SurgeTargets.Count == 0) { gameplay.Result = "No affordable drive or energy above reserve"; return; }
+            gameplay.DriveId = 0;
+            gameplay.SurgeDriveCount = gameplay.SurgeTargets.Count;
+            gameplay.SurgeCompleted = 0;
+            gameplay.SurgeRate = (float)Math.Min(float.MaxValue, energy * 216000 / SurgeDuration * 1.01);
+            gameplay.SurgeTicks = SurgeDuration;
+            gameplay.SurgeRecoveryTicks = BatchRecoveryDuration(gameplay.SurgeDriveCount);
+            HoldSurgeRecovery();
+            foreach (var target in gameplay.SurgeTargets) target.Drive.StartRecovery(gameplay.RecoveryTicks);
+            gameplay.Result = "Surging " + gameplay.SurgeDriveCount + " / " + eligible + " available drives";
+            SaveGameplay();
         }
 
         internal void RequestBurst()
@@ -204,9 +287,9 @@ namespace ArcanePower
                 float after = before - desired;
                 // Pay for the final representable fraction of charge instead of
                 // leaving a drive almost full. Never exceed throughput or reserve.
-                if (after == before)
+                if (before - after < desired)
                 {
-                    int bits = BitConverter.ToInt32(BitConverter.GetBytes(before), 0);
+                    int bits = BitConverter.ToInt32(BitConverter.GetBytes(after), 0);
                     after = BitConverter.ToSingle(BitConverter.GetBytes(bits - 1), 0);
                 }
                 if (before - after > allowance)
@@ -218,7 +301,10 @@ namespace ArcanePower
                 if (actual <= 0 || actual > allowance) continue;
                 cell.battery.CurrentStoredPower = after;
                 removed += actual;
-                cell.ApplyLimits(cell.inputLimit, Math.Max(0, cell.outputLimit - actual * 21600f));
+                // Surge throughput is additional to ordinary grid discharge.
+                // Still clamp native output to the energy left above reserve.
+                cell.ApplyLimits(cell.inputLimit, Math.Min(cell.outputLimit,
+                    Math.Max(0, after - reserve * cell.block.MaxStoredPower) * 2160f));
             }
             return removed;
         }
@@ -226,50 +312,91 @@ namespace ArcanePower
         private void UpdateSurge()
         {
             if (!MyAPIGateway.Multiplayer.IsServer || gameplay.SurgeTicks <= 0) return;
-            if (activeDrive == null)
+            if (!Healthy(block) || emergency || block.ChargeMode == ChargeMode.Recharge)
             {
-                IMyEntity entity;
-                if (MyAPIGateway.Entities.TryGetEntityById(gameplay.DriveId, out entity))
-                    activeDrive = entity.GameLogic.GetAs<JumpDriveSurge>();
-                if (activeDrive != null && !activeDrive.ResumeClaim(Entity.EntityId)) activeDrive = null;
-            }
-            var drive = activeDrive == null ? null : activeDrive.Block;
-            if (!Healthy(block) || emergency || block.ChargeMode == ChargeMode.Recharge || !EligibleDrive(drive))
-            {
-                EndSurge(drive != null && drive.CurrentStoredPower >= drive.MaxStoredPower ? "Surge complete" : "Surge stopped: target, hardware, mode or containment support");
+                EndSurge("Surge stopped: hardware, mode or containment support");
                 return;
             }
-            float gridOutput = 0;
-            foreach (var cell in cells) gridOutput += cell.block.CurrentOutput;
-            float allowance = Math.Min(gameplay.SurgeRate, Math.Max(0, transfer - gridOutput)) / 21600f;
-            float missing = drive.MaxStoredPower - drive.CurrentStoredPower;
-            float debit = DebitEnergy(missing / .9f, allowance);
-            if (debit <= 0) { EndSurge("Surge stopped: transfer or reserve unavailable"); return; }
-            drive.CurrentStoredPower = Math.Min(drive.MaxStoredPower, drive.CurrentStoredPower + debit * .9f);
-            gameplay.SurgeTicks = Math.Max(0, gameplay.SurgeTicks - 10);
-            if (drive.CurrentStoredPower >= drive.MaxStoredPower || gameplay.SurgeTicks == 0)
-                EndSurge(drive.CurrentStoredPower >= drive.MaxStoredPower ? "Surge complete" : "Surge finished; remaining charge uses normal recharge");
+            double missing = 0;
+            bool waiting = false;
+            foreach (var target in gameplay.SurgeTargets)
+            {
+                var surge = target.Drive;
+                if (surge == null)
+                {
+                    IMyEntity entity;
+                    if (MyAPIGateway.Entities.TryGetEntityById(target.DriveId, out entity)) surge = entity.GameLogic.GetAs<JumpDriveSurge>();
+                    // Drive components may initialize after the bank on reload.
+                    if (surge != null && !surge.Initialized) { waiting = true; continue; }
+                    if (surge != null && surge.ResumeClaim(Entity.EntityId)) target.Drive = surge;
+                }
+                if (target.Finished) continue;
+                var drive = target.Drive == null ? null : target.Drive.Block;
+                if (!EligibleDrive(drive))
+                {
+                    target.Finished = true;
+                    if (drive != null && drive.MaxStoredPower > 0 && drive.CurrentStoredPower >= drive.MaxStoredPower) gameplay.SurgeCompleted++;
+                    continue;
+                }
+                missing += (drive.MaxStoredPower - drive.CurrentStoredPower) / .9;
+            }
+            if (waiting) { HoldSurgeRecovery(); return; }
+            if (missing <= 0) { EndSurge("Surge finished"); return; }
+            float power = Math.Min(gameplay.SurgeRate, SurgePower());
+            float budget = Math.Min(power / 21600f, AvailableEnergy());
+            if (budget <= 0) { EndSurge("Surge stopped: transfer or reserve unavailable"); return; }
+            double remaining = missing;
+            float spent = 0;
+            foreach (var target in gameplay.SurgeTargets)
+            {
+                if (target.Finished) continue;
+                var drive = target.Drive.Block;
+                double cost = (drive.MaxStoredPower - drive.CurrentStoredPower) / .9;
+                float debit = DebitEnergy((float)cost, (float)(budget * cost / remaining));
+                budget -= debit;
+                remaining -= cost;
+                spent += debit;
+                drive.CurrentStoredPower = Math.Min(drive.MaxStoredPower, drive.CurrentStoredPower + debit * .9f);
+                if (drive.CurrentStoredPower >= drive.MaxStoredPower) { target.Finished = true; gameplay.SurgeCompleted++; }
+            }
+            if (spent <= 0) { EndSurge("Surge stopped: transfer or reserve unavailable"); return; }
+            remaining = 0;
+            foreach (var target in gameplay.SurgeTargets)
+                if (!target.Finished) remaining += (target.Drive.Block.MaxStoredPower - target.Drive.Block.CurrentStoredPower) / .9;
+            if (remaining <= 0) { EndSurge("Surge finished"); return; }
+            // Retain a truthful estimate if energy availability or float
+            // precision prevents the batch from finishing its target window.
+            gameplay.SurgeTicks = Math.Max(Math.Max(0, gameplay.SurgeTicks - 10), ChargeTicks(remaining, power));
+            HoldSurgeRecovery();
         }
 
         private void EndSurge(string result)
         {
             gameplay.SurgeTicks = 0;
-            gameplay.Result = result;
-            ReleaseDrive();
+            gameplay.SurgeRate = 0;
+            gameplay.RecoveryTicks = gameplay.SurgeRecoveryTicks;
+            gameplay.Result = result + ": " + gameplay.SurgeCompleted + " / " + gameplay.SurgeDriveCount + " drives filled";
+            ReleaseDrives();
+            gameplay.SurgeTargets.Clear();
             gameplay.DriveId = 0;
             SaveGameplay();
         }
 
-        private void ReleaseDrive()
+        private void ReleaseDrives()
         {
-            if (activeDrive != null) activeDrive.Release(Entity.EntityId);
-            activeDrive = null;
+            foreach (var target in gameplay.SurgeTargets)
+                if (target.Drive != null)
+                {
+                    if (!target.Drive.Block.Closed) target.Drive.StartRecovery(gameplay.SurgeRecoveryTicks);
+                    target.Drive.Release(Entity.EntityId);
+                    target.Drive = null;
+                }
         }
 
         private void UpdateRecovery()
         {
             if (!MyAPIGateway.Multiplayer.IsServer || !IsController) return;
-            if (gameplay.RecoveryTicks > 0) gameplay.RecoveryTicks--;
+            if (gameplay.SurgeTicks == 0 && gameplay.RecoveryTicks > 0) gameplay.RecoveryTicks--;
             if (gameplay.BurstTicks > 0)
             {
                 gameplay.BurstTicks--;
@@ -287,8 +414,25 @@ namespace ArcanePower
             if (output + loss > input * .9f)
                 text.Append("Reserve endurance (approx.): ").Append((Math.Max(0, stored - capacity * reserve) / (output + loss - input * .9f) * 3600).ToString("N0")).Append(" s\n");
             text.Append(gameplay.Result).Append("; recovery ").Append((gameplay.RecoveryTicks / 60f).ToString("N1")).Append(" s\n");
-            text.Append("Surge ").Append((surgeDuration / 60f).ToString("N1")).Append(" s; 90% transfer efficiency; protects reserve\n");
-            if (gameplay.SurgeTicks > 0) text.Append("Surge remaining: ").Append((gameplay.SurgeTicks / 60f).ToString("N1")).Append(" s; target ").Append(gameplay.DriveId).Append('\n');
+            text.Append("Surge target window 5.0 s; discharge boost scales with batch charge; 90% efficiency; protects reserve\n");
+            if (gameplay.SurgeTicks > 0)
+            {
+                text.Append("Surge batch: ").Append(gameplay.SurgeCompleted).Append(" / ").Append(gameplay.SurgeDriveCount).Append(" filled; about ").Append((gameplay.SurgeTicks / 60f).ToString("N1")).Append(" s remaining\n");
+                text.Append("Surge discharge boost: ").Append(gameplay.SurgeRate.ToString("N0")).Append(" MW; total ceiling ").Append((transfer + gameplay.SurgeRate).ToString("N0")).Append(" MW\n");
+            }
+            else if (Ready)
+            {
+                if (MyAPIGateway.Multiplayer.IsServer)
+                {
+                    double energy;
+                    gameplay.SurgeEligible = AffordableDrives(jumpDrives, out energy);
+                    gameplay.SurgeAffordable = jumpDrives.Count;
+                    gameplay.SurgeEnergy = (float)energy;
+                }
+                text.Append("Surge batch: ").Append(gameplay.SurgeAffordable).Append(" / ").Append(gameplay.SurgeEligible).Append(" available drives; ").Append(gameplay.SurgeEnergy.ToString("N2")).Append(" MWh above reserve\n");
+                if (gameplay.SurgeAffordable > 0)
+                    text.Append("Batch recovery: ").Append((BatchRecoveryDuration(gameplay.SurgeAffordable) / 60f).ToString("N1")).Append(" s after surge\n");
+            }
             if (gameplay.BurstTicks > 0) text.Append("Burst remaining: ").Append((gameplay.BurstTicks / 60f).ToString("N1")).Append(" s; discharge ceiling ").Append((transfer * 2).ToString("N0")).Append(" MW\n");
         }
     }
@@ -303,6 +447,8 @@ namespace ArcanePower
         private long bankId;
         private int recovery, tick;
         private bool initialized;
+        internal bool Initialized { get { return initialized; } }
+        internal bool Available { get { return initialized && recovery == 0 && bankId == 0; } }
 
         public override void Init(MyObjectBuilder_EntityBase builder)
         {
@@ -319,7 +465,7 @@ namespace ArcanePower
             {
                 var fields = saved.Split(':'); long identity; int ticks;
                 if (fields.Length == 2 && long.TryParse(fields[0], out identity) && identity == Entity.EntityId && int.TryParse(fields[1], out ticks))
-                    recovery = Math.Max(0, Math.Min(7800, ticks));
+                    recovery = Math.Max(0, ticks);
             }
             initialized = true;
             EnergySession.Drives[Entity.EntityId] = this;
@@ -333,6 +479,7 @@ namespace ArcanePower
             bankId = bank; return true;
         }
         internal void Release(long bank) { if (bankId == bank) bankId = 0; }
+        internal void HoldRecovery(int ticks) { recovery = Math.Max(recovery, ticks); NeedsUpdate = MyEntityUpdateEnum.EACH_FRAME; }
         internal void StartRecovery(int ticks) { recovery = ticks; NeedsUpdate = MyEntityUpdateEnum.EACH_FRAME; SaveRecovery(); }
         internal void SaveRecovery()
         {

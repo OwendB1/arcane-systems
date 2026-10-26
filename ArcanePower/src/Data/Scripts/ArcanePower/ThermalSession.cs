@@ -176,6 +176,9 @@ namespace ArcanePower
                     if (machine.SourceId == source.Id && machine.Block.CubeGrid == source.Block.CubeGrid)
                         state.AttachedHeatMJ += machine.Store.HotMJ + machine.Store.WasteMJ;
                 if (!state.Settled) state.Diagnostic = source.ThermalModeTransitionHint;
+                // Forecast only a completed interval: settled production and
+                // current circuit cooling/topology must describe the same frame.
+                source.UpdateThermalForecast();
             }
             foreach (var machine in machines)
             {

@@ -31,8 +31,8 @@ namespace ArcanePower
         private MyBatteryBlock battery;
         private IMyBatteryBlock block;
         private readonly List<IMyReactor> reactors = new List<IMyReactor>();
-        private readonly List<EnergyCore> cells = new List<EnergyCore>(3);
-        private readonly List<EnergyCore> previousCells = new List<EnergyCore>(3);
+        private readonly List<EnergyCore> cells = new List<EnergyCore>(5);
+        private readonly List<EnergyCore> previousCells = new List<EnergyCore>(5);
         private readonly MyIni settings = new MyIni();
         private string settingsText;
         private float reserve = .10f;
@@ -74,7 +74,7 @@ namespace ArcanePower
             battery = (MyBatteryBlock)Entity;
             block = (IMyBatteryBlock)Entity;
             // Native socket compatibility/connection feedback. Bank limits remain
-            // owned by UpdateBank, including socket roles and ownership checks.
+            // owned by UpdateBank, including stabilizer tiers and ownership checks.
             if (IsController)
             {
                 block.AddUpgradeValue("ArcaneEnergyTransfer", 0f);
@@ -131,17 +131,34 @@ namespace ArcanePower
             return module;
         }
 
+        private IMyCubeBlock[] AttachedModules()
+        {
+            Vector3I up = Base6Directions.GetIntVector(block.Orientation.Up);
+            Vector3I forward = Base6Directions.GetIntVector(block.Orientation.Forward);
+            Vector3I right;
+            Vector3I.Cross(ref forward, ref up, out right);
+            // All four bays accept any module type. Compact banks retain their
+            // original top bay; pillar banks have four upright side bays.
+            return new[] { Socket(IsPillar(block) ? forward : up), Socket(-forward), Socket(right), Socket(-right) };
+        }
+
+        private static int HighestTier(IMyCubeBlock[] modules, string name)
+        {
+            int tier = 0;
+            foreach (var module in modules) tier = Math.Max(tier, Tier(module, name));
+            return tier;
+        }
+
         internal bool IsModuleRunning(IMyCubeBlock module)
         {
             if (!initialized || !IsController || !Healthy(block) || !Healthy(module)) return false;
-            var direction = Base6Directions.GetIntVector(IsPillar(block) ? block.Orientation.Forward : block.Orientation.Up);
+            var modules = AttachedModules();
+            if (Array.IndexOf(modules, module) < 0) return false;
             if (Tier(module, "ArcanePower_EnergyTransfer") > 0)
             {
-                if (Tier(Socket(direction), "ArcanePower_EnergyStabilizer") == 0) return false;
-                direction = -Base6Directions.GetIntVector(block.Orientation.Forward);
+                if (HighestTier(modules, "ArcanePower_EnergyStabilizer") == 0) return false;
             }
             else if (Tier(module, "ArcanePower_EnergyStabilizer") == 0) return false;
-            if (Socket(direction) != module) return false;
             foreach (var cell in cells)
                 if (Healthy(cell.block) && (cell.StoredEnergy > 0 || cell.block.CurrentInput > 0)) return true;
             return false;
@@ -208,19 +225,14 @@ namespace ArcanePower
             ReadSettings();
             previousCells.Clear(); previousCells.AddRange(cells);
             cells.Clear(); cells.Add(this);
-            Vector3I up = Base6Directions.GetIntVector(block.Orientation.Up);
-            Vector3I forward = Base6Directions.GetIntVector(block.Orientation.Forward);
-            Vector3I right;
-            Vector3I.Cross(ref forward, ref up, out right);
-            int stabilizer = Tier(Socket(IsPillar(block) ? forward : up), "ArcanePower_EnergyStabilizer");
-            int transferTier = Tier(Socket(-forward), "ArcanePower_EnergyTransfer");
+            var modules = AttachedModules();
+            int stabilizer = HighestTier(modules, "ArcanePower_EnergyStabilizer");
+            int transferTier = HighestTier(modules, "ArcanePower_EnergyTransfer");
             transferTier = Math.Min(transferTier, stabilizer);
             stabilizationTier = Healthy(block) ? stabilizer : 0;
-            surgeDuration = 600 - transferTier * 150;
             transfer = transferTier == 2 ? 1000000 : transferTier == 1 ? 100000 : 10000;
-            foreach (var direction in new[] { right, -right })
+            foreach (var module in modules)
             {
-                var module = Socket(direction);
                 int tier = Tier(module, "ArcanePower_EnergyCapacity");
                 var cell = tier > 0 && tier <= stabilizer ? module.GameLogic.GetAs<EnergyCore>() : null;
                 if (cell != null && cell.initialized) cells.Add(cell);
@@ -353,7 +365,11 @@ namespace ArcanePower
                 // Keep its HDR contribution low enough to retain the state tint.
                 Color fieldColor = charging ? new Color(4, 70, 100)
                     : discharging ? new Color(100, 30, 4) : new Color(4, 18, 100);
-                if (tick % 10 == 1) part.SetEmissiveParts("EnergyGlow", fieldColor, online ? .015f + .235f * fraction : 0);
+                // Keep the completed store's seed visible even while disabled
+                // or waiting for modules. Status lamps still indicate online state.
+                float fieldGlow = block.IsFunctional && block.SlimBlock.BuildLevelRatio >= 1
+                    ? .03f + (online ? .235f * fraction : 0) : 0;
+                if (tick % 10 == 1) part.SetEmissiveParts("EnergyGlow", fieldColor, fieldGlow);
             }
             for (int i = 0; i < rings.Length; i++)
             {
@@ -362,7 +378,7 @@ namespace ArcanePower
                 Matrix pose = RingMotion.Orientation(ringRest[i], i + 2, 1, ringPhase, secondaryPhase);
                 pose.Translation = ringRest[i].Translation;
                 part.PositionComp.SetLocalMatrix(ref pose);
-                if (tick % 10 == 1) part.SetEmissiveParts("Emissive", color, online ? .25f + .45f * fraction : 0);
+                if (tick % 10 == 1) part.SetEmissiveParts("Emissive", color, online ? .40f + .45f * fraction : 0);
             }
         }
 
@@ -372,7 +388,7 @@ namespace ArcanePower
             if (IsController)
             {
                 text.Append("Bank: ").Append(stored.ToString("N1")).Append(" / ").Append(capacity.ToString("N1")).Append(" MWh\n");
-                text.Append("Transfer ceiling: ").Append(transfer.ToString("N0")).Append(" MW\nCapacity modules: ").Append(Math.Max(0, cells.Count - 1)).Append(" / 2\n");
+                text.Append("Transfer ceiling: ").Append(transfer.ToString("N0")).Append(" MW\nCapacity modules: ").Append(Math.Max(0, cells.Count - 1)).Append('\n');
                 text.Append("Reserve: ").Append((reserve * 100).ToString("N0")).Append("%; emergency support ").Append(emergencyEnabled ? "on" : "off").Append('\n');
                 text.Append("Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto.\n");
                 text.Append("Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true\n");
@@ -385,7 +401,7 @@ namespace ArcanePower
 
         public override void Close()
         {
-            ReleaseDrive();
+            ReleaseDrives();
             SaveGameplay();
             EnergySession.Remove(this);
             if (block != null) block.AppendingCustomInfo -= AppendInfo;

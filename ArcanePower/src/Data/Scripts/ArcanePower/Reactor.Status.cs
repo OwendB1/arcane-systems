@@ -13,6 +13,7 @@ namespace ArcanePower
         internal StatusReport ReadStatus(bool detailed)
         {
             var text = new StatusReport { Name = reactor.CustomName, Fuel = FuelNames[Motion.FuelTier - 1], Heat = Motion.Heat,
+                HeatTone = Motion.Critical ? "red" : Motion.ThermalWarning ? "yellow" : "white",
                 Reserve = Math.Min(1, Math.Max(0, Motion.ReserveMJ / ReserveCapacityMJ)), Load = Motion.Load, Precharging = Precharging,
                 Brayton = ThermalVariant && Motion.Thermal != null && Motion.Thermal.Mode == ThermalMode.Brayton };
             bool creative = MyAPIGateway.Session.CreativeMode;
@@ -88,7 +89,9 @@ namespace ArcanePower
             Section(text, "CONTAINMENT");
             Row(text, "Security mode", Motion.SecurityMode ? "On / vent loss shuts down" : "Off / vent loss warns", Motion.SecurityMode ? "white" : "yellow");
             Row(text, "Integrity", Percent(reactor.SlimBlock.Integrity / reactor.SlimBlock.MaxIntegrity) + " / auto eject at 60%", NeedsAutoEjection ? "red" : "white");
-            Row(text, "Heat", Percent(Motion.Heat) + " / critical 125%", Motion.Critical || Motion.Heat >= 1 ? "red" : Motion.Heat >= .85f ? "yellow" : "white");
+            Row(text, "Heat", Percent(Motion.Heat) + " / critical 125%", text.HeatTone);
+            Row(text, "60 s heat peak", Percent(Motion.ForecastPeakHeat) + " at recent load / current cooling", text.HeatTone);
+            Row(text, "Thermal outlook", ThermalOutlook(), text.HeatTone);
             Row(text, "Reserve", Number(Motion.ReserveMJ / ContainmentMW, "0") + " / 90 s", Motion.PowerPaused ? "red" : !Motion.PowerReady ? "yellow" : "white");
             Row(text, "Field", Motion.InstalledTiles + " / 80 tiles   " + Motion.RingCount + " rings");
             if (detailed || text.Precharging)
@@ -146,6 +149,21 @@ namespace ArcanePower
             return text;
         }
 
+        private string ThermalOutlook()
+        {
+            if (Motion.PayloadReleased || Motion.Core == CorePhase.Off) return "No active core";
+            if (Motion.Critical) return "Supercritical / countdown active";
+            if (!Motion.ForecastRising)
+                return Motion.ThermalWarning ? "Forecast safe / confirming recovery" : "No overheating predicted within 60 s";
+            string cause = Motion.TileStarved && Motion.TileWear >= 1 ? "Failed containment"
+                : Motion.ForecastCircuit > 0 ? "Circuit " + Motion.ForecastCircuit : "Core / housing";
+            bool meltdown = Motion.ForecastMeltdownSeconds >= 0;
+            double seconds = meltdown ? Motion.ForecastMeltdownSeconds : Motion.ForecastOverheatSeconds;
+            if (seconds == 0) return cause + (meltdown ? " / critical heat now" : " / overheating now");
+            return cause + (meltdown ? " / critical heat in ~" : " / overheating in ~")
+                + Number(Math.Ceiling(Math.Max(0, seconds)), "0") + " s";
+        }
+
         private string OperatingStatus(out string action, out string tone)
         {
             action = null; tone = "white";
@@ -156,8 +174,15 @@ namespace ArcanePower
                     : Motion.VentReady ? "Eject the core to move the blast away." : "Repair the vent route urgently; core cannot eject.";
                 return "SUPERCRITICAL  /  ~" + Number(Motion.CriticalSeconds, "0.0") + " s";
             }
-            if (Motion.TileStarved && Motion.TileWear >= 1 && !Motion.PayloadReleased)
-            { tone = "red"; action = "Replace 4 tiles or eject before 125% heat."; return "TILE FAILURE  /  RUNAWAY HEAT"; }
+            if (Motion.ThermalWarning)
+            {
+                tone = "yellow";
+                if (!Motion.ForecastRising)
+                { action = "Forecast is safe; confirming recovery for 5 s."; return "THERMAL WARNING / RECOVERING"; }
+                action = Motion.TileStarved && Motion.TileWear >= 1 ? "Replace 4 tiles or eject before 125% heat."
+                    : ThermalOutlook() + ". Restore cooling or reduce load.";
+                return Motion.ForecastPeakHeat >= 1.25f ? "MELTDOWN RISK / NEXT 60 S" : "OVERHEATING RISK / NEXT 60 S";
+            }
             if (initializationFrames > 0)
             { tone = "cyan"; action = "Restoring saved state while grid connections initialize."; return "RECONNECTING CONTAINMENT"; }
             if (Motion.PowerPaused)
@@ -180,11 +205,9 @@ namespace ArcanePower
                 && Motion.Thermal.Mode == ThermalMode.Brayton)
             {
                 var thermal = Motion.Thermal;
-                if (Motion.Heat > 1 || ThermalMath.WasteHeatLevel(thermal, ThermalHeatMW) >= 1)
-                { tone = "red"; action = "Restore cooling or eject before 125% heat. Keep cooldown power supplied."; return "REACTOR OVERHEATING / FAILURE RISK"; }
                 if (Array.Exists(thermal.Loops, loop => loop.Connected && loop.CoolingMW + .001 < loop.RequiredCoolingMW)
                     && (thermal.ProducedMW > .001 || thermal.RetainedHeatMJ > .001))
-                { tone = "yellow"; action = "Add or unblock cooling units, or shut down before trapped heat becomes critical."; return "INSUFFICIENT LOOP COOLING"; }
+                { action = "Add or unblock cooling units; monitor the 60 s heat forecast."; return "INSUFFICIENT LOOP COOLING"; }
             }
             if (ThermalVariant && Motion.Thermal != null)
             {
@@ -283,6 +306,7 @@ namespace ArcanePower
     {
         internal string Name, State, Tone, Section;
         internal string Fuel;
+        internal string HeatTone = "white";
         internal double Heat, Reserve, Load;
         internal bool Precharging, Brayton;
         internal readonly List<StatusRow> Rows = new List<StatusRow>();

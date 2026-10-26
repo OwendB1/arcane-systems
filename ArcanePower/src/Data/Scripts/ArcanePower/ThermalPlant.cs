@@ -109,7 +109,7 @@ namespace ArcanePower
                 && ThermalMath.Finite(RequiredCoolingMW) && RequiredCoolingMW >= 0 && RequiredCoolingMW <= 2500000
                 && ThermalMath.Finite(DesignCoolingMW) && DesignCoolingMW >= 0 && DesignCoolingMW <= 2500000
                 && ThermalMath.Finite(RetainedHeatMJ)
-                && Efficiency >= 0 && Efficiency <= .780001 && DutyTrains >= 0 && StandbyTrains >= 0
+                && Efficiency >= 0 && Efficiency <= .800001 && DutyTrains >= 0 && StandbyTrains >= 0
                 && Diagnostic != null && Diagnostic.Length <= 256;
         }
 
@@ -192,7 +192,7 @@ namespace ArcanePower
     // the existing reactor supply owns containment and cooldown support.
     public static class ThermalMath
     {
-        private static readonly double[] Ceilings = { .40, .55, .66, .78 };
+        private static readonly double[] Ceilings = { .40, .55, .66, .80 };
         private static readonly double[] Auxiliaries = { .08, .07, .06, .05 };
         private static readonly double[] Temperatures = { 650, 1000, 1600, 2200 };
 
@@ -222,13 +222,17 @@ namespace ArcanePower
             if (state == null || !Finite(ratingMW) || ratingMW <= 0) return 0;
             double level = state.Store.WasteMJ / (ratingMW * 2);
             // A hot circuit cannot hide behind three cold ones.
-            foreach (var loop in state.Loops) level = Math.Max(level, loop.ExcessMJ / (ratingMW * .5));
+            foreach (var loop in state.Loops)
+                level = Math.Max(level, loop.ExcessMJ / (ratingMW * .5));
             return Clamp(level, 0, 4);
         }
 
+        internal static double CoreHeatResponse(double heat, double target, bool runaway)
+        { return runaway ? 720 : target > heat ? 3600 : 1800; }
+
         public static double ApproachCoreHeat(double heat, double target, bool runaway)
         {
-            double response = runaway ? 720 : target > heat ? 3600 : 1800;
+            double response = CoreHeatResponse(heat, target, runaway);
             double next = heat + (target - heat) / response;
             // Motion.Heat is a float. Finish settling once a response step is
             // smaller than its precision, instead of leaving a permanent warning

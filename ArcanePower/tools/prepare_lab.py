@@ -186,9 +186,9 @@ def definitions():
     reactor = copy.deepcopy(next(n for n in energy.iter('Definition') if n.findtext('Id/SubtypeId')=='LargeBlockSmallGenerator'))
     for key,value in {'Id/SubtypeId':'ArcanePower_ReactorPrototype', 'DisplayName':'Arcane Reactor',
         'Icon':'Textures/GUI/Icons/ArcaneReactor.dds',
-        'Description':'Aether: 10 GW. Helion: 100 GW. Empyrean: 1 TW. Two working containment controllers required; their installation tier sets two/three/four rings, 1x/1.5x/2x tile deployment and 80%/90%/99% fuel efficiency. Venting ejects containment through the conveyor-connected top hatch, damages the reactor/modules, and leaves the reactor off. Automatic core ejection at 60% remaining integrity requires intact controllers and vents. Security mode selects shutdown or warning on vent loss after startup.',
+        'Description':'Aether: 1 MW. Helion: 10 MW. Empyrean: 100 MW. Two working containment controllers required; their installation tier sets two/three/four rings, 1x/1.5x/2x tile deployment and 80%/90%/99% fuel efficiency. Venting ejects containment through the conveyor-connected top hatch, damages the reactor/modules, and leaves the reactor off. Automatic core ejection at 60% remaining integrity requires intact controllers and vents. Security mode selects shutdown or warning on vent loss after startup.',
         'Model':'Models/Cubes/large/ArcanePower_ReactorPrototype.mwm', 'BlockPairName':'ArcanePower_ReactorPrototype',
-        'MaxPowerOutput':10000, 'FuelProductionToCapacityMultiplier':3600, 'PCU':100,
+        'MaxPowerOutput':1, 'FuelProductionToCapacityMultiplier':3600, 'PCU':100,
         'IsAirTight':'false','InventorySize/X':2,'InventorySize/Y':1,'InventorySize/Z':1,
         'FuelInfos/FuelInfo/Id/SubtypeId':'ArcaneFuelI'}.items(): set_text(reactor,key,value)
     # Native FuelInfos are simultaneous requirements, not alternative fuels.

@@ -22,13 +22,14 @@ def member(file, signature):
 
 
 members = ''.join(member(file, signature) for file, signatures in {
+    'Reactor.cs': ['private void CheckContainment()', 'public override void UpdateBeforeSimulation()'],
     'Reactor.Fuel.cs': ['private bool HasUsableFuel()', 'private void RefreshFuelCapacity()',
                        'private double FuelUnitsPerMinute()', 'private void UpdateFuel()',
                        'private void PayFuel(', 'private void RecoverResiduum()', 'private void ExportResiduum('],
     'Reactor.Safety.cs': ['private bool IsIntactController(', 'internal bool HasAdvancedController()',
                          'private bool HasIntactControllers()'],
     'Reactor.Power.cs': ['private bool CanPrepareContainment', 'internal bool NeedsStorageSupport',
-                        'private float ContainmentMW', 'private double ReserveCapacityMJ'],
+                        'private float ContainmentMW', 'private double ReserveCapacityMJ', 'private void UpdatePower()'],
     'Reactor.Motion.cs': ['private void BeginShutdown()', 'private void BeginDismantling()',
                          'private void RestoreMotionState(', 'internal static bool Valid('],
     'Reactor.Thermal.cs': ['internal bool ThermalInitialized', 'private bool ThermalFuelModeReady',
@@ -43,6 +44,7 @@ members = ''.join(member(file, signature) for file, signatures in {
 }.items() for signature in signatures)
 # Engine interface replacement only; all predicates and state changes are shipped code.
 members = members.replace('VRage.Game.ModAPI.IMyCubeBlock', 'Block').replace('VRage.Game.ModAPI.IMyInventory', 'Inventory')
+members = members.replace('public override ', 'public ')
 members = members.replace('VRage.Game.ModAPI.Ingame.MyItemType', 'MyItemType')
 fuel = (SRC / 'Reactor.Fuel.cs').read_text()
 members += fuel[fuel.index('        private static readonly string[] Fuels'):fuel.index('        private MyReactor nativeReactor;')]

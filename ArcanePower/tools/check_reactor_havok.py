@@ -12,18 +12,22 @@ ROOT = Path(__file__).resolve().parents[1]
 game = Path.home()/'.local/share/Steam/steamapps/common/SpaceEngineers/Bin64'
 reactor = next(block for block in ET.parse(ROOT/'src/Data/CubeBlocks/ArcanePower_Thermal.sbc').findall('CubeBlocks/Definition')
                if block.findtext('Id/SubtypeId')=='ArcanePower_Thermal_ReactorHousing')
-model = ROOT/'src'/reactor.findtext('Model')
-hkt = ROOT/'assets/collisions/Cubes/large/ArcanePower_ReactorPrototype.hkt'
+hkt = ROOT/'assets/collisions/Cubes/large/Thermal/APT_ReactorHousing_M.hkt'
 with tempfile.TemporaryDirectory(prefix='arcane-native-collision-') as directory:
     exe=Path(directory)/'Probe.exe'
     model_probe=Path(directory)/'ModelProbe.exe'
     subprocess.run(['mcs','-out:'+str(model_probe),'-r:/usr/lib/mono/4.5/Facades/netstandard.dll',
                     *['-r:'+str(game/(name+'.dll')) for name in ('VRage.Render','VRage.Math','VRage.Library')],
                     str(ROOT/'tools/EnergyModelProbe.cs')],check=True)
-    embedded=Path(directory)/'embedded.hkt'
-    subprocess.run(['mono',str(model_probe),'--collision',str(model),str(embedded)],check=True,
-                   env={**os.environ,'MONO_PATH':str(game)})
-    assert embedded.read_bytes()==hkt.read_bytes(),'Delivered reactor collision differs from accepted physics'
+    paths = [reactor.findtext('Model'), *[m.get('File') for m in reactor.findall('BuildProgressModels/Model')]]
+    assert len(paths) == 4, 'Check the reactor main and all three construction stages'
+    for index, path in enumerate(paths):
+        model = ROOT/'src'/path
+        embedded=Path(directory)/('embedded-'+str(index)+'.hkt')
+        subprocess.run(['mono',str(model_probe),'--collision',str(model),str(embedded)],check=True,
+                       env={**os.environ,'MONO_PATH':str(game)})
+        accepted = hkt.with_name(model.stem+'.hkt')
+        assert embedded.read_bytes()==accepted.read_bytes()==hkt.read_bytes(), 'Reactor main/stage collision differs from accepted physics: '+path
     subprocess.run(['mcs','-platform:x64','-out:'+str(exe),'-r:/usr/lib/mono/4.5/Facades/netstandard.dll',
                     *['-r:'+str(game/(name+'.dll')) for name in ('HavokWrapper','VRage.Library','VRage.Math')],
                     str(ROOT/'tools/ReactorCollisionProbe.cs')],check=True)
