@@ -44,6 +44,93 @@ def mutable(obj):
         'SEUT / Wire Vent', 'Integrated support / curved pillar saddle', 'Upper radial bracket')) or (obj.name.startswith('SEUT / Large Screw') and max(v.co.z for v in obj.data.vertices) > 3.5)
 
 
+def fit_roof_surfaces(col):
+    """Seat the thermal roof fittings without coincident visible surfaces."""
+    bpy.context.view_layer.update()
+    source = lambda o: o.get('reactor_source_name', o.name)
+    cap = next(o for o in col.objects if source(o).startswith('Cap central service hatch')
+               and min((o.matrix_world @ v.co).z for v in o.data.vertices) > 3.5)
+    # Clear the complete 2.04 m seat OD. Burying this edge in the seat left
+    # almost-coplanar top faces and a visible intersection at grazing angles.
+    # The housing at Z3.525 backs the narrow seam around its full perimeter.
+    if min((cap.matrix_world @ v.co).xy.length for v in cap.data.vertices) < 2.049:
+        cap.data = cap.data.copy()
+        inverse = cap.matrix_world.inverted()
+        for vertex in cap.data.vertices:
+            point = cap.matrix_world @ vertex.co
+            radius = math.hypot(point.x, point.y)
+            if radius < 2.1:
+                point.x *= 2.05/radius; point.y *= 2.05/radius
+                vertex.co = inverse @ point
+        cap.data.update()
+    if col.get('roof_surface_fit_revision') == 1:
+        return {'already_fitted': True, 'cap_opening_radius_m': 2.05}
+    targets = [o for o in col.objects if source(o).startswith(
+        ('Circular upper armored housing', 'Cap removable sector'))
+        and max((o.matrix_world @ v.co).z for v in o.data.vertices) > 3.5]
+    receivers = [o for o in col.objects if source(o).startswith('Reactor exterior / service receiver')
+                 and o.matrix_world.translation.z > 3.5]
+    assert len(receivers) == 16, 'Expected sixteen roof service bays'
+    # Recess the complete receiver, rather than cutting only its inner opening.
+    # A 10 mm perimeter seam is backed by the housing below the 3.57 m floor.
+    for receiver in receivers:
+        bpy.ops.mesh.primitive_cube_add(size=1)
+        cutter = bpy.context.object
+        cutter.data.materials.clear(); cutter.data.materials.append(bpy.data.materials['Metal_Dull'])
+        cutter.dimensions = (1.08, 1.05, .24)
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        bevel = cutter.modifiers.new('Receiver corner clearance', 'BEVEL')
+        bevel.width = .024; bevel.segments = 1
+        bpy.ops.object.modifier_apply(modifier=bevel.name)
+        cutter.matrix_world = receiver.matrix_world @ Matrix.Translation((0, 0, -.057))
+        bpy.context.view_layer.update()
+        cp = [cutter.matrix_world @ Vector(v) for v in cutter.bound_box]
+        for obj in targets:
+            op = [obj.matrix_world @ Vector(v) for v in obj.bound_box]
+            if any(max(p[i] for p in op) < min(p[i] for p in cp)
+                   or min(p[i] for p in op) > max(p[i] for p in cp) for i in range(3)):
+                continue
+            if obj.data.users > 1: obj.data = obj.data.copy()
+            mod = obj.modifiers.new('Full roof receiver recess', 'BOOLEAN')
+            mod.operation = 'DIFFERENCE'; mod.solver = 'EXACT'; mod.object = cutter
+            bpy.context.view_layer.objects.active = obj
+            bpy.ops.object.modifier_apply(modifier=mod.name)
+        bpy.data.objects.remove(cutter, do_unlink=True)
+    # Boolean walls need their own projected UVs; retain all usable old UVs.
+    for obj in targets:
+        mesh = obj.data
+        bm = bmesh.new(); bm.from_mesh(mesh)
+        bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=.00001)
+        bmesh.ops.dissolve_degenerate(bm, edges=list(bm.edges), dist=.000005)
+        bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
+        assert all(e.is_manifold for e in bm.edges), obj.name+': open roof solid'
+        bm.to_mesh(mesh); bm.free()
+        mesh.calc_loop_triangles(); uv = mesh.uv_layers.active.data
+        collapsed = {t.polygon_index for t in mesh.loop_triangles if t.area > 1e-8
+            and abs((uv[t.loops[1]].uv-uv[t.loops[0]].uv).cross(
+                    uv[t.loops[2]].uv-uv[t.loops[0]].uv)) < 1e-11}
+        for index in collapsed:
+            face = mesh.polygons[index]
+            axes = [i for i in range(3) if i != max(range(3), key=lambda j: abs(face.normal[j]))]
+            for loop in face.loop_indices:
+                p = mesh.vertices[mesh.loops[loop].vertex_index].co
+                uv[loop].uv = (p[axes[0]]*.8+.17, p[axes[1]]*.8+.41)
+    screws = 0
+    for obj in col.objects:
+        if not source(obj).startswith('Reactor exterior / native screw face'): continue
+        if min((obj.matrix_world @ v.co).z for v in obj.data.vertices) < 3.5: continue
+        body = bpy.data.objects[obj['fastener_body']]
+        top = max((body.matrix_world @ v.co).z for v in body.data.vertices)
+        # Half-precision native positions collapsed the old 0.5 mm decal gap.
+        obj.data = obj.data.copy(); inverse = obj.matrix_world.inverted()
+        for vertex in obj.data.vertices:
+            point = obj.matrix_world @ vertex.co; point.z = min(top+.002, 3.75)
+            vertex.co = inverse @ point
+        obj.data.update(); screws += 1
+    col['roof_surface_fit_revision'] = 1
+    return {'receiver_recesses': len(receivers), 'screw_faces': screws, 'cap_opening_radius_m': 2.05}
+
+
 def main():
     scene = bpy.data.scenes[NAME]
     assert not scene.get('exterior_detail_revision'), 'Refinement already applied'

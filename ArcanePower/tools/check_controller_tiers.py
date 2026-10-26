@@ -40,6 +40,7 @@ methods = "\n".join([
     method(fuel, "        private void RefreshFuelCapacity()"),
     method(fuel, "        private double FuelUnitsPerMinute()"),
     method(fuel, "        private void UpdateFuel()"),
+    method(fuel, "        private void PayFuel("),
     method((SCRIPTS / "Reactor.Tiles.cs").read_text(), "        private static bool ValidTileGrades("),
 ])
 safety = (SCRIPTS / "Reactor.Safety.cs").read_text()
@@ -112,6 +113,9 @@ namespace Sandbox.ModAPI {
     }
 }
 namespace ArcanePower {
+    static class RingMotion { /* SECONDARY_RATE */ }
+    [ProtoContract] public class ThermalRotorState { public bool Valid(long id) { return true; } }
+    [ProtoContract] public class ThermalRadiatorState { public bool Valid(long id) { return true; } }
     class NativeReactor { public float Capacity; }
     public sealed partial class Reactor {
         IMyReactor reactor=new IMyReactor();
@@ -120,6 +124,13 @@ namespace ArcanePower {
         int controllerRingCapacity=2,initializationFrames,networkTick=1,appearanceRefresh;
         float previousControllers=-1;
         bool receivedState=true,restoreLegacyHardware;
+        // This fixture covers the original direct-generation controller path.
+        // check_reactor_fuel_modes.py exercises the production thermal branches.
+        bool IsLive=true,ThermalVariant=false,ThermalFuelModeReady=true,ThermalCold=true;
+        double ThermalHeatMW { get { return PowerMW[Motion.FuelTier-1]/.40; } }
+        float ElectricalRatingMW { get { return PowerMW[Motion.FuelTier-1]; } }
+        void RefreshThermalCapacity() { throw new InvalidOperationException("Use the thermal fuel fixture"); }
+        void RecoverResiduum() {} void ExportResiduum(Inventory target) {}
         static int[] TileTypes=new int[3];
         const float CooldownHeat=.15f;
         List<IMyTerminalBlock> fuelSources=new List<IMyTerminalBlock>();
@@ -172,6 +183,7 @@ CHECKS = r'''
             for(int rings=2;rings<=4;rings++) {
                 double efficiency=new double[]{.8,.9,.99}[rings-2];
                 for(int tier=1;tier<rings;tier++) {
+                    double minutes=tier==1?2.5:10;
                     var r=new Reactor();r.Hardware(rings);
                     r.reactor.Inventory.Stock[Fuels[tier-1]]=10;
                     r.UpdateFuel();
@@ -185,11 +197,11 @@ CHECKS = r'''
                     Need(ticks==(int)Math.Ceiling(718/(rings*.5)),"complete assembly duration depends on hardware");
                     r.Motion.Core=CorePhase.Running;r.Motion.PowerRamp=1;r.Motion.VentReady=true;
                     r.reactor.CurrentOutput=PowerMW[tier-1];
-                    Near(r.FuelUnitsPerMinute(),.1/efficiency,"full-load canister consumption");
-                    Near(1/r.FuelUnitsPerMinute(),10*efficiency,"one canister lasts 8/9/9.9 minutes");
+                    Near(r.FuelUnitsPerMinute(),1/(minutes*efficiency),"full-load canister consumption");
+                    Near(1/r.FuelUnitsPerMinute(),minutes*efficiency,"tier-specific canister endurance");
                     double before=r.reactor.Inventory.Count(Fuels[tier-1]);
                     for(int i=0;i<3600;i++)r.UpdateFuel();
-                    Near(before-r.reactor.Inventory.Count(Fuels[tier-1])+r.Motion.FuelDebt,.1/efficiency,"one-minute canister debit");
+                    Near(before-r.reactor.Inventory.Count(Fuels[tier-1])+r.Motion.FuelDebt,1/(minutes*efficiency),"one-minute canister debit");
                     Near(r.nativeReactor.Capacity,PowerMW[tier-1]/216000,"efficiency preserves fuel-rated maximum output");
                     r.Motion.VentReady=false;r.Motion.SecurityMode=false;r.RefreshFuelCapacity();
                     Near(r.nativeReactor.Capacity,PowerMW[tier-1]/216000,"warning mode preserves running output with broken vents");
@@ -201,16 +213,16 @@ CHECKS = r'''
                     Need(r.nativeReactor.Capacity==0,"security mode blocks output with broken vents");
                     r.Motion.VentReady=true;
                     r.reactor.CurrentOutput*=.4f;
-                    Near(r.FuelUnitsPerMinute(),.04/efficiency,"partial-load efficiency");
+                    Near(r.FuelUnitsPerMinute(),.4/(minutes*efficiency),"partial-load efficiency");
                     r.Motion.MaintenanceTick=0;r.AdvanceMotion();
                     Near(r.Motion.MaintenanceTick,rings*.5,"controller determines replacement speed");
                     r.reactor.Inventory.Stock[Fuels[tier-1]]=.000001;
                     r.RefreshFuelCapacity();
-                    Near(r.nativeReactor.Capacity,.00001*PowerMW[tier-1]*efficiency/60,"near-empty canister capacity",.0000001);
+                    Near(r.nativeReactor.Capacity,.000001*minutes*PowerMW[tier-1]*efficiency/60,"near-empty canister capacity",.0000001);
                     r.Motion.TileStarved=true;r.Motion.StarvedLoad=.4f;
-                    Near(r.FuelUnitsPerMinute(),.4/efficiency,"starvation efficiency");
+                    Near(r.FuelUnitsPerMinute(),4/(minutes*efficiency),"starvation efficiency");
                     r.RefreshFuelCapacity();
-                    Near(r.nativeReactor.Capacity,.00001*PowerMW[tier-1]*efficiency/6000,"starvation near-empty canister capacity",.0000001);
+                    Near(r.nativeReactor.Capacity,.000001*minutes*PowerMW[tier-1]*efficiency/6000,"starvation near-empty canister capacity",.0000001);
                     r.reactor.Inventory.Stock[Fuels[tier-1]]=10;r.RefreshFuelCapacity();
                     Near(r.nativeReactor.Capacity,PowerMW[tier-1]*.04/216000,"starvation caps actual output without changing rating");
                 }
@@ -270,13 +282,16 @@ CHECKS = r'''
 '''
 with tempfile.TemporaryDirectory(prefix="arcane-controller-check-") as folder:
     source = Path(folder) / "check.cs"
-    source.write_text(STUBS.replace("namespace ArcanePower {", "namespace ArcanePower {\n" + state)
+    source.write_text(STUBS.replace('/* SECONDARY_RATE */', method((SCRIPTS/'RingMotion.cs').read_text(), 'internal static float SecondaryRate('))
+                      .replace("namespace ArcanePower {", "namespace ArcanePower {\n" + state)
                       + fuel_fields + methods + CHECKS)
     exe = source.with_suffix(".exe")
     subprocess.run(["mcs", "-warn:0", "-r:/usr/lib/mono/4.5/Facades/netstandard.dll",
                     "-r:" + str(GAME / "ProtoBuf.Net.Core.dll"), "-r:" + str(GAME / "ProtoBuf.Net.dll"),
                     "-r:" + str(GAME / "VRage.Library.dll"),
-                    "-out:" + str(exe), str(source)], check=True)
+                    "-r:" + str(GAME / "VRage.Math.dll"),
+                    "-out:" + str(exe), str(source),
+                    *[str(SCRIPTS/name) for name in ('ThermalPlant.cs','ThermalLoops.cs','ThermalNetwork.cs','ThermalFlow.cs')]], check=True)
     subprocess.run(["mono", str(exe)], check=True, env={**os.environ, "MONO_PATH": str(GAME)})
 
 # Presentation and physical payload must use the same saved deployed hardware.

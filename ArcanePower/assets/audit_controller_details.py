@@ -31,11 +31,18 @@ def main():
             return trees[o]
         rims=[o for o in details if o.name.startswith(PREFIX+'stepped receiver')]
         require(scene.get('controller_receiver_revision')==2,name+': receiver seating repair missing')
+        require(scene.get('controller_aperture_revision')==1,name+': receiver wall clearance missing')
         rim_samples=0;cover_gaps=[]
         for rim in rims:
             w=2*max(v.co.x for v in rim.data.vertices);h=2*max(v.co.y for v in rim.data.vertices)
             require(abs(max(v.co.z for v in rim.data.vertices)-.006)<.00001,rim.name+': rim is coplanar with casing')
             normal=(rim.matrix_world.to_3x3() @ Vector((0,0,1))).normalized()
+            for axis,half in ((0,w/2),(1,h/2)):
+                for sign in (-1,1):
+                    point=Vector((0,0,-.008));point[axis]=sign*(half-.025)
+                    direction=Vector((0,0,0));direction[axis]=sign
+                    hit,n,index,distance=tree(shell).ray_cast(rim.matrix_world@point,rim.matrix_world.to_3x3()@direction,.02)
+                    require(hit is not None and .009<distance<.011,rim.name+': inner wall coincides with casing aperture')
             for x,y in ((w/2-.008,0),(-w/2+.008,0),(0,h/2-.008),(0,-h/2+.008)):
                 p=rim.matrix_world @ Vector((x,y,.006));hit,n,index,distance=tree(shell).ray_cast(p,-normal,.010)
                 require(hit is not None and n.dot(normal)>.9 and .0055<distance<.0065,rim.name+': lip overlaps casing or lacks backing');rim_samples+=1

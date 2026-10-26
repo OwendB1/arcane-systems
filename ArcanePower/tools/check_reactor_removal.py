@@ -32,9 +32,11 @@ methods = ''.join(member(file, signature) for file, signature in [
     ('Reactor.Fuel.cs', '        private void FuelChanged('),
     ('Reactor.Fuel.cs', '        private bool HasUsableFuel()'),
     ('Reactor.Fuel.cs', '        private int FuelTierLimit'),
+    ('Reactor.Fuel.cs', '        private float FuelFullLoadMinutes'),
     ('Reactor.Fuel.cs', '        private void RefreshFuelCapacity()'),
     ('Reactor.Fuel.cs', '        private double FuelUnitsPerMinute()'),
     ('Reactor.Fuel.cs', '        private void UpdateFuel()'),
+    ('Reactor.Fuel.cs', '        private void PayFuel('),
     ('Reactor.Thermal.cs', '        internal bool ThermalVariant'),
     ('Reactor.Thermal.cs', '        private bool ThermalFuelModeReady'),
     ('Reactor.Thermal.cs', '        private void RefreshThermalCapacity()'),
@@ -101,11 +103,13 @@ class MyReactor : IMyReactor {
 class MyLight {}
 static class MyLights {public static int Removed;public static void RemoveLight(MyLight light){Removed++;}}
 static class VentSession {public static int Removed;public static void Remove(Reactor r){Removed++;}}
+static class ThermalSession {public static int Removed;public static void Remove(Reactor r){Removed++;}}
 enum MyEntityUpdateEnum {NONE,EACH_FRAME}
 enum CorePhase {Off,Starting,Running,Cooling,Stopping}
 enum VentPhase {Idle,ShieldClosing,Ejecting}
 enum ThermalMode {Standalone,Brayton}
-class ThermalState {public double ProducedMW,FuelHeatMJ;public object Store=new object();public ThermalMode Mode,Requested;public bool Settled=true;}
+class Credit {public double HotMJ;}
+class ThermalState {public int LoopVersion;public double ProducedMW,FuelHeatMJ;public Credit Store=new Credit();public ThermalMode Mode,Requested;public bool Settled=true;}
 static class ThermalMath {public static double ExportLimit(object store,double capacity,double efficiency,double ramp,double dt){return 100;}}
 class State {
  public CorePhase Core=CorePhase.Running;
@@ -126,6 +130,8 @@ class Reactor {
  State Motion=new State();
  int initializationFrames,controllerRingCapacity=2,networkTick=1;
  float FuelEfficiency=.8f;
+ class Grant {public double MaximumMW;}
+ Grant standaloneGrant;
  bool ThermalCold=true,ThermalCanRun=true;
  double ThermalHeatMW=25000;
  float ElectricalRatingMW=10000;
@@ -133,7 +139,6 @@ class Reactor {
  static float[] PowerMW={10000,100000,1000000};
  const long ResiduumScale=1000000;const int ResiduumPerCanister=10;
  void RecoverResiduum(){} void ExportResiduum(VRage.Game.Entity.MyInventoryBase target){}
- const float FuelUnitsPerCanister=10;
  List<IMyTerminalBlock> fuelSources=new List<IMyTerminalBlock>();
  List<MyInventoryItem> transferItems=new List<MyInventoryItem>();
  MyEntityUpdateEnum NeedsUpdate=MyEntityUpdateEnum.EACH_FRAME;

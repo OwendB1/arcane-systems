@@ -51,8 +51,9 @@ upgraded turbines**; a larger standard turbine bank cannot accept T3 heat.
 
 The reactor supplies CO2 working fluid automatically. A complete circuit is
 available immediately; there is no filling phase or full-pressure requirement.
-Its turbine still needs grid electricity for cold compressor startup and hot
-shutdown circulation. Heat flow is split into four fixed quarter allocations.
+Turbines need no separate compressor-startup power. Keep the reactor's containment
+supply available for startup and active-cooler cooldown. Each circuit has a fixed
+quarter allocation; actual power demand determines reaction heat linearly.
 No separate generator, tank or filling conveyor is needed.
 
 Build **one turbine and its own coolers per reactor manifold**. Use tees/crosses
@@ -64,9 +65,10 @@ Regular/mirrored turbines provide opposite-side sockets and both equipment tiers
 
 With Aether, each circuit receives up to 6.25 GWth, exports 2.5 GW at starter
 conversion and needs 3.75 GW rejection. Fit at least one effective standard
-10 GW cooler/panel in each circuit, with environmental headroom. One circuit
+10 GW radiator panel or 25 GW atmospheric cooler in each circuit, with environmental headroom. One circuit
 works at 25% of full capacity; four independent circuits provide full capacity.
-Upgraded cooling provides 100 GW per unit/panel. Empyrean requires upgraded
+Upgraded radiators provide 100 GW per panel; upgraded atmospheric coolers provide
+250 GW per unit at full air density with clear exhausts. Empyrean requires upgraded
 turbines and enough cooling within every operating circuit.
 
 All four trains occupy **2 blocks wide × 2 high × 5 long** (5×5×12.5 m). The socket
@@ -88,7 +90,22 @@ outside the ship and connect the **rear duplex manifold** inside it.
 The intake louvers stay recessed in the exterior face. Keep **2.5 m clear beyond
 both fan guards**: half-clear exhaust leaves 25% cooling, fully blocked exhaust
 leaves none. Armor, another grid or terrain in the exhaust path reduces capacity.
-Check **Exhaust clearance** and **Available cooling** in the cooler terminal.
+Select the cooler, radiator base or extension panel in the native terminal to
+see its dedicated **Arcane Power** cooling readout. It shows cooling efficiency
+and available/rated capacity using server measurements, including while stopped.
+Radiator bases include their attached extensions in the stack total and show the
+base panel separately; each extension shows its own contribution. Percentages
+are weighted by rated capacity, so mixed 10/100 GW panels are counted correctly.
+All cooling blocks show measured air density. Radiators also show clear sky,
+solar and ambient cooling factors; atmospheric coolers show exhaust clearance
+and the resulting airflow factor. Active cooling scales from zero in vacuum to
+full rating at one atmosphere. Radiator atmospheric losses scale smoothly with
+density, so trace atmosphere no longer imposes the full atmospheric penalty. Zero
+capacity explains missing atmosphere, obstructions, disabled/damaged blocks or
+unattached panels. These are capacity readings; actual heat removal also depends
+on current waste heat and retained circuit heat. Measurements refresh about once per second and
+are sent to clients twice per second.
+Check **Exhaust clearance** and **Available** in the cooler terminal.
 Clearance is resampled about once per second during operation. Existing coolers
 retain their block size, but their old side connection must be rerouted to the rear.
 
@@ -126,8 +143,7 @@ pipe/machine, open junction outlet, H/C fault or grid split makes that entire
 circuit unavailable immediately. Both reactor bores close together over 0.35 s;
 other circuits keep their own efficiency and heat-flow allocation.
 Once a complete circuit passes its checks, its reactor valve opens even while
-the reactor is off and the circuit is cold. Actual circulation power and paid
-heat inventory govern heat transport and generation. Unused or invalid
+the reactor is off and the circuit is cold. Paid native output determines reaction heat; circuit cooling is independent of load. Unused or invalid
 circuits stay closed; moving/retracted manifolds stay closed too.
 Do not rely on junction auto-capping: fit physical end caps on unused pipe mouths.
 
@@ -137,9 +153,9 @@ and only if all four circuits are defective. One to three valid circuits allow
 startup at their normal quarter allocations.
 Normal Stop and cooldown never create this latch. The dashboard then shows normal
 cooldown rather than a circuit-loss alarm.
-Existing heat remains on its real blocks; containment, tiles, critical-core fuse
+Existing heat remains assigned to its circuit; containment, tiles, critical-core fuse
 and ejection keep their existing authority. There is no standalone fallback.
-Repair the affected circuit and supply circulation power. Healthy circuits can
+Repair the affected circuit and keep reactor auxiliary power supplied. Healthy circuits can
 keep running; a repaired circuit resumes without a refill delay. After a full
 shutdown, restart manually. Repaired circuits can also provide powered cooldown
 while the core stays off.
@@ -148,6 +164,19 @@ Adding or removing pipes or machinery refreshes circuit validity while the react
 is off or running. Damage, welding, access, grid and alignment changes also refresh
 it; Start uses the current result. World reloads revalidate all circuits without
 refilling and retain existing heat and fuel accounting.
+Functional-state and on/off events invalidate the changed block's circuit snapshot,
+including damage and repair completed between simulation ticks. Rechecks run on
+the next server update after output accounting; ordinary power loss is not a
+repair event. Full-weld, ownership and placement checks remain active.
+These updates also recheck retained runtime faults on the changed circuit once
+its layout is complete. Radiator extension changes count as updates to their base.
+Valid inventories and zero native output allow a retry; invalid saved inventories,
+invalid native generator settings and critical reactor state remain isolated.
+Unchanged circuits do not repeatedly reset their faults. Rechecking preserves all
+heat and fuel credit and never starts a stopped reactor. A recovered circuit opens
+its valve and restores normal pipe emissives even before startup.
+The HUD distinguishes a verified layout from server operating readiness; retained
+runtime faults appear as faults, rather than misleading unsealed-pipe warnings.
 Old shared-network builds migrate disabled with all heat retained;
 separate their plumbing and restart. Blocked fans or sun-loaded radiators reduce
 rejection without pretending that pressure was lost: insufficient cooling can
@@ -155,10 +184,10 @@ still raise retained waste to the existing 125% critical threshold.
 
 ## Verify construction, then operation
 
-Once running, green edge lamps and moving streaks/wisps indicate measured
-circulation. Amber means the selected route is connected but idle. A capped spur or unavailable circuit stays still. Cold start can circulate cold fluid before the
-hot bands warm up. Internal circulation also works in powered standalone mode;
-the external room route operates in Brayton mode.
+Once running, green lamps and moving wisps show circuit activity. Speed follows
+electrical load; cooldown has a slow cosmetic flow while heat is removed. Amber
+means connected but idle. Capped spurs and unavailable circuits stay still. Internal
+coolant visuals work in standalone; external room routes operate in Brayton mode.
 
 Aim at a block in the assembly and resolve the guide's next instruction:
 
@@ -170,26 +199,21 @@ Aim at a block in the assembly and resolve the guide's next instruction:
 3. **Welding/access:** no unfinished, damaged or unavailable blocks. The guide
    then reports **Construction verified**. This confirms the observed topology
    and build state; it does not certify thermal capacity or enable startup.
-4. **Cooling:** use an atmospheric cooler in atmosphere with powered circulation
+4. **Cooling:** use an atmospheric cooler in atmosphere with reactor auxiliary power
    and clear fan exhausts,
    or give a space radiator unobstructed exposure to a cold sink. Enough cooling
    must handle the dispatched plant's rejected heat. Welding a cooler does not
    establish that it can reject heat at its location. Compare **Cooling capacity**
    with **Cooling required** on the reactor Power page. Insufficient rejection
    stores waste in the reactor; 100% heat warns and 125% starts irreversible failure.
-5. **Power and supplies:** provide external startup power in addition to reactor
-   containment. Cold compressor startup requests **2% of dispatched thermal
-   throughput** while the turbine has no usable hot inventory. There is no timed
-   filling requirement. A standard 25 GWth bank requests 500 MW for all four
-   circuits, or 125 MW per circuit, plus containment demand. Partial delivery
-   starts proportionally reduced circulation; keep power available for cooldown. Check fuel, containment
-   tiles, controllers, vent readiness and ownership on the reactor dashboard.
-6. **Startup:** once the mode is settled, start the reactor manually. Watch
-   the **Server** line in the guide and the reactor's native terminal/dashboard.
-   **Circuit 1–4** diagnostics show readiness, valve state and cooling margin,
-   including a wait for compressor power when needed. They also report the actual
-   operating limit. The electric compressor spools first; turbine motion follows
-   paid heat and circulation. Verify power export and heat rejection under a real load.
+5. **Power and supplies:** supply containment startup power, fuel, tiles and compatible
+   controllers. There is no turbine pump-startup demand or circulation gate. Keep
+   containment power available during cooldown so active coolers can operate.
+6. **Startup:** start manually once the mode is settled. Circuit diagnostics show
+   readiness, valve state and cooling margin. Both turbine shafts scale smoothly
+   with electrical load. Compare **Cooling required** at current load against
+   **Cooling capacity**; use **Full-load cooling** when sizing the plant. Monitor
+   **Accumulated heat** and **Heat removed** during recovery and shutdown.
 
 Eligible turbines retain 40% starter conversion, then 55%, 66% or 78% with
 suitable temperature/equipment. Circuit count changes capacity rather than
@@ -222,7 +246,7 @@ Keep both faces open to space and the entire rotation envelope clear. The faint
 red-orange panel glow follows actual heat rejection, not requested power.
 
 For shutdown or conversion back to standalone, stop the source and retain
-circulation/cooling power while stored heat drains. Wait for the mode transition
+containment power while stored heat drains. Wait for the mode transition
 and manifold retraction to finish before restarting with Aether. Higher-tier fuel
 can remain in storage but will not be selected or automatically replenished in
 standalone. Losing the last intact advanced controller stops Brayton generation
@@ -238,8 +262,9 @@ mixed inventories, conveyor supply, unavailable controllers, restored unsafe
 states, retained heat, pending fuel charges and powered shutdown/retraction.
 It also checks Residuum recovery across tiny debits, full inventories, failed
 item insertion, save/load, copied identities, conveyors and creative/client guards.
-The completed offline pass has 615 fuel/recovery/shutdown checks and 2,324,845 thermal
-checks, including T3 hardware eligibility, 10/100 GW cooling tiers and inverse
+The offline suites cover fuel/recovery/shutdown and thermal behavior,
+including T3 hardware eligibility, 25/250 GW atmospheric coolers, 10/100 GW
+radiator panels, vacuum/thin-atmosphere boundaries and inverse
 solar exposure with shade, weather and planetary-shadow boundaries. Native
 motion validation passes all 1,730 existing comparisons; isolation valves pass
 48 native mesh/pose comparisons across all four reactor valve mounts. Live SE commissioning

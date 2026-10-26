@@ -29,10 +29,12 @@ namespace ArcanePower
             {
                 if (root.Spec.Kind != ThermalKind.Radiator) continue;
                 int previous = root.RadiatorPanels.Count;
-                long first = previous > 0 ? root.RadiatorPanels[0].Entity.EntityId : 0;
-                long second = previous > 1 ? root.RadiatorPanels[1].Entity.EntityId : 0;
+                // GameLogic.Entity is cleared when a panel is removed. The
+                // retained block reference still identifies the previous link.
+                long first = previous > 0 ? root.RadiatorPanels[0].Block.EntityId : 0;
+                long second = previous > 1 ? root.RadiatorPanels[1].Block.EntityId : 0;
                 root.RadiatorPanels.Clear();
-                if (root.Healthy)
+                if (root.HardwareReady)
                 {
                     for (int i = 0; i < 2; i++)
                     {
@@ -43,7 +45,7 @@ namespace ArcanePower
                         var slim = root.Block.CubeGrid.GetCubeBlock(root.Block.CubeGrid.WorldToGridInteger(target));
                         ThermalBlock panel;
                         if (slim == null || slim.FatBlock == null || !Blocks.TryGetValue(slim.FatBlock.EntityId, out panel)
-                            || panel.Spec.Kind != ThermalKind.RadiatorPanel || !panel.Healthy
+                            || panel.Spec.Kind != ThermalKind.RadiatorPanel || !panel.HardwareReady
                             || !panel.Block.HasPlayerAccess(root.Block.OwnerId)
                             || !ThermalRadiators.FitsExtension(root.Block.WorldMatrix, panel.Block.WorldMatrix, i)) break;
                         panel.RadiatorBase = root;
@@ -51,8 +53,8 @@ namespace ArcanePower
                     }
                 }
                 if (previous != root.RadiatorPanels.Count
-                    || (root.RadiatorPanels.Count > 0 && first != root.RadiatorPanels[0].Entity.EntityId)
-                    || (root.RadiatorPanels.Count > 1 && second != root.RadiatorPanels[1].Entity.EntityId)) root.InvalidateRadiatorCooling();
+                    || (root.RadiatorPanels.Count > 0 && first != root.RadiatorPanels[0].Block.EntityId)
+                    || (root.RadiatorPanels.Count > 1 && second != root.RadiatorPanels[1].Block.EntityId)) root.InvalidateRadiatorCooling();
             }
         }
     }

@@ -37,6 +37,7 @@ namespace Sandbox.Game.Entities {
 namespace Sandbox.Game.Components {
  public class MyRenderComponentScreenAreas {
   public static int Created,Released,Restored,Draws;
+  public static byte LastBackgroundAlpha;
   public static List<MySprite> Last;
   public bool IsUpdateModelPropertiesEnabled=true;
   Sandbox.Game.Entities.MyHandToolBase owner;
@@ -47,7 +48,7 @@ namespace Sandbox.Game.Components {
   public void ReleaseTexture(int area,bool empty){Released++;if(empty)throw new Exception("must not bind empty texture during release");}
   public string GenerateOffscreenTextureName(long id,int area){return "LCDOffscreenTexture_"+id;}
   public void ChangeTexture(int area,string path){if(IsUpdateModelPropertiesEnabled)throw new Exception("do not alter tool visibility");if(path==null)Restored++;}
-  public void RenderSpritesToTexture(int area,VRage.Collections.ListReader<MySprite> sprites,Vector2I size,Vector2 aspect,Color color,byte alpha){Last=sprites.ToList();Draws++;}
+  public void RenderSpritesToTexture(int area,VRage.Collections.ListReader<MySprite> sprites,Vector2I size,Vector2 aspect,Color color,byte alpha){Last=sprites.ToList();LastBackgroundAlpha=alpha;Draws++;}
  }
 }
 namespace Sandbox.ModAPI {
@@ -78,8 +79,8 @@ namespace ArcanePower {
    string[] labels={"Output","Heat","Reserve","Fuel stock","Spare tiles","Vent","Net","Ramp","Containment","Fuel efficiency","Fuel burn","Fuel remaining","Security mode","Integrity","Controllers","Field","Reserve energy","Tile grade","Quartet wear","Replacing","Dismantle at","Tile demand","Tile reserve","Tile stock","Startup tiles","Conveyors","Route","Doors"};
    foreach(string label in labels)report.Rows.Add(new StatusRow{Section="TEST",Label=label,Value=label=="Fuel stock"?"4991.814 units":label=="Tile stock"?"Standard 308 / Reinforced 0 / Advanced 0":"Test reading",Tone="white"});
    if(brayton){
-    string[] coolingLabels={"Circuits available","Conversion efficiency","Cooling capacity","Cooling required","Returned waste","Startup / cooldown draw"};
-    string[] coolingValues={"4 / 4 (100% allocation)","78%","15 GW","21 GW at design load","12345678.0 MJ","500 MW"};
+    string[] coolingLabels={"Circuits available","Conversion efficiency","Cooling capacity","Cooling required","Reaction heat","Full-load cooling","Heat removed","Accumulated heat"};
+    string[] coolingValues={"4 / 4 (100% allocation)","78%","15 GW","21 GW at current load","128 GW / 250 GW","55 GW","15 GW","12345678.0 MJ"};
     for(int i=0;i<coolingLabels.Length;i++)report.Rows.Add(new StatusRow{Section="POWER",Label=coolingLabels[i],Value=coolingValues[i],Tone="yellow"});
    }
    if(precharging){
@@ -120,7 +121,7 @@ namespace ArcanePower {
       }
      }
      if(report.Brayton && !report.Precharging && page==1){
-      foreach(var label in new[]{"Circuits available","Conversion efficiency","Cooling capacity","Cooling required","Returned waste"}){
+      foreach(var label in new[]{"Circuits available","Reaction heat","Cooling capacity","Cooling required","Full-load cooling","Heat removed","Accumulated heat"}){
        Need(sprites.Any(s=>s.Data==label) && lcd.Any(s=>s.Data==label),"both power pages show "+label);
        Need(sprites.Any(s=>s.Data==report.Value(label)) && lcd.Any(s=>s.Data==report.Value(label)),"both power pages show live "+label);
       }
@@ -136,12 +137,18 @@ namespace ArcanePower {
    tool.Render.RenderObjectIDs=new[]{uint.MaxValue};Need(!screen.Draw(tool,sprites),"wait for native render IDs");
    Need(tool.Backlight==0,"unready panel remains dark");
    tool.Render.RenderObjectIDs=new uint[]{7};Need(screen.Draw(tool,sprites),"bind native screen when ready");
-   Need(tool.Backlight==2 && tool.BacklightColor==Color.White,"active panel has a neutral backlight");
+   Need(tool.Backlight>0 && tool.Backlight<=.05f && tool.BacklightColor==Color.White,"active panel has a restrained neutral HDR backlight");
+   float brightness=tool.Backlight;
+   // MyOffscreenRenderer preserves clear alpha while drawing sprites. When
+   // bound as ColorMetalTexture, that alpha is metalness, not screen opacity.
+   // SurfaceAlbedo = baseColor * (1 - metalness); full metal kills emission.
+   Need(Sandbox.Game.Components.MyRenderComponentScreenAreas.LastBackgroundAlpha==0,"live texture must remain nonmetallic so its backlight works without sunlight");
    var rendered=Sandbox.Game.Components.MyRenderComponentScreenAreas.Last;
    var background=rendered[0];var aspect=new Vector2(.270f/.174f,1);var shift=new Vector2(1024,1024)*(aspect-Vector2.One)/2;
    float nativeScale=1024*aspect.X/ReactorDashboard.TabletWidth;
    for(int i=0;i<rendered.Count;i++){
     var sprite=rendered[i];var source=sprites[i];
+    Need(sprite.Color==source.Color,"backlighting preserves the dashboard palette");
     // Native screen renderer adds shift, then the sprite shader divides by
     // Resolution * aspect. Check the final sampled texture coordinates.
     var sampled=(sprite.Position.Value+shift)/new Vector2(1024*aspect.X,1024);
@@ -162,7 +169,7 @@ namespace ArcanePower {
    tool.Render.RenderObjectIDs=new uint[]{8};screen.Draw(tool,sprites);
    Need(Sandbox.Game.Components.MyRenderComponentScreenAreas.Created==2 && Sandbox.Game.Components.MyRenderComponentScreenAreas.Released==1,"rebind replaced render IDs and free old texture");
    var next=new Sandbox.Game.Entities.MyHandToolBase{EntityId=456};screen.Draw(next,sprites);
-   Need(tool.Backlight==0 && next.Backlight==2,"switching tools transfers active backlight");
+   Need(tool.Backlight==0 && next.Backlight==brightness,"switching tools transfers active backlight");
    screen.Release();screen.Release();
    Need(next.Backlight==0,"release switches backlight off");
    Need(Sandbox.Game.Components.MyRenderComponentScreenAreas.Created==Sandbox.Game.Components.MyRenderComponentScreenAreas.Released,"switch/unequip frees every texture exactly once");
@@ -179,7 +186,7 @@ namespace ArcanePower {
    TabletLink.Allowed=false;
    for(int i=0;i<10;i++)tablet.UpdateAfterSimulation();
    Need(Sandbox.Game.Components.MyRenderComponentScreenAreas.Last.Any(s=>s.Data=="DISCONNECTED") && !Sandbox.Game.Components.MyRenderComponentScreenAreas.Last.Any(s=>s.Data=="4991.814 units"),"antenna/access loss removes stale readings");
-   Need(tool.Backlight==2,"disconnected message stays backlit");
+   Need(tool.Backlight>0 && tool.Backlight<=.05f,"disconnected message stays backlit without an HDR glare boost");
    Sandbox.ModAPI.MyAPIGateway.Gui.ChatEntryVisible=true;tablet.UpdateAfterSimulation();
    Need(tool.Backlight==0,"opening chat turns off the hidden panel");
    Need(Sandbox.Game.Components.MyRenderComponentScreenAreas.Created==Sandbox.Game.Components.MyRenderComponentScreenAreas.Released,"opening chat releases native display");

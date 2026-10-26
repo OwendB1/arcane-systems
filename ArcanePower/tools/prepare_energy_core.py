@@ -4,7 +4,7 @@ from pathlib import Path
 import shutil
 import sys
 import xml.etree.ElementTree as E
-from prepare_lab import MOD, save, set_text, XSI, model_source
+from prepare_lab import MOD, save, set_text, XSI, model_source, write_block_menu
 
 BLOCKS = {
  'ArcanePower_EnergyCore': ('Arcane Energy Core',1000,1),
@@ -44,12 +44,15 @@ def refresh_models():
  return revision
 
 
+def energy_block_menu(blocks):
+ write_block_menu(blocks,'Energy',[
+  ('BatteryUpgrades','Arcane Battery Upgrades','Scroll through capacity, transfer and stabilizer modules, including advanced versions.',
+   [name+'_Pillar' for name in BLOCKS if name!='ArcanePower_EnergyCore'])],MOD)
+
+
 def main():
  revision=model_revision()
  root=E.Element('Definitions');blocks=E.SubElement(root,'CubeBlocks')
- categories=E.Element('Definitions');category=E.SubElement(E.SubElement(categories,'CategoryClasses'),'Category',{'{'+XSI+'}type':'MyObjectBuilder_GuiBlockCategoryDefinition'})
- for path,value in {'Id/TypeId':'GuiBlockCategoryDefinition','Id/SubtypeId':'ArcaneSystems_Energy','DisplayName':'Arcane Systems','Name':'ArcaneSystems'}.items():set_text(category,path,value)
- items=E.SubElement(category,'ItemIds')
  for name,(label,capacity,multiplier) in BLOCKS.items():
   core=name=='ArcanePower_EnergyCore'
   kind='BatteryBlock' if capacity else 'UpgradeModule'
@@ -91,9 +94,8 @@ def main():
    set_text(upgrade,'UpgradeType','ArcaneEnergyTransfer' if 'Transfer' in name else 'ArcaneEnergyStabilizer')
    set_text(upgrade,'Modifier',multiplier)
    set_text(upgrade,'ModifierType','Additive')
-  E.SubElement(items,'string').text=kind+'/'+name+'_Pillar'
  save(root,MOD/'Data/CubeBlocks/ArcanePower_EnergyCore.sbc')
- save(categories,MOD/'Data/EnergyCoreCategories.sbc')
+ energy_block_menu(blocks)
  print('Connected seven energy blocks, 21 construction models and rotor:',revision.relative_to(MOD))
 
 if __name__=='__main__':

@@ -50,6 +50,7 @@ def main():
         subprocess.run(['mcs', '-langversion:6', '-out:' + str(exe),
                         '-r:/usr/lib/mono/4.5/Facades/netstandard.dll', '-r:' + str(output / 'ArcanePower.dll'),
                         '-r:' + str(GAME / 'VRage.Math.dll'), '-r:' + str(GAME / 'VRage.Library.dll'),
+                        '-r:' + str(GAME / 'ProtoBuf.Net.dll'), '-r:' + str(GAME / 'ProtoBuf.Net.Core.dll'),
                         str(ROOT / 'tests/thermal-runtime.cs'), str(work / 'Layout.cs'), str(work / 'BareLayout.cs'), str(work / 'RoomLayout.cs')], check=True)
         result = subprocess.run(['mono', str(exe), str(ROOT / 'ArcanePower/validation/thermal-models/flow-review-states.json')], capture_output=True, text=True,
                                 env={**os.environ, 'MONO_PATH': str(output) + ':' + str(GAME)})
@@ -61,9 +62,9 @@ def main():
                       runtime_contracts=55, authored_starter_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-starter-layout.json').read_text())['instances']), manifold_samples=47,
                       authored_room_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-room-layout.json').read_text())['instances']),
                       conservation_hours_per_efficiency=1, efficiencies=[.20, .40, .78],
-                      cooling_checks='Adequate/half/zero rejection, timely recovery, retained-waste critical threshold, paid-energy conservation, reload and no-load/fuel guards',
+                      cooling_checks='Per-circuit adequate/half/zero rejection, early recovery, hottest-circuit critical threshold, paid-energy conservation, idempotent migration, reload and idle credit',
                       bank_checks='Four independent manifold circuits at fixed 25% heat allocations; unchanged tier efficiency, immediate availability, sealed topology, isolated failure and last-loop trip',
-                      rotor_checks='Cold start, heat/circulation response, coastdown, reload/copy identity, invalid inputs, phase integration and native pivots',
+                      rotor_checks='Linear load targets, no-demand idle, coastdown, reload/copy identity, invalid inputs, phase integration and native pivots',
                       flow_checks='Starter and room routing, opposed H/C, capped spurs, standby branches, equal parallel routes, split/facing/roll faults, path sampling and state validation',
                       construction_checks='Authored build, incomplete/detached blocks, open/facing/roll/crowded joints, 24 placement orientations, missing turbine/cooling and unchanged runtime authority',
                       isolation_checks='Removed/damaged/split/misrolled/crowded/open-cap circuits; cross-linked manifolds, extra turbines, fixed surviving allocations, immediate repair, legacy charge/pressure XML snapshots and valve timing',

@@ -58,7 +58,7 @@
       <Volume>24</Volume>
       <Model>Models/Items/ArcanePower/ArcaneFuelI.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 2 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Consuming Aether recovers 10 Aether Residuum per canister in standalone or Brayton mode.</Description>
+      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 2.5 minutes before controller efficiency. Requires 2 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Consuming Aether recovers 10 Aether Residuum per canister in standalone or Brayton mode.</Description>
     </PhysicalItem>
     <PhysicalItem>
       <Id>

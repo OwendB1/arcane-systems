@@ -21,7 +21,7 @@ namespace ArcanePower
         public static bool ShowReactorGuide(ThermalReactorState state, ThermalBuildCheck check)
         {
             return state != null && state.Mode == ThermalMode.Brayton && state.Settled
-                && check != null && !check.Verified;
+                && check != null && (!check.Verified || state.Faulted || state.ConnectedLoops == 0);
         }
 
         public static string Role(ThermalModel model)
@@ -29,7 +29,7 @@ namespace ArcanePower
             switch (model.Kind)
             {
                 case ThermalKind.Reactor: return "Four independent manifold circuits; one turbine and cooling per circuit. Each supplies up to 25% capacity. Unused reactor manifolds stay closed. Stop/cool before changing mode.";
-                case ThermalKind.Train: return "One lower-cell duplex H/C socket on a 2x2x5 train. Use exactly one turbine plus cooling per reactor manifold circuit. Keep the four circuits separate. Supply grid power for compressor startup and hot shutdown circulation.";
+                case ThermalKind.Train: return "One lower-cell duplex H/C socket on a 2x2x5 train. Use exactly one turbine plus cooling per reactor manifold circuit. Keep the four circuits separate. Its built-in compressor needs grid power for startup and hot shutdown circulation.";
                 case ThermalKind.RadiatorPanel: return "Stack above the base or first panel on the same grid. Centre the shaft and match Up; any yaw works. Up to two extensions share the base's axis and cooling loop.";
                 case ThermalKind.AirCooler: return "Connect the rear cooling socket. Mount casing flush in hull; keep 2.5 m clear beyond both front fan guards. Blocked exhaust stops cooling; needs atmosphere and circulation.";
                 case ThermalKind.Radiator: return "Connect cooling underneath the pedestal. Panels automatically track edge-on to the sun; keep both faces open to space and the 3x3x3 sweep clear. Red glow shows heat dissipation.";
@@ -125,7 +125,7 @@ namespace ArcanePower
                 else if (!plant.Ready) result.Next = plant.Diagnostic;
                 else if (result.Cooling == 0) result.Next = "Connect cooling within this manifold circuit";
                 else if (result.Pending > 0) result.Next = "Weld/repair " + result.Pending + " unfinished or unavailable block(s)";
-                else { result.Verified = true; result.Next = ready + "/4 independent circuits verified. Check cooling and compressor power before starting."; }
+                else { result.Verified = true; result.Next = ready + "/4 circuit layouts verified. See Server below for operating readiness."; }
             }
             foreach (var node in result.Nodes) node.Healthy = health[node.Id];
             return result;

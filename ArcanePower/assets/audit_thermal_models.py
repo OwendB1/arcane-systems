@@ -402,6 +402,11 @@ def audit(names=None):
                         if hit[0] is None or abs(hit[0].z+2.5)>.0001:
                             fail(name,'foundation underside seats flat at the block bottom',deck.name)
                 cable=next(o for o in col.objects if ' / compressor supply conduit' in o.name)
+                motor=next(o for o in col.objects if ' / electric compressor motor' in o.name)
+                terminal=next(o for o in col.objects if ' / compressor motor terminal' in o.name)
+                motor_low,motor_high=bounds(motor);terminal_low,terminal_high=bounds(terminal)
+                if min(terminal_low.x-motor_low.x,motor_high.x-terminal_high.x)<.0119:
+                    fail(name,'motor terminal ends recessed from round motor caps',terminal.name)
                 path=list(map(Vector,json.loads(cable['pipe_path'])))
                 if max((b-a).angle(c-b) for a,b,c in zip(path,path[1:],path[2:])) > math.radians(25):
                     fail(name,'cable uses gradual tangent bends without pinched corners',cable.name)
@@ -563,6 +568,21 @@ def audit(names=None):
                 if any(tree(o).ray_cast(p+n*.05, -n, .20)[0] is not None
                        for p in samples for o in col.objects if o.type == 'MESH' and not o.get('thermal_decal_support')):
                     fail(name, 'open 150 mm socket neck', port['id']+' '+str(sign))
+        if name == 'Reactor housing':
+            fittings = {o.get('reactor_source_name'): o for o in col.objects if o.type == 'MESH'}
+            cap = fittings['Cap central service hatch.001']
+            seat = fittings['AP vent / hatch seat']
+            housing = fittings['Circular upper armored housing.001']
+            clearance = min(tree(seat).find_nearest(cap.matrix_world @ v.co)[3]
+                            for v in cap.data.vertices)
+            if tree(cap).overlap(tree(seat)) or not .009 <= clearance <= .011:
+                fail(name, 'central hatch cap clears seat by 10 mm', cap.name)
+            for i in range(128):
+                angle = i*math.tau/128
+                origin = Vector((2.045*math.cos(angle), 2.045*math.sin(angle), 3.8))
+                if tree(housing).ray_cast(origin, Vector((0, 0, -1)), .30)[0] is None:
+                    fail(name, 'central hatch seam has continuous housing backing', str(i))
+            stats['hatch_cap_seat_clearance_mm'] = round(clearance*1000, 3)
         if name == 'Reactor housing' and scene.get('thermal_flow_revision'):
             pumps=[o for o in col.objects if o.get('thermal_coolant_pump')]
             if len(pumps)!=4:

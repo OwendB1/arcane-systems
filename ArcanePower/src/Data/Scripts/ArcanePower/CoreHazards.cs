@@ -26,10 +26,13 @@ namespace ArcanePower
         [ProtoMember(4)] public float Heat;
         [ProtoMember(5)] public float PeakHeat;
         [ProtoMember(6)] public bool Critical;
-        [ProtoMember(7)] public float Fuse = 45;
+        [ProtoMember(7), System.ComponentModel.DefaultValue(CoreHazards.CriticalDurationSeconds)]
+        public float Fuse = CoreHazards.CriticalDurationSeconds;
         [ProtoMember(8)] public float Decay = 20;
         [ProtoMember(9)] public Vector3D Position;
         [ProtoMember(10)] public Vector3 Velocity;
+        // Missing in legacy saves, where Fuse stored heat-weighted units.
+        [ProtoMember(11)] public int FuseVersion;
     }
 
     // The hazard is world state, independent of the disposable physics carrier.
@@ -38,6 +41,7 @@ namespace ArcanePower
     public sealed class CoreHazards : MySessionComponentBase
     {
         internal const float SupercriticalHeat = 1.25f;
+        internal const float CriticalDurationSeconds = 60;
         private const string SaveFile = "ArcanePower-CoreHazards.xml";
         private const ushort Channel = 49372;
         private static CoreHazards instance;
@@ -74,7 +78,7 @@ namespace ArcanePower
             var core = Inside(sourceId);
             if (core == null)
             {
-                core = new CoreHazard { SourceId = sourceId, Tier = tier, Critical = true };
+                core = new CoreHazard { SourceId = sourceId, Tier = tier, Critical = true, FuseVersion = 1 };
                 instance.cores.Add(core);
             }
             core.Heat = heat;
@@ -111,7 +115,7 @@ namespace ArcanePower
             if (core == null)
             {
                 core = new CoreHazard { SourceId = sourceId, Tier = tier, Heat = heat, PeakHeat = heat,
-                    Critical = heat >= SupercriticalHeat };
+                    Critical = heat >= SupercriticalHeat, FuseVersion = 1 };
                 instance.cores.Add(core);
             }
             core.CarrierId = carrier.EntityId;
@@ -123,7 +127,16 @@ namespace ArcanePower
 
         internal static float Seconds(CoreHazard core)
         {
-            return Math.Max(0, core.Fuse / (1 + 4 * Math.Max(0, core.PeakHeat - SupercriticalHeat)));
+            return Math.Max(0, core.FuseVersion == 0
+                ? core.Fuse / (1 + 4 * Math.Max(0, core.PeakHeat - SupercriticalHeat)) : core.Fuse);
+        }
+
+        internal static void AdvanceFuse(CoreHazard core)
+        {
+            // Convert an old armed fuse once, preserving its remaining seconds.
+            // Further heating, ejection and reload never reset or accelerate it.
+            core.Fuse = Math.Max(0, Seconds(core) - 1f / 60);
+            core.FuseVersion = 1;
         }
 
         public override void UpdateBeforeSimulation()
@@ -169,7 +182,7 @@ namespace ArcanePower
                     if (core.Critical)
                     {
                         core.PeakHeat = Math.Max(core.PeakHeat, core.Heat);
-                        core.Fuse = Math.Max(0, core.Fuse - (1 + 4 * Math.Max(0, core.PeakHeat - SupercriticalHeat)) / 60f);
+                        AdvanceFuse(core);
                         if (core.Fuse > 0 || !Explode(core)) continue;
                     }
                     else if (core.Decay > 0) continue;

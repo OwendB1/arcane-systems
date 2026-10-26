@@ -44,13 +44,18 @@ def main():
     assert len(highlights['detector_conveyor_top'])==4 and all(len(highlights[key])==1 for key in highlights if key!='detector_conveyor_top')
     category=ET.parse(MOD/'Data/ThermalCategories.sbc')
     items={n.text for n in category.findall('.//ItemIds/string')}
-    assert len(items)==len(playable), 'Compatibility aliases must not clutter the build menu'
+    reachable=set(items)
+    for group in ET.parse(MOD/'Data/CubeBlocks/ArcanePower_ThermalVariants.sbc').findall('BlockVariantGroups/BlockVariantGroup'):
+        members=[n.get('Type').removeprefix('MyObjectBuilder_')+'/'+n.get('Subtype') for n in group.findall('Blocks/Block')]
+        assert items.intersection(members)=={members[0]}, 'Scroll group must have exactly one menu entry'
+        reachable.update(members)
+    assert len(items)==5 and len(reachable)==len(playable), 'Expected reactor plus four thermal scroll groups'
     files=[]
     for name,spec in models.items():
         d=blocks[spec['subtype']]
         expected='Reactor' if name=='Reactor housing' or name.startswith('Brayton train') else 'UpgradeModule'
         assert d.findtext('Id/TypeId')==expected,(name,'Wrong runtime owner')
-        assert expected+'/'+spec['subtype'] in items
+        assert expected+'/'+spec['subtype'] in reachable
         assert [int(d.find('Size').get(k)) for k in ('x','y','z')]==spec['cells_se']
         assert d.findtext('Public')=='true' and d.findtext('AvailableInSurvival')=='true'
         assert d.findtext('CubeSize')=='Large'

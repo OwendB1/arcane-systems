@@ -55,21 +55,22 @@ namespace ArcanePower
                 string[] labels = report.Precharging && (page == 0 || page == 1)
                     ? new[] { "Containment", "Charge rate", "Charge ETA", "Reserve energy", "Net" }
                     : page == 0 ? new[] { "Net", "Field", "Fuel stock", "Vent" }
-                    : page == 1 && report.Brayton ? new[] { "Circuits available", "Conversion efficiency", "Cooling capacity", "Cooling required", "Returned waste" }
+                    : page == 1 && report.Brayton ? new[] { "Circuits available", "Reaction heat", "Cooling capacity", "Cooling required", "Full-load cooling", "Heat removed", "Accumulated heat" }
                     : page == 1 ? new[] { "Net", "Ramp", "Containment", "Fuel burn", "Fuel remaining" }
                     : page == 2 ? new[] { "Controllers", "Field", "Reserve energy", "Tile grade", "Replacing", "Dismantle at" }
                     : page == 3 ? new[] { "Fuel stock", "Fuel remaining", "Tile demand", "Tile reserve", "Tile stock", "Conveyors" }
                     : new[] { "Vent", "Route", "Doors" };
                 y = 432;
+                float rowSpacing = labels.Length > 6 ? 24 : 27;
                 foreach (var label in labels)
                 {
                     foreach (var row in report.Rows)
                     {
                         if (row.Label != label) continue;
-                        Rect(sprites, 22, y - 2, 596, 25, ((int)y % 2 == 0) ? new Color(16,20,26) : new Color(22,27,34));
+                        Rect(sprites, 22, y - 2, 596, rowSpacing - 2, ((int)y % 2 == 0) ? new Color(16,20,26) : new Color(22,27,34));
                         Text(sprites, label, 28, y, .46f, Tone("muted"));
                         Text(sprites, Clip(row.Value, 44), 202, y, .46f, Tone(row.Tone));
-                        y += 27;
+                        y += rowSpacing;
                         break;
                     }
                 }
@@ -106,7 +107,7 @@ namespace ArcanePower
                 string[] labels = report.Precharging && (page == 0 || page == 1)
                     ? new[] { "Startup charge", "Reserve energy", "Containment", "Charge rate", "Charge ETA", "Net", "Vent" }
                     : page == 0 ? new[] { "Output", "Heat", "Reserve", "Fuel stock", "Spare tiles", "Vent" }
-                    : page == 1 && report.Brayton ? new[] { "Output", "Circuits available", "Conversion efficiency", "Cooling capacity", "Cooling required", "Returned waste", "Startup / cooldown draw" }
+                    : page == 1 && report.Brayton ? new[] { "Output", "Circuits available", "Reaction heat", "Cooling capacity", "Cooling required", "Full-load cooling", "Heat removed", "Accumulated heat" }
                     : page == 1 ? new[] { "Output", "Net", "Ramp", "Containment", "Fuel efficiency", "Fuel burn", "Fuel remaining" }
                     : page == 2 ? new[] { "Security mode", "Integrity", "Controllers", "Field", "Reserve energy", "Tile grade", "Quartet wear", "Replacing", "Dismantle at" }
                     : page == 3 ? new[] { "Fuel efficiency", "Fuel stock", "Fuel burn", "Fuel remaining", "Spare tiles", "Tile demand", "Tile reserve", "Tile stock", "Startup tiles", "Conveyors" }

@@ -410,6 +410,20 @@ def train_foundation(p):
             cover['thermal_seated_on']=deck.name
 
 
+def train_terminal_clearance(p):
+    """Seat the terminal between the motor end faces without coplanar skins."""
+    terminal = named(p, 'compressor motor terminal')[0]
+    motor = named(p, 'electric compressor motor')[0]
+    low, high = (fn((motor.matrix_world@v.co).x for v in motor.data.vertices) for fn in (min,max))
+    centre_x = (low+high)/2
+    width = max((terminal.matrix_world@v.co).x for v in terminal.data.vertices)-min((terminal.matrix_world@v.co).x for v in terminal.data.vertices)
+    target = high-low-.024
+    if abs(width-target)<1e-6:return False
+    if terminal.data.users>1:terminal.data=terminal.data.copy()
+    stretch(terminal,0,centre_x,target/width)
+    return True
+
+
 def train(p):
     shaft_z = M['CONTRACT']['TRAIN_SHAFT_Z']
     cx,tx,gx,bx=(M['CONTRACT']['TRAIN_CENTRES'][k] for k in ('compressor','turbine','generator','cabinet'))
@@ -442,6 +456,7 @@ def train(p):
     stretch(motor, 0, cx-1.30, .48/.70)
     move(p, [motor], (-.19, 0, 0))
     move(p, named(p, 'compressor motor cradle')+named(p, 'compressor motor terminal'), (-.19, 0, 0))
+    train_terminal_clearance(p)
     casing = named(p, 'turbine casing')[0]
     for side in (-1, 1):
         flange = p.box('turbine split joint', (tx, side*1.86, shaft_z),
@@ -577,6 +592,7 @@ def geometry(name):
         return M['record'](name)
     p = parts(name)
     if p.scene.get('thermal_detail_revision') == REVISION:
+        if name.startswith('Brayton train'):train_terminal_clearance(p)
         return M['record'](name)
     assert p.scene['thermal_phase'] == 'base'
     before = set(p.col.objects)

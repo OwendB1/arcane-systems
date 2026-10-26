@@ -221,7 +221,34 @@ checks = r'''
   MyAPIGateway.Utilities.IsDedicated=false;
   Console.WriteLine("PASS: late/recreated render objects, immediate fuel updates, dedicated skip");
  }
- static void Main(){Charging();Priority();RenderRecovery();}
+ static void ThermalWarnings(){
+  for(int tier=1;tier<=3;tier++){
+   var r=new Reactor(tier);r.RenderReady();r.Motion.Core=CorePhase.Running;r.Motion.PowerReady=true;
+   foreach(float heat in new[]{0f,.5f,.85f,1f}){
+    r.Motion.Heat=heat;r.UpdateStatus();r.UpdateAppearance();
+    Need(r.Entity.Color.Equals(FuelColors[tier-1]),"healthy heat keeps the running fuel colour, including full load");
+   }
+   r.reactor.Inventory.Stock=0;r.UpdateStatus();r.UpdateAppearance();
+   Need(r.Motion.Status==ReactorStatus.OutOfFuel && r.Entity.Color.Equals(Color.White),"fuel starvation is neutral white, not a thermal alarm");
+   r.reactor.Enabled=false;r.UpdateStatus();r.UpdateAppearance();
+   Need(r.Motion.Status==ReactorStatus.OutOfFuel && r.Entity.Color.Equals(Color.White),"automatic shutdown cannot latch yellow for missing fuel");
+   r.reactor.Inventory.Stock=10;r.reactor.Enabled=true;r.Motion.TileStarved=true;r.Motion.TileWear=1;r.Motion.Heat=.6f;
+   r.UpdateStatus();r.UpdateAppearance();
+   Need(r.Entity.Color.Equals(Color.Yellow) && r.Entity.Subparts["Ring1"].Color.Equals(Color.Yellow),"failed worn tiles warn on housing and subparts before heat crosses 100%");
+   r.Motion.TileStarved=false;r.Motion.TileWear=0;r.UpdateStatus();r.UpdateAppearance();
+   Need(r.Entity.Color.Equals(FuelColors[tier-1]),"repair clears yellow immediately without a renderer timeout");
+   r.Motion.Core=CorePhase.Cooling;r.reactor.Enabled=false;r.Motion.Heat=1.1f;r.UpdateStatus();r.UpdateAppearance();
+   Need(r.Entity.Color.Equals(Color.Yellow),"retained overheating remains visible during shutdown");
+   r.Motion.Critical=true;r.UpdateAppearance();Need(r.Entity.Color.Equals(Color.Red),"critical warning takes priority over yellow");
+   r.Motion.Critical=false;r.Motion.Vent=VentPhase.ShieldClosing;r.UpdateAppearance();Need(r.Entity.Color.Equals(Color.Red),"ejection takes priority over yellow");
+   r.Motion.Vent=VentPhase.Idle;r.Motion.Heat=1;r.UpdateAppearance();Need(!r.Entity.Color.Equals(Color.Yellow),"cooling below the alarm threshold clears yellow immediately");
+   r.Motion.Heat=2;r.Motion.PayloadReleased=true;r.UpdateAppearance();Need(!r.Entity.Color.Equals(Color.Yellow),"released core does not leave a stale housing alarm");
+   r.Motion.PayloadReleased=false;r.Motion.Core=CorePhase.Off;r.Motion.TileStarved=true;r.Motion.TileWear=1;
+   r.UpdateStatus();r.UpdateAppearance();Need(!r.Entity.Color.Equals(Color.Yellow),"missing startup tiles without a core are not runaway");
+  }
+  Console.WriteLine("PASS: yellow reserved for thermal danger, fuel/idle states, recovery and critical/ejection priority");
+ }
+ static void Main(){Charging();Priority();RenderRecovery();ThermalWarnings();}
 }
 '''
 with tempfile.TemporaryDirectory(prefix='arcane-appearance-') as folder:

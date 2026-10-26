@@ -37,6 +37,7 @@ def audit():
 
     moving = [o for o in col.objects if o.type == 'MESH' and o.get('thermal_motion_group')]
     covers = [o for o in moving if o.get('thermal_cover')]
+    edges = [o for o in moving if o.get('thermal_cover_edge')]
     bodies = [o for o in moving if o.get('thermal_rounded_manifold')]
     connectors = [o for o in moving if o.get('thermal_moving_connector')]
     tails = [o for o in moving if o.get('thermal_extending_connector')]
@@ -69,6 +70,8 @@ def audit():
             fail('unmodified native controller connector', native.name)
     if len(covers) != 8 or len(motion) != 4:
         fail('four bays / eight curved leaves', [len(motion), len(covers)])
+    if len(edges) != 8:
+        fail('eight backed outer door seams', len(edges))
     if len(bodies) != 4 or len(connectors) != 4 or len(tails) != 4:
         fail('four rounded manifolds / four complete connectors', [len(bodies), len(connectors), len(tails)])
     for obj in bodies+connectors+tails:
@@ -81,8 +84,8 @@ def audit():
         if any(not e.is_manifold for e in bm.edges) or bm.calc_volume(signed=True) <= 0:
             fail('closed positive manifold solid', obj.name)
         bm.free()
-    for cover in covers:
-        if not cover.get('uncut_original_checkpoint') or not cover.get('native_uv_preserved'):
+    for cover in covers+edges:
+        if cover in covers and (not cover.get('uncut_original_checkpoint') or not cover.get('native_uv_preserved')):
             fail('original curved geometry and UV source', cover.name)
         bm = bmesh.new()
         bm.from_mesh(cover.data)
@@ -94,7 +97,20 @@ def audit():
         # original 1.48 m armor panel. Fixed cover seams may remain narrow.
         side = 1 if row['deployed_face'][0] > 0 else -1
         y, z = row['stowed_face'][1:]
-        relevant = [geometry(o)[0] for o in covers if row['id']+' /' in o.name]
+        relevant = [geometry(o)[0] for o in covers+edges
+                    if row['id']+' /' in o.name or o.get('thermal_cover_edge') == row['id']]
+        # The old nose-only test missed the 68 mm slots at the door edges.
+        # Check those seams directly, including oblique views into the bay.
+        for edge in (-1, 1):
+            a = row['panel_angle']+edge*.117
+            for height in (-3.04, -2.75, -2.33, -1.91, -1.62):
+                target = Vector((6.01*math.cos(a), 6.01*math.sin(a), height))
+                for offset in (-.32, 0, .32):
+                    eye_angle = row['panel_angle']+offset
+                    direction = Vector((-math.cos(eye_angle), -math.sin(eye_angle), 0))
+                    origin = target-direction*2
+                    if not any(t.ray_cast(origin, direction, 2.2)[0] is not None for t in relevant):
+                        fail('closed outer seam hides plumbing', [row['id'], edge, height, offset])
         for sign in (-1, 1):
             for i in range(33):
                 a = i*math.tau/32

@@ -3,8 +3,7 @@ using ProtoBuf;
 
 namespace ArcanePower
 {
-    // Each validated circuit receives one quarter of the nominal reactor flow.
-    // Heat inventories and metered pump power govern actual circulation.
+    // Each circuit owns its quarter allocation and retained waste independently.
     [ProtoContract]
     public sealed class ThermalLoopState
     {
@@ -15,6 +14,11 @@ namespace ArcanePower
         [ProtoMember(5)] public double CoolingMW;
         [ProtoMember(6)] public double RequiredCoolingMW;
         [ProtoMember(7)] public string Diagnostic = "Connect one turbine and cooling; cap unused pipe mouths";
+        [ProtoMember(8)] public double ExcessMJ;
+        [ProtoMember(9)] public double OutputMW;
+        [ProtoMember(10)] public double ReactionMW;
+        [ProtoMember(11)] public double DesignCoolingMW;
+        [ProtoMember(12)] public double RejectedMW;
 
         public bool Valid()
         {
@@ -22,6 +26,11 @@ namespace ArcanePower
                 && ThermalMath.Finite(NetMW) && NetMW >= 0 && NetMW <= 487500
                 && ThermalMath.Finite(CoolingMW) && CoolingMW >= 0
                 && ThermalMath.Finite(RequiredCoolingMW) && RequiredCoolingMW >= 0 && RequiredCoolingMW <= 625000
+                && ThermalMath.Finite(ExcessMJ) && ExcessMJ >= 0
+                && ThermalMath.Finite(OutputMW) && OutputMW >= 0 && OutputMW <= 487500.1
+                && ThermalMath.Finite(ReactionMW) && ReactionMW >= 0 && ReactionMW <= 625000.1
+                && ThermalMath.Finite(DesignCoolingMW) && DesignCoolingMW >= 0 && DesignCoolingMW <= 625000
+                && ThermalMath.Finite(RejectedMW) && RejectedMW >= 0
                 && Diagnostic != null && Diagnostic.Length <= 256;
         }
     }

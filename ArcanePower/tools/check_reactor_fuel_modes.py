@@ -24,7 +24,7 @@ def member(file, signature):
 members = ''.join(member(file, signature) for file, signatures in {
     'Reactor.Fuel.cs': ['private bool HasUsableFuel()', 'private void RefreshFuelCapacity()',
                        'private double FuelUnitsPerMinute()', 'private void UpdateFuel()',
-                       'private void RecoverResiduum()', 'private void ExportResiduum('],
+                       'private void PayFuel(', 'private void RecoverResiduum()', 'private void ExportResiduum('],
     'Reactor.Safety.cs': ['private bool IsIntactController(', 'internal bool HasAdvancedController()',
                          'private bool HasIntactControllers()'],
     'Reactor.Power.cs': ['private bool CanPrepareContainment', 'internal bool NeedsStorageSupport',
@@ -37,9 +37,9 @@ members = ''.join(member(file, signature) for file, signatures in {
                           'private bool ThermalCold', 'private bool ThermalManifoldPower',
                           'internal string ThermalModeTransitionHint', 'internal void RequestThermalMode(',
                           'private void UpdateThermalMode()', 'internal void ProduceThermal(',
-                          'private void RefreshThermalCapacity()', 'internal void StopForLoopLoss()',
+                          'private void RefreshThermalCapacity()', 'internal ThermalOutputGrant ReserveThermalOutput(', 'internal bool ThermalAuxiliaryReady', 'internal void BeginThermalFrame()', 'internal void GrantStandaloneOutput()', 'internal void StopForLoopLoss()',
                           'private void ThermalEnabledChanged(', 'internal void CheckLoopSafety()',
-                          'private void InitializeThermalRuntime()'],
+                          'private void InitializeThermalRuntime()', 'internal void RecheckThermalFault()'],
 }.items() for signature in signatures)
 # Engine interface replacement only; all predicates and state changes are shipped code.
 members = members.replace('VRage.Game.ModAPI.IMyCubeBlock', 'Block').replace('VRage.Game.ModAPI.IMyInventory', 'Inventory')
@@ -56,13 +56,23 @@ fixture = (ROOT / 'tests/reactor-fuel-modes.cs').read_text()
 fixture = fixture.replace('// PRODUCTION_MEMBERS', members).replace('// PRODUCTION_STATE', state)
 fixture = fixture.replace('/* TERMINAL_GATE */', gate)
 fixture = fixture.replace('// PRODUCTION_LOOPS', ''.join(member('ThermalSession.Loops.cs', signature)
-    for signature in ('private void AdvanceLoops(', 'private static double DrainLoop('))
-    + member('ThermalSession.cs', 'private static void InvalidateCircuits('))
+    for signature in ('private void AdvanceLoops(', 'private static void MigrateMachineHeat('))
+    + member('ThermalSession.cs', 'private static void InvalidateCircuits(')
+    + member('ThermalSession.Radiators.cs', 'private static void LinkRadiators()')
+    + member('ThermalFlowVisuals.cs', 'private void CapturePlantFlow('))
+fixture = fixture.replace('// PRODUCTION_BLOCK_CHECKS', ''.join(member('ThermalBlock.cs', signature)
+    for signature in ('internal bool HardwareReady', 'internal bool Healthy', 'internal void RecheckCircuitFault()',
+                      'private void WatchCircuitChanges()', 'private void UnwatchCircuitChanges()',
+                      'private void CircuitEnabledChanged(', 'private void CircuitStateChanged()', 'internal void AccountOutput()', 'internal void SetOutput('))
+    + member('ThermalBlock.Radiator.cs', 'internal void InvalidateRadiatorCooling()'))
+fixture = fixture.replace('// PRODUCTION_RADIATOR_FIT', ''.join(member('ThermalRadiators.cs', signature)
+    for signature in ('public static Vector3D ExtensionCentre(', 'public static bool FitsExtension(')))
 with tempfile.TemporaryDirectory(prefix='arcane-fuel-modes-') as folder:
     path = Path(folder) / 'check.cs'
     path.write_text(fixture)
     exe = path.with_suffix('.exe')
     subprocess.run(['mcs', '-warn:0', '-langversion:6', '-out:' + str(exe),
                     '-r:/usr/lib/mono/4.5/Facades/netstandard.dll', '-r:' + str(GAME / 'VRage.Library.dll'), '-r:' + str(GAME / 'VRage.Math.dll'),
-                    str(path), str(SRC / 'ThermalPlant.cs'), str(SRC / 'ThermalLoops.cs'), str(SRC / 'ThermalNetwork.cs')], check=True)
+                    str(path), str(SRC / 'ThermalPlant.cs'), str(SRC / 'ThermalLoops.cs'), str(SRC / 'ThermalNetwork.cs'),
+                    str(SRC / 'ThermalFlow.cs')], check=True)
     subprocess.run(['mono', str(exe)], env={**os.environ, 'MONO_PATH': str(GAME)}, check=True)

@@ -35,6 +35,46 @@ def save(root, path):
     E.ElementTree(root).write(path, encoding='utf-8', xml_declaration=True)
 
 
+def write_block_menu(blocks, family, groups, mod):
+    """Native scroll groups; only their first member gets a category entry."""
+    public={b.findtext('Id/SubtypeId'):b for b in blocks
+            if b.findtext('Public','true').lower()=='true'}
+    variants=E.Element('Definitions');variant_groups=E.SubElement(variants,'BlockVariantGroups')
+    grouped=set();secondary=set()
+    for key,label,description,members in groups:
+        assert members and len(members)==len(set(members)) and set(members)<=public.keys(), ('Invalid scroll group',key)
+        assert not grouped.intersection(members), ('Duplicate scroll membership',key)
+        grouped.update(members);secondary.update(members[1:])
+        group=E.SubElement(variant_groups,'BlockVariantGroup')
+        E.SubElement(group,'Id',Type='MyObjectBuilder_BlockVariantGroup',Subtype='ArcanePower_'+family+'_'+key)
+        set_text(group,'Icon',public[members[0]].findtext('Icon'))
+        set_text(group,'DisplayName',label);set_text(group,'Description',description)
+        entries=E.SubElement(group,'Blocks')
+        for subtype in members:
+            E.SubElement(entries,'Block',Type='MyObjectBuilder_'+public[subtype].findtext('Id/TypeId'),Subtype=subtype)
+    categories=E.Element('Definitions')
+    category=E.SubElement(E.SubElement(categories,'CategoryClasses'),'Category',{'{'+XSI+'}type':'MyObjectBuilder_GuiBlockCategoryDefinition'})
+    for path,value in {'Id/TypeId':'GuiBlockCategoryDefinition','Id/SubtypeId':'ArcaneSystems_'+family,
+                       'DisplayName':'Arcane Systems','Name':'ArcaneSystems'}.items():set_text(category,path,value)
+    items=E.SubElement(category,'ItemIds')
+    for subtype,block in public.items():
+        if subtype not in secondary:E.SubElement(items,'string').text=block.findtext('Id/TypeId')+'/'+subtype
+    filename={'Power':'BlockCategories.sbc','Energy':'EnergyCoreCategories.sbc','Thermal':'ThermalCategories.sbc'}[family]
+    save(categories,mod/'Data'/filename)
+    save(variants,mod/'Data/CubeBlocks'/('ArcanePower_'+family+'Variants.sbc'))
+
+
+def power_block_menu():
+    blocks=[]
+    for name in ('ContainmentController','Vents'):
+        blocks.extend(E.parse(MOD/'Data/CubeBlocks'/('ArcanePower_'+name+'.sbc')).findall('CubeBlocks/Definition'))
+    write_block_menu(blocks,'Power',[
+        ('Controllers','Arcane Controllers','Scroll through standard and advanced reactor controllers.',
+         ['ArcanePower_ContainmentController','ArcanePower_AdvancedContainmentController']),
+        ('Vents','Arcane Vents','Scroll through the vent duct and outlet. Finish each vent route with an outlet.',
+         ['ArcanePower_VentDuct','ArcanePower_VentOutlet'])],MOD)
+
+
 def hardware_components(block):
     """Construction order and material costs for the reactor's required hardware."""
     recipes = {
@@ -204,13 +244,6 @@ def definitions():
     save(root,MOD/'Data/CubeBlocks/ArcanePower_ContainmentController.sbc')
 
     fuel_definitions()
-    root=E.Element('Definitions');cat=E.SubElement(E.SubElement(root,'CategoryClasses'),'Category',{'{'+XSI+'}type':'MyObjectBuilder_GuiBlockCategoryDefinition'})
-    set_text(cat,'Id/TypeId','GuiBlockCategoryDefinition');set_text(cat,'Id/SubtypeId','ArcaneSystems_Power')
-    set_text(cat,'DisplayName','Arcane Systems');set_text(cat,'Name','ArcaneSystems')
-    E.SubElement(cat,'ItemIds')
-    E.SubElement(cat.find('ItemIds'),'string').text='UpgradeModule/ArcanePower_ContainmentController'
-    E.SubElement(cat.find('ItemIds'),'string').text='UpgradeModule/ArcanePower_AdvancedContainmentController'
-    save(root,MOD/'Data/BlockCategories.sbc')
     external_hardware_definitions()
     refresh_build_stages()
     metadata=E.Element('ModMetadata')
@@ -245,10 +278,7 @@ def external_hardware_definitions():
         set_text(n,'Model','Models/Cubes/large/'+subtype+'.mwm')
         set_text(n,'Icon','Textures/GUI/Icons/'+('ArcaneAdvancedContainmentController' if 'Advanced' in subtype else 'ArcaneContainmentController')+'.dds')
     save(r,p)
-    p=MOD/'Data/BlockCategories.sbc';r=E.parse(p).getroot();ids=next(r.iter('ItemIds'))
-    for subtype in ('ArcanePower_VentDuct','ArcanePower_VentOutlet'):
-        if not any(n.text=='Conveyor/'+subtype for n in ids):E.SubElement(ids,'string').text='Conveyor/'+subtype
-    save(r,p)
+    power_block_menu()
     containment_tiles()
 
 
@@ -265,7 +295,7 @@ def fuel_definitions():
     native=E.parse(GAME/'Content/Data/VoxelMaterials_asteroids.sbc').getroot()
     voxel_template=next(n for n in native.iter('VoxelMaterial') if n.findtext('Id/SubtypeId')=='Uraninite_01')
     tiers=[
-        ('Aether','Aetherite','ArcaneOre','ArcaneFuelI','ArcaneAetherConcentrate','ArcaneAetherOreToConcentrate','ArcaneAetherFuel',5,.1,.001,.01,10,'10 GW'),
+        ('Aether','Aetherite','ArcaneOre','ArcaneFuelI','ArcaneAetherConcentrate','ArcaneAetherOreToConcentrate','ArcaneAetherFuel',20,.2,.001,.01,10,'10 GW'),
         ('Helion','Helionite','ArcaneHelionOre','ArcaneFuelII','ArcaneHelionConcentrate','ArcaneHelionOreToConcentrate','ArcaneHelionFuel',2,.03,.0001,.005,20,'100 GW'),
         ('Empyrean','Empyrite','ArcaneEmpyreanOre','ArcaneFuelIII','ArcaneEmpyreanConcentrate','ArcaneEmpyreanOreToConcentrate','ArcaneEmpyreanFuel',1,.01,.00001,.001,40,'1 TW')]
 
@@ -322,7 +352,7 @@ def fuel_definitions():
             concentrated=subtype==concentrate
             item=copy.deepcopy(concentrate_template if concentrated else fuel_template)
             description=(f'Dense refined material: {volume:g} L/kg ({1/volume:g} kg/L). Ore matrix is removed during refinement. Assembler ingredient for '+name+' fuel.' if concentrated else
-                         'Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires '+str(tier+2)+' containment rings. Upgrades retain the container; consumed fuel does not return an empty canister.')
+                         'Sealed canister holding 10 fuel units. Ideal full-load endurance: '+('2.5' if tier==0 else '10')+' minutes before controller efficiency. Requires '+str(tier+2)+' containment rings. Upgrades retain the container; consumed fuel does not return an empty canister.')
             if not concentrated:
                 description += (' Consuming Aether recovers 10 Aether Residuum per canister in standalone or Brayton mode.' if tier==0 else ' Requires Brayton mode and an advanced controller.' + (' Empyrean also requires upgraded Brayton turbines.' if tier==2 else ''))
             for key,value in {'Id/SubtypeId':subtype,'DisplayName':label,

@@ -2,6 +2,7 @@
 
 First run assets/export_energy_main.py in production Blender through MCP.
 Use --prototype for the reactor, controllers, vents, subparts and tablet.
+Add --update to install only the prototype models exported into staging.
 """
 import hashlib
 import json
@@ -35,12 +36,15 @@ def settings(path):
     return E.tostring(root)
 
 
-def main(prototype=False):
+def main(prototype=False, update=False):
+    assert prototype or not update, 'Incremental mode is for prototype exports'
     folder = MOD/'Models/Cubes/large'
     label = 'prototype' if prototype else 'energy'
     staging = folder/('.'+label+'-main-stage')
     names = sorted(p.name.removesuffix('-source.json') for p in staging.glob('*-source.json')) if prototype else ['ArcanePower_EnergyFan', 'ArcanePower_EnergyRotor'] + list(BLOCKS)
-    if prototype: assert len(names)==23, 'Incomplete prototype source export'
+    if prototype:
+        assert names, 'No prototype source exports'
+        if not update:assert len(names)==23, 'Incomplete prototype source export'
     specs = {name: json.loads((staging/(name+'-source.json')).read_text()) for name in names}
     stems = [stem for spec in specs.values() for stem in spec['collections']]
     setup = Path.home()/'.local/share/blender-se1-setup'
@@ -69,7 +73,8 @@ def main(prototype=False):
             if path.stat().st_size:shutil.copy2(path,collision)
             else:collision.unlink(missing_ok=True)
         # Keep the reviewed plasma texture revision and its original dark DDS.
-        shutil.copy2(ROOT/'assets/definitions/ArcanePower_Plasma.xml',staging/'ArcanePower_Plasma.xml')
+        if 'ArcanePower_Plasma' in names:
+            shutil.copy2(ROOT/'assets/definitions/ArcanePower_Plasma.xml',staging/'ArcanePower_Plasma.xml')
     def compile(pattern):
         with log.open('a') as output:
             subprocess.run(['wine',str(cache/'MwmBuilder.exe'),'/f','/s:'+win(staging),
@@ -173,10 +178,10 @@ def main(prototype=False):
         if target.exists():assert digest(target)==digest(source),'Immutable LOD cache key collision'
         else:shutil.copy2(source,target)
     if prototype:
-        revision=(MOD/refresh_reactor_model()).parent
+        revision=folder if update else (MOD/refresh_reactor_model()).parent
         delivered={}
         for name,spec in specs.items():
-            if spec['target']=='Models/Cubes/large':delivered[name]=revision/(name+'.mwm')
+            if spec['target']=='Models/Cubes/large' and not update:delivered[name]=revision/(name+'.mwm')
             else:
                 source=MOD/spec['target']/(name+'.mwm')
                 target=source.with_stem(name+'_r'+digest(source)[:12]);shutil.copy2(source,target)
@@ -211,4 +216,4 @@ def main(prototype=False):
     return report
 
 
-if __name__ == '__main__': main('--prototype' in sys.argv)
+if __name__ == '__main__': main('--prototype' in sys.argv, '--update' in sys.argv)

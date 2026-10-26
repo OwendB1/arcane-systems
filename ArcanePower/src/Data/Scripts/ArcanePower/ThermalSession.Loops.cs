@@ -6,7 +6,7 @@ namespace ArcanePower
     public sealed partial class ThermalSession
     {
         private void AdvanceLoops(Reactor source, List<Reactor> sources, List<ThermalBlock> machines,
-            HashSet<long> claimed, HashSet<long> startupHosts)
+            HashSet<long> claimed)
         {
             var state = source.Motion.Thermal;
             bool running = source.ThermalCanRun;
@@ -18,30 +18,54 @@ namespace ArcanePower
                 if (other != source && other.ThermalInitialized && other.Block.CubeGrid == source.Block.CubeGrid)
                     endpoints.Add(other.ThermalEndpoint());
             ThermalCircuitCache graph;
-            if (!circuitGraphs.TryGetValue(source.Id, out graph) || !graph.Matches(endpoints))
+            bool rebuilt = !circuitGraphs.TryGetValue(source.Id, out graph) || !graph.Matches(endpoints);
+            var previous = graph;
+            if (rebuilt)
                 circuitGraphs[source.Id] = graph = new ThermalCircuitCache(endpoints);
             endpoints = graph.Nodes;
             var network = graph.Network;
             var circuits = graph.Circuits;
+            // Fault flags are runtime results, not topology inputs. Retry only
+            // when this circuit's physical members changed (or on first load),
+            // so a recurring accounting fault cannot reset itself every tick.
+            if (rebuilt)
+                for (int index = 0; index < circuits.Length; index++)
+                    if (circuits[index].Ready && graph.CircuitChanged(previous, index))
+                    {
+                        source.RecheckThermalFault();
+                        foreach (var endpoint in circuits[index].Nodes)
+                        {
+                            ThermalBlock machine;
+                            if (!Blocks.TryGetValue(endpoint.Id, out machine)) continue;
+                            machine.RecheckCircuitFault();
+                            foreach (var panel in machine.RadiatorPanels) panel.RecheckCircuitFault();
+                        }
+                    }
             double allocation = ThermalLoops.Allocation(source.ThermalHeatMW);
-            double freshMW = 0, availableHeatMW = 0;
+            double availableHeatMW = 0;
             for (int index = 0; index < circuits.Length; index++)
             {
                 var circuit = circuits[index];
                 var loop = state.Loops[index];
-                loop.HeatMW = loop.NetMW = loop.CoolingMW = loop.RequiredCoolingMW = 0;
-                loop.Connected = circuit.Ready;
-                loop.Diagnostic = circuit.Diagnostic ?? "Circuit ready";
+                loop.HeatMW = loop.NetMW = loop.CoolingMW = loop.DesignCoolingMW = 0;
+                loop.Connected = circuit.Ready && !state.Faulted;
+                loop.Diagnostic = state.Faulted ? state.Diagnostic : circuit.Diagnostic ?? "Circuit ready";
                 var bank = new List<ThermalBlock>();
                 var units = new List<ThermalUnit>();
                 ThermalBlock host = null;
-                if (circuit.Ready)
+                if (loop.Connected)
                     foreach (var endpoint in circuit.Nodes)
                     {
                         ThermalBlock machine;
                         if (!Blocks.TryGetValue(endpoint.Id, out machine)) continue;
                         if (claimed.Contains(endpoint.Id))
                         { loop.Connected = false; loop.Diagnostic = "Circuit machinery is allocated to another source"; break; }
+                        if (machine.Fault != null)
+                        { loop.Connected = false; loop.Diagnostic = machine.Spec.Kind + " fault: " + machine.Fault; break; }
+                        foreach (var panel in machine.RadiatorPanels)
+                            if (panel.Fault != null)
+                            { loop.Connected = false; loop.Diagnostic = "Radiator panel fault: " + panel.Fault; break; }
+                        if (!loop.Connected) break;
                         bank.Add(machine); units.Add(machine.Unit());
                         foreach (var panel in machine.RadiatorPanels) units.Add(panel.Unit());
                         if (machine.Spec.Kind == ThermalKind.Train) host = machine;
@@ -54,95 +78,70 @@ namespace ArcanePower
                     continue;
                 }
                 foreach (var machine in bank)
-                { claimed.Add(machine.Entity.EntityId); machine.SourceId = source.Id; }
-                bool hasHeat = state.Store.HotMJ + state.Store.WasteMJ > .001;
-                foreach (var machine in bank) hasHeat |= machine.Store.HotMJ + machine.Store.WasteMJ > .001;
-                double delivered = 0;
-                bool needsPump = (running && host.Store.HotMJ <= .001) || (!running && hasHeat);
-                // Bootstrap a cold turbine and keep hot shutdown circulation
-                // powered. Running auxiliaries are already paid by conversion.
-                if (needsPump)
                 {
-                    delivered = host.RequestStartup(source.Id, plan.AcceptedMW * .02);
-                    startupHosts.Add(host.Entity.EntityId);
+                    claimed.Add(machine.Entity.EntityId); machine.SourceId = source.Id;
+                    // Once attached, fold old distributed inventories into this
+                    // circuit. Clearing the old store makes migration idempotent.
+                    MigrateMachineHeat(machine, loop);
+                    foreach (var panel in machine.RadiatorPanels) MigrateMachineHeat(panel, loop);
                 }
-                double net = host.Generator == null ? 0 : host.Generator.CurrentOutput;
-                double circulation = ThermalMath.CirculationPower(net, plan.Efficiency, delivered, plan.AcceptedMW);
-                host.RotorCirculation = circulation; host.RotorHotC = source.ThermalHotC;
-                state.RejectedMW += DrainLoop(source, bank, allocation * circulation / 60, circulation);
-                loop.CoolingMW = plan.CoolingMW * circulation;
-                state.CoolingMW += loop.CoolingMW;
                 loop.HeatMW = plan.AcceptedMW;
                 loop.NetMW = plan.NetMW;
-                loop.RequiredCoolingMW = plan.RequiredCoolingMW * source.Motion.PowerRamp;
-                loop.Diagnostic = circulation <= 0 && needsPump
-                    ? (running ? "Waiting for compressor power" : "Cooldown waiting for circulation power") : plan.Limit;
+                loop.DesignCoolingMW = plan.RequiredCoolingMW;
                 state.SupportedMW += loop.NetMW;
-                state.RequiredCoolingMW += loop.RequiredCoolingMW;
+                state.DesignCoolingMW += loop.DesignCoolingMW;
                 availableHeatMW += loop.HeatMW;
-                host.Efficiency = plan.Efficiency;
+                host.RotorLoad = plan.NetMW > 0 ? ThermalMath.Clamp(loop.OutputMW / plan.NetMW, 0, 1) : 0;
+                host.RotorHotC = source.ThermalHotC;
+                // Environmental capacity never depends on electrical load.
+                // Turbine auxiliaries are included in net efficiency. During
+                // cooldown the existing containment supply supports active fans.
+                foreach (var cooler in bank)
+                {
+                    bool air = cooler.Spec.Kind == ThermalKind.AirCooler;
+                    if (!air && cooler.Spec.Kind != ThermalKind.Radiator) continue;
+                    cooler.CoolingConnected = true;
+                    cooler.CoolingPowered = !air || source.ThermalAuxiliaryReady;
+                    if (cooler.CoolingPowered) loop.CoolingMW += cooler.Unit().CoolingMW;
+                }
+                double rejected = ThermalMath.CoolCircuit(loop, loop.CoolingMW);
+                state.CoolingMW += loop.CoolingMW;
+                state.RejectedMW += rejected;
+                foreach (var cooler in bank)
+                    if (cooler.CoolingConnected && cooler.CoolingPowered)
+                        cooler.CoolingRejectedMW = loop.CoolingMW > 0
+                            ? rejected * cooler.Unit().CoolingMW / loop.CoolingMW : 0;
+                loop.Diagnostic = loop.CoolingMW <= 0 && bank.Exists(machine => machine.Spec.Kind == ThermalKind.AirCooler && !machine.CoolingPowered)
+                    ? "Active coolers waiting for reactor auxiliary power"
+                    : loop.CoolingMW + .001 < loop.RequiredCoolingMW
+                    ? "Cooling below current waste heat; circuit heat is accumulating"
+                    : loop.CoolingMW + .001 < loop.DesignCoolingMW
+                    ? "Ready at current load; cooling below full-load requirement" : plan.Limit;
                 if (running)
                 {
-                    ThermalMath.Transfer(state.Store, host.Store, host.Spec.CapacityMJ,
-                        plan.AcceptedMW * circulation / 60, false);
-                    host.OutputGrantMW = ThermalMath.ExportLimit(host.Store, host.Spec.CapacityMJ, plan.Efficiency,
-                        plan.NetMW * source.Motion.PowerRamp, 1.0 / 60);
-                    freshMW += plan.AcceptedMW * circulation;
+                    host.OutputGrant = source.ReserveThermalOutput(loop, plan.AcceptedMW, plan.Efficiency);
+                    host.OutputGrantMW = host.OutputGrant == null ? 0 : host.OutputGrant.MaximumMW;
                 }
-                // Restrict flow tracing to this circuit. Keeping the full root
-                // port array preserves the existing four-port network packet.
                 if (captureFlow)
-                    CapturePlantFlow(source, new ThermalNetwork(circuit.Nodes), circuit.Nodes, bank, plan, circulation);
+                    CapturePlantFlow(source, new ThermalNetwork(circuit.Nodes), circuit.Nodes, bank, plan, Math.Max(host.RotorLoad, rejected > .001 ? .1 : 0));
             }
             // Checked, sealed circuits open even while cold or off.
             CaptureIsolation(network, endpoints, ThermalLoops.OpenValves(state));
             int active = state.ConnectedLoops;
+            if (rebuilt && active > 0) state.LoopTrip = false;
             state.DutyTrains = active;
             state.Efficiency = availableHeatMW > 0 ? state.SupportedMW / availableHeatMW : 0;
             source.CheckLoopSafety();
-            source.ProduceThermal(freshMW);
-            state.Diagnostic = state.LoopTrip && !source.Block.Enabled
-                ? "Startup blocked: all four circuits defective; repair at least one and restart manually"
-                : active + "/4 circuits ready / " + (active * 25) + "% maximum reactor allocation";
+            if (!state.Faulted)
+                state.Diagnostic = active == 0
+                    ? (state.LoopTrip ? "Startup blocked / " : "0/4 circuits ready / ") + state.Loops[0].Diagnostic
+                    : active + "/4 circuits ready / " + (active * 25) + "% maximum reactor allocation";
         }
 
-        private static double DrainLoop(Reactor source, List<ThermalBlock> bank, double coreBudgetMJ, double circulation)
+        private static void MigrateMachineHeat(ThermalBlock machine, ThermalLoopState loop)
         {
-            var state = source.Motion.Thermal;
-            double rejectedMJ = 0;
-            foreach (var machine in bank)
-            {
-                if (machine.Spec.Kind == ThermalKind.Radiator) rejectedMJ += machine.RadiatorRejectedMW / 60;
-                if (machine.Spec.Kind != ThermalKind.AirCooler) continue;
-                double budget = machine.Unit().CoolingMW * circulation / 60;
-                double rejected = ThermalMath.Reject(machine.Store, budget, false);
-                rejected += ThermalMath.Reject(machine.Store, budget - rejected, true);
-                rejectedMJ += rejected;
-            }
-            foreach (var sender in bank)
-                if (sender.Spec.Kind == ThermalKind.Train)
-                    ThermalMath.Transfer(sender.Store, state.Store, source.ThermalHeatMW * 8,
-                        sender.Spec.RatingMW * circulation / 60, true);
-            foreach (var cooler in bank)
-            {
-                if (cooler.Unit().CoolingMW <= 0) continue;
-                double flow = cooler.EffectiveRatingMW * circulation / 60;
-                double coreFlow = Math.Min(flow, coreBudgetMJ);
-                double moved = ThermalMath.Transfer(state.Store, cooler.Store, cooler.Spec.CapacityMJ, coreFlow, true);
-                if (!source.ThermalCanRun)
-                    moved += ThermalMath.Transfer(state.Store, cooler.Store, cooler.Spec.CapacityMJ, coreFlow - moved, false);
-                coreBudgetMJ -= moved; flow -= moved;
-                foreach (var sender in bank)
-                {
-                    if (sender == cooler || flow <= 0) continue;
-                    double budget = Math.Min(sender.Spec.RatingMW * circulation / 60, flow);
-                    double transfer = ThermalMath.Transfer(sender.Store, cooler.Store, cooler.Spec.CapacityMJ, budget, true);
-                    if (!source.ThermalCanRun)
-                        transfer += ThermalMath.Transfer(sender.Store, cooler.Store, cooler.Spec.CapacityMJ, budget - transfer, false);
-                    flow -= transfer;
-                }
-            }
-            return rejectedMJ * 60;
+            loop.ExcessMJ += machine.Store.HotMJ + machine.Store.WasteMJ;
+            machine.Store.HotMJ = machine.Store.WasteMJ = 0;
         }
     }
 }

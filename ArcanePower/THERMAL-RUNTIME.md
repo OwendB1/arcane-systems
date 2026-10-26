@@ -31,32 +31,36 @@ Construction verification is advisory; existing server diagnostics and safeguard
 remain authoritative. Text HUD API is optional, with a native notification
 fallback. Native in-game visual validation is still pending.
 
-The reactor owns its requested/settled mode, manifold deployment, housing heat,
-pending fuel charge and replicated plant diagnostics. `ThermalSession` owns server
-dispatch and reads actual native output before withdrawing the corresponding heat.
-Each machine saves its own hot/waste MJ inventory with its entity ID. Copies and
-projections cannot inherit heat; grid changes rebuild the physical socket graph.
-Invalid stored inventories are isolated without overwriting their original records.
-The existing critical-core latch, fuse, vent, tile and containment paths remain.
+The reactor owns modes, manifolds, fuel accounting, four independent circuit heat
+balances and replicated diagnostics. `ThermalSession` reads actual native electrical
+output before changing topology or granting the next interval. Reaction heat is
+`electrical output / net efficiency`; waste is reaction heat minus electrical output.
+Only actual demand produces reaction heat. Standalone uses the same accounting at 20%.
+
+Native grants reserve at most one simulation interval of paid source energy.
+Fuel is debited before a grant is exposed; unused credit remains saved in source
+`Store.HotMJ`. This small reserve is bookkeeping, not simulated coolant or a warmup
+requirement. It cannot multiply output or disappear on a reload. Removing fuel
+cannot make an already issued grant unpaid. Initial reservation can debit a small
+fraction of fuel even at zero demand; subsequent idle ticks consume no more.
+
+Each circuit owns `ExcessMJ`. Connected coolers subtract their available capacity
+from that circuit's waste; surplus cooling cannot drain another circuit. New
+operation stores no heat on pipes, turbines or coolers. `LoopVersion=2` preserves
+legacy source heat across the four circuits and folds old machinery heat into its
+circuit exactly once when it reconnects. Unattached old radiator inventories can
+still radiate locally. Invalid saves remain isolated and copies cannot inherit heat.
+
+The reactor supplies CO2 automatically. There is no filling, pressure, circulation
+multiplier or turbine pump-startup consumer. Existing containment charging remains.
+Net conversion efficiency already includes running auxiliaries; active coolers
+require the reactor's existing containment supply/reserve, including during cooldown.
+Space radiators remain passive. Retired wire tags stay reserved.
 
 [Power balance](THERMAL-POWER.md) owns efficiency tiers and fixed quarter-capacity
-allocations. Server topology validation requires one turbine and cooling per
-sealed circuit; cross-connected manifolds, shared supplies, extra turbines and
-open pipe mouths cannot operate. Reactor valves close unused outlets; pipe
-junctions require physical caps.
-
-`ThermalLoopState` records validated connectivity, capacity and cooling diagnostics
-in the entity-bound reactor state. The reactor supplies CO2 automatically; complete
-circuits become available immediately, with no fill timer or pressure gate. Repairs
-and reloads revalidate topology without refilling. Cold turbines request metered
-compressor electricity at 2% of dispatched thermal throughput; partial delivery
-supports proportional circulation. Once hot inventory can support generation,
-actual output supplies the running auxiliaries. Hot shutdowns still request external
-circulation power. Electricity actually delivered to the compressor becomes waste
-heat in its real block inventory. Retired loop-charge and rotor-pressure protobuf
-tags stay reserved; older XML fields are ignored without changing saved MJ.
-`LoopVersion` migrates older shared plants disabled while preserving all MJ,
-fuel debt, containment and critical state.
+allocations. Server validation still requires one turbine and cooling per sealed
+circuit; cross-connected manifolds, extra turbines and open mouths cannot operate.
+The existing critical-core latch, fuse, vent, tile and containment paths remain.
 
 Circuit validity follows assembly changes, including while the reactor is off.
 Adding or removing thermal blocks invalidates cached circuit graphs on that grid.
@@ -71,21 +75,15 @@ Losing all valid circuits while running stops generation without setting this
 startup latch. Normal shutdown and cooldown never set it. Restoring a saved
 diagnostic clears the old latch without re-enabling the reactor. Repaired circuits can
 resume powered cooldown while off; a rejected startup requires another manual On.
-There is no automatic switch to standalone. Running auxiliaries are paid once;
-per-circuit fan cooling and transport use metered circulation. Shutdown requests
-external power to drain the bank. Radiator surfaces can passively reject their
-own stored heat.
-
-Dispatch no longer caps reaction/output grants at the sustainable cooling limit.
-Every paid conversion retains its waste, which returns to the reactor's bounded
-inventory before transfer to connected coolers. Missing rejection raises core heat
-and uses the existing 125% irreversible critical latch, fuse and ejection path.
-Full inventories stop fresh fuel admission without deleting the thermal hazard;
-ordinary unused hot reserve alone does not manufacture an overheat. Shutdown
-retains waste and needs cooldown circulation; the housing's small passive
-rejection is available only when the reaction is stopped. Saved/replicated
-diagnostics include effective cooling and design-load rejection requirements.
-Terminal, LCD and tablet share cooling-shortfall/overheat warning priority.
+There is no automatic switch to standalone. Cooling capacity follows the installed
+equipment, sunlight, density, clearance and availability, independently of load.
+Actual rejection is limited by heat present. Cooling shortfalls accumulate per
+circuit and drive the existing 125% irreversible critical latch. The hottest
+circuit determines the warning contribution; three cold circuits cannot hide it.
+No cooling-based output throttle makes an undersized plant silently safe.
+Shutdown stops new reaction heat, retains excess, and permits connected cooling;
+the small passive housing rejection also drains isolated heat and unused fuel
+credit. Current-load waste and full-load cooling requirements are displayed separately.
 
 All four train variants have six turbine rotor rows (64 blades each), alternating
 with six fixed 68-vane rows. The independent compressor has fourteen 56-blade rotor
@@ -131,18 +129,14 @@ to review the native appearance after material-definition changes.
 
 
 
-`ThermalRotors` drives cosmetic shaft motion from its circuit's actual circulation
-and paid hot inventory. Temperature reflects source heat and available inventory.
-Heat and circulation control turbine speed; the electric compressor can spool
-during powered cold startup. No fill level or pressure estimate controls motion;
-a per-pipe real-fluid or material-temperature solver is not simulated.
-Loss of routing, heat, circulation or functional hardware removes drive. Shafts
-accelerate over four seconds and coast over eight, without altering MJ accounting.
-Visual speeds are capped at 20/24 rpm, keeping dense rows below 24 blade passes/s;
-these are not engineering shaft-speed ratings.
+`ThermalRotors` drives both cosmetic shafts linearly from delivered output divided
+by the circuit's allocated electrical rating. Temperature colour follows the same
+load and the fuel tier. No stored-heat or circulation multiplier controls speed.
+Shafts accelerate over four seconds and coast over eight, without altering energy
+accounting. Visual speeds remain capped at 20/24 rpm to avoid dense-blade aliasing.
 
-The server saves phase/inertia with the train's entity-bound heat inventory.
-Reload preserves the pose but clears drive until validated circulation resumes. A secure
+The server saves phase/inertia with the train's entity-bound visual state.
+Reload preserves the pose but clears drive until validated power delivery resumes. A secure
 read-only channel supplies initial and twice-per-second rotor snapshots. Clients
 integrate between snapshots and use bounded corrections around the shortest
 angular arc; incoming client drive/state is rejected. Old saves without rotor
@@ -166,9 +160,9 @@ Current checks use independent circuits in all 24 grid orientations.
 The thermal reactor also has glass coolant risers, two floor-level distributor
 rings, four integrated pump heads, four guarded supply sight sections and four
 warm pickups. Short cold wisps emerge from the upper chamber injector mouths.
-Internal cooling can circulate in standalone mode with delivered containment
-power/reserve and operating or retained heat. External circulation requires
-verified Brayton routing and measured circulation support.
+Internal streaks also work in standalone mode. External wisps follow verified
+Brayton routes. Their speed follows load, with a slow cosmetic flow while heat is
+being removed during cooldown. These effects never determine cooling or output.
 
 Internal coolant tubes use independent smoked blue-grey `ArcanePower_CoolantGlass`
 sight sections, metal pressure-jacket backing and seated collars. Vertical risers
@@ -212,8 +206,9 @@ remains available for trapped heat; it produces no electricity.
 Dispatch selects an eligible tier and cold-end temperature within each circuit.
 Standard trains handle 25 GWth; upgraded trains handle 2.5 TWth. Reactor fuel tiers
 provide 25/250/2,500 GWth. Generated model contracts own equipment ratings.
-Fuel is charged for newly admitted thermal MJ, including finite warm-up inventory;
-stock and saved fractional debt bound the final fuel quantum.
+Fuel is debited into the one-interval native output reserve; stock and saved
+fractional debt bound the final quantum. Displayed burn follows actual reaction
+heat, while unused paid credit remains saved until used or drained at shutdown.
 
 Prototype boundaries:
 
@@ -226,15 +221,18 @@ Prototype boundaries:
   runtime role, preserved through placement transforms. Its peer must be the
   reactor vessel, enforced by the shared matcher and construction guide.
   `ThermalLoops.OpenValves` opens each validated complete circuit on fully
-  deployed Brayton manifolds, including cold/off circuits. Metered circulation
-  and paid hot inventory govern transport/output separately.
+  deployed Brayton manifolds, including cold/off circuits. Fuel-backed grants
+  and actual delivered power govern output separately.
   Construction inspection stops at unselected vessels, so another circuit's
   mismatched sockets do not contaminate a healthy selected circuit's report.
-- Pipes are ideal links within one simulation step. MJ resides on real source
-  and machine blocks; per-pipe fluid mass, pressure and transit delay are not
-  simulated. The normalized core hazard is separate from this housing/loop ledger.
+- Pipes define connectivity only. Excess heat resides in the owning reactor's
+  per-circuit balances; per-pipe fluid mass, pressure and transit delay are not
+  simulated. The normalized core hazard follows the hottest circuit's balance.
 - Atmospheric density is sampled from the local planet. Ambient temperature is
-  currently the 25°C reference. Atmospheric coolers sample 18 authored exhaust
+  currently the 25°C reference. Native `MyPlanet.GetAirDensity` returns zero
+  outside its atmospheric altitude, including non-atmospheric planets; finding
+  a nearby planet alone does not apply an atmosphere penalty. Atmospheric coolers
+  are rated at 25 GW (T1) or 250 GW (T2) and sample 18 authored exhaust
   positions (nine per fan) once per 60 simulation ticks, transformed by the
   block's world matrix. Each checks 2.5 m forward from beyond the guard hardware.
   Same-grid block occupancy catches armor enclosing the ray origin; forward and
@@ -245,15 +243,22 @@ Prototype boundaries:
   clearance and available MW. The server owns heat rejection; client terminal
   inspection only samples local conditions. These discrete rays are an obstruction
   approximation, not an airflow simulation; in-game physics remains to be verified.
-  Radiators sample eight exposure rays over 250 m;
-  sink temperature uses space/atmosphere reference values. Solar exposure follows the native two-sided solar formula: absolute normal/sun dot
+  Radiators sample eight exposure rays over 250 m. Their ambient cooling factor
+  blends vacuum and reference-atmosphere rejection in proportion to clamped
+  native density; the old `density > 0.001` full-atmosphere switch is removed.
+  Zero density retains 100%; full density retains 12.36%. Their own terminal
+  reports measured air density and the same ambient factor used by the simulation.
+  Solar exposure follows the native two-sided solar formula: absolute normal/sun dot
   product × fraction of lit pivots × solar weather multiplier, bounded to 0–1.
   Cooling multiplies the result by `1 - 0.5 × solar exposure`: 100% in shade or
-  edge-on, 50% at full sun on either face. The server samples eight points on each
+  edge-on, 50% at full sun on either face. The server samples 32 points on each
   moving panel with the vanilla 100 m/layer-15 ray rules, own-block exclusion,
   near-surface night check and 20-radius planetary shadows (500 m/90% terrain
   margin). All pivots refresh in the existing once-per-second environment pass,
-  rather than vanilla’s staggered one-pivot updates. Base and extensions sample
+  rather than vanilla’s staggered one-pivot updates. Partial shade resolves in
+  3.125% steps, limiting each sample's cooling effect to 1.5625 percentage points
+  at face-on incidence with the normal weather multiplier; the angle response
+  remains continuous. Base and extensions sample
   independently. Automatic tracking still targets edge-on. Clear-sky obstruction
   and sink temperature are separate limits. Material-temperature dynamics remain
   outside this gameplay model.
@@ -299,6 +304,21 @@ transforms were identical.
 3. Use `assets/thermal-manifold-runtime.json` for the exact revision-4 panel
    angles/source groups. The runtime reproduces the authored inset/slide/extension
    phases and refuses Brayton deployment if the required native rig is absent.
+   The eight armor leaves now close against backed outer seams. Concealed pocket
+   relief clears the wider leaves throughout all 47 sampled poses; the existing
+   inset/slide/extension transforms are unchanged.
+   `fit_roof_surfaces()` in `assets/refine_reactor_exterior.py` clears all sixteen
+   roof receiver frames and seats their screw decals above the metal. The central
+   cap opening is R2.05 m around the R2.04 m hatch seat: a 10 mm seam backed by the
+   housing, with no cap/seat surface intersections. Live views were checked at
+   1.8, 2.4 and 3.0 m, including grazing angles.
+   The inner ceiling hatch parks 99 mm higher, with its underside at Z2.460 m.
+   Its lift is now 0.221 m, preserving the previous fully-open endpoint and slides.
+   The seat and concealed backing pocket follow `assets/vent.json`; a 41-pose
+   geometry sweep clears the ceiling and deployed blast shields. The compiled
+   runtime/native mesh check passed 164 ceiling poses, with a 2.459998 m closed
+   underside and less than 0.000001 m change to the fully-open endpoint. Export the main,
+   moving parts, all three construction stages and LODs together after these edits.
 4. All four train variants need two root subparts, `Thermal_TurbineRotor` and
    `Thermal_CompressorRotor`. Use `assets/thermal-rotor-runtime.json` for the
    Blender pivots. The compact train's generated native pivots are `(-1.0, -.10, 0)`
@@ -320,7 +340,14 @@ transforms were identical.
    scene, then run `tools/prepare_thermal_isolation.py --compile`; omit `--compile`
    to validate installed meshes. The authored contract retains 48 samples: four
    reactor ports, both bores, a seat and five gate poses. The probe requires every
-   unique combination and checks native UVs, textures, pivots and bore clearance.
+   unique combination and checks native UVs, textures and pivots. It also checks
+   the exported vertices every 5 degrees through 90 degrees of travel: 160 bore
+   clearance checks across all eight valves.
+   The 411 mm disc, 454 mm seat and reduced spindle/bearings fit the reactor's
+   460 mm, 40-sided stem ID, with at least 1.42 mm wall clearance after native
+   vertex packing. Live Blender review covered front, side and chamber-facing
+   views at 1.8, 2.4 and 3.0 m, plus nine opening poses. Native checks pass;
+   in-game visual review remains pending.
    Pipe and machine mouths have no runtime valve subparts.
 
 Verification from the repository root:
@@ -333,11 +360,11 @@ dotnet build arcane-systems.sln
 ```
 
 The focused checks execute the compiled production kernel with native math. They
-cover budgets, fixed four-circuit capacity, per-loop equipment limits, isolated losses, one-hour conservation
+cover budgets, fixed four-circuit capacity, per-loop equipment limits, isolated losses, conservation
 scenarios at 20/40/78%, cooling overload/recovery and the 125% heat threshold,
-stable auxiliary circulation at all bank sizes and tiers, fuel exhaustion,
+linear load response, per-circuit cooling isolation, fuel exhaustion,
 reload/copy identity, mode/startup guards,
-47 manifold poses, heat/pressure rotor response, cold compressor startup,
+47 manifold poses, linear rotor response, cold startup without pump power,
 coastdown, native shaft transforms, frame-size-independent phase integration,
 and the captured authored starter layout, including
 facing/roll faults and grid separation. They do not execute the coordinator in

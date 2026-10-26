@@ -28,6 +28,7 @@ namespace ArcanePower
     {
         public long Id, GridId;
         public bool Healthy;
+        public int Revision;
         public ThermalModel Model;
         public ThermalPort[] Ports;
 
@@ -67,6 +68,7 @@ namespace ArcanePower
         public readonly List<ThermalEndpoint> Nodes = new List<ThermalEndpoint>();
         public readonly ThermalNetwork Network;
         public readonly ThermalConnections[] Circuits;
+        public bool Invalidated;
 
         public ThermalCircuitCache(IList<ThermalEndpoint> nodes)
         {
@@ -79,7 +81,7 @@ namespace ArcanePower
                     ports[i] = new ThermalPort(port.Circuit, port.Position, port.Normal, port.HotAxis, port.ReactorOnly);
                 }
                 Nodes.Add(new ThermalEndpoint { Id = node.Id, GridId = node.GridId,
-                    Healthy = node.Healthy, Model = node.Model, Ports = ports });
+                    Healthy = node.Healthy, Revision = node.Revision, Model = node.Model, Ports = ports });
             }
             Network = new ThermalNetwork(Nodes);
             Circuits = Network.Loops(Nodes[0]);
@@ -87,18 +89,31 @@ namespace ArcanePower
 
         public bool Matches(IList<ThermalEndpoint> nodes)
         {
-            if (nodes.Count != Nodes.Count) return false;
+            if (Invalidated || nodes.Count != Nodes.Count) return false;
             for (int i = 0; i < nodes.Count; i++)
+                if (!Same(nodes[i], Nodes[i])) return false;
+            return true;
+        }
+
+        public bool CircuitChanged(ThermalCircuitCache previous, int index)
+        {
+            if (previous == null || index >= previous.Circuits.Length) return true;
+            var before = previous.Circuits[index]; var after = Circuits[index];
+            if (before.Ready != after.Ready || before.Nodes.Count != after.Nodes.Count) return true;
+            foreach (var node in after.Nodes)
+                if (!Same(node, before.Nodes.Find(old => old.Id == node.Id))) return true;
+            return false;
+        }
+
+        private static bool Same(ThermalEndpoint a, ThermalEndpoint b)
+        {
+            if (a == null || b == null || a.Id != b.Id || a.GridId != b.GridId || a.Healthy != b.Healthy
+                || a.Revision != b.Revision || a.Model != b.Model || a.Ports.Length != b.Ports.Length) return false;
+            for (int j = 0; j < a.Ports.Length; j++)
             {
-                var a = nodes[i]; var b = Nodes[i];
-                if (a.Id != b.Id || a.GridId != b.GridId || a.Healthy != b.Healthy
-                    || a.Model != b.Model || a.Ports.Length != b.Ports.Length) return false;
-                for (int j = 0; j < a.Ports.Length; j++)
-                {
-                    var p = a.Ports[j]; var q = b.Ports[j];
-                    if (p.Circuit != q.Circuit || p.Position != q.Position || p.Normal != q.Normal
-                        || p.HotAxis != q.HotAxis || p.ReactorOnly != q.ReactorOnly) return false;
-                }
+                var p = a.Ports[j]; var q = b.Ports[j];
+                if (p.Circuit != q.Circuit || p.Position != q.Position || p.Normal != q.Normal
+                    || p.HotAxis != q.HotAxis || p.ReactorOnly != q.ReactorOnly) return false;
             }
             return true;
         }
@@ -226,9 +241,12 @@ namespace ArcanePower
             {
                 var loop = result[i] = new ThermalConnections();
                 var joint = Joints.Find(j => j.Node == reactor && j.Port == reactor.Ports[i]);
-                if (!reactor.Healthy || joint == null || joint.Status != ThermalJointStatus.Matched
-                    || joint.Peer == null || !joint.Peer.Healthy)
+                if (!reactor.Healthy)
+                { loop.Diagnostic = "Reactor unavailable: check build, ownership and manifold deployment"; continue; }
+                if (joint == null || joint.Status != ThermalJointStatus.Matched || joint.Peer == null)
                 { loop.Diagnostic = "Connect a sealed circuit to this manifold; align H/C"; continue; }
+                if (!joint.Peer.Healthy)
+                { loop.Diagnostic = "Reactor adapter unavailable: weld, enable and check access"; continue; }
                 var found = new HashSet<ThermalEndpoint>();
                 var queue = new Queue<ThermalEndpoint>();
                 found.Add(joint.Peer); queue.Enqueue(joint.Peer);

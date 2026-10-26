@@ -16,15 +16,78 @@ M=E['M']
 STAGE=ROOT/'src/Models/Cubes/large/.isolation-stage'
 SOURCE=ROOT/'assets/arcane-thermal-isolation.blend'
 NAMES=('ArcaneIsolationSeat','ArcaneIsolationGate')
+BORE_RADIUS=.230  # Reactor sliding stem: R265 with a 35 mm wall, 40 sides.
+DISC_RADIUS=.2055
 
 
-def witness_uv(obj):
-    # The uniform indicator map needs enough UV area for MWM half precision,
-    # including the sub-millimetre chamfers on these tiny witness strips.
+def small_part_uv(obj):
+    # Tiny rib and indicator chamfers need enough UV area for MWM half precision.
+    # Preserve projection proportions while increasing their texture density.
     layer=obj.data.uv_layers.active.data
     lo=Vector([min(d.uv[i] for d in layer) for i in (0,1)])
     scale=.8/max(max(d.uv[i] for d in layer)-lo[i] for i in (0,1))
     for d in layer:d.uv=(d.uv-lo)*scale+Vector((.05,.05))
+
+
+def geometry(p, ident):
+    """Complete mechanism inside the reactor bore, including shaft bearings."""
+    if ident.endswith('Seat'):
+        p.tube('steel valve seat',[(0,.010,0),(0,.045,0)],.227,'Metal_Dull',.020,40)
+        p.tube('pressure gasket',[(0,.006,0),(0,.010,0)],.219,'PaintedMetal_VeryDark',.012,40)
+        for side in (-1,1):
+            p.box('shaft bearing',(0,.017,side*.218),(.040,.036,.018),'Metal_Shiny',.002)
+    else:
+        p.cylinder('pressure blade',(0,-.005,0),(0,.005,0),DISC_RADIUS,'Metal_Shiny',40)
+        p.cylinder('blade spindle',(0,0,-.218),(0,0,.218),.012,'Metal_Dull',12)
+        for side in (-1,1):
+            small_part_uv(p.box('blade stiffening rib',(side*.080,-.011,0),(.030,.012,.280),'Metal_Dull',.002))
+            small_part_uv(p.box('closure witness',(side*.080,-.018,0),(.014,.002,.045),'ThermalStatus',.0007))
+
+
+def refit():
+    """Update only the existing valve source scenes; keep native roots/dummies."""
+    for ident in NAMES:
+        scene=bpy.data.scenes[ident];bpy.context.window.scene=scene;bpy.context.view_layer.update()
+        col=E['C'].get_collections(scene)['main'][0]
+        meshes=[o for o in col.objects if o.type=='MESH']
+        root=meshes[0].parent
+        assert root is not None and all(o.parent==root for o in meshes)
+        for obj in meshes:bpy.data.objects.remove(obj,do_unlink=True)
+        p=object.__new__(M['Parts']);p.name=ident;p.col=col;p.scene=scene;p.support=[]
+        p.native={m.name:m for m in bpy.data.materials}
+        geometry(p,ident)
+        for obj in col.objects:
+            if obj.type=='MESH':obj.parent=root
+    return audit_bore()
+
+
+def audit_bore():
+    """Fit evaluated geometry inside the actual faceted ID at every 5 degrees."""
+    col=M['main_for']('Reactor housing')
+    stem=next(o for o in col.objects if 'LA sliding H primary stem' in o.name)
+    path=list(map(Vector,json.loads(stem['pipe_path'])));axis=(path[-1]-path[0]).normalized()
+    radii=[]
+    bpy.context.window.scene=M['scene_for']('Reactor housing');bpy.context.view_layer.update()
+    for vertex in stem.data.vertices:
+        d=stem.matrix_world@vertex.co-path[0];radii.append((d-axis*d.dot(axis)).length)
+    assert abs(min(radii)-BORE_RADIUS)<1e-5, 'Reactor bore changed; remeasure the valve fit'
+    limit=BORE_RADIUS*math.cos(math.pi/40)
+    maximum=0
+    for ident in NAMES:
+        bpy.context.window.scene=bpy.data.scenes[ident];bpy.context.view_layer.update()
+        deps=bpy.context.evaluated_depsgraph_get()
+        for obj in E['C'].get_collections(bpy.context.scene)['main'][0].objects:
+            if obj.type!='MESH':continue
+            for degrees in (range(0,91,5) if ident.endswith('Gate') else (0,)):
+                turn=Matrix.Rotation(math.radians(degrees),4,'Z')
+                for vertex in obj.evaluated_get(deps).data.vertices:
+                    v=turn@obj.matrix_world@vertex.co
+                    radial=math.hypot(v.x,v.z);maximum=max(maximum,radial)
+                    assert radial<limit-.001, (obj.name,degrees,'Valve crosses inner pressure wall',radial)
+                    if ident.endswith('Gate') and 'spindle' not in obj.name:
+                        assert radial<.207*math.cos(math.pi/40), (obj.name,'Blade sweeps through its seat')
+    return {'bore_diameter_m':2*BORE_RADIUS,'disc_diameter_m':2*DISC_RADIUS,
+            'minimum_wall_clearance_m':limit-maximum,'motion_samples':19}
 
 
 def build():
@@ -37,19 +100,8 @@ def build():
         scene.seut.export_exportPath=str(STAGE)
         p=object.__new__(M['Parts']);p.name=ident;p.col=col;p.scene=scene;p.support=[]
         p.native={m.name:m for m in bpy.data.materials}
-        if ident.endswith('Seat'):
-            # 55 cm bore, fitted inside the accepted 71 cm pipe jacket.
-            p.tube('steel valve seat',[(0,.010,0),(0,.055,0)],.308,'Metal_Dull',.031,40)
-            p.tube('pressure gasket',[(0,.006,0),(0,.010,0)],.292,'PaintedMetal_VeryDark',.015,40)
-            for side in (-1,1):
-                p.box('shaft bearing',(0,.025,side*.297),(.070,.052,.034),'Metal_Shiny',.003)
-            E['dummy'](col,root,'subpart_Gate',Matrix.Identity(4),NAMES[1])
-        else:
-            disc=p.cylinder('pressure blade',(0,-.006,0),(0,.006,0),.278,'Metal_Shiny',40)
-            p.cylinder('blade spindle',(0,0,-.297),(0,0,.297),.015,'Metal_Dull',12)
-            for side in (-1,1):
-                p.box('blade stiffening rib',(side*.105,-.014,0),(.040,.016,.390),'Metal_Dull',.003)
-                witness_uv(p.box('closure witness',(side*.105,-.023,0),(.018,.003,.065),'ThermalStatus',.001))
+        geometry(p,ident)
+        if ident.endswith('Seat'):E['dummy'](col,root,'subpart_Gate',Matrix.Identity(4),NAMES[1])
         for obj in col.objects:
             if obj.type=='MESH':obj.parent=root
         scenes.append(scene)
@@ -62,6 +114,7 @@ def save():
 
 
 def export():
+    audit_bore()
     STAGE.mkdir(parents=True,exist_ok=True)
     previous=bpy.context.window.scene
     names={o:o.name for o in bpy.data.objects if o.type=='EMPTY'}
@@ -123,7 +176,8 @@ def contract(rows):
                         samples.append({'subtype':spec['subtype'],'port':index,'side':side,'model':name,'opening':opening,
                                         'bounds':[[fn(p[i] for p in ps) for i in range(3)] for fn in (min,max)]})
     finally:bpy.context.window.scene=previous
-    (ROOT/'assets/thermal-isolation.json').write_text(json.dumps({'models':rows,'radius':.278,'bore_offset':.46,'recess':.30,
+    (ROOT/'assets/thermal-isolation.json').write_text(json.dumps({'models':rows,'radius':DISC_RADIUS,
+        'bore_radius':BORE_RADIUS,'bore_sides':40,'bore_offset':.46,'recess':.30,
         'samples':samples},indent=2)+'\n')
 
 

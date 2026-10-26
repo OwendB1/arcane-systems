@@ -27,7 +27,7 @@ namespace ArcanePower
             // hazard even when full stores stop new fuel or the player shuts off.
             // Use the existing 125% critical-core/ejection/fuse lifecycle.
             if (!Motion.PayloadReleased && Motion.Core != CorePhase.Off && ThermalVariant && Motion.Thermal != null)
-                target = Math.Max(target, (float)ThermalMath.WasteHeatLevel(Motion.Thermal.Store, ThermalHeatMW));
+                target = Math.Max(target, (float)ThermalMath.WasteHeatLevel(Motion.Thermal, ThermalHeatMW));
             Motion.Heat = (float)ThermalMath.ApproachCoreHeat(Motion.Heat, target, runaway);
         }
 
@@ -57,8 +57,7 @@ namespace ArcanePower
                 Vector3 velocity = reactor.CubeGrid.Physics == null ? Vector3.Zero : reactor.CubeGrid.Physics.GetVelocityAtPoint(position);
                 core = CoreHazards.Arm(Id, Motion.FuelTier, Motion.Heat, position, velocity);
                 if (core != null && Motion.Critical)
-                    core.Fuse = Math.Min(core.Fuse, Motion.CriticalSeconds
-                        * (1 + 4 * Math.Max(0, Motion.Heat - CoreHazards.SupercriticalHeat)));
+                    core.Fuse = Math.Min(core.Fuse, Motion.CriticalSeconds);
             }
             if (core != null) TrackCore(core);
         }

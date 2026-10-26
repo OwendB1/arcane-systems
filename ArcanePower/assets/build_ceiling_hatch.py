@@ -22,7 +22,7 @@ if not backup.exists():bpy.ops.wm.save_as_mainfile(filepath=str(backup),copy=Tru
 if not s.get('ap_ceiling_pocket'):
     cutter=annulus('Ceiling door pocket cutter',1.84,4.05,2.675,2.865,native['Metal_Dull'])
     for o in list(col.objects):
-        if o.type=='MESH' and o.name.startswith(('AP vent / cassette outer wall','AP vent / ejection throat')):
+        if o.type=='MESH' and o.name.startswith(('AP vent / cassette outer wall','AP vent / ejection throat','AP vent / bell backing')):
             mod=o.modifiers.new('Inner leaf clearance','BOOLEAN')
             mod.operation='DIFFERENCE';mod.solver='EXACT';mod.object=cutter
             bpy.context.view_layer.objects.active=o
@@ -43,8 +43,8 @@ for o in list(col.objects):
 # vent lining. The shield sleeve cassette occupies the annulus inside 2.58m;
 # leave that space free so the telescoping sleeves can pass the pocket floor.
 for label,ri,ro,z0,z1,material in [
-    ('inner seat',1.86,1.915,2.335,2.675,'Metal_Dull'),
-    ('inner seat light',1.866,1.906,2.331,2.335,'Emissive'),
+    ('inner seat',1.86,1.915,2.460,2.675,'Metal_Dull'),
+    ('inner seat light',1.866,1.906,2.456,2.460,'Emissive'),
     ('inner pocket floor',2.58,4.035,2.655,2.675,'PaintedMetal_VeryDark'),
     ('inner pocket ceiling',2.58,4.035,2.865,2.885,'PaintedMetal_VeryDark'),
     ('inner pocket wall',4.015,4.035,2.675,2.865,'Metal_Dull'),
@@ -71,7 +71,7 @@ for o in list(inspection.objects):bpy.data.objects.remove(o,do_unlink=True)
 slides=[]
 for i in range(4):
     angle=math.pi/4+i*math.pi/2
-    rest=Matrix.Rotation(angle,4,'Z');rest.translation=(0,0,2.365)
+    rest=Matrix.Rotation(angle,4,'Z');rest.translation=(0,0,2.464)
     dummy=bpy.data.objects.new('subpart_CeilingHatch'+str(i+1),None);col.objects.link(dummy)
     dummy.parent=root;dummy.matrix_basis=rest;dummy['file']=scene.name
     slides.append(list(Matrix.Rotation(angle,3,'Z')@Vector((1.40,1.40,0))))
@@ -91,8 +91,8 @@ for i in range(4):
 p=ROOT/'assets/vent.json';data=json.loads(p.read_text())
 data['intake']['count']=0
 data['intake']['status']='Superseded by the four CeilingHatch leaves; shared Intake clock retained'
-data['ceiling_hatch']={'count':4,'model':scene.name,'park_z':2.365,'lift_m':.32,'slides':slides,'bore_radius_m':1.86}
+data['ceiling_hatch']={'count':4,'model':scene.name,'park_z':2.464,'lift_m':.221,'slides':slides,'bore_radius_m':1.86}
 data['status']='Paired inner/outer four-leaf vent doors with lined connecting barrel and retraction pockets'
 p.write_text(json.dumps(data,indent=2)+'\n')
 bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
-print('Inner door: lifts 0.32m then retracts 1.98m between the dispensers; shared roof/ceiling leaf model.')
+print('Inner door: flush with ceiling at 2.46m; lifts 0.221m into the existing radial pocket.')

@@ -18,7 +18,7 @@ new Vector3(-0.70710678f, 0.00000000f, -0.70710678f),
 internal static readonly float[] ShieldTravel = { 0.64083333f, 1.28166667f, 1.92250000f, 2.56333333f, 3.20416667f, 3.84500000f };
 internal static readonly Vector3[] HatchSlides = { new Vector3(-1.95000005f, 0.00000000f, 1.95000005f), new Vector3(1.94999993f, 0.00000000f, 1.95000017f), new Vector3(1.95000017f, 0.00000000f, -1.94999993f), new Vector3(-1.95000017f, 0.00000000f, -1.94999993f) };
 internal static readonly Vector3[] CeilingHatchSlides = { new Vector3(0.00000012f, 0.00000000f, 1.97989893f), new Vector3(1.97989893f, 0.00000000f, -0.00000048f), new Vector3(0.00000048f, 0.00000000f, -1.97989893f), new Vector3(-1.97989905f, 0.00000000f, -0.00000107f) };
-internal const float CeilingHatchLift = 0.32000000f;
+internal const float CeilingHatchLift = 0.22100000f;
 internal const float HatchDrop = 0.30000000f;
 internal static readonly TilePose[] Tiles = {
 new TilePose("Tile01", 0, 1, new Vector3(-2.85783839f, 1.98159385f, -2.85783839f), new Vector3(0.05046692f, 1.75000000f, -0.03666632f), new Matrix(0.58779204f, 0.00000460f, 0.80901212f, 0.00000000f, 0.26803440f, -0.94352281f, -0.19473644f, 0.00000000f, 0.76332051f, 0.33130759f, -0.55459642f, 0.00000000f, 0.20186770f, -0.21738309f, -0.14666529f, 1.00000000f)),

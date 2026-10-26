@@ -112,8 +112,8 @@
   "ceiling_hatch": {
     "count": 4,
     "model": "ArcanePower_VentHatch",
-    "park_z": 2.365,
-    "lift_m": 0.32,
+    "park_z": 2.464,
+    "lift_m": 0.221,
     "slides": [
       [
         -1.1920928955078125e-07,

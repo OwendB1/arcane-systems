@@ -9,10 +9,8 @@
       <DisplayName>Arcane Systems</DisplayName>
       <Name>ArcaneSystems</Name>
       <ItemIds>
-        <string>Conveyor/ArcanePower_VentDuct</string>
-        <string>Conveyor/ArcanePower_VentOutlet</string>
-        <string>UpgradeModule/ArcanePower_AdvancedContainmentController</string>
         <string>UpgradeModule/ArcanePower_ContainmentController</string>
+        <string>Conveyor/ArcanePower_VentDuct</string>
       </ItemIds>
     </Category>
   </CategoryClasses>

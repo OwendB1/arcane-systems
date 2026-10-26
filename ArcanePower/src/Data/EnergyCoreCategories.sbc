@@ -11,11 +11,6 @@
       <ItemIds>
         <string>BatteryBlock/ArcanePower_EnergyCore_Pillar</string>
         <string>BatteryBlock/ArcanePower_EnergyCapacity_Pillar</string>
-        <string>BatteryBlock/ArcanePower_EnergyCapacityAdvanced_Pillar</string>
-        <string>UpgradeModule/ArcanePower_EnergyTransfer_Pillar</string>
-        <string>UpgradeModule/ArcanePower_EnergyTransferAdvanced_Pillar</string>
-        <string>UpgradeModule/ArcanePower_EnergyStabilizer_Pillar</string>
-        <string>UpgradeModule/ArcanePower_EnergyStabilizerAdvanced_Pillar</string>
       </ItemIds>
     </Category>
   </CategoryClasses>

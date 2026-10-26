@@ -32,26 +32,20 @@ namespace ArcanePower
     }
 
     // Cosmetic state only: this never grants power or consumes/creates MJ.
-    // Heat and circulation drive the shafts; visual inertia never grants MW.
+    // Electrical load drives the shafts; visual inertia never grants MW.
     public static class ThermalRotors
     {
         // Cosmetic speeds keep the 64/56-blade rows below 24 blade passes/s.
         // Actual engineering shaft speeds are deliberately not simulated.
         public const double MaxRpm = 20, MaxCompressorRpm = 24;
-        public static void Drive(ThermalRotorState state, double hotMJ, double ratingMW,
-            double hotC, double circulation, bool running, double seconds)
+        public static void Drive(ThermalRotorState state, double load, double hotC, bool running, double seconds)
         {
             if (!ThermalMath.Finite(seconds) || seconds <= 0 || seconds > 1) return;
-            bool valid = running && ThermalMath.Finite(hotMJ) && hotMJ >= 0
-                && ThermalMath.Finite(ratingMW) && ratingMW > 0 && ThermalMath.Finite(hotC)
-                && ThermalMath.Finite(circulation);
-            double flow = valid ? ThermalMath.Clamp(circulation, 0, 1) : 0;
-            double heat = valid ? ThermalMath.Clamp(hotMJ / (ratingMW * .5), 0, 1) : 0;
-            state.HotC = 45 + (valid ? ThermalMath.Clamp(hotC, 45, 2200) - 45 : 0) * heat;
-            state.TargetRpm = flow > 0 && heat > 0
-                ? MaxRpm * Math.Sqrt(flow * ThermalMath.Span(state.HotC, 45, 2200)) : 0;
-            // The independent electric compressor can spool during a paid cold start.
-            state.CompressorTargetRpm = MaxCompressorRpm * Math.Sqrt(flow);
+            bool valid = running && ThermalMath.Finite(load) && ThermalMath.Finite(hotC);
+            double demand = valid ? ThermalMath.Clamp(load, 0, 1) : 0;
+            state.HotC = 45 + (valid ? ThermalMath.Clamp(hotC, 45, 2200) - 45 : 0) * demand;
+            state.TargetRpm = MaxRpm * demand;
+            state.CompressorTargetRpm = MaxCompressorRpm * demand;
             Advance(state, seconds);
         }
 

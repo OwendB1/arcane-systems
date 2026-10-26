@@ -26,6 +26,34 @@ def receiver_profile(w,h,shoulder=.040):
     return [(x,y,z) for z,loop in loops for x,y in loop]
 
 
+def fit_receiver_apertures(scene,col):
+    """Clear the casing behind each receiver's inner walls by 10 mm."""
+    if scene.get('controller_aperture_revision')==1:return False
+    shell=next(o for o in col.objects if o.name.startswith('Power pack / curved socket shell'))
+    if shell.data.users>1:shell.data=shell.data.copy()
+    for rim in [o for o in col.objects if o.name.startswith(PREFIX+'stepped receiver')]:
+        w=max(v.co.x for v in rim.data.vertices)-.015
+        h=max(v.co.y for v in rim.data.vertices)-.015
+        c=.006
+        loop=[(-w+c,-h),(w-c,-h),(w,-h+c),(w,h-c),(w-c,h),(-w+c,h),(-w,h-c),(-w,-h+c)]
+        mesh=bpy.data.meshes.new('Controller aperture cutter')
+        mesh.materials.append(shell.data.materials[0])
+        mesh.from_pydata([(x,y,z) for z in (-.060,.040) for x,y in loop],[],
+            [tuple(reversed(range(8))),tuple(range(8,16))]+[(i,(i+1)%8,(i+1)%8+8,i+8) for i in range(8)])
+        cutter=bpy.data.objects.new('Controller aperture cutter',mesh);col.objects.link(cutter)
+        cutter.matrix_world=rim.matrix_world.copy()
+        mod=shell.modifiers.new('Receiver wall clearance','BOOLEAN');mod.operation='DIFFERENCE';mod.solver='EXACT';mod.object=cutter
+        modifier_name=mod.name
+        bpy.context.view_layer.objects.active=shell;bpy.context.view_layer.update()
+        try:bpy.ops.object.modifier_apply(modifier=modifier_name)
+        finally:
+            if modifier_name in shell.modifiers:shell.modifiers.remove(shell.modifiers[modifier_name])
+            bpy.data.objects.remove(cutter,do_unlink=True)
+            bpy.data.meshes.remove(mesh)
+    scene['controller_aperture_revision']=1
+    return True
+
+
 def fit_receiver_rims(scene,col):
     if scene.get('controller_receiver_revision')==2:return False
     rims=[o for o in col.objects if o.name.startswith(PREFIX+'stepped receiver')]
@@ -74,7 +102,9 @@ def main(names=NAMES):
         scene.seut.paint_color=bpy.data.scenes['ArcanePower_ReactorPrototype'].seut.paint_color[:]
         if scene.get('controller_detail_revision')==1:
             bpy.context.window.scene=scene;bpy.context.view_layer.update()
-            if fit_receiver_rims(scene,COLS.get_collections(scene)['main'][0]):changed.append(name)
+            col=COLS.get_collections(scene)['main'][0]
+            fitted=fit_receiver_rims(scene,col)
+            if fit_receiver_apertures(scene,col) or fitted:changed.append(name)
             continue
         advanced='Advanced' in name;bpy.context.window.scene=scene;bpy.context.view_layer.update()
         col=COLS.get_collections(scene)['main'][0];root=next(o for o in col.objects if o.parent is None)
@@ -130,7 +160,7 @@ def main(names=NAMES):
             verts=receiver_profile(w,h,shoulder);faces=[(k*8+i,k*8+(i+1)%8,((k+1)%6)*8+(i+1)%8,((k+1)%6)*8+i) for k in range(6) for i in range(8)]
             rim=mesh_object('stepped receiver',verts,faces,'PaintedMetal_Colorable',frame)
             floor=box('receiver floor',frame,(0,0,-.060),(w-.025,h-.025,.022),'PaintedMetal_VeryDark')
-            cut(box('temporary aperture',frame,(0,0,-.010),(w-.05,h-.05,.100)),shell)
+            cut(box('temporary aperture',frame,(0,0,-.010),(w-.03,h-.03,.100)),shell)
             return rim,floor
 
         def cover(frame,w,h,label):
@@ -217,6 +247,7 @@ def main(names=NAMES):
                 for y in (-.12,.12):bolt(side @ Matrix.Translation((0,0,-.010)),0,y,panel,.002,.017)
         scene['controller_detail_revision']=1
         scene['controller_receiver_revision']=2
+        scene['controller_aperture_revision']=1
         scene['controller_detail_variant']='Paired power cartridges, connected buses and dual cooling' if advanced else 'Broad service cassette and passive cooling bank'
         report['variants'][name]={'rear_shell_vertices':rear,'shell':shell.name,'before_main':original_main,'detail':scene['controller_detail_variant']}
         changed.append(name)

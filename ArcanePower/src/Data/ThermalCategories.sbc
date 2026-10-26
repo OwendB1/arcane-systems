@@ -10,32 +10,10 @@
       <Name>ArcaneSystems</Name>
       <ItemIds>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryStraight</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryElbow</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryRiser</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryTee</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryCross</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryRollAdapter</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryEndCap</string>
         <string>Reactor/ArcanePower_Thermal_ReactorHousing</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryReactorAdapter</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryStraightBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryElbowBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryRiserBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryTeeBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryCrossBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryRollAdapterBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryEndCapBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_PrimaryReactorAdapterBare</string>
         <string>UpgradeModule/ArcanePower_Thermal_SpaceRadiator</string>
-        <string>UpgradeModule/ArcanePower_Thermal_RadiatorPanel</string>
-        <string>UpgradeModule/ArcanePower_Thermal_AtmosphericCooler</string>
         <string>Reactor/ArcanePower_Thermal_BraytonTrain</string>
-        <string>Reactor/ArcanePower_Thermal_BraytonTrainUpgraded</string>
-        <string>Reactor/ArcanePower_Thermal_BraytonTrainMirrored</string>
-        <string>Reactor/ArcanePower_Thermal_BraytonTrainMirroredUpgraded</string>
-        <string>UpgradeModule/ArcanePower_Thermal_AtmosphericCoolerUpgraded</string>
-        <string>UpgradeModule/ArcanePower_Thermal_SpaceRadiatorUpgraded</string>
-        <string>UpgradeModule/ArcanePower_Thermal_RadiatorPanelUpgraded</string>
       </ItemIds>
     </Category>
   </CategoryClasses>

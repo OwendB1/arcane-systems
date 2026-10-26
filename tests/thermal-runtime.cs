@@ -153,142 +153,78 @@ public static partial class ThermalRuntimeChecks
     private static void Stores()
     {
         foreach (double eta in new[] { .20, .40, .78 })
-        {
-            var store = new ThermalStore { EntityId = 1, HotMJ = 40 };
-            double admitted = 0, exported = 0, rejected = 0;
-            for (int tick = 0; tick < 216000; tick++)
+            foreach (double load in new[] { 0.0, .01, .1, .25, .5, 1.0 })
             {
-                double demand = tick >= 200000 ? 0 : tick % 12000 < 6000 ? 8 : 2;
-                // Exercise native float rounding against production limits.
-                double output = (float)Math.Min(demand, ThermalMath.ExportLimit(store, 80, eta, 10, 1.0 / 60));
-                Check(ThermalMath.Convert(store, output / 60, eta), "output must have paid heat");
-                exported += output / 60;
-                if (tick < 80000 || tick >= 80100) rejected += ThermalMath.Reject(store, .15, false);
-                admitted += ThermalMath.AdmitHeat(store, 40, 10.0 / 60, 1000000);
-                Check(store.Valid(1, 80), "finite bounded inventory");
-                if (tick == 100000)
-                {
-                    var serializer = new XmlSerializer(typeof(ThermalStore));
-                    var writer = new StringWriter(); serializer.Serialize(writer, store);
-                    store = (ThermalStore)serializer.Deserialize(new StringReader(writer.ToString()));
-                    Check(!store.Valid(2, 80), "pasted entity cannot inherit heat");
-                }
-                if (tick > 210000) Near(ThermalMath.AdmitHeat(store, 40, 1, 1000), 0, "full/no-demand inventory stops fuel use");
+                var state = new ThermalReactorState { Store = new ThermalStore { EntityId = 1, HotMJ = 100 }, LoopVersion = 2 };
+                var loop = state.Loops[0];
+                var grant = new ThermalOutputGrant(state, loop, 100, eta);
+                double output = (float)(grant.MaximumMW * load);
+                Check(grant.Settle(output), "native float output is paid");
+                Near(state.ProducedMW, output / eta, "reaction is linear in delivered power");
+                Near(loop.RequiredCoolingMW, output * (1 / eta - 1), "waste is linear in delivered power");
+                Near(100, state.Store.HotMJ + loop.ExcessMJ + output / 60, "every reserved MJ conserved");
+                Near(state.NetOutputMW, output, "actual output telemetry");
+                Check(!grant.Settle(output), "an interval cannot be charged twice");
             }
-            Near(40 + admitted, exported + rejected + store.HotMJ + store.WasteMJ, "one-hour energy conservation including cooling outage/reload");
+        foreach (double output in new[] { -1.0, double.NaN, double.PositiveInfinity, 1000 })
+        {
+            var state = new ThermalReactorState { Store = new ThermalStore { EntityId = 1, HotMJ = 1 } };
+            Check(!new ThermalOutputGrant(state, state.Loops[0], 1, .78).Settle(output), "invalid or unfunded output rejected");
+            Near(state.Store.HotMJ, 1, "rejection does not lose credit");
         }
-        var sender = new ThermalStore { EntityId = 1, HotMJ = 100 };
-        var receiver = new ThermalStore { EntityId = 2, WasteMJ = 9 };
-        Near(ThermalMath.Transfer(sender, receiver, 10, 100, false), 1, "receiver acceptance bounds transfer");
-        Near(sender.HotMJ + receiver.HotMJ + receiver.WasteMJ, 109, "transfer conservation");
-        Near(ThermalMath.Transfer(sender, sender, 200, 100, false), 0, "no self transfer");
-        Near(ThermalMath.Transfer(sender, receiver, double.NaN, 100, false), 0, "invalid receiver capacity rejected");
-        Check(!ThermalMath.Convert(receiver, 100, .4), "unfunded native output rejected");
-        var lastFuel = new ThermalStore { EntityId = 3 };
-        Near(ThermalMath.AdmitHeat(lastFuel, 100, 10, .0001), .0001, "last fuel quantum");
-        Near(ThermalMath.AdmitHeat(lastFuel, 100, 10, 0), 0, "exhausted fuel cannot create heat");
-        var corrupt = new ThermalStore { EntityId = 3, HotMJ = double.NaN };
-        Check(!corrupt.Valid(3, 100), "invalid saved heat rejected");
+        var legacy = new ThermalReactorState { Mode = ThermalMode.Brayton, LoopVersion = 1,
+            Store = new ThermalStore { EntityId = 1, HotMJ = 200, WasteMJ = 100 }, FuelHeatMJ = 12, Faulted = true };
+        legacy.MigrateHeat(); legacy.MigrateHeat();
+        Near(legacy.RetainedHeatMJ, 300, "migration retains all old heat exactly once");
+        Near(legacy.Store.HotMJ, 0, "old heat is not spendable fuel credit");
+        Near(legacy.FuelHeatMJ, 12, "migration preserves pending fuel bill");
+        Check(legacy.Faulted && legacy.LoopVersion == 2, "migration preserves isolation");
+        var serializer = new XmlSerializer(typeof(ThermalReactorState));
+        var writer = new StringWriter(); serializer.Serialize(writer, legacy);
+        var restored = (ThermalReactorState)serializer.Deserialize(new StringReader(writer.ToString()));
+        Check(restored.Valid(1) && !restored.Valid(2), "new saved state keeps identity validation");
+        Near(restored.RetainedHeatMJ, 300, "per-circuit heat survives reload");
+        restored.BeginFrame(); Near(restored.RetainedHeatMJ, 300, "telemetry reset never clears accumulated heat");
+        restored.Loops[0].ExcessMJ = double.NaN; Check(!restored.Valid(1), "invalid circuit heat rejected");
+        var fuel = new ThermalStore();
+        Near(ThermalMath.AdmitHeat(fuel, 100, 10, .0001), .0001, "last fuel quantum bounds reserve");
+        Near(ThermalMath.AdmitHeat(fuel, 100, 10, 0), 0, "empty fuel cannot create credit");
     }
 
     private static void CoolingFailure()
     {
-        // Run the paid-heat path at native tick rate. Cooling buffers may delay
-        // the hazard, but cannot erase waste or turn an undersized loop safe.
-        foreach (double rejectionMW in new[] { 60.0, 30.0, 0.0 })
-            foreach (int response in new[] { 0, 1, 2 })
+        foreach (double capacity in new[] { 15.0, 7.5, 0 })
+            foreach (bool recover in new[] { false, true })
             {
-                // Also prove that delayed restoration cannot undo a threshold
-                // already crossed during the core's thermal response.
-                if (response == 2 && rejectionMW != 0) continue;
-                bool recover = response != 0;
-                var source = new ThermalStore { EntityId = 1, HotMJ = 400 };
-                var cooler = new ThermalStore { EntityId = 2 };
-                var trains = new List<ThermalStore>();
-                for (int i = 0; i < 4; i++) trains.Add(new ThermalStore { EntityId = 3 + i });
-                double admitted = 0, exported = 0, rejected = 0;
-                float heat = 0;
-                bool critical = false, restored = false;
+                var state = new ThermalReactorState { LoopVersion = 2 };
+                float heat = 0; bool critical = false, restored = false;
+                double paid = 0, exported = 0, rejected = 0;
                 for (int tick = 0; tick < 24000; tick++)
                 {
-                    // Restore cooling when the core warning appears, before
-                    // crossing the irreversible threshold. Elapsed time alone
-                    // is not a safe recovery guarantee for every shortfall.
-                    restored |= recover && (heat >= 1 || (response == 1 && ThermalMath.WasteHeatLevel(source, 100) >= 1));
-                    double cooling = restored ? 120 : rejectionMW;
-                    foreach (var train in trains)
+                    state.BeginFrame();
+                    paid += ThermalMath.AdmitHeat(state.Store, 100.0 / 60, 100.0 / 60, 1000000);
+                    foreach (var loop in state.Loops)
                     {
-                        double delivered = (float)ThermalMath.ExportLimit(train, 800, .4, 10, 1.0 / 60) / 60;
-                        Check(ThermalMath.Convert(train, delivered, .4), "overload output remains paid");
-                        exported += delivered;
+                        var grant = new ThermalOutputGrant(state, loop, 25.0 / 60, .4);
+                        Check(grant.Settle(grant.MaximumMW), "load remains paid during cooling loss");
+                        exported += grant.MaximumMW / 60;
                     }
-                    rejected += ThermalMath.Reject(cooler, cooling / 60, false);
-                    foreach (var train in trains)
-                        ThermalMath.Transfer(train, source, 800, 100.0 / 60, true);
-                    // Increasing rejection also supplies the second unit's
-                    // transport capacity, as the actual connected bank does.
-                    if (cooling > 0)
-                        ThermalMath.Transfer(source, cooler, 800, (cooling > 60 ? 200 : 100.0) / 60, true);
-                    foreach (var train in trains)
-                        ThermalMath.Transfer(source, train, 800, 25.0 / 60, false);
-                    double fresh = ThermalMath.AdmitReactionHeat(source, 100, 100.0 / 60, 1e9);
-                    admitted += fresh;
-                    double target = Math.Max(fresh * 60 / 100, ThermalMath.WasteHeatLevel(source, 100));
-                    heat = (float)ThermalMath.ApproachCoreHeat(heat, target, false);
+                    restored |= recover && ThermalMath.WasteHeatLevel(state, 100) >= 1;
+                    for (int i = 0; i < 4; i++)
+                        rejected += ThermalMath.CoolCircuit(state.Loops[i], i == 0 ? (restored ? 30 : capacity) : 1000) / 60;
+                    heat = (float)ThermalMath.ApproachCoreHeat(heat, Math.Max(1, ThermalMath.WasteHeatLevel(state, 100)), false);
                     critical |= heat >= 1.25;
-                    Check(source.Valid(1, 800) && cooler.Valid(2, 800), "reactor/receiver remain bounded during cooling loss");
-                    if (tick == 2400)
-                    {
-                        var saved = new ThermalReactorState { Mode = ThermalMode.Brayton, Requested = ThermalMode.Brayton,
-                            Deployment = 1, Store = source, CoolingMW = cooling, RequiredCoolingMW = 60 };
-                        var serializer = new XmlSerializer(typeof(ThermalReactorState));
-                        var writer = new StringWriter(); serializer.Serialize(writer, saved);
-                        var loaded = (ThermalReactorState)serializer.Deserialize(new StringReader(writer.ToString()));
-                        Check(loaded.Valid(1), "cooling diagnostics and trapped heat survive reload");
-                        Near(loaded.Store.WasteMJ, source.WasteMJ, "reload cannot discard waste");
-                        Near(loaded.RequiredCoolingMW, 60, "cooling requirement survives reload");
-                        source = loaded.Store;
-                    }
+                    Near(state.Loops[1].ExcessMJ, 0, "healthy circuit cannot absorb another circuit's waste");
                 }
-                double retained = source.HotMJ + source.WasteMJ + cooler.HotMJ + cooler.WasteMJ;
-                foreach (var train in trains) { retained += train.HotMJ + train.WasteMJ; Check(train.Valid(train.EntityId, 800), "train stays bounded"); }
-                Near(400 + admitted, exported + rejected + retained, "cooling failure/recovery conserves every paid MJ");
-                if (rejectionMW >= 60 || response == 1)
-                {
-                    Check(!critical && heat <= 1.0001, "adequate/restored cooling avoids supercriticality: cooling="
-                        + rejectionMW + ", heat=" + heat + ", restored=" + restored);
-                    Near(source.WasteMJ, 0, "restored cooling drains returned waste");
-                }
-                else Check(critical, "persistent or belatedly restored cooling deficit must cross the existing 125% failure threshold: cooling="
-                    + rejectionMW + ", heat=" + heat + ", hot=" + source.HotMJ + ", waste=" + source.WasteMJ);
+                Near(paid, exported + rejected + state.Store.HotMJ + state.RetainedHeatMJ, "failure/recovery conserve energy");
+                Check(critical == (capacity < 15 && !recover), "persistent shortage reaches failure; early repair prevents it");
+                if (capacity >= 15 || recover) Near(state.RetainedHeatMJ, 0, "adequate cooling clears excess");
             }
-        var hot = new ThermalStore { EntityId = 1, WasteMJ = 800 };
-        Near(ThermalMath.AdmitReactionHeat(hot, 100, 100, 100), 0, "full reactor stops fresh fuel without clearing heat");
-        Check(ThermalMath.WasteHeatLevel(hot, 100) > 1.25, "full retained waste remains dangerous after fuel cutoff");
-        var idle = new ThermalStore { EntityId = 1, HotMJ = 400 };
-        Near(ThermalMath.AdmitReactionHeat(idle, 100, 100, 100), 0, "no-load hot reserve stops fuel use");
-        Near(ThermalMath.WasteHeatLevel(idle, 100), 0, "ordinary warm inventory does not manufacture a cooling failure");
-        Near(ThermalMath.AdmitReactionHeat(new ThermalStore(), 100, 100, 0), 0, "no unpaid reaction heat");
-        var bad = new ThermalReactorState { Store = new ThermalStore { EntityId = 1 }, CoolingMW = double.NaN };
-        Check(!bad.Valid(1), "invalid replicated cooling rejected");
-        bad.CoolingMW = 0; bad.RequiredCoolingMW = double.PositiveInfinity;
-        Check(!bad.Valid(1), "invalid cooling requirement rejected");
-        foreach (double ceiling in new[] { .4, .55, .66, .78 })
-            for (int count = 1; count <= 4; count++)
-            {
-                double eta = ceiling;
-                double circulation = 1;
-                for (int tick = 0; tick < 600; tick++)
-                    circulation = ThermalMath.CirculationPower(100 * eta * circulation, eta, 0, 100);
-                Near(circulation, 1, "every bank sustains circulation from internally paid auxiliaries at full demand");
-            }
-        Near(ThermalMath.CirculationPower(78, .78, 0, 100), 1, "four oversized trains use dispatched heat, not summed nameplate rating, for circulation");
-        Near(ThermalMath.CirculationPower(4, .16, 0, 100), .625, "partial load uses actual paid conversion heat");
-        foreach (double eta in new[] { 0, -1, 1, double.NaN, double.PositiveInfinity })
-        {
-            Near(ThermalMath.CirculationPower(40, eta, 0, 100), 0, "invalid efficiency cannot create internal power");
-            Near(ThermalMath.CirculationPower(0, eta, 2, 100), 1, "external cooldown power remains metered without conversion");
-        }
+        var stopped = new ThermalReactorState { LoopVersion = 2 };
+        stopped.Loops[0].ExcessMJ = 100;
+        stopped.BeginFrame(); ThermalMath.CoolCircuit(stopped.Loops[0], 60);
+        Near(stopped.Loops[0].ExcessMJ, 99, "shutdown cooling needs no electrical generation");
+        Near(stopped.ProducedMW, 0, "cooldown never produces new reaction heat");
     }
 
     private static void ModesAndStartup()
@@ -313,7 +249,12 @@ public static partial class ThermalRuntimeChecks
         guideState.Mode = ThermalMode.Brayton; guideState.Deployment = 1;
         Check(ThermalConstruction.ShowReactorGuide(guideState, guideCheck), "show incomplete Brayton connections");
         guideCheck.Verified = true;
+        Check(ThermalConstruction.ShowReactorGuide(guideState, guideCheck), "show runtime unavailability even when layout is verified");
+        guideState.Loops[0].Connected = true;
         Check(!ThermalConstruction.ShowReactorGuide(guideState, guideCheck), "hide verified Brayton connection guide");
+        guideState.Faulted = true;
+        Check(ThermalConstruction.ShowReactorGuide(guideState, guideCheck), "runtime isolation cannot be hidden behind a layout OK");
+        guideState.Faulted = false;
         guideCheck.Verified = false; guideState.Requested = ThermalMode.Standalone;
         Check(!ThermalConstruction.ShowReactorGuide(guideState, guideCheck), "hide reactor guide while leaving Brayton");
         var state = new ThermalReactorState { Store = new ThermalStore { EntityId = 1 }, Requested = ThermalMode.Brayton };
@@ -335,9 +276,6 @@ public static partial class ThermalRuntimeChecks
         for (int tick = 0; tick < 361; tick++) state.AdvanceManifolds(true, true, true, 1.0 / 60);
         Check(state.Settled && state.Mode == ThermalMode.Standalone, "fully stowed mode");
         Check(state.Valid(1) && !state.Valid(2), "saved mode identity");
-        Near(ThermalMath.CirculationPower(0, .4, 0, 100), 0, "unpowered fans and circulation stop");
-        Near(ThermalMath.CirculationPower(0, .4, 2, 100), 1, "paid external circulation");
-        Near(ThermalMath.CirculationPower(40, .4, 0, 100), 1, "running auxiliaries deducted internally once");
         for (int bay = 0; bay < 4; bay++)
         {
             var anchor = new Vector3((bay < 2 ? 1 : -1) * 4.12f, -2.33f, bay % 2 == 0 ? -2.5f : 2.5f);
@@ -596,26 +534,26 @@ public static partial class ThermalRuntimeChecks
     private static void Rotors()
     {
         var cold = new ThermalRotorState { EntityId = 1 };
-        for (int i = 0; i < 480; i++) ThermalRotors.Drive(cold, 0, 100, 650, 1, true, 1.0 / 60);
+        for (int i = 0; i < 480; i++) ThermalRotors.Drive(cold, 0, 650, true, 1.0 / 60);
         Near(cold.Rpm, 0, "cold turbine cannot spin from compressor power");
-        Check(cold.CompressorRpm > ThermalRotors.MaxCompressorRpm * .8, "paid cold start spools independent compressor");
+        Near(cold.CompressorRpm, 0, "no demand leaves both shafts stopped");
         var warm = new ThermalRotorState { EntityId = 1 };
         var hot = new ThermalRotorState { EntityId = 1 };
         var low = new ThermalRotorState { EntityId = 1 };
         for (int i = 0; i < 3600; i++)
         {
-            ThermalRotors.Drive(warm, 50, 100, 650, 1, true, 1.0 / 60);
-            ThermalRotors.Drive(hot, 50, 100, 2200, 1, true, 1.0 / 60);
-            ThermalRotors.Drive(low, 50, 100, 2200, .25, true, 1.0 / 60);
+            ThermalRotors.Drive(warm, 1, 650, true, 1.0 / 60);
+            ThermalRotors.Drive(hot, 1, 2200, true, 1.0 / 60);
+            ThermalRotors.Drive(low, .25, 2200, true, 1.0 / 60);
             Check(hot.Valid(1) && warm.Valid(1) && low.Valid(1), "bounded rotor states and wrapped phases");
         }
-        Check(hot.Rpm > warm.Rpm && hot.Rpm > low.Rpm && hot.Rpm > ThermalRotors.MaxRpm * .98,
-            "heat and circulation both increase shaft speed");
-        Near(low.TargetRpm, hot.TargetRpm * .5, "quarter circulation gives half target speed without a pressure gate");
+        Check(hot.Rpm == warm.Rpm && hot.Rpm > low.Rpm && hot.Rpm > ThermalRotors.MaxRpm * .98,
+            "load drives shaft speed independently of fuel temperature");
+        Near(low.TargetRpm, hot.TargetRpm * .25, "quarter load gives quarter target speed");
         double spinning = hot.Rpm;
-        ThermalRotors.Drive(hot, 50, 100, 2200, 1, false, 1.0 / 60);
+        ThermalRotors.Drive(hot, 1, 2200, false, 1.0 / 60);
         Check(hot.Rpm > 0 && hot.Rpm < spinning && hot.TargetRpm == 0, "fault or valve closure coasts, never snaps");
-        for (int i = 0; i < 7200; i++) ThermalRotors.Drive(hot, 50, 100, 2200, 0, false, 1.0 / 60);
+        for (int i = 0; i < 7200; i++) ThermalRotors.Drive(hot, 0, 2200, false, 1.0 / 60);
         Near(hot.Rpm, 0, "shutdown reaches rest");
         Check(!warm.Valid(2), "copied rotor identity rejected");
         var serializer = new XmlSerializer(typeof(ThermalStore));
@@ -626,7 +564,7 @@ public static partial class ThermalRuntimeChecks
         Check(restored.Valid(1, 100) && !restored.Valid(2, 100), "rotor storage preserves heat/copy validation");
         foreach (double invalid in new[] { double.NaN, double.PositiveInfinity, -1.0 })
         {
-            ThermalRotors.Drive(warm, invalid, 100, 650, 1, true, 1.0 / 60);
+            ThermalRotors.Drive(warm, invalid, 650, true, 1.0 / 60);
             Check(warm.Valid(1) && warm.TargetRpm == 0, "invalid drive input cannot accelerate");
         }
         double phase = warm.Phase;
@@ -1038,7 +976,7 @@ public static partial class ThermalRuntimeChecks
             state.Loops[i].Connected=false;
             Check(state.ConnectedLoops==3-i,"availability follows validated topology");
             Near(state.Store.HotMJ+state.Store.WasteMJ,150,"circuit loss never erases or fabricates heat");
-            Near(ThermalMath.WasteHeatLevel(state.Store,100),.25,"core heat normalization retains full reactor rating");
+            Near(ThermalMath.WasteHeatLevel(state,100),.25,"core heat normalization retains full reactor rating");
         }
         var xml=new XmlSerializer(typeof(ThermalReactorState));var writer=new StringWriter();xml.Serialize(writer,state);
         var restored=(ThermalReactorState)xml.Deserialize(new StringReader(writer.ToString().Replace("</ThermalLoopState>", "<Charge>0.5</Charge></ThermalLoopState>")));
@@ -1071,39 +1009,27 @@ public static partial class ThermalRuntimeChecks
 
     private static void LoopEnergy()
     {
-        foreach(double eta in new[]{.4,.78}) {
-            var core=new ThermalStore{EntityId=1,HotMJ=400};
-            var trains=new ThermalStore[4];
-            for(int i=0;i<4;i++)trains[i]=new ThermalStore{EntityId=10+i};
-            double admitted=0,exported=0,rejected=0,pumping=0;
-            // A single delivered interval can start circulation immediately.
-            foreach(var train in trains) {
-                double delivered=ThermalLoops.Allocation(100)*.02;
-                Near(ThermalMath.CirculationPower(0,eta,delivered,25),1,"cold circulation needs no fill timer");
-                train.WasteMJ+=delivered/60;pumping+=delivered/60;
-            }
-            for(int active=4;active>=0;active--) {
-                double before=admitted;
-                for(int tick=0;tick<1200;tick++) {
-                    for(int i=0;i<active;i++) {
-                        double allocation=ThermalLoops.Allocation(100);
-                        ThermalMath.Transfer(core,trains[i],200,allocation/60,false);
-                        double output=ThermalMath.ExportLimit(trains[i],200,eta,allocation*eta,1.0/60);
-                        Check(output<=allocation*eta,"surviving turbines never inherit failed circuit allocations");
-                        Check(ThermalMath.Convert(trains[i],output/60,eta),"each native grant consumes paid heat");
-                        exported+=output/60;
-                        ThermalMath.Transfer(trains[i],core,800,allocation/60,true);
+        foreach (double eta in new[] { .4, .78 })
+        {
+            var state = new ThermalReactorState { LoopVersion = 2 };
+            double paid = 0, exported = 0, rejected = 0;
+            for (int active = 4; active >= 0; active--)
+                foreach (double load in new[] { 0.0, .1, .4, 1.0, .2, 0.0 })
+                    for (int tick = 0; tick < 600; tick++)
+                    {
+                        state.BeginFrame();
+                        paid += ThermalMath.AdmitHeat(state.Store, 100.0 / 60, active * 25.0 / 60, 1000000);
+                        for (int i = 0; i < active; i++)
+                        {
+                            var grant = new ThermalOutputGrant(state, state.Loops[i], 25.0 / 60, eta);
+                            double output = (float)(grant.MaximumMW * load);
+                            Check(grant.Settle(output), "available circuits retain their fixed quarter allocation");
+                            exported += output / 60;
+                        }
+                        foreach (var loop in state.Loops) rejected += ThermalMath.CoolCircuit(loop, 60) / 60;
+                        Near(state.ProducedMW, state.NetOutputMW / eta, "demand steps preserve linear reaction");
+                        Near(paid, exported + rejected + state.Store.HotMJ + state.RetainedHeatMJ, "load/loss/no-load energy balance");
                     }
-                    rejected+=ThermalMath.Reject(core,(active>0 ? active*25*(1-eta) : 2)/60,false);
-                    if(active>0)admitted+=ThermalMath.AdmitReactionHeat(core,100,active*25.0/60,1000000);
-                    double retained=core.HotMJ+core.WasteMJ;
-                    foreach(var train in trains)retained+=train.HotMJ+train.WasteMJ;
-                    Near(400+admitted+pumping,exported+rejected+retained,"successive circuit losses conserve fuel, pump electricity, export, rejection and trapped MJ");
-                    Check(core.Valid(1,800),"core store remains bounded while circuit availability changes");
-                }
-                if(active==0)Near(admitted,before,"last-loop shutdown admits no new reaction heat");
-            }
-            Check(core.HotMJ+core.WasteMJ>0,"shutdown preserves residual heat instead of resetting the reactor");
         }
     }
 
@@ -1127,11 +1053,28 @@ public static partial class ThermalRuntimeChecks
         Near(ThermalRadiators.Step(.3, .3 + Math.PI, 1), .3, "two-sided equivalent avoids unnecessary half turn");
         double wrap = ThermalRadiators.Step(Math.PI * 2 - .01, .01, 1);
         Near(wrap, .01, "tracking crosses zero on the short arc");
-        Near(ThermalRadiators.Cooling(60, 1, -270.15, 0), 60, "edge-on keeps cooling rating");
-        Near(ThermalRadiators.Cooling(60, 1, -270.15, .5), 45, "half solar exposure retains 75% cooling");
-        Near(ThermalRadiators.Cooling(60, 1, -270.15, 1), 30, "full sun on one face retains 50% cooling");
-        Near(ThermalRadiators.Cooling(60, 0, -270.15, 0), 0, "occluded tracked radiator cannot cool");
-        Near(ThermalRadiators.Cooling(60, .5, -270.15, 0), 30, "solar shade does not undo obstructed radiating area");
+        Near(ThermalRadiators.Cooling(60, 1, 0, 0), 60, "edge-on keeps cooling rating");
+        Near(ThermalRadiators.Cooling(60, 1, 0, .5), 45, "half solar exposure retains 75% cooling");
+        Near(ThermalRadiators.Cooling(60, 1, 0, 1), 30, "full sun on one face retains 50% cooling");
+        Near(ThermalRadiators.Cooling(60, 0, 0, 0), 0, "occluded tracked radiator cannot cool");
+        Near(ThermalRadiators.Cooling(60, .5, 0, 0), 30, "solar shade does not undo obstructed radiating area");
+        double atmosphericFactor = ThermalMath.RadiativeCooling(1, 1, 25);
+        Near(ThermalRadiators.AmbientEfficiency(0), 1, "vacuum has no atmospheric radiator penalty");
+        Near(ThermalRadiators.AmbientEfficiency(1), atmosphericFactor, "full atmosphere retains reference sink");
+        Check(ThermalRadiators.AmbientEfficiency(.0011) > .999,
+            "trace atmosphere no longer switches to the full atmospheric penalty");
+        double previousCooling = double.MaxValue;
+        for (int i = 0; i <= 1000; i++)
+        {
+            double density = i / 1000.0;
+            double cooling = ThermalRadiators.Cooling(100000, 1, density, 0);
+            Check(cooling <= previousCooling && cooling >= 100000 * atmosphericFactor - .000001,
+                "radiator atmosphere transition is continuous and bounded");
+            if (i > 0) Check(previousCooling - cooling < 100, "no atmosphere threshold cliff");
+            previousCooling = cooling;
+        }
+        Near(ThermalRadiators.Cooling(100000, 1, double.NaN, 0), 0, "invalid density cannot grant cooling");
+        Near(ThermalRadiators.Cooling(100000, 1, double.PositiveInfinity, 0), 0, "infinite density fails closed");
         foreach (double cosine in new[] { -1.0, 1.0 })
         {
             Near(ThermalRadiators.SolarExposure(cosine, 1, 1, false), 1, "either face receives full solar load");
@@ -1141,12 +1084,12 @@ public static partial class ThermalRuntimeChecks
             Near(ThermalRadiators.SolarExposure(cosine, 1, 1, true), 0, "planetary eclipse removes solar load");
             Near(ThermalRadiators.SolarExposure(cosine, 1, 0, false), 0, "zero weather sunlight removes solar load");
         }
-        Near(ThermalRadiators.Cooling(60,1,-270.15,ThermalRadiators.SolarExposure(.5,.5,.5,false)),56.25,
+        Near(ThermalRadiators.Cooling(60,1,0,ThermalRadiators.SolarExposure(.5,.5,.5,false)),56.25,
             "oblique incidence, partial shade and weather multiply like solar panels");
         Near(ThermalRadiators.SolarExposure(0,1,1,false),0,"edge-on receives no solar load");
         Near(ThermalRadiators.SolarEfficiency(ThermalRadiators.SolarExposure(1,1,2,false)),.5,"enhanced weather cannot exceed 50% solar penalty");
         Near(ThermalRadiators.SolarExposure(double.NaN,1,1,false),1,"invalid sampled sun is conservatively fully exposed");
-        Near(ThermalRadiators.Cooling(60,1,-270.15,double.NaN),0,"invalid solar state cannot grant cooling");
+        Near(ThermalRadiators.Cooling(60,1,0,double.NaN),0,"invalid solar state cannot grant cooling");
         foreach (var rotation in Orientations())
         {
             Vector3D sun=Vector3D.TransformNormal(Vector3D.UnitX,rotation);
@@ -1178,11 +1121,21 @@ public static partial class ThermalRuntimeChecks
         foreach(string suffix in new[]{"AtmosphericCooler","SpaceRadiator","RadiatorPanel"}) {
             var standard = ThermalModels.All["ArcanePower_Thermal_"+suffix];
             var upgraded = ThermalModels.All["ArcanePower_Thermal_"+suffix+"Upgraded"];
-            Near(standard.CoolingMW,10000,"standard cooler/panel rejects 10 GW");
-            Near(upgraded.CoolingMW,100000,"upgraded cooler/panel rejects 100 GW");
+            bool active = suffix == "AtmosphericCooler";
+            Near(standard.CoolingMW,active ? 25000 : 10000,"standard active cooler 25 GW; radiator panel 10 GW");
+            Near(upgraded.CoolingMW,active ? 250000 : 100000,"upgraded active cooler 250 GW; radiator panel 100 GW");
             Near(standard.RatingMW,25000,"standard saved thermal capacity preserved");
             Near(upgraded.RatingMW,250000,"upgraded cooler throughput scales with cooling");
             Check(standard.Cells==upgraded.Cells && standard.Ports.Length==upgraded.Ports.Length,"upgrades retain socket and footprint contract");
+            if (active)
+                foreach (var cooler in new[] { standard, upgraded })
+                {
+                    Near(ThermalMath.AirCooling(cooler.CoolingMW,0,1),0,"actual cooler has zero vacuum capacity");
+                    Near(ThermalMath.AirCooling(cooler.CoolingMW,.5,1),cooler.CoolingMW*.5,"actual cooler scales at half atmosphere");
+                    Near(ThermalMath.AirCooling(cooler.CoolingMW,1,1),cooler.CoolingMW,"actual cooler reaches rating at one atmosphere");
+                    Near(ThermalMath.AirCooling(cooler.CoolingMW,2,1),cooler.CoolingMW,"dense atmosphere cannot exceed cooler rating");
+                    Near(ThermalMath.AirCooling(cooler.CoolingMW,1,0),0,"blocked upgraded fans cannot reject heat");
+                }
         }
         var model = ThermalModels.All["ArcanePower_Thermal_SpaceRadiator"];
         Check(model.Cells == new Vector3I(3, 3, 3), "reserved radiator sweep cells");
@@ -1236,19 +1189,92 @@ public static partial class ThermalRuntimeChecks
                 }
             Check(!ThermalRadiators.FitsExtension(root, root, -1), "no extension below the base");
         }
-        Near(3 * ThermalRadiators.Cooling(model.CoolingMW, 1, -270.15, 0), 30000, "three standard panels reject 30 GW");
+        Near(3 * ThermalRadiators.Cooling(model.CoolingMW, 1, 0, 0), 30000, "three standard panels reject 30 GW");
         var upgrade = ThermalModels.All["ArcanePower_Thermal_RadiatorPanelUpgraded"];
-        Near(3 * ThermalRadiators.Cooling(upgrade.CoolingMW,1,-270.15,0),300000,"three upgraded panels reject 300 GW");
-        Near(ThermalRadiators.Cooling(model.CoolingMW,1,-270.15,0)+2*ThermalRadiators.Cooling(upgrade.CoolingMW,1,-270.15,0),210000,"mixed tier panels add individual cooling ratings");
+        Near(3 * ThermalRadiators.Cooling(upgrade.CoolingMW,1,0,0),300000,"three upgraded panels reject 300 GW");
+        Near(6 * ThermalRadiators.Cooling(upgrade.CoolingMW,1,0,0),600000,"two complete upgraded stacks reject 600 GW in vacuum");
+        Near(ThermalRadiators.Cooling(model.CoolingMW,1,0,0)+2*ThermalRadiators.Cooling(upgrade.CoolingMW,1,0,0),210000,"mixed tier panels add individual cooling ratings");
         state.Angle = 0; state.Panels = 4;
         Check(!state.Valid(1), "reject excessive attached count");
         state.Panels = 1; state.ParentId = -1;
         Check(!state.Valid(1), "reject invalid parent identity");
     }
 
+    private static void MeltdownCountdown()
+    {
+        Type hazards = typeof(CoreHazard).Assembly.GetType("ArcanePower.CoreHazards");
+        var secondsMethod = hazards.GetMethod("Seconds", BindingFlags.Static | BindingFlags.NonPublic);
+        var advanceMethod = hazards.GetMethod("AdvanceFuse", BindingFlags.Static | BindingFlags.NonPublic);
+        Func<CoreHazard, float> seconds = core => (float)secondsMethod.Invoke(null, new object[] { core });
+        Action<CoreHazard> advance = core => advanceMethod.Invoke(null, new object[] { core });
+        var serializer = new XmlSerializer(typeof(CoreHazard));
+        Func<CoreHazard, CoreHazard> reload = core => {
+            using (var writer = new StringWriter())
+            {
+                serializer.Serialize(writer, core);
+                return (CoreHazard)serializer.Deserialize(new StringReader(writer.ToString()));
+            }
+        };
+        foreach (float heat in new[] { 1.25f, 1.5f, 2f, 3f, 4f })
+        {
+            var core = new CoreHazard { SourceId = 1, Tier = 3, Critical = true, Heat = heat, PeakHeat = heat, FuseVersion = 1 };
+            Near(seconds(core), 60, "new meltdown allows sixty seconds at every heat level");
+            for (int frame = 0; frame < 3599; frame++)
+            {
+                float before = seconds(core);
+                advance(core);
+                Check(seconds(core) > 0 && seconds(core) < before, "countdown advances monotonically without premature detonation");
+                if (frame == 449)
+                {
+                    Check(Math.Abs(seconds(core) - 52.5f) < .01, "normal 7.5-second ejection leaves a useful response window");
+                    core.CarrierId = 123; core.Heat = 0;
+                    Near(seconds(reload(core)), seconds(core), "ejection and cooling do not reset the countdown");
+                }
+                if (frame == 1799)
+                {
+                    float saved = seconds(core); core = reload(core);
+                    Near(seconds(core), saved, "reload preserves the exact remaining countdown");
+                    core.CarrierId = 0; core.Heat = core.PeakHeat = 4;
+                }
+            }
+            Check(seconds(core) <= .04, "sixty-second timer reaches its last simulation frame");
+            advance(core); advance(core);
+            Near(seconds(core), 0, "expired countdown is clamped to zero");
+            advance(core); Near(seconds(core), 0, "expired cores cannot gain a new countdown");
+        }
+        foreach (float heat in new[] { 1.25f, 1.5f, 2f, 3f, 4f })
+        {
+            var legacy = (CoreHazard)serializer.Deserialize(new StringReader(
+                "<CoreHazard><Critical>true</Critical><Fuse>45</Fuse><PeakHeat>" + heat.ToString(System.Globalization.CultureInfo.InvariantCulture) + "</PeakHeat></CoreHazard>"));
+            double remaining = 45 / (1 + 4 * Math.Max(0, heat - 1.25));
+            Near(seconds(legacy), remaining, "legacy fuse is interpreted as its saved remaining time");
+            advance(legacy);
+            Near(seconds(legacy), remaining - 1.0 / 60, "legacy migration retains remaining seconds without granting fresh time");
+            Check(legacy.FuseVersion == 1, "legacy fuse migrates once");
+            legacy = reload(legacy); legacy.PeakHeat = 4;
+            advance(legacy);
+            Near(seconds(legacy), remaining - 2.0 / 60, "migrated timer never reapplies heat acceleration after reload");
+        }
+        var wire = ProtoBuf.Meta.RuntimeTypeModel.Create();
+        foreach (float remaining in new[] { 0f, 17f, 60f })
+            using (var buffer = new MemoryStream())
+            {
+                var core = new CoreHazard { Critical = true, FuseVersion = 1, Fuse = remaining, PeakHeat = 4 };
+                wire.Serialize(buffer, core); buffer.Position = 0;
+                var received = (CoreHazard)wire.Deserialize(buffer, null, typeof(CoreHazard));
+                Near(seconds(received), remaining, "wire roundtrip preserves expired, partial and fresh timers despite the constructor default");
+                Check(received.FuseVersion == 1 && received.Critical, "wire retains irreversible countdown semantics");
+            }
+        var motion = new MotionState { Critical = true, CriticalSeconds = 60 };
+        var valid = typeof(CoreHazard).Assembly.GetType("ArcanePower.Reactor").GetMethod("Valid", BindingFlags.Static | BindingFlags.NonPublic);
+        Check((bool)valid.Invoke(null, new object[] { motion }), "sixty-second countdown survives motion packet/save validation");
+        motion.CriticalSeconds = 60.1f;
+        Check(!(bool)valid.Invoke(null, new object[] { motion }), "countdown validation remains bounded");
+    }
+
     public static void Main(string[] args)
     {
-        Isolation(); Registrations(); Budgets(); Stores(); CoolingFailure(); ModesAndStartup(); Topology(); UniversalPipes(); ReactorAdapters(); BarePipes(); Rotors(); Radiators(); LoopEnergy(); Construction(); Flow(args.Length > 0 ? args[0] : null);
-        Console.WriteLine("Thermal runtime: " + checks + " checks passed (registrations/channels, budget, conservation, reload, modes, 47 manifold poses, heat/circulation rotors, construction/orientation guide and authored topology)");
+        Isolation(); Registrations(); Budgets(); Stores(); CoolingFailure(); ModesAndStartup(); Topology(); UniversalPipes(); ReactorAdapters(); BarePipes(); Rotors(); Radiators(); LoopEnergy(); Construction(); MeltdownCountdown(); Flow(args.Length > 0 ? args[0] : null);
+        Console.WriteLine("Thermal runtime: " + checks + " checks passed (registrations/channels, budget, conservation, reload, modes, 47 manifold poses, linear load rotors, construction/orientation guide and authored topology)");
     }
 }

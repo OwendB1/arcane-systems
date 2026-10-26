@@ -50,6 +50,8 @@ def generate():
         cooler = kind in ('AirCooler', 'Radiator', 'RadiatorPanel')
         rating = (250000 if grade == 3 else 25000) if cooler else (2500000 if grade == 3 or kind == 'Reactor' else 25000)
         cooling = (100000 if grade == 3 else 10000) if cooler else 0
+        if kind == 'AirCooler':
+            cooling = 250000 if grade == 3 else 25000
         subtype = model['subtype']
         assert model['cells_se'] == [model['cells_blender'][i] for i in (0, 2, 1)]
         rows += [f'            models.Add("{subtype}", new ThermalModel {{',

@@ -24,6 +24,172 @@ INSET = .36
 SLIDE = .155
 
 
+def cut(cutter, targets):
+    bpy.context.view_layer.update()
+    for obj in targets:
+        if obj.data.users > 1:
+            obj.data = obj.data.copy()
+        mod = obj.modifiers.new('Internal curved manifold pocket', 'BOOLEAN')
+        mod.operation, mod.solver, mod.object = 'DIFFERENCE', 'EXACT', cutter
+        bpy.context.view_layer.objects.active = obj
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+        bm = bmesh.new()
+        bm.from_mesh(obj.data)
+        bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=.00001)
+        bmesh.ops.dissolve_degenerate(bm, edges=list(bm.edges), dist=.000005)
+        # The original drum has a coincident radial cap at its mesh seam.
+        # Welding after booleans exposes that internal face; removing it
+        # restores two faces per edge without changing the solid's volume.
+        internal = [f for f in bm.faces if all(len(e.link_faces) > 2 for e in f.edges)]
+        if internal:
+            bmesh.ops.delete(bm, geom=internal, context='FACES_ONLY')
+        bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
+        bm.to_mesh(obj.data)
+        bm.free()
+        layer = obj.data.uv_layers.active
+        obj.data.calc_loop_triangles()
+        # Boolean pocket walls can inherit a collapsed edge of the old
+        # UVs. Repair those faces only, preserving accepted exterior UVs.
+        collapsed = {t.polygon_index for t in obj.data.loop_triangles if t.area > 1e-8
+                     and abs((layer.data[t.loops[1]].uv-layer.data[t.loops[0]].uv).cross(
+                         layer.data[t.loops[2]].uv-layer.data[t.loops[0]].uv)) < 1e-11}
+        for face in obj.data.polygons:
+            if not obj.get('reactor_source_name') or face.index in collapsed:
+                axes = [i for i in range(3) if i != max(range(3), key=lambda j: abs(face.normal[j]))]
+                for li in face.loop_indices:
+                    point = obj.data.vertices[obj.data.loops[li].vertex_index].co
+                    layer.data[li].uv = (point[axes[0]]*.8+.17, point[axes[1]]*.8+.41)
+        obj['thermal_pocket_cut'] = True
+    bpy.data.objects.remove(cutter, do_unlink=True)
+
+
+def relieve_cover_pockets(p):
+    """Flare the concealed opening so wider doors clear their radial inset."""
+    if p.col.get('cover_pocket_fit_revision') == 1: return
+    drum = [o for o in p.col.objects if o.type == 'MESH'
+            and o.get('reactor_source_name', '').startswith('Lower machinery drum')]
+    for row in json.loads(p.col['manifold_motion']):
+        angle = row['panel_angle']
+        outline = [(r*math.cos(angle-a),r*math.sin(angle-a))
+                   for r,a in ((6.30,.117),(6.13,.117),(6.00,.121),(5.45,.121))]
+        outline += [(5.45*math.cos(angle-.121+.242*i/24),
+                     5.45*math.sin(angle-.121+.242*i/24)) for i in range(1,25)]
+        outline += [(r*math.cos(angle+a),r*math.sin(angle+a))
+                    for r,a in ((6.00,.121),(6.13,.117),(6.30,.117))]
+        outline += [(6.30*math.cos(angle+.117-.234*i/24),
+                     6.30*math.sin(angle+.117-.234*i/24)) for i in range(1,24)]
+        count = len(outline)
+        vertices = [(x,y,z) for z in (-3.075,-1.585) for x,y in outline]
+        faces = [tuple(reversed(range(count))),tuple(range(count,2*count))]
+        faces += [(j,(j+1)%count,(j+1)%count+count,j+count) for j in range(count)]
+        cut(p.mesh('temporary concealed door relief',vertices,faces),drum)
+    p.col['cover_pocket_fit_revision'] = 1
+
+
+def seat_cover_decals(col):
+    """Keep the existing signs above their refitted armor faces."""
+    for obj in col.objects:
+        support = bpy.data.objects.get(obj.get('thermal_decal_support', ''))
+        if not support or not support.get('thermal_cover'): continue
+        support.data.calc_loop_triangles()
+        tree = BVHTree.FromPolygons([support.matrix_world @ v.co for v in support.data.vertices],
+            [tuple(t.vertices) for t in support.data.loop_triangles], all_triangles=True)
+        if obj.data.users > 1: obj.data = obj.data.copy()
+        inverse = obj.matrix_world.inverted()
+        for vertex in obj.data.vertices:
+            point,normal,_,_ = tree.find_nearest(obj.matrix_world @ vertex.co)
+            vertex.co = inverse @ (point+normal*.004)
+        obj.data.update()
+
+
+def fit_closed_covers():
+    """Fit the eight leaves to their cutouts and back the outer seams."""
+    model = runpy.run_path(str(ROOT/'assets/build_thermal_models.py'))
+    p = model['Parts']('Reactor housing', existing=True)
+    if p.col.get('cover_edge_fit_revision') == 1:
+        relieve_cover_pockets(p)
+        bpy.context.view_layer.update()
+        seat_cover_decals(p.col)
+        return {'already_fitted': True}
+    previous = p.scene['thermal_manifolds_deployment']
+    pose(0)
+    fitted = 0
+    try:
+        for row in json.loads(p.col['manifold_motion']):
+            angle = row['panel_angle']
+            covers = [o for o in p.col.objects if o.get('thermal_cover')
+                      and o['thermal_motion_group'] in row['cover_slides']]
+            for cover in covers:
+                inverse = cover.matrix_world.inverted()
+                points = [cover.matrix_world @ v.co for v in cover.data.vertices]
+                offsets = [(math.atan2(v.y, v.x)-angle+math.pi) % math.tau-math.pi for v in points]
+                side = 1 if sum(offsets) > 0 else -1
+                inner, outer = min(map(abs, offsets)), max(map(abs, offsets))
+                cover.data = cover.data.copy()
+                for vertex, point, offset in zip(cover.data.vertices, points, offsets):
+                    a = angle+side*(inner+(abs(offset)-inner)*(.116-inner)/(outer-inner))
+                    radius = math.hypot(point.x, point.y)
+                    point.x, point.y = radius*math.cos(a), radius*math.sin(a)
+                    vertex.co = inverse @ point
+                cover.data.update()
+                # The stepped return meets the rear of the door, then extends
+                # beneath the fixed drum skin inside the existing slide pocket.
+                profile = ((.110,5.98),(.123,5.98),(.123,6.00),
+                           (.115,6.00),(.115,6.035),(.110,6.035))
+                vertices = [(radius*math.cos(angle+side*a), radius*math.sin(angle+side*a), z)
+                            for z in (-3.06,-1.60) for a,radius in profile]
+                faces = [tuple(reversed(range(6))), tuple(range(6,12))]
+                faces += [(j,(j+1)%6,(j+1)%6+6,j+6) for j in range(6)]
+                lip = p.mesh(row['id']+' outer door seam backing '+str(side), vertices, faces, 'PaintedMetal_VeryDark')
+                parent = cover.parent
+                lip.data.transform(parent.matrix_world.inverted())
+                lip.parent = parent; lip.matrix_parent_inverse = Matrix.Identity(4); lip.matrix_basis = Matrix.Identity(4)
+                lip['thermal_motion_group'] = cover['thermal_motion_group']
+                lip['thermal_cover_edge'] = row['id']
+                fitted += 1
+        assert fitted == 8, 'Expected eight manifold doors'
+        relieve_cover_pockets(p)
+        bpy.context.view_layer.update()
+        seat_cover_decals(p.col)
+        p.col['cover_edge_fit_revision'] = 1
+    finally:
+        pose(previous)
+    return {'fitted_doors': fitted, 'outer_seam_m': .006, 'backed_seams': fitted}
+
+
+def fit_ceiling_hatch(col):
+    """Align the inherited inner door and its seat with the chamber ceiling."""
+    contract = json.loads((ROOT/'assets/vent.json').read_text())['ceiling_hatch']
+    height = contract['park_z']
+    bpy.context.view_layer.update()
+    dummies = [o for o in col.objects if o.type == 'EMPTY'
+               and o.get('reactor_source_name', o.name).startswith('subpart_CeilingHatch')]
+    assert len(dummies) == 4
+    for obj in dummies:
+        matrix = obj.matrix_world.copy(); matrix.translation.z = height; obj.matrix_world = matrix
+    for label,bottom in (('inner seat',height-.004),('inner seat light',height-.008)):
+        obj = next(o for o in col.objects if o.get('reactor_source_name', o.name)
+                   == 'AP vent / connected duct / '+label)
+        obj.data = obj.data.copy(); inverse = obj.matrix_world.inverted()
+        old = min((obj.matrix_world @ v.co).z for v in obj.data.vertices)
+        for vertex in obj.data.vertices:
+            point = obj.matrix_world @ vertex.co
+            if label.endswith('light'): point.z += bottom-old
+            elif point.z < old+.00001: point.z = bottom
+            vertex.co = inverse @ point
+        obj.data.update()
+    if not col.get('ceiling_backing_relief'):
+        model = runpy.run_path(str(ROOT/'assets/build_thermal_models.py'))
+        p = model['Parts']('Reactor housing', existing=True)
+        backing = next(o for o in col.objects if o.get('reactor_source_name') == 'AP vent / bell backing')
+        cutter = p.tube('temporary ceiling door backing relief', [(0,0,2.675),(0,0,2.865)],
+                        4.05, 'Metal_Dull', 2.21, 128)
+        cut(cutter, [backing])
+        col['ceiling_backing_relief'] = True
+    return {'closed_underside_m':height-.004,'lift_m':contract['lift_m'],
+            'open_height_m':height+contract['lift_m']}
+
+
 def rounded_manifold(p, ident, side, y):
     """Twin isolated bores in a curved casting, with a moving rear connector.
 
@@ -197,43 +363,6 @@ def build(p):
                 faces.append((4*i+j, 4*(i+1)+j, 4*(i+1)+(j+1)%4, 4*i+(j+1)%4))
         return p.mesh(label, verts, faces, mat)
 
-    def cut(cutter, targets):
-        bpy.context.view_layer.update()
-        for obj in targets:
-            if obj.data.users > 1:
-                obj.data = obj.data.copy()
-            mod = obj.modifiers.new('Internal curved manifold pocket', 'BOOLEAN')
-            mod.operation, mod.solver, mod.object = 'DIFFERENCE', 'EXACT', cutter
-            bpy.context.view_layer.objects.active = obj
-            bpy.ops.object.modifier_apply(modifier=mod.name)
-            bm = bmesh.new()
-            bm.from_mesh(obj.data)
-            bmesh.ops.remove_doubles(bm, verts=list(bm.verts), dist=.00001)
-            bmesh.ops.dissolve_degenerate(bm, edges=list(bm.edges), dist=.000005)
-            # The original drum has a coincident radial cap at its mesh seam.
-            # Welding after booleans exposes that internal face; removing it
-            # restores two faces per edge without changing the solid's volume.
-            internal = [f for f in bm.faces if all(len(e.link_faces) > 2 for e in f.edges)]
-            if internal:
-                bmesh.ops.delete(bm, geom=internal, context='FACES_ONLY')
-            bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
-            bm.to_mesh(obj.data)
-            bm.free()
-            layer = obj.data.uv_layers.active
-            obj.data.calc_loop_triangles()
-            # Boolean pocket walls can inherit a collapsed edge of the old
-            # UVs. Repair those faces only, preserving accepted exterior UVs.
-            collapsed = {t.polygon_index for t in obj.data.loop_triangles if t.area > 1e-8
-                         and abs((layer.data[t.loops[1]].uv-layer.data[t.loops[0]].uv).cross(
-                             layer.data[t.loops[2]].uv-layer.data[t.loops[0]].uv)) < 1e-11}
-            for face in obj.data.polygons:
-                if not obj.get('reactor_source_name') or face.index in collapsed:
-                    axes = [i for i in range(3) if i != max(range(3), key=lambda j: abs(face.normal[j]))]
-                    for li in face.loop_indices:
-                        point = obj.data.vertices[obj.data.loops[li].vertex_index].co
-                        layer.data[li].uv = (point[axes[0]]*.8+.17, point[axes[1]]*.8+.41)
-            obj['thermal_pocket_cut'] = True
-        bpy.data.objects.remove(cutter, do_unlink=True)
 
     def driver(obj, channel, index, expression):
         d = obj.driver_add(channel, index).driver
@@ -438,6 +567,9 @@ def build(p):
         if not obj.parent and obj.type != 'EMPTY':
             obj.parent = root
     bpy.context.view_layer.update()
+    runpy.run_path(str(ROOT/'assets/refine_reactor_exterior.py'))['fit_roof_surfaces'](p.col)
+    fit_closed_covers()
+    fit_ceiling_hatch(p.col)
     return {'manifolds': len(motion), 'original_curved_armor_halves': 8, 'pipe_stroke_m': STROKE,
             'sideways_slide_rad': SLIDE, 'pocket_inset_m': INSET, 'retired_old_details': len(removed)}
 

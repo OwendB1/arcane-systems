@@ -124,14 +124,14 @@ namespace ArcanePower
             FlowView view;
             if (!flows.TryGetValue(source.Id, out view)) return;
             if (view.State.Mode == ThermalFlowMode.Fault) return;
-            view.State.Rate = source.ThermalInternalCirculation;
-            view.State.Heat = ThermalMath.Clamp(source.Motion.Thermal.Store.HotMJ / (source.ThermalHeatMW * .5), 0, 1)
+            view.State.Rate = Math.Max(source.ThermalVisualLoad, source.Motion.Thermal.RejectedMW > .001 ? .1 : 0);
+            view.State.Heat = Math.Max(source.ThermalVisualLoad, ThermalMath.WasteHeatLevel(source.Motion.Thermal, source.ThermalHeatMW) / 4)
                 * ThermalMath.Span(source.ThermalHotC, 45, 2200);
             view.State.Internal = true;
             view.State.Mode = view.State.Rate > 0 ? ThermalFlowMode.Pumping : ThermalFlowMode.Ready;
         }
         private void CapturePlantFlow(Reactor source, ThermalNetwork network, List<ThermalEndpoint> endpoints,
-            List<ThermalBlock> bank, ThermalPlan plan, double circulation)
+            List<ThermalBlock> bank, ThermalPlan plan, double load)
         {
             if (!captureFlow) return;
             var trains = new HashSet<long>();
@@ -142,14 +142,13 @@ namespace ArcanePower
             // H flows from the reactor to active machines; C follows it back.
             trains.UnionWith(coolers);
             var oriented = network.FlowDirections(new HashSet<long> { source.Id }, trains);
-            double heat = ThermalMath.Clamp((source.Motion.Thermal.Store.HotMJ + source.Motion.Thermal.ProducedMW / 60)
-                / (source.ThermalHeatMW * .5), 0, 1) * ThermalMath.Span(source.ThermalHotC, 45, 2200);
+            double heat = ThermalMath.Clamp(load, 0, 1) * ThermalMath.Span(source.ThermalHotC, 45, 2200);
             foreach (var endpoint in endpoints)
             {
                 byte[] ports; FlowView view;
                 if (!flows.TryGetValue(endpoint.Id, out view)) continue;
                 oriented.TryGetValue(endpoint.Id, out ports);
-                view.State.ObserveCircuit(ports, circulation, heat, endpoint.Model.Kind != ThermalKind.Pipe);
+                view.State.ObserveCircuit(ports, load, heat, endpoint.Model.Kind != ThermalKind.Pipe);
                 ThermalBlock radiator;
                 if (Blocks.TryGetValue(endpoint.Id, out radiator) && radiator.Spec.Kind == ThermalKind.Radiator)
                     foreach (var panel in radiator.RadiatorPanels)
@@ -188,6 +187,13 @@ namespace ArcanePower
                 Color status = pipeFault ? Color.Red : mode == ThermalFlowMode.Fault ? new Color(255, 65, 40)
                     : mode == ThermalFlowMode.Pumping ? new Color(45, 230, 140)
                     : mode == ThermalFlowMode.Ready ? new Color(255, 185, 55) : new Color(35, 50, 60);
+                var source = spec != null && spec.Kind == ThermalKind.Reactor ? VentSession.Find(id) : null;
+                if (current && source != null)
+                {
+                    if (source.Motion.Critical || source.Motion.Vent != VentPhase.Idle) status = Color.Red;
+                    else if (source.Motion.ThermalWarning) status = Color.Yellow;
+                    else if (mode == ThermalFlowMode.Ready) status = new Color(35, 175, 220);
+                }
                 float statusIntensity = pipeFault ? .325f : .65f;
                 entity.SetEmissiveParts("ThermalStatus", status, current ? statusIntensity : 0);
                 entity.SetEmissivePartsForSubparts("ThermalStatus", status, current ? statusIntensity : 0);

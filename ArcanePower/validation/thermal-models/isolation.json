@@ -1,12 +1,14 @@
 {
   "status": "passed",
   "checks": 48,
-  "maximum_error_m": 0.00011920928955078125,
-  "contract_sha256": "ffb24cd91cc704097c22ebc29165f3ba4adeb09c99eda1e86422196accd9b138",
+  "maximum_error_m": 5.5789947509765625e-05,
+  "clearance_checks": 160,
+  "minimum_wall_clearance_m": 0.0014224893869458632,
+  "contract_sha256": "4b96b6cf938ec04551734bec3624668132083cb826bd82956571fcb2d6a3219d",
   "runtime_pose_sha256": "b37f6eb64784d51ad1a5f15a88016d88fb22ba895cbf71fbdf4dd88760093ac8",
   "native_mesh_sha256": {
-    "Models/Cubes/large/Thermal/Isolation/ArcaneIsolationSeat.mwm": "e0c86c1e655bd1523e2ecf564d0650b60b5d6488a9499ad9ae384c07b7ccba0b",
-    "Models/Cubes/large/Thermal/Isolation/ArcaneIsolationGate.mwm": "3bcd72efb6210a825844f2aea37710de5b6fe06dc9400afe9f4764964e1baa04"
+    "Models/Cubes/large/Thermal/Isolation/ArcaneIsolationSeat.mwm": "8aee328047676568fa5d2428a6ab24b644f79e45bf20840d2d5e551f71a5b89f",
+    "Models/Cubes/large/Thermal/Isolation/ArcaneIsolationGate.mwm": "386656fa3baec74b3f50ae006e0efa34a3da0724123ae77fcaa1f833dcf7e6a3"
   },
   "in_game_validation": "not_run"
 }

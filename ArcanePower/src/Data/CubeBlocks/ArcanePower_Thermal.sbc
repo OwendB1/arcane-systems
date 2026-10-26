@@ -307,7 +307,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="3" z="5" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_ReactorHousing_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_4dafbdfd5573/APT_ReactorHousing_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="2400" />
         <Component Subtype="Construction" Count="1000" />
@@ -374,9 +374,9 @@
         <MountPoint Side="Right" StartX="2" EndX="3" StartY="0" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_ReactorHousing_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_ReactorHousing_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_ReactorHousing_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_4dafbdfd5573/APT_ReactorHousing_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_4dafbdfd5573/APT_ReactorHousing_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_4dafbdfd5573/APT_ReactorHousing_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -850,7 +850,7 @@
       </Id>
       <DisplayName>Arcane Atmospheric cooler</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCooler.dds</Icon>
-      <Description>10 GW ideal heat rejection per unit/panel. Airtight hull casing, rear manifold. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires atmosphere and powered circulation.</Description>
+      <Description>25 GW ideal heat rejection per unit/panel. Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />
@@ -897,7 +897,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrain_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrain_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -939,9 +939,9 @@
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrain_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrain_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrain_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrain_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrain_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrain_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -958,7 +958,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainUpgraded_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainUpgraded_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -1001,9 +1001,9 @@
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainUpgraded_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainUpgraded_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainUpgraded_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainUpgraded_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1020,7 +1020,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainMir_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMir_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -1062,9 +1062,9 @@
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainMir_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainMir_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainMir_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMir_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMir_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMir_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1081,7 +1081,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainMirUpgraded_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMirUpgraded_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -1124,9 +1124,9 @@
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainMirUpgraded_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainMirUpgraded_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_BraytonTrainMirUpgraded_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMirUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMirUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8c5ba1f70b01/APT_BraytonTrainMirUpgraded_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1138,7 +1138,7 @@
       </Id>
       <DisplayName>Arcane Atmospheric cooler upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCoolerUpgraded.dds</Icon>
-      <Description>100 GW ideal heat rejection per unit/panel. Airtight hull casing, rear manifold. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires atmosphere and powered circulation. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
+      <Description>250 GW ideal heat rejection per unit/panel. Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />

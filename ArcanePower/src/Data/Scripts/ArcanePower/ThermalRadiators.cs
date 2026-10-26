@@ -102,12 +102,21 @@ namespace ArcanePower
             return ThermalMath.Finite(sunExposure) ? 1 - .5 * ThermalMath.Clamp(sunExposure, 0, 1) : 0;
         }
 
-        public static double Cooling(double rating, double exposure, double sinkC, double sunExposure)
+        public static double AmbientEfficiency(double airDensity)
         {
-            // Inverse solar response. Clearance and sink temperature remain
+            if (!ThermalMath.Finite(airDensity)) return 0;
+            // Blend the vacuum and reference-atmosphere sinks by measured density.
+            // Trace atmosphere must not apply the full 25 C penalty at a threshold.
+            return 1 - ThermalMath.Clamp(airDensity, 0, 1)
+                * (1 - ThermalMath.RadiativeCooling(1, 1, 25));
+        }
+
+        public static double Cooling(double rating, double exposure, double airDensity, double sunExposure)
+        {
+            // Inverse solar response. Clearance and ambient density remain
             // independent: enclosing a panel cannot manufacture free cooling.
-            return ThermalMath.RadiativeCooling(rating, exposure, sinkC)
-                * SolarEfficiency(sunExposure);
+            return ThermalMath.RadiativeCooling(rating, exposure, -270.15)
+                * AmbientEfficiency(airDensity) * SolarEfficiency(sunExposure);
         }
 
         public static double HeatGlow(double previous, double rejectedMW, double rating, double seconds)

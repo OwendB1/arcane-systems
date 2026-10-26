@@ -71,6 +71,7 @@ for name, ore, fuel, concentrate, refining, preparing, expected_yield in (
     assert int(material.findtext('MinVersion')) == 3
     weight = int(material.findtext('AsteroidGeneratorSpawnProbabilityMultiplier'))
     mining = float(material.findtext('MinedOreRatio'))
+    assert (weight,mining)=={'Aether':(20,.2),'Helion':(2,.03),'Empyrean':(1,.01)}[name]
     assert 0 < weight < previous_weight and weight < 100
     assert 0 < mining < previous_mining and mining < .3  # Uranium's mined-ore ratio.
     blueprint = recipes[refining]
@@ -103,6 +104,7 @@ for name, ore, fuel, concentrate, refining, preparing, expected_yield in (
         assert Decimal(items[ore].findtext('Volume')) / volume >= 37
         assert name in node.findtext('DisplayName')
     assert Decimal(items[fuel].findtext('Volume')) == 24
+    assert 'Ideal full-load endurance: '+('2.5' if name=='Aether' else '10')+' minutes' in items[fuel].findtext('Description')
     assert tuple(Decimal(items[fuel].findtext('Size/' + axis)) for axis in 'XYZ') == (Decimal('.261'), Decimal('.438'), Decimal('.261'))
     assert Decimal(items[fuel].findtext('Mass')) == Decimal(canister.findtext('Mass')) + 10 * (1 + ('Aether', 'Helion', 'Empyrean').index(name))
     previous_fuel = fuel
@@ -131,7 +133,8 @@ with tempfile.TemporaryDirectory(prefix='arcane-fuel-recipes-') as directory:
             shutil.copy2(original_mod / 'Data' / name, prepare_lab.MOD / 'Data' / name)
         prepare_lab.fuel_definitions()
         prepare_lab.containment_tiles()
-        for name in ('PhysicalItems.sbc', 'Blueprints.sbc', 'ContainmentTiles.sbc', 'ContainmentTileBlueprints.sbc'):
+        for name in ('PhysicalItems.sbc', 'Blueprints.sbc', 'ContainmentTiles.sbc', 'ContainmentTileBlueprints.sbc',
+                     'VoxelMaterials_Arcane.sbc', 'VoxelMaterials_ArcaneRarity.sbc'):
             assert (prepare_lab.MOD / 'Data' / name).read_bytes() == (original_mod / 'Data' / name).read_bytes(), name
     finally:
         prepare_lab.MOD = original_mod
@@ -160,5 +163,7 @@ with tempfile.TemporaryDirectory(prefix='arcane-thermal-catalog-') as directory:
         release.write_catalog(thermal)
         release.write_catalog(ET.parse(release.MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').getroot())
         assert (release.MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').read_bytes()==(original/'Data/CubeBlocks/ArcanePower_Thermal.sbc').read_bytes()
+        for name in ('ThermalCategories.sbc','CubeBlocks/ArcanePower_ThermalVariants.sbc'):
+            assert (release.MOD/'Data'/name).read_bytes()==(original/'Data'/name).read_bytes(), name
     finally:release.MOD=original
 print('PASS: uncraftable Residuum, five material-gated upgrades, idempotent block catalog')

@@ -33,5 +33,31 @@
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryReactorAdapter" />
       </Blocks>
     </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_Cooling" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiator.dds</Icon>
+      <DisplayName>Arcane Radiators and Coolers</DisplayName>
+      <Description>Scroll through radiators, extension panels and atmospheric coolers, including upgraded versions.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_SpaceRadiator" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_SpaceRadiatorUpgraded" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_RadiatorPanel" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_RadiatorPanelUpgraded" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_AtmosphericCooler" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_AtmosphericCoolerUpgraded" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Thermal_Turbines" />
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrain.dds</Icon>
+      <DisplayName>Arcane Turbines</DisplayName>
+      <Description>Scroll through standard, upgraded and mirrored Brayton turbines.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_Reactor" Subtype="ArcanePower_Thermal_BraytonTrain" />
+        <Block Type="MyObjectBuilder_Reactor" Subtype="ArcanePower_Thermal_BraytonTrainUpgraded" />
+        <Block Type="MyObjectBuilder_Reactor" Subtype="ArcanePower_Thermal_BraytonTrainMirrored" />
+        <Block Type="MyObjectBuilder_Reactor" Subtype="ArcanePower_Thermal_BraytonTrainMirroredUpgraded" />
+      </Blocks>
+    </BlockVariantGroup>
   </BlockVariantGroups>
 </Definitions>

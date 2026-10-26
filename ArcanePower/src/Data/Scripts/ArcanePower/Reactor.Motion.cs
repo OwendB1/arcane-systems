@@ -75,6 +75,14 @@ namespace ArcanePower
         // Millionths of one recovered component, earned only by paid T1 burn.
         [ProtoMember(54)] public long ResiduumMicroUnits;
 
+        // Healthy full-load operation can reach 100%; it is not a heat alarm.
+        // This presentation predicate does not drive the runaway heat model.
+        internal bool ThermalWarning
+        {
+            get { return !PayloadReleased && Core != CorePhase.Off
+                && (Critical || Heat > 1 || (TileStarved && TileWear >= 1)); }
+        }
+
         // XML-only compatibility with saves made before fuel and hardware tiers
         // were separated. Never write the obsolete field into new saves/packets.
         [System.Xml.Serialization.XmlElement("Profile")]
@@ -199,7 +207,7 @@ namespace ArcanePower
                 && state.CoreSubtick >= 0 && state.CoreSubtick < 1
                 && state.EjectTick >= 0 && state.EjectTick <= 120
                 && state.StarvedLoad >= 0 && state.StarvedLoad <= 1
-                && state.CriticalSeconds >= 0 && state.CriticalSeconds <= 45
+                && state.CriticalSeconds >= 0 && state.CriticalSeconds <= 60
                 && state.Heat >= 0 && state.Heat <= 4 && state.VentLoad >= 0 && state.VentLoad <= 1
                 && state.VentHeat >= 0 && state.VentHeat <= 4
                 && state.FuelDebt >= -(double)VRage.MyFixedPoint.SmallestPossibleValue * .5 - 1e-12 && state.FuelDebt < 1

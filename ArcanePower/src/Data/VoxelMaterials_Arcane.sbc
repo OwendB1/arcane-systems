@@ -8,7 +8,7 @@
       </Id>
       <MaterialTypeName>Rock</MaterialTypeName>
       <MinedOre>ArcaneOre</MinedOre>
-      <MinedOreRatio>0.1</MinedOreRatio>
+      <MinedOreRatio>0.2</MinedOreRatio>
       <CanBeHarvested>true</CanBeHarvested>
       <IsRare>true</IsRare>
       <VoxelHandPreview>Textures/GUI/Icons/ArcanePower/ArcaneOre.dds</VoxelHandPreview>
@@ -42,7 +42,7 @@
       <SpawnsFromMeteorites>false</SpawnsFromMeteorites>
       <MinVersion>3</MinVersion>
       <MaxVersion>2147483647</MaxVersion>
-      <AsteroidGeneratorSpawnProbabilityMultiplier>5</AsteroidGeneratorSpawnProbabilityMultiplier>
+      <AsteroidGeneratorSpawnProbabilityMultiplier>20</AsteroidGeneratorSpawnProbabilityMultiplier>
     </VoxelMaterial>
     <VoxelMaterial xsi:type="MyObjectBuilder_Dx11VoxelMaterialDefinition">
       <Id>

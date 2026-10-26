@@ -129,7 +129,8 @@ namespace ArcanePower
                 var terminal = block.FatBlock as IMyTerminalBlock;
                 bool healthy = grid.Physics != null && block.BuildLevelRatio >= 1
                     && block.FatBlock != null && block.FatBlock.IsFunctional
-                    && (terminal == null || terminal.HasPlayerAccess(MyAPIGateway.Session.Player.IdentityId));
+                    && (terminal == null || terminal.HasPlayerAccess(MyAPIGateway.Session.Player.IdentityId))
+                    && (spec.Kind == ThermalKind.Reactor || !(terminal is IMyFunctionalBlock) || ((IMyFunctionalBlock)terminal).Enabled);
                 var node = ThermalEndpoint.At(i + 1, grid.EntityId, spec, orientation, at, healthy);
                 nodes.Add(node);
                 if (!preview && block == aimed)
@@ -233,6 +234,12 @@ namespace ArcanePower
             if (source == null || source.Motion.Thermal == null || (!MyAPIGateway.Multiplayer.IsServer && source.Motion.Sequence == 0))
                 return "Waiting for reactor operating state";
             var state = source.Motion.Thermal;
+            if (state.Faulted) return "Runtime isolated: " + state.Diagnostic;
+            if (state.Settled && state.Mode == ThermalMode.Brayton)
+                for (int i = 0; i < state.Loops.Length; i++)
+                    if (!state.Loops[i].Connected && check.Joints.Exists(j => j.Node == check.Source
+                        && j.Port == check.Source.Ports[i] && j.Peer != null))
+                        return "Circuit " + (i + 1) + " / valve closed: " + state.Loops[i].Diagnostic;
             return state.Mode + (state.Settled ? ": " : " / mode transition: ") + state.Diagnostic;
         }
 

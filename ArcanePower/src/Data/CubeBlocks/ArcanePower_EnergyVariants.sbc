@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions>
+  <BlockVariantGroups>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Energy_BatteryUpgrades" />
+      <Icon>Textures/GUI/Icons/ArcanePower/ArcanePower_EnergyCapacity.dds</Icon>
+      <DisplayName>Arcane Battery Upgrades</DisplayName>
+      <Description>Scroll through capacity, transfer and stabilizer modules, including advanced versions.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_BatteryBlock" Subtype="ArcanePower_EnergyCapacity_Pillar" />
+        <Block Type="MyObjectBuilder_BatteryBlock" Subtype="ArcanePower_EnergyCapacityAdvanced_Pillar" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_EnergyTransfer_Pillar" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_EnergyTransferAdvanced_Pillar" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_EnergyStabilizer_Pillar" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_EnergyStabilizerAdvanced_Pillar" />
+      </Blocks>
+    </BlockVariantGroup>
+  </BlockVariantGroups>
+</Definitions>

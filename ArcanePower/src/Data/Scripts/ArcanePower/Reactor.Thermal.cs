@@ -8,6 +8,9 @@ namespace ArcanePower
     {
         private bool thermalRestoreFault;
         private bool thermalStartRequested;
+        private double reservedThermalMJ;
+        private ThermalOutputGrant standaloneGrant;
+        private int thermalAccountedAt = -1;
         internal void FailThermalRuntime()
         {
             reactor.Enabled = false;
@@ -22,18 +25,17 @@ namespace ArcanePower
             get { return Motion.Thermal != null && Motion.Thermal.Settled
                 && (Motion.Thermal.Mode != ThermalMode.Brayton || HasAdvancedController()); }
         }
-        internal double ThermalInternalCirculation
+        internal double ThermalVisualLoad
         {
-            get { return ThermalInitialized && !Motion.PowerPaused && !Motion.Thermal.Faulted
-                && (ThermalCanRun || Motion.Thermal.Store.HotMJ + Motion.Thermal.Store.WasteMJ > .001)
-                ? ThermalMath.Clamp((Motion.PowerInputMW + (Motion.ReserveMJ > ContainmentMW / 60 ? ContainmentMW : 0)) / ContainmentMW, 0, 1) : 0; }
+            get { return ThermalInitialized ? ThermalMath.Clamp(Motion.Thermal.ProducedMW / ThermalHeatMW, 0, 1) : 0; }
         }
+        internal bool ThermalAuxiliaryReady { get { return ThermalManifoldPower; } }
         internal double ThermalHeatMW { get { return PowerMW[Motion.FuelTier - 1] / .40; } }
         internal double ThermalHotC { get { return Motion.FuelTier == 1 ? 650 : Motion.FuelTier == 2 ? 1000 : 2200; } }
         private bool ThermalNeedsPowerSupport
         {
             get { return ThermalVariant && Motion.Thermal != null && (!Motion.Thermal.Settled
-                || (!ThermalCanRun && Motion.Thermal.Store.HotMJ + Motion.Thermal.Store.WasteMJ + Motion.Thermal.AttachedHeatMJ > .001)); }
+                || (!ThermalCanRun && Motion.Thermal.Store.HotMJ + Motion.Thermal.RetainedHeatMJ + Motion.Thermal.AttachedHeatMJ > .001)); }
         }
         internal bool ThermalCanRun
         {
@@ -50,7 +52,7 @@ namespace ArcanePower
         {
             get { return Motion.Thermal != null && Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle
                 && !Motion.Critical && Motion.Heat <= CooldownHeat
-                && Motion.Thermal.Store.HotMJ + Motion.Thermal.Store.WasteMJ + Motion.Thermal.AttachedHeatMJ <= .001; }
+                && Motion.Thermal.Store.HotMJ + Motion.Thermal.RetainedHeatMJ + Motion.Thermal.AttachedHeatMJ <= .001; }
         }
         private bool ThermalManifoldPower
         {
@@ -71,10 +73,13 @@ namespace ArcanePower
             if (MyAPIGateway.Multiplayer.IsServer)
             {
                 bool legacy = Motion.Thermal.LoopVersion == 0 && Motion.Thermal.Mode == ThermalMode.Brayton;
-                Motion.Thermal.Loops = ThermalLoops.Empty();
-                Motion.Thermal.LoopVersion = 1;
+                if (Motion.Thermal.Loops == null) Motion.Thermal.Loops = ThermalLoops.Empty();
+                Motion.Thermal.MigrateHeat();
+                foreach (var loop in Motion.Thermal.Loops) loop.Connected = false;
                 // A saved diagnostic is not a new manual startup attempt.
                 Motion.Thermal.LoopTrip = false;
+                if (Motion.Thermal.Faulted)
+                    Motion.Thermal.Diagnostic = "Reactor runtime fault; update a circuit block to recheck; heat retained";
                 // Revalidate topology after reload. Preserve every MJ and the
                 // critical-core state during network migration.
                 if (legacy)
@@ -91,6 +96,14 @@ namespace ArcanePower
             reactor.Enabled = false;
             if (nativeReactor != null) nativeReactor.Capacity = 0;
             BeginShutdown();
+        }
+
+        internal void RecheckThermalFault()
+        {
+            if (!Motion.Thermal.Faulted || thermalRestoreFault || reactor.Enabled || reactor.CurrentOutput != 0
+                || Motion.Critical || Motion.Vent != VentPhase.Idle || Motion.EntityId != Id || !Valid(Motion)) return;
+            Motion.Thermal.Faulted = false;
+            Motion.Thermal.Diagnostic = "Runtime rechecked; restart manually when a circuit is ready";
         }
 
         private void ThermalEnabledChanged(IMyTerminalBlock block)
@@ -113,7 +126,7 @@ namespace ArcanePower
                 && state.Settled && state.Mode == ThermalMode.Brayton)
             {
                 // One valid sealed circuit is enough to start at its normal
-                // quarter allocation; pump power governs actual circulation.
+                // quarter allocation; output follows grid demand.
                 state.LoopTrip = state.ConnectedLoops == 0;
                 if (state.LoopTrip) StopForLoopLoss();
             }
@@ -179,42 +192,72 @@ namespace ArcanePower
             return ArcanePower.ThermalEndpoint.At(Id, reactor.CubeGrid.EntityId, spec, rotation, centre,
                 reactor.IsFunctional && reactor.SlimBlock.BuildLevelRatio >= 1 && reactor.OwnerId != 0
                     && reactor.CubeGrid.Physics != null
-                    && !Motion.Thermal.Faulted && ManifoldRigReady
+                    && ManifoldRigReady
                     && Motion.Thermal.Mode == ThermalMode.Brayton && Motion.Thermal.Deployment == 1);
+        }
+
+        internal void BeginThermalFrame()
+        {
+            Motion.Thermal.BeginFrame();
+            reservedThermalMJ = 0;
         }
 
         internal void AccountThermalOutput()
         {
-            var state = Motion.Thermal;
-            if (reactor.CurrentOutput > 0 && !ThermalMath.Convert(state.Store, reactor.CurrentOutput / 60.0, .20))
-            { state.Faulted = true; reactor.Enabled = false; state.Diagnostic = "Standalone output exceeded paid heat inventory; isolated"; }
+            int now = MyAPIGateway.Session.GameplayFrameCounter;
+            if (thermalAccountedAt == now) return;
+            thermalAccountedAt = now;
+            var grant = standaloneGrant;
+            standaloneGrant = null;
+            if (grant != null && !grant.Settle(reactor.CurrentOutput)) FailThermalRuntime();
+            else if (grant == null && reactor.CurrentOutput > .001) FailThermalRuntime();
+        }
+
+        internal ThermalOutputGrant ReserveThermalOutput(ThermalLoopState loop, double heatMW, double efficiency)
+        {
+            if (!ThermalCanRun || efficiency <= 0 || efficiency >= 1 || !ThermalMath.Finite(heatMW)) return null;
+            double wanted = Math.Max(0, Math.Min(heatMW * Motion.PowerRamp / 60,
+                ThermalHeatMW / 60 - reservedThermalMJ));
+            // Refill only a one-interval paid reserve. Unused credit stays saved;
+            // no-demand operation stops buying fuel once this small reserve is full.
+            ProduceThermal(Math.Max(0, reservedThermalMJ + wanted - Motion.Thermal.Store.HotMJ) * 60);
+            PayFuel(false);
+            double available = Math.Max(0, Math.Min(wanted, Motion.Thermal.Store.HotMJ - reservedThermalMJ));
+            reservedThermalMJ += available;
+            return new ThermalOutputGrant(Motion.Thermal, loop, available, efficiency);
+        }
+
+        internal void GrantStandaloneOutput()
+        {
+            standaloneGrant = Motion.Thermal.Mode == ThermalMode.Standalone
+                ? ReserveThermalOutput(null, ThermalHeatMW, .20) : null;
+            RefreshThermalCapacity();
         }
 
         internal void ProduceThermal(double flowMW)
         {
             if (!ThermalCanRun) return;
             var state = Motion.Thermal;
-            // A finite warm inventory supplies the next native distribution
-            // interval. No demand eventually fills it and stops fresh fuel use.
+            // This is fuel credit for the next native interval, not a flow or
+            // reaction buffer. Reaction telemetry is measured when output settles.
             double availableFuelMJ = ThermalHeatMW * 8;
             if (!MyAPIGateway.Session.CreativeMode)
             {
-                double energyPerUnit = ThermalHeatMW * 600 * FuelEfficiency;
+                double energyPerUnit = ThermalHeatMW * FuelFullLoadMinutes * 60 * FuelEfficiency;
                 double stock = (double)reactor.GetInventory().GetItemAmount(VRage.Game.ModAPI.Ingame.MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1]));
                 availableFuelMJ = Math.Max(0, (stock - Motion.FuelDebt) * energyPerUnit - state.FuelHeatMJ);
             }
-            double admitted = ThermalMath.AdmitReactionHeat(state.Store, ThermalHeatMW,
-                Math.Min(ThermalHeatMW, flowMW) * Motion.PowerRamp / 60, availableFuelMJ);
+            double admitted = ThermalMath.AdmitHeat(state.Store, ThermalHeatMW / 60,
+                Math.Max(0, flowMW) / 60, availableFuelMJ);
             state.FuelHeatMJ += admitted;
-            state.ProducedMW = admitted * 60;
         }
 
         private void RefreshThermalCapacity()
         {
             if (!IsLive || nativeReactor == null || Motion.Thermal == null) return;
             var state = Motion.Thermal;
-            double limit = ThermalCanRun && state.Mode == ThermalMode.Standalone
-                ? ThermalMath.ExportLimit(state.Store, ThermalHeatMW * 8, .20, ThermalHeatMW * .20 * Motion.PowerRamp, 1.0 / 60) : 0;
+            double limit = ThermalCanRun && state.Mode == ThermalMode.Standalone && standaloneGrant != null
+                ? standaloneGrant.MaximumMW : 0;
             nativeReactor.Capacity = (float)(limit / 216000);
         }
     }

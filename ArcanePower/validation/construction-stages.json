@@ -15,7 +15,7 @@
       {
         "stage": 3,
         "meshes": 111,
-        "triangles": 3860
+        "triangles": 4020
       }
     ],
     "ArcanePower_ContainmentController": [
@@ -32,7 +32,7 @@
       {
         "stage": 3,
         "meshes": 62,
-        "triangles": 2566
+        "triangles": 2691
       }
     ],
     "ArcanePower_ReactorPrototype": [

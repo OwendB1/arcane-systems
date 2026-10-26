@@ -2,7 +2,7 @@
   "source": "/home/owendb/Documents/GitHub/arcane-systems/ArcanePower/assets/arcane-power-prototype.blend",
   "protected_objects": {
     "ArcanePower_AdvancedContainmentController root": "6182963f13b45420c329cb58955ce2272b0a2b620876e7a7cd21c35fac9b42ad",
-    "Power pack / curved socket shell.001": "ee9dfbfc8d8bc56e658c6ec46717ad8f5d54b3d6e41d59582a669f9716fb1f74",
+    "Power pack / curved socket shell.001": "cb3c02fc6956a536e7eb3bdbdb5183595e845a7872400065eaf91af762bba639",
     "detector_upgrade_mating.001": "f871c8e9347fe4bcb0b2e27d4845bef16cd792e850aa6bf3c88e3ef44f697953",
     "Controller detail / captive screw.017": "1d6c116d38590342f0bf85e730ca24bb58771e7e0c81e2ff52124e39229f0fe3",
     "Controller detail / native screw face.017": "b3fd0938400a968ec29b52bae485f52765114d753cd0f29a503c706ee27981e4",
@@ -351,7 +351,7 @@
     "BlastShield6 / raised panel 15": "eaf58594cda4c8de7bcdb568600ee436f0d0a831558b781933e550646f641981",
     "BlastShield6 / fuel seam 15": "01800031ac51b15b5382c33426c2ab0be774cbd068b357296df2fd8c138aebbb",
     "ArcanePower_ContainmentController root": "6182963f13b45420c329cb58955ce2272b0a2b620876e7a7cd21c35fac9b42ad",
-    "Power pack / curved socket shell": "cc5aecf3711c9c23f5da8b4bb1e6ab9983448f4128fedc32aebe3cba0d16fa61",
+    "Power pack / curved socket shell": "c0e5e82dc0d5ebf06705574d1c3c102cca77c25904c5cb63d3b079604f2bd509",
     "detector_upgrade_mating": "608e275ad65f84ff06257b89d631bc778a0159c6122c646ff6549359f6334afc",
     "Controller detail / captive screw": "aa6b8585bcb07182eca7568b7242a773dd0dd6e669dec0aaa8a532c6ba6e2b94",
     "Controller detail / native screw face": "9e8ee0936fc957003fc5bd8ffb1296f5620ee085f08c8d0adeb74fa631f80ccf",

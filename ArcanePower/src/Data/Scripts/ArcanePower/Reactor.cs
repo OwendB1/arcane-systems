@@ -38,7 +38,7 @@ namespace ArcanePower
         private MyEntitySubpart previousRing;
         private int appearanceRefresh;
         private ReactorStatus previousStatus;
-        private bool previousPrecharging;
+        private bool previousPrecharging, previousThermalWarning;
         private int pulseTick;
         private const float EmissiveIntensity = 12f;
         private MyLight coreGlow;
@@ -144,7 +144,8 @@ namespace ArcanePower
             MyEntitySubpart first;
             entity.Subparts.TryGetValue("Ring1", out first);
             bool venting = Motion.Vent != VentPhase.Idle;
-            bool incomplete = Motion.Status == ReactorStatus.Incomplete || venting || Motion.Critical;
+            bool thermalWarning = Motion.ThermalWarning;
+            bool incomplete = Motion.Status == ReactorStatus.Incomplete || venting || Motion.Critical || thermalWarning;
             bool precharging = Precharging;
             bool charging = precharging && PrechargeMW > .000001;
             pulseTick = (pulseTick + 1) % 120;
@@ -152,15 +153,16 @@ namespace ArcanePower
             // load. Retry once per second even when the entity/state is unchanged;
             // this also restores colours after a later render-object recreation.
             Color color = venting || Motion.Critical ? Color.Red
+                : thermalWarning ? Color.Yellow
                 : precharging ? Color.White
                 : Motion.Status == ReactorStatus.Active ? FuelColors[Motion.FuelTier - 1]
-                : Motion.Status == ReactorStatus.OutOfFuel ? Color.Yellow : Color.Red;
+                : Motion.Status == ReactorStatus.OutOfFuel ? Color.White : Color.Red;
             float intensity = EmissiveIntensity;
             if (incomplete || (precharging && !charging))
                 intensity *= .5f + .5f * (float)System.Math.Cos(pulseTick * System.Math.PI / 60);
             else if (charging)
                 intensity *= pulseTick % 60 < 30 ? 1f : 0f;
-            if (incomplete || precharging || previousPrecharging != precharging || previousRing != first
+            if (incomplete || precharging || previousPrecharging != precharging || previousThermalWarning != thermalWarning || previousRing != first
                 || previousFuelTier != Motion.FuelTier || previousStatus != Motion.Status || --appearanceRefresh <= 0)
             {
                 appearanceRefresh = 60;
@@ -168,6 +170,7 @@ namespace ArcanePower
                 previousFuelTier = Motion.FuelTier;
                 previousStatus = Motion.Status;
                 previousPrecharging = precharging;
+                previousThermalWarning = thermalWarning;
                 entity.SetEmissiveParts("Emissive", color, intensity);
                 entity.SetEmissivePartsForSubparts("Emissive", color, intensity);
             }
@@ -213,7 +216,8 @@ namespace ArcanePower
             }
             bool hasFuel = HasUsableFuel();
             // Automatic shutdown disables the native reactor. Retain its fuel
-            // starvation indication until fuel arrives instead of turning red.
+            // starvation status until fuel arrives; its neutral white emissives
+            // must not be confused with the yellow thermal alarm.
             if (!hasFuel && (reactor.Enabled || Motion.Status == ReactorStatus.OutOfFuel))
                 Motion.Status = ReactorStatus.OutOfFuel;
             else Motion.Status = reactor.Enabled ? ReactorStatus.Active : ReactorStatus.ShutOff;

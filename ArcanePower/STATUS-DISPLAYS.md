@@ -70,6 +70,15 @@ While the readout is visible, a neutral emissive backlight keeps the panel
 readable in darkness. It also lights the disconnected message. Hiding or
 unequipping the tablet turns the backlight off and restores the matte black
 base texture; it does not cast a lamp beam into the scene.
+The generated readout also uses zero alpha, matching native LCDs: the offscreen
+renderer preserves that channel, and the screen's ColorMetal material reads it
+as metalness. Opaque alpha made the live screen fully metallic and suppressed
+its emissive albedo, leaving it readable only under reflected sunlight.
+The tablet's emissive multiplier is 0.025: its full emission mask is amplified
+by scene HDR lighting. The earlier 2.0 setting washed the dark background grey
+and clipped coloured labels toward white after the metalness correction. The
+lower multiplier retains the dashboard palette and backlighting; native block
+LCD brightness is unaffected. In-game confirmation of this adjustment is pending.
 
 ## Values and warning semantics
 
@@ -251,6 +260,8 @@ readable glyph height, final texture coordinates after the native shift and
 shader viewport division, render-ID replacement, texture ownership/cleanup,
 selection and page controls, antenna-loss clearing, upright exported UVs and
 uniform matte base textures.
+It also checks the live texture's zero metalness alpha, so an emissive strength
+alone cannot pass while the generated readout still blocks its own backlight.
 `tools/compile_mod.py` also passes with zero warnings/errors. Actual GPU rendering
 and first/third-person appearance still need an in-game review; restart SE to
 ensure the updated model is loaded. The last in-game screenshot still showed
@@ -264,3 +275,12 @@ and a small right-thumb-tip clearance adjustment. Native animation export/re-imp
 editor reload checks pass. The pose is fitted to the male reference rig;
 arm IK and the female character fit still need a world reload and in-game
 visual confirmation.
+
+## Thermal readings
+
+Reaction heat follows actual electrical output divided by conversion efficiency.
+Cooling capacity is the connected equipment's available rejection, independent of
+turbine load. Cooling required shows current waste heat; Full-load cooling is a
+separate sizing target. Heat removed is actual rejection, bounded by available heat.
+Accumulated heat is retained excess across the four independent circuits. Cooling
+unit terminals also show connection/auxiliary-power state and their own heat removal.

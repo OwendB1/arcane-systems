@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions>
+  <BlockVariantGroups>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Power_Controllers" />
+      <Icon>Textures/GUI/Icons/ArcaneContainmentController.dds</Icon>
+      <DisplayName>Arcane Controllers</DisplayName>
+      <Description>Scroll through standard and advanced reactor controllers.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_ContainmentController" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_AdvancedContainmentController" />
+      </Blocks>
+    </BlockVariantGroup>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcanePower_Power_Vents" />
+      <Icon>Textures/GUI/Icons/ArcaneVentDuct.dds</Icon>
+      <DisplayName>Arcane Vents</DisplayName>
+      <Description>Scroll through the vent duct and outlet. Finish each vent route with an outlet.</Description>
+      <Blocks>
+        <Block Type="MyObjectBuilder_Conveyor" Subtype="ArcanePower_VentDuct" />
+        <Block Type="MyObjectBuilder_Conveyor" Subtype="ArcanePower_VentOutlet" />
+      </Blocks>
+    </BlockVariantGroup>
+  </BlockVariantGroups>
+</Definitions>

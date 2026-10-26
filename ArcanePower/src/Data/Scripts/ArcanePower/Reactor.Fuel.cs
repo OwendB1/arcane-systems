@@ -14,7 +14,8 @@ namespace ArcanePower
         private static readonly string[] Fuels = { "ArcaneFuelI", "ArcaneFuelII", "ArcaneFuelIII" };
         private static readonly string[] FuelNames = { "Aether", "Helion", "Empyrean" };
         private static readonly float[] PowerMW = { 10000f, 100000f, 1000000f };
-        private const float FuelUnitsPerCanister = 10f;
+        // Ideal full-load endurance; controller efficiency scales usable energy.
+        private float FuelFullLoadMinutes { get { return Motion.FuelTier == 1 ? 2.5f : 10f; } }
         private const string ResiduumSubtype = "ArcaneAetherResiduum";
         private const long ResiduumScale = 1000000L;
         private const int ResiduumPerCanister = 10;
@@ -62,7 +63,9 @@ namespace ArcanePower
         {
             return IsLive && Motion.FuelTier <= FuelTierLimit && (!ThermalVariant || ThermalFuelModeReady)
                 && (MyAPIGateway.Session.CreativeMode
-                || reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1])) > 0);
+                || reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1])) > 0
+                || (ThermalVariant && Motion.Thermal != null && Motion.Thermal.LoopVersion >= 2
+                    && Motion.Thermal.Store.HotMJ > .001));
         }
 
         private void RefreshFuelCapacity()
@@ -74,7 +77,7 @@ namespace ArcanePower
             float units = MyAPIGateway.Session.CreativeMode ? 1f
                 : (float)reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1]));
             // Native capacity uses MW-seconds / 3600, including its per-frame
-            // output cap. Each canister stores 10 minutes at its ideal rating;
+            // output cap. Canister endurance depends on the selected fuel;
             // controller efficiency determines the usable fraction.
             float rating = PowerMW[Motion.FuelTier - 1];
             bool generating = CanOperate && initializationFrames <= 2 && Motion.Core == CorePhase.Running && reactor.Enabled && !Motion.PowerPaused
@@ -82,16 +85,16 @@ namespace ArcanePower
             // Native source caps MW to Capacity * 3600 * 60. Keep the tier's
             // rated MaxOutput while the available electrical output ramps up.
             nativeReactor.Capacity = Motion.FuelTier + 1 <= controllerRingCapacity && generating
-                ? System.Math.Min(units * FuelUnitsPerCanister * rating * FuelEfficiency / (Motion.TileStarved ? 6000f : 60f), rating * (Motion.TileStarved ? Math.Min(Motion.PowerRamp, Motion.StarvedLoad * .1f) : Motion.PowerRamp) / 216000f) : 0;
+                ? System.Math.Min(units * FuelFullLoadMinutes * rating * FuelEfficiency / (Motion.TileStarved ? 6000f : 60f), rating * (Motion.TileStarved ? Math.Min(Motion.PowerRamp, Motion.StarvedLoad * .1f) : Motion.PowerRamp) / 216000f) : 0;
         }
 
         private double FuelUnitsPerMinute()
         {
             if (ThermalVariant && Motion.Thermal != null)
-                return Motion.Thermal.ProducedMW / ThermalHeatMW / (FuelEfficiency * FuelUnitsPerCanister);
+                return Motion.Thermal.ProducedMW / ThermalHeatMW / (FuelEfficiency * FuelFullLoadMinutes);
             bool failed = Motion.TileStarved && Motion.Core == CorePhase.Running && reactor.Enabled
                 && !Motion.PowerPaused && (Motion.Vent == VentPhase.Idle || Motion.Vent == VentPhase.ShieldClosing);
-            return (failed ? Motion.StarvedLoad * 10.0 : reactor.CurrentOutput / (double)PowerMW[Motion.FuelTier - 1]) / (FuelEfficiency * FuelUnitsPerCanister);
+            return (failed ? Motion.StarvedLoad * 10.0 : reactor.CurrentOutput / (double)PowerMW[Motion.FuelTier - 1]) / (FuelEfficiency * FuelFullLoadMinutes);
         }
 
         private void UpdateFuel()
@@ -121,37 +124,9 @@ namespace ArcanePower
             if (initializationFrames == 0 && (Motion.FuelTier > FuelTierLimit
                 || (ThermalVariant && !ThermalFuelModeReady))) reactor.Enabled = false;
 
-            // Ideal burn is one canister/10 minutes at full rated load, divided by
-            // controller efficiency. The saved signed remainder retains debt or
-            // rounding credit, avoiding fixed-point rounding loss at low demand.
             bool starvedBurn = Motion.TileStarved && Motion.Core == CorePhase.Running && reactor.Enabled
                 && !Motion.PowerPaused && (Motion.Vent == VentPhase.Idle || Motion.Vent == VentPhase.ShieldClosing);
-            if (ThermalVariant && Motion.Thermal != null)
-            {
-                if (!MyAPIGateway.Session.CreativeMode)
-                    Motion.FuelDebt += Motion.Thermal.FuelHeatMJ / (ThermalHeatMW * 600 * FuelEfficiency);
-                Motion.Thermal.FuelHeatMJ = 0;
-            }
-            if (!MyAPIGateway.Session.CreativeMode && (reactor.CurrentOutput > 0 || starvedBurn || (ThermalVariant && Motion.FuelDebt > 0)))
-            {
-                if (!ThermalVariant) Motion.FuelDebt += FuelUnitsPerMinute() / 3600;
-                else if (starvedBurn) Motion.FuelDebt += Motion.StarvedLoad * 10.0 / (FuelEfficiency * FuelUnitsPerCanister * 3600);
-                MyFixedPoint amount = (MyFixedPoint)Motion.FuelDebt;
-                if (amount > 0)
-                {
-                    string fuel = Fuels[Motion.FuelTier - 1];
-                    amount = MyFixedPoint.Min(amount, inventory.GetItemAmount(MyItemType.MakeIngot(fuel)));
-                    if (amount > 0)
-                    {
-                        inventory.RemoveItemsOfType(amount, new MyObjectBuilder_Ingot { SubtypeName = fuel });
-                        Motion.FuelDebt -= (double)amount;
-                        // Integer carry makes many tiny burns identical to a canister.
-                        if (ThermalVariant && Motion.FuelTier == 1)
-                            Motion.ResiduumMicroUnits += (long)Math.Round((double)amount * ResiduumScale) * ResiduumPerCanister;
-                    }
-                    else Motion.FuelDebt = 0;
-                }
-            }
+            PayFuel(starvedBurn);
             RefreshFuelCapacity();
             RecoverResiduum();
             if (reactor.UseConveyorSystem && networkTick % 100 == 0)
@@ -189,6 +164,39 @@ namespace ArcanePower
             }
         }
 
+
+        private void PayFuel(bool starvedBurn)
+        {
+            var inventory = reactor.GetInventory();
+            // Flush reservations before exposing native output. The signed
+            // remainder preserves fixed-point rounding credit at tiny loads.
+            if (ThermalVariant && Motion.Thermal != null)
+            {
+                if (!MyAPIGateway.Session.CreativeMode)
+                    Motion.FuelDebt += Motion.Thermal.FuelHeatMJ / (ThermalHeatMW * FuelFullLoadMinutes * 60 * FuelEfficiency);
+                Motion.Thermal.FuelHeatMJ = 0;
+            }
+            if (!MyAPIGateway.Session.CreativeMode && (reactor.CurrentOutput > 0 || starvedBurn || (ThermalVariant && Motion.FuelDebt > 0)))
+            {
+                if (!ThermalVariant) Motion.FuelDebt += FuelUnitsPerMinute() / 3600;
+                else if (starvedBurn) Motion.FuelDebt += Motion.StarvedLoad * 10.0 / (FuelEfficiency * FuelFullLoadMinutes * 3600);
+                MyFixedPoint amount = (MyFixedPoint)Motion.FuelDebt;
+                if (amount > 0)
+                {
+                    string fuel = Fuels[Motion.FuelTier - 1];
+                    amount = MyFixedPoint.Min(amount, inventory.GetItemAmount(MyItemType.MakeIngot(fuel)));
+                    if (amount > 0)
+                    {
+                        inventory.RemoveItemsOfType(amount, new MyObjectBuilder_Ingot { SubtypeName = fuel });
+                        Motion.FuelDebt -= (double)amount;
+                        // Integer carry makes many tiny burns identical to a canister.
+                        if (ThermalVariant && Motion.FuelTier == 1)
+                            Motion.ResiduumMicroUnits += (long)Math.Round((double)amount * ResiduumScale) * ResiduumPerCanister;
+                    }
+                    else Motion.FuelDebt = 0;
+                }
+            }
+        }
 
         private void RecoverResiduum()
         {

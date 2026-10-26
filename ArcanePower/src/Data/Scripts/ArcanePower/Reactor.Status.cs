@@ -34,7 +34,7 @@ namespace ArcanePower
             Section(text, "POWER");
             double output = ThermalVariant && Motion.Thermal != null ? Motion.Thermal.NetOutputMW : reactor.CurrentOutput;
             Row(text, "Output", Power(output) + " / " + Power(ThermalVariant && Motion.Thermal != null ? Motion.Thermal.SupportedMW : PowerMW[Motion.FuelTier - 1]));
-            Row(text, "Net", Power(output - Motion.PowerInputMW - (ThermalVariant && Motion.Thermal != null ? Motion.Thermal.StartupMW : 0)));
+            Row(text, "Net", Power(output - Motion.PowerInputMW));
             if (text.Precharging)
             {
                 double charge = PrechargeMW;
@@ -55,14 +55,15 @@ namespace ArcanePower
                 Row(text, "Manifolds", Percent(thermal.Deployment) + " deployed");
                 Row(text, "Conversion efficiency", Percent(thermal.Efficiency));
                 Row(text, "Reaction heat", Power(thermal.ProducedMW) + " / " + Power(ThermalHeatMW));
-                Row(text, "Trapped housing heat", Number(thermal.Store.HotMJ + thermal.Store.WasteMJ, "0.0") + " MJ");
+                Row(text, "Accumulated heat", Number(thermal.RetainedHeatMJ, "0.0") + " MJ");
                 Row(text, "Circuits available", thermal.ConnectedLoops + " / 4 (" + thermal.ConnectedLoops * 25 + "% allocation)");
                 if (text.Brayton)
                 {
-                    bool shortfall = thermal.CoolingMW + .001 < thermal.RequiredCoolingMW;
+                    bool shortfall = Array.Exists(thermal.Loops, loop => loop.RequiredCoolingMW > loop.CoolingMW + .001);
                     Row(text, "Cooling capacity", Power(thermal.CoolingMW), shortfall ? "yellow" : "white");
-                    Row(text, "Cooling required", Power(thermal.RequiredCoolingMW) + " at design load");
-                    Row(text, "Returned waste", Number(thermal.Store.WasteMJ, "0.0") + " MJ", Motion.Heat > 1 ? "red" : "white");
+                    Row(text, "Cooling required", Power(thermal.RequiredCoolingMW) + " at current load");
+                    Row(text, "Full-load cooling", Power(thermal.DesignCoolingMW));
+                    Row(text, "Heat removed", Power(thermal.RejectedMW));
                     byte valves = ThermalLoops.OpenValves(thermal);
                     for (int i = 0; i < thermal.Loops.Length; i++)
                     {
@@ -70,10 +71,9 @@ namespace ArcanePower
                         Row(text, "Circuit " + (i + 1), (loop.Connected ? "Ready" : "Unavailable")
                             + " / valve " + ((valves & (1 << i)) != 0 ? "open" : "closed"),
                             loop.Connected ? "white" : "yellow");
-                        Line(text, "muted", loop.Diagnostic + " / cooling " + Power(loop.CoolingMW) + " / " + Power(loop.RequiredCoolingMW));
+                        Line(text, "muted", loop.Diagnostic + " / cooling " + Power(loop.CoolingMW) + " / required " + Power(loop.RequiredCoolingMW) + " / retained " + Number(loop.ExcessMJ, "0.0") + " MJ");
                     }
                 }
-                Row(text, "Startup / cooldown draw", Power(thermal.StartupMW));
                 Line(text, thermalRestoreFault || thermal.Faulted ? "red" : "muted", thermal.Diagnostic);
                 Line(text, "muted", "Setup: one turbine and cooling per manifold circuit. Keep circuits separate; cap unused pipe mouths and match H/C.");
                 Line(text, "muted", "Each circuit supplies up to 25% capacity. Retained waste still triggers the existing failure at 125% heat.");
@@ -180,15 +180,17 @@ namespace ArcanePower
                 && Motion.Thermal.Mode == ThermalMode.Brayton)
             {
                 var thermal = Motion.Thermal;
-                if (Motion.Heat > 1 || ThermalMath.WasteHeatLevel(thermal.Store, ThermalHeatMW) >= 1)
+                if (Motion.Heat > 1 || ThermalMath.WasteHeatLevel(thermal, ThermalHeatMW) >= 1)
                 { tone = "red"; action = "Restore cooling or eject before 125% heat. Keep cooldown power supplied."; return "REACTOR OVERHEATING / FAILURE RISK"; }
                 if (Array.Exists(thermal.Loops, loop => loop.Connected && loop.CoolingMW + .001 < loop.RequiredCoolingMW)
-                    && (thermal.ProducedMW > .001 || thermal.Store.WasteMJ > .001))
+                    && (thermal.ProducedMW > .001 || thermal.RetainedHeatMJ > .001))
                 { tone = "yellow"; action = "Add or unblock cooling units, or shut down before trapped heat becomes critical."; return "INSUFFICIENT LOOP COOLING"; }
             }
             if (ThermalVariant && Motion.Thermal != null)
             {
                 var thermal = Motion.Thermal;
+                if (thermal.Faulted)
+                { tone = "red"; action = thermal.Diagnostic; return "THERMAL RUNTIME ISOLATED"; }
                 if ((thermal.Mode == ThermalMode.Brayton || thermal.Requested == ThermalMode.Brayton) && !HasAdvancedController())
                 { tone = "yellow"; action = "Install or repair an advanced controller. Keep cooldown power supplied; restart manually."; return "BRAYTON LOCKED / ADVANCED CONTROLLER REQUIRED"; }
                 if (Motion.FuelTier > 1 && (thermal.Mode != ThermalMode.Brayton || thermal.Requested != ThermalMode.Brayton))
@@ -196,7 +198,7 @@ namespace ArcanePower
                 if (!thermal.Settled)
                 { tone = "yellow"; action = ThermalModeTransitionHint; return "MODE CHANGE / RESTART WHEN SETTLED"; }
                 if (thermal.Mode == ThermalMode.Brayton && thermal.LoopTrip && !reactor.Enabled)
-                { tone = "yellow"; action = "Repair at least one separate circuit, then start manually to refill. Keep cooldown power supplied."; return "STARTUP BLOCKED / ALL FOUR CIRCUITS DEFECTIVE"; }
+                { tone = "yellow"; action = "Repair at least one separate circuit, then start manually. Keep cooldown power supplied."; return "STARTUP BLOCKED / ALL FOUR CIRCUITS DEFECTIVE"; }
             }
             if (Motion.Core == CorePhase.Cooling)
             { tone = "yellow"; action = "Holding the shell until heat falls to 15%."; return "COOLING DOWN"; }

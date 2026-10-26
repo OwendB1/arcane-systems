@@ -13,15 +13,10 @@ namespace ArcanePower
     {
         private bool receivedRadiator;
         private double radiatorVisualAngle;
-        internal double RadiatorRejectedMW;
         internal ThermalBlock RadiatorBase;
         internal readonly List<ThermalBlock> RadiatorPanels = new List<ThermalBlock>();
         internal double PanelCoolingMW;
         private List<VRage.Game.ModAPI.IHitInfo> solarHits;
-        internal double EffectiveRatingMW
-        {
-            get { double total = Spec.RatingMW; foreach (var panel in RadiatorPanels) total += panel.Spec.RatingMW; return total; }
-        }
         internal bool IsRadiator { get { return Spec.Kind == ThermalKind.Radiator || Spec.Kind == ThermalKind.RadiatorPanel; } }
 
         internal void ReceiveRadiator(ThermalRadiatorState state)
@@ -47,7 +42,7 @@ namespace ArcanePower
                     Vector3D local = Vector3D.TransformNormal(sun, MatrixD.Transpose(Block.WorldMatrix));
                     state.Target = Healthy ? ThermalRadiators.Target(local, state.Angle) : state.Angle;
                     state.Angle = ThermalRadiators.Step(state.Angle, state.Target, 1.0 / 60);
-                    state.RejectedMW = RadiatorRejectedMW;
+                    state.RejectedMW = CoolingRejectedMW;
                 }
                 else if (RadiatorBase != null)
                 {
@@ -139,19 +134,19 @@ namespace ArcanePower
             int lit = 0;
             if (!shadow && Math.Abs(cosine) > .000001)
             {
-                // Vanilla solar logic: eight pivots, sun-facing side, 100 m
-                // rays on layer 15; ignore this block, not the rest of its grid.
-                // Use the moving panel frame rather than the pedestal frame.
-                foreach (double x in new[] { -2.35, -.85, .85, 2.35 })
-                    foreach (double height in extension ? new[] { -1.02, .98 } : new[] { 1.6, 3.6 })
+                // Subdivide each former solar sample into four: 32 pivots give
+                // 3.125% partial-shadow steps. Keep the vanilla sun-facing side,
+                // 100 m/layer-15 rays and own-block exclusion in the moving frame.
+                foreach (double x in new[] { -2.725, -1.975, -1.225, -.475, .475, 1.225, 1.975, 2.725 })
+                    foreach (double height in extension ? new[] { -1.52, -.52, .48, 1.48 } : new[] { 1.1, 2.1, 3.1, 4.1 })
                     {
                         Vector3D pivot = panel.Translation + normal * (cosine >= 0 ? .26 : -.26) + right * x + up * height;
                         if (SolarPivotLit(pivot, sun)) lit++;
                     }
             }
-            state.SunIncidence = ThermalRadiators.SolarExposure(cosine, lit / 8.0,
+            state.SunIncidence = ThermalRadiators.SolarExposure(cosine, lit / 32.0,
                 MyAPIGateway.Session.WeatherEffects.GetSolarMultiplier(Block.GetPosition()), shadow);
-            PanelCoolingMW = ThermalRadiators.Cooling(Spec.CoolingMW, state.Exposure, density > .001 ? 25 : -270.15, state.SunIncidence);
+            PanelCoolingMW = ThermalRadiators.Cooling(Spec.CoolingMW, state.Exposure, density, state.SunIncidence);
             return PanelCoolingMW;
         }
 
@@ -170,6 +165,6 @@ namespace ArcanePower
             return true;
         }
 
-        internal void InvalidateRadiatorCooling() { environmentAt = -1000; }
+        internal void InvalidateRadiatorCooling() { environmentAt = -1000; CircuitRevision++; }
     }
 }

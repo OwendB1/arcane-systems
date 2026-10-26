@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "revision": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc",
+  "revision": "Models/Cubes/large/Thermal/thermal_4dafbdfd5573",
   "blocks": 24,
   "native_meshes": 274,
   "construction_models": 72,
@@ -737,289 +737,289 @@
       "subparts": []
     },
     "APT_ReactorHousing_LA_Carriage_M_LOD1": {
-      "sha256": "14b272e470ff2ac90c37cf24d808628535d2047b81b64b397121b05d6def2ca5",
+      "sha256": "150ef499543c05d9afbb9f85d05f76f7b8d917c2981a5f945f799df294f9593d",
       "triangles": 4180,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LA_Carriage_M_LOD2": {
-      "sha256": "23ed458b75a691715f73950f30efbf94c45d8e055faf08066b873a9736b5a104",
+      "sha256": "1db59220fb510ecde7c71e52b7e1b8dd78cdd3113358673f302e201f019ebc37",
       "triangles": 3282,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LA_Carriage_M": {
-      "sha256": "a6657210ecdddb59170994242b21589d47b84955fe4c0753eba73ff8eac948bd",
+      "sha256": "e3533ab8a451c15bdd46111a4e48664358a76a0bcd2d34d01a6d562d6f81ed38",
       "triangles": 5574,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LA_Carriage_M_LOD1_r14b272e470ff.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LA_Carriage_M_LOD2_r23ed458b75a6.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LA_Carriage_M_LOD1_r150ef499543c.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LA_Carriage_M_LOD2_r1db59220fb51.mwm"
       ],
       "subparts": []
     },
     "APT_ReactorHousing_LA_Intermediate_M": {
-      "sha256": "3896254ad4bfe327959ed81dbd11e2dc606705b7aa9cb622c34c93ff3390952f",
+      "sha256": "479fd72df7a458315aca02e842fa4e08ebb4a42888d19e64f851cde72f72a83e",
       "triangles": 1920,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LA_CoverMinus_M": {
-      "sha256": "59b85f4ad1f8ddb432d7b42f8edbd7d515c5c155b0fcd5664b334ce4fb57b2b8",
-      "triangles": 22,
+      "sha256": "2694c2b8fad7da53e0e9def2ab969650173834fae01f3c516a35ab2140d686f4",
+      "triangles": 42,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LA_CoverPlus_M": {
-      "sha256": "3de40ef8da1cdb482475f10d3b4db4f39c64421f394322a823f8c8c79677638f",
-      "triangles": 22,
+      "sha256": "bd02b61eaf389c9159811d624aa82a1411f380d0a0789b8a0834120024589674",
+      "triangles": 42,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LA_ConnectorTail_M": {
-      "sha256": "0e5c36d714026675d18c13eb2cae6e233fa364a9d38aceb03f3fddb138aa0b53",
+      "sha256": "c69152a0ee72cd2f72948197e3e2f50ce75d76dfbb0691ee5756f4a7aa4ed73a",
       "triangles": 124,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LB_Carriage_M_LOD1": {
-      "sha256": "2fdd177ee481312d5e694be1bdbcfb7a0bd9ce795c9641480257d8285fcf6a7f",
+      "sha256": "0982a3a22295e0fb2755f7fecf63f2571b30c4946574b11191a4336e24817e44",
       "triangles": 4180,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LB_Carriage_M_LOD2": {
-      "sha256": "84b479632366075c43b637aa46bbbb83dc0c38ab8ff1b65fbcb6ccc72c859193",
+      "sha256": "92cbd2f73a646766f30a0e14e0c6d25d99d10c1f02665f17c42ad7ff3fa15dda",
       "triangles": 3282,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LB_Carriage_M": {
-      "sha256": "fca8aca06c53bcd03e61ac04cac4e227b0a4fd2d22b1d15540d59319d543969d",
+      "sha256": "955a46b9c2ff128b2a8d9d05da41290f12731811e5e343d31383e02394fb1256",
       "triangles": 5574,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LB_Carriage_M_LOD1_r2fdd177ee481.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LB_Carriage_M_LOD2_r84b479632366.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LB_Carriage_M_LOD1_r0982a3a22295.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LB_Carriage_M_LOD2_r92cbd2f73a64.mwm"
       ],
       "subparts": []
     },
     "APT_ReactorHousing_LB_Intermediate_M": {
-      "sha256": "d12d90234f7add63752201cdf10bd45e0d6545a35d41ae820df2272d12d21cc2",
+      "sha256": "7256c9ca4b84b1a4fbf3b2d7b01e8163be37c2c6050467dc48c51f7b17930ee8",
       "triangles": 1920,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LB_CoverMinus_M": {
-      "sha256": "10c9a7746758c248551d5ff40e0d17c39a29b93fbd1fe6c08a1a5f7beefc0f27",
-      "triangles": 22,
+      "sha256": "78c6c714097c697dbcae2217f7f2b4e1dfca85344cb716f96c5e48982d7eea30",
+      "triangles": 42,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LB_CoverPlus_M": {
-      "sha256": "d3799549f025e3f457beb6693b3421c034bc1153d6478b59c89163346efc50de",
-      "triangles": 22,
+      "sha256": "680aacf81447adc72e83d85933b8ab57c9d1843f959e3e34f59985d60c26ddcd",
+      "triangles": 42,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_LB_ConnectorTail_M": {
-      "sha256": "011c02f296fbbb3aa3ddef24049db1bb5cb51b3ca6f6a8e5db464f83e8c1c5de",
+      "sha256": "d71da06849a9de9fb58f93ac6a4606174f410fad18e167c31623b981a3da4ae3",
       "triangles": 124,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RA_Carriage_M_LOD1": {
-      "sha256": "729e6391475bbf335f24ae657071778266d7c8c8da2439db700b79dd2ba1c009",
+      "sha256": "b21d57ed137d499313cf655a75513c1d51ae9fffe60c4e7d8575b976bafd0842",
       "triangles": 4180,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RA_Carriage_M_LOD2": {
-      "sha256": "f33f243374fff3c9df968057af794924d4d3e09818dfd8eaa99b3f813bc021bb",
+      "sha256": "3bdcfc2f6d65f0cc4d514fe11b207431ddb0e2ed6ab9cb4b89e2a868b2939816",
       "triangles": 3282,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RA_Carriage_M": {
-      "sha256": "e42cfc13f49c4d147e8e709e7b8400b2b0489cbd883b643647886dc43d553dd2",
+      "sha256": "53406c28d33ac80d3703100b47ea688fcb79d9c6ebfd682287d5eea26be9ae82",
       "triangles": 5574,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RA_Carriage_M_LOD1_r729e6391475b.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RA_Carriage_M_LOD2_rf33f243374ff.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RA_Carriage_M_LOD1_rb21d57ed137d.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RA_Carriage_M_LOD2_r3bdcfc2f6d65.mwm"
       ],
       "subparts": []
     },
     "APT_ReactorHousing_RA_Intermediate_M": {
-      "sha256": "b18122245cb4647ea849c6807c812c63da76150c1011d1d1c2fc361c3bdb27be",
+      "sha256": "d0f29c64a4e25930af9aac3656852ad7479963cf511ca3be1585ee644c3d99b9",
       "triangles": 1920,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RA_CoverMinus_M": {
-      "sha256": "cea623f8248f0c5910811bc61078f1bec3f2dceb436487515ab48cf63392175c",
-      "triangles": 22,
+      "sha256": "a6d97cb331954861aa106fe24336e6c85cbba99d0cc58a9518d003c3b2cca9f7",
+      "triangles": 42,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RA_CoverPlus_M": {
-      "sha256": "d3711e482ace6fb5b5a663cf4e844de6b0390a1d1f57dc1c02bf83b9c6f11c28",
-      "triangles": 22,
+      "sha256": "2cf9c1cef63083f4ef1abc8de07767045ab80b82bb4bcb3a0732b83046853bda",
+      "triangles": 42,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RA_ConnectorTail_M": {
-      "sha256": "04f43e7483085ae42e466114dbb8d5c138f1a096f41b783959c159c21b31a5fb",
+      "sha256": "65d7fa226e0255516b64e8bab9d0b6b0cda6a09c13d13cd75ea26187b23aff00",
       "triangles": 124,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RB_Carriage_M_LOD1": {
-      "sha256": "7725d58bbe8146e0eda985db60ce40d127b6acab2a4eb4ca7da547349b1ba93e",
+      "sha256": "548d88de2657bc45cf5baf24b986e0a0b8270f2c16673f35421a3afb6c544341",
       "triangles": 4180,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RB_Carriage_M_LOD2": {
-      "sha256": "bfb948c155452a9e6a18448e5e50969b614197cc11387c94ba4cb326ed61db10",
+      "sha256": "50c670b5043c2eadcafdf3313e949824407846e3c61cc919c8578765b0b8fcaa",
       "triangles": 3282,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RB_Carriage_M": {
-      "sha256": "c42ef7853ea8814468e1674b1372cf8fb8fc8420c76fdb2142fefe27010fc30a",
+      "sha256": "eda85018549888d6010f0c44a8005bb237488391621574830930fa0ce2cab981",
       "triangles": 5574,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RB_Carriage_M_LOD1_r7725d58bbe81.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RB_Carriage_M_LOD2_rbfb948c15545.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RB_Carriage_M_LOD1_r548d88de2657.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RB_Carriage_M_LOD2_r50c670b5043c.mwm"
       ],
       "subparts": []
     },
     "APT_ReactorHousing_RB_Intermediate_M": {
-      "sha256": "786a6c17825e330fff554ab034e596972c1b68ea5f4fba6362e8b7c2f31d0616",
+      "sha256": "46a45fe3e4509d3e42e5c5a23f90c71d0aa214424d074c967f9d7411341b9b40",
       "triangles": 1920,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RB_CoverMinus_M": {
-      "sha256": "5ba1badc3e731c29076955369af32e2240bd84af8abbee71345983ce3b752e9c",
-      "triangles": 22,
+      "sha256": "b93b51db59a7ea6f9119f780f4f9bdea011f0301ae1707bd815733d596315863",
+      "triangles": 42,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RB_CoverPlus_M": {
-      "sha256": "a21b7bd80f8b44c1a7d4bdcbe8fab4f431cd1fa4ec45670c9884424d583a81da",
-      "triangles": 22,
+      "sha256": "eef05f2ab17c81905003d21a58797f8e0ecd47e805c34d2c6430f3af1b2c3924",
+      "triangles": 42,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_RB_ConnectorTail_M": {
-      "sha256": "80811dfc5fcb2a6a68b374423e85af72381ffe9a81c1135becb717eef09063dd",
+      "sha256": "2e3d59fdf26d6bf4e138b6c2c20353c8780c4b544b55d207eea00ea0ab8eeae5",
       "triangles": 124,
       "type": "main",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_M_BS2_LOD1": {
-      "sha256": "dd98062ed5e5931a10ba8981748a304761b26d86d343232e86203e40ed43a947",
-      "triangles": 112180,
+      "sha256": "36b2bfad279a7846be5d1df6976f5019c41608c3a6f75d15bfd6310760df891b",
+      "triangles": 113910,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_M_BS2_LOD2": {
-      "sha256": "fdf8961c902584963f0215c763e1de18f9ad70c535d4c32d3bbd1fb319ffdf2c",
-      "triangles": 60839,
+      "sha256": "b47cd9c3d3c6c2b22f7bbc2ceec88ad4cc213d8a38b0c1e87026ace9aa7d82fc",
+      "triangles": 61715,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_M_BS3_LOD1": {
-      "sha256": "01ddce34f6dfbb58c83c80bb81bb6e162360cebc6cf55242cfbab2d2462055c2",
-      "triangles": 116098,
+      "sha256": "1de8615d7a11e91b924d1c429e54d65144d2182ce23fa524d567e2aeef2de353",
+      "triangles": 117826,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_M_BS3_LOD2": {
-      "sha256": "8e24e0fd5c6599a1dada208fc1368ca22fbcdab7482d043e289b0682060bb6bd",
-      "triangles": 63723,
+      "sha256": "d2d379c606a843ce2617bfeb7014dcb4495607029a69ec61aa754a9b49bdcc2f",
+      "triangles": 64599,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_M_LOD1": {
-      "sha256": "fda00b033fc7d3b85e0436e879552042a7e772e1723906bc681f926dad6a05f7",
-      "triangles": 140189,
+      "sha256": "d4cb6f6fa86457b4c7d5fe922caa67f88fad51d61392e106aa0d2e49a4e3cb76",
+      "triangles": 141945,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_M_LOD2": {
-      "sha256": "a69535a37a8b01a597c389fcfa83a790c83eed504e5c730a0735beea27b12ed0",
-      "triangles": 111364,
+      "sha256": "996a17eb8d17954c5ea31d8223ca46cace38c3c318b265ab3946047d46741283",
+      "triangles": 112165,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_M_BS1": {
-      "sha256": "9c851c007307e596846f23c1997c7c0f5a27c256caaaf75364135d62a0c847c7",
+      "sha256": "44c02695c8508dcb66019a9300df21098c45ae171c10a16f84260af430dbddc6",
       "triangles": 6368,
       "type": "bs",
       "lods": [],
       "subparts": []
     },
     "APT_ReactorHousing_M_BS2": {
-      "sha256": "0eecedd91a2cd28c218993b26f65efbe2f2f965e46824f0a2b337d2663adeb47",
-      "triangles": 190907,
+      "sha256": "bc3941c99349f57627aa3380c8d3258a265f87e6a372c0ecbe06e37137d779e2",
+      "triangles": 193913,
       "type": "bs",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS2_LOD1_rdd98062ed5e5.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS2_LOD2_rfdf8961c9025.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS2_LOD1_r36b2bfad279a.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS2_LOD2_rb47cd9c3d3c6.mwm"
       ],
       "subparts": []
     },
     "APT_ReactorHousing_M_BS3": {
-      "sha256": "7ca40ebf77eb147a9958033ab1e57b43a84ab864a38450cd7aa267ca2fa67f91",
-      "triangles": 196707,
+      "sha256": "32a65376ea3ff9078ea28894b36c90f17dc20d19f3e45f6b769258e055bdc0ea",
+      "triangles": 199713,
       "type": "bs",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS3_LOD1_r01ddce34f6df.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS3_LOD2_r8e24e0fd5c65.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS3_LOD1_r1de8615d7a11.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS3_LOD2_rd2d379c606a8.mwm"
       ],
       "subparts": []
     },
     "APT_ReactorHousing_M": {
-      "sha256": "b3627721ca2c0d8fd43d0302eef94113beb94f0b82a73ddb6a9dc76c4dc1b75e",
-      "triangles": 192699,
+      "sha256": "5c07e753c3ca3835d3889e08b22f4767c919238b3ee8f582bb8519dfdd8427ce",
+      "triangles": 195879,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_LOD1_rfda00b033fc7.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_LOD2_ra69535a37a8b.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_LOD1_rd4cb6f6fa864.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_LOD2_r996a17eb8d17.mwm"
       ],
       "subparts": [
         "ArcanePower_FloorLeaf",
@@ -1148,129 +1148,129 @@
       ]
     },
     "APT_BraytonTrain_TurbineRotor_M_LOD1": {
-      "sha256": "13102f3692ff7f38f830191eb3d9601ccc8b0e5432cff69e3cb418e8ae6495da",
+      "sha256": "7c09cd422b47ea3584326cc4c753f9e2d89b810f9f26f9cf9994b88ed366ba9e",
       "triangles": 180666,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_TurbineRotor_M_LOD2": {
-      "sha256": "f307255f6406df900b37d1cf8721d6d3a6cdac8a9246edd3b90a42fd10b01fe0",
+      "sha256": "b6a07a24642b3ff2e03f723edc13454f2b7b93946c321d7c426c6f4639e0553a",
       "triangles": 82132,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_TurbineRotor_M": {
-      "sha256": "2f4c7ab25c734f1bb4b9976ce3e60e777e3a929fa417b93d69422645e47f37f7",
+      "sha256": "cd10cecf6399d0dc029b20f9984de6975449c6fa4c6b7a08670ce29240c080d9",
       "triangles": 329044,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_TurbineRotor_M_LOD1_r13102f3692ff.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_TurbineRotor_M_LOD2_rf307255f6406.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_TurbineRotor_M_LOD1_r7c09cd422b47.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_TurbineRotor_M_LOD2_rb6a07a24642b.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrain_CompressorRotor_M_LOD1": {
-      "sha256": "d303913d9e3d408d5a9d442bf746ae15fafe9f02f8000beb5e7e60f89d57f5bf",
+      "sha256": "3d198b87685b23dcd3d87417b6073e896eee103cd0d5c790f8ff7626c464377e",
       "triangles": 28842,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_CompressorRotor_M_LOD2": {
-      "sha256": "99f58df195b247b7c948ac39a127e484212c5aa5e615e098fbba6909694c760f",
+      "sha256": "b06f645ba0f548d46c6b22feca573ebbcbe89cfcac89afc40ae43fceb90a8c93",
       "triangles": 13110,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_CompressorRotor_M": {
-      "sha256": "95c7a1daa38cbadc74ed10f0e0553d6d1db4c2bdbec610c48e3d91657935ab75",
+      "sha256": "9ea3735d5e047d156492ee8f365775b954624095e50f3898a2214cc4fe55ee60",
       "triangles": 52440,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_CompressorRotor_M_LOD1_rd303913d9e3d.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_CompressorRotor_M_LOD2_r99f58df195b2.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_CompressorRotor_M_LOD1_r3d198b87685b.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_CompressorRotor_M_LOD2_rb06f645ba0f5.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrain_M_BS2_LOD1": {
-      "sha256": "f6ebd23d9819d140856f8ac8d8dfa7ba827ac77006d7ded4b6986f941b25a07e",
+      "sha256": "523a0c2e8768e5a82074f1fdd836adfe2164735145201ee7b852102d171f78ae",
       "triangles": 276121,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_M_BS2_LOD2": {
-      "sha256": "a7d76224278aa81a906857b085fd77e83b4417840d6e3f99e4c0f080caea2935",
+      "sha256": "461bfaa2eb6d27bfe8e6bf9b663d3526350a044b23d3995974aa0d6907ec3be1",
       "triangles": 126032,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_M_BS3_LOD1": {
-      "sha256": "a17e8b6b95c9dce07958dd5118feb865115aab1f08c908f2f68c9e3e1ae11da6",
+      "sha256": "cb8674000a810a973f3db2ea8dc250ca559e555de1751f4caa1254660820fb95",
       "triangles": 276589,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_M_BS3_LOD2": {
-      "sha256": "a1aafd18e11b6c2a9440461832684a05514b0110396f6e9d2ee7abf5ab7e9388",
+      "sha256": "6ff4def525a93b87ff53b5e04d9fc1891329e7f5dfad35bb17fd206e99ab3eb7",
       "triangles": 126256,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_M_LOD1": {
-      "sha256": "7f11b0fc8bfb0ce3a01c779d4196396c6502a6566a7c7560261c6123e0abf298",
+      "sha256": "5fdb46f48d956b38324c021806fd48eecf9d712f8b26712ff8d498ac6c60eee7",
       "triangles": 86316,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_M_LOD2": {
-      "sha256": "51d2b06206257212e0d54a152c70f0da535d6d7c4ac6045286403f72fc6ba8b3",
+      "sha256": "fc40c49f1bc83f0f700cb31ed8083aad80b3fa91ee3d8438c5cb03bbddf7d879",
       "triangles": 47328,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_M_BS1": {
-      "sha256": "f6c9bca526a40c28e35d52e87fdfb657714eec2bafc8a4b1f4b808ef781b1779",
+      "sha256": "21a09e763db1c0862edd17921185f9ef9ba0019063e026a94a52d50e3de68163",
       "triangles": 608,
       "type": "bs",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrain_M_BS2": {
-      "sha256": "d24fa75d07a7864af46a6da8e92ad4c13f71cb2e81e780baa723f0361660f7e0",
+      "sha256": "f720e4ca912931992c994265c89748dc09f16fe60d068ca85089b8685d543583",
       "triangles": 515601,
       "type": "bs",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS2_LOD1_rf6ebd23d9819.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS2_LOD2_ra7d76224278a.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS2_LOD1_r523a0c2e8768.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS2_LOD2_r461bfaa2eb6d.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrain_M_BS3": {
-      "sha256": "75b22729ddda2e1740d75a602fb5631fcb3af18afeee3f32cb604b2c78f944d2",
+      "sha256": "b82ad9527907168843890bef1bb15a2d972b928a514e52158d2a783473e5fa19",
       "triangles": 516757,
       "type": "bs",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS3_LOD1_ra17e8b6b95c9.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS3_LOD2_ra1aafd18e11b.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS3_LOD1_rcb8674000a81.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS3_LOD2_r6ff4def525a9.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrain_M": {
-      "sha256": "08f029d80f66cfb0d110c2c187a841660b68f8c59e949c15f3101d706dae20bd",
+      "sha256": "8cd919a863339d26258995d60064059f1506768606c49fded8fcd0725a9206c9",
       "triangles": 167665,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_LOD1_r7f11b0fc8bfb.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_LOD2_r51d2b0620625.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_LOD1_r5fdb46f48d95.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_LOD2_rfc40c49f1bc8.mwm"
       ],
       "subparts": [
         "APT_BraytonTrain_TurbineRotor_M",
@@ -1278,129 +1278,129 @@
       ]
     },
     "APT_BraytonTrainUpgraded_TurbineRotor_M_LOD1": {
-      "sha256": "bc05da9c012f4fe036de625a93e44b8fb684243396a19984ccab9e9e726b6776",
+      "sha256": "23ada5d1587ca88b79e417d345cb92a46b15eee9a9635458626e7886ab751d8e",
       "triangles": 180666,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_TurbineRotor_M_LOD2": {
-      "sha256": "b31f32e52cbd5a9502a60cf1d4a38aee812d8ea5669c731530a8f29ace583939",
+      "sha256": "48a98949ffe391d77dd0171b37f5ed5b9c30a7368f4324b3ab21eb1254d43da5",
       "triangles": 82132,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_TurbineRotor_M": {
-      "sha256": "355abbb559ff1769f315a458c46f99714ca533fc1cb606c686651e299b1ebfa1",
+      "sha256": "21f531003f199029484a0433b228d4838a64b94a2a70ff4635046a2d743f7bb9",
       "triangles": 329044,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_TurbineRotor_M_LOD1_rbc05da9c012f.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_TurbineRotor_M_LOD2_rb31f32e52cbd.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_TurbineRotor_M_LOD1_r23ada5d1587c.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_TurbineRotor_M_LOD2_r48a98949ffe3.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_CompressorRotor_M_LOD1": {
-      "sha256": "703c0ad17ced5d2a3c3ea9df86639b25c02845bebfbb8c87e0c4bdb113505feb",
+      "sha256": "63d448e38ff3bac1be6cdb89bbe9fd6e37e4382d7d7bb7ae2e2c685e38daa3b7",
       "triangles": 28842,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_CompressorRotor_M_LOD2": {
-      "sha256": "cd3960ab138101b00046a86e1a87df62135579849fb16e2fa6d3f81ab0179fdf",
+      "sha256": "23c168d26139c195fab1a9cdbf3fd3e8d8b8ad47d17faefbd12783ea6a317bbb",
       "triangles": 13110,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_CompressorRotor_M": {
-      "sha256": "5d40e33dd09456a0dad283913a2f89782399860e62a48393fcf67d589629f06a",
+      "sha256": "0141223fc3abae0bbdc8d9a92e7b002fd2d8e6546274158d03a777e81e6c06ec",
       "triangles": 52440,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_CompressorRotor_M_LOD1_r703c0ad17ced.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_CompressorRotor_M_LOD2_rcd3960ab1381.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_CompressorRotor_M_LOD1_r63d448e38ff3.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_CompressorRotor_M_LOD2_r23c168d26139.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_M_BS2_LOD1": {
-      "sha256": "3bf986e37cf042eefcca1674a76a29e367c6d26cca5446bcb1cf6598060b74c1",
+      "sha256": "57cabcfff3ed745f82e2ee9c633da2bb4df88b2a946bfdb5fce34e5be84c8e06",
       "triangles": 276088,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_M_BS2_LOD2": {
-      "sha256": "c71c742d5dc103ae98aa4a681bb9db362330da43b6bd41925ba50903ebf76189",
+      "sha256": "d751c87c3e512879916968b73fcc43a0dfb1ca6b019b5bc65963ae15bc10a4cf",
       "triangles": 126051,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_M_BS3_LOD1": {
-      "sha256": "07325ad121d161bd2670a8573618431ecc9e9c98fc3c58fdeb2f5d12ebaacdce",
+      "sha256": "6f1d899d6b9edfdd6c0f1303aab099ddf9fedc3df0a94501d67630baf06ec5a1",
       "triangles": 276472,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_M_BS3_LOD2": {
-      "sha256": "b50c13f01c3ce24aed130b5ac1ec109d69d4d17f400d2e1437c38ff51650a002",
+      "sha256": "4f13bb4374424be1dd3f2ac596127702de704ce4471423bf1a1e4d940edaf5d8",
       "triangles": 126243,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_M_LOD1": {
-      "sha256": "26ef3913241dcb506f46c817f1dd1686daf2fd71ff1ceae33ccd5083493dede3",
+      "sha256": "fea42318775186d731281dc92d2ddd3b75f2b896f190e68e70dcaa5f0b011962",
       "triangles": 86584,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_M_LOD2": {
-      "sha256": "dcdd92dc96c94b44684c7ea1f01e205572bf357983358680fd26a0e82cba6c15",
+      "sha256": "6038ceac58c7c9fbf428301e15ef8e520b2f41d31356a6133cc019614a0fa169",
       "triangles": 47483,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_M_BS1": {
-      "sha256": "db917eeffc1695f39050fa9cfa65674ebcfe264bb1e857f791af8ae064ec6f20",
+      "sha256": "d99004bb432f17b1664bf3cc98b5b962839de5d30f4b6ad8b4f848a792c64669",
       "triangles": 608,
       "type": "bs",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_M_BS2": {
-      "sha256": "b1b330f9c3f5e41d03dc382abb24cda03db698e9c156db3dc0b8a7e3c5a147c6",
+      "sha256": "593a29068485960ac9cc9d5d490b4c2c21514c02f899fcfd669db9166402ac1d",
       "triangles": 515528,
       "type": "bs",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS2_LOD1_r3bf986e37cf0.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS2_LOD2_rc71c742d5dc1.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS2_LOD1_r57cabcfff3ed.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS2_LOD2_rd751c87c3e51.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_M_BS3": {
-      "sha256": "4b62ba555a36530e252603c705e196a21c393778c07d0b3933e4263b726659ac",
+      "sha256": "5e79106d7b7bf40552fd0879230758738b1163760a4ba09a12db513c8f523e05",
       "triangles": 516680,
       "type": "bs",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS3_LOD1_r07325ad121d1.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS3_LOD2_rb50c13f01c3c.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS3_LOD1_r6f1d899d6b9e.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS3_LOD2_r4f13bb437442.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainUpgraded_M": {
-      "sha256": "d6f7600611cc99ff3af12bf3ed946e3f2233f9ce1d3415ef733e085f77bd1361",
+      "sha256": "c8f4189d59c663ed6111cb3ed25e84103318c521912e2d9139b6108707ba957d",
       "triangles": 168220,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_LOD1_r26ef3913241d.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_LOD2_rdcdd92dc96c9.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_LOD1_rfea423187751.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_LOD2_r6038ceac58c7.mwm"
       ],
       "subparts": [
         "APT_BraytonTrainUpgraded_TurbineRotor_M",
@@ -1999,129 +1999,129 @@
       "subparts": []
     },
     "APT_BraytonTrainMir_TurbineRotor_M_LOD1": {
-      "sha256": "627c72c608ff372c94c5846c5b8c2197206a9a410c0d39a380f4f6e3aa7c2920",
+      "sha256": "c9ed81eae3a5840bde2cb9cfe7c60fd7a49984f98e7fabffefd6e9a68fea82b4",
       "triangles": 180666,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_TurbineRotor_M_LOD2": {
-      "sha256": "fcc9bea33712270635454d796df0b011959d7f8fcabf18bdfa5a82a8533b99d1",
+      "sha256": "014efc0a382d74099d050fdf73fd268d2ee85236783eae26f02fda2764e386f5",
       "triangles": 82132,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_TurbineRotor_M": {
-      "sha256": "abb317a8f3b2accf97ce161ae31083f1819f5d110760f7b003e565e556193514",
+      "sha256": "c8680577c87df2cf16d0b05ba6740bd4e5cee47b12fa85c0789b4cce1264cbde",
       "triangles": 329044,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_TurbineRotor_M_LOD1_r627c72c608ff.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_TurbineRotor_M_LOD2_rfcc9bea33712.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_TurbineRotor_M_LOD1_rc9ed81eae3a5.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_TurbineRotor_M_LOD2_r014efc0a382d.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainMir_CompressorRotor_M_LOD1": {
-      "sha256": "7cbdedc95d0cd455ad343fb70cb03cd433d5b55099930a95f678f3a1ca9e9268",
+      "sha256": "bf5f6128526ad3509e37b6640a780b5bdcb36addbde07ebcfa8eced0103832ae",
       "triangles": 28842,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_CompressorRotor_M_LOD2": {
-      "sha256": "ef3d7492fcc8ae79758fb38758e7942ca2160f3ba265d58d94a0c92ac9a27db1",
+      "sha256": "3ac4975f63024011b9d6543af475f73dda0df8cf789402559d31f5c0e2fadacb",
       "triangles": 13110,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_CompressorRotor_M": {
-      "sha256": "0b684dd93e7d71ee8083307a343af559cee059bf3744fcf8356eb3b654cbd874",
+      "sha256": "fa8d432efdcefed85078a514002fca5a9132a0c51e1d7eade7b5eacb9aaaa561",
       "triangles": 52440,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_CompressorRotor_M_LOD1_r7cbdedc95d0c.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_CompressorRotor_M_LOD2_ref3d7492fcc8.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_CompressorRotor_M_LOD1_rbf5f6128526a.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_CompressorRotor_M_LOD2_r3ac4975f6302.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainMir_M_BS2_LOD1": {
-      "sha256": "f73d198bcf08b4acdb982c5808e1d81e07077fe574583f73ebda502759756134",
+      "sha256": "62fe59961658431a2e5a0c68254f4883a71aeae273c6d1caecc6d9d98f7d94ab",
       "triangles": 276136,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_M_BS2_LOD2": {
-      "sha256": "300d0970666c0d0507d07b0ecc1af8e3b49cac70c6ed1ec3cf820d4f76ffec6a",
+      "sha256": "1175094055da18f6d0a0514110ef0c8ebca679a1c7c32d34be10ff36d41211b3",
       "triangles": 126031,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_M_BS3_LOD1": {
-      "sha256": "ca925f1f5629d137e4a9e7c24df8747c760ec5e1c8ff32c304b78df0202b5712",
+      "sha256": "04441e2077ad23ee7227dcc7cc279be81f5a4052de7bfd709547fbc8a05f019a",
       "triangles": 276840,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_M_BS3_LOD2": {
-      "sha256": "778bdfbcbd4c44116179db21e3a0118e16c67d4000bb5e2aebcf8675eb74bb19",
+      "sha256": "ef1e7b8f85a61d3276d2fe42b63355d03fefe3dcfad82fafa5f320104d4bbaa6",
       "triangles": 126362,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_M_LOD1": {
-      "sha256": "fef9fa82a20ba24c7b16af3bd383fd03e7c628837e08a233e341f423c9f2d872",
+      "sha256": "ad2880e1bca98245803d1bbfc86dc6115188b4ee030a4945002b76d3e94240cf",
       "triangles": 86331,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_M_LOD2": {
-      "sha256": "55da02843172b742a56f387064f0cf75e3418ec44e658e32338ea368a4bf004a",
+      "sha256": "aa5a3fafbfe81d0f9fd2f72a0f17ffcd2b7c87e4eeeeb3c9dc9927302adc9aa0",
       "triangles": 47326,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_M_BS1": {
-      "sha256": "266df037ec2d3a4818d0060cf84d314777494adee8384d04ed4ff5ce8b09a923",
+      "sha256": "732af48c231db25f399dcfceadc75f7b6cc59fd26edafdd1b0b91f2bb3d1409a",
       "triangles": 608,
       "type": "bs",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMir_M_BS2": {
-      "sha256": "e5e3f2577810f6ed806af5b783087b7b4cdca8ef05001195b5164efe0b785caa",
+      "sha256": "996efa07121b454bfbb42b5108a8999165b9ce3abb2caa8770100fb7dda8d3e5",
       "triangles": 515659,
       "type": "bs",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS2_LOD1_rf73d198bcf08.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS2_LOD2_r300d0970666c.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS2_LOD1_r62fe59961658.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS2_LOD2_r1175094055da.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainMir_M_BS3": {
-      "sha256": "5e87bb195887c184dca47852636e644c9d2c22a3a5d2d760f005b61705fda6af",
+      "sha256": "bcd0cf511d6c182a2d6bcc153488ffa4fae57a3658b3f675da81633b708beb8a",
       "triangles": 517243,
       "type": "bs",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS3_LOD1_rca925f1f5629.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS3_LOD2_r778bdfbcbd4c.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS3_LOD1_r04441e2077ad.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS3_LOD2_ref1e7b8f85a6.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainMir_M": {
-      "sha256": "b38f52f1f30f2fc6d8d1d74d75a3ddfa1af9fda7047e419acdb702bbd6a90be5",
+      "sha256": "71b2b447552f45b6f88ca48782eebeefae2c0beda9b80da18099cde8d2ea1f1d",
       "triangles": 167723,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_LOD1_rfef9fa82a20b.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_LOD2_r55da02843172.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_LOD1_rad2880e1bca9.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_LOD2_raa5a3fafbfe8.mwm"
       ],
       "subparts": [
         "APT_BraytonTrainMir_TurbineRotor_M",
@@ -2129,129 +2129,129 @@
       ]
     },
     "APT_BraytonTrainMirUpgraded_TurbineRotor_M_LOD1": {
-      "sha256": "e53cc91216ac1288849f7d01c95a11adce0851b26f9de9a32172605f76b5fe76",
+      "sha256": "82e26d064fa10b1ccbc534d6bf97121598fe8a58f2856327b78e13e8951e9f24",
       "triangles": 180666,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_TurbineRotor_M_LOD2": {
-      "sha256": "9d6b3f6ee66e33e1157af85c439c88a2d22db48f2303209409fb683cb45c9007",
+      "sha256": "7100801448f6b724eb0dda4a7ce88ce615d8e81f26394799e025a45be634d7b9",
       "triangles": 82132,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_TurbineRotor_M": {
-      "sha256": "30c3ce4a34c79f4bea8afc0ce22a66d4f30744d1f0959f95076b27b5463763b7",
+      "sha256": "413293b51cc6ef23ef3ab6c8ff6a92357bb1d64b48c8f2fb60bfa06de0f9540c",
       "triangles": 329044,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_TurbineRotor_M_LOD1_re53cc91216ac.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_TurbineRotor_M_LOD2_r9d6b3f6ee66e.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_TurbineRotor_M_LOD1_r82e26d064fa1.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_TurbineRotor_M_LOD2_r7100801448f6.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_CompressorRotor_M_LOD1": {
-      "sha256": "c6129e2be51d090c5dfd83ef38d5df83abbd10b81951e7e3c455199aa928d661",
+      "sha256": "bed2e4921b153d83722c5f608e7aa0cb35fbe76182aa5b6dc7a2fa4290b81ee0",
       "triangles": 28842,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_CompressorRotor_M_LOD2": {
-      "sha256": "5c1d43d9d1f6c3d103f319eac9208449f70d2835f9edc95c4240d53416b0cb1c",
+      "sha256": "470434b02c6f3851a4ede1a2fe6b7e2bad9b7beb9e54ea1edb8e84356622cdbb",
       "triangles": 13110,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_CompressorRotor_M": {
-      "sha256": "0a879d41308425fcf9110b476e64d08a2b3950aaf84dd7cf25b048d9c6d93bff",
+      "sha256": "e34edd35aa17362e40486eae8f7ceb2b3241ebbf4bd8c9b05a9da5c47083c2ba",
       "triangles": 52440,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_CompressorRotor_M_LOD1_rc6129e2be51d.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_CompressorRotor_M_LOD2_r5c1d43d9d1f6.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_CompressorRotor_M_LOD1_rbed2e4921b15.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_CompressorRotor_M_LOD2_r470434b02c6f.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_M_BS2_LOD1": {
-      "sha256": "6d0b60e12189d59889a01850c74d49750537e3306055fd047a5665cc865ba5e0",
+      "sha256": "c754474445d3f98a597b2587f3808e5e8c4dbb9e06e2eabcaa1c51fd2c613050",
       "triangles": 276104,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_M_BS2_LOD2": {
-      "sha256": "595347a5a954b0f5c18cba98ce791a16e9ff0e84949ccfe3eae37411203220e0",
+      "sha256": "5db01305478c2cc615daa0280b47c2095d33c3bd29f94fff51ff5b85b6e7ee6d",
       "triangles": 126049,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_M_BS3_LOD1": {
-      "sha256": "e3402e9f2465b2cb4665f7a7969ad6970702cd6412d8d7bb1a84a65a2773d032",
+      "sha256": "8fc2acfdab5a634d108bdd9be3aee756770d47381e0720dfea7bf18cb793b053",
       "triangles": 276936,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_M_BS3_LOD2": {
-      "sha256": "f263e248adf89b54ba3986e2c47bc95092bc9664fa1c481cf1b609b91a261c96",
+      "sha256": "79a1928881bf020549b4095c7ce9eb2041a5c66da1412b187438ec9e5544d053",
       "triangles": 126444,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_M_LOD1": {
-      "sha256": "f7469e6cd095ec49b87f3c0fa9e5e6ef609d3b142a5213161068d1697d033d95",
+      "sha256": "c33916ec69d6e90f6e585f0ec5bb338cba90a8c2e806e2afde121be204deb971",
       "triangles": 86600,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_M_LOD2": {
-      "sha256": "c295f2e85baa8d8b7ba8846529d8d0d31bb0ec2fa036fe317aa22305d754bb44",
+      "sha256": "9d728a240a1aac0c55cfb7a05ac674607b2bbc91610fd4fd72e49176094b41de",
       "triangles": 47481,
       "type": "lod",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_M_BS1": {
-      "sha256": "a1bc34c86f7a6e8926c679b7cec50e00bf972476aee8429f394ffb5ae52f1709",
+      "sha256": "0bbefa0e8d05006a9dbeae4aaba082685523e67f850fd3c07d322600f33a8de1",
       "triangles": 608,
       "type": "bs",
       "lods": [],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_M_BS2": {
-      "sha256": "07bb85423c478aefd4aeb9ca5306eb327bcb8aa7622250ee0ad181d8c8e37c46",
+      "sha256": "dc746ab1d994215b5748bfb63bfd51ee61b6d765847269e5b0909bb0995776b8",
       "triangles": 515586,
       "type": "bs",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS2_LOD1_r6d0b60e12189.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS2_LOD2_r595347a5a954.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS2_LOD1_rc754474445d3.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS2_LOD2_r5db01305478c.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_M_BS3": {
-      "sha256": "f8effa309078ac1466dddcc7ce6f98324165a8dd249e1572a18bf3090dd48551",
+      "sha256": "0beeee9d23f0391f53ea589df94320afb186b1bbb65a843b2d036cf020656056",
       "triangles": 517554,
       "type": "bs",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS3_LOD1_re3402e9f2465.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS3_LOD2_rf263e248adf8.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS3_LOD1_r8fc2acfdab5a.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS3_LOD2_r79a1928881bf.mwm"
       ],
       "subparts": []
     },
     "APT_BraytonTrainMirUpgraded_M": {
-      "sha256": "e23b4132f9e63fbee095dc52d30def785df6152aa62e330d7489947d95eb7964",
+      "sha256": "f02a284b63049ae6ca8186440c915e636cbb10368c54e6eab455142ae7ee9f7a",
       "triangles": 168278,
       "type": "main",
       "lods": [
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_LOD1_rf7469e6cd095.mwm",
-        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_LOD2_rc295f2e85baa.mwm"
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_LOD1_rc33916ec69d6.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_LOD2_r9d728a240a1a.mwm"
       ],
       "subparts": [
         "APT_BraytonTrainMirUpgraded_TurbineRotor_M",

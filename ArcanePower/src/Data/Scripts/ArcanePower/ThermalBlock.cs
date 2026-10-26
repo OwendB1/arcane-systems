@@ -21,20 +21,17 @@ namespace ArcanePower
         internal MyReactor Generator;
         internal ThermalModel Spec;
         internal ThermalStore Store;
-        internal double Efficiency;
-        internal double OutputGrantMW;
-        internal double RotorCirculation, RotorHotC = 45;
+        internal double OutputGrantMW, CoolingRejectedMW;
+        internal double RotorLoad, RotorHotC = 45;
+        internal ThermalOutputGrant OutputGrant;
+        private int outputAccountedAt = -1;
+        internal bool CoolingConnected, CoolingPowered = true;
+        internal int CircuitRevision;
+        private VRage.Game.ModAPI.IMyComponentStack circuitComponents;
         private bool receivedRotor;
         internal long SourceId { get { return Store.SourceId; } set { Store.SourceId = value; } }
-        internal double StartupInputMW { get { return startupInput; } }
-        internal long StartupOwner { get { return startupOwner; } }
         internal string Fault { get { return Store == null ? null : Store.Fault; } set { if (Store != null) Store.Fault = value; } }
         private bool preserveInvalidSave;
-        private MyResourceSinkComponent startupSink;
-        private long startupOwner;
-        private int requestedAt = -100;
-        private float startupDemand;
-        private double startupInput;
         private int environmentAt = -1000;
         private double coolingMW;
         private double clearExhaust;
@@ -73,14 +70,6 @@ namespace ArcanePower
                 Store.Rotor.TargetRpm = Store.Rotor.CompressorTargetRpm = 0;
                 receivedRotor = MyAPIGateway.Multiplayer.IsServer;
             }
-            if (Spec.Kind == ThermalKind.Train)
-            {
-                startupSink = new MyResourceSinkComponent();
-                startupSink.Init(MyStringHash.GetOrCompute("ArcaneContainment"), new MyResourceSinkInfo {
-                    ResourceTypeId = MyResourceDistributorComponent.ElectricityId, MaxRequiredInput = 50000,
-                    RequiredInputFunc = RequiredStartup });
-                Block.ResourceSink = startupSink;
-            }
             if (IsRadiator)
             {
                 if (Store.Radiator == null) Store.Radiator = new ThermalRadiatorState { EntityId = Entity.EntityId };
@@ -90,7 +79,34 @@ namespace ArcanePower
                 receivedRadiator = MyAPIGateway.Multiplayer.IsServer;
             }
             Block.AppendingCustomInfo += AppendInfo;
+            WatchCircuitChanges();
             ThermalSession.Add(this);
+        }
+
+        private void WatchCircuitChanges()
+        {
+            circuitComponents = Block.SlimBlock.ComponentStack;
+            circuitComponents.IsFunctionalChanged += CircuitStateChanged;
+            Block.EnabledChanged += CircuitEnabledChanged;
+        }
+
+        private void UnwatchCircuitChanges()
+        {
+            if (circuitComponents == null) return;
+            circuitComponents.IsFunctionalChanged -= CircuitStateChanged;
+            circuitComponents = null;
+            Block.EnabledChanged -= CircuitEnabledChanged;
+        }
+
+        private void CircuitEnabledChanged(IMyTerminalBlock block) { CircuitStateChanged(); }
+
+        private void CircuitStateChanged()
+        {
+            // Invalidate the snapshot even if damage/repair finishes between
+            // ticks. Recheck on the next server update, after output accounting.
+            // IsWorkingChanged also fires for power loss; that is not a repair.
+            unchecked { CircuitRevision++; }
+            if (RadiatorBase != null) RadiatorBase.InvalidateRadiatorCooling();
         }
 
         internal void ReceiveRotor(ThermalRotorState state)
@@ -112,8 +128,7 @@ namespace ArcanePower
             var state = Store.Rotor;
             if (MyAPIGateway.Multiplayer.IsServer)
             {
-                ThermalRotors.Drive(state, Store.HotMJ, Spec.RatingMW, RotorHotC,
-                    RotorCirculation, Healthy, 1.0 / 60);
+                ThermalRotors.Drive(state, RotorLoad, RotorHotC, Healthy, 1.0 / 60);
                 state.Sequence++;
             }
             else if (receivedRotor) ThermalRotors.Advance(state, 1.0 / 60);
@@ -127,15 +142,27 @@ namespace ArcanePower
             }
         }
 
-        private float RequiredStartup()
-        {
-            return startupSink == null || !Healthy || MyAPIGateway.Session.GameplayFrameCounter - requestedAt > 1 ? 0 : startupDemand;
-        }
-
         internal bool Healthy
         {
-            get { return Fault == null && Block != null && !Block.Closed && Block.Enabled && Block.IsFunctional
-                && Block.SlimBlock.BuildLevelRatio >= 1 && Block.CubeGrid.Physics != null; }
+            get { return Fault == null && HardwareReady; }
+        }
+
+        internal bool HardwareReady
+        {
+            get { return Block != null && !Block.Closed && Block.Enabled && Block.IsFunctional
+                && Block.SlimBlock != null && Block.SlimBlock.BuildLevelRatio >= 1
+                && Block.CubeGrid != null && Block.CubeGrid.Physics != null; }
+        }
+
+        internal void RecheckCircuitFault()
+        {
+            if (Fault == null || preserveInvalidSave || !HardwareReady || Store == null
+                || !Store.Valid(Block.EntityId, Spec.CapacityMJ)) return;
+            if (Generator != null && (Generator.CurrentOutput != 0
+                || Generator.BlockDefinition.FuelInfos.Length != 0
+                || !(Generator.BlockDefinition.MaxPowerOutput > 0))) return;
+            // A repaired circuit may retry; never discard or replenish its heat.
+            Fault = null;
         }
 
         internal ThermalEndpoint Endpoint(long owner)
@@ -143,38 +170,15 @@ namespace ArcanePower
             Matrix rotation;
             Block.Orientation.GetMatrix(out rotation);
             Vector3 centre = ((MyEntity)Entity).PositionComp.LocalMatrixRef.Translation;
-            return ThermalEndpoint.At(Entity.EntityId, Block.CubeGrid.EntityId, Spec, rotation, centre,
-                Healthy && owner != 0 && Block.HasPlayerAccess(owner));
-        }
-
-        internal double RequestStartup(long owner, double demand)
-        {
-            if (startupSink == null) return 0;
-            int now = MyAPIGateway.Session.GameplayFrameCounter;
-            double input = startupOwner == owner && now - requestedAt == 1 ? startupInput : 0;
-            startupOwner = owner; requestedAt = now;
-            startupDemand = (float)ThermalMath.Clamp(demand, 0,
-                Math.Min(50000, Math.Max(0, Spec.CapacityMJ - Store.HotMJ - Store.WasteMJ) * 60));
-            startupSink.Update();
-            return input;
-        }
-
-        internal void AccountStartup()
-        {
-            startupInput = startupSink == null ? 0 : Math.Max(0, Math.Min(startupDemand,
-                startupSink.CurrentInputByType(MyResourceDistributorComponent.ElectricityId)));
-            if (startupInput > 0) Store.WasteMJ += startupInput / 60;
-        }
-
-        internal void StopStartup()
-        {
-            if (startupSink == null) return;
-            startupDemand = 0; startupOwner = 0; startupSink.Update();
+            var endpoint = ThermalEndpoint.At(Entity.EntityId, Block.CubeGrid.EntityId, Spec, rotation, centre,
+                HardwareReady && owner != 0 && Block.HasPlayerAccess(owner));
+            endpoint.Revision = CircuitRevision;
+            return endpoint;
         }
 
         internal void SetOutput(double mw)
         {
-            if (Generator == null) return;
+            if (Generator == null || Block == null || Block.Closed || Block.MarkedForClose) return;
             // Definitions must use an empty FuelInfos list: only this runtime
             // may pay for and expose thermal generator output.
             if (Generator.BlockDefinition.FuelInfos.Length != 0)
@@ -188,16 +192,31 @@ namespace ArcanePower
 
         internal void AccountOutput()
         {
-            if (Generator == null || Generator.CurrentOutput <= 0) return;
-            if (!ThermalMath.Convert(Store, Generator.CurrentOutput / 60.0, Efficiency))
-            { Fault = "Native output exceeded its paid heat allocation; isolated"; SetOutput(0); }
+            if (Generator == null) return;
+            int now = MyAPIGateway.Session.GameplayFrameCounter;
+            if (outputAccountedAt == now) return;
+            outputAccountedAt = now;
+            var grant = OutputGrant;
+            OutputGrant = null;
+            // Removal may already have torn down the native source. Conservatively
+            // settle its last reservation at the grant ceiling; never read torn
+            // resources or return possibly delivered energy as spendable credit.
+            double output = Block.Closed || Block.MarkedForClose
+                ? (grant == null ? 0 : grant.MaximumMW) : Generator.CurrentOutput;
+            if ((grant != null && !grant.Settle(output))
+                || (grant == null && output > .001))
+            {
+                Fault = "Native output exceeded its paid energy reservation; isolated";
+                if (grant != null) { grant.Source.Faulted = true; grant.Source.Diagnostic = Fault; }
+                SetOutput(0);
+            }
         }
 
         internal ThermalUnit Unit()
         {
             UpdateEnvironment();
             return new ThermalUnit { Id = Entity.EntityId, Kind = Spec.Kind, Grade = Spec.Grade,
-                RatingMW = EffectiveRatingMW, CoolingMW = Healthy ? coolingMW : 0, ColdC = 45 };
+                RatingMW = Spec.RatingMW, CoolingMW = Healthy ? coolingMW : 0, ColdC = 45 };
         }
 
         private void UpdateEnvironment()
@@ -208,6 +227,7 @@ namespace ArcanePower
                 environmentAt = now;
                 var planet = MyGamePruningStructure.GetClosestPlanet(Entity.GetPosition());
                 double density = planet == null ? 0 : planet.GetAirDensity(Entity.GetPosition());
+                airDensity = ThermalMath.Clamp(density, 0, 1);
                 double rating = Spec.CoolingMW;
                 if (Spec.Kind == ThermalKind.AirCooler)
                 {
@@ -225,9 +245,9 @@ namespace ArcanePower
                         clear++;
                     }
                     clearExhaust = clear / (double)ThermalModels.AirCoolerExhaustSamples.Length;
-                    coolingMW = ThermalMath.AirCooling(rating, density, clearExhaust);
+                    coolingMW = ThermalMath.AirCooling(rating, airDensity, clearExhaust);
                 }
-                else coolingMW = RadiatorCooling(density);
+                else coolingMW = RadiatorCooling(airDensity);
             }
         }
 
@@ -240,6 +260,7 @@ namespace ArcanePower
 
         private void AppendInfo(IMyTerminalBlock block, StringBuilder info)
         {
+            if (IsCooling) { AppendCoolingInfo(info); return; }
             info.Append("\nArcane thermal runtime prototype\n");
             info.AppendLine("Construction: " + ThermalConstruction.Role(Spec));
             info.AppendLine("Aim at a thermal block, or select one for placement, to inspect sockets and construction checks.");
@@ -251,31 +272,10 @@ namespace ArcanePower
                 info.Append("Rated cooling per unit/panel: ").Append((Spec.CoolingMW / 1000).ToString("N0")).AppendLine(" GW (ideal exposure)");
             if (Spec.Kind == ThermalKind.Train)
                 info.AppendLine(Spec.Grade >= 3 ? "Fuel heat: Aether, Helion or Empyrean" : "Fuel heat: Aether or Helion; Empyrean requires upgraded turbines");
-            if (Spec.Kind == ThermalKind.AirCooler)
-            {
-                // Clients may inspect local clearance; server Unit() remains
-                // the sole authority for actual heat rejection and dispatch.
-                UpdateEnvironment();
-                info.Append("Exhaust clearance: ").Append((clearExhaust * 100).ToString("0")).AppendLine("%");
-                info.Append("Available cooling: ").Append((Healthy ? coolingMW : 0).ToString("N1")).AppendLine(" MW");
-                if (clearExhaust < .999) info.AppendLine("Exhaust obstructed: clear 2.5 m in front of both fan guards.");
-            }
-            if (IsRadiator && Store.Radiator != null && (MyAPIGateway.Multiplayer.IsServer || receivedRadiator))
-            {
-                var radiator = Store.Radiator;
-                info.AppendLine(Spec.Kind == ThermalKind.RadiatorPanel
-                    ? (radiator.ParentId != 0 ? "Attached to radiator axis" : "Inactive: stack above an aligned radiator (maximum two extensions)")
-                    : (Healthy ? "Automatic sun tracking: edge-on / " + radiator.Panels + " panel(s)" : "Sun tracking paused"));
-                info.Append("Panel angle: ").Append((radiator.Angle * 180 / Math.PI).ToString("0.0")).AppendLine(" degrees");
-                info.Append("Clear sky: ").Append((radiator.Exposure * 100).ToString("0")).Append("% / solar exposure: ")
-                    .Append((radiator.SunIncidence * 100).ToString("0")).AppendLine("%");
-                info.Append("Cooling after solar load: ").Append((ThermalRadiators.SolarEfficiency(radiator.SunIncidence) * 100).ToString("0")).AppendLine("% (before clearance/sink limits)");
-                info.Append("Heat dissipated: ").Append(radiator.RejectedMW.ToString("N1")).AppendLine(" MW");
-            }
             if (Spec.Kind == ThermalKind.Train && (MyAPIGateway.Multiplayer.IsServer || receivedRotor))
             {
                 var rotor = Store.Rotor;
-                info.Append("Visual turbine: ").Append(rotor.Rpm.ToString("0")).Append(" rpm / compressor: ")
+                info.Append("Visual turbine: ").Append(rotor.Rpm.ToString("0")).Append(" rpm / built-in compressor: ")
                     .Append(rotor.CompressorRpm.ToString("0")).AppendLine(" rpm");
                 info.Append("Working temperature: ").Append(rotor.HotC.ToString("0")).AppendLine(" C (gameplay model)");
             }
@@ -284,7 +284,8 @@ namespace ArcanePower
         public override void Close()
         {
             if (Block == null || Spec == null) return;
-            StopStartup(); Save(); ThermalSession.Remove(this);
+            UnwatchCircuitChanges();
+            ThermalSession.Remove(this); Save();
             Block.AppendingCustomInfo -= AppendInfo;
         }
     }

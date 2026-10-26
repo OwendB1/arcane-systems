@@ -13,7 +13,7 @@ import shutil
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
-from prepare_lab import ROOT, MOD, GAME, XSI, REACTOR_TEMPLATE, save, set_text, hardware_components
+from prepare_lab import ROOT, MOD, GAME, XSI, REACTOR_TEMPLATE, save, set_text, hardware_components, write_block_menu
 from package_release import resolve
 
 STAGING=MOD/'Models/Cubes/large/.thermal-stage'
@@ -168,12 +168,6 @@ def write_catalog(root):
         if block.findtext('Id/SubtypeId') not in names:blocks.remove(block)
     canonical={block.findtext('Id/SubtypeId'):block for block in blocks}
     assert set(canonical)==set(names), 'Incomplete public thermal catalog'
-    category=ET.Element('Definitions');classes=ET.SubElement(category,'CategoryClasses')
-    group=ET.SubElement(classes,'Category',{f'{{{XSI}}}type':'MyObjectBuilder_GuiBlockCategoryDefinition'})
-    set_text(group,'Id/TypeId','GuiBlockCategoryDefinition')
-    set_text(group,'Id/SubtypeId','ArcaneSystems_Thermal')
-    set_text(group,'DisplayName','Arcane Systems');set_text(group,'Name','ArcaneSystems')
-    ids=ET.SubElement(group,'ItemIds')
     for ident,block in canonical.items():
         name=names[ident]
         set_text(block,'Description',description(name))
@@ -187,7 +181,6 @@ def write_catalog(root):
             shape=name.split(' / ')[1].removesuffix(' bare')
             style='Bare' if name in CONTRACT['BARE_PIPES'] else 'Manifold'
             set_text(block,'DisplayName','Arcane '+shape+' Pipe ('+style+')')
-        ET.SubElement(ids,'string').text=block.findtext('Id/TypeId')+'/'+ident
     for alias,target in CONTRACT['PIPE_ALIASES'].items():
         ident=CONTRACT['subtype'](alias)
         block=copy.deepcopy(canonical[CONTRACT['subtype'](target)])
@@ -197,7 +190,6 @@ def write_catalog(root):
         # Keep survival availability so existing projections can still be welded.
         blocks.append(block)
     save(root,MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc')
-    save(category,MOD/'Data/ThermalCategories.sbc')
     variant_groups(blocks)
     # Alias icons are no longer referenced; retain their authored PNG sources.
     for alias in CONTRACT['PIPE_ALIASES']:
@@ -220,7 +212,8 @@ def description(name):
     base=CONTRACT['COOLER_UPGRADES'].get(name,name)
     if base in CONTRACT['COOLER_UPGRADES'].values():
         rating='100 GW' if name.endswith('upgraded') else '10 GW'
-        detail={'Atmospheric cooler':'Airtight hull casing, rear manifold. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires atmosphere and powered circulation.',
+        if base == 'Atmospheric cooler': rating='250 GW' if name.endswith('upgraded') else '25 GW'
+        detail={'Atmospheric cooler':'Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation.',
                 'Space radiator':'Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Aim at the top shaft coupling to stack up to two panels on the same grid; match Up, any yaw works. Grind either panel face to remove a section. Mixed tiers add their own cooling. Keep both faces exposed to space.',
                 'Radiator panel':'Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling.'}[base]
         return rating+' ideal heat rejection per unit/panel. '+detail+(' Requires 10 Aether Residuum recovered from T1 fuel.' if name.endswith('upgraded') else '')
@@ -241,17 +234,18 @@ def variant_groups(blocks):
           if block.findtext('Id/SubtypeId').endswith('Bare') and block.findtext('Public')=='true']
     framed=[subtype.removesuffix('Bare') for subtype in bare]
     assert set(framed)<=installed, 'Bare pipe is missing its manifold counterpart'
-    variants=ET.Element('Definitions');groups=ET.SubElement(variants,'BlockVariantGroups')
+    groups=[]
     for key,label,subtypes in (('BarePipes','Bare',bare),('ManifoldPipes','Manifold',framed)):
         if not subtypes:continue
-        group=ET.SubElement(groups,'BlockVariantGroup')
-        ET.SubElement(group,'Id',Type='MyObjectBuilder_BlockVariantGroup',Subtype='ArcanePower_Thermal_'+key)
-        set_text(group,'Icon','Textures/GUI/Icons/ArcanePower/Thermal/'+subtypes[0]+'.dds')
-        set_text(group,'DisplayName','Arcane Pipes ('+label+')')
-        set_text(group,'Description','Scroll through '+label.lower()+' thermal pipes and fittings. Connect the shared supply/return network; align H/C on every socket face.')
-        members=ET.SubElement(group,'Blocks')
-        for subtype in subtypes:ET.SubElement(members,'Block',Type='MyObjectBuilder_UpgradeModule',Subtype=subtype)
-    save(variants,MOD/'Data/CubeBlocks/ArcanePower_ThermalVariants.sbc')
+        groups.append((key,'Arcane Pipes ('+label+')',
+            'Scroll through '+label.lower()+' thermal pipes and fittings. Connect the shared supply/return network; align H/C on every socket face.',subtypes))
+    groups.extend([
+        ('Cooling','Arcane Radiators and Coolers','Scroll through radiators, extension panels and atmospheric coolers, including upgraded versions.',
+         ['ArcanePower_Thermal_'+name for name in ('SpaceRadiator','SpaceRadiatorUpgraded','RadiatorPanel',
+          'RadiatorPanelUpgraded','AtmosphericCooler','AtmosphericCoolerUpgraded')]),
+        ('Turbines','Arcane Turbines','Scroll through standard, upgraded and mirrored Brayton turbines.',
+         ['ArcanePower_Thermal_BraytonTrain'+suffix for suffix in ('','Upgraded','Mirrored','MirroredUpgraded')])])
+    write_block_menu(blocks,'Thermal',groups,MOD)
 
 
 def install(additions=False):

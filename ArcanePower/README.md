@@ -65,6 +65,13 @@ styles, kept in separate eight-block scrolling groups. Both styles share socket
 geometry, H/C orientation and animated flow. Old HP/LP IDs remain as 28 hidden
 compatibility aliases, reusing the current models and icons.
 
+The Arcane Systems build tab shows one scrollable entry each for battery upgrade
+modules, radiators/coolers/extension panels, vents, turbines and controllers.
+Each group includes its standard and advanced versions; the turbine group also
+includes mirrored versions. The two pipe groups remain separate. The reactor and
+Energy Core retain their own entries. Individual variants remain buildable by
+scrolling through their group. The definition generators preserve this layout.
+
 The current thermal catalog has 27 public blocks plus the hidden pipe aliases.
 Each reactor manifold supplies an independent circuit with one turbine and its
 own cooling. Four circuits provide full capacity; a breach isolates the affected
@@ -102,8 +109,9 @@ The thermal design is the sole playable **Arcane Reactor**, with standalone and
 Brayton modes. Standalone accepts Aether only; Brayton needs at least one advanced
 controller. The [construction guide](THERMAL-CONSTRUCTION.md) covers mode changes
 and controller-loss recovery. Complete circuits are available immediately, without
-filling or pressure gates; cold startup and hot cooldown still need powered
-circulation. Circuit validity updates as blocks and connections change, even
+filling, pressure or circulation gates. Reaction heat and turbine motion follow
+electrical load linearly; cooling capacity depends on equipment and environment.
+Containment startup and active-cooler cooldown still need auxiliary power. Circuit validity updates as blocks and connections change, even
 while the reactor is off; startup uses the current result. [Runtime ownership](THERMAL-RUNTIME.md) describes
 server interlocks and retained heat. Its subtype remains
 `ArcanePower_Thermal_ReactorHousing`. The original `ArcanePower_ReactorPrototype`
@@ -139,6 +147,13 @@ The actual Blender UI was reviewed at 1.8, 2.4 and 3.0 m; the finished reactor i
 left open. Delivery checks (report pruned) ·
 Live UI view.
 This art refresh has not been reloaded in-game or published to Workshop.
+
+The controller receiver apertures now clear their inner walls by 10 mm while
+retaining supported lips. The turbine compressor-motor terminals sit 12 mm inside
+both motor end faces. These clearances remove coincident surfaces on both
+controller tiers and all four turbine variants, with matching native LODs and
+construction stages. Front, side and chamber-facing Blender views were checked
+at 1.8, 2.4 and 3.0 m; accepted collision inputs remain unchanged.
 
 The **3×3×3 Energy Core** uses full-block **1×3×1 upgrade pillars**, with two side
 capacity sockets, a rear transfer socket and a front stabilizer. Pillars face the
@@ -239,7 +254,7 @@ The terminal **Security mode** switch defaults to **On**: losing the vent route 
 | Helion | 3 | Amber | 100,000 MW |
 | Empyrean | 4 | Violet | 1,000,000 MW |
 
-The highest mode- and controller-compatible fuel present is selected only while Off, vent Idle, output zero and thermally cold, after outstanding heat charges are accounted. Fuel stays locked through operation/shutdown. Standalone selection and automatic conveyor replenishment are limited to Aether; higher-tier canisters may remain stored for later Brayton use. Each filled canister holds 10 fuel units: 10 ideal full-load minutes, or **8/9/9.9 minutes** with controller tiers 1/2/3. Consumption divides by controller efficiency and falls with demand. Native inventory amounts include the remaining fraction of a canister; telemetry labels stock and burn in canisters. Refineries retain base yields of 0.1%/0.01%/0.001% for Aether/Helion/Empyrean concentrates.
+The highest mode- and controller-compatible fuel present is selected only while Off, vent Idle, output zero and thermally cold, after outstanding heat charges are accounted. Fuel stays locked through operation/shutdown. Standalone selection and automatic conveyor replenishment are limited to Aether; higher-tier canisters may remain stored for later Brayton use. Each filled canister holds 10 fuel units. Aether lasts **2.5 ideal full-load minutes**, or **2/2.25/2.475 minutes** with controller tiers 1/2/3. Helion and Empyrean retain 10 ideal minutes, scaled by their compatible controllers' 90%/99% efficiency. Consumption divides by controller efficiency and falls with demand. Native inventory amounts include the remaining fraction of a canister; telemetry labels stock and burn in canisters. Refineries retain base yields of 0.1%/0.01%/0.001% for Aether/Helion/Empyrean concentrates.
 
 Craft an **Aether Containment Canister (Empty)** in a full assembler, then fill
 or upgrade it through the existing fuel chain:
@@ -275,10 +290,22 @@ space radiator bases and extension panels require **10 units** each. This materi
 is their critical construction component. Empyrean heat requires upgraded turbines;
 adding standard turbines cannot bypass that requirement.
 
-Standard coolers reject **10 GW per unit/panel**, upgraded versions **100 GW**.
+Aether burns four times faster at the same heat demand, producing Residuum four
+times faster. At 90% controller efficiency, one fully utilized circuit recovers
+**66.67 units/hour**: 9 minutes for an upgraded cooler/panel or 18 minutes for a
+turbine. Four fully utilized circuits recover **266.67 units/hour**: 27 minutes
+for the 120 units needed by four turbines and four coolers. Lower loads take
+longer. Canister and concentrate demand also increase fourfold; with doubled
+mining yield, the required excavation volume doubles. Power and heat ratings,
+crafting recipes, and higher-tier fuel endurance are unchanged.
+
+Atmospheric coolers reject **25 GW per T1 unit** or **250 GW per T2 unit** at full
+air density with clear exhausts; vacuum provides no active cooling. Radiator
+sections retain **10 GW per T1 panel** or **100 GW per T2 panel**.
 Three-panel radiator stacks provide **30 GW / 300 GW** under ideal exposure;
-mixed stacks sum each panel's rating. Atmosphere, blockage and solar exposure still
-reduce rejection. Each of four Aether circuits receives up to 6.25 GWth and needs
+mixed stacks sum each panel's rating. Atmospheric radiator losses scale smoothly
+with measured density; blockage and solar exposure also reduce rejection.
+Each of four Aether circuits receives up to 6.25 GWth and needs
 3.75 GW rejection at 40% conversion. Give each circuit its own standard cooler or
 radiator connection; a single circuit can operate at one quarter of full capacity.
 Empyrean supplies ten times Helion's heat; upgraded turbines support its existing
@@ -300,7 +327,7 @@ Controller count and ring capacity are separate values; one advanced controller 
 
 ## Status colours and load-driven motion
 
-Emissives pulse red/black over 120 ticks when construction is incomplete, the block is nonfunctional or fewer than two controllers are attached. A complete reactor is steady red when off, yellow when enabled without fuel, and uses its selected fuel colour otherwise. Fuel-starvation yellow persists through automatic shutdown until refuelling. Parent emissives can update before Ring1 renders. Emissives now use twelve-times intensity (up from four), and an active vent pulses bright red. The reactor and terminal vent outlet share that intensity. One client-only, shadowless light with a 4.5 m range follows the visible plasma to illuminate nearby chamber surfaces in the current fuel/alarm colour. Its strength follows the core emission and growth/shrink envelope; it turns off with the hidden core and is released when the reactor closes. Surface bloom depends on the player's graphics settings; the mod does not alter them.
+Emissives pulse red/black over 120 ticks when construction is incomplete, the block is nonfunctional or fewer than two controllers are attached. A complete reactor is steady red when off, white when out of fuel, and uses its selected fuel colour during healthy operation. Yellow pulses indicate failed worn containment or core heat above 100%; critical cores and active ejection retain red priority. Idle coolant status and closed reactor valves use cyan. Fuel-starvation status remains visible through automatic shutdown without a yellow alarm. Parent emissives can update before Ring1 renders. Emissives now use twelve-times intensity (up from four), and an active vent pulses bright red. The reactor and terminal vent outlet share that intensity. One client-only, shadowless light with a 4.5 m range follows the visible plasma to illuminate nearby chamber surfaces in the current fuel/alarm colour. Its strength follows the core emission and growth/shrink envelope; it turns off with the hidden core and is released when the reactor closes. Surface bloom depends on the player's graphics settings; the mod does not alter them.
 
 The server derives load from native `CurrentOutput / MaxOutput`, smoothed with a 60-tick response. Running ring speed ranges from three times the original speed at zero load to nine times at full load. Both primary and secondary phase/rate are saved and synchronized. Each ring has a perpendicular second rotation axis with distinct alternating signed rates (magnitudes 0.07/0.09/0.11/0.13), driven by smooth phase modulation; shutdown brakes both axes from their captured speeds. Tiles and plasma share a smooth irregular drift and gentle vertical bob that grows with load, stays below 6 cm, starts near the end of startup and settles during shutdown. The plasma keeps its rest orientation relative to the reactor while sharing the field's drift/bob and ejection translation. The containment shell tumbles around multiple axes: slow continuous yaw/roll spin is combined with unequal broad sweeps that reverse direction and carry the shell through half-turns, plus the smaller 6°–9.25° irregular tilt. The saved load-driven spin phase drives this motion without per-frame randomness or jumps at phase wrapping. Shutdown brakes the tumbling, then aligns the intact shell before reverse assembly releases its first quartet. Translational wiggle/bob and ring movement are unchanged. This motion is presentation; the separate normalized heat state drives vent purging/damage.
 
@@ -651,7 +678,7 @@ operation still need game review.
 
 | Ore | Deposit weight | Mined-ore ratio | Base refining yield | Concentrate/fuel volume |
 | --- | --- | --- | --- | --- |
-| Aetherite | 5 | 0.1 | 0.1% | 0.01 L/kg |
+| Aetherite | 20 | 0.2 | 0.1% | 0.01 L/kg |
 | Helionite | 2 | 0.03 | 0.01% | 0.005 L/kg |
 | Empyrite | 1 | 0.01 | 0.001% | 0.001 L/kg |
 
@@ -664,6 +691,9 @@ selection/removal of materials still controls each procedural deposit. This uses
 native definitions for generator versions 3 and later; no voxel-scanning script
 runs, and planetary ore maps and meteorites do not supply these materials.
 Other mods overriding the same vanilla materials can change the final weights.
+Aether's weight is four times its original value and its mining yield is doubled.
+The weight change affects newly generated deposits; existing ore layouts remain
+in place. The mining-yield change applies when mining existing deposits too.
 
 Raw ore occupies 0.37 L/kg. Refining removes its bulk matrix and concentrates the
 active material: densities are 100/200/1,000 kg/L. Volumes are at least the native

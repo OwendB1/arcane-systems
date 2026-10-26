@@ -12,6 +12,7 @@ namespace ArcanePower
     internal sealed class TabletScreen
     {
         private const string Material = "ArcaneTabletScreen";
+        private const float Backlight = .025f;
         private static readonly Vector2I Resolution = new Vector2I(1024, 1024);
         private static readonly Vector2 Aspect = new Vector2(.270f / .174f, 1);
         private MyHandToolBase owner;
@@ -51,10 +52,13 @@ namespace ArcanePower
                 if (sprite.Type == SpriteType.TEXT) sprite.RotationOrScale *= scale;
                 scaled.Add(sprite);
             }
-            renderer.RenderSpritesToTexture(0, new ListReader<MySprite>(scaled), Resolution, Aspect, Color.Black, 255);
+            // The offscreen renderer preserves clear alpha, which becomes metalness
+            // in ColorMetalTexture. Native LCDs use 0; 255 suppresses emissive albedo.
+            renderer.RenderSpritesToTexture(0, new ListReader<MySprite>(scaled), Resolution, Aspect, Color.Black, 0);
             renderer.ChangeTexture(0, renderer.GenerateOffscreenTextureName(tool.EntityId, 0));
-            // Light the panel itself without tinting the telemetry colours.
-            tool.SetEmissiveParts(Material, Color.White, 2f);
+            // The full emission mask is amplified by SE's HDR lighting. A strong
+            // backlight turns dark panels grey and clips the status colours white.
+            tool.SetEmissiveParts(Material, Color.White, Backlight);
             return true;
         }
 

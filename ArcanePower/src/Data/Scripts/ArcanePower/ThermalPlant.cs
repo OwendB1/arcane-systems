@@ -43,7 +43,7 @@ namespace ArcanePower
         [ProtoMember(11)] public string Diagnostic = "Standalone / integrated cooling";
         [ProtoMember(12)] public double RejectedMW;
         [ProtoMember(13)] public double NetOutputMW;
-        [ProtoMember(14)] public double StartupMW;
+        // ProtoMember(14) was the retired turbine pump draw; never reuse.
         [ProtoMember(16)] public bool Faulted;
         [ProtoMember(17)] public double AttachedHeatMJ;
         [ProtoMember(18)] public double CoolingMW;
@@ -51,6 +51,34 @@ namespace ArcanePower
         [ProtoMember(20)] public ThermalLoopState[] Loops = ThermalLoops.Empty();
         [ProtoMember(21)] public int LoopVersion;
         [ProtoMember(22)] public bool LoopTrip;
+        [ProtoMember(23)] public double DesignCoolingMW;
+
+        public double RetainedHeatMJ
+        {
+            get { double total = Store.WasteMJ; if (Loops != null) foreach (var loop in Loops) if (loop != null) total += loop.ExcessMJ; return total; }
+        }
+
+        public void BeginFrame()
+        {
+            ProducedMW = NetOutputMW = RejectedMW = SupportedMW = 0;
+            CoolingMW = RequiredCoolingMW = DesignCoolingMW = AttachedHeatMJ = 0;
+            DutyTrains = StandbyTrains = 0;
+            foreach (var loop in Loops)
+                loop.OutputMW = loop.ReactionMW = loop.RequiredCoolingMW = loop.RejectedMW = 0;
+        }
+
+        public void MigrateHeat()
+        {
+            if (LoopVersion >= 2) return;
+            // Old hot inventories were already produced heat. Do not turn them
+            // into new fuel credit or erase them when removing the flow model.
+            double heat = Store.HotMJ + Store.WasteMJ;
+            Store.HotMJ = 0;
+            if (Mode == ThermalMode.Brayton)
+            { foreach (var loop in Loops) loop.ExcessMJ += heat / ThermalLoops.Count; Store.WasteMJ = 0; }
+            else Store.WasteMJ = heat;
+            LoopVersion = 2;
+        }
 
         public int ConnectedLoops
         {
@@ -59,7 +87,7 @@ namespace ArcanePower
 
         private bool ValidLoops()
         {
-            if (LoopVersion < 0 || LoopVersion > 1) return false;
+            if (LoopVersion < 0 || LoopVersion > 2) return false;
             if (Loops == null) return LoopVersion == 0;
             if (Loops.Length != ThermalLoops.Count) return false;
             foreach (var loop in Loops) if (loop == null || !loop.Valid()) return false;
@@ -76,10 +104,11 @@ namespace ArcanePower
                 && ThermalMath.Finite(SupportedMW) && SupportedMW >= 0 && SupportedMW <= 1950000
                 && ThermalMath.Finite(RejectedMW) && RejectedMW >= 0 && RejectedMW <= 2500000 * 10.0
                 && ThermalMath.Finite(NetOutputMW) && NetOutputMW >= 0 && NetOutputMW <= 1950000.1
-                && ThermalMath.Finite(StartupMW) && StartupMW >= 0 && StartupMW <= 50000.1
                 && ThermalMath.Finite(AttachedHeatMJ) && AttachedHeatMJ >= 0
                 && ThermalMath.Finite(CoolingMW) && CoolingMW >= 0
                 && ThermalMath.Finite(RequiredCoolingMW) && RequiredCoolingMW >= 0 && RequiredCoolingMW <= 2500000
+                && ThermalMath.Finite(DesignCoolingMW) && DesignCoolingMW >= 0 && DesignCoolingMW <= 2500000
+                && ThermalMath.Finite(RetainedHeatMJ)
                 && Efficiency >= 0 && Efficiency <= .780001 && DutyTrains >= 0 && StandbyTrains >= 0
                 && Diagnostic != null && Diagnostic.Length <= 256;
         }
@@ -124,9 +153,43 @@ namespace ArcanePower
         public readonly List<ThermalUnit> Trains = new List<ThermalUnit>();
     }
 
+    // A one-interval claim on paid source energy. Reservations never create heat;
+    // only electricity actually delivered by SE consumes fuel energy and emits waste.
+    // The source's saved HotMJ retains unused credit across reloads. Claims are
+    // rebuilt, never replayed, and the sum of claims cannot exceed that credit.
+    public sealed class ThermalOutputGrant
+    {
+        public readonly ThermalReactorState Source;
+        public readonly ThermalLoopState Loop;
+        public readonly double HeatMJ, Efficiency, MaximumMW;
+        private bool settled;
+        public ThermalOutputGrant(ThermalReactorState source, ThermalLoopState loop, double heatMJ, double efficiency)
+        {
+            Source = source; Loop = loop; HeatMJ = heatMJ; Efficiency = efficiency;
+            MaximumMW = heatMJ * efficiency * 60 * .999999;
+        }
+        public bool Settle(double outputMW)
+        {
+            if (settled) return false;
+            settled = true;
+            if (!ThermalMath.Finite(outputMW) || outputMW < 0 || outputMW > MaximumMW + .001
+                || !ThermalMath.Finite(Efficiency) || Efficiency <= 0 || Efficiency >= 1) return false;
+            double heat = outputMW / (60 * Efficiency);
+            if (heat > HeatMJ || heat > Source.Store.HotMJ) return false;
+            Source.Store.HotMJ -= heat;
+            double waste = Math.Max(0, heat - outputMW / 60);
+            Source.ProducedMW += heat * 60; Source.NetOutputMW += outputMW;
+            Source.RequiredCoolingMW += waste * 60;
+            if (Loop == null) Source.Store.WasteMJ += waste;
+            else
+            { Loop.ExcessMJ += waste; Loop.OutputMW += outputMW; Loop.ReactionMW += heat * 60; Loop.RequiredCoolingMW += waste * 60; }
+            return true;
+        }
+    }
+
     // This is the design calculator's accounting, shared by the game adapter and
-    // executable checks. Auxiliaries are deducted internally exactly once; only
-    // cold starting draws external electricity through a native sink.
+    // executable checks. Turbine auxiliaries are included in net efficiency;
+    // the existing reactor supply owns containment and cooldown support.
     public static class ThermalMath
     {
         private static readonly double[] Ceilings = { .40, .55, .66, .78 };
@@ -137,16 +200,12 @@ namespace ArcanePower
         public static double Clamp(double value, double low, double high) { return Math.Max(low, Math.Min(high, value)); }
         public static double Span(double value, double start, double end) { return Clamp((value - start) / (end - start), 0, 1); }
 
-        public static double CirculationPower(double netMW, double efficiency, double externalMW, double designMW)
+        public static double CoolCircuit(ThermalLoopState loop, double capacityMW)
         {
-            if (!Finite(netMW) || !Finite(externalMW) || !Finite(designMW) || designMW <= 0) return 0;
-            // At least 5% of converted heat already pays for auxiliaries inside
-            // net efficiency. Recover that heat from actual output and the bank's
-            // efficiency; assuming the 78% ceiling would stall smaller banks.
-            // External starting/cooldown power is independently metered.
-            double internalMW = Finite(efficiency) && efficiency > 0 && efficiency < 1
-                ? Math.Max(0, netMW) / efficiency * .05 : 0;
-            return Clamp((internalMW + Math.Max(0, externalMW)) / (designMW * .02), 0, 1);
+            if (loop == null || !Finite(capacityMW) || capacityMW < 0) return 0;
+            double rejected = Math.Min(loop.ExcessMJ, capacityMW / 60);
+            loop.ExcessMJ -= rejected; loop.RejectedMW += rejected * 60;
+            return rejected * 60;
         }
 
         public static double AdmitHeat(ThermalStore store, double warmCapacityMJ, double maximumMJ, double paidFuelMJ)
@@ -158,24 +217,13 @@ namespace ArcanePower
             return admitted;
         }
 
-        public static double AdmitReactionHeat(ThermalStore store, double ratingMW, double maximumMJ, double paidFuelMJ)
+        public static double WasteHeatLevel(ThermalReactorState state, double ratingMW)
         {
-            if (store == null || !Finite(ratingMW) || ratingMW <= 0) return 0;
-            // Four seconds of useful hot reserve; a separate eight-second total
-            // limit leaves room for returning waste. Full stores stop fuel use,
-            // but retained waste still heats the core and can cause failure.
-            return AdmitHeat(store, ratingMW * 8,
-                Math.Min(maximumMJ, Math.Max(0, ratingMW * 4 - store.HotMJ)), paidFuelMJ);
-        }
-
-        public static double WasteHeatLevel(ThermalStore store, double ratingMW)
-        {
-            if (store == null || !Finite(ratingMW) || ratingMW <= 0 || !Finite(store.WasteMJ)) return 0;
-            // Two seconds of rated reaction energy in unremoved waste is the
-            // 100% warning level. This is below the free waste space beside the
-            // normal four-second hot reserve, so intake saturation cannot make
-            // a persistent cooling shortfall settle safely below critical heat.
-            return Clamp(store.WasteMJ / (ratingMW * 2), 0, 4);
+            if (state == null || !Finite(ratingMW) || ratingMW <= 0) return 0;
+            double level = state.Store.WasteMJ / (ratingMW * 2);
+            // A hot circuit cannot hide behind three cold ones.
+            foreach (var loop in state.Loops) level = Math.Max(level, loop.ExcessMJ / (ratingMW * .5));
+            return Clamp(level, 0, 4);
         }
 
         public static double ApproachCoreHeat(double heat, double target, bool runaway)
@@ -254,40 +302,6 @@ namespace ArcanePower
                     best.Trains.Add(train);
                 }
             return best;
-        }
-
-        public static double Transfer(ThermalStore sender, ThermalStore receiver, double receiverCapacity, double maximumMJ, bool waste)
-        {
-            if (sender == null || receiver == null || sender == receiver || !Finite(receiverCapacity)
-                || !Finite(maximumMJ) || maximumMJ <= 0 || !Finite(sender.HotMJ) || !Finite(sender.WasteMJ)
-                || !Finite(receiver.HotMJ) || !Finite(receiver.WasteMJ)) return 0;
-            double available = waste ? sender.WasteMJ : sender.HotMJ;
-            double moved = Math.Max(0, Math.Min(maximumMJ, Math.Min(available, receiverCapacity - receiver.HotMJ - receiver.WasteMJ)));
-            if (waste) { sender.WasteMJ -= moved; receiver.WasteMJ += moved; }
-            else { sender.HotMJ -= moved; receiver.HotMJ += moved; }
-            return moved;
-        }
-
-        public static double ExportLimit(ThermalStore store, double capacity, double efficiency, double ratingMW, double seconds)
-        {
-            if (store == null || !store.Valid(store.EntityId, capacity) || !Finite(ratingMW)
-                || efficiency <= 0 || efficiency >= 1 || !Finite(efficiency) || !Finite(seconds) || seconds <= 0) return 0;
-            // Conversion conserves total energy: the unexported fraction stays
-            // in this block as waste heat, so conversion cannot overfill it.
-            // Leave room for the native source's float rounding at the edge of
-            // a double-precision MJ allocation.
-            return Math.Max(0, Math.Min(ratingMW, store.HotMJ * efficiency / seconds)) * .999999;
-        }
-
-        public static bool Convert(ThermalStore store, double deliveredMJ, double efficiency)
-        {
-            if (store == null || !Finite(deliveredMJ) || deliveredMJ < 0 || !Finite(efficiency) || efficiency <= 0 || efficiency >= 1) return false;
-            double consumed = deliveredMJ / efficiency;
-            if (consumed > store.HotMJ + .000001) return false;
-            consumed = Math.Min(consumed, store.HotMJ);
-            store.HotMJ -= consumed;
-            store.WasteMJ += consumed - deliveredMJ;
-            return true;
         }
 
         public static double Reject(ThermalStore store, double maximumMJ, bool hot)

@@ -65,6 +65,33 @@ class ThermalIsolationProbe
         int checks=0;double maximum=0;
         var reactor=ThermalModels.All.Values.Single(m=>m.Kind==ThermalKind.Reactor);
         Require(reactor.Ports.Length==4,"Expected four reactor valve mounts");
+        // The sliding reactor stem is narrower than the external pipe block.
+        // Test the exported vertices through full travel inside its faceted ID.
+        double boreRadius=Convert.ToDouble(source["bore_radius"]);
+        int boreSides=Convert.ToInt32(source["bore_sides"]);
+        Require(boreRadius>0 && boreSides>=3,"Invalid reactor bore contract");
+        double boreLimit=boreRadius*Math.Cos(Math.PI/boreSides);
+        double minimumClearance=double.MaxValue;
+        int clearanceChecks=0;
+        foreach(var port in reactor.Ports) foreach(int side in new[]{-1,1})
+        {
+            var seat=ThermalIsolation.Seat(port,side);
+            var mouth=port.Position+port.HotAxis*(side*ThermalIsolation.BoreOffset);
+            foreach(var mesh in points) for(int degrees=0;degrees<=(mesh.Key.EndsWith("Gate")?90:0);degrees+=5)
+            {
+                var turn=mesh.Key.EndsWith("Gate")?ThermalIsolation.Gate(degrees/90.0):Matrix.Identity;
+                foreach(var vertex in mesh.Value)
+                {
+                    var offset=Vector3.Transform(vertex,turn*seat)-mouth;
+                    float depth=Vector3.Dot(offset,port.Normal);
+                    Require(depth<-.005f,"Valve protrudes through connector mouth: "+mesh.Key);
+                    double clearance=boreLimit-(offset-port.Normal*depth).Length();
+                    Require(clearance>.001,"Valve leaves reactor bore clearance: "+mesh.Key+" / "+degrees);
+                    minimumClearance=Math.Min(minimumClearance,clearance);
+                }
+                clearanceChecks++;
+            }
+        }
         var covered=new HashSet<string>();
         foreach(Dictionary<string,object> row in (object[])source["samples"])
         {
@@ -87,10 +114,6 @@ class ThermalIsolationProbe
             foreach(var v in points[name])
             {
                 var point=Vector3.Transform(v,turn*seat);box.Include(point);
-                var mouth=port.Position+port.HotAxis*(side*ThermalIsolation.BoreOffset);
-                var offset=point-mouth;float depth=Vector3.Dot(offset,port.Normal);
-                Require(depth<-.005f,"Valve protrudes through connector mouth: "+spec.Subtype);
-                Require((offset-port.Normal*depth).Length()<.325f,"Valve leaves bore envelope: "+spec.Subtype);
             }
             var expected=(object[])row["bounds"];
             double error=0;
@@ -100,7 +123,8 @@ class ThermalIsolationProbe
             maximum=Math.Max(maximum,error);checks++;
         }
         Require(covered.Count==reactor.Ports.Length*2*6,"Missing reactor bore or valve pose");
-        Console.WriteLine(json.Serialize(new{status="passed",checks,maximum_error_m=maximum,textures=textures.ToArray()}));
+        Console.WriteLine(json.Serialize(new{status="passed",checks,maximum_error_m=maximum,
+            clearance_checks=clearanceChecks,minimum_wall_clearance_m=minimumClearance,textures=textures.ToArray()}));
         return 0;
     }
 }

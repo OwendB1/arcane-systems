@@ -50,7 +50,7 @@ namespace ArcanePower
                     {
                         Matrix turn = ThermalIsolation.Gate(opening[i]);
                         gate.PositionComp.SetLocalMatrix(ref turn);
-                        gate.SetEmissiveParts("ThermalStatus", open ? new Color(45, 230, 140) : new Color(255, 165, 45), .35f);
+                        gate.SetEmissiveParts("ThermalStatus", open ? new Color(45, 230, 140) : new Color(35, 175, 220), .35f);
                     }
                 }
             }
