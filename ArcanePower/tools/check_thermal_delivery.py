@@ -7,12 +7,14 @@ import xml.etree.ElementTree as ET
 import zipfile
 from PIL import Image, ImageStat
 from check_block_catalog import check_catalog
+from check_reactor_roof import check as check_roof
 
 ROOT=Path(__file__).resolve().parents[1]
 MOD=ROOT/'src'
 
 
 def main():
+    check_roof()
     models=json.loads((ROOT/'validation/thermal-models/models.json').read_text())
     contract=runpy.run_path(str(ROOT/'assets/thermal_model_contract.py'))
     playable=contract['PLAYABLE']

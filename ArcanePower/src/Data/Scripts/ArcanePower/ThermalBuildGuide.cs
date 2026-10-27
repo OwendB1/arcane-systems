@@ -18,7 +18,7 @@ namespace ArcanePower
     // Follows SCF BuildPreviewHud's native builder, facing/rotation arrows and
     // optional Text HUD API pattern. All checks are advisory and client-only.
     [MySessionComponentDescriptor(MyUpdateOrder.AfterSimulation)]
-    public sealed class ThermalBuildGuide : MySessionComponentBase
+    public sealed partial class ThermalBuildGuide : MySessionComponentBase
     {
         private readonly StringBuilder text = new StringBuilder();
         private readonly List<IMySlimBlock> blocks = new List<IMySlimBlock>();
@@ -45,10 +45,51 @@ namespace ArcanePower
         private Vector3D radiatorDock;
         private int tick;
         private string fallbackText;
+        private const string GuideCommand = "/ap guide";
+        private const string GuidePreferenceFile = "construction-guide.txt";
+        private bool guideEnabled = true, chatSubscribed;
+
+        private void LoadPreference()
+        {
+            try
+            {
+                if (!MyAPIGateway.Utilities.FileExistsInLocalStorage(GuidePreferenceFile, typeof(ThermalBuildGuide))) return;
+                using (var reader = MyAPIGateway.Utilities.ReadFileInLocalStorage(GuidePreferenceFile, typeof(ThermalBuildGuide)))
+                {
+                    bool saved;
+                    if (bool.TryParse(reader.ReadToEnd().Trim(), out saved)) guideEnabled = saved;
+                }
+            }
+            catch (Exception error) { Log(error); }
+        }
+
+        private void GuideChat(string message, ref bool sendToOthers)
+        {
+            if (!string.Equals(message.Trim(), GuideCommand, StringComparison.OrdinalIgnoreCase)) return;
+            sendToOthers = false;
+            guideEnabled = !guideEnabled;
+            Hide();
+            string persistence = " Saved for future sessions.";
+            try
+            {
+                using (var writer = MyAPIGateway.Utilities.WriteFileInLocalStorage(GuidePreferenceFile, typeof(ThermalBuildGuide)))
+                    writer.Write(guideEnabled);
+            }
+            catch (Exception error)
+            {
+                Log(error);
+                persistence = " Could not save this preference; it applies only this session.";
+            }
+            MyAPIGateway.Utilities.ShowMessage("Arcane Power", "Construction guide " + (guideEnabled ? "on." : "off.")
+                + persistence + " Type " + GuideCommand + " to toggle it again.");
+        }
 
         public override void LoadData()
         {
             if (MyAPIGateway.Utilities.IsDedicated) return;
+            LoadPreference();
+            MyAPIGateway.Utilities.MessageEntered += GuideChat;
+            chatSubscribed = true;
             api = new HudAPIv2(() => panel = new HudAPIv2.HUDMessage(text, new Vector2D(-.97, .48),
                 null, -1, .72, true, true) { Visible = false });
         }
@@ -64,7 +105,7 @@ namespace ArcanePower
 
         private bool Visible()
         {
-            return MyAPIGateway.Session != null && MyAPIGateway.Session.Player != null
+            return guideEnabled && MyAPIGateway.Session != null && MyAPIGateway.Session.Player != null
                 && MyAPIGateway.Session.Camera != null && MyAPIGateway.Session.Config.HudState != 0
                 && !MyAPIGateway.Gui.IsCursorVisible && !MyAPIGateway.Gui.ChatEntryVisible;
         }
@@ -76,6 +117,9 @@ namespace ArcanePower
             var builder = MyCubeBuilder.Static;
             var definition = builder == null || builder.CubeBuilderState == null ? null : builder.CubeBuilderState.CurrentBlockDefinition;
             preview = builder != null && builder.IsActivated && builder.BlockCreationIsActivated && definition != null;
+            // Keep the vessel's mounting guide visible while placing its hardware.
+            // Resolve the aimed vessel below and retain the normal access check.
+            if (preview && ReactorHardware(definition.Id.SubtypeName)) preview = false;
             ThermalModel model;
             IMySlimBlock aimed = null;
             if (preview)
@@ -100,7 +144,7 @@ namespace ArcanePower
             }
             else
             {
-                aimed = Aim();
+                aimed = AssemblyVessel(Aim());
                 if (aimed == null || !ThermalModels.All.TryGetValue(aimed.BlockDefinition.Id.SubtypeName, out model)) return;
                 var terminal = aimed.FatBlock as IMyTerminalBlock;
                 if (terminal != null && !terminal.HasPlayerAccess(MyAPIGateway.Session.Player.IdentityId))
@@ -146,7 +190,8 @@ namespace ArcanePower
             if (model.Kind == ThermalKind.Reactor)
             {
                 var reactor = aimed.FatBlock == null ? null : VentSession.Find(aimed.FatBlock.EntityId);
-                if (!ThermalConstruction.ShowReactorGuide(reactor == null ? null : reactor.Motion.Thermal, check)) return;
+                ShowReactorAssembly(aimed, reactor);
+                return;
             }
             suggested = ThermalConstruction.Suggest(selected, rotation, centre, nodes);
             string next = check.Next;
@@ -273,10 +318,20 @@ namespace ArcanePower
             if (server != null) text.Append("\nServer: ").Append(server);
             text.Append("\nConstruction checks do not authorize startup. Cooling, power and reactor safeguards still apply.");
             if (preview) text.Append("\nSelected preview only: inspect line/mirror copies after placement.");
+            Present("Thermal " + label.ToLowerInvariant() + ": " + next);
+        }
+
+        private void Present(string summary)
+        {
+            text.Append("\n<color=150,180,200>Type ").Append(GuideCommand).Append(" in chat to toggle this guide (saved).");
             WrapText();
-            fallbackText = "Thermal " + label.ToLowerInvariant() + ": " + next;
+            fallbackText = summary + " | " + GuideCommand + " toggles guide (saved)";
             if (!fullHud) return;
-            if (panel != null && api.Heartbeat) panel.Visible = true;
+            if (panel != null && api.Heartbeat)
+            {
+                panel.Scale = assemblyBlock == null ? .72 : .62;
+                panel.Visible = true;
+            }
             else
             {
                 if (fallback == null) fallback = MyAPIGateway.Utilities.CreateNotification("", 1000, "White");
@@ -286,9 +341,11 @@ namespace ArcanePower
 
         public override void Draw()
         {
-            if (!active || selected == null || grid == null || !Visible()) return;
+            if (!active || grid == null || !Visible()) return;
             try
             {
+                if (assemblyBlock != null) DrawAssemblyMarkers();
+                if (selected == null) return;
                 MatrixD world = grid.WorldMatrix;
                 if (radiatorGuide)
                     Ring(radiatorDock, radiatorFrame.Right, radiatorFrame.Backward, .38,
@@ -310,7 +367,7 @@ namespace ArcanePower
                     Ring(at + hot * .46, hot, across, .28, new Color(255, 85, 0).ToVector4());
                     Ring(at - hot * .46, hot, across, .28, new Color(0, 200, 255).ToVector4());
                 }
-                if (!fullHud) return;
+                if (!fullHud || assemblyBlock != null) return;
                 var camera = MyAPIGateway.Session.Camera.WorldMatrix;
                 Vector3D point = preview ? previewWorld : Vector3D.Transform(centre, world);
                 Vector3D ray = point - camera.Translation;
@@ -402,6 +459,7 @@ namespace ArcanePower
         private void Hide()
         {
             active = false; selected = null; check = null; radiatorGuide = radiatorAligned = false;
+            assemblyBlock = null; assemblyReactor = null; assemblyDummies.Clear();
             if (panel != null) panel.Visible = false;
             if (fallback != null) fallback.Hide();
         }
@@ -415,6 +473,8 @@ namespace ArcanePower
 
         protected override void UnloadData()
         {
+            if (chatSubscribed) MyAPIGateway.Utilities.MessageEntered -= GuideChat;
+            chatSubscribed = false;
             Hide();
             if (api != null) api.Unload();
             api = null; panel = null; fallback = null;

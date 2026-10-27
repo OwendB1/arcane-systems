@@ -2964,8 +2964,8 @@
     "scene": "APT_ReactorHousing_M",
     "type": "lod",
     "index": 1,
-    "triangles": 102743,
-    "authored_triangles": 102743,
+    "triangles": 103027,
+    "authored_triangles": 103027,
     "reference": "APT_ReactorHousing_M",
     "distance": 75
   },
@@ -2974,8 +2974,8 @@
     "scene": "APT_ReactorHousing_M",
     "type": "lod",
     "index": 2,
-    "triangles": 80813,
-    "authored_triangles": 80813,
+    "triangles": 80943,
+    "authored_triangles": 80943,
     "reference": "APT_ReactorHousing_M",
     "distance": 150
   },
@@ -3014,8 +3014,8 @@
     "scene": "APT_ReactorHousing_M",
     "type": "main",
     "index": 0,
-    "triangles": 147295,
-    "authored_triangles": 147334,
+    "triangles": 147813,
+    "authored_triangles": 147852,
     "reference": null,
     "distance": null
   },

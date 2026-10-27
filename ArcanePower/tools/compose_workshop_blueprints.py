@@ -1,4 +1,4 @@
-"""Typeset the Blender schematic renders into three Workshop feature plates."""
+"""Typeset the current Blender wireframe studies into Workshop feature plates."""
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
@@ -55,8 +55,8 @@ im, d = plate('01', 'REACTOR / CONTAINMENT ASSEMBLY', 'ENERGY GENERATION  //  CO
 model(im, 'reactor', (35, 170, 940, 640))
 text(d, (67, 805), 'CUTAWAY: SHIELDS / GLAZING / TILE SHELL OMITTED; RINGS POSED', 15, CYAN)
 d.line((992, 185, 992, 802), fill='#315a70', width=2)
-note(d, 1030, 206, '01', 'THREE FUEL TIERS', ['Aether / Helion / Empyrean', '10 GW / 100 GW / 1 TW', 'Provisional maximum output'])
-note(d, 1030, 367, '02', 'ACTIVE CONTAINMENT', ['Two external controllers', 'Two to four deployed rings', '80 replaceable shell tiles'])
+note(d, 1030, 206, '01', 'THREE FUEL TIERS', ['Aether / Helion / Empyrean', '2.5 / 25 / 250 MW heat', 'Up to 200 MW electrical'])
+note(d, 1030, 367, '02', 'ACTIVE CONTAINMENT', ['Two external controllers', 'Four independent heat circuits', '80 replaceable shell tiles'])
 note(d, 1030, 528, '03', 'A COMMITTED EXIT', ['Straight duct + outlet route', 'Physical core ejection', 'Critical fuse survives launch'])
 d.rectangle((1030, 718, 1525, 789), outline=GOLD, width=1)
 text(d, (1050, 732), 'CONTAINMENT IS A REQUIREMENT.', 22, GOLD, True)
@@ -82,15 +82,89 @@ text(d, (70, 777), 'CORE: 3 x 3 x 3 LG / 1,000 MWh / 10 GW BASE', 17, CYAN)
 text(d, (70, 806), 'GLAZING OMITTED TO SHOW INTERNAL ASSEMBLY', 14, MUTED)
 d.line((770, 185, 770, 805), fill='#315a70', width=2)
 for i, (name, title, line1, line2) in enumerate([
-    ('capacity', 'CAPACITY', 'Side sockets', '+100,000 MWh each'),
-    ('transfer', 'TRANSFER', 'Rear socket', '1 TW ceiling'),
-    ('stabilizer', 'STABILIZER', 'Front socket', 'Enables expansions')]):
+    ('capacity', 'CAPACITY', 'Any compatible bay', '+10,000 / +100,000 MWh'),
+    ('transfer', 'TRANSFER', 'Any compatible bay', '100 GW / 1 TW ceiling'),
+    ('stabilizer', 'STABILIZER', 'Any compatible bay', 'Matching / lower tiers')]):
     x=805+i*250
     model(im, name, (x, 225, 230, 295))
     text(d, (x+6, 539), title, 24, INK, True)
     text(d, (x+6, 577), line1, 16, CYAN)
-    text(d, (x+6, 606), line2, 16, MUTED)
+    text(d, (x+6, 606), line2, 15, MUTED)
 text(d, (813, 191), '1 x 3 x 1 LG / ADVANCED PILLARS', 18, GOLD)
-note(d, 812, 690, '01', 'KEEP A RESERVE', ['Auto / Recharge / Discharge', 'Emergency support for eligible reactors', 'Each physical battery retains its own charge'])
+note(d, 812, 690, '01', 'KEEP A RESERVE', ['Auto / Recharge / Discharge', 'Five-second jump-drive surge', 'Four bays accept any supported module'])
 im.save(OUT/'energy-blueprint.png', optimize=True)
-print('Wrote three 1600x900 Workshop blueprint plates to', OUT)
+
+
+
+def grid_plate(number, title, subtitle, filename, parts, columns=4, footnote=''):
+    im, d = plate(number, title, subtitle)
+    rows = (len(parts)+columns-1)//columns
+    width, height = 1500/columns, 615/rows
+    for index, (name, label, detail) in enumerate(parts):
+        x, y = 50+(index%columns)*width, 177+(index//columns)*height
+        model(im, name, (x+10, y, width-30, height-88))
+        d.line((x+12, y+height-81, x+width-20, y+height-81), fill='#315a70')
+        text(d, (x+16, y+height-71), label, 21 if columns<4 else 19, GOLD, True)
+        text(d, (x+16, y+height-38), detail, 16 if columns<4 else 15, MUTED)
+    if footnote: text(d, (62, 809), footnote, 15, CYAN)
+    im.save(OUT/filename, optimize=True)
+
+
+grid_plate('04', 'BRAYTON / TURBINE FAMILY', 'ONE TURBINE PER CIRCUIT  //  INTEGRATED COMPRESSOR  //  REGULAR + MIRRORED', 'turbines-blueprint.png', [
+    ('turbine', 'T1 / STANDARD', '0.25 MW per turbine / starter conversion'),
+    ('turbine-upgraded', 'T2 / UPGRADED', '50 MW per turbine / Empyrean eligible'),
+    ('turbine-mirrored', 'T1 / MIRRORED', 'Opposite-side duplex socket / same rating'),
+    ('turbine-mirrored-upgraded', 'T2 / MIRRORED UPGRADED', 'Four T2 circuits provide up to 200 MW')], 2,
+    '2 WIDE x 2 HIGH x 5 LONG LG  /  ALIGN H + C  /  EACH CIRCUIT RECEIVES UP TO 25% OF SOURCE HEAT')
+
+im, d = plate('05', 'ATMOSPHERIC / HEAT REJECTION', 'TWIN FAN ASSEMBLY  //  DUPLEX MANIFOLD  //  CLEAR EXHAUST REQUIRED')
+model(im, 'air-cooler', (45, 177, 740, 460))
+model(im, 'air-cooler-rear', (815, 177, 740, 460))
+text(d, (66, 635), 'FRONT / TWIN FAN GUARDS', 23, GOLD, True)
+text(d, (824, 635), 'REAR / H + C CONNECTIONS', 23, GOLD, True)
+note(d, 65, 692, '01', 'TWO EQUIPMENT TIERS', ['25 GW standard / 250 GW upgraded', 'Same 3 x 3 x 2 LG body'])
+note(d, 824, 692, '02', 'LEAVE THE FANS CLEAR', ['2.5 m beyond both guards', 'Vacuum provides no active cooling'])
+im.save(OUT/'cooling-blueprint.png', optimize=True)
+
+im, d = plate('06', 'RADIATORS / MODULAR ARRAY', 'PASSIVE HEAT REJECTION  //  SUN TRACKING  //  BASE + TWO EXTENSIONS')
+model(im, 'radiator-stack', (48, 175, 700, 635))
+text(d, (70, 805), 'COMPLETE THREE-SECTION STACK / AUTHORING POSE', 15, CYAN)
+d.line((778, 185, 778, 805), fill='#315a70', width=2)
+model(im, 'space-radiator', (800, 177, 340, 330))
+model(im, 'radiator-panel', (1170, 177, 340, 330))
+text(d, (822, 522), 'RADIATOR BASE', 22, GOLD, True)
+text(d, (1190, 522), 'EXTENSION PANEL', 22, GOLD, True)
+note(d, 812, 592, '01', 'MIXED TIERS ADD CAPACITY', ['10 / 100 GW per standard / upgraded section', 'Three sections: 30 / 300 GW in ideal exposure'])
+note(d, 812, 710, '02', 'BUILD ON THE TOP SHAFT', ['Match Up; any yaw / maximum two extensions', 'Shade and edge-on tracking preserve capacity'])
+im.save(OUT/'radiators-blueprint.png', optimize=True)
+
+for bare, number, title in [(False, '07', 'FRAMED'), (True, '08', 'BARE')]:
+    parts = []
+    for shape, label, detail in [
+        ('straight', 'STRAIGHT', 'Opposed H / C ports'), ('elbow', 'ELBOW', 'Horizontal turn'),
+        ('riser', 'RISER', 'Vertical transition'), ('tee', 'TEE', 'Branch within one circuit'),
+        ('cross', 'CROSS', 'Four-way junction'), ('roll-adapter', 'ROLL ADAPTER', 'Rotate the duplex roll'),
+        ('end-cap', 'END CAP', 'Seal unused pipe mouths'), ('reactor-adapter', 'REACTOR ADAPTER', 'Offset end faces vessel')]:
+        parts.append(('pipe-'+shape+('-bare' if bare else ''), label, detail))
+    grid_plate(number, 'DUPLEX PIPEWORK / '+title, 'ONE LARGE-GRID CELL  //  SHARED SUPPLY + RETURN  //  KEEP REACTOR CIRCUITS SEPARATE',
+               ('bare' if bare else 'framed')+'-pipes-blueprint.png', parts,
+               footnote='MATCH OPPOSING FACES AND H/C ROLL  /  CAP OPEN MOUTHS  /  CONVEYORS DO NOT CARRY HEAT')
+
+im, d = plate('09', 'ENERGY CORE / COMPLETE BANK', 'FULL ASSEMBLY  //  FOUR UNIVERSAL BAYS  //  COMPLETE CASING + GLAZING OUTLINES')
+model(im, 'energy-full', (40, 175, 1030, 635))
+d.line((1090, 185, 1090, 805), fill='#315a70', width=2)
+note(d, 1120, 210, '01', 'PHYSICAL STORAGE', ['3 x 3 x 3 LG core', '1,000 MWh base capacity', 'Each cell keeps its charge'])
+note(d, 1120, 388, '02', 'FOUR FLEXIBLE BAYS', ['2 advanced capacity units', '1 advanced transfer unit', '1 advanced stabilizer'])
+note(d, 1120, 566, '03', 'BANK ABILITIES', ['Five-second drive surge', 'Ten-second burst output', 'Reserve + reactor support'])
+text(d, (70, 804), 'WIRE-FRAME GLAZING / NO STRUCTURAL CUTAWAY / ASSEMBLED ADVANCED MODULES', 15, CYAN)
+im.save(OUT/'full-energy-blueprint.png', optimize=True)
+
+grid_plate('10', 'STORAGE / UPGRADE MODULES', '1 x 3 x 1 LARGE-GRID PILLARS  //  ANY CORE BAY  //  ALIGN UP AND FACE CONNECTORS INWARD', 'energy-modules-blueprint.png', [
+    ('capacity-standard', 'STANDARD CAPACITY', '+10,000 MWh'),
+    ('transfer-standard', 'STANDARD TRANSFER', '100 GW bank ceiling'),
+    ('stabilizer-standard', 'STANDARD STABILIZER', 'Supports standard modules'),
+    ('capacity', 'ADVANCED CAPACITY', '+100,000 MWh'),
+    ('transfer', 'ADVANCED TRANSFER', '1 TW bank ceiling'),
+    ('stabilizer', 'ADVANCED STABILIZER', 'Supports both equipment tiers')], 3,
+    'STRONGEST TRANSFER / STABILIZER TIER APPLIES  /  MATCHING OR STRONGER STABILIZER REQUIRED')
+print('Wrote ten 1600x900 Workshop blueprint plates to', OUT)

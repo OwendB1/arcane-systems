@@ -323,6 +323,11 @@ def install(additions=False):
                 key='subpart_'+rotor['subpart']
                 assert key in actual and max(abs(actual[key][0][12+i]-pivot[i]) for i in range(3))<1e-5,('Wrong shaft pivot',key)
                 assert max(abs(v-w) for v,w in zip(actual[key][0][:12],[1,0,0,0,0,1,0,0,0,0,1,0]))<1e-5,('Rotated shaft rest frame',key)
+    if 'Reactor housing' in mains:
+        from check_reactor_roof import check as check_roof
+        main = mains['Reactor housing']
+        check_roof([STAGING/(stem+'.mwm') for stem in [main, *[key for key, row in rows.items()
+                   if row['type']=='lod' and row['reference']==main]]])
     bundle={stem+'.mwm':STAGING/(stem+'.mwm') for stem,row in rows.items() if row['type']!='lod'}
     pending=list(bundle.values())
     current=next(block for block in ET.parse(MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').findall('CubeBlocks/Definition')

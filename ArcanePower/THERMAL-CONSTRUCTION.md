@@ -1,7 +1,7 @@
 # Building and verifying a Brayton plant
 
 The construction guide, 27 public thermal blocks and 28 hidden pipe compatibility definitions and native models are
-included in the local 0.1.0 alpha package. Live SE validation of these instructions
+included in the local alpha package. Live SE validation of these instructions
 remains pending. Construction verification is separate from server permission
 to start the reactor.
 
@@ -12,6 +12,39 @@ placement arrows. Aim at an existing thermal block within 20 m to inspect its
 connected assembly while welding or checking a finished build. Use the full HUD
 for instructions and arrows. Minimal HUD retains socket markers; HUD off, chat
 and menus hide the guide.
+Type **`/ap guide`** in chat to toggle all construction instructions and placement
+highlights. This preference is saved locally between sessions and affects only
+your client. Use the same command to restore the guide. The command is also
+shown in the full instructions and the native fallback notification.
+`tools/check_guide_preference.py` verifies saved on/off states, command matching,
+ordinary-chat passthrough and storage failure handling. A live review on
+2026-10-27 verified hiding, persistence after world reload, and restoration with
+the same command in the separate HUD review world.
+The full text panel uses Text HUD API; without it, the native notification shows
+the current next step while placement rings remain available.
+The vessel now shows a **reactor assembly guide in standalone and Brayton modes**.
+It also stays available when aiming at its attached controllers or roof vent stack,
+including while placing those hardware blocks. The panel leads with the current
+operating warning, then shows controller, vent, tile, fuel and startup-power steps.
+It lists the **2.5 / 25 / 250 MW thermal** fuel ratings and the controller/mode
+requirements; heat ratings are separate from electrical output.
+
+Amber rings mark the two native lower controller sockets and the next roof vent
+connection. Green means that controller is fully built and functional, or the
+complete vent route is ready. Cyan rings identify side conveyor hatches for fuel
+canisters and tile supplies. Face controller connectors inward; a standard pair
+supports Aether, a mixed pair supports Helion, and two advanced controllers support
+Empyrean. Helion/Empyrean also require Brayton, and Empyrean needs upgraded turbines.
+The vent marker follows the straight stack to its first missing, unfinished or
+misaligned section. These are advisory placement highlights, not startup permission.
+`tools/check_reactor_guide.py` exercises the production marker code against the
+shipped MWM sockets across all 24 grid orientations, including individual controller
+readiness, vent progression, projections and hardware targeting. Assembly text and
+warning priority are covered by `tools/check_appearance.py`. In-game captures on
+2026-10-27 verified the full panel, empty controller sockets, roof vent target and
+continued guidance while placing a controller. The review used a separate copy of
+the prototype lab with Text HUD API enabled; the original world was preserved.
+
 Pipe and machine inspections stop at the vessel and cover the selected circuit.
 Inspect the vessel itself to check all four circuits. A mismatch prompt reports
 the number of faulty connections and correction, rather than assuming red markers

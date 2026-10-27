@@ -48,6 +48,25 @@ def fit_roof_surfaces(col):
     """Seat the thermal roof fittings without coincident visible surfaces."""
     bpy.context.view_layer.update()
     source = lambda o: o.get('reactor_source_name', o.name)
+    if not col.get('roof_backing_relief_revision'):
+        housing = next(o for o in col.objects if source(o).startswith('Circular upper armored housing')
+                       and max((o.matrix_world @ v.co).z for v in o.data.vertices) > 3.5)
+        # The housing at 3.746 and cap at 3.748 both pack to 3.74707031 in
+        # MWMBuilder. Recess the complete cap/rim footprint below the cap's
+        # underside, leaving a solid pocket floor above the 3.52 hatch cavity.
+        # A 2.55 m radius clears the 2.527 m rim without touching roof panels.
+        bpy.ops.mesh.primitive_cylinder_add(vertices=128, radius=2.55, depth=.40,
+                                           location=(0, 0, 3.78))
+        cutter = bpy.context.object
+        cutter.data.materials.clear(); cutter.data.materials.append(bpy.data.materials['Metal_Dull'])
+        if housing.data.users > 1: housing.data = housing.data.copy()
+        mod = housing.modifiers.new('Central roof backing relief', 'BOOLEAN')
+        mod.operation = 'DIFFERENCE'; mod.solver = 'EXACT'; mod.object = cutter
+        bpy.context.view_layer.objects.active = housing
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+        bpy.data.objects.remove(cutter, do_unlink=True)
+        finish_recess_meshes([housing])
+        col['roof_backing_relief_revision'] = 1
     cap = next(o for o in col.objects if source(o).startswith('Cap central service hatch')
                and min((o.matrix_world @ v.co).z for v in o.data.vertices) > 3.5)
     # Clear the complete 2.04 m seat OD. Burying this edge in the seat left

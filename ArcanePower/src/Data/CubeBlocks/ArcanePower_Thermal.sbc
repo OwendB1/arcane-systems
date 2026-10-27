@@ -307,7 +307,7 @@
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="3" z="5" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_e9bd91568ccd/APT_ReactorHousing_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="2400" />
         <Component Subtype="Construction" Count="1000" />
@@ -374,9 +374,9 @@
         <MountPoint Side="Right" StartX="2" EndX="3" StartY="0" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_e9bd91568ccd/APT_ReactorHousing_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_e9bd91568ccd/APT_ReactorHousing_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_e9bd91568ccd/APT_ReactorHousing_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>

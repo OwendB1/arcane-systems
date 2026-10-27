@@ -815,6 +815,14 @@ def audit(names=None):
                 if tree(housing).ray_cast(origin, Vector((0, 0, -1)), .30)[0] is None:
                     fail(name, 'central hatch seam has continuous housing backing', str(i))
             stats['hatch_cap_seat_clearance_mm'] = round(clearance*1000, 3)
+            for radius in (2.10, 2.25, 2.40):
+                for i in range(32):
+                    angle = (i+.37)*math.tau/32
+                    origin = Vector((radius*math.cos(angle), radius*math.sin(angle), 3.85))
+                    cap_hit = tree(cap).ray_cast(origin, Vector((0, 0, -1)), .4)[0]
+                    backing_hit = tree(housing).ray_cast(origin, Vector((0, 0, -1)), .4)[0]
+                    if cap_hit is None or backing_hit is None or cap_hit.z-backing_hit.z < .01:
+                        fail(name, 'roof cap has recessed backing safe for native vertex packing', str((radius, i)))
         if name == 'Reactor housing' and scene.get('thermal_flow_revision'):
             for obj in col.objects:
                 if obj.get('thermal_flow_fixture') and any(obj.name.startswith(name+' / '+port['id']+' ') for port in ports):

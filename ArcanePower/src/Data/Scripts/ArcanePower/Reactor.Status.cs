@@ -149,6 +149,56 @@ namespace ArcanePower
             return text;
         }
 
+        // The look-at guide shares warning priority with the terminal/tablet,
+        // but keeps assembly instructions separate from the full telemetry.
+        internal StatusReport ReadAssemblyGuide()
+        {
+            var live = ReadStatus(false);
+            var guide = new StatusReport { Name = live.Name, State = live.State, Tone = live.Tone, Fuel = live.Fuel };
+            foreach (var row in live.Rows)
+                if (row.Section == null) guide.Rows.Add(row);
+            if (!receivedState) return guide;
+
+            Section(guide, "ASSEMBLY");
+            Row(guide, "1 Controllers", Motion.ControllersReady ? "Both ready / " + controllerRingCapacity + "-ring capacity"
+                : Number(Math.Max(0, previousControllers), "0") + "/2 attached; fully weld or repair both",
+                Motion.ControllersReady ? "green" : "yellow");
+            Line(guide, "muted", "Fit one to each highlighted LOWER side socket; face the connector inward.");
+            Row(guide, "2 Vent", Motion.VentReady ? Motion.VentDucts + " duct(s) + outlet ready"
+                : "Stack 1-15 ducts above the roof, then one outlet; match Up", Motion.VentReady ? "green" : "yellow");
+            int[] stock = SpareTileQuartets();
+            int missing = MyAPIGateway.Session.CreativeMode ? 0 : Math.Max(0, NeededTileQuartets() - stock[0] - stock[1] - stock[2]) * 4;
+            Row(guide, "3 Tiles", Motion.InstalledTiles + "/80 installed; " + (missing > 0 ? "load " + missing + " more"
+                : "startup supply ready") + ". Use same-grade sets of 4", missing > 0 || Motion.TileStarved ? "yellow" : "green");
+            Row(guide, "4 Fuel", live.Fuel + " selected / " + live.Value("Fuel stock"), HasUsableFuel() ? "green" : "yellow");
+            Row(guide, "5 Startup", "Battery/grid supply > " + Power(ContainmentMW) + "; fill 90 s reserve, then assemble",
+                Motion.PowerReady ? "green" : "yellow");
+            if (Precharging)
+                Line(guide, "white", "Reserve " + live.Value("Startup charge") + " / " + live.Value("Charge ETA"));
+            else if (Motion.Core == CorePhase.Off && !reactor.Enabled)
+                Line(guide, "muted", "When supplies and connections are ready, switch the reactor On.");
+
+            Section(guide, "FUEL GUIDE / HEAT RATINGS");
+            for (int i = 0; i < FuelNames.Length; i++)
+            {
+                string requirement = i == 0 ? "2 rings; standalone or Brayton"
+                    : i == 1 ? "3 rings; Brayton; mixed/advanced pair"
+                    : "4 rings; Brayton; 2 advanced + T2 turbines";
+                Row(guide, FuelNames[i], Power(PowerMW[i] / .40) + " heat / " + requirement, "white");
+            }
+            Line(guide, "muted", "Two standard controllers = 2 rings; mixed = 3; two advanced = 4.");
+            Line(guide, "muted", "Load filled canisters + tiles through conveyor hatches, not the controller sockets.");
+            if (ThermalVariant && Motion.Thermal != null)
+            {
+                Section(guide, "CONVERSION");
+                Row(guide, "Mode", live.Value("Conversion mode"));
+                Line(guide, "muted", "Brayton needs an advanced controller. Stop/cool, select Brayton in terminal, wait for deployment.");
+                if (Motion.Thermal.Mode == ThermalMode.Brayton || Motion.Thermal.Requested == ThermalMode.Brayton)
+                    Row(guide, "Circuits", live.Value("Circuits available") + "; one turbine + cooling per separate H/C circuit");
+            }
+            return guide;
+        }
+
         private string ThermalOutlook()
         {
             if (Motion.PayloadReleased || Motion.Core == CorePhase.Off) return "No active core";
@@ -200,7 +250,7 @@ namespace ArcanePower
             if (!reactor.IsFunctional || reactor.SlimBlock.BuildLevelRatio < 1)
             { tone = "red"; action = "Complete or repair the reactor."; return "REACTOR INCOMPLETE"; }
             if (previousControllers < 2 || Motion.FuelTier + 1 > controllerRingCapacity)
-            { tone = "red"; action = "Attach two compatible, working controllers."; return "CONTAINMENT INCOMPLETE"; }
+            { tone = "red"; action = "Fit two controllers to the lower side upgrade sockets, connectors inward; weld both fully."; return "CONTAINMENT INCOMPLETE"; }
             if (!Motion.PayloadReleased && Motion.Core != CorePhase.Off && ThermalVariant && Motion.Thermal != null
                 && Motion.Thermal.Mode == ThermalMode.Brayton)
             {

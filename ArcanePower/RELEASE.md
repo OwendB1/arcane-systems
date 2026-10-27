@@ -3,7 +3,7 @@
 Workshop item: [3819727962](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962).
 The publishing source of truth is `workshop/title.txt`, `workshop/version.txt`,
 `workshop/description.bbcode`, `src/modinfo.sbmi.main` and `src/thumb.gif`.
-The title is generated as **Arcane Power (0.1.0)** from the two text files.
+The title is generated as **Arcane Power (0.1.1)** from the two text files.
 The animated preview uses the 480×270 GIF below 1 MB.
 
 `.github/workflows/arcane-power-workshop-upload.yml` calls the existing shared
@@ -26,11 +26,13 @@ adding duplicates. SteamCMD handles the primary preview, not these gallery
 uploads. Rebuild the original-model illustrations with:
 
 ```sh
-blender -b ArcanePower/assets/arcane-energy-core.blend --python ArcanePower/assets/render_workshop_blueprints.py
+blender -b --factory-startup --python-exit-code 1 --python ArcanePower/assets/render_workshop_blueprints.py
 python3 ArcanePower/tools/compose_workshop_blueprints.py
 ```
 
-The render scripts use temporary scenes and do not save the authoring blends.
+The render scripts use temporary scenes and do not save the authoring blends. The renderer reads the saved SEUT Main collections directly, uses the actual mesh crease edges, and runs without the Blender UI or export add-on callbacks.
+
+The ten plates cover the reactor, controllers/vent route, storage cutaway, four turbine variants, atmospheric cooling, radiator stacks, framed pipes, bare pipes, full Energy Core bank, and all six storage modules. The three original filenames remain stable; the seven additions use matching 1600×900 cyan-on-navy layouts. The full-bank plate retains the complete casing, glazing outlines and four attached modules.
 
 ## Local alpha package
 
@@ -82,6 +84,12 @@ previously blank reverse faces. Derived stages
 and LODs follow the same source.
 The sole playable reactor keeps its thermal subtype ID. Archived authoring
 sources remain outside the shipped mod. Reactor internal plumbing is preserved.
+The roof backing is recessed beneath the central hatch surround: the previous
+2 mm gap collapsed during MWM vertex packing and caused visible z-fighting.
+The main and both distance meshes now pass native clearance sampling before
+installation and during delivery checks. Construction stages were refreshed;
+accepted collision inputs are unchanged. Headless close-ups at 1.8, 2.4 and
+3.0 m and a separate in-game review world verified the repaired roof on 2026-10-27.
 Reactor adapters have square-edged receiving lips that overlap the deployed
 manifold noses. External pipe ends use short metal ferrules with matching inner
 and outer glass boundaries, including framed/bare pipes and moving manifolds.
@@ -130,7 +138,7 @@ python3 ArcanePower/tools/package_release.py
 python3 ArcanePower/tools/check_thermal_delivery.py
 ```
 
-The output is `.cache/release/ArcanePower-0.1.0.zip` under ArcanePower.
+The output is `.cache/release/ArcanePower-0.1.1.zip` under ArcanePower.
 Extract its contents into a local mod directory and enable it in an experimental
 SE1 world. The local development symlink already exposes `src` on the next world
 load. Do not load both the extracted package and the development copy together.

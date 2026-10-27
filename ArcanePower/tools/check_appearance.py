@@ -205,9 +205,9 @@ checks = r'''
    Need(!r.Precharging && !r.ReadStatus(false).Precharging,"interlocks and other phases suppress startup charge");
    if(r.Motion.Critical || r.Motion.Vent!=VentPhase.Idle)Need(r.Entity.Color.Equals(Color.Red),"critical/vent alarm overrides charging");
   }
-  var client=new Reactor();client.Motion.ReserveMJ=45;client.Motion.PowerInputMW=4;
+  var client=new Reactor();client.Motion.ReserveMJ=client.ReserveCapacityMJ/2;client.Motion.PowerInputMW=client.ContainmentMW*4;
   MyAPIGateway.Multiplayer.IsServer=false;client.Tick();
-  Near(client.Motion.ReserveMJ,45,"client does not invent charge progress");
+  Near(client.Motion.ReserveMJ,client.ReserveCapacityMJ/2,"client does not invent charge progress");
   Need(client.ReadStatus(false).Value("Charge ETA")=="~15 s","client presents replicated measured input");
   MyAPIGateway.Multiplayer.IsServer=true;
   Console.WriteLine("PASS: fault/vent/interlock priority, phase transitions and client presentation");
@@ -269,7 +269,26 @@ checks = r'''
   Need(named.ReadStatus(false).Value("Thermal outlook")=="Supercritical / countdown active","armed hazard cannot claim a safe outlook");
   Console.WriteLine("PASS: rolling forecasts, warning/recovery timing, circuit ETAs, server authority and critical/ejection priority");
  }
- static void Main(){Charging();Priority();RenderRecovery();ThermalWarnings();}
+ static void AssemblyGuide(){
+  var r=new Reactor();r.previousControllers=0;r.Motion.ControllersReady=false;r.reactor.Enabled=false;
+  var guide=r.ReadAssemblyGuide();
+  Need(guide.State=="CONTAINMENT INCOMPLETE" && guide.Rows[0].Value.Contains("lower side upgrade sockets"),"look-at guide leads with actionable controller placement");
+  Need(guide.Value("1 Controllers").Contains("0/2 attached"),"missing controllers are counted");
+  Need(guide.Value("Aether").StartsWith("2.5 MW heat") && guide.Value("Helion").StartsWith("25 MW heat")
+   && guide.Value("Empyrean").StartsWith("250 MW heat"),"guide uses current thermal fuel ratings");
+  Need(guide.Value("Aether").Contains("standalone") && guide.Value("Helion").Contains("mixed/advanced")
+   && guide.Value("Empyrean").Contains("2 advanced + T2 turbines"),"fuel tiers explain controller, mode and turbine requirements");
+  Need(guide.Value("2 Vent").Contains("ready") && guide.Value("3 Tiles").Contains("startup supply ready"),"available supplies and route have live readiness");
+  Need(guide.Value("5 Startup").Contains("100 W") || guide.Value("5 Startup").Contains("0.1 kW"),"startup power follows the selected fuel scale");
+  r.previousControllers=2;r.Motion.ControllersReady=true;r.controllerRingCapacity=3;
+  Need(r.ReadAssemblyGuide().Value("1 Controllers").Contains("3-ring capacity"),"compatible hardware capacity shown independently of selected fuel");
+  r.Motion.Critical=true;r.Motion.CriticalSeconds=12;
+  guide=r.ReadAssemblyGuide();Need(guide.State.StartsWith("SUPERCRITICAL") && guide.Tone=="red" && guide.Rows[0].Section==null,"hazards retain priority over assembly steps");
+  r.Motion.Critical=false;r.receivedState=false;
+  guide=r.ReadAssemblyGuide();Need(guide.State=="WAITING FOR REACTOR STATE" && guide.Value("1 Controllers")=="--","unreplicated state cannot advertise assembly readiness");
+  Console.WriteLine("PASS: reactor assembly steps, current fuel/controller requirements, startup power, readiness and warning priority");
+ }
+ static void Main(){Charging();Priority();RenderRecovery();ThermalWarnings();AssemblyGuide();}
 }
 '''
 with tempfile.TemporaryDirectory(prefix='arcane-appearance-') as folder:
