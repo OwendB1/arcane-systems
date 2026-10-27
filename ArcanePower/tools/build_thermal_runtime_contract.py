@@ -49,16 +49,17 @@ def generate():
         grade = 3 if 'upgraded' in name or kind == 'Pipe' else 0
         cooler = kind in ('AirCooler', 'Radiator', 'RadiatorPanel')
         if kind == 'Train':
-            rating = 62.5 if grade == 3 else .625
+            rating = 62500 if grade == 3 else 625
         elif kind == 'Reactor':
-            rating = 250
+            rating = 250000
         elif cooler:
+            # Retain historical heat-storage capacity for existing saves.
             rating = 250000 if grade == 3 else 25000
         else:
             rating = 2500000
-        cooling = (100000 if grade == 3 else 10000) if cooler else 0
+        cooling = (10000 if grade == 3 else 1000) if cooler else 0
         if kind == 'AirCooler':
-            cooling = 250000 if grade == 3 else 25000
+            cooling = 25000 if grade == 3 else 2500
         subtype = model['subtype']
         assert model['cells_se'] == [model['cells_blender'][i] for i in (0, 2, 1)]
         rows += [f'            models.Add("{subtype}", new ThermalModel {{',

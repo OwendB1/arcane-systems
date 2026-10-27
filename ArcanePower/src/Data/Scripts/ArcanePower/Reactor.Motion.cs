@@ -223,10 +223,10 @@ namespace ArcanePower
                 && state.FuelDebt >= -(double)VRage.MyFixedPoint.SmallestPossibleValue * .5 - 1e-12 && state.FuelDebt < 1
                 && state.ResiduumMicroUnits >= 0 && state.ResiduumMicroUnits <= 1000000000000000L
                 && state.Status >= ReactorStatus.ShutOff && state.Status <= ReactorStatus.Active
-                // Retain the old per-tier saved-heat bounds across the 10,000:1 rebalance.
+                // Retain the old per-tier saved-heat bounds across the 10:1 rebalance.
                 && (state.Thermal == null || (state.Thermal.Valid(state.EntityId)
-                    && state.Thermal.Store.Valid(state.EntityId, PowerMW[state.FuelTier - 1] * 10000 / .40 * 8)
-                    && state.Thermal.FuelHeatMJ <= PowerMW[state.FuelTier - 1] * 10000 / .40 * 8));
+                    && state.Thermal.Store.Valid(state.EntityId, PowerMW[state.FuelTier - 1] * 10 / .40 * 8)
+                    && state.Thermal.FuelHeatMJ <= PowerMW[state.FuelTier - 1] * 10 / .40 * 8));
         }
 
         internal void ReceiveState(MotionState state)

@@ -275,11 +275,11 @@ The terminal **Security mode** switch defaults to **On**: losing the vent route 
 
 [Reactor.cs](src/Data/Scripts/ArcanePower/Reactor.cs) enforces two functional controllers and available ring capacity. [Reactor.Fuel.cs](src/Data/Scripts/ArcanePower/Reactor.Fuel.cs) now selects and consumes actual fuel tiers:
 
-| Fuel | Minimum controller ring capacity | Colour | Rated output |
+| Fuel | Minimum controller ring capacity | Colour | Rated reactor heat |
 | --- | --- | --- | --- |
-| Aether | 2 | Cyan | 1 MW |
-| Helion | 3 | Amber | 10 MW |
-| Empyrean | 4 | Violet | 100 MW |
+| Aether | 2 | Cyan | 2.5 GW |
+| Helion | 3 | Amber | 25 GW |
+| Empyrean | 4 | Violet | 250 GW |
 
 The highest mode- and controller-compatible fuel present is selected only while Off, vent Idle, output zero and thermally cold, after outstanding heat charges are accounted. Fuel stays locked through operation/shutdown. Standalone selection and automatic conveyor replenishment are limited to Aether; higher-tier canisters may remain stored for later Brayton use. Each filled canister holds 10 fuel units. Aether lasts **2.5 ideal full-load minutes**, or **2/2.25/2.475 minutes** with controller tiers 1/2/3. Helion and Empyrean retain 10 ideal minutes, scaled by their compatible controllers' 90%/99% efficiency. Consumption divides by controller efficiency and falls with demand. Native inventory amounts include the remaining fraction of a canister; telemetry labels stock and burn in canisters. Refineries retain base yields of 0.1%/0.01%/0.001% for Aether/Helion/Empyrean concentrates.
 
@@ -326,18 +326,18 @@ longer. Canister and concentrate demand also increase fourfold; with doubled
 mining yield, the required excavation volume doubles. Power and heat ratings,
 crafting recipes, and higher-tier fuel endurance are unchanged.
 
-Atmospheric coolers reject **25 GW per T1 unit** or **250 GW per T2 unit** at full
+Atmospheric coolers reject **2.5 GW per T1 unit** or **25 GW per T2 unit** at full
 air density with clear exhausts; vacuum provides no active cooling. Radiator
-sections retain **10 GW per T1 panel** or **100 GW per T2 panel**.
-Three-panel radiator stacks provide **30 GW / 300 GW** under ideal exposure;
+sections retain **1 GW per T1 panel** or **10 GW per T2 panel**.
+Three-panel radiator stacks provide **3 GW / 30 GW** under ideal exposure;
 mixed stacks sum each panel's rating. Atmospheric radiator losses scale smoothly
 with measured density; blockage and solar exposure also reduce rejection.
-Reactor fuel heat ratings are **2.5 / 25 / 250 MWth**. Each of four Aether
-circuits receives up to 0.625 MWth, exports **0.25 MW** and needs
-0.375 MW rejection at 40% conversion. Give each circuit its own standard cooler or
+Reactor fuel heat ratings are **2.5 / 25 / 250 GWth**. Each of four Aether
+circuits receives up to 0.625 GWth, exports **250 MW** and needs
+375 MW rejection at 40% conversion. Give each circuit its own standard cooler or
 radiator connection; a single circuit can operate at one quarter of full capacity.
 Empyrean supplies ten times Helion's heat. Each upgraded turbine accepts up to
-62.5 MWth and exports **50 MW** at 80% conversion: **200 MW** across four ports.
+62.5 GWth and exports **50 GW** at 80% conversion: **200 GW** across four ports.
 Regular and mirrored turbines have matching native and effective output limits.
 
 Native `FuelInfos` is empty because multiple native entries represent concurrent inputs rather than alternative fuels. The mod allows all three fuels in its inventory, maintains native energy capacity for the selected fuel and consumes it explicitly. Conveyor replenishment uses public inventory transfers with conveyor reachability and access checks.
@@ -497,7 +497,7 @@ See the [remaining-work overview](../docs/arcane-power-remaining-work.md) for th
 
 [ContainmentController.cs](src/Data/Scripts/ArcanePower/ContainmentController.cs) places native electrical sinks on the two external controllers. SE pairs a generator and electrical sink in the same component container as storage, so the reactor remains a normal source while controllers draw the operating energy. The new `ArcaneContainment` sink group has priority 2 (after vanilla safe zones, before defense) and accepts partial supply. Native grid behavior and split/merge handling still require game review.
 
-[Reactor.Power.cs](src/Data/Scripts/ArcanePower/Reactor.Power.cs) uses provisional containment demand **0.1/1/10 kW**, a **90-second** internal shutdown reserve (**2.5/25/250 Wh**), and up to three times operating demand for charging. Full precharge therefore requests **0.4/4/40 kW** and takes approximately **30 seconds** with sufficient grid supply, before the existing assembly and output ramp. Startup requires grid input and a full reserve; the reserve cannot start the reactor or export electricity. Creative also requires electrical supply. Reserve charging uses actual distributed input, and persisted energy remains tied to the original entity ID.
+[Reactor.Power.cs](src/Data/Scripts/ArcanePower/Reactor.Power.cs) uses provisional containment demand **0.1/1/10 MW**, a **90-second** internal shutdown reserve (**2.5/25/250 kWh**), and up to three times operating demand for charging. Full precharge therefore requests **0.4/4/40 MW** and takes approximately **30 seconds** with sufficient grid supply, before the existing assembly and output ramp. Startup requires grid input and a full reserve; the reserve cannot start the reactor or export electricity. Creative also requires electrical supply. Reserve charging uses actual distributed input, and persisted energy remains tied to the original entity ID.
 
 Before assembly, the housing and subpart emissives **blink white once per second** while delivered surplus power charges the reserve. Waiting for power uses a **slow, two-second white fade**. These signals are distinct from the running fuel colours; critical and vent alarms keep priority. Terminal information and the LCD/tablet Overview and Power pages show startup charge percentage, stored energy, delivered/requested input, net charging power and a remaining-time estimate. LCD and tablet progress bars follow the replicated reserve. No surplus means an explicit waiting state without a countdown; a full reserve still requires containment input before startup. `tools/check_appearance.py` exercises actual power, status and emissive methods, and `tools/check_tablet_screen.py` checks the display layouts. In-game appearance and multiplayer review remain pending.
 

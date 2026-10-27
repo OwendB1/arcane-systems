@@ -298,10 +298,10 @@ additional standalone electrical path. A small passive housing rejection path
 remains available for trapped heat; it produces no electricity.
 
 Dispatch selects an eligible tier and cold-end temperature within each circuit.
-Standard trains handle 0.625 MWth and export up to 0.25 MW; upgraded trains
-handle 62.5 MWth and export up to 50 MW. Reactor fuel tiers provide
-2.5/25/250 MWth, with 40/55/80% eligible conversion. Four upgraded Empyrean
-circuits provide 200 MW. Generated model contracts own equipment ratings;
+Standard trains handle 0.625 GWth and export up to 250 MW; upgraded trains
+handle 62.5 GWth and export up to 50 GW. Reactor fuel tiers provide
+2.5/25/250 GWth, with 40/55/80% eligible conversion. Four upgraded Empyrean
+circuits provide 200 GW. Generated model contracts own equipment ratings;
 native definitions and runtime multipliers use the same per-turbine ceilings.
 Pre-rebalance saved heat remains valid and retained; new admission and dispatch
 use the rebalanced ratings.

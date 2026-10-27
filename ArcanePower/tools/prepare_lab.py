@@ -188,7 +188,7 @@ def definitions():
         'Icon':'Textures/GUI/Icons/ArcaneReactor.dds',
         'Description':'Aether: 1 MW. Helion: 10 MW. Empyrean: 100 MW. Two working containment controllers required; their installation tier sets two/three/four rings, 1x/1.5x/2x tile deployment and 80%/90%/99% fuel efficiency. Venting ejects containment through the conveyor-connected top hatch, damages the reactor/modules, and leaves the reactor off. Automatic core ejection at 60% remaining integrity requires intact controllers and vents. Security mode selects shutdown or warning on vent loss after startup.',
         'Model':'Models/Cubes/large/ArcanePower_ReactorPrototype.mwm', 'BlockPairName':'ArcanePower_ReactorPrototype',
-        'MaxPowerOutput':1, 'FuelProductionToCapacityMultiplier':3600, 'PCU':100,
+        'MaxPowerOutput':1000, 'FuelProductionToCapacityMultiplier':3600, 'PCU':100,
         'IsAirTight':'false','InventorySize/X':2,'InventorySize/Y':1,'InventorySize/Z':1,
         'FuelInfos/FuelInfo/Id/SubtypeId':'ArcaneFuelI'}.items(): set_text(reactor,key,value)
     # Native FuelInfos are simultaneous requirements, not alternative fuels.
@@ -295,9 +295,9 @@ def fuel_definitions():
     native=E.parse(GAME/'Content/Data/VoxelMaterials_asteroids.sbc').getroot()
     voxel_template=next(n for n in native.iter('VoxelMaterial') if n.findtext('Id/SubtypeId')=='Uraninite_01')
     tiers=[
-        ('Aether','Aetherite','ArcaneOre','ArcaneFuelI','ArcaneAetherConcentrate','ArcaneAetherOreToConcentrate','ArcaneAetherFuel',20,.2,.001,.01,10,'10 GW'),
-        ('Helion','Helionite','ArcaneHelionOre','ArcaneFuelII','ArcaneHelionConcentrate','ArcaneHelionOreToConcentrate','ArcaneHelionFuel',2,.03,.0001,.005,20,'100 GW'),
-        ('Empyrean','Empyrite','ArcaneEmpyreanOre','ArcaneFuelIII','ArcaneEmpyreanConcentrate','ArcaneEmpyreanOreToConcentrate','ArcaneEmpyreanFuel',1,.01,.00001,.001,40,'1 TW')]
+        ('Aether','Aetherite','ArcaneOre','ArcaneFuelI','ArcaneAetherConcentrate','ArcaneAetherOreToConcentrate','ArcaneAetherFuel',20,.2,.001,.01,10,'2.5 GW'),
+        ('Helion','Helionite','ArcaneHelionOre','ArcaneFuelII','ArcaneHelionConcentrate','ArcaneHelionOreToConcentrate','ArcaneHelionFuel',2,.03,.0001,.005,20,'25 GW'),
+        ('Empyrean','Empyrite','ArcaneEmpyreanOre','ArcaneFuelIII','ArcaneEmpyreanConcentrate','ArcaneEmpyreanOreToConcentrate','ArcaneEmpyreanFuel',1,.01,.00001,.001,40,'250 GW')]
 
     def recipe(subtype,name,prerequisites,result,amount,seconds,category,result_type='Ingot',whole_canister=False):
         bp=E.SubElement(recipes,'Blueprint')
@@ -352,7 +352,7 @@ def fuel_definitions():
             concentrated=subtype==concentrate
             item=copy.deepcopy(concentrate_template if concentrated else fuel_template)
             description=(f'Dense refined material: {volume:g} L/kg ({1/volume:g} kg/L). Ore matrix is removed during refinement. Assembler ingredient for '+name+' fuel.' if concentrated else
-                         'Sealed canister holding 10 fuel units. Ideal full-load endurance: '+('2.5' if tier==0 else '10')+' minutes before controller efficiency. Requires '+str(tier+2)+' containment rings. Upgrades retain the container; consumed fuel does not return an empty canister.')
+                         'Sealed canister holding 10 fuel units. Rated reactor heat: '+rating+'. Ideal full-load endurance: '+('2.5' if tier==0 else '10')+' minutes before controller efficiency. Requires '+str(tier+2)+' containment rings. Upgrades retain the container; consumed fuel does not return an empty canister.')
             if not concentrated:
                 description += (' Consuming Aether recovers 10 Aether Residuum per canister in standalone or Brayton mode.' if tier==0 else ' Requires Brayton mode and an advanced controller.' + (' Empyrean also requires upgraded Brayton turbines.' if tier==2 else ''))
             for key,value in {'Id/SubtypeId':subtype,'DisplayName':label,

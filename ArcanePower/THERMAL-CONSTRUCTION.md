@@ -26,7 +26,7 @@ The vessel now shows a **reactor assembly guide in standalone and Brayton modes*
 It also stays available when aiming at its attached controllers or roof vent stack,
 including while placing those hardware blocks. The panel leads with the current
 operating warning, then shows controller, vent, tile, fuel and startup-power steps.
-It lists the **2.5 / 25 / 250 MW thermal** fuel ratings and the controller/mode
+It lists the **2.5 / 25 / 250 GW thermal** fuel ratings and the controller/mode
 requirements; heat ratings are separate from electrical output.
 
 Amber rings mark the two native lower controller sockets and the next roof vent
@@ -128,7 +128,7 @@ see its dedicated **Arcane Power** cooling readout. It shows cooling efficiency
 and available/rated capacity using server measurements, including while stopped.
 Radiator bases include their attached extensions in the stack total and show the
 base panel separately; each extension shows its own contribution. Percentages
-are weighted by rated capacity, so mixed 10/100 GW panels are counted correctly.
+are weighted by rated capacity, so mixed 1/10 GW panels are counted correctly.
 All cooling blocks show measured air density. Radiators also show clear sky,
 solar and ambient cooling factors; atmospheric coolers show exhaust clearance
 and the resulting airflow factor. Active cooling scales from zero in vacuum to
@@ -272,8 +272,8 @@ gives 75%, and 100% sun on either face gives 50%. Each panel samples its own
 angle, partial shade, planetary shadow and weather. The terminal shows
 **Solar exposure** and **Cooling after solar load**. Keep both faces clear to
 space; shade alone does not compensate for enclosing the panels.
-Three equally exposed standard panels dissipate up to 30 GW, or 300 GW with all
-three upgraded. Mixed stacks add each section's own 10/100 GW rating.
+Three equally exposed standard panels dissipate up to 3 GW, or 30 GW with all
+three upgraded. Mixed stacks add each section's own 1/10 GW rating.
 A detached, misaligned, unfinished, disabled or third extension adds no cooling.
 Keep both faces open to space and the entire rotation envelope clear. The faint
 red-orange panel glow follows actual heat rejection, not requested power.
@@ -296,7 +296,7 @@ states, retained heat, pending fuel charges and powered shutdown/retraction.
 It also checks Residuum recovery across tiny debits, full inventories, failed
 item insertion, save/load, copied identities, conveyors and creative/client guards.
 The offline suites cover fuel/recovery/shutdown and thermal behavior,
-including T3 hardware eligibility, 25/250 GW atmospheric coolers, 10/100 GW
+including T3 hardware eligibility, 2.5/25 GW atmospheric coolers, 1/10 GW
 radiator panels, vacuum/thin-atmosphere boundaries and inverse
 solar exposure with shade, weather and planetary-shadow boundaries. Native
 motion validation passes all 1,730 existing comparisons; isolation valves pass

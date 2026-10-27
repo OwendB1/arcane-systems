@@ -157,15 +157,18 @@ public static partial class ThermalRuntimeChecks
         {
             if (model.Kind != ThermalKind.Train) continue;
             bool upgraded = model.Grade == 3;
-            double sourceMW = upgraded ? 250 : 2.5;
-            double outputMW = upgraded ? 50 : .25;
+            double sourceMW = upgraded ? 250000 : 2500;
+            double outputMW = upgraded ? 50000 : 250;
+            var cooler = ThermalModels.All["ArcanePower_Thermal_AtmosphericCooler" + (upgraded ? "Upgraded" : "")];
             var units = new List<ThermalUnit> {
                 new ThermalUnit { Kind = ThermalKind.Train, Grade = model.Grade, RatingMW = model.RatingMW },
-                new ThermalUnit { Kind = ThermalKind.AirCooler, CoolingMW = 100 }
+                new ThermalUnit { Kind = ThermalKind.AirCooler, CoolingMW = cooler.CoolingMW }
             };
             var plan = ThermalMath.Dispatch(ThermalLoops.Allocation(sourceMW), upgraded ? 2200 : 650, units);
             Near(plan.NetMW, outputMW, "per-port electrical rating: " + model.Subtype);
-            Near(plan.NetMW * ThermalLoops.Count, upgraded ? 200 : 1, "four-port electrical maximum");
+            Near(plan.RequiredCoolingMW, upgraded ? 12500 : 375, "full-load waste heat per circuit");
+            Near(plan.SustainableMW, outputMW, "one matching atmospheric cooler sustains full output at ideal exposure");
+            Near(plan.NetMW * ThermalLoops.Count, upgraded ? 200000 : 1000, "four-port electrical maximum");
             Near(ThermalMath.Dispatch(sourceMW, upgraded ? 2200 : 650, units).NetMW, outputMW,
                 "turbine cannot exceed rating with excess source heat");
             Check(new ThermalStore { EntityId = 1, HotMJ = upgraded ? 20000000 : 200000 }.Valid(1, model.CapacityMJ),
@@ -1208,10 +1211,10 @@ public static partial class ThermalRuntimeChecks
             var standard = ThermalModels.All["ArcanePower_Thermal_"+suffix];
             var upgraded = ThermalModels.All["ArcanePower_Thermal_"+suffix+"Upgraded"];
             bool active = suffix == "AtmosphericCooler";
-            Near(standard.CoolingMW,active ? 25000 : 10000,"standard active cooler 25 GW; radiator panel 10 GW");
-            Near(upgraded.CoolingMW,active ? 250000 : 100000,"upgraded active cooler 250 GW; radiator panel 100 GW");
+            Near(standard.CoolingMW,active ? 2500 : 1000,"standard active cooler 2.5 GW; radiator panel 1 GW");
+            Near(upgraded.CoolingMW,active ? 25000 : 10000,"upgraded active cooler 25 GW; radiator panel 10 GW");
             Near(standard.RatingMW,25000,"standard saved thermal capacity preserved");
-            Near(upgraded.RatingMW,250000,"upgraded cooler throughput scales with cooling");
+            Near(upgraded.RatingMW,250000,"upgraded saved thermal capacity preserved");
             Check(standard.Cells==upgraded.Cells && standard.Ports.Length==upgraded.Ports.Length,"upgrades retain socket and footprint contract");
             if (active)
                 foreach (var cooler in new[] { standard, upgraded })
@@ -1275,11 +1278,11 @@ public static partial class ThermalRuntimeChecks
                 }
             Check(!ThermalRadiators.FitsExtension(root, root, -1), "no extension below the base");
         }
-        Near(3 * ThermalRadiators.Cooling(model.CoolingMW, 1, 0, 0), 30000, "three standard panels reject 30 GW");
+        Near(3 * ThermalRadiators.Cooling(model.CoolingMW, 1, 0, 0), 3000, "three standard panels reject 3 GW");
         var upgrade = ThermalModels.All["ArcanePower_Thermal_RadiatorPanelUpgraded"];
-        Near(3 * ThermalRadiators.Cooling(upgrade.CoolingMW,1,0,0),300000,"three upgraded panels reject 300 GW");
-        Near(6 * ThermalRadiators.Cooling(upgrade.CoolingMW,1,0,0),600000,"two complete upgraded stacks reject 600 GW in vacuum");
-        Near(ThermalRadiators.Cooling(model.CoolingMW,1,0,0)+2*ThermalRadiators.Cooling(upgrade.CoolingMW,1,0,0),210000,"mixed tier panels add individual cooling ratings");
+        Near(3 * ThermalRadiators.Cooling(upgrade.CoolingMW,1,0,0),30000,"three upgraded panels reject 30 GW");
+        Near(6 * ThermalRadiators.Cooling(upgrade.CoolingMW,1,0,0),60000,"two complete upgraded stacks reject 60 GW in vacuum");
+        Near(ThermalRadiators.Cooling(model.CoolingMW,1,0,0)+2*ThermalRadiators.Cooling(upgrade.CoolingMW,1,0,0),21000,"mixed tier panels add individual cooling ratings");
         state.Angle = 0; state.Panels = 4;
         Check(!state.Valid(1), "reject excessive attached count");
         state.Panels = 1; state.ParentId = -1;

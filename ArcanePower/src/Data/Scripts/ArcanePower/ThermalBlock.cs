@@ -269,7 +269,7 @@ namespace ArcanePower
                 info.Append("Stored heat: ").Append((Store.HotMJ + Store.WasteMJ).ToString("N1")).AppendLine(" MJ");
             else info.AppendLine("Heat inventories are server-owned. Use the thermal reactor dashboard for plant diagnostics.");
             if (Spec.CoolingMW > 0)
-                info.Append("Rated cooling per unit/panel: ").Append((Spec.CoolingMW / 1000).ToString("N0")).AppendLine(" GW (ideal exposure)");
+                info.Append("Rated cooling per unit/panel: ").Append(CoolingPower(Spec.CoolingMW)).AppendLine(" (ideal exposure)");
             if (Spec.Kind == ThermalKind.Train)
                 info.AppendLine(Spec.Grade >= 3 ? "Fuel heat: Aether, Helion or Empyrean" : "Fuel heat: Aether or Helion; Empyrean requires upgraded turbines");
             if (Spec.Kind == ThermalKind.Train && (MyAPIGateway.Multiplayer.IsServer || receivedRotor))

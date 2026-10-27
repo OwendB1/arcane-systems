@@ -47,7 +47,7 @@
         <TypeId>Ingot</TypeId>
         <SubtypeId>ArcaneFuelI</SubtypeId>
       </Id>
-      <DisplayName>Aether Fuel Canister — 10 GW</DisplayName>
+      <DisplayName>Aether Fuel Canister — 2.5 GW</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/ArcaneFuelI.dds</Icon>
       <Size>
         <X>0.261</X>
@@ -58,7 +58,7 @@
       <Volume>24</Volume>
       <Model>Models/Items/ArcanePower/ArcaneFuelI.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 2.5 minutes before controller efficiency. Requires 2 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Consuming Aether recovers 10 Aether Residuum per canister in standalone or Brayton mode.</Description>
+      <Description>Sealed canister holding 10 fuel units. Rated reactor heat: 2.5 GW. Ideal full-load endurance: 2.5 minutes before controller efficiency. Requires 2 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Consuming Aether recovers 10 Aether Residuum per canister in standalone or Brayton mode.</Description>
     </PhysicalItem>
     <PhysicalItem>
       <Id>
@@ -106,7 +106,7 @@
         <TypeId>Ingot</TypeId>
         <SubtypeId>ArcaneFuelII</SubtypeId>
       </Id>
-      <DisplayName>Helion Fuel Canister — 100 GW</DisplayName>
+      <DisplayName>Helion Fuel Canister — 25 GW</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/ArcaneFuelII.dds</Icon>
       <Size>
         <X>0.261</X>
@@ -117,7 +117,7 @@
       <Volume>24</Volume>
       <Model>Models/Items/ArcanePower/ArcaneFuelII.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 3 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Requires Brayton mode and an advanced controller.</Description>
+      <Description>Sealed canister holding 10 fuel units. Rated reactor heat: 25 GW. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 3 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Requires Brayton mode and an advanced controller.</Description>
     </PhysicalItem>
     <PhysicalItem>
       <Id>
@@ -165,7 +165,7 @@
         <TypeId>Ingot</TypeId>
         <SubtypeId>ArcaneFuelIII</SubtypeId>
       </Id>
-      <DisplayName>Empyrean Fuel Canister — 1 TW</DisplayName>
+      <DisplayName>Empyrean Fuel Canister — 250 GW</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/ArcaneFuelIII.dds</Icon>
       <Size>
         <X>0.261</X>
@@ -176,7 +176,7 @@
       <Volume>24</Volume>
       <Model>Models/Items/ArcanePower/ArcaneFuelIII.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Sealed canister holding 10 fuel units. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 4 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Requires Brayton mode and an advanced controller. Empyrean also requires upgraded Brayton turbines.</Description>
+      <Description>Sealed canister holding 10 fuel units. Rated reactor heat: 250 GW. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 4 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Requires Brayton mode and an advanced controller. Empyrean also requires upgraded Brayton turbines.</Description>
     </PhysicalItem>
   </PhysicalItems>
   <Components>

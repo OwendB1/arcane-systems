@@ -15,8 +15,10 @@ the [full plan](arcane-power-plan.md) retains the wider design direction.
 ## Current status
 
 - **Progression and cooling, 24 October:** Aether Residuum recovery, upgraded
-  turbine/cooler recipes, T3 equipment eligibility and 10/100 GW cooling tiers are
+  turbine/cooler recipes, T3 equipment eligibility and cooling tiers are
   implemented. The catalog has 27 public thermal blocks and 24 model families.
+  Corrected 27 October: fuel heat is 2.5/25/250 GW; atmospheric cooling is
+  2.5/25 GW and radiator sections are 1/10 GW for T1/T2.
   See [fuel progression](../ArcanePower/README.md#fuel-selection-and-controllers)
   and [power balance](../ArcanePower/THERMAL-POWER.md).
 

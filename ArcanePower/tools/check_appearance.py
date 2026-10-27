@@ -274,12 +274,12 @@ checks = r'''
   var guide=r.ReadAssemblyGuide();
   Need(guide.State=="CONTAINMENT INCOMPLETE" && guide.Rows[0].Value.Contains("lower side upgrade sockets"),"look-at guide leads with actionable controller placement");
   Need(guide.Value("1 Controllers").Contains("0/2 attached"),"missing controllers are counted");
-  Need(guide.Value("Aether").StartsWith("2.5 MW heat") && guide.Value("Helion").StartsWith("25 MW heat")
-   && guide.Value("Empyrean").StartsWith("250 MW heat"),"guide uses current thermal fuel ratings");
+  Need(guide.Value("Aether").StartsWith("2.5 GW heat") && guide.Value("Helion").StartsWith("25 GW heat")
+   && guide.Value("Empyrean").StartsWith("250 GW heat"),"guide uses current thermal fuel ratings");
   Need(guide.Value("Aether").Contains("standalone") && guide.Value("Helion").Contains("mixed/advanced")
    && guide.Value("Empyrean").Contains("2 advanced + T2 turbines"),"fuel tiers explain controller, mode and turbine requirements");
   Need(guide.Value("2 Vent").Contains("ready") && guide.Value("3 Tiles").Contains("startup supply ready"),"available supplies and route have live readiness");
-  Need(guide.Value("5 Startup").Contains("100 W") || guide.Value("5 Startup").Contains("0.1 kW"),"startup power follows the selected fuel scale");
+  Need(guide.Value("5 Startup").Contains("100 kW") || guide.Value("5 Startup").Contains("0.1 MW"),"startup power follows the selected fuel scale");
   r.previousControllers=2;r.Motion.ControllersReady=true;r.controllerRingCapacity=3;
   Need(r.ReadAssemblyGuide().Value("1 Controllers").Contains("3-ring capacity"),"compatible hardware capacity shown independently of selected fuel");
   r.Motion.Critical=true;r.Motion.CriticalSeconds=12;

@@ -325,7 +325,7 @@
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>1</MaxPowerOutput>
+      <MaxPowerOutput>1000</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -766,7 +766,7 @@
       </Id>
       <DisplayName>Arcane Space radiator</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiator.dds</Icon>
-      <Description>10 GW ideal heat rejection per unit/panel. Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Aim at the top shaft coupling to stack up to two panels on the same grid; match Up, any yaw works. Grind either panel face to remove a section. Mixed tiers add their own cooling. Keep both faces exposed to space.</Description>
+      <Description>1 GW ideal heat rejection per unit/panel. Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Aim at the top shaft coupling to stack up to two panels on the same grid; match Up, any yaw works. Grind either panel face to remove a section. Mixed tiers add their own cooling. Keep both faces exposed to space.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="3" />
@@ -808,7 +808,7 @@
       </Id>
       <DisplayName>Arcane Radiator panel</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_RadiatorPanel.dds</Icon>
-      <Description>10 GW ideal heat rejection per unit/panel. Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling.</Description>
+      <Description>1 GW ideal heat rejection per unit/panel. Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="2" z="3" />
@@ -850,7 +850,7 @@
       </Id>
       <DisplayName>Arcane Atmospheric cooler</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCooler.dds</Icon>
-      <Description>25 GW ideal heat rejection per unit/panel. Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation.</Description>
+      <Description>2.5 GW ideal heat rejection per unit/panel. Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />
@@ -911,7 +911,7 @@
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>0.25</MaxPowerOutput>
+      <MaxPowerOutput>250</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -973,7 +973,7 @@
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>50</MaxPowerOutput>
+      <MaxPowerOutput>50000</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -1034,7 +1034,7 @@
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>0.25</MaxPowerOutput>
+      <MaxPowerOutput>250</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -1096,7 +1096,7 @@
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>50</MaxPowerOutput>
+      <MaxPowerOutput>50000</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -1138,7 +1138,7 @@
       </Id>
       <DisplayName>Arcane Atmospheric cooler upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCoolerUpgraded.dds</Icon>
-      <Description>250 GW ideal heat rejection per unit/panel. Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
+      <Description>25 GW ideal heat rejection per unit/panel. Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />
@@ -1181,7 +1181,7 @@
       </Id>
       <DisplayName>Arcane Space radiator upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiatorUpgraded.dds</Icon>
-      <Description>100 GW ideal heat rejection per unit/panel. Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Aim at the top shaft coupling to stack up to two panels on the same grid; match Up, any yaw works. Grind either panel face to remove a section. Mixed tiers add their own cooling. Keep both faces exposed to space. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
+      <Description>10 GW ideal heat rejection per unit/panel. Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Aim at the top shaft coupling to stack up to two panels on the same grid; match Up, any yaw works. Grind either panel face to remove a section. Mixed tiers add their own cooling. Keep both faces exposed to space. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="3" />
@@ -1224,7 +1224,7 @@
       </Id>
       <DisplayName>Arcane Radiator panel upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_RadiatorPanelUpgraded.dds</Icon>
-      <Description>100 GW ideal heat rejection per unit/panel. Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
+      <Description>10 GW ideal heat rejection per unit/panel. Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="2" z="3" />

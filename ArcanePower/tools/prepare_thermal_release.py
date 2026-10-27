@@ -120,9 +120,9 @@ def definitions(models,mains,revision,additions=False):
         size=definition.find('Size');size.attrib.clear();size.attrib.update(zip(('x','y','z'),map(str,spec['cells_se'])))
         if is_source:
             hardware_components(definition)
-            set_text(definition,'MaxPowerOutput',1)
+            set_text(definition,'MaxPowerOutput',1000)
         elif is_train:
-            set_text(definition,'MaxPowerOutput',50 if name.endswith('upgraded') else .25)
+            set_text(definition,'MaxPowerOutput',50000 if name.endswith('upgraded') else 250)
             set_text(definition,'PCU',80)
         else:
             if definition.find('Upgrades') is not None:definition.find('Upgrades').clear()
@@ -215,8 +215,8 @@ def trim_native_manifest(report):
 def description(name):
     base=CONTRACT['COOLER_UPGRADES'].get(name,name)
     if base in CONTRACT['COOLER_UPGRADES'].values():
-        rating='100 GW' if name.endswith('upgraded') else '10 GW'
-        if base == 'Atmospheric cooler': rating='250 GW' if name.endswith('upgraded') else '25 GW'
+        rating='10 GW' if name.endswith('upgraded') else '1 GW'
+        if base == 'Atmospheric cooler': rating='25 GW' if name.endswith('upgraded') else '2.5 GW'
         detail={'Atmospheric cooler':'Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation.',
                 'Space radiator':'Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Aim at the top shaft coupling to stack up to two panels on the same grid; match Up, any yaw works. Grind either panel face to remove a section. Mixed tiers add their own cooling. Keep both faces exposed to space.',
                 'Radiator panel':'Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling.'}[base]

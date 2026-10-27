@@ -73,7 +73,7 @@ for row, (name, ore_name, ore, concentrate, fuel, color) in enumerate(tiers):
         with Image.open(ROOT/'assets/icons/fuels'/(subtype+'.png')) as source:
             icon = source.convert('RGBA').resize((284, 284), Image.Resampling.LANCZOS)
         sheet.paste(icon, (col*320+18, y+8), icon)
-        label = (ore_name, name, name+' / '+('10 GW', '100 GW', '1 TW')[row])[col]
+        label = (ore_name, name, name+' / '+('2.5 GW', '25 GW', '250 GW')[row])[col]
         draw.text((col*320+24, y+293), label, font=small, fill=color)
     with Image.open(MOD/'Textures/Voxels/ArcanePower'/('Arcane'+name+'_cm.tga')) as source:
         swatch = source.convert('RGB').resize((284, 284), Image.Resampling.LANCZOS)

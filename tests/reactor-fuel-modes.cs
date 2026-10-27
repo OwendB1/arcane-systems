@@ -167,14 +167,18 @@ class Reactor {
   var r=new Reactor();
   for(int tier=1;tier<=3;tier++){
    r.Motion.FuelTier=tier;
-   Near(r.ThermalHeatMW,new[]{2.5,25,250}[tier-1],"fuel heat rating");
+   Near(r.ThermalHeatMW,new[]{2500.0,25000,250000}[tier-1],"fuel heat rating");
    r.Mode(ThermalMode.Brayton);
-   Near(r.ElectricalRatingMW,new[]{2.0,20,200}[tier-1],"Brayton native electrical ceiling");
+   Near(r.ElectricalRatingMW,new[]{2000.0,20000,200000}[tier-1],"Brayton native electrical ceiling");
   }
+  r.Motion.FuelTier=1;r.Mode(ThermalMode.Standalone);
+  Near(r.ElectricalRatingMW,500,"standalone Aether converts 2.5 GW heat into 500 MW electricity");
+  Near(r.ThermalHeatMW-r.ElectricalRatingMW,2000,"standalone Aether rejects 2 GW waste heat at full load");
+  r.Motion.FuelTier=3;r.Mode(ThermalMode.Brayton);
   foreach(bool upgraded in new[]{false,true}){
-   double expected=upgraded?50:.25;
+   double expected=upgraded?50000:250;
    var block=new ThermalBlock{Block=new Block(),Generator=new ReactorBlock(),
-    Spec=new ThermalModel{Grade=upgraded?3:0,RatingMW=upgraded?62.5:.625}};
+    Spec=new ThermalModel{Grade=upgraded?3:0,RatingMW=upgraded?62500:625}};
    block.Generator.BlockDefinition.MaxPowerOutput=(float)expected;
    block.SetOutput(expected);
    Near(block.Generator.PowerOutputMultiplier*block.Generator.BlockDefinition.MaxPowerOutput,expected,"native theoretical turbine maximum");
@@ -414,7 +418,7 @@ class Reactor {
   for(int rings=2;rings<=4;rings++)for(int tier=1;tier<rings;tier++){
    if((mode==ThermalMode.Standalone && tier!=1) || (mode==ThermalMode.Brayton && rings==2))continue;
    double minutes=tier==1?2.5:10,efficiency=new[]{.8,.9,.99}[rings-2];
-   double rating=new[]{2.5,25,250}[tier-1];
+   double rating=new[]{2500.0,25000,250000}[tier-1];
    foreach(double load in new[]{0.0,.25,.5,.75,1.0}){
     var r=new Reactor();r.Mode(mode);r.Motion.RingCount=rings;r.Motion.FuelTier=tier;r.Stock(tier,10);r.Running();
     double admitted=0;

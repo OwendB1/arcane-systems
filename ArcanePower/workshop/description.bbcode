@@ -1,7 +1,7 @@
 [img]https://i.imgur.com/fVVaDCS.gif[/img]
 [i]If you enjoy this mod, please rate it! Thank you.[/i]
 
-[h1]Arcane Power[/h1]
+[h1]Arcane Power 0.1.2[/h1]
 
 [i]There is something moving inside the containment field.
 The instruments call it a reaction. The engineers call it a power source.
@@ -17,8 +17,8 @@ Build an industrial arcane power plant: mine rare fuel, maintain its containment
 [list]
 [*]One large-grid [b]Arcane Reactor[/b] with animated assembly, rotating rings, tile replacement and core ejection
 [*][b]20% standalone efficiency[/b], or [b]40% starter / up to 80% exotic Brayton[/b] with eligible fuel, turbines and cooling
-[*][b]Aether only in standalone[/b]; Helion and Empyrean require Brayton
-[*]Fuel heat: [b]2.5/25/250 MW[/b]; four turbines export up to [b]1 MW T1 / 200 MW T2[/b]
+[*][b]Standalone Aether: 500 MW electrical[/b] from 2.5 GW heat at 20%; Helion and Empyrean require Brayton
+[*]Fuel heat: [b]Aether 2.5 GW / Helion 25 GW / Empyrean 250 GW[/b]; four turbines export up to [b]1 GW T1 / 200 GW T2[/b]
 [*]Two functional controllers provide 2/3/4 rings; [b]at least one advanced controller unlocks Brayton[/b]
 [*]Demand-based fuel use, gradual ramp, grid-powered containment and a shutdown reserve
 [*]Manifolds retract behind curved sliding panels; mode changes wait for shutdown and cooling
@@ -26,20 +26,20 @@ Build an industrial arcane power plant: mine rare fuel, maintain its containment
 
 [h2]Build a Brayton Plant[/h2]
 
-Build up to [b]four independent circuits[/b], each with one turbine and its own cooling. One to four complete circuits provide [b]25/50/75/100% capacity[/b] at their normal tier efficiency. Keep reactor outlets separate, align H/C bores, use reactor adapters and cap unused pipe mouths. Build on one physical large grid; conveyors and subgrids cannot carry heat.
+Build up to [b]four independent circuits[/b], each with one turbine and its own cooling. One to four circuits provide [b]25/50/75/100% capacity[/b] at normal tier efficiency. Keep outlets separate, align H/C bores, use reactor adapters and cap unused pipe mouths. Use one physical large grid; conveyors and subgrids cannot carry heat.
 
 [list]
 [*]One duplex pipe family with framed/bare straights, elbows, risers, tees, crosses, adapters and caps
-[*]Standard/upgraded turbines, regular/mirrored, [b]2 wide x 2 high x 5 long[/b] with one lower socket
+[*]T1 turbines: [b]250 MW each[/b]; T2: [b]50 GW each[/b] with Empyrean. Regular/mirrored, [b]2x2x5 cells[/b], one lower socket
 [*]Reflective glass, animated flow, spinning blades and a copper-wound armature behind inspection windows
 [*]Built-in compressors and reactor-generated CO2; no separate tank, generator, heater or recuperator
 [/list]
 
-Circuits are ready immediately, without filling or pressure gates. Keep containment power supplied for startup and cooldown. Cooling shortages retain waste heat; irreversible failure arms at [b]125% heat[/b]. Invalid circuits isolate independently; losing all stops generation. [b]Only manual Start with all four circuits defective latches a fault.[/b] One valid circuit permits startup. Advanced-controller loss stops Brayton without standalone fallback.
+Circuits need no filling or pressure setup. Keep containment powered during startup/cooldown. Cooling shortages retain waste heat; irreversible failure arms at [b]125% heat[/b]. Invalid circuits isolate; losing all stops generation. [b]Manual Start with all four circuits defective latches a fault.[/b] One valid circuit permits startup. Advanced-controller loss stops Brayton.
 
-Atmospheric coolers fit a [b]3x3x2-cell hull opening[/b], with rear manifolds. Leave [b]2.5 m beyond both fan guards[/b]: half-clear exhaust gives 25% cooling; blocked fans give none.
+Atmospheric coolers reject [b]2.5 GW T1 / 25 GW T2[/b] at full air density; vacuum gives none. Fit a [b]3x3x2-cell hull opening[/b] and leave [b]2.5 m beyond both fans[/b]: half-clear gives 25% cooling; blocked gives none.
 
-Space radiators connect underneath and track edge-on to the sun. Stack up to [b]two extensions[/b] on the same grid: aim at the top shaft coupling and match the base Up axis; [b]any yaw works[/b]. The guide marks the dock and tilt correction. Grind either panel face to remove a section. Keep the 3x3-cell sweep and both faces clear. Each panel retains [b]100/75/50% cooling at 0/50/100% sun[/b], including shade/weather. Faint red-orange glow follows actual rejection; detached/excess panels add no cooling.
+Space radiator sections reject [b]1 GW T1 / 10 GW T2[/b] in ideal exposure. Bases connect underneath and track edge-on to the sun. Stack up to [b]two extensions[/b] on the same grid: aim at the top shaft coupling and match the base Up axis; [b]any yaw works[/b]. The guide marks the dock and tilt correction. Grind either panel face to remove a section. Keep the 3x3-cell sweep and both faces clear. Each panel retains [b]100/75/50% cooling at 0/50/100% sun[/b], including shade/weather. Glow follows actual rejection; detached/excess panels add no cooling. Full-output Empyrean needs [b]12.5 GW cooling per circuit / 50 GW total[/b].
 
 [h2]Feed the Field[/h2]
 
@@ -71,7 +71,7 @@ Align 1x3x1 modules on the same grid. Detached cells retain charge/upkeep; destr
 
 [h2]Know What Is Happening[/h2]
 
-Placement arrows and H/C markers identify bad joints. [b]Red pipe rings[/b] mark invalid circuits; idle/pumping circuits show amber/green. Monitor the terminal, [b]Arcane Reactor[/b] LCD or antenna-linked tablet. Text HUD API is optional.
+Look at the reactor for assembly steps, fuel requirements and placement highlights for controllers and vents. [b]/ap guide[/b] toggles all construction instructions and markers; your choice persists between sessions. Text HUD API is optional. H/C markers identify bad joints; [b]red pipe rings[/b] mark invalid circuits. Monitor the terminal, [b]Arcane Reactor[/b] LCD or antenna-linked tablet.
 
 [h2]Getting Started[/h2]
 

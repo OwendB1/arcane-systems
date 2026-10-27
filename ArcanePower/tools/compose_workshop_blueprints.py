@@ -1,4 +1,5 @@
 """Typeset the current Blender wireframe studies into Workshop feature plates."""
+import argparse
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
@@ -6,6 +7,10 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / '.cache/workshop-blueprints'
 OUT = ROOT / 'workshop/images'
 OUT.mkdir(parents=True, exist_ok=True)
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--plates', nargs='+', choices=[f'{i:02}' for i in range(1, 11)],
+                    help='Rebuild only these plates from their Blender studies.')
+selected = set(parser.parse_args().plates or [f'{i:02}' for i in range(1, 11)])
 SANS = '/usr/share/fonts/nerd-fonts/Overpass/OverpassNerdFont-ExtraBold.otf'
 MONO = '/usr/share/fonts/liberation-mono-fonts/LiberationMono-Regular.ttf'
 INK = '#d3f2ff'
@@ -51,52 +56,56 @@ def note(d, x, y, number, title, lines):
     for index, line in enumerate(lines): text(d, (x+48, y+35+index*28), line, 18, MUTED)
 
 
-im, d = plate('01', 'REACTOR / CONTAINMENT ASSEMBLY', 'ENERGY GENERATION  //  CONTROLLED REACTION  //  EMERGENCY EJECTION')
-model(im, 'reactor', (35, 170, 940, 640))
-text(d, (67, 805), 'CUTAWAY: SHIELDS / GLAZING / TILE SHELL OMITTED; RINGS POSED', 15, CYAN)
-d.line((992, 185, 992, 802), fill='#315a70', width=2)
-note(d, 1030, 206, '01', 'THREE FUEL TIERS', ['Aether / Helion / Empyrean', '2.5 / 25 / 250 MW heat', 'Up to 200 MW electrical'])
-note(d, 1030, 367, '02', 'ACTIVE CONTAINMENT', ['Two external controllers', 'Four independent heat circuits', '80 replaceable shell tiles'])
-note(d, 1030, 528, '03', 'A COMMITTED EXIT', ['Straight duct + outlet route', 'Physical core ejection', 'Critical fuse survives launch'])
-d.rectangle((1030, 718, 1525, 789), outline=GOLD, width=1)
-text(d, (1050, 732), 'CONTAINMENT IS A REQUIREMENT.', 22, GOLD, True)
-text(d, (1050, 761), 'Keep the exit pointed away from home.', 15, MUTED)
-im.save(OUT/'reactor-blueprint.png', optimize=True)
+if '01' in selected:
+    im, d = plate('01', 'REACTOR / CONTAINMENT ASSEMBLY', 'ENERGY GENERATION  //  CONTROLLED REACTION  //  EMERGENCY EJECTION')
+    model(im, 'reactor', (35, 170, 940, 640))
+    text(d, (67, 805), 'CUTAWAY: SHIELDS / GLAZING / TILE SHELL OMITTED; RINGS POSED', 15, CYAN)
+    d.line((992, 185, 992, 802), fill='#315a70', width=2)
+    note(d, 1030, 206, '01', 'THREE FUEL TIERS', ['Aether / Helion / Empyrean', '2.5 / 25 / 250 GW heat', 'Up to 200 GW electrical'])
+    note(d, 1030, 367, '02', 'ACTIVE CONTAINMENT', ['Two external controllers', 'Four independent heat circuits', '80 replaceable shell tiles'])
+    note(d, 1030, 528, '03', 'A COMMITTED EXIT', ['Straight duct + outlet route', 'Physical core ejection', 'Critical fuse survives launch'])
+    d.rectangle((1030, 718, 1525, 789), outline=GOLD, width=1)
+    text(d, (1050, 732), 'CONTAINMENT IS A REQUIREMENT.', 22, GOLD, True)
+    text(d, (1050, 761), 'Keep the exit pointed away from home.', 15, MUTED)
+    im.save(OUT/'reactor-blueprint.png', optimize=True)
 
-im, d = plate('02', 'CONTAINMENT / VENT HARDWARE', 'EXTERNAL MODULES  //  ALIGNED DUCTS  //  TERMINAL OUTLET')
-parts = [('controller', '01 / STANDARD', 'CONTAINMENT CONTROLLER'), ('advanced-controller', '02 / ADVANCED', 'CONTAINMENT CONTROLLER'), ('duct', '03 / STACKABLE', 'VENT DUCT'), ('outlet', '04 / TERMINAL', 'VENT OUTLET')]
-for i, (name, title, label) in enumerate(parts):
-    x = 50 + i*380
-    model(im, name, (x, 204, 350, 342))
-    d.line((x, 570, x+340, 570), fill='#315a70', width=1)
-    text(d, (x+4, 592), title, 22, GOLD, True)
-    text(d, (x+4, 628), label, 17, CYAN)
-note(d, 58, 706, 'A', 'PAIR THE CONTROLLERS', ['Standard, mixed or advanced pairs set ring capacity.'])
-note(d, 848, 706, 'B', 'COMPLETE THE ROUTE', ['1-15 aligned ducts, then one terminal outlet.'])
-im.save(OUT/'hardware-blueprint.png', optimize=True)
+if '02' in selected:
+    im, d = plate('02', 'CONTAINMENT / VENT HARDWARE', 'EXTERNAL MODULES  //  ALIGNED DUCTS  //  TERMINAL OUTLET')
+    parts = [('controller', '01 / STANDARD', 'CONTAINMENT CONTROLLER'), ('advanced-controller', '02 / ADVANCED', 'CONTAINMENT CONTROLLER'), ('duct', '03 / STACKABLE', 'VENT DUCT'), ('outlet', '04 / TERMINAL', 'VENT OUTLET')]
+    for i, (name, title, label) in enumerate(parts):
+        x = 50 + i*380
+        model(im, name, (x, 204, 350, 342))
+        d.line((x, 570, x+340, 570), fill='#315a70', width=1)
+        text(d, (x+4, 592), title, 22, GOLD, True)
+        text(d, (x+4, 628), label, 17, CYAN)
+    note(d, 58, 706, 'A', 'PAIR THE CONTROLLERS', ['Standard, mixed or advanced pairs set ring capacity.'])
+    note(d, 848, 706, 'B', 'COMPLETE THE ROUTE', ['1-15 aligned ducts, then one terminal outlet.'])
+    im.save(OUT/'hardware-blueprint.png', optimize=True)
 
-im, d = plate('03', 'ENERGY CORE / MODULAR STORAGE', 'NATIVE BATTERY STORAGE  //  CAPACITY  //  TRANSFER  //  STABILIZATION')
-model(im, 'energy-bank', (38, 181, 700, 550))
-text(d, (70, 745), 'ASSEMBLED BANK / NATIVE SE UPGRADE SOCKETS', 17, GOLD)
-text(d, (70, 777), 'CORE: 3 x 3 x 3 LG / 1,000 MWh / 10 GW BASE', 17, CYAN)
-text(d, (70, 806), 'GLAZING OMITTED TO SHOW INTERNAL ASSEMBLY', 14, MUTED)
-d.line((770, 185, 770, 805), fill='#315a70', width=2)
-for i, (name, title, line1, line2) in enumerate([
-    ('capacity', 'CAPACITY', 'Any compatible bay', '+10,000 / +100,000 MWh'),
-    ('transfer', 'TRANSFER', 'Any compatible bay', '100 GW / 1 TW ceiling'),
-    ('stabilizer', 'STABILIZER', 'Any compatible bay', 'Matching / lower tiers')]):
-    x=805+i*250
-    model(im, name, (x, 225, 230, 295))
-    text(d, (x+6, 539), title, 24, INK, True)
-    text(d, (x+6, 577), line1, 16, CYAN)
-    text(d, (x+6, 606), line2, 15, MUTED)
-text(d, (813, 191), '1 x 3 x 1 LG / ADVANCED PILLARS', 18, GOLD)
-note(d, 812, 690, '01', 'KEEP A RESERVE', ['Auto / Recharge / Discharge', 'Five-second jump-drive surge', 'Four bays accept any supported module'])
-im.save(OUT/'energy-blueprint.png', optimize=True)
+if '03' in selected:
+    im, d = plate('03', 'ENERGY CORE / MODULAR STORAGE', 'NATIVE BATTERY STORAGE  //  CAPACITY  //  TRANSFER  //  STABILIZATION')
+    model(im, 'energy-bank', (38, 181, 700, 550))
+    text(d, (70, 745), 'ASSEMBLED BANK / NATIVE SE UPGRADE SOCKETS', 17, GOLD)
+    text(d, (70, 777), 'CORE: 3 x 3 x 3 LG / 1,000 MWh / 10 GW BASE', 17, CYAN)
+    text(d, (70, 806), 'GLAZING OMITTED TO SHOW INTERNAL ASSEMBLY', 14, MUTED)
+    d.line((770, 185, 770, 805), fill='#315a70', width=2)
+    for i, (name, title, line1, line2) in enumerate([
+        ('capacity', 'CAPACITY', 'Any compatible bay', '+10,000 / +100,000 MWh'),
+        ('transfer', 'TRANSFER', 'Any compatible bay', '100 GW / 1 TW ceiling'),
+        ('stabilizer', 'STABILIZER', 'Any compatible bay', 'Matching / lower tiers')]):
+        x=805+i*250
+        model(im, name, (x, 225, 230, 295))
+        text(d, (x+6, 539), title, 24, INK, True)
+        text(d, (x+6, 577), line1, 16, CYAN)
+        text(d, (x+6, 606), line2, 15, MUTED)
+    text(d, (813, 191), '1 x 3 x 1 LG / ADVANCED PILLARS', 18, GOLD)
+    note(d, 812, 690, '01', 'KEEP A RESERVE', ['Auto / Recharge / Discharge', 'Five-second jump-drive surge', 'Four bays accept any supported module'])
+    im.save(OUT/'energy-blueprint.png', optimize=True)
 
 
 
 def grid_plate(number, title, subtitle, filename, parts, columns=4, footnote=''):
+    if number not in selected: return
     im, d = plate(number, title, subtitle)
     rows = (len(parts)+columns-1)//columns
     width, height = 1500/columns, 615/rows
@@ -110,33 +119,36 @@ def grid_plate(number, title, subtitle, filename, parts, columns=4, footnote='')
     im.save(OUT/filename, optimize=True)
 
 
-grid_plate('04', 'BRAYTON / TURBINE FAMILY', 'ONE TURBINE PER CIRCUIT  //  INTEGRATED COMPRESSOR  //  REGULAR + MIRRORED', 'turbines-blueprint.png', [
-    ('turbine', 'T1 / STANDARD', '0.25 MW per turbine / starter conversion'),
-    ('turbine-upgraded', 'T2 / UPGRADED', '50 MW per turbine / Empyrean eligible'),
-    ('turbine-mirrored', 'T1 / MIRRORED', 'Opposite-side duplex socket / same rating'),
-    ('turbine-mirrored-upgraded', 'T2 / MIRRORED UPGRADED', 'Four T2 circuits provide up to 200 MW')], 2,
-    '2 WIDE x 2 HIGH x 5 LONG LG  /  ALIGN H + C  /  EACH CIRCUIT RECEIVES UP TO 25% OF SOURCE HEAT')
+if '04' in selected:
+    grid_plate('04', 'BRAYTON / TURBINE FAMILY', 'ONE TURBINE PER CIRCUIT  //  INTEGRATED COMPRESSOR  //  REGULAR + MIRRORED', 'turbines-blueprint.png', [
+        ('turbine', 'T1 / STANDARD', '250 MW per turbine / starter conversion'),
+        ('turbine-upgraded', 'T2 / UPGRADED', '50 GW per turbine / Empyrean eligible'),
+        ('turbine-mirrored', 'T1 / MIRRORED', 'Opposite-side duplex socket / same rating'),
+        ('turbine-mirrored-upgraded', 'T2 / MIRRORED UPGRADED', 'Four T2 circuits provide up to 200 GW')], 2,
+        '2 WIDE x 2 HIGH x 5 LONG LG  /  ALIGN H + C  /  EACH CIRCUIT RECEIVES UP TO 25% OF SOURCE HEAT')
 
-im, d = plate('05', 'ATMOSPHERIC / HEAT REJECTION', 'TWIN FAN ASSEMBLY  //  DUPLEX MANIFOLD  //  CLEAR EXHAUST REQUIRED')
-model(im, 'air-cooler', (45, 177, 740, 460))
-model(im, 'air-cooler-rear', (815, 177, 740, 460))
-text(d, (66, 635), 'FRONT / TWIN FAN GUARDS', 23, GOLD, True)
-text(d, (824, 635), 'REAR / H + C CONNECTIONS', 23, GOLD, True)
-note(d, 65, 692, '01', 'TWO EQUIPMENT TIERS', ['25 GW standard / 250 GW upgraded', 'Same 3 x 3 x 2 LG body'])
-note(d, 824, 692, '02', 'LEAVE THE FANS CLEAR', ['2.5 m beyond both guards', 'Vacuum provides no active cooling'])
-im.save(OUT/'cooling-blueprint.png', optimize=True)
+if '05' in selected:
+    im, d = plate('05', 'ATMOSPHERIC / HEAT REJECTION', 'TWIN FAN ASSEMBLY  //  DUPLEX MANIFOLD  //  CLEAR EXHAUST REQUIRED')
+    model(im, 'air-cooler', (45, 177, 740, 460))
+    model(im, 'air-cooler-rear', (815, 177, 740, 460))
+    text(d, (66, 635), 'FRONT / TWIN FAN GUARDS', 23, GOLD, True)
+    text(d, (824, 635), 'REAR / H + C CONNECTIONS', 23, GOLD, True)
+    note(d, 65, 692, '01', 'TWO EQUIPMENT TIERS', ['2.5 GW standard / 25 GW upgraded', 'Same 3 x 3 x 2 LG body'])
+    note(d, 824, 692, '02', 'LEAVE THE FANS CLEAR', ['2.5 m beyond both guards', 'Vacuum provides no active cooling'])
+    im.save(OUT/'cooling-blueprint.png', optimize=True)
 
-im, d = plate('06', 'RADIATORS / MODULAR ARRAY', 'PASSIVE HEAT REJECTION  //  SUN TRACKING  //  BASE + TWO EXTENSIONS')
-model(im, 'radiator-stack', (48, 175, 700, 635))
-text(d, (70, 805), 'COMPLETE THREE-SECTION STACK / AUTHORING POSE', 15, CYAN)
-d.line((778, 185, 778, 805), fill='#315a70', width=2)
-model(im, 'space-radiator', (800, 177, 340, 330))
-model(im, 'radiator-panel', (1170, 177, 340, 330))
-text(d, (822, 522), 'RADIATOR BASE', 22, GOLD, True)
-text(d, (1190, 522), 'EXTENSION PANEL', 22, GOLD, True)
-note(d, 812, 592, '01', 'MIXED TIERS ADD CAPACITY', ['10 / 100 GW per standard / upgraded section', 'Three sections: 30 / 300 GW in ideal exposure'])
-note(d, 812, 710, '02', 'BUILD ON THE TOP SHAFT', ['Match Up; any yaw / maximum two extensions', 'Shade and edge-on tracking preserve capacity'])
-im.save(OUT/'radiators-blueprint.png', optimize=True)
+if '06' in selected:
+    im, d = plate('06', 'RADIATORS / MODULAR ARRAY', 'PASSIVE HEAT REJECTION  //  SUN TRACKING  //  BASE + TWO EXTENSIONS')
+    model(im, 'radiator-stack', (48, 175, 700, 635))
+    text(d, (70, 805), 'COMPLETE THREE-SECTION STACK / AUTHORING POSE', 15, CYAN)
+    d.line((778, 185, 778, 805), fill='#315a70', width=2)
+    model(im, 'space-radiator', (800, 177, 340, 330))
+    model(im, 'radiator-panel', (1170, 177, 340, 330))
+    text(d, (822, 522), 'RADIATOR BASE', 22, GOLD, True)
+    text(d, (1190, 522), 'EXTENSION PANEL', 22, GOLD, True)
+    note(d, 812, 592, '01', 'MIXED TIERS ADD CAPACITY', ['1 / 10 GW per standard / upgraded section', 'Three sections: 3 / 30 GW in ideal exposure'])
+    note(d, 812, 710, '02', 'BUILD ON THE TOP SHAFT', ['Match Up; any yaw / maximum two extensions', 'Shade and edge-on tracking preserve capacity'])
+    im.save(OUT/'radiators-blueprint.png', optimize=True)
 
 for bare, number, title in [(False, '07', 'FRAMED'), (True, '08', 'BARE')]:
     parts = []
@@ -150,21 +162,23 @@ for bare, number, title in [(False, '07', 'FRAMED'), (True, '08', 'BARE')]:
                ('bare' if bare else 'framed')+'-pipes-blueprint.png', parts,
                footnote='MATCH OPPOSING FACES AND H/C ROLL  /  CAP OPEN MOUTHS  /  CONVEYORS DO NOT CARRY HEAT')
 
-im, d = plate('09', 'ENERGY CORE / COMPLETE BANK', 'FULL ASSEMBLY  //  FOUR UNIVERSAL BAYS  //  COMPLETE CASING + GLAZING OUTLINES')
-model(im, 'energy-full', (40, 175, 1030, 635))
-d.line((1090, 185, 1090, 805), fill='#315a70', width=2)
-note(d, 1120, 210, '01', 'PHYSICAL STORAGE', ['3 x 3 x 3 LG core', '1,000 MWh base capacity', 'Each cell keeps its charge'])
-note(d, 1120, 388, '02', 'FOUR FLEXIBLE BAYS', ['2 advanced capacity units', '1 advanced transfer unit', '1 advanced stabilizer'])
-note(d, 1120, 566, '03', 'BANK ABILITIES', ['Five-second drive surge', 'Ten-second burst output', 'Reserve + reactor support'])
-text(d, (70, 804), 'WIRE-FRAME GLAZING / NO STRUCTURAL CUTAWAY / ASSEMBLED ADVANCED MODULES', 15, CYAN)
-im.save(OUT/'full-energy-blueprint.png', optimize=True)
+if '09' in selected:
+    im, d = plate('09', 'ENERGY CORE / COMPLETE BANK', 'FULL ASSEMBLY  //  FOUR UNIVERSAL BAYS  //  COMPLETE CASING + GLAZING OUTLINES')
+    model(im, 'energy-full', (40, 175, 1030, 635))
+    d.line((1090, 185, 1090, 805), fill='#315a70', width=2)
+    note(d, 1120, 210, '01', 'PHYSICAL STORAGE', ['3 x 3 x 3 LG core', '1,000 MWh base capacity', 'Each cell keeps its charge'])
+    note(d, 1120, 388, '02', 'FOUR FLEXIBLE BAYS', ['2 advanced capacity units', '1 advanced transfer unit', '1 advanced stabilizer'])
+    note(d, 1120, 566, '03', 'BANK ABILITIES', ['Five-second drive surge', 'Ten-second burst output', 'Reserve + reactor support'])
+    text(d, (70, 804), 'WIRE-FRAME GLAZING / NO STRUCTURAL CUTAWAY / ASSEMBLED ADVANCED MODULES', 15, CYAN)
+    im.save(OUT/'full-energy-blueprint.png', optimize=True)
 
-grid_plate('10', 'STORAGE / UPGRADE MODULES', '1 x 3 x 1 LARGE-GRID PILLARS  //  ANY CORE BAY  //  ALIGN UP AND FACE CONNECTORS INWARD', 'energy-modules-blueprint.png', [
-    ('capacity-standard', 'STANDARD CAPACITY', '+10,000 MWh'),
-    ('transfer-standard', 'STANDARD TRANSFER', '100 GW bank ceiling'),
-    ('stabilizer-standard', 'STANDARD STABILIZER', 'Supports standard modules'),
-    ('capacity', 'ADVANCED CAPACITY', '+100,000 MWh'),
-    ('transfer', 'ADVANCED TRANSFER', '1 TW bank ceiling'),
-    ('stabilizer', 'ADVANCED STABILIZER', 'Supports both equipment tiers')], 3,
-    'STRONGEST TRANSFER / STABILIZER TIER APPLIES  /  MATCHING OR STRONGER STABILIZER REQUIRED')
-print('Wrote ten 1600x900 Workshop blueprint plates to', OUT)
+if '10' in selected:
+    grid_plate('10', 'STORAGE / UPGRADE MODULES', '1 x 3 x 1 LARGE-GRID PILLARS  //  ANY CORE BAY  //  ALIGN UP AND FACE CONNECTORS INWARD', 'energy-modules-blueprint.png', [
+        ('capacity-standard', 'STANDARD CAPACITY', '+10,000 MWh'),
+        ('transfer-standard', 'STANDARD TRANSFER', '100 GW bank ceiling'),
+        ('stabilizer-standard', 'STANDARD STABILIZER', 'Supports standard modules'),
+        ('capacity', 'ADVANCED CAPACITY', '+100,000 MWh'),
+        ('transfer', 'ADVANCED TRANSFER', '1 TW bank ceiling'),
+        ('stabilizer', 'ADVANCED STABILIZER', 'Supports both equipment tiers')], 3,
+        'STRONGEST TRANSFER / STABILIZER TIER APPLIES  /  MATCHING OR STRONGER STABILIZER REQUIRED')
+print('Wrote', len(selected), '1600x900 Workshop blueprint plates to', OUT)

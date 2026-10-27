@@ -40,7 +40,7 @@ The core is the source of the catastrophic explosion. Ejecting it can save the h
 - The reactor disables native emissive-state handling. In Brayton mode its own electrical source is intentionally idle, which otherwise makes vanilla reactor logic overwrite the mod's fuel colour with yellow even when the thermal forecast is safe.
 - A subcritical ejected core fades and disappears after 20 simulation seconds. A supercritical ejected core retains its fuse and peak heat. The reactor reports outstanding ejected-core countdowns in terminal info.
 
-At full pre-failure load, degraded T1/T2/T3 output is 1/10/100 GW, with ten fuel units/minute. Original ratings remain 10/100/1,000 GW.
+The legacy direct generator has 1/10/100 GW electrical ratings and falls to 10% of the captured load on tile failure. Fuel burn accelerates to 10 times its normal rate. The thermal reactor supplies 2.5/25/250 GW of heat; its mode and connected turbines determine electrical output.
 
 ## Explosion scale
 

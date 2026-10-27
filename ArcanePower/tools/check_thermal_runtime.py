@@ -38,11 +38,11 @@ def main():
     generators = {block.findtext('Id/SubtypeId'): float(block.findtext('MaxPowerOutput'))
                   for block in definitions if block.find('MaxPowerOutput') is not None}
     assert generators == {
-        'ArcanePower_Thermal_ReactorHousing': 1,
-        'ArcanePower_Thermal_BraytonTrain': .25,
-        'ArcanePower_Thermal_BraytonTrainMirrored': .25,
-        'ArcanePower_Thermal_BraytonTrainUpgraded': 50,
-        'ArcanePower_Thermal_BraytonTrainMirroredUpgraded': 50,
+        'ArcanePower_Thermal_ReactorHousing': 1000,
+        'ArcanePower_Thermal_BraytonTrain': 250,
+        'ArcanePower_Thermal_BraytonTrainMirrored': 250,
+        'ArcanePower_Thermal_BraytonTrainUpgraded': 50000,
+        'ArcanePower_Thermal_BraytonTrainMirroredUpgraded': 50000,
     }, generators
     subprocess.run(['python3', str(ROOT / 'ArcanePower/tools/build_thermal_runtime_contract.py'), '--check'], check=True)
     with tempfile.TemporaryDirectory(prefix='arcane-thermal-check-') as directory:

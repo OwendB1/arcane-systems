@@ -75,39 +75,39 @@ namespace ArcanePower {
   static int checks;
   static void Need(bool value,string message){checks++;if(!value)throw new Exception(message);}
   static void Near(double a,double b,string message){Need(Math.Abs(a-b)<.00001,message);}
-  static CoolingProbe Block(ThermalKind kind,double rating=10000){return new CoolingProbe{Spec=new ThermalModel{Kind=kind,CoolingMW=rating}};}
+  static CoolingProbe Block(ThermalKind kind,double rating=1000){return new CoolingProbe{Spec=new ThermalModel{Kind=kind,CoolingMW=rating}};}
   static byte[] Wire(ThermalRotorPacket packet){return MyAPIGateway.Utilities.SerializeToBinary(packet);}
   static void Main(){
    var air=Block(ThermalKind.AirCooler);Need(air.Text().Contains("Waiting for cooling readings"),"unmeasured state is explicit");
-   double capacity=ThermalMath.AirCooling(10000,.5,.5);air.Sample(capacity,capacity,.5,.5);
+   double capacity=ThermalMath.AirCooling(1000,.5,.5);air.Sample(capacity,capacity,.5,.5);
    air.Store.HotMJ=20;air.Store.WasteMJ=30;
    var measured=air.CaptureCooling();Need(measured.Valid(1),"measured cooler snapshot validates");
    Need(air.Text().Contains("Stored heat: 50.0 MJ"),"existing stored heat information retained");
-   Need(air.Text().Contains("Efficiency: 12.5%") && air.Text().Contains("1.25 GW / 10 GW rated"),"capacity includes both density and squared clearance");
+   Need(air.Text().Contains("Efficiency: 12.5%") && air.Text().Contains("125 MW / 1 GW rated"),"capacity includes both density and squared clearance");
    Need(air.Text().Contains("Airflow factor: 25%") && air.Text().Contains("Clear 2.5 m"),"partial blockage explains nonlinear loss");
    Near(measured.AvailableMW,capacity,"display preserves simulation capacity before circulation");
    air.Block.Enabled=false;air.CaptureCooling();Need(air.Text().Contains("SWITCHED OFF") && air.Text().Contains("Efficiency: 0%"),"disabled cooler is unavailable");
    air.Block.Enabled=true;air.Block.SlimBlock.BuildLevelRatio=.9f;air.CaptureCooling();Need(air.Text().Contains("FINISH WELDING"),"unfinished cooler is explained");
    air.Block.SlimBlock.BuildLevelRatio=1;air.Sample(0,0,0,1);air.CaptureCooling();Need(air.Text().Contains("Requires atmosphere"),"vacuum loss is explained");
-   var active=Block(ThermalKind.AirCooler,250000);active.Sample(250000,250000,1,1);
-   Need(active.CaptureCooling().Valid(1) && active.Text().Contains("250 GW / 250 GW rated") && active.Text().Contains("Efficiency: 100%"),"250 GW cooler fits telemetry and reaches full atmospheric rating");
+   var active=Block(ThermalKind.AirCooler,25000);active.Sample(25000,25000,1,1);
+   Need(active.CaptureCooling().Valid(1) && active.Text().Contains("25 GW / 25 GW rated") && active.Text().Contains("Efficiency: 100%"),"25 GW cooler fits telemetry and reaches full atmospheric rating");
    active.CoolingConnected=true;active.CoolingPowered=false;active.CaptureCooling();
    Need(active.Text().Contains("waiting for reactor auxiliary power") && active.Text().Contains("Efficiency: 0%"),"unpowered connected active cooler exposes unavailable capacity");
    active.CoolingPowered=true;active.CaptureCooling();Need(active.Text().Contains("Efficiency: 100%"),"auxiliary supply restores capacity without a flow multiplier");
-   active.Sample(0,0,0,1);active.CaptureCooling();Need(active.Text().Contains("Efficiency: 0%") && active.Text().Contains("Air density: 0%"),"250 GW cooler is unavailable in vacuum");
-   var thin=Block(ThermalKind.Radiator,100000);thin.Store.Radiator=new ThermalRadiatorState{EntityId=1,Exposure=1};
-   double thinCapacity=ThermalRadiators.Cooling(100000,1,.0011,0);thin.Sample(thinCapacity,thinCapacity,.0011,1);thin.CaptureCooling();
+   active.Sample(0,0,0,1);active.CaptureCooling();Need(active.Text().Contains("Efficiency: 0%") && active.Text().Contains("Air density: 0%"),"25 GW cooler is unavailable in vacuum");
+   var thin=Block(ThermalKind.Radiator,10000);thin.Store.Radiator=new ThermalRadiatorState{EntityId=1,Exposure=1};
+   double thinCapacity=ThermalRadiators.Cooling(10000,1,.0011,0);thin.Sample(thinCapacity,thinCapacity,.0011,1);thin.CaptureCooling();
    Need(thin.Text().Contains("Air density: 0.1%") && thin.Text().Contains("Ambient cooling factor: 99.9%"),"terminal uses measured density without a full-atmosphere cutoff");
-   var root=Block(ThermalKind.Radiator);var panel=Block(ThermalKind.RadiatorPanel,100000);
+   var root=Block(ThermalKind.Radiator);var panel=Block(ThermalKind.RadiatorPanel,10000);
    root.Store.Radiator=new ThermalRadiatorState{EntityId=1,Exposure=1,SunIncidence=1};
    panel.Store.Radiator=new ThermalRadiatorState{EntityId=2,Exposure=.75};panel.Block.EntityId=2;
    root.RadiatorPanels.Add(panel);panel.RadiatorBase=root;
-   root.Sample(80000,5000,0,0);panel.Sample(0,75000,0,0);
-   measured=root.CaptureCooling();Near(measured.RatedMW,110000,"mixed panel ratings summed once");
-   Near(measured.AvailableMW,80000,"extension counted once in stack capacity");
-   Need(root.Text().Contains("Efficiency: 72.7%") && root.Text().Contains("Base panel: 50% / 5 GW"),"stack efficiency weighted by capacity");
+   root.Sample(8000,500,0,0);panel.Sample(0,7500,0,0);
+   measured=root.CaptureCooling();Near(measured.RatedMW,11000,"mixed panel ratings summed once");
+   Near(measured.AvailableMW,8000,"extension counted once in stack capacity");
+   Need(root.Text().Contains("Efficiency: 72.7%") && root.Text().Contains("Base panel: 50% / 500 MW"),"stack efficiency weighted by capacity");
    Need(root.Text().Contains("Solar cooling factor: 50%") && root.Text().Contains("Ambient cooling factor: 100%") && root.Text().Contains("Air density: 0%"),"radiator losses and vacuum measurement exposed");
-   panel.CaptureCooling();Need(panel.Text().Contains("Efficiency: 75%") && panel.Text().Contains("75 GW / 100 GW rated"),"extension shows its own contribution");
+   panel.CaptureCooling();Need(panel.Text().Contains("Efficiency: 75%") && panel.Text().Contains("7.5 GW / 10 GW rated"),"extension shows its own contribution");
    Need(panel.Text().Contains("attached to radiator axis") && root.Samples==2,"extension reads its base's cached environment");
    panel.RadiatorBase=null;panel.CaptureCooling();Need(panel.Text().Contains("UNATTACHED PANEL") && panel.Text().Contains("Efficiency: 0%"),"detached extension cannot report stale capacity");
    root.Store.Fault="Test isolation";root.CaptureCooling();Need(root.Text().Contains("ISOLATED / Test isolation") && root.Text().Contains("Efficiency: 0%"),"runtime isolation visible");
@@ -118,11 +118,11 @@ namespace ArcanePower {
    byte[] bytes=Wire(packet);Need(bytes.Length<=1024,"cooling plus radiator snapshot fits existing packet limit");
    var copy=MyAPIGateway.Utilities.SerializeFromBinary<ThermalRotorPacket>(bytes);
    Need(copy.Cooling.Valid(1) && copy.Cooling.Fault.Length==256,"real protobuf preserves cooling fields");
-   Near(copy.Cooling.AvailableMW,80000,"protobuf preserves measured capacity");
+   Near(copy.Cooling.AvailableMW,8000,"protobuf preserves measured capacity");
    var client=Block(ThermalKind.Radiator);ThermalSession.Blocks[1]=client;var receiver=new ThermalSession();
    MyAPIGateway.Multiplayer.IsServer=false;receiver.Receive(bytes,false);
    Need(client.Block.Refreshes==0,"client ignores readings from another client");
-   receiver.Receive(bytes,true);Need(client.Block.Refreshes==1 && client.Text().Contains("80 GW / 110 GW rated"),"server snapshot refreshes native terminal");
+   receiver.Receive(bytes,true);Need(client.Block.Refreshes==1 && client.Text().Contains("8 GW / 11 GW rated"),"server snapshot refreshes native terminal");
    receiver.Receive(bytes,true);Need(client.Block.Refreshes==1,"duplicate sequence ignored");
    foreach(Action<ThermalCoolingState> corrupt in new Action<ThermalCoolingState>[] {
     s=>s.EntityId=2,s=>s.Sequence=-1,s=>s.RatedMW=0,s=>s.AvailableMW=double.NaN,
@@ -137,7 +137,7 @@ namespace ArcanePower {
    Need(MyAPIGateway.Multiplayer.Sent!=null,"read-only sync request receives live measurements");
    var old=Wire(new ThermalRotorPacket{EntityId=1,Radiator=root.Store.Radiator});
    MyAPIGateway.Multiplayer.IsServer=false;ThermalSession.Blocks[1]=client;receiver.Receive(old,true);
-   Need(client.Block.Refreshes==1 && client.Text().Contains("80 GW / 110 GW rated"),"older packets without cooling preserve the last reading");
+   Need(client.Block.Refreshes==1 && client.Text().Contains("8 GW / 11 GW rated"),"older packets without cooling preserve the last reading");
    Console.WriteLine("PASS: "+checks+" cooling terminal, mixed-panel capacity, environment, protobuf and authority checks");
   }
  }
