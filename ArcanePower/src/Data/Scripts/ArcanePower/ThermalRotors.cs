@@ -20,13 +20,28 @@ namespace ArcanePower
 
         public bool Valid(long id)
         {
+            return Valid(id, ThermalRotors.MaxRpm);
+        }
+
+        public void MigrateSavedRpm(long id)
+        {
+            // Accept the former 4000 RPM save range without weakening packet validation.
+            if (!Valid(id, 4000)) return;
+            Rpm = Math.Min(Rpm, ThermalRotors.MaxRpm);
+            CompressorRpm = Math.Min(CompressorRpm, ThermalRotors.MaxCompressorRpm);
+            TargetRpm = Math.Min(TargetRpm, ThermalRotors.MaxRpm);
+            CompressorTargetRpm = Math.Min(CompressorTargetRpm, ThermalRotors.MaxCompressorRpm);
+        }
+
+        private bool Valid(long id, double maximumRpm)
+        {
             return EntityId == id && Sequence >= 0
                 && ThermalMath.Finite(Phase) && Phase >= 0 && Phase < Math.PI * 2
                 && ThermalMath.Finite(CompressorPhase) && CompressorPhase >= 0 && CompressorPhase < Math.PI * 2
-                && ThermalMath.Finite(Rpm) && Rpm >= 0 && Rpm <= ThermalRotors.MaxRpm
-                && ThermalMath.Finite(TargetRpm) && TargetRpm >= 0 && TargetRpm <= ThermalRotors.MaxRpm
-                && ThermalMath.Finite(CompressorRpm) && CompressorRpm >= 0 && CompressorRpm <= ThermalRotors.MaxCompressorRpm
-                && ThermalMath.Finite(CompressorTargetRpm) && CompressorTargetRpm >= 0 && CompressorTargetRpm <= ThermalRotors.MaxCompressorRpm
+                && ThermalMath.Finite(Rpm) && Rpm >= 0 && Rpm <= maximumRpm
+                && ThermalMath.Finite(TargetRpm) && TargetRpm >= 0 && TargetRpm <= maximumRpm
+                && ThermalMath.Finite(CompressorRpm) && CompressorRpm >= 0 && CompressorRpm <= maximumRpm
+                && ThermalMath.Finite(CompressorTargetRpm) && CompressorTargetRpm >= 0 && CompressorTargetRpm <= maximumRpm
                 && ThermalMath.Finite(HotC) && HotC >= 45 && HotC <= 2200;
         }
     }
@@ -35,7 +50,7 @@ namespace ArcanePower
     // Electrical load drives the shafts; visual inertia never grants MW.
     public static class ThermalRotors
     {
-        public const double IdleRpm = 100, MaxRpm = 4000, MaxCompressorRpm = MaxRpm;
+        public const double IdleRpm = 10, MaxRpm = 200, MaxCompressorRpm = MaxRpm;
         private const double IdleRampSeconds = 5;
         public static void Drive(ThermalRotorState state, double load, double hotC, bool running, double seconds)
         {

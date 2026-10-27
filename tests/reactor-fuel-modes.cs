@@ -184,6 +184,12 @@ class Reactor {
    Near(block.Generator.PowerOutputMultiplier*block.Generator.BlockDefinition.MaxPowerOutput,expected,"native theoretical turbine maximum");
    Near(block.Generator.Capacity*216000,expected,"native effective turbine maximum");
   }
+  r.Running();r.BeginShutdown();Near(r.Motion.CooldownStartHeat,.8f,"shutdown captures actual starting heat");
+  r.Motion.Heat=.4f;r.BeginShutdown();Near(r.Motion.CooldownStartHeat,.8f,"repeated shutdown checks preserve original progress baseline");
+  var serializer=new System.Xml.Serialization.XmlSerializer(typeof(MotionState));
+  var saved=new System.IO.StringWriter();serializer.Serialize(saved,r.Motion);
+  var restored=(MotionState)serializer.Deserialize(new System.IO.StringReader(saved.ToString()));
+  Near(restored.CooldownStartHeat,.8f,"shutdown progress baseline survives saved-world reload");
   r.Motion.EntityId=r.Id;r.Motion.Thermal.Store.EntityId=r.Id;r.Motion.ReserveMJ=0;
   r.Motion.Thermal.Store.HotMJ=1000000;
   Need(Valid(r.Motion),"pre-rebalance paid heat remains loadable");
@@ -194,6 +200,12 @@ class Reactor {
   foreach(float seconds in new[]{-2f,61f,float.NaN,float.PositiveInfinity}){
    snapshot.ForecastOverheatSeconds=seconds;Need(!Valid(snapshot),"reject invalid overheat ETA");snapshot.ForecastOverheatSeconds=-1;
    snapshot.ForecastMeltdownSeconds=seconds;Need(!Valid(snapshot),"reject invalid critical ETA");snapshot.ForecastMeltdownSeconds=-1;
+  }
+  foreach(float seconds in new[]{-2f,3601f,float.NaN,float.PositiveInfinity}){
+   snapshot.ForecastCooldownSeconds=seconds;Need(!Valid(snapshot),"reject invalid cooldown ETA");snapshot.ForecastCooldownSeconds=-1;
+  }
+  foreach(float heat in new[]{-.1f,4.1f,float.NaN,float.PositiveInfinity}){
+   snapshot.CooldownStartHeat=heat;Need(!Valid(snapshot),"reject invalid shutdown baseline");snapshot.CooldownStartHeat=0;
   }
   snapshot.ForecastCircuit=5;Need(!Valid(snapshot),"reject nonexistent forecast circuit");
   var r=new Reactor();r.Mode(ThermalMode.Brayton);r.Stock(2,10);r.Motion.FuelTier=2;r.Running();
@@ -394,6 +406,28 @@ class Reactor {
   var client=new Reactor();client.Mode(ThermalMode.Brayton);client.reactor.Enabled=false;client.reactor.Enabled=true;
   Need(!client.thermalStartRequested,"clients cannot arm the server startup latch");MyAPIGateway.Multiplayer.IsServer=true;
  }
+ static void RuntimeFaultShutdown(){
+  foreach(var mode in new[]{ThermalMode.Standalone,ThermalMode.Brayton}){
+   var r=new Reactor();r.Mode(mode);r.Stock(1,10);r.Running();
+   r.Motion.Thermal.Store.HotMJ=40;r.Motion.Thermal.Loops[0].ExcessMJ=20;
+   r.Motion.Thermal.Loops[0].Connected=true;
+   r.FailThermalRuntime();
+   Need(!r.reactor.Enabled && r.Motion.Core==CorePhase.Cooling && !r.ThermalCanRun,"runtime exception explicitly starts cooldown");
+   Need(r.Motion.Thermal.Faulted && r.Motion.Thermal.Loops[0].Connected,"runtime exception preserves connected cooling");
+   Near(r.Motion.Thermal.Store.HotMJ,40,"shutdown preserves paid heat inventory");
+   Near(r.Motion.Thermal.Loops[0].ExcessMJ,20,"shutdown preserves retained waste");
+   r.reactor.Enabled=true;r.UpdateThermalMode();Need(!r.reactor.Enabled,"fault cannot be bypassed by toggling either reactor mode");
+  }
+  var source=new Reactor();source.Mode(ThermalMode.Brayton);source.Stock(1,10);source.Running();
+  source.Motion.Thermal.Store.HotMJ=10;source.Motion.Thermal.Loops[0].Connected=true;
+  var block=new ThermalBlock{Block=new Block(),Generator=new ReactorBlock(),Spec=new ThermalModel{RatingMW=100}};
+  block.OutputGrant=new ThermalOutputGrant(source.Motion.Thermal,source.Motion.Thermal.Loops[0],1,.4);
+  block.Generator.CurrentOutput=100;MyAPIGateway.Session.GameplayFrameCounter++;block.AccountOutput();
+  Need(source.Motion.Thermal.Faulted && block.Fault==null,"paid output fault trips generation without latching physical circuit");
+  source.CheckLoopSafety();
+  Need(!source.reactor.Enabled && source.Motion.Core==CorePhase.Cooling,"accounting fault stops running core despite ThermalCanRun already false");
+  Need(ThermalLoops.OpenValves(source.Motion.Thermal)==1,"accounting fault leaves intact cooling path open");
+ }
  static void OutputLifetime(){
   var state=new ThermalReactorState{Store=new ThermalStore{EntityId=1,HotMJ=10},LoopVersion=2};
   var block=new ThermalBlock{Block=new Block(),Generator=new ReactorBlock(),Spec=new ThermalModel{RatingMW=100}};
@@ -559,6 +593,13 @@ class Reactor {
   broken.Block.IsFunctional=true;broken.Block.EntityId=99;broken.Node.Id=99;ThermalSession.Blocks.Remove(10);ThermalSession.Blocks.Add(99,broken);
   session.Step(r,machines);
   Need(r.Motion.Thermal.ConnectedLoops==4 && session.Valves==15,"replacement pipe restores its circuit without a refill");
+  r.FailThermalRuntime();
+  Need(!r.reactor.Enabled && r.Motion.Core==CorePhase.Cooling,"full plant runtime isolation stops the core");
+  session.Step(r,machines);
+  Need(r.Motion.Thermal.Faulted && session.Valves==15,"source failure leaves all four intact cooling circuits open");
+  Need(r.Motion.Thermal.CoolingMW>0 && machines.TrueForAll(m=>m.Fault==null),"runtime fault retains cooling without latching machinery");
+  foreach(var host in hosts)Near(host.OutputGrantMW,0,"source runtime fault revokes new generation grants");
+  r.Motion.Thermal.Faulted=false;
   double paid=r.Motion.Thermal.FuelHeatMJ;r.reactor.Enabled=false;r.BeginShutdown();
   foreach(var host in hosts)host.Generator.CurrentOutput=0;
   r.Motion.Thermal.Loops[0].ExcessMJ=100;
@@ -573,6 +614,8 @@ class Reactor {
   foreach(var host in hosts)Near(host.OutputGrantMW,0,"cold stopped plant grants no power");
   r.Motion.ReserveMJ=0;r.Motion.PowerInputMW=0;r.Motion.PowerPaused=true;
   r.Motion.Thermal.Loops[0].ExcessMJ=100;session.Step(r,machines);
+  Need(r.Motion.Thermal.PotentialCoolingMW>0 && r.Motion.Thermal.Loops[0].PotentialCoolingMW>0,
+   "complete offline circuits expose potential cooling without auxiliary power");
   Near(r.Motion.Thermal.CoolingMW,0,"active coolers require containment auxiliary power during cooldown");
   Near(r.Motion.Thermal.Loops[0].ExcessMJ,100,"unpowered active cooling cannot erase heat");
   machines[2].Spec.Kind=ThermalKind.Radiator;machines[2].CircuitRevision++;session.Step(r,machines);
@@ -588,8 +631,8 @@ class Reactor {
   hosts[0].Fault=hosts[1].Fault="Native output exceeded its paid heat allocation; isolated";
   hosts[0].Store.HotMJ=7;hosts[0].Store.WasteMJ=3;
   session.Step(r,machines);
-  Need(r.Motion.Thermal.Faulted && session.Valves==0,"fault alone does not trigger its own recovery");
-  Need(r.Motion.Thermal.Diagnostic.Contains("Runtime fault") && r.Motion.Thermal.Loops[0].Diagnostic.Contains("Runtime fault"),
+  Need(r.Motion.Thermal.Faulted && session.Valves==12,"source fault preserves healthy cooling paths without resetting generation fault");
+  Need(r.Motion.Thermal.Diagnostic.Contains("Runtime fault") && r.Motion.Thermal.Loops[0].Diagnostic.Contains("fault"),
    "runtime fault is not overwritten by an unsealed connection or startup message");
   machines[0].Block.Enabled=false;session.Step(r,machines);
   Need(r.Motion.Thermal.Faulted,"an incomplete changed circuit cannot clear source isolation");
@@ -685,7 +728,7 @@ class Reactor {
   Need(root.CircuitRevision==4 && panel.CircuitRevision==2,"removed extension unsubscribes even after GameLogic.Entity is released");
   ThermalSession.Blocks.Clear();
  }
- static void Main(){RebalancedRatings();ReloadInitialization();OutputLifetime();ReservationSafety();FuelBalance();Residuum();FuelMatrix();ControllerAndCommands();CoolingAndAccounting();CircuitShutdown();CircuitAccounting();RadiatorRemoval();Console.WriteLine("PASS: "+checks+" production fuel/mode/controller checks; survival/creative, terminal/server, inventory/conveyors, restore, cooldown and paid-heat accounting");}
+ static void Main(){RuntimeFaultShutdown();RebalancedRatings();ReloadInitialization();OutputLifetime();ReservationSafety();FuelBalance();Residuum();FuelMatrix();ControllerAndCommands();CoolingAndAccounting();CircuitShutdown();CircuitAccounting();RadiatorRemoval();Console.WriteLine("PASS: "+checks+" production fuel/mode/controller checks; survival/creative, terminal/server, inventory/conveyors, restore, cooldown and paid-heat accounting");}
 }
 
 // Recording engine doubles; the circuit dispatcher and heat transport are injected unchanged.

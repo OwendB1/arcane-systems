@@ -79,6 +79,8 @@ namespace ArcanePower
         [ProtoMember(57)] public float ForecastOverheatSeconds = -1;
         [ProtoMember(58)] public float ForecastMeltdownSeconds = -1;
         [ProtoMember(59)] public int ForecastCircuit;
+        [ProtoMember(60)] public float CooldownStartHeat;
+        [ProtoMember(61)] public float ForecastCooldownSeconds = -1;
 
         // Timing is decided on the server; clients display the same confirmed
         // warning throughout its recovery hold instead of toggling independently.
@@ -98,7 +100,7 @@ namespace ArcanePower
 
     public sealed partial class Reactor
     {
-        private const float CooldownHeat = .15f;
+        private const float CooldownHeat = ThermalMath.CooldownHeat;
         private const int PlasmaStartTick = 1038; // Last quartet has latched.
         internal static readonly Guid MotionStorage = new Guid("d85a5399-b527-45ac-bcc0-aa1c442b2710");
         internal MotionState Motion = new MotionState();
@@ -218,6 +220,8 @@ namespace ArcanePower
                 && state.ForecastOverheatSeconds >= -1 && state.ForecastOverheatSeconds <= 60
                 && state.ForecastMeltdownSeconds >= -1 && state.ForecastMeltdownSeconds <= 60
                 && state.ForecastCircuit >= 0 && state.ForecastCircuit <= 4
+                && state.CooldownStartHeat >= 0 && state.CooldownStartHeat <= 4
+                && state.ForecastCooldownSeconds >= -1 && state.ForecastCooldownSeconds <= 3600
                 && state.Heat >= 0 && state.Heat <= 4 && state.VentLoad >= 0 && state.VentLoad <= 1
                 && state.VentHeat >= 0 && state.VentHeat <= 4
                 && state.FuelDebt >= -(double)VRage.MyFixedPoint.SmallestPossibleValue * .5 - 1e-12 && state.FuelDebt < 1
@@ -261,6 +265,8 @@ namespace ArcanePower
         private void BeginShutdown()
         {
             if (Motion.Core == CorePhase.Off || Motion.Core == CorePhase.Stopping || Motion.Core == CorePhase.Cooling) return;
+            Motion.CooldownStartHeat = Motion.Heat;
+            Motion.ForecastCooldownSeconds = -1;
             if (Motion.Core == CorePhase.Running && (Motion.Heat > CooldownHeat || Motion.MaintenanceTick >= 0))
             {
                 Motion.Core = CorePhase.Cooling;
@@ -307,6 +313,8 @@ namespace ArcanePower
                     Motion.PayloadReleased = false;
                     Motion.RingCount = controllerRingCapacity;
                     Motion.Core = CorePhase.Starting;
+                    Motion.CooldownStartHeat = 0;
+                    Motion.ForecastCooldownSeconds = -1;
                     Motion.CoreTick = 0;
                     Motion.CoreSubtick = 0;
                     Motion.SpinPhase = 0;

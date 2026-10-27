@@ -17,7 +17,12 @@ def vector(parent,tag,values):
     for axis,value in zip('XYZW',values):add(e,axis,value)
 physical=add(add(root,'PhysicalItems'),'PhysicalItem',**{'xsi:type':'MyObjectBuilder_ToolItemDefinition'})
 add(physical,'Id',Type='MyObjectBuilder_PhysicalGunObject',Subtype='ArcanePower_Tablet')
-for k,v in [('DisplayName','Arcane Reactor Tablet'),('Icon',r'Textures\GUI\Icons\ArcanePower\Tablet.dds'),('Description','Read-only reactor telemetry. Requires suit antenna enabled and an accessible bidirectional grid antenna link. Equip: left click selects a reachable reactor; right click changes page. Text HUD API enables the full live dashboard.')]:add(physical,k,v)
+for k,v in [('DisplayName','Arcane Reactor Tablet'),('Icon',r'Textures\GUI\Icons\ArcanePower\Tablet.dds'),
+            ('Description',('Read-only reactor telemetry on the tablet screen.\n\n'
+                            'CONNECTION\nEnable the suit antenna.\n'
+                            'Requires an accessible, bidirectional grid antenna link.\n\n'
+                            'CONTROLS\nEquip the tablet.\n'
+                            'Left click: select a reachable reactor.\nRight click: change page.'))]:add(physical,k,v)
 vector(physical,'Size',[.36,.26,.062])
 for k,v in [('Mass',1.4),('Volume',3),('Model',r'Models\Items\ArcanePower_Tablet.mwm'),('PhysicalMaterial','Metal'),('HitDistance',0),('ShowAmmoCount','false'),('DepositAllEnabled','false')]:add(physical,k,v)
 add(physical,'PrimaryActions');add(physical,'SecondaryActions')

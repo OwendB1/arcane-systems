@@ -8,7 +8,18 @@
       </Id>
       <DisplayName>Arcane Vent Duct</DisplayName>
       <Icon>Textures/GUI/Icons/ArcaneVentDuct.dds</Icon>
-      <Description>Required reactor vent route: stack 1-15 Arcane Vent Duct tubes directly above the centered roof hatch, then one Arcane Vent Outlet. Fully weld every section; align their top faces with reactor Up on the same grid. Keep the outlet clear. Missing or damaged sections prevent startup and shut down a running reactor. Central ports also carry conveyor items.</Description>
+      <Description>VENT ROUTE
+Stack 1-15 Arcane Vent Ducts above the centered reactor roof hatch.
+Finish with one Arcane Vent Outlet and keep the outlet clear.
+
+INSTALLATION
+Fully weld every section on the same grid.
+Align their top faces with reactor Up.
+Central ports also carry conveyor items.
+
+SAFETY
+Missing or damaged sections prevent startup.
+Security mode selects shutdown or warning on vent loss after startup.</Description>
       <GuiVisible>true</GuiVisible>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
@@ -66,7 +77,18 @@
       </Id>
       <DisplayName>Arcane Vent Outlet</DisplayName>
       <Icon>Textures/GUI/Icons/ArcaneVentOutlet.dds</Icon>
-      <Description>Required reactor vent route: stack 1-15 Arcane Vent Duct tubes directly above the centered roof hatch, then one Arcane Vent Outlet. Fully weld every section; align their top faces with reactor Up on the same grid. Keep the outlet clear. Missing or damaged sections prevent startup and shut down a running reactor. Central ports also carry conveyor items.</Description>
+      <Description>VENT ROUTE
+Stack 1-15 Arcane Vent Ducts above the centered reactor roof hatch.
+Finish with one Arcane Vent Outlet and keep the outlet clear.
+
+INSTALLATION
+Fully weld every section on the same grid.
+Align their top faces with reactor Up.
+Central ports also carry conveyor items.
+
+SAFETY
+Missing or damaged sections prevent startup.
+Security mode selects shutdown or warning on vent loss after startup.</Description>
       <GuiVisible>true</GuiVisible>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>

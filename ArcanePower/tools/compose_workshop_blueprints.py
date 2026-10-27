@@ -133,7 +133,7 @@ if '05' in selected:
     model(im, 'air-cooler-rear', (815, 177, 740, 460))
     text(d, (66, 635), 'FRONT / TWIN FAN GUARDS', 23, GOLD, True)
     text(d, (824, 635), 'REAR / H + C CONNECTIONS', 23, GOLD, True)
-    note(d, 65, 692, '01', 'TWO EQUIPMENT TIERS', ['2.5 GW standard / 25 GW upgraded', 'Same 3 x 3 x 2 LG body'])
+    note(d, 65, 692, '01', 'TWO EQUIPMENT TIERS', ['5 GW standard / 50 GW upgraded', 'Same 3 x 3 x 2 LG body'])
     note(d, 824, 692, '02', 'LEAVE THE FANS CLEAR', ['2.5 m beyond both guards', 'Vacuum provides no active cooling'])
     im.save(OUT/'cooling-blueprint.png', optimize=True)
 
@@ -146,7 +146,7 @@ if '06' in selected:
     model(im, 'radiator-panel', (1170, 177, 340, 330))
     text(d, (822, 522), 'RADIATOR BASE', 22, GOLD, True)
     text(d, (1190, 522), 'EXTENSION PANEL', 22, GOLD, True)
-    note(d, 812, 592, '01', 'MIXED TIERS ADD CAPACITY', ['1 / 10 GW per standard / upgraded section', 'Three sections: 3 / 30 GW in ideal exposure'])
+    note(d, 812, 592, '01', 'MIXED TIERS ADD CAPACITY', ['2 / 20 GW per standard / upgraded section', 'Three sections: 6 / 60 GW in ideal exposure'])
     note(d, 812, 710, '02', 'BUILD ON THE TOP SHAFT', ['Match Up; any yaw / maximum two extensions', 'Shade and edge-on tracking preserve capacity'])
     im.save(OUT/'radiators-blueprint.png', optimize=True)
 

@@ -3,7 +3,7 @@
 Workshop item: [3819727962](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962).
 The publishing source of truth is `workshop/title.txt`, `workshop/version.txt`,
 `workshop/description.bbcode`, `src/modinfo.sbmi.main` and `src/thumb.gif`.
-The title is generated as **Arcane Power (0.1.2)** from the two text files.
+The title is generated as **Arcane Power (0.1.3)** from the two text files.
 The animated preview uses the 480×270 GIF below 1 MB.
 
 `.github/workflows/arcane-power-workshop-upload.yml` calls the existing shared
@@ -24,10 +24,19 @@ The corrected fuel heat ratings are **2.5 / 25 / 250 GW** for Aether, Helion and
 Empyrean, including canister names and assembly instructions. Standalone Aether
 exports **500 MW** at 20%; T1 turbines export **250 MW each / 1 GW total**.
 T2 turbines export **50 GW each / 200 GW total** with Empyrean at 80%.
-Cooling is **2.5 / 25 GW** per atmospheric unit and **1 / 10 GW** per radiator
+Cooling is **5 / 50 GW** per atmospheric unit and **2 / 20 GW** per radiator
 section (T1/T2). Old saved heat remains valid without rescaling its stored MJ.
 Fuel endurance and controller efficiencies remain unchanged. Native caps, runtime
 values, definition generators and the four affected gallery plates agree.
+
+Runtime isolation now stops generation and enters cooldown while keeping intact
+cooling circuits open. Native GW output rounding no longer causes false accounting
+trips. Complete circuits show potential cooling even while off; actual active
+cooling still needs auxiliary power. LCD/tablet Overview and Power pages show
+cooldown progress and an estimated simulation time to the 15% threshold.
+The atmospheric and radiator Workshop plates reflect the doubled cooler ratings.
+Version 0.1.3 also formats block and item descriptions into readable sections,
+with native line breaks preserved by their definition generators.
 The corrected ratings passed compiled runtime, fuel accounting, cooling telemetry,
 fuel-definition regeneration and MDK compatibility checks. The current live world
 has not been reloaded for this balance change; reload it to load new definitions.
@@ -150,7 +159,7 @@ python3 ArcanePower/tools/package_release.py
 python3 ArcanePower/tools/check_thermal_delivery.py
 ```
 
-The output is `.cache/release/ArcanePower-0.1.2.zip` under ArcanePower.
+The output is `.cache/release/ArcanePower-0.1.3.zip` under ArcanePower.
 Extract its contents into a local mod directory and enable it in an experimental
 SE1 world. The local development symlink already exposes `src` on the next world
 load. Do not load both the extracted package and the development copy together.

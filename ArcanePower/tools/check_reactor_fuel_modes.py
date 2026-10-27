@@ -40,7 +40,7 @@ members = ''.join(member(file, signature) for file, signatures in {
                           'private void UpdateThermalMode()', 'internal void ProduceThermal(',
                           'private void RefreshThermalCapacity()', 'internal ThermalOutputGrant ReserveThermalOutput(', 'internal bool ThermalAuxiliaryReady', 'internal void BeginThermalFrame()', 'internal void GrantStandaloneOutput()', 'internal void StopForLoopLoss()',
                           'private void ThermalEnabledChanged(', 'internal void CheckLoopSafety()',
-                          'private void InitializeThermalRuntime()', 'internal void RecheckThermalFault()'],
+                          'private void InitializeThermalRuntime()', 'internal void RecheckThermalFault()', 'internal void FailThermalRuntime()'],
 }.items() for signature in signatures)
 # Engine interface replacement only; all predicates and state changes are shipped code.
 members = members.replace('VRage.Game.ModAPI.IMyCubeBlock', 'Block').replace('VRage.Game.ModAPI.IMyInventory', 'Inventory')

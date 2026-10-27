@@ -96,12 +96,12 @@ unconnected reactor manifolds remain closed automatically. Keep the plant on
 one physical large grid; subgrid rotors/pistons/connectors do not transport heat.
 Regular/mirrored turbines provide opposite-side sockets and both equipment tiers.
 
-With Aether, each circuit receives up to 6.25 GWth, exports 2.5 GW at starter
-conversion and needs 3.75 GW rejection. Fit at least one effective standard
-10 GW radiator panel or 25 GW atmospheric cooler in each circuit, with environmental headroom. One circuit
+With Aether, each circuit receives up to 0.625 GWth, exports 250 MW at starter
+conversion and needs 375 MW rejection. Fit at least one effective standard
+2 GW radiator panel or 5 GW atmospheric cooler in each circuit, with environmental headroom. One circuit
 works at 25% of full capacity; four independent circuits provide full capacity.
-Upgraded radiators provide 100 GW per panel; upgraded atmospheric coolers provide
-250 GW per unit at full air density with clear exhausts. Empyrean requires upgraded
+Upgraded radiators provide 20 GW per panel; upgraded atmospheric coolers provide
+50 GW per unit at full air density with clear exhausts. Empyrean requires upgraded
 turbines and enough cooling within every operating circuit.
 
 All four trains occupy **2 blocks wide × 2 high × 5 long** (5×5×12.5 m). The socket
@@ -128,7 +128,7 @@ see its dedicated **Arcane Power** cooling readout. It shows cooling efficiency
 and available/rated capacity using server measurements, including while stopped.
 Radiator bases include their attached extensions in the stack total and show the
 base panel separately; each extension shows its own contribution. Percentages
-are weighted by rated capacity, so mixed 1/10 GW panels are counted correctly.
+are weighted by rated capacity, so mixed 2/20 GW panels are counted correctly.
 All cooling blocks show measured air density. Radiators also show clear sky,
 solar and ambient cooling factors; atmospheric coolers show exhaust clearance
 and the resulting airflow factor. Active cooling scales from zero in vacuum to
@@ -272,8 +272,8 @@ gives 75%, and 100% sun on either face gives 50%. Each panel samples its own
 angle, partial shade, planetary shadow and weather. The terminal shows
 **Solar exposure** and **Cooling after solar load**. Keep both faces clear to
 space; shade alone does not compensate for enclosing the panels.
-Three equally exposed standard panels dissipate up to 3 GW, or 30 GW with all
-three upgraded. Mixed stacks add each section's own 1/10 GW rating.
+Three equally exposed standard panels dissipate up to 6 GW, or 60 GW with all
+three upgraded. Mixed stacks add each section's own 2/20 GW rating.
 A detached, misaligned, unfinished, disabled or third extension adds no cooling.
 Keep both faces open to space and the entire rotation envelope clear. The faint
 red-orange panel glow follows actual heat rejection, not requested power.
@@ -296,7 +296,7 @@ states, retained heat, pending fuel charges and powered shutdown/retraction.
 It also checks Residuum recovery across tiny debits, full inventories, failed
 item insertion, save/load, copied identities, conveyors and creative/client guards.
 The offline suites cover fuel/recovery/shutdown and thermal behavior,
-including T3 hardware eligibility, 2.5/25 GW atmospheric coolers, 1/10 GW
+including T3 hardware eligibility, 5/50 GW atmospheric coolers, 2/20 GW
 radiator panels, vacuum/thin-atmosphere boundaries and inverse
 solar exposure with shade, weather and planetary-shadow boundaries. Native
 motion validation passes all 1,730 existing comparisons; isolation valves pass

@@ -15,6 +15,7 @@ namespace ArcanePower
         private int cursor, forecastTick, riskTicks, safeTicks, previousConnections = -1;
         private bool previousGenerating, previousRunaway;
         public double PeakHeat, OverheatSeconds = -1, MeltdownSeconds = -1;
+        public double CooldownSeconds = -1;
         public int Circuit;
         public bool Warning;
 
@@ -32,7 +33,7 @@ namespace ArcanePower
         {
             if (!ThermalMath.Finite(heat) || !ThermalMath.Finite(operatingTarget)
                 || !ThermalMath.Finite(ratingMW) || ratingMW <= 0)
-            { PeakHeat = 4; OverheatSeconds = MeltdownSeconds = 0; Circuit = 0; Warning = true; return; }
+            { PeakHeat = 4; OverheatSeconds = MeltdownSeconds = 0; CooldownSeconds = -1; Circuit = 0; Warning = true; return; }
             int connections = 0;
             double housingWaste = state == null ? 0 : state.RequiredCoolingMW;
             for (int i = 1; i <= ThermalLoops.Count; i++)
@@ -59,6 +60,7 @@ namespace ArcanePower
                 forecastTick = 14;
                 Predict(heat, runaway ? operatingTarget : generating ? sums[5] / Window : 0,
                     runaway, state, ratingMW, generating);
+                CooldownSeconds = !generating && !runaway ? PredictCooldown(heat, state, ratingMW) : -1;
             }
             bool risk = PeakHeat > Math.Max(1, heat) + .001;
             if (runaway || (risk && MeltdownSeconds >= 0))
@@ -110,9 +112,45 @@ namespace ArcanePower
             }
         }
 
-        private void AdvanceWaste(ThermalReactorState state, double ratingMW, bool generating, ref double credit)
+        private double PredictCooldown(double heat, ThermalReactorState state, double ratingMW)
         {
-            const double seconds = .05;
+            if (heat >= 1.25) return -1;
+            if (heat <= ThermalMath.CooldownHeat) return 0;
+            double credit = state == null ? 0 : state.Store.HotMJ;
+            for (int i = 0; i < energy.Length; i++)
+            {
+                energy[i] = state == null ? 0 : i == 0 ? state.Store.WasteMJ : state.Loops[i - 1].ExcessMJ;
+                production[i] = 0;
+            }
+            // Advisory midpoint projection, bounded to one hour. It reuses the
+            // circuit budgets and passive drain order of the risk forecast.
+            // Estimates are simulation seconds, independent of rendering speed.
+            for (int step = 0; step < 7200; step++)
+            {
+                bool empty = true;
+                foreach (double stored in energy) if (stored > 0) empty = false;
+                if (empty)
+                {
+                    double tail = Math.Ceiling(Math.Log(ThermalMath.CooldownHeat / heat)
+                        / Math.Log(1 - 1 / ThermalMath.CoreHeatResponse(heat, 0, false))) / 60;
+                    return step * .5 + tail <= 3600 ? step * .5 + tail : -1;
+                }
+                AdvanceWaste(state, ratingMW, false, ref credit, .25);
+                double target = 0;
+                for (int i = 0; i < energy.Length; i++)
+                    target = Math.Max(target, energy[i] / (ratingMW * (i == 0 ? 2 : .5)));
+                target = ThermalMath.Clamp(target, 0, 4);
+                double response = ThermalMath.CoreHeatResponse(heat, target, false);
+                heat = ThermalMath.Clamp(heat + (target - heat) * (1 - Math.Pow(1 - 1 / response, 30)), 0, 4);
+                if (heat >= 1.25) return -1;
+                if (heat <= ThermalMath.CooldownHeat) return (step + 1) * .5;
+                AdvanceWaste(state, ratingMW, false, ref credit, .25);
+            }
+            return -1;
+        }
+
+        private void AdvanceWaste(ThermalReactorState state, double ratingMW, bool generating, ref double credit, double seconds = .05)
+        {
             for (int i = 0; i < energy.Length; i++)
                 energy[i] = Math.Max(0, energy[i] + (production[i] - cooling[i]) * seconds);
             if (state == null || state.Mode != ThermalMode.Brayton || generating) return;

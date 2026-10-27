@@ -89,12 +89,14 @@ namespace ArcanePower {
    air.Block.Enabled=false;air.CaptureCooling();Need(air.Text().Contains("SWITCHED OFF") && air.Text().Contains("Efficiency: 0%"),"disabled cooler is unavailable");
    air.Block.Enabled=true;air.Block.SlimBlock.BuildLevelRatio=.9f;air.CaptureCooling();Need(air.Text().Contains("FINISH WELDING"),"unfinished cooler is explained");
    air.Block.SlimBlock.BuildLevelRatio=1;air.Sample(0,0,0,1);air.CaptureCooling();Need(air.Text().Contains("Requires atmosphere"),"vacuum loss is explained");
-   var active=Block(ThermalKind.AirCooler,25000);active.Sample(25000,25000,1,1);
-   Need(active.CaptureCooling().Valid(1) && active.Text().Contains("25 GW / 25 GW rated") && active.Text().Contains("Efficiency: 100%"),"25 GW cooler fits telemetry and reaches full atmospheric rating");
+   var active=Block(ThermalKind.AirCooler,50000);active.Sample(50000,50000,1,1);
+   Need(active.CaptureCooling().Valid(1) && active.Text().Contains("50 GW / 50 GW rated") && active.Text().Contains("Efficiency: 100%"),"50 GW cooler fits telemetry and reaches full atmospheric rating");
    active.CoolingConnected=true;active.CoolingPowered=false;active.CaptureCooling();
    Need(active.Text().Contains("waiting for reactor auxiliary power") && active.Text().Contains("Efficiency: 0%"),"unpowered connected active cooler exposes unavailable capacity");
+   Near(active.CaptureCooling().PotentialMW,50000,"unpowered connected circuit retains potential capacity");
+   Need(active.Text().Contains("Potential at current exposure: 50 GW"),"offline potential shown separately from available cooling");
    active.CoolingPowered=true;active.CaptureCooling();Need(active.Text().Contains("Efficiency: 100%"),"auxiliary supply restores capacity without a flow multiplier");
-   active.Sample(0,0,0,1);active.CaptureCooling();Need(active.Text().Contains("Efficiency: 0%") && active.Text().Contains("Air density: 0%"),"25 GW cooler is unavailable in vacuum");
+   active.Sample(0,0,0,1);active.CaptureCooling();Need(active.Text().Contains("Efficiency: 0%") && active.Text().Contains("Air density: 0%"),"50 GW cooler is unavailable in vacuum");
    var thin=Block(ThermalKind.Radiator,10000);thin.Store.Radiator=new ThermalRadiatorState{EntityId=1,Exposure=1};
    double thinCapacity=ThermalRadiators.Cooling(10000,1,.0011,0);thin.Sample(thinCapacity,thinCapacity,.0011,1);thin.CaptureCooling();
    Need(thin.Text().Contains("Air density: 0.1%") && thin.Text().Contains("Ambient cooling factor: 99.9%"),"terminal uses measured density without a full-atmosphere cutoff");

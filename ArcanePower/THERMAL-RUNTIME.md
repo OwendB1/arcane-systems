@@ -145,14 +145,16 @@ to review the native appearance after material-definition changes.
 `ThermalRotors` drives both cosmetic shafts linearly from delivered output divided
 by the circuit's allocated electrical rating. Temperature colour follows the same
 load and the fuel tier. No stored-heat or circulation multiplier controls speed.
-Healthy enabled turbines idle at 100 RPM. Both shafts target
-`100 + 3900 × utilization` RPM, reaching 4,000 RPM at full utilization.
-With no load, both shafts ramp from rest to idle over five seconds (20 RPM per
+Healthy enabled turbines idle at 10 RPM. Both shafts target
+`10 + 190 × utilization` RPM, reaching 200 RPM at full utilization.
+With no load, both shafts ramp from rest to idle over five seconds (2 RPM per
 second). Load present at startup or arriving during that ramp immediately uses
 the existing four-second response toward its load-dependent target; it never waits
 to reach idle first. Disabled, damaged or faulted turbines coast to rest with the
 existing eight-second response; an unloaded restart below idle resumes the gentle
-ramp from the current speed. Shaft motion does not alter energy accounting.
+ramp from the current speed. Valid saved speeds from the former 4,000 RPM range
+are clamped to 200 RPM on reload, preserving shaft pose and stored heat.
+Shaft motion does not alter energy accounting.
 The displayed block name is **Arcane Turbine**; subtype IDs remain unchanged for
 existing grids. Dense blades can appear to strobe at these speeds as frames sample
 the actual shaft angle.
@@ -331,7 +333,7 @@ Prototype boundaries:
   currently the 25°C reference. Native `MyPlanet.GetAirDensity` returns zero
   outside its atmospheric altitude, including non-atmospheric planets; finding
   a nearby planet alone does not apply an atmosphere penalty. Atmospheric coolers
-  are rated at 25 GW (T1) or 250 GW (T2) and sample 18 authored exhaust
+  are rated at 5 GW (T1) or 50 GW (T2) and sample 18 authored exhaust
   positions (nine per fan) once per 60 simulation ticks, transformed by the
   block's world matrix. Each checks 2.5 m forward from beyond the guard hardware.
   Same-grid block occupancy catches armor enclosing the ray origin; forward and
@@ -468,3 +470,21 @@ coastdown, native shaft transforms, frame-size-independent phase integration,
 and the captured authored starter layout, including
 facing/roll faults and grid separation. They do not execute the coordinator in
 a live SE world or establish native collision/animation compatibility.
+
+### Runtime faults and cooling continuity
+
+A generation/runtime fault disables the reactor and explicitly enters its normal
+shutdown/cooldown sequence. It does not disconnect sealed circuits or close their
+valves. Electrical output accounting faults latch generation at the source;
+physical faults or invalid machinery inventories still isolate the affected circuit.
+A complete circuit continues rejecting retained heat with the available auxiliary
+supply (or passively for radiators). Generation requires revalidation and a manual
+restart. Potential environmental cooling is measured independently of auxiliary
+power, while actual heat rejection never uses an unpowered active cooler.
+
+Native generation uses float Capacity/CurrentOutput. Settlement permits the float
+roundtrip within the existing 1 ppm output headroom, while still requiring every
+MJ to fit both the reserved allocation and remaining paid fuel inventory. This
+prevents false isolation at GW output without granting unpaid electricity.
+Outstanding reservations survive a runtime exception long enough to settle the
+last native interval; stopping output must not discard their accounting evidence.

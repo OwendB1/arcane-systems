@@ -1,9 +1,9 @@
 {
-  "version": "0.1.2",
+  "version": "0.1.3",
   "published": false,
-  "archive": "ArcanePower-0.1.2.zip",
-  "sha256": "6a5cbbdab7128110519f9200bb14c983bd1d0d1937754b61cced1cb5de7196e4",
-  "bytes": 440729743,
+  "archive": "ArcanePower-0.1.3.zip",
+  "sha256": "6ed3755e50fdbf91e224fac75402a66c036b3f0bd11bf1fc22301ecb2f221e03",
+  "bytes": 440732181,
   "files": [
     {
       "path": "Audio/ArcanePower/Assembly.wav",
@@ -97,23 +97,23 @@
     },
     {
       "path": "Data/ContainmentTiles.sbc",
-      "bytes": 3097,
-      "sha256": "476e4502801e49e06b6fa3caa6de4936c4dc7b4e2b7833fa0bec8cbf0309b8a0"
+      "bytes": 3031,
+      "sha256": "e1522b6859eb6e555d66f47ee36dd49539d499fcf86dca46ac5b483e8eeed2e3"
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_ContainmentController.sbc",
-      "bytes": 6673,
-      "sha256": "850233b9d7e38f524943209b2ca39076f518de04e34cf1a841ac117eecf7ec1b"
+      "bytes": 6789,
+      "sha256": "4601bd110f9695c05995bea214bcd36bd3525c0adec185522671b0db93fdda5c"
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_EnergyCore.sbc",
-      "bytes": 23927,
-      "sha256": "d124dfc44b4e741f7f5d6726cfa6b29fb99b655af71947e3e000b214c0b112dc"
+      "bytes": 24186,
+      "sha256": "07e043ffa0ef7d47bd922ad627b83e6dca675113e00f4df5b27bc0ef5cd2da5f"
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_EnergyCoreLegacy.sbc",
-      "bytes": 23835,
-      "sha256": "9dadf384e33a1f820fea20a73522894d80a93ff03b05c0efe2c073404f5aad4a"
+      "bytes": 23903,
+      "sha256": "2af7ec8486c0b79da65fb2ed5c427134a930f69eae8137d03da28348422512fa"
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_EnergyVariants.sbc",
@@ -127,8 +127,8 @@
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
-      "bytes": 141177,
-      "sha256": "f53cc151be45a96e8bc4324907ee4892dd7068feea2da443a6a20a7f16e6b4d6"
+      "bytes": 142457,
+      "sha256": "42be8f501f9e41dd016292fc016c22e66f9fa9e806ae7deafef26976aa8a6cf9"
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_ThermalVariants.sbc",
@@ -137,8 +137,8 @@
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_Vents.sbc",
-      "bytes": 7086,
-      "sha256": "b4e3fe13894796ca2e25c7dcc8ee4d1c08574eadcd3c8d25c008870b7b85cc45"
+      "bytes": 7178,
+      "sha256": "664a2dca9297008c8e2727d36e27f3f2009436102ed712886f3f529e4d69aea5"
     },
     {
       "path": "Data/EjectedContainment.sbc",
@@ -162,8 +162,8 @@
     },
     {
       "path": "Data/PhysicalItems.sbc",
-      "bytes": 9302,
-      "sha256": "4cc871a33f73a42ac39a8ef549b81e9e15330ef59adb6ee1a4833c0b5c122988"
+      "bytes": 9395,
+      "sha256": "dc7f3a98d11f38e5c92e03ccffdee9be1895741b061fe11bcd8855d64621f425"
     },
     {
       "path": "Data/ResourceDistributionGroups.sbc",
@@ -217,8 +217,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Failure.cs",
-      "bytes": 9073,
-      "sha256": "f02511b9b3c93f28df4dcf1528208951da8e67ffeed183609ca27595375929c1"
+      "bytes": 9525,
+      "sha256": "9b297608038185d46ea1d3908353bb6b31bdf93edaa39bb7837f13d3e4aa31d5"
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Fuel.cs",
@@ -227,8 +227,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Motion.cs",
-      "bytes": 37493,
-      "sha256": "5801ea1a27b877ab8ce7ca4afc97c4dc978dcfa2929218e9e52d0cde283f72f0"
+      "bytes": 38024,
+      "sha256": "a63f090324aaa3c63daefcbd0652eaac1944ffc3ab4770dd0bcfa3267a45a53a"
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Power.cs",
@@ -247,13 +247,13 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Status.cs",
-      "bytes": 26825,
-      "sha256": "ec296d8fb2d470b9a9eb58e900f0fc4f34845903041d1e89796470685e1438df"
+      "bytes": 29530,
+      "sha256": "9fddab5ba7d2884574b6bfedc25daec35c9405befcef3f6fc284a8e4be1e78b4"
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Thermal.cs",
-      "bytes": 13748,
-      "sha256": "4b042d786fab1dfaeb8f10ee744f4221e52bb9087353608c18779d5b78e1d995"
+      "bytes": 14018,
+      "sha256": "e5a3ea2c81d217ba052e8c086a1b00ed09027438f6ca1b34ec8caedf2c75c025"
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Tiles.cs",
@@ -272,8 +272,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ReactorDashboard.cs",
-      "bytes": 10446,
-      "sha256": "85eac1351adbecc0d7d11de6356dc4eb274ca523c99d5e3d1445e5db383ba73b"
+      "bytes": 11164,
+      "sha256": "6433c34799b6dc30af27227e0783bb65dda2cac95ac1834f15d49857497e46b5"
     },
     {
       "path": "Data/Scripts/ArcanePower/ReactorLcd.cs",
@@ -307,13 +307,13 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalBlock.Status.cs",
-      "bytes": 8808,
-      "sha256": "d1cae90a4cc9a2ace3e94e3208666f17fea40b8ca5cbce59d3a3db258f7c9da0"
+      "bytes": 9172,
+      "sha256": "4dfad61860eeb8869a436cd019e62d9b90d282a5ff4e37f98d009f47eb756974"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalBlock.cs",
-      "bytes": 14590,
-      "sha256": "ea682599cfe281aa3e6b21f575f41037e63ffeafd713663a5baa92d382e139c6"
+      "bytes": 14937,
+      "sha256": "698a2e19679371ce79c353cc0e5d0687e0a63fee7c85bca0d561c30de07777e4"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalBuildGuide.Reactor.cs",
@@ -347,8 +347,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalForecast.cs",
-      "bytes": 7013,
-      "sha256": "2db493128f0e76b69cd497b1ba8e5c7d8ba1484ade2af8a69f143692ec779cc4"
+      "bytes": 9157,
+      "sha256": "9128134357db65aadc13e12adb5524f991dd334d2d3f92a20a2d4f43d4225999"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalIsolation.cs",
@@ -362,8 +362,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalLoops.cs",
-      "bytes": 2707,
-      "sha256": "352b6792affecd673d4b94d99a43cdbc98987f79baeb14d56e6a3cf06bb55a0e"
+      "bytes": 2835,
+      "sha256": "b3479cfefe9d6dc73abea013764a81465722658b79005e3e196c65b1c411e70a"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalManifolds.cs",
@@ -373,7 +373,7 @@
     {
       "path": "Data/Scripts/ArcanePower/ThermalModels.cs",
       "bytes": 35486,
-      "sha256": "fb0abad8fc3241fef446da3a956d273c1531a0acbb0d3d080fbd2ee9fda7ac04"
+      "sha256": "34fcd7f8e1e3c64c6b5d9b15a2b0c4c5e9887ad1cfee32b477d8c1c1fbd315d6"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalNetwork.cs",
@@ -382,8 +382,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalPlant.cs",
-      "bytes": 16324,
-      "sha256": "48edf6e79c48c850bb7e43796b3d1cc7de19e9651fb6c069ff66bba25f46a212"
+      "bytes": 17030,
+      "sha256": "fff1d991b69df4562a7aa22fad466753265095d8806cb9f8a231e657ef363f7e"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalRadiators.cs",
@@ -392,13 +392,13 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalRotors.cs",
-      "bytes": 4699,
-      "sha256": "4bee43787cebd24635748cbd900636613275a0e5fe1613bbe2d872eb3d347344"
+      "bytes": 5267,
+      "sha256": "fa683f929de67551ff3b58303493dbc76d67ad300c480a9d32289693d0a52c65"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalSession.Loops.cs",
-      "bytes": 8603,
-      "sha256": "df38463b9b73af0e554b7eb00516ce87d673c41be684f4c180bc87980d1deb4d"
+      "bytes": 8741,
+      "sha256": "58c74aacbcf855e5ffeb7b20c16cc8eadd7018d2a0fed3fe7a55175fe085bb2e"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalSession.Radiators.cs",
@@ -407,8 +407,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalSession.cs",
-      "bytes": 11317,
-      "sha256": "1ae6c516504556ebb9bfbbff1983a498f286ca55fa46f5ecb8d28aeabed31d9f"
+      "bytes": 11450,
+      "sha256": "e4791a9a566c96f7e37674af4684984d4bc0538049cee3b6f71a9d14d743b1b9"
     },
     {
       "path": "Data/Scripts/ArcanePower/VentHardware.cs",
@@ -422,8 +422,8 @@
     },
     {
       "path": "Data/Tablet.sbc",
-      "bytes": 5949,
-      "sha256": "5e3ffd25e80a20baa5a22843e1e7bebf3faf7e152a4cc9685031fe1d73165334"
+      "bytes": 5958,
+      "sha256": "e28bb9927a9ab4cc3721ed2e44dccd4cdffa92d22ac482e9af5535f87a2421ab"
     },
     {
       "path": "Data/TabletFingers.sbc",
@@ -3318,7 +3318,7 @@
     {
       "path": "metadata.mod",
       "bytes": 200,
-      "sha256": "20a9075c12314da156169bcd05164c66111f77c5fbc34782057ddf2affd138dd"
+      "sha256": "4bc9ccf929172de022c06e43a49c3edca6a706cb000a3db152ab91009dccbb82"
     }
   ],
   "native_assets": [

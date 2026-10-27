@@ -8,7 +8,13 @@
       </Id>
       <DisplayName>Arcane Containment Controller</DisplayName>
       <Icon>Textures/GUI/Icons/ArcaneContainmentController.dds</Icon>
-      <Description>Attach directly to either reactor side socket. Two standard controllers deploy two rings at 1x tile speed with 80% fuel efficiency and support Aether.</Description>
+      <Description>INSTALLATION
+Attach directly to either reactor side socket.
+Two working controllers are required.
+
+STANDARD PAIR
+Two rings / 1x tile deployment speed.
+80% fuel efficiency; supports Aether.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -68,7 +74,17 @@
       </Id>
       <DisplayName>Arcane Advanced Containment Controller</DisplayName>
       <Icon>Textures/GUI/Icons/ArcaneAdvancedContainmentController.dds</Icon>
-      <Description>Two working controllers are required. Standard + advanced: three rings, 1.5x tile speed, 90% efficiency, supports Aether/Helion. Two advanced: four rings, 2x tile speed, 99% efficiency, supports all fuels.</Description>
+      <Description>INSTALLATION
+Attach directly to either reactor side socket.
+Two working controllers are required.
+
+STANDARD + ADVANCED
+Three rings / 1.5x tile speed / 90% fuel efficiency.
+Supports Aether and Helion.
+
+TWO ADVANCED
+Four rings / 2x tile speed / 99% fuel efficiency.
+Supports all fuels.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />

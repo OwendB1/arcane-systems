@@ -53,6 +53,14 @@ namespace ArcanePower
         [ProtoMember(22)] public bool LoopTrip;
         [ProtoMember(23)] public double DesignCoolingMW;
 
+        public double PotentialCoolingMW
+        {
+            get { double total = Mode == ThermalMode.Standalone ? CoolingMW : 0;
+                if (Mode == ThermalMode.Brayton && Loops != null)
+                    foreach (var loop in Loops) if (loop != null) total += loop.PotentialCoolingMW;
+                return total; }
+        }
+
         public double RetainedHeatMJ
         {
             get { double total = Store.WasteMJ; if (Loops != null) foreach (var loop in Loops) if (loop != null) total += loop.ExcessMJ; return total; }
@@ -172,7 +180,11 @@ namespace ArcanePower
         {
             if (settled) return false;
             settled = true;
-            if (!ThermalMath.Finite(outputMW) || outputMW < 0 || outputMW > MaximumMW + .001
+            // Native Capacity and CurrentOutput are floats. At 50 GW their
+            // roundtrip can exceed a fixed 1 kW tolerance. Allow float rounding
+            // inside the grant's 1 ppm headroom; the paid-MJ checks remain exact.
+            double roundingMW = Math.Max(.001, MaximumMW * .00000025);
+            if (!ThermalMath.Finite(outputMW) || outputMW < 0 || outputMW > MaximumMW + roundingMW
                 || !ThermalMath.Finite(Efficiency) || Efficiency <= 0 || Efficiency >= 1) return false;
             double heat = outputMW / (60 * Efficiency);
             if (heat > HeatMJ || heat > Source.Store.HotMJ) return false;
@@ -192,6 +204,7 @@ namespace ArcanePower
     // the existing reactor supply owns containment and cooldown support.
     public static class ThermalMath
     {
+        public const float CooldownHeat = .15f;
         private static readonly double[] Ceilings = { .40, .55, .66, .80 };
         private static readonly double[] Auxiliaries = { .08, .07, .06, .05 };
         private static readonly double[] Temperatures = { 650, 1000, 1600, 2200 };

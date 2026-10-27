@@ -9,6 +9,7 @@ namespace ArcanePower
             HashSet<long> claimed)
         {
             var state = source.Motion.Thermal;
+            if (state.Faulted) source.StopForLoopLoss();
             bool running = source.ThermalCanRun;
             var endpoints = new List<ThermalEndpoint> { source.ThermalEndpoint() };
             foreach (var machine in machines)
@@ -47,9 +48,9 @@ namespace ArcanePower
             {
                 var circuit = circuits[index];
                 var loop = state.Loops[index];
-                loop.HeatMW = loop.NetMW = loop.CoolingMW = loop.DesignCoolingMW = 0;
-                loop.Connected = circuit.Ready && !state.Faulted;
-                loop.Diagnostic = state.Faulted ? state.Diagnostic : circuit.Diagnostic ?? "Circuit ready";
+                loop.HeatMW = loop.NetMW = loop.CoolingMW = loop.DesignCoolingMW = loop.PotentialCoolingMW = 0;
+                loop.Connected = circuit.Ready;
+                loop.Diagnostic = circuit.Diagnostic ?? "Circuit ready";
                 var bank = new List<ThermalBlock>();
                 var units = new List<ThermalUnit>();
                 ThermalBlock host = null;
@@ -102,7 +103,9 @@ namespace ArcanePower
                     if (!air && cooler.Spec.Kind != ThermalKind.Radiator) continue;
                     cooler.CoolingConnected = true;
                     cooler.CoolingPowered = !air || source.ThermalAuxiliaryReady;
-                    if (cooler.CoolingPowered) loop.CoolingMW += cooler.Unit().CoolingMW;
+                    double potential = cooler.Unit().CoolingMW;
+                    loop.PotentialCoolingMW += potential;
+                    if (cooler.CoolingPowered) loop.CoolingMW += potential;
                 }
                 double rejected = ThermalMath.CoolCircuit(loop, loop.CoolingMW);
                 state.CoolingMW += loop.CoolingMW;

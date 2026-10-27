@@ -9,6 +9,7 @@ namespace ArcanePower
     internal static class ReactorDashboard
     {
         internal static readonly string[] Pages = { "Overview", "Power", "Containment", "Supplies", "Vent" };
+        private static readonly string[] CooldownRows = { "Core cooldown", "Cooldown progress", "Cooldown ETA", "Shutdown stage", "Heat to drain", "Heat removed", "Cooling capacity", "Containment", "Reaction heat" };
         internal const float TabletWidth = 640;
         internal const float TabletHeight = TabletWidth * .174f / .270f;
         internal static Color Tone(string tone)
@@ -45,7 +46,9 @@ namespace ArcanePower
                     { Wrapped(sprites, row.Value, 22, y, .48f, Tone(row.Tone), 63); y += 36; }
                 // Keep alert space reserved; cards and page body never jump around.
                 Card(sprites, "OUTPUT / " + report.Fuel.ToUpperInvariant(), report.Value("Output"), 22, 196, report.Load, "cyan");
-                Card(sprites, "HEAT / CRITICAL AT 125%", report.Value("Heat"), 330, 196, report.Heat / 1.25, report.HeatTone);
+                Card(sprites, report.CoolingDown ? "CORE COOLDOWN" : "HEAT / CRITICAL AT 125%",
+                    report.Value(report.CoolingDown ? "Core cooldown" : "Heat"), 330, 196,
+                    report.CoolingDown ? report.CooldownProgress : report.Heat / 1.25, report.HeatTone);
                 Card(sprites, report.Precharging ? "STARTUP CHARGE" : "EMERGENCY RESERVE",
                     report.Value(report.Precharging ? "Startup charge" : "Reserve"), 22, 285, report.Reserve,
                     report.Precharging ? report.Tone : report.Reserve < .2 ? "red" : "green");
@@ -54,8 +57,9 @@ namespace ArcanePower
                 Text(sprites, Pages[page].ToUpperInvariant(), 22, 397, .62f, Tone("cyan"));
                 string[] labels = report.Precharging && (page == 0 || page == 1)
                     ? new[] { "Containment", "Charge rate", "Charge ETA", "Reserve energy", "Net" }
+                    : report.CoolingDown && (page == 0 || page == 1) ? CooldownRows
                     : page == 0 ? new[] { "Net", "Field", "Fuel stock", "Vent" }
-                    : page == 1 && report.Brayton ? new[] { "Circuits available", "Reaction heat", "Cooling capacity", "Cooling required", "Full-load cooling", "Heat removed", "Accumulated heat" }
+                    : page == 1 && report.Brayton ? new[] { "Circuits available", "Reaction heat", "Cooling capacity", "Potential cooling", "Cooling required", "Full-load cooling", "Heat removed", "Heat to drain" }
                     : page == 1 ? new[] { "Net", "Ramp", "Containment", "Fuel burn", "Fuel remaining" }
                     : page == 2 ? new[] { "60 s heat peak", "Thermal outlook", "Controllers", "Field", "Reserve energy", "Tile grade", "Replacing", "Dismantle at" }
                     : page == 3 ? new[] { "Fuel stock", "Fuel remaining", "Tile demand", "Tile reserve", "Tile stock", "Conveyors" }
@@ -95,10 +99,11 @@ namespace ArcanePower
             else
             {
                 Text(sprites, Clip(report.State, 48), 18, 88, .62f, Tone(report.Tone));
-                if (report.Precharging)
+                if (report.Precharging || report.CoolingDown)
                 {
                     Rect(sprites, 18, 111, 604, 3, new Color(48, 55, 64));
-                    Rect(sprites, 18, 111, (float)(604 * MathHelper.Clamp(report.Reserve, 0, 1)), 3, Tone(report.Tone));
+                    Rect(sprites, 18, 111, (float)(604 * MathHelper.Clamp(report.CoolingDown ? report.CooldownProgress : report.Reserve, 0, 1)),
+                        3, Tone(report.CoolingDown ? report.HeatTone : report.Tone));
                 }
                 float y = 118;
                 foreach (var row in report.Rows)
@@ -106,8 +111,9 @@ namespace ArcanePower
                     { Text(sprites, Clip(row.Value, 72), 18, y, .42f, Tone(row.Tone)); y += 22; }
                 string[] labels = report.Precharging && (page == 0 || page == 1)
                     ? new[] { "Startup charge", "Reserve energy", "Containment", "Charge rate", "Charge ETA", "Net", "Vent" }
+                    : report.CoolingDown && (page == 0 || page == 1) ? CooldownRows
                     : page == 0 ? new[] { "Output", "Heat", "Reserve", "Fuel stock", "Spare tiles", "Vent" }
-                    : page == 1 && report.Brayton ? new[] { "Output", "Circuits available", "Reaction heat", "Cooling capacity", "Cooling required", "Full-load cooling", "Heat removed", "Accumulated heat" }
+                    : page == 1 && report.Brayton ? new[] { "Output", "Circuits available", "Reaction heat", "Cooling capacity", "Potential cooling", "Cooling required", "Full-load cooling", "Heat removed", "Heat to drain" }
                     : page == 1 ? new[] { "Output", "Net", "Ramp", "Containment", "Fuel efficiency", "Fuel burn", "Fuel remaining" }
                     : page == 2 ? new[] { "60 s heat peak", "Thermal outlook", "Security mode", "Integrity", "Controllers", "Field", "Reserve energy", "Tile grade", "Quartet wear", "Replacing", "Dismantle at" }
                     : page == 3 ? new[] { "Fuel efficiency", "Fuel stock", "Fuel burn", "Fuel remaining", "Spare tiles", "Tile demand", "Tile reserve", "Tile stock", "Startup tiles", "Conveyors" }

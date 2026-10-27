@@ -13,10 +13,9 @@ namespace ArcanePower
         private int thermalAccountedAt = -1;
         internal void FailThermalRuntime()
         {
-            reactor.Enabled = false;
-            if (nativeReactor != null) nativeReactor.Capacity = 0;
+            StopForLoopLoss();
             if (Motion.Thermal != null)
-            { Motion.Thermal.Faulted = true; Motion.Thermal.Diagnostic = "Runtime fault; heat inventory isolated and retained"; }
+            { Motion.Thermal.Faulted = true; Motion.Thermal.Diagnostic = "Runtime fault; generation stopped, cooling retained"; }
         }
         internal bool ThermalVariant { get { return IsLive && reactor.BlockDefinition.SubtypeName == "ArcanePower_Thermal_ReactorHousing"; } }
         internal bool ThermalInitialized { get { return ThermalVariant && motionInitialized && initializationFrames == 0 && !thermalRestoreFault && Motion.Thermal != null; } }
@@ -120,6 +119,13 @@ namespace ArcanePower
         internal void CheckLoopSafety()
         {
             var state = Motion.Thermal;
+            if (state.Faulted)
+            {
+                // A generation/accounting fault must stop the core even though
+                // ThermalCanRun is already false. Keep valid cooling paths open.
+                StopForLoopLoss();
+                return;
+            }
             bool start = thermalStartRequested;
             thermalStartRequested = false;
             if (start && reactor.Enabled && Motion.Core == CorePhase.Off
@@ -169,6 +175,7 @@ namespace ArcanePower
             if (!ThermalVariant || Motion.Thermal == null) return;
             if (MyAPIGateway.Multiplayer.IsServer)
             {
+                if (Motion.Thermal.Faulted) StopForLoopLoss();
                 if (!ThermalFuelModeReady) reactor.Enabled = false;
                 // Movement requires delivered motor power or the existing paid
                 // emergency reserve. The normal containment sink owns both.

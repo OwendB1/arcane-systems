@@ -16,6 +16,12 @@ namespace ArcanePower
                 HeatTone = Motion.Critical ? "red" : Motion.ThermalWarning ? "yellow" : "white",
                 Reserve = Math.Min(1, Math.Max(0, Motion.ReserveMJ / ReserveCapacityMJ)), Load = Motion.Load, Precharging = Precharging,
                 Brayton = ThermalVariant && Motion.Thermal != null && Motion.Thermal.Mode == ThermalMode.Brayton };
+            var thermal = ThermalVariant ? Motion.Thermal : null;
+            // Match the energy inventories that must drain before the reactor is cold.
+            double heatToDrain = thermal == null ? 0 : thermal.Store.HotMJ + thermal.RetainedHeatMJ + thermal.AttachedHeatMJ;
+            text.CoolingDown = !Motion.Critical && Motion.Vent == VentPhase.Idle && !text.Precharging
+                && (Motion.Core == CorePhase.Cooling || Motion.Core == CorePhase.Stopping
+                    || (Motion.Core == CorePhase.Off && (Motion.Heat > CooldownHeat || heatToDrain > .001)));
             bool creative = MyAPIGateway.Session.CreativeMode;
             double fuel = (double)reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1]));
             int[] tileStock = SpareTileQuartets();
@@ -36,6 +42,24 @@ namespace ArcanePower
             double output = ThermalVariant && Motion.Thermal != null ? Motion.Thermal.NetOutputMW : reactor.CurrentOutput;
             Row(text, "Output", Power(output) + " / " + Power(ThermalVariant && Motion.Thermal != null ? Motion.Thermal.SupportedMW : PowerMW[Motion.FuelTier - 1]));
             Row(text, "Net", Power(output - Motion.PowerInputMW));
+            if (text.CoolingDown)
+            {
+                text.CooldownProgress = Motion.Heat <= CooldownHeat ? 1
+                    : Motion.CooldownStartHeat > CooldownHeat
+                        ? ThermalMath.Clamp((Motion.CooldownStartHeat - Motion.Heat) / (Motion.CooldownStartHeat - CooldownHeat), 0, 1) : 0;
+                Row(text, "Core cooldown", Number(Motion.Heat * 100, "0.0") + "% / target " + Percent(CooldownHeat), text.HeatTone);
+                Row(text, "Cooldown progress", Percent(text.CooldownProgress));
+                Row(text, "Cooldown ETA", Motion.Heat <= CooldownHeat ? "Core cooled"
+                    : Motion.TileStarved && Motion.TileWear >= 1 ? "Unavailable / containment failure"
+                    : Motion.ForecastCooldownSeconds >= 0 ? "~" + Duration(Math.Ceiling(Motion.ForecastCooldownSeconds)) + " to " + Percent(CooldownHeat)
+                    : "Unavailable at current cooling");
+                Row(text, "Shutdown stage", Motion.Core == CorePhase.Stopping ? "Dismantling containment"
+                    : Motion.Core == CorePhase.Off ? (heatToDrain > .001 ? "Draining retained heat" : "Core cooling")
+                    : Motion.PowerPaused ? "Mechanisms need containment power"
+                    : !Motion.ControllersReady ? "Mechanisms need both controllers"
+                    : Motion.Heat > CooldownHeat ? "Cooling core to " + Percent(CooldownHeat)
+                    : Motion.MaintenanceTick >= 0 ? "Finishing tile replacement" : "Ready to dismantle");
+            }
             if (text.Precharging)
             {
                 double charge = PrechargeMW;
@@ -47,7 +71,6 @@ namespace ArcanePower
             }
             if (ThermalVariant && Motion.Thermal != null)
             {
-                var thermal = Motion.Thermal;
                 Section(text, "THERMAL PLANT");
                 Row(text, "Conversion mode", thermal.Mode + (thermal.Settled ? "" : " -> " + thermal.Requested + " / shutdown, drain, move, restart"));
                 Row(text, "Brayton access", HasAdvancedController() ? "Advanced controller installed" : "Locked / install an advanced controller",
@@ -56,15 +79,18 @@ namespace ArcanePower
                 Row(text, "Manifolds", Percent(thermal.Deployment) + " deployed");
                 Row(text, "Conversion efficiency", Percent(thermal.Efficiency));
                 Row(text, "Reaction heat", Power(thermal.ProducedMW) + " / " + Power(ThermalHeatMW));
-                Row(text, "Accumulated heat", Number(thermal.RetainedHeatMJ, "0.0") + " MJ");
+                Row(text, "Heat to drain", Energy(heatToDrain));
                 Row(text, "Circuits available", thermal.ConnectedLoops + " / 4 (" + thermal.ConnectedLoops * 25 + "% allocation)");
+                bool shortfall = Array.Exists(thermal.Loops, loop => loop.RequiredCoolingMW > loop.CoolingMW + .001);
+                Row(text, "Cooling capacity", Power(thermal.CoolingMW), shortfall ? "yellow" : "white");
+                Row(text, "Potential cooling", Power(thermal.PotentialCoolingMW) + " at current exposure");
+                Row(text, "Cooling required", Power(thermal.RequiredCoolingMW) + " at current load");
+                Row(text, "Full-load cooling", Power(thermal.DesignCoolingMW));
+                Row(text, "Heat removed", Power(thermal.RejectedMW));
+                if (text.CoolingDown)
+                    Line(text, "muted", "Cooldown ETA: simulation time to 15% at current cooling; excludes tile replacement, dismantling and final heat drain. Reaction heat is new production.");
                 if (text.Brayton)
                 {
-                    bool shortfall = Array.Exists(thermal.Loops, loop => loop.RequiredCoolingMW > loop.CoolingMW + .001);
-                    Row(text, "Cooling capacity", Power(thermal.CoolingMW), shortfall ? "yellow" : "white");
-                    Row(text, "Cooling required", Power(thermal.RequiredCoolingMW) + " at current load");
-                    Row(text, "Full-load cooling", Power(thermal.DesignCoolingMW));
-                    Row(text, "Heat removed", Power(thermal.RejectedMW));
                     byte valves = ThermalLoops.OpenValves(thermal);
                     for (int i = 0; i < thermal.Loops.Length; i++)
                     {
@@ -72,7 +98,7 @@ namespace ArcanePower
                         Row(text, "Circuit " + (i + 1), (loop.Connected ? "Ready" : "Unavailable")
                             + " / valve " + ((valves & (1 << i)) != 0 ? "open" : "closed"),
                             loop.Connected ? "white" : "yellow");
-                        Line(text, "muted", loop.Diagnostic + " / cooling " + Power(loop.CoolingMW) + " / required " + Power(loop.RequiredCoolingMW) + " / retained " + Number(loop.ExcessMJ, "0.0") + " MJ");
+                        Line(text, "muted", loop.Diagnostic + " / cooling " + Power(loop.CoolingMW) + " / potential " + Power(loop.PotentialCoolingMW) + " / required " + Power(loop.RequiredCoolingMW) + " / retained " + Number(loop.ExcessMJ, "0.0") + " MJ");
                     }
                 }
                 Line(text, thermalRestoreFault || thermal.Faulted ? "red" : "muted", thermal.Diagnostic);
@@ -83,7 +109,7 @@ namespace ArcanePower
             }
             if (detailed)
                 Row(text, "Ramp", Percent(Motion.PowerRamp) + "   Reaction load " + Percent(Motion.Load));
-            if (detailed || text.Precharging)
+            if (detailed || text.Precharging || text.CoolingDown)
                 Row(text, "Containment", Power(Motion.PowerInputMW) + " / " + Power(Motion.PowerDemandMW) + " requested");
 
             Section(text, "CONTAINMENT");
@@ -340,6 +366,11 @@ namespace ArcanePower
                 : size >= 1000 ? Number(mw / 1000, "0.###") + " GW"
                 : size > 0 && size < 1 ? Number(mw * 1000, "0.#") + " kW" : Number(mw, "0.##") + " MW";
         }
+        private static string Energy(double mj)
+        {
+            return mj >= 1000000 ? Number(mj / 1000000, "0.###") + " TJ"
+                : mj >= 1000 ? Number(mj / 1000, "0.###") + " GJ" : Number(mj, "0.###") + " MJ";
+        }
         private static void Section(StatusReport report, string title) { report.Section = title; }
         private static void Row(StatusReport report, string label, string value, string tone = "white")
         { report.Rows.Add(new StatusRow { Section = report.Section, Label = label, Value = value, Tone = tone }); }
@@ -357,8 +388,8 @@ namespace ArcanePower
         internal string Name, State, Tone, Section;
         internal string Fuel;
         internal string HeatTone = "white";
-        internal double Heat, Reserve, Load;
-        internal bool Precharging, Brayton;
+        internal double Heat, Reserve, Load, CooldownProgress;
+        internal bool Precharging, Brayton, CoolingDown;
         internal readonly List<StatusRow> Rows = new List<StatusRow>();
 
         internal string Value(string label)

@@ -18,7 +18,10 @@
       <Model>Models/Items/ArcanePower/ArcaneOre.mwm</Model>
       <PhysicalMaterial>Stone</PhysicalMaterial>
       <MinimalPricePerUnit>350</MinimalPricePerUnit>
-      <Description>Rare asteroid ore. Base refining yield: 0.1%. Refine to Aether Concentrate, then prepare fuel in an assembler.</Description>
+      <Description>Rare asteroid ore.
+
+Base refining yield: 0.1%.
+Refine to Aether Concentrate, then prepare fuel in an assembler.</Description>
       <VoxelMaterial>ArcaneAetherDeposit</VoxelMaterial>
       <Models>
         <Model>Models/Items/ArcanePower/ArcaneOre.mwm</Model>
@@ -40,7 +43,10 @@
       <Volume>0.01</Volume>
       <Model>Models/Items/ArcanePower/ArcaneAetherConcentrate.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Dense refined material: 0.01 L/kg (100 kg/L). Ore matrix is removed during refinement. Assembler ingredient for Aether fuel.</Description>
+      <Description>Dense refined material: 0.01 L/kg (100 kg/L).
+
+Ore matrix is removed during refinement.
+Assembler ingredient for Aether fuel.</Description>
     </PhysicalItem>
     <PhysicalItem>
       <Id>
@@ -58,7 +64,20 @@
       <Volume>24</Volume>
       <Model>Models/Items/ArcanePower/ArcaneFuelI.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Sealed canister holding 10 fuel units. Rated reactor heat: 2.5 GW. Ideal full-load endurance: 2.5 minutes before controller efficiency. Requires 2 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Consuming Aether recovers 10 Aether Residuum per canister in standalone or Brayton mode.</Description>
+      <Description>Sealed canister holding 10 fuel units.
+
+OUTPUT
+Rated reactor heat: 2.5 GW.
+Ideal full-load endurance: 2.5 minutes before controller efficiency.
+
+REQUIREMENTS
+Requires 2 containment rings.
+Standalone or Brayton mode.
+
+RECOVERY
+Consuming Aether recovers 10 Aether Residuum per canister.
+
+Upgrades retain the container; consumed fuel does not return an empty canister.</Description>
     </PhysicalItem>
     <PhysicalItem>
       <Id>
@@ -77,7 +96,10 @@
       <Model>Models/Items/ArcanePower/ArcaneHelionOre.mwm</Model>
       <PhysicalMaterial>Stone</PhysicalMaterial>
       <MinimalPricePerUnit>350</MinimalPricePerUnit>
-      <Description>Rare asteroid ore. Base refining yield: 0.01%. Refine to Helion Concentrate, then prepare fuel in an assembler.</Description>
+      <Description>Rare asteroid ore.
+
+Base refining yield: 0.01%.
+Refine to Helion Concentrate, then prepare fuel in an assembler.</Description>
       <VoxelMaterial>ArcaneHelionDeposit</VoxelMaterial>
       <Models>
         <Model>Models/Items/ArcanePower/ArcaneHelionOre.mwm</Model>
@@ -99,7 +121,10 @@
       <Volume>0.005</Volume>
       <Model>Models/Items/ArcanePower/ArcaneHelionConcentrate.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Dense refined material: 0.005 L/kg (200 kg/L). Ore matrix is removed during refinement. Assembler ingredient for Helion fuel.</Description>
+      <Description>Dense refined material: 0.005 L/kg (200 kg/L).
+
+Ore matrix is removed during refinement.
+Assembler ingredient for Helion fuel.</Description>
     </PhysicalItem>
     <PhysicalItem>
       <Id>
@@ -117,7 +142,17 @@
       <Volume>24</Volume>
       <Model>Models/Items/ArcanePower/ArcaneFuelII.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Sealed canister holding 10 fuel units. Rated reactor heat: 25 GW. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 3 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Requires Brayton mode and an advanced controller.</Description>
+      <Description>Sealed canister holding 10 fuel units.
+
+OUTPUT
+Rated reactor heat: 25 GW.
+Ideal full-load endurance: 10 minutes before controller efficiency.
+
+REQUIREMENTS
+Requires 3 containment rings.
+Requires Brayton mode and an advanced controller.
+
+Upgrades retain the container; consumed fuel does not return an empty canister.</Description>
     </PhysicalItem>
     <PhysicalItem>
       <Id>
@@ -136,7 +171,10 @@
       <Model>Models/Items/ArcanePower/ArcaneEmpyreanOre.mwm</Model>
       <PhysicalMaterial>Stone</PhysicalMaterial>
       <MinimalPricePerUnit>350</MinimalPricePerUnit>
-      <Description>Rare asteroid ore. Base refining yield: 0.001%. Refine to Empyrean Concentrate, then prepare fuel in an assembler.</Description>
+      <Description>Rare asteroid ore.
+
+Base refining yield: 0.001%.
+Refine to Empyrean Concentrate, then prepare fuel in an assembler.</Description>
       <VoxelMaterial>ArcaneEmpyreanDeposit</VoxelMaterial>
       <Models>
         <Model>Models/Items/ArcanePower/ArcaneEmpyreanOre.mwm</Model>
@@ -158,7 +196,10 @@
       <Volume>0.001</Volume>
       <Model>Models/Items/ArcanePower/ArcaneEmpyreanConcentrate.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Dense refined material: 0.001 L/kg (1000 kg/L). Ore matrix is removed during refinement. Assembler ingredient for Empyrean fuel.</Description>
+      <Description>Dense refined material: 0.001 L/kg (1000 kg/L).
+
+Ore matrix is removed during refinement.
+Assembler ingredient for Empyrean fuel.</Description>
     </PhysicalItem>
     <PhysicalItem>
       <Id>
@@ -176,7 +217,18 @@
       <Volume>24</Volume>
       <Model>Models/Items/ArcanePower/ArcaneFuelIII.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
-      <Description>Sealed canister holding 10 fuel units. Rated reactor heat: 250 GW. Ideal full-load endurance: 10 minutes before controller efficiency. Requires 4 containment rings. Upgrades retain the container; consumed fuel does not return an empty canister. Requires Brayton mode and an advanced controller. Empyrean also requires upgraded Brayton turbines.</Description>
+      <Description>Sealed canister holding 10 fuel units.
+
+OUTPUT
+Rated reactor heat: 250 GW.
+Ideal full-load endurance: 10 minutes before controller efficiency.
+
+REQUIREMENTS
+Requires 4 containment rings.
+Requires Brayton mode and an advanced controller.
+Empyrean also requires upgraded Brayton turbines.
+
+Upgrades retain the container; consumed fuel does not return an empty canister.</Description>
     </PhysicalItem>
   </PhysicalItems>
   <Components>
@@ -199,7 +251,11 @@
       <MaxIntegrity>30</MaxIntegrity>
       <DropProbability>0.5</DropProbability>
       <Health>18</Health>
-      <Description>Empty platinum-lined, superconducting fuel container. Fill with 10 kg of Aether Concentrate. The container carries through Helion and Empyrean upgrades; consumed fuel does not return an empty canister.</Description>
+      <Description>Empty platinum-lined, superconducting fuel container.
+
+Fill with 10 kg of Aether Concentrate.
+The container carries through Helion and Empyrean upgrades.
+Consumed fuel does not return an empty canister.</Description>
     </Component>
     <Component>
       <Id>
@@ -220,7 +276,16 @@
       <MaxIntegrity>100</MaxIntegrity>
       <DropProbability>1</DropProbability>
       <Health>100</Health>
-      <Description>An exceptionally dense, heat-resistant material recovered from consumed Aether fuel. Requires no processing. Ten 1 kg units per fully consumed canister, in standalone or Brayton mode. Used in advanced turbines (20 units) and cooling units/panels (10 units). Inventory volume: 0.001 L per unit.</Description>
+      <Description>Dense, heat-resistant material recovered from consumed Aether fuel.
+
+RECOVERY
+Ten 1 kg units per fully consumed canister.
+Available in standalone or Brayton mode; requires no processing.
+
+CRAFTING
+Advanced turbines: 20 units.
+Advanced cooling units/panels: 10 units.
+Inventory volume: 0.001 L per unit.</Description>
     </Component>
   </Components>
 </Definitions>

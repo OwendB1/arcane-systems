@@ -19,6 +19,7 @@ namespace ArcanePower
         [ProtoMember(10)] public double ReactionMW;
         [ProtoMember(11)] public double DesignCoolingMW;
         [ProtoMember(12)] public double RejectedMW;
+        [ProtoMember(13)] public double PotentialCoolingMW;
 
         public bool Valid()
         {
@@ -31,6 +32,7 @@ namespace ArcanePower
                 && ThermalMath.Finite(ReactionMW) && ReactionMW >= 0 && ReactionMW <= 625000.1
                 && ThermalMath.Finite(DesignCoolingMW) && DesignCoolingMW >= 0 && DesignCoolingMW <= 625000
                 && ThermalMath.Finite(RejectedMW) && RejectedMW >= 0
+                && ThermalMath.Finite(PotentialCoolingMW) && PotentialCoolingMW >= 0
                 && Diagnostic != null && Diagnostic.Length <= 256;
         }
     }
@@ -50,7 +52,7 @@ namespace ArcanePower
         public static byte OpenValves(ThermalReactorState state)
         {
             if (state == null || state.Mode != ThermalMode.Brayton || state.Deployment != 1
-                || state.Faulted || state.Loops == null || state.Loops.Length != Count) return 0;
+                || state.Loops == null || state.Loops.Length != Count) return 0;
             byte mask = 0;
             for (int i = 0; i < Count; i++)
                 if (state.Loops[i] != null && state.Loops[i].Connected) mask |= (byte)(1 << i);

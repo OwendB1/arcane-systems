@@ -110,7 +110,9 @@ namespace ArcanePower
             catch (Exception error)
             {
                 VRage.Utils.MyLog.Default.WriteLine("ArcanePower: thermal runtime isolated after fault: " + error);
-                foreach (var block in Blocks.Values) { block.SetOutput(0); block.OutputGrant = null; block.RotorLoad = 0; block.CoolingRejectedMW = 0; }
+                // Keep outstanding grants to settle the last native interval.
+                // Discarding them would falsely fault every turbine next tick.
+                foreach (var block in Blocks.Values) { block.SetOutput(0); block.RotorLoad = 0; block.CoolingRejectedMW = 0; }
                 foreach (var source in VentSession.All) if (source.ThermalVariant) source.FailThermalRuntime();
             }
             foreach (var block in Blocks.Values)

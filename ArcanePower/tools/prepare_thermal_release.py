@@ -215,19 +215,74 @@ def trim_native_manifest(report):
 def description(name):
     base=CONTRACT['COOLER_UPGRADES'].get(name,name)
     if base in CONTRACT['COOLER_UPGRADES'].values():
-        rating='10 GW' if name.endswith('upgraded') else '1 GW'
-        if base == 'Atmospheric cooler': rating='25 GW' if name.endswith('upgraded') else '2.5 GW'
-        detail={'Atmospheric cooler':'Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation.',
-                'Space radiator':'Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Aim at the top shaft coupling to stack up to two panels on the same grid; match Up, any yaw works. Grind either panel face to remove a section. Mixed tiers add their own cooling. Keep both faces exposed to space.',
-                'Radiator panel':'Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling.'}[base]
-        return rating+' ideal heat rejection per unit/panel. '+detail+(' Requires 10 Aether Residuum recovered from T1 fuel.' if name.endswith('upgraded') else '')
+        rating='20 GW' if name.endswith('upgraded') else '2 GW'
+        if base == 'Atmospheric cooler': rating='50 GW' if name.endswith('upgraded') else '5 GW'
+        detail={
+            'Atmospheric cooler': (
+                'INSTALLATION\nAirtight hull casing, rear manifold.\n'
+                'Keep 2.5 m clear beyond both exhaust fans.\n'
+                'Requires reactor auxiliary power for active cooling.\n\n'
+                'ENVIRONMENT\nZero cooling in vacuum; full rating at 1 atmosphere.\n'
+                'Half-clear exhaust gives 25% cooling; blocked gives none.'),
+            'Space radiator': (
+                'INSTALLATION\nBottom socket; automatic edge-on sun tracking.\n'
+                'Keep both faces exposed to space.\n\n'
+                'EXTENSIONS\nStack up to two panels on the top shaft coupling.\n'
+                'Match Up; any yaw works. Mixed tiers add their own cooling.\n'
+                'Grind either panel face to remove a section.\n\n'
+                'ENVIRONMENT\nShade or edge-on: 100% cooling. Full sun: 50%.\n'
+                'Angle, shade and weather follow solar-panel exposure.'),
+            'Radiator panel': (
+                'INSTALLATION\nStack directly above a radiator or its first extension.\n'
+                'Aim at the top shaft coupling on the same grid.\n'
+                'Match the base Up axis; any yaw works. Panels align automatically.\n'
+                'Maximum two extensions; unattached panels provide no cooling.\n'
+                'Grind either panel face to remove a section.\n\n'
+                'ENVIRONMENT\nShade or edge-on: 100% cooling. Full sun: 50%.')
+        }[base]
+        return rating+' ideal heat rejection per unit/panel.\n\n'+detail+(
+            '\n\nCRAFTING\nRequires 10 Aether Residuum recovered from T1 fuel.' if name.endswith('upgraded') else '')
     if name=='Reactor housing':
-        return 'Internal CO2 generation. Standalone: Aether only, 20% net. Helion and Empyrean require Brayton to prevent meltdown. At least one fully built, functional advanced controller unlocks Brayton. Up to 40% starter / 80% exotic conversion. Four independent manifold circuits, one turbine plus cooling each; each supplies up to 25% capacity. Circuit loss isolates that manifold; losing all valid circuits stops generation. Only a manual Start with all four circuits defective latches a fault. Normal Stop does not latch. Align H/C and cap unused pipe mouths. Two controllers and a working vent route required. Stop and cool before changing mode.'
+        return (
+            'FUELS AND OUTPUT\nAether: 2.5 GW heat. Helion: 25 GW. Empyrean: 250 GW.\n'
+            'Standalone: Aether only, 20% net / 500 MW electrical.\n'
+            'Brayton: up to 40% starter / 80% exotic conversion.\n'
+            'Helion and Empyrean require Brayton to prevent meltdown.\n\n'
+            'ASSEMBLY\nTwo working controllers and a complete vent route are required.\n'
+            'At least one fully built, functional advanced controller unlocks Brayton.\n'
+            'The reactor generates CO2 internally.\n\n'
+            'CIRCUITS\nFour independent manifolds; one turbine plus cooling per circuit.\n'
+            'Each circuit supplies up to 25% capacity.\n'
+            'Align H/C, keep circuits separate and cap unused pipe mouths.\n\n'
+            'SHUTDOWN AND SAFETY\nA circuit breach isolates that manifold.\n'
+            'Losing all valid circuits stops generation.\n'
+            'Runtime faults stop generation while intact cooling paths stay open.\n'
+            'A manual Start with all four circuits defective latches a startup fault.\n'
+            'Normal Stop does not latch. Stop and cool before changing mode.')
     if name.startswith('Brayton train'):
-        return ('Requires 20 Aether Residuum; compatible with T3 Empyrean heat. ' if name.endswith('upgraded') else 'T1/T2 fuels only; T3 Empyrean requires upgraded turbines. ') + '2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.'
+        return (
+            'FUELS\n'+('Compatible with T3 Empyrean heat.\nRequires 20 Aether Residuum.'
+                if name.endswith('upgraded') else 'T1/T2 fuels only; T3 Empyrean requires upgraded turbines.')+
+            '\n\nINSTALLATION\n2 wide x 2 high x 5 long large-grid turbine/compressor.\n'
+            'One lower-cell duplex H/C socket; mirrored versions move it to the opposite side.\n\n'
+            'CIRCUIT\nConnect exactly one turbine and cooling per reactor manifold.\n'
+            'Keep the four circuits separate; each receives up to 25% of reactor heat.\n'
+            'The reactor supplies CO2 internally.\n'
+            'Running auxiliaries are included in conversion efficiency.\n'
+            'Keep reactor auxiliary power available for active coolers during cooldown.')
     if name in ('PRIMARY / Reactor adapter', 'PRIMARY / Reactor adapter bare'):
-        return '170 mm reactor offset adapter. The offset end connects only to the Arcane Reactor vessel; use the opposite end for normal duplex pipes. Align H with H and C with C. Keep each reactor manifold circuit separate and cap unused pipe mouths.'
-    return 'CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.'
+        return (
+            '170 mm reactor offset adapter.\n\n'
+            'The offset end connects only to the Arcane Reactor vessel.\n'
+            'Use the opposite end for normal duplex pipes.\n\n'
+            'Align H with H and C with C.\n'
+            'Keep each reactor manifold circuit separate and cap unused pipe mouths.')
+    return (
+        'CO2 supply/return pipe for one independent reactor manifold circuit.\n'
+        'Keep the circuit on one physical grid.\n\n'
+        'Align H to H and C to C.\n'
+        'Cap unused pipe mouths; a breach closes this circuit at the reactor.\n'
+        'Ordinary conveyors do not replace thermal pipes.')
 
 
 def variant_groups(blocks):

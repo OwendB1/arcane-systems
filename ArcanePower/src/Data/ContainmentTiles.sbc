@@ -20,7 +20,15 @@
       <MaxIntegrity>30</MaxIntegrity>
       <DropProbability>0.5</DropProbability>
       <Health>18</Health>
-      <Description>Self-controlling platinum-lined containment with superconducting coils, onboard computers and quartet sensing. Compatible with Aether, Helion and Empyrean. 1x Standard lifetime and crafting cost. Install in same-grade quartets; the shell holds 80 tiles. Normal shutdown retains tiles; venting discards them.</Description>
+      <Description>Platinum-lined containment with superconducting coils and onboard quartet sensing.
+
+COMPATIBILITY
+Aether, Helion and Empyrean.
+1x Standard lifetime and crafting cost.
+
+INSTALLATION
+Use same-grade quartets; the shell holds 80 tiles.
+Normal shutdown retains tiles; venting discards them.</Description>
     </Component>
     <Component>
       <Id>
@@ -41,7 +49,15 @@
       <MaxIntegrity>30</MaxIntegrity>
       <DropProbability>0.5</DropProbability>
       <Health>18</Health>
-      <Description>Self-controlling platinum-lined containment with superconducting coils, onboard computers and quartet sensing. Compatible with Aether, Helion and Empyrean. 10x Standard lifetime and crafting cost. Install in same-grade quartets; the shell holds 80 tiles. Normal shutdown retains tiles; venting discards them.</Description>
+      <Description>Platinum-lined containment with superconducting coils and onboard quartet sensing.
+
+COMPATIBILITY
+Aether, Helion and Empyrean.
+10x Standard lifetime and crafting cost.
+
+INSTALLATION
+Use same-grade quartets; the shell holds 80 tiles.
+Normal shutdown retains tiles; venting discards them.</Description>
     </Component>
     <Component>
       <Id>
@@ -62,7 +78,15 @@
       <MaxIntegrity>30</MaxIntegrity>
       <DropProbability>0.5</DropProbability>
       <Health>18</Health>
-      <Description>Self-controlling platinum-lined containment with superconducting coils, onboard computers and quartet sensing. Compatible with Aether, Helion and Empyrean. 100x Standard lifetime and crafting cost. Install in same-grade quartets; the shell holds 80 tiles. Normal shutdown retains tiles; venting discards them.</Description>
+      <Description>Platinum-lined containment with superconducting coils and onboard quartet sensing.
+
+COMPATIBILITY
+Aether, Helion and Empyrean.
+100x Standard lifetime and crafting cost.
+
+INSTALLATION
+Use same-grade quartets; the shell holds 80 tiles.
+Normal shutdown retains tiles; venting discards them.</Description>
     </Component>
   </Components>
 </Definitions>

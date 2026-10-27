@@ -5,7 +5,16 @@
       <Id Type="MyObjectBuilder_PhysicalGunObject" Subtype="ArcanePower_Tablet" />
       <DisplayName>Arcane Reactor Tablet</DisplayName>
       <Icon>Textures\GUI\Icons\ArcanePower\Tablet.dds</Icon>
-      <Description>Read-only reactor telemetry. Requires suit antenna enabled and an accessible bidirectional grid antenna link. Equip: left click selects a reachable reactor; right click changes page. Text HUD API enables the full live dashboard.</Description>
+      <Description>Read-only reactor telemetry on the tablet screen.
+
+CONNECTION
+Enable the suit antenna.
+Requires an accessible, bidirectional grid antenna link.
+
+CONTROLS
+Equip the tablet.
+Left click: select a reachable reactor.
+Right click: change page.</Description>
       <Size>
         <X>0.36</X>
         <Y>0.26</Y>

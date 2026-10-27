@@ -269,6 +269,49 @@ checks = r'''
   Need(named.ReadStatus(false).Value("Thermal outlook")=="Supercritical / countdown active","armed hazard cannot claim a safe outlook");
   Console.WriteLine("PASS: rolling forecasts, warning/recovery timing, circuit ETAs, server authority and critical/ejection priority");
  }
+ static void ShutdownCooling(){
+  foreach(var mode in new[]{ThermalMode.Standalone,ThermalMode.Brayton}){
+   var r=new Reactor();r.reactor.Enabled=false;r.Motion.Core=CorePhase.Cooling;r.Motion.Heat=.8f;r.Motion.CooldownStartHeat=.8f;
+   var thermal=r.Motion.Thermal;thermal.Mode=thermal.Requested=mode;thermal.Deployment=mode==ThermalMode.Brayton?1:0;
+   thermal.Store.HotMJ=500;thermal.Store.WasteMJ=mode==ThermalMode.Standalone?3000:1000;
+   thermal.Loops[0].ExcessMJ=mode==ThermalMode.Brayton?2000:0;thermal.Loops[0].CoolingMW=mode==ThermalMode.Brayton?2500:0;thermal.AttachedHeatMJ=500;
+   thermal.CoolingMW=2500;thermal.RejectedMW=100;
+   r.UpdateThermalForecast();var report=r.ReadStatus(false);
+   Need(report.CoolingDown && report.Value("Core cooldown")=="80.0% / target 15%","shutdown tracks core heat independently of new reaction");
+   Need(report.CooldownProgress==0 && report.Value("Cooldown ETA").StartsWith("~"),"shutdown starts at zero progress with a server estimate");
+   Need(report.Value("Reaction heat").StartsWith("0 MW / "),"new production still truthfully stops at shutdown");
+   Need(report.Value("Heat to drain")=="4 GJ","remaining energy includes housing, circuits and attached legacy stores once");
+   Need(report.Value("Heat removed")=="100 MW" && report.Value("Cooling capacity")=="2.5 GW","standalone and Brayton show actual removal separately from available capacity");
+   Need(report.Value("Containment")!="--","short reports keep cooldown power visible");
+   thermal.Store.HotMJ=thermal.Store.WasteMJ=thermal.Loops[0].ExcessMJ=thermal.AttachedHeatMJ=0;
+   thermal.RejectedMW=0;
+   for(int i=0;i<300;i++){r.UpdateThermal();r.UpdateThermalForecast();}
+   report=r.ReadStatus(false);
+   Need(report.CoolingDown && r.Motion.Heat<.8f && r.Motion.Heat>.15f,"core cooldown remains visible after every energy store is drained");
+   Need(report.Value("Heat to drain")=="0 MJ" && report.Value("Heat removed")=="0 MW","zero stored energy/removal cannot imply core cooldown is finished");
+   Need(report.CooldownProgress>0 && report.CooldownProgress<1 && report.Value("Cooldown ETA").Contains("to 15%"),"progress and estimate remain visible after reaction stops");
+   Need(report.Value("Core cooldown")!="80.0% / target 15%","core reading follows the real cooling simulation");
+   r.Motion.PowerPaused=true;report=r.ReadStatus(false);
+   Need(report.State=="MECHANISMS PAUSED" && report.Value("Shutdown stage").Contains("power"),"power loss retains warning priority and explains blocked mechanisms");
+   r.Motion.PowerPaused=false;r.Motion.Heat=.15f;r.Motion.MaintenanceTick=0;
+   Need(r.ReadStatus(false).Value("Shutdown stage")=="Finishing tile replacement","15% is not completion while tile maintenance remains active");
+   Need(r.ReadStatus(false).CooldownProgress==1 && r.ReadStatus(false).Value("Cooldown ETA")=="Core cooled","15% completes thermal progress but not tile or mechanical work");
+   r.Motion.MaintenanceTick=-1;
+   Need(r.ReadStatus(false).Value("Shutdown stage")=="Ready to dismantle","actual shutdown heat threshold matches the display");
+   r.Motion.Core=CorePhase.Stopping;
+   Need(r.ReadStatus(false).Value("Shutdown stage")=="Dismantling containment","mechanical shutdown remains visible after cooling");
+   r.Motion.Core=CorePhase.Off;
+   Need(!r.ReadStatus(false).CoolingDown,"cold off reactor returns to normal pages");
+   thermal.Loops[1].ExcessMJ=.002;
+   report=r.ReadStatus(false);
+   Need(report.CoolingDown && report.Value("Heat to drain")=="0.002 MJ","small retained heat still blocks cold transition and remains visible");
+   r.Motion.Critical=true;report=r.ReadStatus(false);
+   Need(!report.CoolingDown && report.State.StartsWith("SUPERCRITICAL"),"critical reactor cannot advertise ordinary cooldown");
+   r.Motion.Critical=false;r.Motion.Vent=VentPhase.Ejecting;
+   Need(!r.ReadStatus(false).CoolingDown,"ejection retains its own presentation");
+  }
+  Console.WriteLine("PASS: shutdown core decay, 15% threshold, full stored-energy accounting, standalone/Brayton removal and warning priority");
+ }
  static void AssemblyGuide(){
   var r=new Reactor();r.previousControllers=0;r.Motion.ControllersReady=false;r.reactor.Enabled=false;
   var guide=r.ReadAssemblyGuide();
@@ -288,7 +331,7 @@ checks = r'''
   guide=r.ReadAssemblyGuide();Need(guide.State=="WAITING FOR REACTOR STATE" && guide.Value("1 Controllers")=="--","unreplicated state cannot advertise assembly readiness");
   Console.WriteLine("PASS: reactor assembly steps, current fuel/controller requirements, startup power, readiness and warning priority");
  }
- static void Main(){Charging();Priority();RenderRecovery();ThermalWarnings();AssemblyGuide();}
+ static void Main(){Charging();Priority();RenderRecovery();ThermalWarnings();AssemblyGuide();ShutdownCooling();}
 }
 '''
 with tempfile.TemporaryDirectory(prefix='arcane-appearance-') as folder:

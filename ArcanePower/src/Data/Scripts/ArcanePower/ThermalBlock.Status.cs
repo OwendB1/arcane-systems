@@ -24,12 +24,14 @@ namespace ArcanePower
         [ProtoMember(13)] public double RejectedMW;
         [ProtoMember(14)] public bool Connected;
         [ProtoMember(15)] public bool Powered;
+        [ProtoMember(16)] public double PotentialMW;
 
         public bool Valid(long id)
         {
             return EntityId == id && Sequence >= 0 && Panels >= 1 && Panels <= 3
                 && ThermalMath.Finite(RatedMW) && RatedMW > 0 && RatedMW <= 300000
                 && ThermalMath.Finite(AvailableMW) && AvailableMW >= 0 && AvailableMW <= RatedMW + .001
+                && ThermalMath.Finite(PotentialMW) && PotentialMW >= 0 && PotentialMW <= RatedMW + .001
                 && ThermalMath.Finite(PanelMW) && PanelMW >= 0 && PanelMW <= AvailableMW + .001
                 && ThermalMath.Finite(Clearance) && Clearance >= 0 && Clearance <= 1
                 && ThermalMath.Finite(SunExposure) && SunExposure >= 0 && SunExposure <= 1
@@ -54,13 +56,14 @@ namespace ArcanePower
             else UpdateEnvironment();
             bool extension = Spec.Kind == ThermalKind.RadiatorPanel;
             bool attached = !extension || RadiatorBase != null;
-            bool available = Healthy && attached && (!extension || RadiatorBase.Healthy)
-                && (Spec.Kind != ThermalKind.AirCooler || !CoolingConnected || CoolingPowered);
+            bool intact = Healthy && attached && (!extension || RadiatorBase.Healthy);
+            bool available = intact && (Spec.Kind != ThermalKind.AirCooler || !CoolingConnected || CoolingPowered);
             double rating = Spec.CoolingMW;
             foreach (var panel in RadiatorPanels) rating += panel.Spec.CoolingMW;
             var radiator = Store.Radiator;
             coolingState = new ThermalCoolingState {
                 EntityId = Block.EntityId, Sequence = ++coolingSequence, RatedMW = rating,
+                PotentialMW = intact ? (extension ? PanelCoolingMW : coolingMW) : 0,
                 AvailableMW = available ? (extension ? PanelCoolingMW : coolingMW) : 0,
                 PanelMW = available ? (IsRadiator ? PanelCoolingMW : coolingMW) : 0,
                 Clearance = IsRadiator ? (radiator == null ? 0 : radiator.Exposure) : clearExhaust,
@@ -101,6 +104,7 @@ namespace ArcanePower
             info.Append("Efficiency: ").AppendLine(CoolingPercent(state.AvailableMW / state.RatedMW));
             info.Append("Available: ").Append(CoolingPower(state.AvailableMW)).Append(" / ")
                 .Append(CoolingPower(state.RatedMW)).AppendLine(" rated");
+            info.Append("Potential at current exposure: ").AppendLine(CoolingPower(state.PotentialMW));
             info.Append("Stored heat: ").Append(state.StoredHeatMJ.ToString("0.0", CultureInfo.InvariantCulture)).AppendLine(" MJ");
             info.Append("Heat removed: ").AppendLine(CoolingPower(state.RejectedMW));
             info.AppendLine(!state.Connected ? "Circuit: disconnected / standby"

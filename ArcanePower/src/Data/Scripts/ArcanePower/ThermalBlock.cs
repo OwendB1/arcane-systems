@@ -56,6 +56,7 @@ namespace ArcanePower
                     try
                     {
                         var saved = MyAPIGateway.Utilities.SerializeFromXML<ThermalStore>(xml);
+                        if (saved != null && saved.Rotor != null) saved.Rotor.MigrateSavedRpm(Entity.EntityId);
                         if (saved != null && saved.Valid(Entity.EntityId, Spec.CapacityMJ)) Store = saved;
                         else if (saved != null && saved.EntityId == Entity.EntityId)
                         { preserveInvalidSave = true; Fault = "Invalid saved heat inventory; isolated"; }
@@ -206,8 +207,11 @@ namespace ArcanePower
             if ((grant != null && !grant.Settle(output))
                 || (grant == null && output > .001))
             {
-                Fault = "Native output exceeded its paid energy reservation; isolated";
-                if (grant != null) { grant.Source.Faulted = true; grant.Source.Diagnostic = Fault; }
+                // Stop generation at the source. An electrical accounting fault
+                // does not make an intact cooling circuit physically unsealed.
+                const string diagnostic = "Native output exceeded its paid energy reservation; generation stopped";
+                if (grant != null) { grant.Source.Faulted = true; grant.Source.Diagnostic = diagnostic; }
+                else Fault = diagnostic;
                 SetOutput(0);
             }
         }

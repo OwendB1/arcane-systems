@@ -12,6 +12,27 @@ yellow only when that projection rises into overheating; healthy full-load heat
 and safely cooling residual heat remain neutral. Critical cores remain red.
 The terminal and Containment pages show `60 s heat peak` at current load/cooling.
 
+## Shutdown cooling
+
+During shutdown, Overview and Power show core heat, a cooldown progress bar,
+estimated time to 15% heat, shutdown stage and retained energy to drain. Progress
+starts at the heat captured on shutdown and survives save/reload. The server
+projects the ETA from each circuit's stored waste and available cooling, including
+passive housing drainage and the core's thermal response. It is simulation time
+at current conditions, excluding tile replacement, mechanical dismantling and the
+final energy drain. An unavailable estimate is stated explicitly.
+
+`Reaction heat` remains instantaneous new production, so it correctly reaches
+zero when generation stops. `Heat to drain` includes paid hot inventory, housing
+waste, all circuit excess and attached legacy stores, with MJ/GJ/TJ units.
+Cooling remains visible after these inventories empty while the core temperature
+continues falling. Critical and ejected-core warnings retain priority.
+
+Complete Brayton circuits expose `Potential cooling` at current environmental
+exposure even while off. `Cooling capacity` remains the actually available cooling;
+unpowered atmospheric fans contribute only to potential capacity. Circuit details
+show both values; cooler terminals also show potential capacity separately.
+
 ## LCD setup
 
 Select **Arcane Reactor** under the screen's Scripts content mode. A single
@@ -131,9 +152,10 @@ and access conditions. No game-code reflection or plugin is required.
 
 Compilation uses the installed SE assemblies and MDK mod whitelist analyzer.
 SEUT exported the MWM and collision and converted the custom material textures.
-No regression suites or in-game actions were run for this pass. Hand grip/pose,
-first/third-person orientation, live LCD/HUD scale and antenna-loss behavior still
-need user-requested in-game review. The current world was not reloaded or changed.
+The cooldown update passes production status/thermal checks, LCD/tablet layout
+checks, save/reload checks and game compatibility/whitelist compilation. Hand
+grip/pose, first/third-person orientation, live LCD/HUD scale and antenna-loss
+behavior still need in-game review. The current world was not reloaded or changed.
 
 ### Hand pose correction after first game review
 

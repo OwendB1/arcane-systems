@@ -7,7 +7,35 @@
         <SubtypeId>ArcanePower_EnergyCore</SubtypeId>
       </Id>
       <DisplayName>Arcane Energy Core (legacy compact)</DisplayName>
-      <Description>Preserved compact block for existing saves. New construction uses the three-cell pillar installation. Compact 3x3x3 storage controller. Side sockets: capacity; rear: transfer; top: stabilizer. Modules must face the core. Base 1,000 MWh / 10 GW; capacities add 10,000 or 100,000 MWh. Transfer modules raise the bank ceiling to 100 GW / 1 TW. Standard/advanced stabilizers support matching or lower tier modules. Native Auto/Recharge/Discharge. Starts empty; 90% charge efficiency. Default 10% emergency reserve; Custom Data [ArcaneEnergyCore] ReservePercent=10, EmergencySupport=true. Recharge switches visibly to Auto for reactor startup/cooldown/venting and stays Auto. Stored-charge upkeep rises with fill; stabilizers reduce loss. Terminal/toolbar: surge all affordable jump drives in 5 seconds at 90% efficiency, with batch-scaled discharge boost and 25% extra base recovery per additional drive, or double discharge for 10 seconds. Shared recovery; reserve protected. Passive loss continues while disabled or detached.</Description>
+      <Description>Preserved compact block for existing saves.
+New construction uses the three-cell pillar installation.
+
+
+INSTALLATION
+Compact 3x3x3 storage controller.
+Side sockets: capacity; rear: transfer; top: stabilizer.
+Modules must face the core.
+
+STORAGE
+Base 1,000 MWh / 10 GW; capacities add 10,000 or 100,000 MWh.
+Transfer modules raise the bank ceiling to 100 GW / 1 TW.
+Standard/advanced stabilizers support matching or lower tier modules.
+
+CHARGING
+Native Auto/Recharge/Discharge.
+Starts empty; 90% charge efficiency.
+
+RESERVE
+Default 10% emergency reserve; Custom Data [ArcaneEnergyCore] ReservePercent=10, EmergencySupport=true.
+Recharge switches visibly to Auto for reactor startup/cooldown/venting and stays Auto.
+Stored-charge upkeep rises with fill; stabilizers reduce loss.
+
+ABILITIES
+Terminal/toolbar: surge all affordable jump drives in 5 seconds at 90% efficiency, with batch-scaled discharge boost and 25% extra base recovery per additional drive, or double discharge for 10 seconds.
+Shared recovery; reserve protected.
+
+UPKEEP
+Passive loss continues while disabled or detached.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyCore.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
@@ -64,7 +92,13 @@
         <SubtypeId>ArcanePower_EnergyCapacity</SubtypeId>
       </Id>
       <DisplayName>Arcane Capacity Module (legacy compact)</DisplayName>
-      <Description>Preserved compact block for existing saves. New construction uses the three-cell pillar installation. Attach to a side-center Energy Core socket, with the connector/forward face toward the core. Requires a matching or stronger top stabilizer. Stores 10000 MWh in this block; removal retains its charge, destruction loses it, new/projected/copied blocks start empty. The core sets bank transfer limits and charge mode.</Description>
+      <Description>Preserved compact block for existing saves.
+New construction uses the three-cell pillar installation.
+
+Attach to a side-center Energy Core socket, with the connector/forward face toward the core.
+Requires a matching or stronger top stabilizer.
+Stores 10000 MWh in this block; removal retains its charge, destruction loses it, new/projected/copied blocks start empty.
+The core sets bank transfer limits and charge mode.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyCapacity.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
@@ -121,7 +155,13 @@
         <SubtypeId>ArcanePower_EnergyCapacityAdvanced</SubtypeId>
       </Id>
       <DisplayName>Arcane Advanced Capacity Module (legacy compact)</DisplayName>
-      <Description>Preserved compact block for existing saves. New construction uses the three-cell pillar installation. Attach to a side-center Energy Core socket, with the connector/forward face toward the core. Requires a matching or stronger top stabilizer. Stores 100000 MWh in this block; removal retains its charge, destruction loses it, new/projected/copied blocks start empty. The core sets bank transfer limits and charge mode.</Description>
+      <Description>Preserved compact block for existing saves.
+New construction uses the three-cell pillar installation.
+
+Attach to a side-center Energy Core socket, with the connector/forward face toward the core.
+Requires a matching or stronger top stabilizer.
+Stores 100000 MWh in this block; removal retains its charge, destruction loses it, new/projected/copied blocks start empty.
+The core sets bank transfer limits and charge mode.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyCapacityAdvanced.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
@@ -178,7 +218,12 @@
         <SubtypeId>ArcanePower_EnergyTransfer</SubtypeId>
       </Id>
       <DisplayName>Arcane Transfer Module (legacy compact)</DisplayName>
-      <Description>Preserved compact block for existing saves. New construction uses the three-cell pillar installation. Attach to the rear-center Energy Core socket, with the connector/forward face toward the core. Raises bank charge/discharge ceiling to 100 GW. Requires matching or stronger top stabilizer; does not add capacity.</Description>
+      <Description>Preserved compact block for existing saves.
+New construction uses the three-cell pillar installation.
+
+Attach to the rear-center Energy Core socket, with the connector/forward face toward the core.
+Raises bank charge/discharge ceiling to 100 GW.
+Requires matching or stronger top stabilizer; does not add capacity.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyTransfer.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
@@ -233,7 +278,12 @@
         <SubtypeId>ArcanePower_EnergyTransferAdvanced</SubtypeId>
       </Id>
       <DisplayName>Arcane Advanced Transfer Module (legacy compact)</DisplayName>
-      <Description>Preserved compact block for existing saves. New construction uses the three-cell pillar installation. Attach to the rear-center Energy Core socket, with the connector/forward face toward the core. Raises bank charge/discharge ceiling to 1 TW. Requires matching or stronger top stabilizer; does not add capacity.</Description>
+      <Description>Preserved compact block for existing saves.
+New construction uses the three-cell pillar installation.
+
+Attach to the rear-center Energy Core socket, with the connector/forward face toward the core.
+Raises bank charge/discharge ceiling to 1 TW.
+Requires matching or stronger top stabilizer; does not add capacity.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyTransferAdvanced.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
@@ -288,7 +338,12 @@
         <SubtypeId>ArcanePower_EnergyStabilizer</SubtypeId>
       </Id>
       <DisplayName>Arcane Stabilizer (legacy compact)</DisplayName>
-      <Description>Preserved compact block for existing saves. New construction uses the three-cell pillar installation. Attach to the top-center Energy Core socket, connector/forward face toward the core. Supports standard capacity and transfer modules. Loss disables unsupported modules without deleting stored charge.</Description>
+      <Description>Preserved compact block for existing saves.
+New construction uses the three-cell pillar installation.
+
+Attach to the top-center Energy Core socket, connector/forward face toward the core.
+Supports standard capacity and transfer modules.
+Loss disables unsupported modules without deleting stored charge.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyStabilizer.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
@@ -343,7 +398,12 @@
         <SubtypeId>ArcanePower_EnergyStabilizerAdvanced</SubtypeId>
       </Id>
       <DisplayName>Arcane Advanced Stabilizer (legacy compact)</DisplayName>
-      <Description>Preserved compact block for existing saves. New construction uses the three-cell pillar installation. Attach to the top-center Energy Core socket, connector/forward face toward the core. Supports both standard and advanced capacity and transfer modules. Loss disables unsupported modules without deleting stored charge.</Description>
+      <Description>Preserved compact block for existing saves.
+New construction uses the three-cell pillar installation.
+
+Attach to the top-center Energy Core socket, connector/forward face toward the core.
+Supports both standard and advanced capacity and transfer modules.
+Loss disables unsupported modules without deleting stored charge.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/Compact/ArcanePower_EnergyStabilizerAdvanced.dds</Icon>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>

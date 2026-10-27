@@ -76,6 +76,52 @@ def energy_block_menu(blocks):
    [name+'_Pillar' for name in BLOCKS if name!='ArcanePower_EnergyCore'])],MOD)
 
 
+def description(name):
+ _,capacity,multiplier=BLOCKS[name]
+ if name=='ArcanePower_EnergyCore':
+  return (
+   '3x3x3 Energy Core storage controller.\n\n'
+   'INSTALLATION\nFour upright 1x3x1 bays accept capacity, transfer or stabilizer modules.\n'
+   'Align module Up with core Up and face its connectors toward the core.\n\n'
+   'STORAGE AND TRANSFER\nBase: 1,000 MWh capacity / 10 GW transfer.\n'
+   'Capacity modules add 10,000 or 100,000 MWh.\n'
+   'Transfer modules raise the bank ceiling to 100 GW / 1 TW.\n'
+   'Standard/advanced stabilizers support matching or lower tier modules.\n'
+   'Duplicate stabilizer/transfer modules use the strongest tier without stacking.\n\n'
+   'CHARGING\nNative Auto / Recharge / Discharge modes.\n'
+   'Starts empty; 90% charge efficiency.\n'
+   'Emergency reactor support switches Recharge to Auto and leaves it in Auto.\n\n'
+   'RESERVE\nDefault: 10% emergency reserve. Configure in Custom Data:\n'
+   '[ArcaneEnergyCore]\nReservePercent=10\nEmergencySupport=true\n\n'
+   'TERMINAL / TOOLBAR\nSurge: charges affordable jump drives in 5 seconds at 90% efficiency.\n'
+   'Bank discharge increases with the selected batch.\n'
+   'Each additional drive adds 25% of the base recovery time.\n'
+   'Burst: double discharge for 10 seconds.\n'
+   'Both abilities share recovery and protect the reserve.\n\n'
+   'UPKEEP\nStored-charge loss rises with fill; stabilizers reduce loss.\n'
+   'Passive loss continues while disabled or detached.')
+ installation=(
+  'Full 1x3x1 large-grid pillar.\n\n'
+  'INSTALLATION\nAttach to any of the four Energy Core bays.\n'
+  'Align Up with core Up and face the connectors toward the core.')
+ if capacity:
+  return installation+(
+   '\nRequires a matching or stronger attached stabilizer.\n\n'
+   f'STORAGE\nStores {capacity:,} MWh in this block.\n'
+   'Removal retains its charge; destruction loses it.\n'
+   'New, projected and copied blocks start empty.\n'
+   'The core sets bank transfer limits and charge mode.')
+ if 'Transfer' in name:
+  return installation+(
+   '\n\nTRANSFER\nRaises the bank charge/discharge ceiling to '+('1 TW' if multiplier==10 else '100 GW')+'.\n'
+   'Effective tier is limited by the strongest attached stabilizer.\n'
+   'Does not add capacity. Duplicate transfer modules do not stack.')
+ return installation+(
+  '\n\nSUPPORT\nSupports '+('both standard and advanced' if multiplier==10 else 'standard')+' capacity and transfer modules.\n'
+  'The strongest attached stabilizer tier applies; duplicates do not stack.\n'
+  'Loss disables unsupported modules without deleting stored charge.')
+
+
 def main():
  revision=model_revision()
  root=E.Element('Definitions');blocks=E.SubElement(root,'CubeBlocks')
@@ -83,12 +129,7 @@ def main():
   core=name=='ArcanePower_EnergyCore'
   kind='BatteryBlock' if capacity else 'UpgradeModule'
   definition=E.SubElement(blocks,'Definition',{'{'+XSI+'}type':'MyObjectBuilder_'+kind+'Definition'})
-  description=('3x3x3 storage controller. Four upright 1x3x1 bays accept any capacity, transfer or stabilizer module. Align module Up with core Up and its connector/forward face toward the core. Base 1,000 MWh / 10 GW; capacities add 10,000 or 100,000 MWh. Transfer modules raise the bank ceiling to 100 GW / 1 TW. Standard/advanced stabilizers support matching or lower tier modules. Duplicate stabilizer/transfer modules use the strongest tier without stacking. Native Auto/Recharge/Discharge. Starts empty; 90% charge efficiency. Default 10% emergency reserve; Custom Data [ArcaneEnergyCore] ReservePercent=10, EmergencySupport=true. Recharge switches visibly to Auto for reactor startup/cooldown/venting and stays Auto. Stored-charge upkeep rises with fill; stabilizers reduce loss. Terminal/toolbar: surge all affordable jump drives in 5 seconds at 90% efficiency, with batch-scaled discharge boost and 25% extra base recovery per additional drive, or double discharge for 10 seconds. Shared recovery; reserve protected. Passive loss continues while disabled or detached.' if core else
-   'Attach to any of the four Energy Core bays, with the connector/forward face toward the core. Requires a matching or stronger attached stabilizer. Stores '+str(capacity)+' MWh in this block; removal retains its charge, destruction loses it, new/projected/copied blocks start empty. The core sets bank transfer limits and charge mode.' if capacity else
-   'Attach to any of the four Energy Core bays, with the connector/forward face toward the core. Raises bank charge/discharge ceiling to '+('1 TW' if multiplier==10 else '100 GW')+'. Effective transfer tier is limited by the strongest attached stabilizer; does not add capacity. Duplicate transfer modules do not stack.' if 'Transfer' in name else
-   'Attach to any of the four Energy Core bays, connector/forward face toward the core. Supports '+('both standard and advanced' if multiplier==10 else 'standard')+' capacity and transfer modules. The strongest attached stabilizer tier applies; duplicates do not stack. Loss disables unsupported modules without deleting stored charge.')
-  if not core:description='Full 1x3x1 large-grid pillar; align Up with core Up. '+description
-  for path,value in {'Id/TypeId':kind,'Id/SubtypeId':name+'_Pillar','DisplayName':label,'Description':description,
+  for path,value in {'Id/TypeId':kind,'Id/SubtypeId':name+'_Pillar','DisplayName':label,'Description':description(name),
    'Icon':icon_path(name),'CubeSize':'Large','BlockTopology':'TriangleMesh',
    'Model':(revision/(name+'.mwm')).relative_to(MOD).as_posix(),'BlockPairName':name+'_Pillar','EdgeType':'Light',
    'BuildTimeSeconds':180 if core else 60*multiplier,'PCU':100 if core else 25,'IsAirTight':'false','Public':'true',

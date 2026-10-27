@@ -42,8 +42,13 @@ namespace ArcanePower
                 Motion.ForecastPeakHeat = 0; Motion.ForecastWarning = false;
                 Motion.ForecastOverheatSeconds = Motion.ForecastMeltdownSeconds = -1;
                 Motion.ForecastCircuit = 0;
+                Motion.ForecastCooldownSeconds = -1;
                 return;
             }
+            // Old saves have no shutdown baseline; begin at their restored heat.
+            if ((Motion.Core == CorePhase.Cooling || Motion.Core == CorePhase.Stopping)
+                && Motion.CooldownStartHeat <= CooldownHeat && Motion.Heat > CooldownHeat)
+                Motion.CooldownStartHeat = Motion.Heat;
             if (heatForecast == null) heatForecast = new ThermalForecast(Motion.ForecastWarning);
             bool runaway = Motion.Critical || (Motion.TileStarved && Motion.TileWear >= 1);
             double target = runaway ? (Motion.Critical ? 4 : 2.5 + .5 * Motion.StarvedLoad) : Motion.TargetLoad;
@@ -54,6 +59,7 @@ namespace ArcanePower
             Motion.ForecastMeltdownSeconds = (float)heatForecast.MeltdownSeconds;
             Motion.ForecastCircuit = heatForecast.Circuit;
             Motion.ForecastWarning = heatForecast.Warning;
+            Motion.ForecastCooldownSeconds = (float)heatForecast.CooldownSeconds;
         }
 
         internal void TrackCore(CoreHazard core)

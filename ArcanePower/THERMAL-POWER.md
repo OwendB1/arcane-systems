@@ -62,7 +62,12 @@ active coolers. An already armed critical fuse cannot be cancelled by cooling.
 The terminal, LCD and tablet distinguish reaction heat, available cooling, current
 waste-heat requirements, actual heat removal and accumulated heat. Full-load cooling
 requirements remain a separate planning figure. Cooling unit terminals show their
-own environment, capacity, connection/power state and heat removal.
+own environment, capacity, connection/power state and heat removal. Complete circuits
+also report potential capacity at current exposure while the reactor is off;
+available active cooling still requires containment auxiliary power. A generation
+runtime fault stops the core and keeps intact cooling paths open for cooldown.
+Cooldown progress and estimated simulation time to the 15% dismantling threshold
+remain visible on LCD/tablet Overview and Power pages after reaction heat stops.
 
 Fuel heat ratings are **2.5 / 25 / 250 GWth** for Aether / Helion / Empyrean.
 Each T1 turbine admits up to **0.625 GWth** and exports **250 MW** at 40% conversion;
@@ -70,18 +75,18 @@ four provide **1 GW**. Each T2 turbine admits up to **62.5 GWth** and exports
 **50 GW** at 80% conversion; four Empyrean circuits provide **200 GW**.
 At full Empyrean load, each circuit rejects **12.5 GW** (50 GW total).
 One T2 atmospheric cooler per circuit provides headroom at ideal density and clearance.
-Space cooling needs at least two T2 sections per circuit at ideal exposure, or three
+Space cooling needs at least one T2 section per circuit at ideal exposure, or two
 for full sunlight in vacuum.
 Regular and mirrored turbines share these limits. Helion reaches 55% conversion,
 providing 13.75 GW across four T2 turbines. Standalone Aether provides 500 MW.
 At full Aether load, each standard circuit needs **375 MW** rejection. Install at least one fully
-exposed 1 GW standard radiator panel or a 2.5 GW standard atmospheric cooler in
+exposed 2 GW standard radiator panel or a 5 GW standard atmospheric cooler in
 each circuit: four circuits need four
 separate cooling connections. Leave headroom for sunlight, atmosphere and blockage.
 The same allocation and cooling accounting apply to upgraded equipment and fuels.
 
-Atmospheric coolers reject **2.5/25 GW per T1/T2 unit**. Radiator sections retain
-**1/10 GW per T1/T2 panel**. Effective cooling depends on the installation:
+Atmospheric coolers reject **5/50 GW per T1/T2 unit**. Radiator sections retain
+**2/20 GW per T1/T2 panel**. Effective cooling depends on the installation:
 
 - Atmospheric: `rating × density × clear exhaust fraction²`. Half-clear exhaust
   provides 25% cooling at reference density; fully blocked fans provide none.
@@ -95,7 +100,7 @@ Atmospheric coolers reject **2.5/25 GW per T1/T2 unit**. Radiator sections retai
   no longer triggers the full atmospheric penalty: at 0.1% density, 99.91% of
   capacity remains before sun and clearance losses; at full density, 12.36% remains.
 - A radiator base supports two extensions. Three equally exposed sections provide
-  3 GW standard or 30 GW upgraded; mixed stacks add each section's capacity.
+  6 GW standard or 60 GW upgraded; mixed stacks add each section's capacity.
   Disconnected or excess extensions contribute nothing and cannot duplicate MJ.
 
 The [construction guide](THERMAL-CONSTRUCTION.md) covers cooling placement and

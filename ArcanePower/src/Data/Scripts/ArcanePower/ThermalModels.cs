@@ -27,12 +27,12 @@ namespace ArcanePower
                 } });
             models.Add("ArcanePower_Thermal_AtmosphericCooler", new ThermalModel {
                 Subtype = "ArcanePower_Thermal_AtmosphericCooler", Cells = new Vector3I(3, 3, 2),
-                Kind = ThermalKind.AirCooler, Grade = 0, RatingMW = 25000, CoolingMW = 2500, Ports = new ThermalPort[] {
+                Kind = ThermalKind.AirCooler, Grade = 0, RatingMW = 25000, CoolingMW = 5000, Ports = new ThermalPort[] {
                     new ThermalPort("CO2", new Vector3(-0f, 0f, 2.5f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
                 } });
             models.Add("ArcanePower_Thermal_SpaceRadiator", new ThermalModel {
                 Subtype = "ArcanePower_Thermal_SpaceRadiator", Cells = new Vector3I(3, 3, 3),
-                Kind = ThermalKind.Radiator, Grade = 0, RatingMW = 25000, CoolingMW = 1000, Ports = new ThermalPort[] {
+                Kind = ThermalKind.Radiator, Grade = 0, RatingMW = 25000, CoolingMW = 2000, Ports = new ThermalPort[] {
                     new ThermalPort("CO2", new Vector3(-0f, -3.75f, 0f), new Vector3(-0f, -1f, 0f), new Vector3(-0f, 0f, 1f)),
                 } });
             models.Add("ArcanePower_Thermal_PrimaryStraight", new ThermalModel {
@@ -321,7 +321,7 @@ namespace ArcanePower
                 } });
             models.Add("ArcanePower_Thermal_RadiatorPanel", new ThermalModel {
                 Subtype = "ArcanePower_Thermal_RadiatorPanel", Cells = new Vector3I(3, 2, 3),
-                Kind = ThermalKind.RadiatorPanel, Grade = 0, RatingMW = 25000, CoolingMW = 1000, Ports = new ThermalPort[] {
+                Kind = ThermalKind.RadiatorPanel, Grade = 0, RatingMW = 25000, CoolingMW = 2000, Ports = new ThermalPort[] {
                 } });
             models.Add("ArcanePower_Thermal_BraytonTrainMirrored", new ThermalModel {
                 Subtype = "ArcanePower_Thermal_BraytonTrainMirrored", Cells = new Vector3I(5, 2, 2),
@@ -335,17 +335,17 @@ namespace ArcanePower
                 } });
             models.Add("ArcanePower_Thermal_AtmosphericCoolerUpgraded", new ThermalModel {
                 Subtype = "ArcanePower_Thermal_AtmosphericCoolerUpgraded", Cells = new Vector3I(3, 3, 2),
-                Kind = ThermalKind.AirCooler, Grade = 3, RatingMW = 250000, CoolingMW = 25000, Ports = new ThermalPort[] {
+                Kind = ThermalKind.AirCooler, Grade = 3, RatingMW = 250000, CoolingMW = 50000, Ports = new ThermalPort[] {
                     new ThermalPort("CO2", new Vector3(-0f, 0f, 2.5f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
                 } });
             models.Add("ArcanePower_Thermal_SpaceRadiatorUpgraded", new ThermalModel {
                 Subtype = "ArcanePower_Thermal_SpaceRadiatorUpgraded", Cells = new Vector3I(3, 3, 3),
-                Kind = ThermalKind.Radiator, Grade = 3, RatingMW = 250000, CoolingMW = 10000, Ports = new ThermalPort[] {
+                Kind = ThermalKind.Radiator, Grade = 3, RatingMW = 250000, CoolingMW = 20000, Ports = new ThermalPort[] {
                     new ThermalPort("CO2", new Vector3(-0f, -3.75f, 0f), new Vector3(-0f, -1f, 0f), new Vector3(-0f, 0f, 1f)),
                 } });
             models.Add("ArcanePower_Thermal_RadiatorPanelUpgraded", new ThermalModel {
                 Subtype = "ArcanePower_Thermal_RadiatorPanelUpgraded", Cells = new Vector3I(3, 2, 3),
-                Kind = ThermalKind.RadiatorPanel, Grade = 3, RatingMW = 250000, CoolingMW = 10000, Ports = new ThermalPort[] {
+                Kind = ThermalKind.RadiatorPanel, Grade = 3, RatingMW = 250000, CoolingMW = 20000, Ports = new ThermalPort[] {
                 } });
             return models;
         }

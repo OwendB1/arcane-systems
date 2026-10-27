@@ -8,7 +8,12 @@
       </Id>
       <DisplayName>Arcane Straight Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraight.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -50,7 +55,12 @@
       </Id>
       <DisplayName>Arcane Elbow Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbow.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -92,7 +102,12 @@
       </Id>
       <DisplayName>Arcane Riser Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiser.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -134,7 +149,12 @@
       </Id>
       <DisplayName>Arcane Tee Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTee.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -176,7 +196,12 @@
       </Id>
       <DisplayName>Arcane Cross Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCross.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -218,7 +243,12 @@
       </Id>
       <DisplayName>Arcane Roll adapter Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapter.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -260,7 +290,12 @@
       </Id>
       <DisplayName>Arcane End cap Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCap.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -302,7 +337,28 @@
       </Id>
       <DisplayName>Arcane Reactor</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_ReactorHousing.dds</Icon>
-      <Description>Internal CO2 generation. Standalone: Aether only, 20% net. Helion and Empyrean require Brayton to prevent meltdown. At least one fully built, functional advanced controller unlocks Brayton. Up to 40% starter / 80% exotic conversion. Four independent manifold circuits, one turbine plus cooling each; each supplies up to 25% capacity. Circuit loss isolates that manifold; losing all valid circuits stops generation. Only a manual Start with all four circuits defective latches a fault. Normal Stop does not latch. Align H/C and cap unused pipe mouths. Two controllers and a working vent route required. Stop and cool before changing mode.</Description>
+      <Description>FUELS AND OUTPUT
+Aether: 2.5 GW heat. Helion: 25 GW. Empyrean: 250 GW.
+Standalone: Aether only, 20% net / 500 MW electrical.
+Brayton: up to 40% starter / 80% exotic conversion.
+Helion and Empyrean require Brayton to prevent meltdown.
+
+ASSEMBLY
+Two working controllers and a complete vent route are required.
+At least one fully built, functional advanced controller unlocks Brayton.
+The reactor generates CO2 internally.
+
+CIRCUITS
+Four independent manifolds; one turbine plus cooling per circuit.
+Each circuit supplies up to 25% capacity.
+Align H/C, keep circuits separate and cap unused pipe mouths.
+
+SHUTDOWN AND SAFETY
+A circuit breach isolates that manifold.
+Losing all valid circuits stops generation.
+Runtime faults stop generation while intact cooling paths stay open.
+A manual Start with all four circuits defective latches a startup fault.
+Normal Stop does not latch. Stop and cool before changing mode.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="3" z="5" />
@@ -388,7 +444,13 @@
       </Id>
       <DisplayName>Arcane Reactor adapter Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryReactorAdapter.dds</Icon>
-      <Description>170 mm reactor offset adapter. The offset end connects only to the Arcane Reactor vessel; use the opposite end for normal duplex pipes. Align H with H and C with C. Keep each reactor manifold circuit separate and cap unused pipe mouths.</Description>
+      <Description>170 mm reactor offset adapter.
+
+The offset end connects only to the Arcane Reactor vessel.
+Use the opposite end for normal duplex pipes.
+
+Align H with H and C with C.
+Keep each reactor manifold circuit separate and cap unused pipe mouths.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -430,7 +492,12 @@
       </Id>
       <DisplayName>Arcane Straight Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraightBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -472,7 +539,12 @@
       </Id>
       <DisplayName>Arcane Elbow Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -514,7 +586,12 @@
       </Id>
       <DisplayName>Arcane Riser Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiserBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -556,7 +633,12 @@
       </Id>
       <DisplayName>Arcane Tee Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTeeBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -598,7 +680,12 @@
       </Id>
       <DisplayName>Arcane Cross Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCrossBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -640,7 +727,12 @@
       </Id>
       <DisplayName>Arcane Roll adapter Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapterBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -682,7 +774,12 @@
       </Id>
       <DisplayName>Arcane End cap Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCapBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -724,7 +821,13 @@
       </Id>
       <DisplayName>Arcane Reactor adapter Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryReactorAdapterBare.dds</Icon>
-      <Description>170 mm reactor offset adapter. The offset end connects only to the Arcane Reactor vessel; use the opposite end for normal duplex pipes. Align H with H and C with C. Keep each reactor manifold circuit separate and cap unused pipe mouths.</Description>
+      <Description>170 mm reactor offset adapter.
+
+The offset end connects only to the Arcane Reactor vessel.
+Use the opposite end for normal duplex pipes.
+
+Align H with H and C with C.
+Keep each reactor manifold circuit separate and cap unused pipe mouths.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -766,7 +869,20 @@
       </Id>
       <DisplayName>Arcane Space radiator</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiator.dds</Icon>
-      <Description>1 GW ideal heat rejection per unit/panel. Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Aim at the top shaft coupling to stack up to two panels on the same grid; match Up, any yaw works. Grind either panel face to remove a section. Mixed tiers add their own cooling. Keep both faces exposed to space.</Description>
+      <Description>2 GW ideal heat rejection per unit/panel.
+
+INSTALLATION
+Bottom socket; automatic edge-on sun tracking.
+Keep both faces exposed to space.
+
+EXTENSIONS
+Stack up to two panels on the top shaft coupling.
+Match Up; any yaw works. Mixed tiers add their own cooling.
+Grind either panel face to remove a section.
+
+ENVIRONMENT
+Shade or edge-on: 100% cooling. Full sun: 50%.
+Angle, shade and weather follow solar-panel exposure.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="3" />
@@ -808,7 +924,17 @@
       </Id>
       <DisplayName>Arcane Radiator panel</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_RadiatorPanel.dds</Icon>
-      <Description>1 GW ideal heat rejection per unit/panel. Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling.</Description>
+      <Description>2 GW ideal heat rejection per unit/panel.
+
+INSTALLATION
+Stack directly above a radiator or its first extension.
+Aim at the top shaft coupling on the same grid.
+Match the base Up axis; any yaw works. Panels align automatically.
+Maximum two extensions; unattached panels provide no cooling.
+Grind either panel face to remove a section.
+
+ENVIRONMENT
+Shade or edge-on: 100% cooling. Full sun: 50%.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="2" z="3" />
@@ -850,7 +976,16 @@
       </Id>
       <DisplayName>Arcane Atmospheric cooler</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCooler.dds</Icon>
-      <Description>2.5 GW ideal heat rejection per unit/panel. Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation.</Description>
+      <Description>5 GW ideal heat rejection per unit/panel.
+
+INSTALLATION
+Airtight hull casing, rear manifold.
+Keep 2.5 m clear beyond both exhaust fans.
+Requires reactor auxiliary power for active cooling.
+
+ENVIRONMENT
+Zero cooling in vacuum; full rating at 1 atmosphere.
+Half-clear exhaust gives 25% cooling; blocked gives none.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />
@@ -892,7 +1027,19 @@
       </Id>
       <DisplayName>Arcane Turbine</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrain.dds</Icon>
-      <Description>T1/T2 fuels only; T3 Empyrean requires upgraded turbines. 2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.</Description>
+      <Description>FUELS
+T1/T2 fuels only; T3 Empyrean requires upgraded turbines.
+
+INSTALLATION
+2 wide x 2 high x 5 long large-grid turbine/compressor.
+One lower-cell duplex H/C socket; mirrored versions move it to the opposite side.
+
+CIRCUIT
+Connect exactly one turbine and cooling per reactor manifold.
+Keep the four circuits separate; each receives up to 25% of reactor heat.
+The reactor supplies CO2 internally.
+Running auxiliaries are included in conversion efficiency.
+Keep reactor auxiliary power available for active coolers during cooldown.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
@@ -953,7 +1100,20 @@
       </Id>
       <DisplayName>Arcane Turbine Upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainUpgraded.dds</Icon>
-      <Description>Requires 20 Aether Residuum; compatible with T3 Empyrean heat. 2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.</Description>
+      <Description>FUELS
+Compatible with T3 Empyrean heat.
+Requires 20 Aether Residuum.
+
+INSTALLATION
+2 wide x 2 high x 5 long large-grid turbine/compressor.
+One lower-cell duplex H/C socket; mirrored versions move it to the opposite side.
+
+CIRCUIT
+Connect exactly one turbine and cooling per reactor manifold.
+Keep the four circuits separate; each receives up to 25% of reactor heat.
+The reactor supplies CO2 internally.
+Running auxiliaries are included in conversion efficiency.
+Keep reactor auxiliary power available for active coolers during cooldown.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
@@ -1015,7 +1175,19 @@
       </Id>
       <DisplayName>Arcane Turbine Mirrored</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainMirrored.dds</Icon>
-      <Description>T1/T2 fuels only; T3 Empyrean requires upgraded turbines. 2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.</Description>
+      <Description>FUELS
+T1/T2 fuels only; T3 Empyrean requires upgraded turbines.
+
+INSTALLATION
+2 wide x 2 high x 5 long large-grid turbine/compressor.
+One lower-cell duplex H/C socket; mirrored versions move it to the opposite side.
+
+CIRCUIT
+Connect exactly one turbine and cooling per reactor manifold.
+Keep the four circuits separate; each receives up to 25% of reactor heat.
+The reactor supplies CO2 internally.
+Running auxiliaries are included in conversion efficiency.
+Keep reactor auxiliary power available for active coolers during cooldown.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
@@ -1076,7 +1248,20 @@
       </Id>
       <DisplayName>Arcane Turbine Mirrored Upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainMirroredUpgraded.dds</Icon>
-      <Description>Requires 20 Aether Residuum; compatible with T3 Empyrean heat. 2 wide x 2 high x 5 long large-grid turbine/compressor. One lower-cell duplex H/C socket. Connect exactly one turbine and cooling per reactor manifold circuit. Keep the four circuits separate; each receives up to one quarter of reactor heat flow. Use the mirrored version for an opposite-side socket. The built-in compressor takes grid power for startup and cooldown; the reactor supplies CO2 internally.</Description>
+      <Description>FUELS
+Compatible with T3 Empyrean heat.
+Requires 20 Aether Residuum.
+
+INSTALLATION
+2 wide x 2 high x 5 long large-grid turbine/compressor.
+One lower-cell duplex H/C socket; mirrored versions move it to the opposite side.
+
+CIRCUIT
+Connect exactly one turbine and cooling per reactor manifold.
+Keep the four circuits separate; each receives up to 25% of reactor heat.
+The reactor supplies CO2 internally.
+Running auxiliaries are included in conversion efficiency.
+Keep reactor auxiliary power available for active coolers during cooldown.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
@@ -1138,7 +1323,19 @@
       </Id>
       <DisplayName>Arcane Atmospheric cooler upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCoolerUpgraded.dds</Icon>
-      <Description>25 GW ideal heat rejection per unit/panel. Airtight hull casing, rear manifold. Cooling scales with air density: zero in vacuum, full rating at 1 atmosphere. Keep 2.5 m clear beyond both exhaust fans; half-clear gives 25% cooling, blocked gives none. Requires powered circulation. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
+      <Description>50 GW ideal heat rejection per unit/panel.
+
+INSTALLATION
+Airtight hull casing, rear manifold.
+Keep 2.5 m clear beyond both exhaust fans.
+Requires reactor auxiliary power for active cooling.
+
+ENVIRONMENT
+Zero cooling in vacuum; full rating at 1 atmosphere.
+Half-clear exhaust gives 25% cooling; blocked gives none.
+
+CRAFTING
+Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />
@@ -1181,7 +1378,23 @@
       </Id>
       <DisplayName>Arcane Space radiator upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiatorUpgraded.dds</Icon>
-      <Description>10 GW ideal heat rejection per unit/panel. Bottom socket; automatic edge-on sun tracking. Zero solar exposure gives 100% cooling; full sun on either face gives 50%. Angle, shade and weather follow solar-panel exposure. Aim at the top shaft coupling to stack up to two panels on the same grid; match Up, any yaw works. Grind either panel face to remove a section. Mixed tiers add their own cooling. Keep both faces exposed to space. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
+      <Description>20 GW ideal heat rejection per unit/panel.
+
+INSTALLATION
+Bottom socket; automatic edge-on sun tracking.
+Keep both faces exposed to space.
+
+EXTENSIONS
+Stack up to two panels on the top shaft coupling.
+Match Up; any yaw works. Mixed tiers add their own cooling.
+Grind either panel face to remove a section.
+
+ENVIRONMENT
+Shade or edge-on: 100% cooling. Full sun: 50%.
+Angle, shade and weather follow solar-panel exposure.
+
+CRAFTING
+Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="3" />
@@ -1224,7 +1437,20 @@
       </Id>
       <DisplayName>Arcane Radiator panel upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_RadiatorPanelUpgraded.dds</Icon>
-      <Description>10 GW ideal heat rejection per unit/panel. Aim at the top shaft coupling and stack directly above a radiator or its first extension on the same grid. Match the base Up axis; any yaw works. Moving panels align automatically. Maximum two extensions. Grind either panel face to remove a section. Each panel provides 100% cooling in shade or edge-on, 50% in full sun; unattached panels provide no cooling. Requires 10 Aether Residuum recovered from T1 fuel.</Description>
+      <Description>20 GW ideal heat rejection per unit/panel.
+
+INSTALLATION
+Stack directly above a radiator or its first extension.
+Aim at the top shaft coupling on the same grid.
+Match the base Up axis; any yaw works. Panels align automatically.
+Maximum two extensions; unattached panels provide no cooling.
+Grind either panel face to remove a section.
+
+ENVIRONMENT
+Shade or edge-on: 100% cooling. Full sun: 50%.
+
+CRAFTING
+Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="2" z="3" />
@@ -1267,7 +1493,12 @@
       </Id>
       <DisplayName>Arcane Straight Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraight.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1310,7 +1541,12 @@
       </Id>
       <DisplayName>Arcane Elbow Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbow.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1353,7 +1589,12 @@
       </Id>
       <DisplayName>Arcane Riser Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiser.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1396,7 +1637,12 @@
       </Id>
       <DisplayName>Arcane Tee Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTee.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1439,7 +1685,12 @@
       </Id>
       <DisplayName>Arcane Cross Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCross.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1482,7 +1733,12 @@
       </Id>
       <DisplayName>Arcane Roll adapter Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapter.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1525,7 +1781,12 @@
       </Id>
       <DisplayName>Arcane End cap Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCap.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1568,7 +1829,12 @@
       </Id>
       <DisplayName>Arcane Straight Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraight.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1611,7 +1877,12 @@
       </Id>
       <DisplayName>Arcane Elbow Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbow.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1654,7 +1925,12 @@
       </Id>
       <DisplayName>Arcane Riser Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiser.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1697,7 +1973,12 @@
       </Id>
       <DisplayName>Arcane Tee Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTee.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1740,7 +2021,12 @@
       </Id>
       <DisplayName>Arcane Cross Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCross.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1783,7 +2069,12 @@
       </Id>
       <DisplayName>Arcane Roll adapter Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapter.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1826,7 +2117,12 @@
       </Id>
       <DisplayName>Arcane End cap Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCap.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1869,7 +2165,12 @@
       </Id>
       <DisplayName>Arcane Straight Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraightBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1912,7 +2213,12 @@
       </Id>
       <DisplayName>Arcane Elbow Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1955,7 +2261,12 @@
       </Id>
       <DisplayName>Arcane Riser Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiserBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -1998,7 +2309,12 @@
       </Id>
       <DisplayName>Arcane Tee Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTeeBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -2041,7 +2357,12 @@
       </Id>
       <DisplayName>Arcane Cross Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCrossBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -2084,7 +2405,12 @@
       </Id>
       <DisplayName>Arcane Roll adapter Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapterBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -2127,7 +2453,12 @@
       </Id>
       <DisplayName>Arcane End cap Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCapBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -2170,7 +2501,12 @@
       </Id>
       <DisplayName>Arcane Straight Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraightBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -2213,7 +2549,12 @@
       </Id>
       <DisplayName>Arcane Elbow Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -2256,7 +2597,12 @@
       </Id>
       <DisplayName>Arcane Riser Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiserBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -2299,7 +2645,12 @@
       </Id>
       <DisplayName>Arcane Tee Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTeeBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -2342,7 +2693,12 @@
       </Id>
       <DisplayName>Arcane Cross Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCrossBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -2385,7 +2741,12 @@
       </Id>
       <DisplayName>Arcane Roll adapter Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapterBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
@@ -2428,7 +2789,12 @@
       </Id>
       <DisplayName>Arcane End cap Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCapBare.dds</Icon>
-      <Description>CO2 supply/return pipe within one independent reactor manifold circuit on one physical grid. Align H to H and C to C. Cap unused pipe mouths; a breach closes this circuit at the reactor. Ordinary conveyors do not replace thermal pipes.</Description>
+      <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
+Keep the circuit on one physical grid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />

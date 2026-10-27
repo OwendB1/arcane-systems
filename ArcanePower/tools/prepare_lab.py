@@ -219,7 +219,10 @@ def definitions():
     production=E.parse(GAME/'Content/Data/CubeBlocks/CubeBlocks_Production.sbc').getroot()
     module=copy.deepcopy(next(n for n in production.iter('Definition') if n.findtext('Id/SubtypeId')=='LargeProductivityModule'))
     for path,val in {'Id/SubtypeId':'ArcanePower_ContainmentController','DisplayName':'Arcane Containment Controller',
-        'Description':'Attach directly to either reactor side socket. Two standard controllers deploy two rings at 1x tile speed with 80% fuel efficiency and support Aether.',
+        'Description':('INSTALLATION\nAttach directly to either reactor side socket.\n'
+                       'Two working controllers are required.\n\n'
+                       'STANDARD PAIR\nTwo rings / 1x tile deployment speed.\n'
+                       '80% fuel efficiency; supports Aether.'),
         'Model':'Models/Cubes/large/ArcanePower_ContainmentController.mwm','BlockPairName':'ArcanePower_ContainmentController',
         'Upgrades/MyUpgradeModuleInfo/UpgradeType':'ArcaneContainment','Upgrades/MyUpgradeModuleInfo/Modifier':1}.items():set_text(module,path,val)
     module.find('Size').attrib.update(x='1',y='1',z='1')
@@ -237,7 +240,12 @@ def definitions():
     for path,val in {'Id/SubtypeId':'ArcanePower_AdvancedContainmentController',
         'DisplayName':'Arcane Advanced Containment Controller',
         'BlockPairName':'ArcanePower_AdvancedContainmentController',
-        'Description':'Two working controllers are required. Standard + advanced: three rings, 1.5x tile speed, 90% efficiency, supports Aether/Helion. Two advanced: four rings, 2x tile speed, 99% efficiency, supports all fuels.',
+        'Description':('INSTALLATION\nAttach directly to either reactor side socket.\n'
+                       'Two working controllers are required.\n\n'
+                       'STANDARD + ADVANCED\nThree rings / 1.5x tile speed / 90% fuel efficiency.\n'
+                       'Supports Aether and Helion.\n\n'
+                       'TWO ADVANCED\nFour rings / 2x tile speed / 99% fuel efficiency.\n'
+                       'Supports all fuels.'),
         'Upgrades/MyUpgradeModuleInfo/Modifier':2}.items():set_text(advanced,path,val)
     hardware_components(advanced)
     root.find('CubeBlocks').append(advanced)
@@ -257,7 +265,14 @@ def external_hardware_definitions():
     root=E.Element('Definitions');blocks=E.SubElement(root,'CubeBlocks')
     for subtype,label in [('ArcanePower_VentDuct','Arcane Vent Duct'),('ArcanePower_VentOutlet','Arcane Vent Outlet')]:
         n=copy.deepcopy(template)
-        for path,value in {'Id/SubtypeId':subtype,'DisplayName':label,'Description':'Stack matching vent sections above the reactor and finish with an Arcane Vent Outlet. The outlet opens during venting. Central connections also carry conveyor items.',
+        for path,value in {'Id/SubtypeId':subtype,'DisplayName':label,
+                'Description':('VENT ROUTE\nStack 1-15 Arcane Vent Ducts above the centered reactor roof hatch.\n'
+                               'Finish with one Arcane Vent Outlet and keep the outlet clear.\n\n'
+                               'INSTALLATION\nFully weld every section on the same grid.\n'
+                               'Align their top faces with reactor Up.\n'
+                               'Central ports also carry conveyor items.\n\n'
+                               'SAFETY\nMissing or damaged sections prevent startup.\n'
+                               'Security mode selects shutdown or warning on vent loss after startup.'),
                 'Model':'Models/Cubes/large/'+subtype+'.mwm','EmissiveColorPreset':'ArcaneVentDisconnected','Icon':'Textures/GUI/Icons/'+('ArcaneVentOutlet' if subtype.endswith('Outlet') else 'ArcaneVentDuct')+'.dds','BlockPairName':subtype,'IsAirTight':'false','GuiVisible':'true','PCU':25,'BuildTimeSeconds':30}.items():set_text(n,path,value)
         n.find('Size').attrib.update(x='3',y='1',z='3')
         for tag in ['BuildProgressModels','MountPoints','MirroringX','MirroringY','MirroringZ','Center']:
@@ -322,7 +337,10 @@ def fuel_definitions():
             'Icon':'Textures/GUI/Icons/ArcanePower/'+canister+'.dds',
             'Model':'Models/Items/ArcanePower/'+canister+'.mwm','Mass':canister_mass,'Volume':24,
             'Size/X':.261,'Size/Y':.438,'Size/Z':.261,
-            'Description':'Empty platinum-lined, superconducting fuel container. Fill with 10 kg of Aether Concentrate. The container carries through Helion and Empyrean upgrades; consumed fuel does not return an empty canister.'}.items():set_text(container,key,value)
+            'Description':('Empty platinum-lined, superconducting fuel container.\n\n'
+                           'Fill with 10 kg of Aether Concentrate.\n'
+                           'The container carries through Helion and Empyrean upgrades.\n'
+                           'Consumed fuel does not return an empty canister.')}.items():set_text(container,key,value)
     E.SubElement(items_root,'Components').append(container)
     recipe(canister,'Aether Containment Canister (Empty)',canister_inputs,canister,1,60,'Components',result_type='Component')
     # Recovered directly by the reactor; deliberately no assembler/refinery recipe.
@@ -332,14 +350,20 @@ def fuel_definitions():
             'Model':'Models/Items/ArcanePower/ArcaneAetherResiduum.mwm',
             'Mass':1,'Volume':.001,'Size/X':.12,'Size/Y':.10,'Size/Z':.08,
             'MaxIntegrity':100,'Health':100,'DropProbability':1,
-            'Description':'An exceptionally dense, heat-resistant material recovered from consumed Aether fuel. Requires no processing. Ten 1 kg units per fully consumed canister, in standalone or Brayton mode. Used in advanced turbines (20 units) and cooling units/panels (10 units). Inventory volume: 0.001 L per unit.'}.items():set_text(residuum,key,value)
+            'Description':('Dense, heat-resistant material recovered from consumed Aether fuel.\n\n'
+                           'RECOVERY\nTen 1 kg units per fully consumed canister.\n'
+                           'Available in standalone or Brayton mode; requires no processing.\n\n'
+                           'CRAFTING\nAdvanced turbines: 20 units.\n'
+                           'Advanced cooling units/panels: 10 units.\n'
+                           'Inventory volume: 0.001 L per unit.')}.items():set_text(residuum,key,value)
     items_root.find('Components').append(residuum)
 
 
     for tier,(name,ore_name,ore,fuel,concentrate,refining,preparing,weight,mined,yield_ratio,volume,seconds,rating) in enumerate(tiers):
         raw=copy.deepcopy(ore_template)
         for key,value in {'Id/SubtypeId':ore,'DisplayName':ore_name+' Ore','Mass':1,'Volume':.37,
-                'Description':f'Rare asteroid ore. Base refining yield: {yield_ratio*100:g}%. Refine to {name} Concentrate, then prepare fuel in an assembler.'}.items():set_text(raw,key,value)
+                'Description':(f'Rare asteroid ore.\n\nBase refining yield: {yield_ratio*100:g}%.\n'
+                               f'Refine to {name} Concentrate, then prepare fuel in an assembler.')}.items():set_text(raw,key,value)
         set_text(raw,'Icon','Textures/GUI/Icons/ArcanePower/'+ore+'.dds')
         set_text(raw,'Model','Models/Items/ArcanePower/'+ore+'.mwm')
         # Native ore otherwise substitutes an amount-based vanilla debris mesh.
@@ -351,10 +375,15 @@ def fuel_definitions():
         for subtype,label in [(concentrate,name+' Concentrate'),(fuel,name+' Fuel Canister — '+rating)]:
             concentrated=subtype==concentrate
             item=copy.deepcopy(concentrate_template if concentrated else fuel_template)
-            description=(f'Dense refined material: {volume:g} L/kg ({1/volume:g} kg/L). Ore matrix is removed during refinement. Assembler ingredient for '+name+' fuel.' if concentrated else
-                         'Sealed canister holding 10 fuel units. Rated reactor heat: '+rating+'. Ideal full-load endurance: '+('2.5' if tier==0 else '10')+' minutes before controller efficiency. Requires '+str(tier+2)+' containment rings. Upgrades retain the container; consumed fuel does not return an empty canister.')
+            description=(f'Dense refined material: {volume:g} L/kg ({1/volume:g} kg/L).\n\n'
+                         'Ore matrix is removed during refinement.\nAssembler ingredient for '+name+' fuel.' if concentrated else
+                         'Sealed canister holding 10 fuel units.\n\n'
+                         'OUTPUT\nRated reactor heat: '+rating+'.\nIdeal full-load endurance: '+('2.5' if tier==0 else '10')+
+                         ' minutes before controller efficiency.\n\nREQUIREMENTS\nRequires '+str(tier+2)+' containment rings.')
             if not concentrated:
-                description += (' Consuming Aether recovers 10 Aether Residuum per canister in standalone or Brayton mode.' if tier==0 else ' Requires Brayton mode and an advanced controller.' + (' Empyrean also requires upgraded Brayton turbines.' if tier==2 else ''))
+                description += ('\nStandalone or Brayton mode.\n\nRECOVERY\nConsuming Aether recovers 10 Aether Residuum per canister.' if tier==0 else
+                                '\nRequires Brayton mode and an advanced controller.'+('\nEmpyrean also requires upgraded Brayton turbines.' if tier==2 else ''))
+                description += '\n\nUpgrades retain the container; consumed fuel does not return an empty canister.'
             for key,value in {'Id/SubtypeId':subtype,'DisplayName':label,
                     'Mass':1 if concentrated else canister_mass+10*(tier+1),
                     'Volume':volume if concentrated else 24,'Description':description}.items():set_text(item,key,value)
@@ -407,7 +436,10 @@ def containment_tiles():
             ('Advanced','ArcaneAdvancedContainmentTile','ArcaneAdvancedContainmentTiles',100)]:
         tile=copy.deepcopy(template)
         for key,value in {'Id/SubtypeId':subtype,'DisplayName':grade+' Containment Tile',
-                'Description':f'Self-controlling platinum-lined containment with superconducting coils, onboard computers and quartet sensing. Compatible with Aether, Helion and Empyrean. {factor}x Standard lifetime and crafting cost. Install in same-grade quartets; the shell holds 80 tiles. Normal shutdown retains tiles; venting discards them.'}.items():set_text(tile,key,value)
+                'Description':('Platinum-lined containment with superconducting coils and onboard quartet sensing.\n\n'
+                               f'COMPATIBILITY\nAether, Helion and Empyrean.\n{factor}x Standard lifetime and crafting cost.\n\n'
+                               'INSTALLATION\nUse same-grade quartets; the shell holds 80 tiles.\n'
+                               'Normal shutdown retains tiles; venting discards them.')}.items():set_text(tile,key,value)
         items.append(tile)
         bp=E.SubElement(blueprints,'Blueprint')
         for key,value in {'Id/TypeId':'BlueprintDefinition','Id/SubtypeId':blueprint,
