@@ -145,6 +145,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Fetch runtime LFS assets
+        run: git lfs pull --include="${{ inputs.src_dir }}/**" --exclude=""
+
       - name: Validate required secrets
         env:
           STEAM_CONFIG_VDF: ${{ secrets.STEAM_CONFIG_VDF }}

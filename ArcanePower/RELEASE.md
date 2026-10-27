@@ -13,6 +13,13 @@ There is one Power item, so its profile is always `main`. The repository's
 existing `STEAM_USERNAME` and `STEAM_CONFIG_VDF` secrets are reused. Other mods
 retain their PNG thumbnails and existing main/beta behavior.
 
+Native `.mwm` models and source `.blend` files use Git LFS. Keep LFS enabled when
+committing and pushing exports; the pre-push hook uploads their contents before
+publishing the Git commit. The upload job fetches only the selected mod's `src/`
+assets, so it publishes real models without downloading Blender checkpoints.
+Existing Git history is preserved. After cloning for local asset work, run
+`git lfs pull`; source-only CI builds do not need those binary downloads.
+
 Blueprint gallery images live in `workshop/images/` and are uploaded through
 Steam's gallery editor. Upload the same filenames to replace images without
 adding duplicates. SteamCMD handles the primary preview, not these gallery

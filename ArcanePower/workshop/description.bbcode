@@ -18,6 +18,7 @@ Build an industrial arcane power plant: mine rare fuel, maintain its containment
 [*]One large-grid [b]Arcane Reactor[/b] with animated assembly, rotating rings, tile replacement and core ejection
 [*][b]20% standalone efficiency[/b], or [b]40% starter / up to 80% exotic Brayton[/b] with eligible fuel, turbines and cooling
 [*][b]Aether only in standalone[/b]; Helion and Empyrean require Brayton
+[*]Fuel heat: [b]2.5/25/250 MW[/b]; four turbines export up to [b]1 MW T1 / 200 MW T2[/b]
 [*]Two functional controllers provide 2/3/4 rings; [b]at least one advanced controller unlocks Brayton[/b]
 [*]Demand-based fuel use, gradual ramp, grid-powered containment and a shutdown reserve
 [*]Manifolds retract behind curved sliding panels; mode changes wait for shutdown and cooling
@@ -34,21 +35,15 @@ Build up to [b]four independent circuits[/b], each with one turbine and its own 
 [*]Built-in compressors and reactor-generated CO2; no separate tank, generator, heater or recuperator
 [/list]
 
-Complete circuits are ready immediately, with [b]no filling, pressure or circulation gate[/b]. Reaction heat, waste heat and steady fuel use scale linearly with electrical output. Turbine shafts follow load smoothly. There is no separate compressor-startup power request; keep containment power supplied for startup and active-cooler cooldown. Adding/removing blocks and repairing connections updates validity while the reactor is off. Saved heat survives migration. Old shared plants still need separate circuits and a manual restart.
+Circuits are ready immediately, without filling or pressure gates. Keep containment power supplied for startup and cooldown. Cooling shortages retain waste heat; irreversible failure arms at [b]125% heat[/b]. Invalid circuits isolate independently; losing all stops generation. [b]Only manual Start with all four circuits defective latches a fault.[/b] One valid circuit permits startup. Advanced-controller loss stops Brayton without standalone fallback.
 
 Atmospheric coolers fit a [b]3x3x2-cell hull opening[/b], with rear manifolds. Leave [b]2.5 m beyond both fan guards[/b]: half-clear exhaust gives 25% cooling; blocked fans give none.
 
 Space radiators connect underneath and track edge-on to the sun. Stack up to [b]two extensions[/b] on the same grid: aim at the top shaft coupling and match the base Up axis; [b]any yaw works[/b]. The guide marks the dock and tilt correction. Grind either panel face to remove a section. Keep the 3x3-cell sweep and both faces clear. Each panel retains [b]100/75/50% cooling at 0/50/100% sun[/b], including shade/weather. Faint red-orange glow follows actual rejection; detached/excess panels add no cooling.
 
-Atmospheric coolers reject [b]25 GW standard / 250 GW upgraded[/b] at full air density with clear exhausts; half atmosphere gives half capacity and vacuum gives none. Radiator panels retain [b]10 GW standard / 100 GW upgraded[/b]. Three equally exposed radiator sections provide 30/300 GW; mixed stacks add each rating. Atmospheric radiator losses scale with measured density. Cooling capacity stays independent of load. Compare current Cooling required with Cooling capacity on the Power page; use Full-load cooling for sizing, and inspect each cooling block's terminal for density, clearance and efficiency. Shortfalls store waste: heat warns at 100%, with irreversible failure at [b]125%[/b]. Restore cooling or stop early; retain cooldown power.
-
-Reactor shut-offs open each complete checked circuit even while cold, and close invalid/unused circuits. The reactor adapter's offset end connects only to the vessel; use its opposite end for normal pipes. Losing all valid circuits stops generation; repair and restart manually. [b]Only a manual Start with all four circuits defective latches a circuit-loss fault.[/b] One valid circuit allows startup, without a pressure gate. Normal Stop and cooldown do not latch. Stored heat and an armed fuse remain. Repaired circuits can resume cooling while off. Advanced-controller loss stops Brayton generation, retaining connected cooling. No automatic standalone fallback.
-
 [h2]Feed the Field[/h2]
 
 Mine asteroid Aetherite, Helionite and Empyrite; refine concentrates and fill crafted canisters with Aether, then upgrade to Helion and Empyrean. Spent fuel returns no canister.
-
-Aetherite has [b]4x its original deposit weight and 2x mining yield[/b]. Aether fuel burns [b]4x faster[/b] at the same heat demand: 2.5 ideal full-load minutes per canister, or 2/2.25/2.475 minutes with standard/mixed/advanced controllers. Lower demand extends endurance. Higher-tier fuel endurance and power/heat ratings are unchanged. New deposit weighting affects newly generated asteroids; existing ore layouts remain.
 
 Aether recovers [b]10 Aether Residuum per canister[/b] in either mode. Upgraded turbines need [b]20 units[/b], upgraded coolers/panels [b]10[/b]. Fractional/blocked recovery survives saves; conveyors can export it. Empyrean requires upgraded turbines.
 
@@ -62,7 +57,7 @@ Fit [b]1-15 aligned vent ducts and an outlet[/b] above the reactor. Keep the out
 
 [h2]Arcane Energy Core[/h2]
 
-A [b]3x3x3 battery[/b] stores [b]1,000 MWh[/b] at [b]10 GW[/b]. Two capacity sockets add 10,000 MWh per standard module or 100,000 MWh per advanced module. A rear transfer module raises the ceiling to 100 GW or 1 TW. A front stabilizer reduces upkeep and ability recovery for matching/lower tiers.
+A [b]3x3x3 battery[/b] stores [b]1,000 MWh[/b] at [b]10 GW[/b]. Four bays accept capacity, transfer or stabilizer modules. Capacities add 10,000/100,000 MWh; transfer raises the ceiling to 100 GW/1 TW. The strongest stabilizer supports matching/lower tiers and reduces upkeep/recovery; duplicate tiers do not stack.
 
 [list]
 [*]Native Auto/Recharge/Discharge modes with 90% charging efficiency
@@ -76,7 +71,7 @@ Align 1x3x1 modules on the same grid. Detached cells retain charge/upkeep; destr
 
 [h2]Know What Is Happening[/h2]
 
-Placement arrows, H/C markers and construction instructions identify bad joints, missing welds and machines. [b]Solid red pipe rings[/b] warn of disconnected or invalid circuits. Each complete circuit restores its own colours, including capped ends; one complete circuit permits startup at 25% capacity while the other three remain incomplete. Valid idle circuits show amber status and pumping circuits show green. Verify power, fuel and cooling too. Monitor the terminal, [b]Arcane Reactor[/b] LCD or read-only antenna-linked tablet. Text HUD API is optional; native fallback is included.
+Placement arrows and H/C markers identify bad joints. [b]Red pipe rings[/b] mark invalid circuits; idle/pumping circuits show amber/green. Monitor the terminal, [b]Arcane Reactor[/b] LCD or antenna-linked tablet. Text HUD API is optional.
 
 [h2]Getting Started[/h2]
 
