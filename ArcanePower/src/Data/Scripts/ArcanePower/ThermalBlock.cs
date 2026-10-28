@@ -150,9 +150,20 @@ namespace ArcanePower
 
         internal bool HardwareReady
         {
-            get { return Block != null && !Block.Closed && Block.Enabled && Block.IsFunctional
+            get { return Block != null && !Block.Closed && !Block.MarkedForClose && Block.Enabled && Block.IsFunctional
                 && Block.SlimBlock != null && Block.SlimBlock.BuildLevelRatio >= 1
                 && Block.CubeGrid != null && Block.CubeGrid.Physics != null; }
+        }
+
+        // A failed cooler loses heat rejection, not its physical pipe connection.
+        // Access is checked separately by Endpoint/LinkRadiators. Pipes and
+        // turbines retain their existing build/functional requirements.
+        internal bool CircuitReady
+        {
+            get { return IsCooling
+                ? Block != null && !Block.Closed && !Block.MarkedForClose && Block.SlimBlock != null
+                    && Block.CubeGrid != null && Block.CubeGrid.Physics != null
+                : HardwareReady; }
         }
 
         internal void RecheckCircuitFault()
@@ -172,7 +183,7 @@ namespace ArcanePower
             Block.Orientation.GetMatrix(out rotation);
             Vector3 centre = ((MyEntity)Entity).PositionComp.LocalMatrixRef.Translation;
             var endpoint = ThermalEndpoint.At(Entity.EntityId, Block.CubeGrid.EntityId, Spec, rotation, centre,
-                HardwareReady && owner != 0 && Block.HasPlayerAccess(owner));
+                CircuitReady && !RadiatorBreached && owner != 0 && Block.HasPlayerAccess(owner));
             endpoint.Revision = CircuitRevision;
             return endpoint;
         }
@@ -226,7 +237,8 @@ namespace ArcanePower
         private void UpdateEnvironment()
         {
             int now = MyAPIGateway.Session.GameplayFrameCounter;
-            if ((Spec.Kind == ThermalKind.AirCooler || Spec.Kind == ThermalKind.Radiator) && now - environmentAt >= 60)
+            if ((Spec.Kind == ThermalKind.AirCooler || Spec.Kind == ThermalKind.Radiator
+                || Spec.Kind == ThermalKind.HullRadiator) && now - environmentAt >= 60)
             {
                 environmentAt = now;
                 var planet = MyGamePruningStructure.GetClosestPlanet(Entity.GetPosition());

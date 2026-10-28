@@ -1,9 +1,9 @@
 {
-  "version": "0.2.0",
+  "version": "0.3.0",
   "published": false,
-  "archive": "ArcanePower-0.2.0.zip",
-  "sha256": "84a67124d665a3b5fdf227fede746dc27753b2dad064d48480817c5f266663d7",
-  "bytes": 440732269,
+  "archive": "ArcanePower-0.3.0.zip",
+  "sha256": "68c990b2966d6019ac77c4caef372e03b8058a69cad5f88b0e3e4f5319aefa7d",
+  "bytes": 444406459,
   "files": [
     {
       "path": "Audio/ArcanePower/Assembly.wav",
@@ -98,12 +98,12 @@
     {
       "path": "Data/ContainmentTiles.sbc",
       "bytes": 3031,
-      "sha256": "e1522b6859eb6e555d66f47ee36dd49539d499fcf86dca46ac5b483e8eeed2e3"
+      "sha256": "1a97960449a014d4e439d002fc74e8b3413e43ceef8ec8cd3f54ea5750c6b1b8"
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_ContainmentController.sbc",
-      "bytes": 6789,
-      "sha256": "4601bd110f9695c05995bea214bcd36bd3525c0adec185522671b0db93fdda5c"
+      "bytes": 6803,
+      "sha256": "66068cbd5c40575d6be1a73faa169fccc8d757cc9dd4caf5be0f0e041c1c7588"
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_EnergyCore.sbc",
@@ -127,23 +127,23 @@
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_Thermal.sbc",
-      "bytes": 143361,
-      "sha256": "158cb64b6ea0b6b45167e04ce021e65059bbd66697ae6cb6d4f304891e9c3543"
+      "bytes": 157259,
+      "sha256": "94d50c753d96b6ba3112f8decfd5c208419b1fa167a851b57a802ee641f5514f"
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_ThermalVariants.sbc",
-      "bytes": 4625,
-      "sha256": "8df7aaa56d351935c38c7b77df308b774dc22cc086da9c3ea537e49c1ad550a8"
+      "bytes": 5463,
+      "sha256": "f864dfe91ce97a8b52cf5023448aa1bc0bd78d62b530a69f24a49471cee639da"
     },
     {
       "path": "Data/CubeBlocks/ArcanePower_Vents.sbc",
-      "bytes": 7178,
-      "sha256": "664a2dca9297008c8e2727d36e27f3f2009436102ed712886f3f529e4d69aea5"
+      "bytes": 7177,
+      "sha256": "6cdece295d2ef7101b8e3bcc00070f1ca33daa73494dbd26828d56cf6ba3b928"
     },
     {
       "path": "Data/EjectedContainment.sbc",
-      "bytes": 5644,
-      "sha256": "6738e860fffcacd0178d788b935aa80dcb12fc0219e538130dafb000993dde0b"
+      "bytes": 5643,
+      "sha256": "45d77591b37707f190cee0f3c248776cc3931809847c8a5ba6ea8cda29cf1bae"
     },
     {
       "path": "Data/EmissiveColors.sbc",
@@ -247,8 +247,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Status.cs",
-      "bytes": 29706,
-      "sha256": "38e34cba472222aecd177f21cf9fa28f9dd5e35ffe4a3790e8373ab68f91b73b"
+      "bytes": 29721,
+      "sha256": "f3931e409ec7d0d150c9cea62fbbc44bd020edc6826459e5cbd366590b63157f"
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Thermal.cs",
@@ -302,18 +302,18 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalBlock.Radiator.cs",
-      "bytes": 9594,
-      "sha256": "3f58ee901d7713126c8b6c754c2a38072ac137a45cb686251c4b2209246bf556"
+      "bytes": 12770,
+      "sha256": "6492cf816403cef2fa9e8e6a9f3ccf58874a10f79150c7d1d9051d672cbb520e"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalBlock.Status.cs",
-      "bytes": 9172,
-      "sha256": "4dfad61860eeb8869a436cd019e62d9b90d282a5ff4e37f98d009f47eb756974"
+      "bytes": 10044,
+      "sha256": "494e5114a5b42461387f4521a7222323b93b56aa7799657ec62ba8b7ccf42757"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalBlock.cs",
-      "bytes": 14925,
-      "sha256": "eb528bfff0e87728218fc8fe140ab1a2d32afb5abc5dfb1f5e594f29cc46ecae"
+      "bytes": 15567,
+      "sha256": "25bd6864a56303fea5475428bd80c1313e3ba43a26e24b124c449ecc904382c3"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalBuildGuide.Reactor.cs",
@@ -322,13 +322,13 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalBuildGuide.cs",
-      "bytes": 26625,
-      "sha256": "bae7cd953dcc6b78c05ee0ff94be8a095f199d8ae68fbe23fa288216e74cfe54"
+      "bytes": 28582,
+      "sha256": "333b8fdb9c805c30d31d71695a7af017a5d22d187fd24cc0cc005e5475a20d41"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalConstruction.cs",
-      "bytes": 9998,
-      "sha256": "a7a0c5e738e315c910528f14e60e1fdaf8a8c5aaa717bd57dd7cfbe4aedfb0b0"
+      "bytes": 11278,
+      "sha256": "7ee22ad079309f8f6b416d56ff0a869bcc4331fbaf737447d38181529ec59b66"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalFlow.cs",
@@ -337,13 +337,13 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalFlowModels.cs",
-      "bytes": 88432,
-      "sha256": "d61f34e7a828a9dc92894c88d15d6843777ace565a7c7b053fab1d6184e74caa"
+      "bytes": 91830,
+      "sha256": "e20f6ca18d4a2361cd5597486b4884dc5433922a9148815dfdd0a415b0f11a0e"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalFlowVisuals.cs",
-      "bytes": 16345,
-      "sha256": "2c9d51b9b175e8e27210763db23c9dd742c4c0c532ee3f2326d4ba34533a1279"
+      "bytes": 16495,
+      "sha256": "65f04aae45aa7132e56e964ded147fec7a5de2125ebabf7c9f5f9bb6777bdd75"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalForecast.cs",
@@ -372,43 +372,48 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalModels.cs",
-      "bytes": 35488,
-      "sha256": "d833310c313bf431a5f6bafaaaaec83f3ffc46bd59e163e896fd1ac1a8be72b2"
+      "bytes": 40474,
+      "sha256": "58e5fb4d35ce2581e05cc8e2565dc901eda59ed88e72b557cb334e77bee742c5"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalNetwork.cs",
-      "bytes": 17748,
-      "sha256": "d0d555647b63e225e900f47674e263d59bb35adb57a0486c0bc0883437518711"
+      "bytes": 21607,
+      "sha256": "d46fd018b950f73dfcb2ae5726c866b4d28f8550f98cd08528f5c2ae2be8032c"
+    },
+    {
+      "path": "Data/Scripts/ArcanePower/ThermalPipeJoint.cs",
+      "bytes": 4643,
+      "sha256": "0e29578f1dc8a1f50130259c1b4edd38f0da98506a6760f6d8de4c46d4fe112b"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalPlant.cs",
-      "bytes": 15759,
-      "sha256": "4e98c6318a48dd35a5c4eef0e5756256390647c34f48b8434f6e9375e314b593"
+      "bytes": 15818,
+      "sha256": "f786acb003cf97a262a438f9fc91b309c2d5517f6986d1e282baa9ab7607776b"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalRadiators.cs",
-      "bytes": 6118,
-      "sha256": "66f6fce992cd5c1b4715caf212c15b7dcdb57fc7ed7619d914fc3c249a7c037e"
+      "bytes": 6479,
+      "sha256": "432ac0ff33cb31f82043ebeff9e475363a17166738a2e7cdec2f5d8e150eb05f"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalRotors.cs",
-      "bytes": 5267,
-      "sha256": "fa683f929de67551ff3b58303493dbc76d67ad300c480a9d32289693d0a52c65"
+      "bytes": 5266,
+      "sha256": "9ad14e0895d735540236c2372ab384560d4e27da46814b7f3432c3c1c2edb2dc"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalSession.Loops.cs",
-      "bytes": 8509,
-      "sha256": "523eaa773e20ab4885ac97deb81c3f40286030092e4df5b00f0d61d8fd74d2fd"
+      "bytes": 8840,
+      "sha256": "94498912767a6c5183b3b48b1e8eef92e507d624ea2698be1faef494d4461cb1"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalSession.Radiators.cs",
-      "bytes": 3300,
-      "sha256": "c5ca0422b46ff56ed7b311c99607eff7411dc77e2f8352469b592295d566bed2"
+      "bytes": 3744,
+      "sha256": "cb0ddfd03994d652ad2ef7a48d2b938710ba5eba5b76361e306cc773ac85c371"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalSession.cs",
-      "bytes": 11520,
-      "sha256": "69b54bff5fda5003275ae440b9a4cc1262d0788abf983c76531308008db07dd7"
+      "bytes": 11944,
+      "sha256": "65c2b55b0b7c1ffe9a8eb5536ac6e12041a0971bbaee75a1a4ff7470f8e69a17"
     },
     {
       "path": "Data/Scripts/ArcanePower/VentHardware.cs",
@@ -423,7 +428,7 @@
     {
       "path": "Data/Tablet.sbc",
       "bytes": 5958,
-      "sha256": "e28bb9927a9ab4cc3721ed2e44dccd4cdffa92d22ac482e9af5535f87a2421ab"
+      "sha256": "e5cbc0b7d5e2b5160de1c87fe9c387c0b899a8fd035d8d5f2d7b69e306875f49"
     },
     {
       "path": "Data/TabletFingers.sbc",
@@ -432,8 +437,8 @@
     },
     {
       "path": "Data/ThermalCategories.sbc",
-      "bytes": 850,
-      "sha256": "62feed25be17dae55f5c2307b4f7b41c2ec854154cbadbb9b9f7c4c94c3d8084"
+      "bytes": 925,
+      "sha256": "b0ad3f865d49f3f6deebd8a1cfc262a8af8751c8eb327fe6952096d348c39a06"
     },
     {
       "path": "Data/TransparentMaterials.sbc",
@@ -456,124 +461,114 @@
       "sha256": "dbee233eeea325c25517fb5f36263087852a65e48c356484029aa967db758468"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS1_r015a374b7905.mwm",
+      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS1_r0952d4f25e1e.mwm",
       "bytes": 65964,
-      "sha256": "015a374b79053d25d2489fff4214999ed2fc4cbce43451cf5a3989bf28926a35"
+      "sha256": "0952d4f25e1e24ba9a4efb7a5a71c9ed7d7f27a26a9575f681088778713627d4"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS2_r61b1e10ce2ff.mwm",
+      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS2_rb27aecc294e9.mwm",
       "bytes": 262572,
-      "sha256": "61b1e10ce2ff8c130569787b35adf11063a777446f62c768d2d7f74cf4be33bd"
+      "sha256": "b27aecc294e90dc39d83e008ef6a50e556a3b22d4787b115e9b3ca809e3a8fff"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS3_r2c8e65a36e39.mwm",
+      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS3_r4e2060312696.mwm",
       "bytes": 524716,
-      "sha256": "2c8e65a36e39ae1b0685b41f0cc65fa72e8db9aeba275a5a344fefc290e48754"
+      "sha256": "4e206031269670553a77e5161c7cdbb630ea55c633de81e98dad2d8e33fccf18"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_LOD1_rb0500125ef27.mwm",
+      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_LOD1_r81d8fde7b56c.mwm",
       "bytes": 131500,
-      "sha256": "b0500125ef27fd056ccf0f8709e76a31f647b84f73913e3abf95f1b30beb94ec"
+      "sha256": "81d8fde7b56c45e38b214d61c8c0936bf7dae7a84d32098717e43f5f814e460e"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_LOD2_r69ff4016ae59.mwm",
+      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_LOD2_r21bd99135531.mwm",
       "bytes": 131500,
-      "sha256": "69ff4016ae5976d024a7ffd15b07070b279b8747291788744751f496fa8556b0"
+      "sha256": "21bd99135531884de0637a02bdf720074b6b47a9da60ba25db2584e7f0af0419"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_r3e8b09710491.mwm",
-      "bytes": 524903,
-      "sha256": "3e8b09710491cd5a61b1b71f41ff8d4ba85a6904c39ce743ebafadf8a7b1d146"
-    },
-    {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield1_LOD1_r1de30223c495.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield1_LOD1_r7e76ebf5e7e3.mwm",
       "bytes": 262572,
-      "sha256": "1de30223c495fead11db33d1465e828d82a7e9d2c42564342e452a2e5a83ba50"
+      "sha256": "7e76ebf5e7e392cec96888edf69b1d7216125757d2feed8efd5029ced9f9c0b1"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield1_LOD2_r5be1e45b4b73.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield1_LOD2_r2939ebb576fe.mwm",
       "bytes": 262572,
-      "sha256": "5be1e45b4b73ed44a2753dc604991135d5c7a1bcb596f66920179fc1d004a824"
+      "sha256": "2939ebb576fe84aed6a97b6cd93a76a77d2995b3bf2b49ce5511f43b9ce47f80"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield2_LOD1_r89a867a11dbd.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield2_LOD1_re747e6aba8ca.mwm",
       "bytes": 262572,
-      "sha256": "89a867a11dbd536a2a1b8e8025e429d8712e2bb4b73b41df7f67518af8adf5eb"
+      "sha256": "e747e6aba8ca974b265d8f5e624b73210d9a61bddde81008566dc9338865e519"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield2_LOD2_r806c4e630a22.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield2_LOD2_r2a71fa82afe3.mwm",
       "bytes": 262572,
-      "sha256": "806c4e630a2241e92f361e8246a3ecde9ffe5fcbb9416dfa5e1b7ac263b8f5ee"
+      "sha256": "2a71fa82afe35f448621ad41f2cc20875f90b099ac572077afd3955f52ac78b3"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield3_LOD1_rbecea524eed1.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield3_LOD1_rd2ca09dfea12.mwm",
       "bytes": 262572,
-      "sha256": "becea524eed1ee176ed0902788bae190a31f300f3c7f5254af3e5c8fc7aa6040"
+      "sha256": "d2ca09dfea12dc788d015b3d00583b49ee6375503bb60b6c70fb92762a310c49"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield3_LOD2_r4be90aa81e6c.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield3_LOD2_re60da58fa69e.mwm",
       "bytes": 262572,
-      "sha256": "4be90aa81e6cf3c153aa58f7e8c6e0dc1d2453078af4bb9b7756929dd32273ae"
+      "sha256": "e60da58fa69ed31027b7b893e36f782d09e49a0fcdfb06653e9cc605f00b5c53"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield4_LOD1_r2039dedb7910.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield4_LOD1_r41a607122942.mwm",
       "bytes": 262572,
-      "sha256": "2039dedb79100bdce7df16c1693c098014883693ac69a069da0d32b7dd2660e7"
+      "sha256": "41a6071229423c01e4ee6d540fa37e88d98e8934f60d791e448b164d12e06a77"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield4_LOD2_r5beb57752ee8.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield4_LOD2_ra0f0d7c4cf67.mwm",
       "bytes": 262572,
-      "sha256": "5beb57752ee864e38e96f80ad20ae6b0f62bee90a9f38ebd961e60d6236d586f"
+      "sha256": "a0f0d7c4cf67249b54992ccaf7888a5b3bdf5228abe60ad1b1bb698d99082ec9"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield5_LOD1_r1870fcbefceb.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield5_LOD1_r378c03bbb80b.mwm",
       "bytes": 262572,
-      "sha256": "1870fcbefceb6c146618c871c1bfd14cace2aebea10b63dea791f60b0cc979dd"
+      "sha256": "378c03bbb80b5edb903a5601d16631c828231a87fa2e0928faeed1dbe1e69b61"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield5_LOD2_rd84654f42679.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield5_LOD2_r6c4c1ee9ea51.mwm",
       "bytes": 262572,
-      "sha256": "d84654f426792c847a07eeff1f40a96c7a5b9c078eacf7a62dd69bb5ed8921fc"
+      "sha256": "6c4c1ee9ea512b9540cfc48b4b895b064f2684db793b765aa01b01ef459a6f2b"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield6_LOD1_r261f4520e2be.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield6_LOD1_rc84162740349.mwm",
       "bytes": 262572,
-      "sha256": "261f4520e2bed4535da7c519c41947a8a0417ea28e5aa975fbfa42dce7759f6d"
+      "sha256": "c8416274034984b622fec2aa791d791ba78800ef63172d7bd25bdee34688084e"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_BlastShield6_LOD2_rd9ac4cfc44bf.mwm",
+      "path": "Models/Cubes/large/ArcanePower_BlastShield6_LOD2_r69e2b5de410c.mwm",
       "bytes": 262572,
-      "sha256": "d9ac4cfc44bf89a6b54d902983b4c3b011001cccac0a41a97b0afb898ffdee77"
+      "sha256": "69e2b5de410c8b29f7de5cdcbadcc0c8e195a9402cc0bc77e544701bcc5fede0"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_ContainmentController_BS1_rfe8da49a1eda.mwm",
+      "path": "Models/Cubes/large/ArcanePower_ContainmentController_BS1_ra1007c695e05.mwm",
       "bytes": 65964,
-      "sha256": "fe8da49a1eda6ca2e43ce619ea23b3f32f6944beed91d3570eefb947209b55e4"
+      "sha256": "a1007c695e0550087b9d39dc07829cd7ea86f16cf9d01c68e7d9a7356abd1edc"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_ContainmentController_BS2_r5f52f80a2aa2.mwm",
+      "path": "Models/Cubes/large/ArcanePower_ContainmentController_BS2_r9b5be5d2da21.mwm",
       "bytes": 131500,
-      "sha256": "5f52f80a2aa279690cb48859a05b47c754d4193082de5f0138f992ab4ae6e590"
+      "sha256": "9b5be5d2da21958703d2fd980b0800f4baa060fb1553d1e6ead8a55723582e72"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_ContainmentController_BS3_r2381594d03c6.mwm",
+      "path": "Models/Cubes/large/ArcanePower_ContainmentController_BS3_rc29e9eb1bb19.mwm",
       "bytes": 262572,
-      "sha256": "2381594d03c6bf69890f945c5cf0023636b5c1ffc80be252db4cb8ab72d1149a"
+      "sha256": "c29e9eb1bb194f4519aa8dc9d054867b2a5b972d3b714486f2cbdd4f5e6dc329"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_ContainmentController_LOD1_r069b3b07d82a.mwm",
+      "path": "Models/Cubes/large/ArcanePower_ContainmentController_LOD1_r73eeabdbfd18.mwm",
       "bytes": 131500,
-      "sha256": "069b3b07d82a1e33ce070fd72330a46ff108839a026b490861ed32427c257999"
+      "sha256": "73eeabdbfd18ae73fb4bfda3b527faf39e1b9c2d5be237d4630a266f8d64bd7e"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_ContainmentController_LOD2_rca718d20e8b0.mwm",
+      "path": "Models/Cubes/large/ArcanePower_ContainmentController_LOD2_r0e6819f1a555.mwm",
       "bytes": 131500,
-      "sha256": "ca718d20e8b06ad8c4938a85451bcbd05c33df28ff9fa36089b41a49862ff814"
-    },
-    {
-      "path": "Models/Cubes/large/ArcanePower_ContainmentController_rc357e6ac302d.mwm",
-      "bytes": 262743,
-      "sha256": "c357e6ac302d69256e64649ceb54ee976d8b40f59a05045a6a65ed54c05e2f92"
+      "sha256": "0e6819f1a55592f9a75554637dc896d9c99fc8de834f95f048aaa7a3d4c14cab"
     },
     {
       "path": "Models/Cubes/large/ArcanePower_EnergyCapacityAdvanced_LOD1_r63339cf6c090.mwm",
@@ -646,34 +641,29 @@
       "sha256": "8cce1bbd715c5116e855e27d2102cc2785b72ecc5a6f55f8689e3ae2e10e0b6d"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_FloorLeaf_LOD1_re6254e8e6c9d.mwm",
-      "bytes": 33196,
-      "sha256": "e6254e8e6c9d08a248114c3b0b23987f4980bd193c0c9af867c1f2bd97816fdd"
-    },
-    {
-      "path": "Models/Cubes/large/ArcanePower_FloorLeaf_LOD2_r53d9007c7a17.mwm",
-      "bytes": 16812,
-      "sha256": "53d9007c7a17abf4987b9921a059643d2c35cfa68f779935c2cba923f2a5de07"
-    },
-    {
-      "path": "Models/Cubes/large/ArcanePower_Ring1_LOD1_rde7b116fc96c.mwm",
+      "path": "Models/Cubes/large/ArcanePower_Ring1_LOD1_rf0452e18346b.mwm",
       "bytes": 262572,
-      "sha256": "de7b116fc96ce4892f3677c36d27bf81a134b53354cccb8afdf91194092f5f96"
+      "sha256": "f0452e18346bd46016c0012f2f1c4758748a4b60241756b9fd378a2defc798b1"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_Ring1_LOD2_rca710f5e3f9f.mwm",
+      "path": "Models/Cubes/large/ArcanePower_Ring1_LOD2_r752bc43aa0fc.mwm",
       "bytes": 131500,
-      "sha256": "ca710f5e3f9f4df908a496b10031512b9c8acc855f17eef62b802a694b2d7586"
+      "sha256": "752bc43aa0fce3a09ba131efb54d6034dfc9f62440455381d80b6aad5e656815"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_Ring2_LOD1_ra6eae1bbe491.mwm",
+      "path": "Models/Cubes/large/ArcanePower_Ring2_LOD1_raff9ac81d02f.mwm",
       "bytes": 262572,
-      "sha256": "a6eae1bbe49162ad9a4055e37f820f0f9a1bbe02b63e634a365e127b22441ecf"
+      "sha256": "aff9ac81d02f134f0c7f06a362ee04de58b0188610a522127b72907cc15206f8"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_Ring2_LOD2_rf173310868eb.mwm",
+      "path": "Models/Cubes/large/ArcanePower_Ring2_LOD2_rb558b05161b2.mwm",
       "bytes": 131500,
-      "sha256": "f173310868eb66e7c38cb02767fd772809e1526913d87e820dde5c8f80c8b71f"
+      "sha256": "b558b05161b29500815fe20a518629b5f7380e9b4115253ffc21f194543503c2"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_Ring3_LOD1_rfcaa9e621c05.mwm",
+      "bytes": 262572,
+      "sha256": "fcaa9e621c050a45fb7f0e79181dce493014027b82a2cbafee4fc4a63e896b82"
     },
     {
       "path": "Models/Cubes/large/ArcanePower_Ring3_LOD1_rfe71fa1db755.mwm",
@@ -686,9 +676,19 @@
       "sha256": "aae68b369f13270fcf820998a8be3adcdf5585ff008d1afdc8f720028eac8ede"
     },
     {
+      "path": "Models/Cubes/large/ArcanePower_Ring3_LOD2_rfaf34c30d7c7.mwm",
+      "bytes": 131500,
+      "sha256": "faf34c30d7c749b1492e65adf1366a0b9bd70406c514982b886c27f83e1f16b1"
+    },
+    {
       "path": "Models/Cubes/large/ArcanePower_Ring4_LOD1_r1f23b3b267ae.mwm",
       "bytes": 262572,
       "sha256": "1f23b3b267aeba539bc7cc94846d3ea928d759678d9b5d08fe697d63bca8cf67"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_Ring4_LOD1_rcfd86bf256dc.mwm",
+      "bytes": 262572,
+      "sha256": "cfd86bf256dc5f201e1aacfc9ae07a379ef76a9e752c34b9effa8075c10d0ca3"
     },
     {
       "path": "Models/Cubes/large/ArcanePower_Ring4_LOD2_r0c339045d1bd.mwm",
@@ -696,64 +696,69 @@
       "sha256": "0c339045d1bdfeea06045d1e9fc6a6246d915f66b8274288902088d0fdb57498"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_VentDuct_BS1_r89bdaa1d0dfb.mwm",
-      "bytes": 262572,
-      "sha256": "89bdaa1d0dfba71179fe105a463b89f9f7339d1826cfa7e924165d3c06b535dd"
-    },
-    {
-      "path": "Models/Cubes/large/ArcanePower_VentDuct_BS2_rb8f82aee2535.mwm",
-      "bytes": 524716,
-      "sha256": "b8f82aee2535956d3b6617f354d802e3565848ba345042abd825796a93549462"
-    },
-    {
-      "path": "Models/Cubes/large/ArcanePower_VentDuct_BS3_r2078e033ae36.mwm",
-      "bytes": 524716,
-      "sha256": "2078e033ae36c270ae75e447c008db0946bcbbd5ef5d93f702892008903b75e7"
-    },
-    {
-      "path": "Models/Cubes/large/ArcanePower_VentDuct_LOD1_ra341c1025966.mwm",
-      "bytes": 524716,
-      "sha256": "a341c1025966b77d3007acedbb832b6a4477ab909c03474f05c6104e3cf04c97"
-    },
-    {
-      "path": "Models/Cubes/large/ArcanePower_VentDuct_LOD2_ree0e9aa9fddd.mwm",
-      "bytes": 262572,
-      "sha256": "ee0e9aa9fdddec462431940b1654371067f423fa6f8ff3f0857f5facf90f0e77"
-    },
-    {
-      "path": "Models/Cubes/large/ArcanePower_VentHatch_LOD1_r163491b1f14c.mwm",
+      "path": "Models/Cubes/large/ArcanePower_Ring4_LOD2_r3527b5723a27.mwm",
       "bytes": 131500,
-      "sha256": "163491b1f14c2e061c3334fd5cdaef4f0dd124b90ac6f68169c58a2b83e1ca27"
+      "sha256": "3527b5723a274abcf71ad6a992c9ae65219ef054f7f0155a503ecac3a23463fe"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_VentHatch_LOD2_r5fbbdc77831e.mwm",
-      "bytes": 65964,
-      "sha256": "5fbbdc77831e2c3159818133bbfdc1aefa1d3e46e7283771fb04bb601ff37353"
-    },
-    {
-      "path": "Models/Cubes/large/ArcanePower_VentOutlet_BS1_reff662b918b3.mwm",
+      "path": "Models/Cubes/large/ArcanePower_VentDuct_BS1_rd5d87bcc32b5.mwm",
       "bytes": 262572,
-      "sha256": "eff662b918b3b9bcb5eaea520f816a8974445c78fa0ce3731bf5feaa01037424"
+      "sha256": "d5d87bcc32b564b04acf32cbc9e91a6a4c10bf609af2268afbb72e3d132602d8"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_VentOutlet_BS2_r1989c0db1011.mwm",
+      "path": "Models/Cubes/large/ArcanePower_VentDuct_BS2_r306deb89d120.mwm",
       "bytes": 524716,
-      "sha256": "1989c0db10119d0e647f9ae18c515b19fa13b5a86fe523e60e0627bd63cebb0b"
+      "sha256": "306deb89d1202a4d40cabc813e9dbbce0573dbb1a2c6a9c700121c62e229c86c"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_VentOutlet_BS3_r2abe99e31535.mwm",
+      "path": "Models/Cubes/large/ArcanePower_VentDuct_BS3_rb2fae94b400b.mwm",
       "bytes": 524716,
-      "sha256": "2abe99e31535d85f9332aec6c6ca52c988711b8883af200bafe6648579126f52"
+      "sha256": "b2fae94b400b2091fd56dc9e0bbb2e3c8a24a110b55c62325d3a63d28537c660"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_VentOutlet_LOD1_re0d1a6b908d4.mwm",
+      "path": "Models/Cubes/large/ArcanePower_VentDuct_LOD1_r9b2ea6a2b6c9.mwm",
       "bytes": 524716,
-      "sha256": "e0d1a6b908d4b8d650b02b7edcf8cc1b236b865136a46748251943f319ed4a46"
+      "sha256": "9b2ea6a2b6c9f4c06fb0726c2c2a71519b9fa810feef968a102cf95853051d42"
     },
     {
-      "path": "Models/Cubes/large/ArcanePower_VentOutlet_LOD2_r254ffc63ba12.mwm",
+      "path": "Models/Cubes/large/ArcanePower_VentDuct_LOD2_rfadb2934515a.mwm",
       "bytes": 262572,
-      "sha256": "254ffc63ba120371eace21a9119b2e854f90afba925bd740db9dcbc064d70b36"
+      "sha256": "fadb2934515a09d2e008b36b0044bba28bb8b314920a6da7d5f0806376f6a9eb"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentHatch_LOD1_r5f187e98a8b3.mwm",
+      "bytes": 131500,
+      "sha256": "5f187e98a8b3432d7a0d5a95c9eb1de26b15caa69f348e68ee49be2be471d837"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentHatch_LOD2_rf39d79bcddfd.mwm",
+      "bytes": 131500,
+      "sha256": "f39d79bcddfd2645576497ab4442f23ebe310916fd6b0430b5821233e45ec648"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentOutlet_BS1_r6cde5eb475ed.mwm",
+      "bytes": 262572,
+      "sha256": "6cde5eb475edee2c2a7e056b4e629b05029cc739f9b5472f638a721c15a1927a"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentOutlet_BS2_r5787ea2034b7.mwm",
+      "bytes": 524716,
+      "sha256": "5787ea2034b77c65a4a236f3a48c595712ce942f23f0fbec3e16ca70327a9ed1"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentOutlet_BS3_r7e97998c21f5.mwm",
+      "bytes": 1049004,
+      "sha256": "7e97998c21f5a7c0fab509c05049d6f9b0b43f8098d8fcb02721a94e875a7e66"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentOutlet_LOD1_rb13e8d4ce20b.mwm",
+      "bytes": 524716,
+      "sha256": "b13e8d4ce20b47c31656cf79cc13d5e670f863cbbf7207d9d8a35aa87a838baa"
+    },
+    {
+      "path": "Models/Cubes/large/ArcanePower_VentOutlet_LOD2_re0dbc2ae5266.mwm",
+      "bytes": 524716,
+      "sha256": "e0dbc2ae52666a49c9a5e4deac8d0d479b5f88036e587589fc452b6416d3b5c6"
     },
     {
       "path": "Models/Cubes/large/Thermal/Isolation/ArcaneIsolationGate.mwm",
@@ -766,1469 +771,1579 @@
       "sha256": "8aee328047676568fa5d2428a6ab24b644f79e45bf20840d2d5e551f71a5b89f"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_BS2_LOD1_r2ca76324b02a.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_BS2_LOD1_r83f3dd758591.mwm",
       "bytes": 524716,
-      "sha256": "2ca76324b02a678ca236d0b313e8be30dd7452b55d51fb66fd6c8aa37eb9d8bd"
+      "sha256": "83f3dd758591a98962230e9056ac8484e563792910e188d3dafcb87a0b4178f4"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_BS2_LOD2_raa9094525dd9.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_BS2_LOD2_raaf519ec4bea.mwm",
       "bytes": 524716,
-      "sha256": "aa9094525dd98999554bac6d0592f0ae7f983e3ac61485d577410c460f7862de"
+      "sha256": "aaf519ec4bea0e968c3af79af6e1fac64673a6e60037b4d476655cb713ee1485"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_BS3_LOD1_r33fea1c820bb.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_BS3_LOD1_r8bf41c2c917a.mwm",
       "bytes": 1049004,
-      "sha256": "33fea1c820bb1db24b3cb53b13b4a20b0ee3910388de803c4895b0253f6cea94"
+      "sha256": "8bf41c2c917a0b009443744cac667b8e48c45b434d1facd208496c5f23043c4c"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_BS3_LOD2_r91dd2fce0dd8.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_BS3_LOD2_r21e63be7a533.mwm",
       "bytes": 524716,
-      "sha256": "91dd2fce0dd805e88950d43c054c8b71d392c5ceecb46381a01afad240a1d966"
+      "sha256": "21e63be7a5333a692d3681adf401c06efeab091e4232f9d41bddf4dbf6bf23e7"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_LOD1_r28d6ebc7b56a.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_LOD1_r18c45016e686.mwm",
       "bytes": 1049004,
-      "sha256": "28d6ebc7b56a7081819fd5a923e51fddab276fcc8417b824e7b6ed000664ddd5"
+      "sha256": "18c45016e686dc19d19870b874ebfb293c2d2c8af7bed2a3fed7a631f1e01fc6"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_LOD2_rbfdcc22e302b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_AtmosphericCooler_M_LOD2_r34d2e2d7d965.mwm",
       "bytes": 524716,
-      "sha256": "bfdcc22e302bef29d1ef8a2afb0cf0517e03a0ba24c91f158dbd835a32066bb9"
+      "sha256": "34d2e2d7d965df38255dca909d1e4b57fc690e20f9b4db11306d568e27961bdb"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_CompressorRotor_M_LOD1_r7f68ed83d8e5.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_CompressorRotor_M_LOD1_r10393f755528.mwm",
       "bytes": 2097580,
-      "sha256": "7f68ed83d8e50f3f8b0052c4f83b5a062e87202af9f6089bdf0319819abdcbaf"
+      "sha256": "10393f755528defe8fdef2337529e2a68273fc940c6ca5d65968972eeace887f"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_CompressorRotor_M_LOD2_ref23f9f1a1b9.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_CompressorRotor_M_LOD2_r29a8f189d66b.mwm",
       "bytes": 1049004,
-      "sha256": "ef23f9f1a1b9bacff8055d9ef8868e0a0bc831ce00c133ead98148e44eb1523c"
+      "sha256": "29a8f189d66b623c5eedd8668ab219c7e699b6bf208c3bd31e13161f4386c134"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS2_LOD1_ra13f2b032fe8.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS2_LOD1_r3dda76fcca35.mwm",
       "bytes": 16777644,
-      "sha256": "a13f2b032fe80561a60286c0dce84fadfc2a027dec4b1d2547dfafe53d59c563"
+      "sha256": "3dda76fcca357b6deb4922eac910bb64d9039655ca77607b5396dbfe6902216e"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS2_LOD2_rd230d8bed656.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS2_LOD2_re3897e143a0d.mwm",
       "bytes": 16777644,
-      "sha256": "d230d8bed656ba1442fb8ca80eceabe6263aaa24397c7b2435079d00eb7523d8"
+      "sha256": "e3897e143a0d70144f913383b9cf017516820532a19a4fdcb633e0d2a7acea38"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS3_LOD1_r628f1c8be7bb.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS3_LOD1_rfddd9c938573.mwm",
       "bytes": 16777644,
-      "sha256": "628f1c8be7bb3a1e9605b0df4e02020c4e2653601216c0e1ab562b844ceee5d6"
+      "sha256": "fddd9c93857371c5a5f623004c13cfc0e36fc98fc8822ce6dfcacc076229c474"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS3_LOD2_rc323b4cd6ff8.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_BS3_LOD2_r60b97b47ea64.mwm",
       "bytes": 16777644,
-      "sha256": "c323b4cd6ff8bfe4de1cc038151ff9edd60158b80aeabd2bc802d114af53523f"
+      "sha256": "60b97b47ea64cfe2d4c787c3566ce4242ad49c1539c5b0ee504811cb2c1125db"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_LOD1_r4f2dc6f9b87a.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_LOD1_r794841176d13.mwm",
       "bytes": 8389036,
-      "sha256": "4f2dc6f9b87a49b1a833d30879adfc7084bd18b2de673c8e0f86b6fbc5f42bef"
+      "sha256": "794841176d1302bdebe166dcf9dcdedf09347b794fa907cfadaf9f1ff633b213"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_LOD2_r087c755cbc08.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_M_LOD2_r7d7f454e1164.mwm",
       "bytes": 4194732,
-      "sha256": "087c755cbc089356ff8530d454d14a3258c677f464e9453c4489c9e4b7da37e8"
+      "sha256": "7d7f454e116437a03dd6486d8bafd4dd87da4b37ebadd11a5a482fac782d494d"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_TurbineRotor_M_LOD1_r3e42bbab3fa1.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_TurbineRotor_M_LOD1_r87f1813e5329.mwm",
       "bytes": 16777644,
-      "sha256": "3e42bbab3fa179571906e335a396a37221d1aafc55467cd82516db3324fe3be3"
+      "sha256": "87f1813e5329b1da2cacc17cfd3a3efab8e6f6b4ad47111278de5b5c4406bba5"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_TurbineRotor_M_LOD2_rb2821f199a6b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMirUpgraded_TurbineRotor_M_LOD2_rfe82ce603c17.mwm",
       "bytes": 8389036,
-      "sha256": "b2821f199a6bc70b9a50b7a2a90ac0eaf2aaa397d8871351686ba3a659586434"
+      "sha256": "fe82ce603c17dd0a94e4b08ec29a2fd79bbadf46cc5bff4edc5b4ca17c19f5d7"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_CompressorRotor_M_LOD1_rf49f18d3d723.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_CompressorRotor_M_LOD1_rfa4a8510fc43.mwm",
       "bytes": 2097580,
-      "sha256": "f49f18d3d7237ec48d75f0011278da1f59e461503afd03e6e3e057bd19de6781"
+      "sha256": "fa4a8510fc43155717595a4b647bbc44ea61707b84058499b554b6bbe7b7c4ad"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_CompressorRotor_M_LOD2_r3adfbd7e616b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_CompressorRotor_M_LOD2_r3129a71ec52f.mwm",
       "bytes": 1049004,
-      "sha256": "3adfbd7e616b821c3daeb03d5496add8bcda1303aa122347c7c654bf1fc4e688"
+      "sha256": "3129a71ec52ff2b8ba97d35e771aba06984c73bcb95690e240282f96a847fb04"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS2_LOD1_rfdd08a740b8b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS2_LOD1_r27c45e88e5f9.mwm",
       "bytes": 16777644,
-      "sha256": "fdd08a740b8bc3429993bb4b699384012a82a837d0863f68997b43bd205f33c3"
+      "sha256": "27c45e88e5f975a1284b8e76be93bbdafab160b2b81379b7fa47510f45c0c758"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS2_LOD2_rc2bc3b80a183.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS2_LOD2_rf0d9143ff7f8.mwm",
       "bytes": 16777644,
-      "sha256": "c2bc3b80a1837c5044e3d5371b8c1ab53f2349a06d464407bab4a0e26045119b"
+      "sha256": "f0d9143ff7f847f87a065a15bcb7e01bf6f52af823eb73741516ec29279f46db"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS3_LOD1_r686ff629b80e.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS3_LOD1_r1a4efca94e50.mwm",
       "bytes": 16777644,
-      "sha256": "686ff629b80e6d59d247c5318fea1694bc4747bb4b55e854f6689143d1c40245"
+      "sha256": "1a4efca94e50c7ecd33f0a38686f3304cde1a7394a3c9223564688ccf565e191"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS3_LOD2_r06cc0f1d4a1b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_BS3_LOD2_r756267e447e9.mwm",
       "bytes": 16777644,
-      "sha256": "06cc0f1d4a1b7cf608827022f7e25150a60e379ceb672abe1fe8dd72d920f1c6"
+      "sha256": "756267e447e96b94fd3cbd253a688d533286a8a0ef2be8232bf91415448e14d5"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_LOD1_r0de6e4029137.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_LOD1_rcb766b40a070.mwm",
       "bytes": 8389036,
-      "sha256": "0de6e40291377ee5c478b7fcd41eec2e1d168f942569e169d0e402e43c40cb98"
+      "sha256": "cb766b40a0704ce371d00190f5fb6c8666821b087ea7986f0837dc8c157a46e2"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_LOD2_r8e459b67dddd.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_M_LOD2_rb9480cd27173.mwm",
       "bytes": 4194732,
-      "sha256": "8e459b67ddddb0a09dfa808cdd7ac1af7b3692390ab6feb4d268813247a3db0c"
+      "sha256": "b9480cd271737088183e9560664b1e9cf7d66cb809593b079daa866befa29d51"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_TurbineRotor_M_LOD1_rc4b39839e04b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_TurbineRotor_M_LOD1_r5671b572d47c.mwm",
       "bytes": 16777644,
-      "sha256": "c4b39839e04b24552f8e0f3297bdf469e9dbd29ca4df63d2412fe3e7680741ca"
+      "sha256": "5671b572d47c5b5a3f8bcd1e282ce3cd5c099bf9d4b6c91cafaadde25692811c"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_TurbineRotor_M_LOD2_r725c5a264409.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainMir_TurbineRotor_M_LOD2_r77022985ae68.mwm",
       "bytes": 8389036,
-      "sha256": "725c5a2644098b80b4c13bc67997f4ba03d6e3ea4589c6923ee5fa0d2ae5ffb9"
+      "sha256": "77022985ae685a1d9f4993260a84b67eb875d9ff308c1e85899eada204cbc601"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_CompressorRotor_M_LOD1_r2f585776b976.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_CompressorRotor_M_LOD1_r90f1a05ac463.mwm",
       "bytes": 2097580,
-      "sha256": "2f585776b976189c6dfe62d944e0fb0279aa8d5347b01811a6e447c1b5f1c8f0"
+      "sha256": "90f1a05ac46366794d99ca34487d6688d877334f20116132e5b52efac36bb558"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_CompressorRotor_M_LOD2_r9f20b6d584f3.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_CompressorRotor_M_LOD2_r886971bccfbb.mwm",
       "bytes": 1049004,
-      "sha256": "9f20b6d584f333ebe0bb7550402096eb9ab13f447ca716fc114dbdd0fdd13d3a"
+      "sha256": "886971bccfbb7d76a9a5ad9528d470ab9628357cff94d35ba354e81227f2ca74"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS2_LOD1_rf481a90e7a61.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS2_LOD1_re361f7b8cd85.mwm",
       "bytes": 16777644,
-      "sha256": "f481a90e7a61c10f1e05169cda6697c11a8b8716960445bed7a275a95a05897b"
+      "sha256": "e361f7b8cd8551b9d98c3bd07a537b24f216662e9c6257787bf2e8584ff2fee7"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS2_LOD2_rf79cfa2de8fb.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS2_LOD2_r0cafb9387a6a.mwm",
       "bytes": 16777644,
-      "sha256": "f79cfa2de8fb8ce618dd77cc660871d908383d5a524dde0a2d186f66cac1c9e1"
+      "sha256": "0cafb9387a6a4b55059b581335de177e90f4944eb5e20dea6bff00bc146e04a4"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS3_LOD1_rbb03fd84438a.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS3_LOD1_r432b0e92225d.mwm",
       "bytes": 16777644,
-      "sha256": "bb03fd84438ad60db9e87a54a3a39a4c47aae3f67840cf5653544a0957c9fa38"
+      "sha256": "432b0e92225dda1ad395d79d1c47258401b9967a970367f14c226601de45091b"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS3_LOD2_r9c98f03b6ad2.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_BS3_LOD2_rcd8ac3477356.mwm",
       "bytes": 16777644,
-      "sha256": "9c98f03b6ad2c17545f0d1896ced5fbd635ec349a3f8ac10a2f24c759af1ea72"
+      "sha256": "cd8ac3477356d0bac3bcdd96b4e8df752041c66423d7d82047d5a10ce76b529c"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_LOD1_rb07fb2411ec6.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_LOD1_r138afa928053.mwm",
       "bytes": 8389036,
-      "sha256": "b07fb2411ec6db0eb40578088faab637605150fa14ff80166b20e0b329f548ab"
+      "sha256": "138afa928053af8b93e175865280a81c39bdc8af1eab69293fb1b755a7aa5ef9"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_LOD2_r8864f9957e98.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_M_LOD2_r03fc6ed01745.mwm",
       "bytes": 4194732,
-      "sha256": "8864f9957e98cd09dc1a2a7bf74fa5441b8d7c2f5d15721518f4ab159929f1e0"
+      "sha256": "03fc6ed01745e53f9a4d95717266d4522f329c9b6c4ebd7961825c1154fc6e9c"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_TurbineRotor_M_LOD1_rb595e538e5eb.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_TurbineRotor_M_LOD1_rb1b67e272802.mwm",
       "bytes": 16777644,
-      "sha256": "b595e538e5eb41fdddb98b91337b2f555a48eb0ad4d3c04679119c0a0e0cd7f7"
+      "sha256": "b1b67e272802898882055ac4715d488efd8ff14ddd41fd76de4849ea9bd17d1f"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_TurbineRotor_M_LOD2_r5a34eb29e4fa.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrainUpgraded_TurbineRotor_M_LOD2_r8c301ad3089e.mwm",
       "bytes": 8389036,
-      "sha256": "5a34eb29e4fa88717728a3106575e88f33165b9fa08790e9e52341e79369cc13"
+      "sha256": "8c301ad3089e3fc0038c892b0c51acec583c8438bfff59f00e8fc0dbc526f7b7"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_CompressorRotor_M_LOD1_rc5ff03608dae.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_CompressorRotor_M_LOD1_r62cb0e55e5fd.mwm",
       "bytes": 2097580,
-      "sha256": "c5ff03608dae5ef4ded8b4643445a5085744d67fc2ecd6bbb5b09b48c21ebba1"
+      "sha256": "62cb0e55e5fd1ebde444ae6c27846a837fc169d0d2bf53b722934c5de830449b"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_CompressorRotor_M_LOD2_r8c51dfc6d92b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_CompressorRotor_M_LOD2_rb75ff0243082.mwm",
       "bytes": 1049004,
-      "sha256": "8c51dfc6d92ba868d2aa083f453b1cd0300f88b3215d6077cdd898d4847aa0ef"
+      "sha256": "b75ff0243082e54863dd3c7ebe288e77ff65b1bf4835e5c32c960f1f3626e5fb"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS2_LOD1_rc463239a0f80.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS2_LOD1_rd70bdf7a8075.mwm",
       "bytes": 16777644,
-      "sha256": "c463239a0f806a31adf0d585cff335a878bd786fdfff7c3f3844cb5d751d54b5"
+      "sha256": "d70bdf7a80751ad13e401419f451b8795646417385032df9c8de363e817d62a6"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS2_LOD2_r50a860f0b2d0.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS2_LOD2_ra3c6661d07a9.mwm",
       "bytes": 16777644,
-      "sha256": "50a860f0b2d0001212ff83144c85e0a6c5948e9646a5b2e78ccaa2f2a52538a6"
+      "sha256": "a3c6661d07a99fd0ef388b077e1fb7859d7ef712916c54551243584ec2d05e3e"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS3_LOD1_r0c46bc4ac422.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS3_LOD1_ra2960b61d0d8.mwm",
       "bytes": 16777644,
-      "sha256": "0c46bc4ac422d68c0a985e253e39905c7ad986b6d07dd07ef5a398465fecb6db"
+      "sha256": "a2960b61d0d810ec3635009ad439cac99dfe64391d4bc9b92401677491aca971"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS3_LOD2_rcbdaf18eac6d.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_BS3_LOD2_rea57df6b2fb6.mwm",
       "bytes": 16777644,
-      "sha256": "cbdaf18eac6d0048435c7a4100a86f973424d2738e7ae6e3184e72796b243375"
+      "sha256": "ea57df6b2fb6643c8c5af306787253ee0c7fc289cfccc578fc8f5939ef2c862c"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_LOD1_rffb83c4eab75.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_LOD1_r0f10aaefc108.mwm",
       "bytes": 8389036,
-      "sha256": "ffb83c4eab75c981186d226d582b89001cfc06b3f12221eee0587b09c9b34e21"
+      "sha256": "0f10aaefc10894bc15eb4d7d811dbb4d788c7c3c79ee8406847abc01dfb6bd40"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_LOD2_rcfc6557c84d1.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_M_LOD2_r6f8174527d1c.mwm",
       "bytes": 4194732,
-      "sha256": "cfc6557c84d14c76c96c5a3f0577a23b8fb1ccdbe45d53beff003cd1e312b540"
+      "sha256": "6f8174527d1c2285e461f4add83e1306a8ec195ce35bf1c66467c29ac6850ff2"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_TurbineRotor_M_LOD1_r9fe730b2f2bc.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_TurbineRotor_M_LOD1_r2e9d90c08726.mwm",
       "bytes": 16777644,
-      "sha256": "9fe730b2f2bc88de1f9c5405330d009d0785449152e91e3f21ca02730d8cf3ff"
+      "sha256": "2e9d90c0872614a56f1744425061d27638bbb2351b68492c34618eae3de05ded"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_TurbineRotor_M_LOD2_r5b9fd3663831.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_BraytonTrain_TurbineRotor_M_LOD2_r916337dc180d.mwm",
       "bytes": 8389036,
-      "sha256": "5b9fd36638313cde6c656c30dc5b6a2e7c6187e5183a96d8de6a66aab8d6b576"
+      "sha256": "916337dc180dd78d093d3fe1b5f054a1c690bd29ea1855275ed0e6c5a1c2f0f7"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_BS2_LOD1_r21ae57b7b0d8.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_HullRadiator_M_BS2_LOD1_r550684ce649e.mwm",
       "bytes": 524716,
-      "sha256": "21ae57b7b0d8ff875efed36590e4bdf71f70c75b9de15957e23217905080b1af"
+      "sha256": "550684ce649ee435c9fe2d2e596e25c055ad8645484568e9b5f9b51536b51079"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_BS2_LOD2_r9d35d91da724.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_HullRadiator_M_BS2_LOD2_r5e78c1d65733.mwm",
       "bytes": 262572,
-      "sha256": "9d35d91da7247dfd6c190047c3bcc54f720e8e3e0cc904c4156d3807f7e77f65"
+      "sha256": "5e78c1d657337f33f50a75fee64eb366d9b1cc9e517c8dc2bdd9571a0d2da4a5"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_BS3_LOD1_re8146e2e5c90.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_HullRadiator_M_BS3_LOD1_r77f4ce05fe21.mwm",
       "bytes": 524716,
-      "sha256": "e8146e2e5c90acfbc431690e04cb3a452175177e41fddf065ecef3886fc51f0d"
+      "sha256": "77f4ce05fe21b71c749afac0eaffc943e09d3e0c4e845a70baa2d4e6c21e5991"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_BS3_LOD2_r774a38057d4c.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_HullRadiator_M_BS3_LOD2_re2b7c8921ed8.mwm",
       "bytes": 262572,
-      "sha256": "774a38057d4c6a5850be43e6e7de3314cfe7a914a592b0c8665bdb9f747f273d"
+      "sha256": "e2b7c8921ed80cbaae9008f36f6b16e02e2c0885857c50b26d1dcf49c1127ec9"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_LOD1_r2d3c86ed09a4.mwm",
-      "bytes": 524716,
-      "sha256": "2d3c86ed09a427ea7cd63b95f94a1e6813beca4f2af6aeba3364a62765246634"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_LOD2_r037d7e4907ca.mwm",
-      "bytes": 524716,
-      "sha256": "037d7e4907caa1ca15b02a742ba74d741cef72de056e98694372af5180c3a3f6"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_BS2_LOD1_rfebcd6702b9f.mwm",
-      "bytes": 524716,
-      "sha256": "febcd6702b9fb935ef99ede67d593d39fc7336b1dc6cfddf54afc16bbf92c533"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_BS2_LOD2_r7de8c36cf5a5.mwm",
-      "bytes": 524716,
-      "sha256": "7de8c36cf5a53e2ef4464ccfedcc5d405ddb3d6020c939774578ba7958cce98e"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_BS3_LOD1_r5bca496fae4c.mwm",
-      "bytes": 524716,
-      "sha256": "5bca496fae4c3fabf2a14311c6da03a78a32b9b7f24862e21d610e53a76e8bb5"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_BS3_LOD2_ra243a8be18bd.mwm",
-      "bytes": 524716,
-      "sha256": "a243a8be18bd76896d8b603cfe988bd76912add84b0cc191b7552f9779cf9c80"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_LOD1_r1ca67e5816ae.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_HullRadiator_M_LOD1_r1293da8531c5.mwm",
       "bytes": 1049004,
-      "sha256": "1ca67e5816ae19eadfb6b76405a78ed6a6b19c5a5268df3fff7dd84b89b272ca"
+      "sha256": "1293da8531c5d794eb771988606f38bfabd456d8fa3dadb7ae58b2a1642ef07e"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_LOD2_r691470470ffd.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_HullRadiator_M_LOD2_r30840cbfcea1.mwm",
+      "bytes": 524716,
+      "sha256": "30840cbfcea1e445f70afc74f3cad2e5585010a9f4e6af75d6d9832e3829d665"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PipeRotorHead_M_BS3_LOD1_r7f2d6837cabb.mwm",
       "bytes": 1049004,
-      "sha256": "691470470ffd9bf9aaaf291e69c723a72c406f4a7f7f6347a27aaa5fc8778118"
+      "sha256": "7f2d6837cabb12a581e56c4152aa9c420bdfae226e5b61ae718eed895cbad5ba"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_BS2_LOD1_r7c17ba1f4c6b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PipeRotorHead_M_BS3_LOD2_r58e9cae9a4e2.mwm",
       "bytes": 524716,
-      "sha256": "7c17ba1f4c6b9098162756cb17df5fcf0672798d5e97be743b96fb4e34f3f4f5"
+      "sha256": "58e9cae9a4e21dc6b1162d01cc6491be63054691223e20f4fd54c95e8cf1f1ab"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_BS2_LOD2_ra42bdae99ec0.mwm",
-      "bytes": 262572,
-      "sha256": "a42bdae99ec02c3219282cc8688879b0928acbe10ac8dd92c0087c23c8b84b0a"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_BS3_LOD1_r0b04c63cb356.mwm",
-      "bytes": 524716,
-      "sha256": "0b04c63cb356e5391c0faac98905d57edeaf3f84e3df4f1d0a726788755a7b2f"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_BS3_LOD2_r8ddc980d22c4.mwm",
-      "bytes": 262572,
-      "sha256": "8ddc980d22c4015b0092caf074f0f92b4d29a1a9713c613594ba882baa4cf2e9"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_LOD1_r6e4c4c86f2d6.mwm",
-      "bytes": 524716,
-      "sha256": "6e4c4c86f2d6710256a39dfc1ed1d1c495b6517921ff0221e5401dd3cee70cd9"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_LOD2_rd65ca759439b.mwm",
-      "bytes": 524716,
-      "sha256": "d65ca759439b74fceb8d1e86fc471343924d73f481fe239218d3143e47020627"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_BS2_LOD1_r3905ea08cf50.mwm",
-      "bytes": 524716,
-      "sha256": "3905ea08cf50f88563329e605172e1d848974c6913e7bfc45007879e67ea0788"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_BS2_LOD2_r9c91d19c5d1f.mwm",
-      "bytes": 262572,
-      "sha256": "9c91d19c5d1f4b0dfd4a32af88bd3f43b383294aec5b46599512be12dc529c15"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_BS3_LOD1_r07298a06bc49.mwm",
-      "bytes": 524716,
-      "sha256": "07298a06bc493675a9871993eb7f68271b0fd1433453fb70c895a2e7dff04d44"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_BS3_LOD2_r73a42f857fe3.mwm",
-      "bytes": 262572,
-      "sha256": "73a42f857fe368edc76dda1604f4219f4762a1f085e87013cdc163b9a56041be"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_LOD1_r9eadfd13cd64.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PipeRotorHead_M_LOD1_rd9dca0dd7f39.mwm",
       "bytes": 1049004,
-      "sha256": "9eadfd13cd64b0b3537b1218d956950ede39405a7a182955bab37b4601540074"
+      "sha256": "d9dca0dd7f397688f8768dcca008492b8882dd5aa35b3b7641b813960616f7fb"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_LOD2_r5b9b5467294e.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PipeRotorHead_M_LOD2_r13fb89e86599.mwm",
       "bytes": 524716,
-      "sha256": "5b9b5467294e82a0dca27f49df3f3a522da5c3cea5fad25ec0b38f29dc935ac3"
+      "sha256": "13fb89e86599dece27eac60c2ef717b654e6207b0a2e76f35f2fef48327de712"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryEndCapBare_M_LOD1_rdc9829e859f7.mwm",
-      "bytes": 262572,
-      "sha256": "dc9829e859f74c0878d6eaceb1901d73a72a51c5c47e031850a25db95fd4f761"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryEndCapBare_M_LOD2_r118a6d979628.mwm",
-      "bytes": 262572,
-      "sha256": "118a6d97962872b08d6463b5df23ab47580a6113ce9e429cf0cc98febfbbd9be"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryEndCap_M_LOD1_r9a69c44fdfec.mwm",
-      "bytes": 262572,
-      "sha256": "9a69c44fdfec67bfceafd0b22f2b9f5a1802c2ee09dcf05737a3791c86fd93f1"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryEndCap_M_LOD2_rfeed1294601f.mwm",
-      "bytes": 262572,
-      "sha256": "feed1294601f696853b66a0c9c8846f818fce97fa262f2037f4b9d2a7a165322"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapterBare_M_LOD1_ra1014eea87bc.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PipeRotor_M_BS3_LOD1_rced81346d229.mwm",
       "bytes": 524716,
-      "sha256": "a1014eea87bc97f45f075026fd8b7a15ccb8b263f0f00b4fcaeae775264d6382"
+      "sha256": "ced81346d229cca0dc79e75fa4b07bc0ac25300f2ab48d8247ba530fbe3351c6"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapterBare_M_LOD2_r184c322ac31b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PipeRotor_M_BS3_LOD2_rac14f6a19b90.mwm",
       "bytes": 524716,
-      "sha256": "184c322ac31b9e36583d3a3fb79ebe3b477f899bc36703c33bf0b01556243b5c"
+      "sha256": "ac14f6a19b905d4f8ae126132524768bf277ae779f3cb59cc9727cd21dbd0640"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_BS2_LOD1_r3a0850db5955.mwm",
-      "bytes": 524716,
-      "sha256": "3a0850db595536db132fed72196d7afe454f575860336897d3936f4e72c7667f"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_BS2_LOD2_r1c300d2d46fb.mwm",
-      "bytes": 262572,
-      "sha256": "1c300d2d46fbb332cc8d09d4cf81ac8e2b746fd110be3e6af9952f66b7d71c6c"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_BS3_LOD1_r8bd7062e5a1f.mwm",
-      "bytes": 524716,
-      "sha256": "8bd7062e5a1ff02a761f0e5382d50b221af034fd1146e0e84115d1f004d727ea"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_BS3_LOD2_ra8b5d253d974.mwm",
-      "bytes": 262572,
-      "sha256": "a8b5d253d9748e690e1d4e894441038ea5457d43214e568c3fedbc2c17c30232"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_LOD1_r89f9a49a24c1.mwm",
-      "bytes": 524716,
-      "sha256": "89f9a49a24c1846385f4e271fa4b3acde8f5d7c39155a3cc15b08e89ab9fc5d1"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_LOD2_r3c07ca2cb47a.mwm",
-      "bytes": 524716,
-      "sha256": "3c07ca2cb47a88ca6b368b2173482dcd049aa05883f06973c387f275303cddae"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_BS2_LOD1_rd6935e475a00.mwm",
-      "bytes": 524716,
-      "sha256": "d6935e475a00d8c76c70d3eec721a8085c3fe606f99d45ff1198dca405fc9daa"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_BS2_LOD2_r3794e14cdd37.mwm",
-      "bytes": 262572,
-      "sha256": "3794e14cdd371cad15daa5f45ea9be64d0591e37de57fb52ce0c0d210104f006"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_BS3_LOD1_r2801b54c7c64.mwm",
-      "bytes": 524716,
-      "sha256": "2801b54c7c64e5a690440e356399afb8f4fb4357e049759a18d3b14d6bea508c"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_BS3_LOD2_r490065814534.mwm",
-      "bytes": 262572,
-      "sha256": "490065814534667ca0c092806a1cd4925a9f8b5aa1346cb0b9028ff29d6ba00e"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_LOD1_r559697fd0bd5.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PipeRotor_M_LOD1_rcfa3ed366e31.mwm",
       "bytes": 1049004,
-      "sha256": "559697fd0bd5bd8109475d0f022599fff21202e13c558592d2a6e015daba4372"
+      "sha256": "cfa3ed366e3187815292efe883c0a38bed7aa1119ff652f48856002fbce0e34f"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_LOD2_r111e152972c4.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PipeRotor_M_LOD2_r8831abcf2869.mwm",
       "bytes": 524716,
-      "sha256": "111e152972c4e11c19c9ab986e01485bc1dd561eb6242eb102a8a211110a1f31"
+      "sha256": "8831abcf2869b0899fcb29be6120b116b7bc1a1e79ad56729c76b09a9b1fc07a"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_BS2_LOD1_rfc90c0480ff4.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_BS2_LOD1_rca60703144b8.mwm",
       "bytes": 524716,
-      "sha256": "fc90c0480ff49e77df1c8fa0e791b8e8be4bc2676e63475b0b065bc5fb750666"
+      "sha256": "ca60703144b8089cbfb5d896de9b1ed32b2a86286b09e9d910a7a39a29b413e2"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_BS2_LOD2_r60e856b6ed7b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_BS2_LOD2_radc34708c0dc.mwm",
       "bytes": 262572,
-      "sha256": "60e856b6ed7b660ee33ce22cf1970333cfd0b7cb72d0d2975ea6d6711f75a352"
+      "sha256": "adc34708c0dc12b0517d5cdc6e543dc9ed20c78d311fe2656f8493e8ba57f6bd"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_BS3_LOD1_r00f3c720a6be.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_BS3_LOD1_rcf8cc03b9f99.mwm",
       "bytes": 524716,
-      "sha256": "00f3c720a6beb217c132c268b85cd034c5d0c45583c13f321cd57f61f7ad1650"
+      "sha256": "cf8cc03b9f991a56a835195a4679c74dd6ebefeb01905933be735b659762a018"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_BS3_LOD2_rd09190209f62.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_BS3_LOD2_r2060edcdb452.mwm",
       "bytes": 262572,
-      "sha256": "d09190209f629265b824dd517fe559eb848342e40c71f958cc430a4696fc3ffe"
+      "sha256": "2060edcdb4525a5e7a59e760f6282dc23933641b6bcc42211d6b9760661a11e3"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_LOD1_rc0e5ea423e0a.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_LOD1_r4aabe0ee69e9.mwm",
+      "bytes": 524716,
+      "sha256": "4aabe0ee69e9ad95ab0c98226a0b03faf30e7fc2448b57aed2ba4123b97aaab4"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossBare_M_LOD2_r270dbe46edc0.mwm",
+      "bytes": 524716,
+      "sha256": "270dbe46edc0034b8eaa87ab6330827addfa3d225928b9f27a75a2a89ba2e2dc"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_BS2_LOD1_re882faa87bd8.mwm",
+      "bytes": 524716,
+      "sha256": "e882faa87bd8dd1086187e6bb846eb8e95f60a02a2d983b0528e1b01637986c7"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_BS2_LOD2_ref6538a55d3e.mwm",
+      "bytes": 524716,
+      "sha256": "ef6538a55d3e438b21e72c347ac1fc190f8bfd7139d241f1a229029ef3677886"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_BS3_LOD1_re2b3ce8ef91d.mwm",
+      "bytes": 524716,
+      "sha256": "e2b3ce8ef91dc6732e3beb9994936b5f81ed1ab81c33a857564f9e9cd3fffd84"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_BS3_LOD2_r738f1ab823da.mwm",
+      "bytes": 524716,
+      "sha256": "738f1ab823da7fb3fd254ebc74fc61d15bbab309af343569bfa3cc3e86c0700e"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_LOD1_r1f22079b6331.mwm",
       "bytes": 1049004,
-      "sha256": "c0e5ea423e0a73c932011546936b6e5050be21015a575ed898f1871e54c4152a"
+      "sha256": "1f22079b633142bfa62578c36b88b8479fb54365efe604e8bd9223b970cfcc31"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_LOD2_r3b53e784d82c.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryCross_M_LOD2_r87e1bc9ef6e0.mwm",
       "bytes": 1049004,
-      "sha256": "3b53e784d82cd15d566aba2b62df2b32ec41497ad8cbe7d474116b8fa9c8775b"
+      "sha256": "87e1bc9ef6e00114dcce309d75afd22c4e64ce75a0a1e432ddabf9340df90ec8"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_BS2_LOD1_r52379ab5cc99.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_BS2_LOD1_r5c2f54601f0c.mwm",
       "bytes": 524716,
-      "sha256": "52379ab5cc99271ce91ee1863fed37be367d479b667c7e8e20b0eea81fb81440"
+      "sha256": "5c2f54601f0c5d58b7789dda1479f4b65913b4a1dbedf8d51fba9d1e5c8aae75"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_BS2_LOD2_rf915fd6f3608.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_BS2_LOD2_rd7b2e6ea53d8.mwm",
       "bytes": 262572,
-      "sha256": "f915fd6f3608c657176dca2dcb8dac5e1db039f8c8c6812158ebe741bbae1014"
+      "sha256": "d7b2e6ea53d8d39c679f5baee5424a8b2b90ffd892962a84615c703cde119af6"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_BS3_LOD1_r8a23d4955cb0.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_BS3_LOD1_r2ac5e3c6d47d.mwm",
       "bytes": 524716,
-      "sha256": "8a23d4955cb0b3d03db3a83401170008efc8033a97ed01b18cde5473bd1a6696"
+      "sha256": "2ac5e3c6d47d7adf8664bc30d0077bbae975e4e41a6d02059194740dfc93a53b"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_BS3_LOD2_r16ccb3a42f97.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_BS3_LOD2_rbd1d28d30827.mwm",
       "bytes": 262572,
-      "sha256": "16ccb3a42f97d669d106fafea9c6e3c425a29dbbed4f3518ffb047b8bdac4dac"
+      "sha256": "bd1d28d30827881cf9c5884addd82af1e8f103d67bb925f76266ff476ef7de36"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_LOD1_r7a1a4391024e.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_LOD1_rdd592d7622a9.mwm",
+      "bytes": 524716,
+      "sha256": "dd592d7622a9df2419f62b03365eeb5dcfc33d3eefaf1c5bfa1dac858a19bfd0"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowBare_M_LOD2_rf361b1549c97.mwm",
+      "bytes": 524716,
+      "sha256": "f361b1549c97bd4d3458cc8daa0810ff52444f34c67ae114ccf436ce31c2be31"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_BS2_LOD1_r1b9febfd14b5.mwm",
+      "bytes": 524716,
+      "sha256": "1b9febfd14b5ac699992767aceef22c4d84525783c9cba7ab191ddddb250d094"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_BS2_LOD2_rd690106fa499.mwm",
+      "bytes": 262572,
+      "sha256": "d690106fa49965566e086f4b79fb7293bea33c5fa29f92928def30614bb8d9c2"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_BS3_LOD1_r0c2fd4765ecd.mwm",
+      "bytes": 524716,
+      "sha256": "0c2fd4765ecd717a4756d6ef0316acf032762ef2f15d3971ae95d19a118c0e95"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_BS3_LOD2_r0c250a53001e.mwm",
+      "bytes": 262572,
+      "sha256": "0c250a53001e07faab5daea89af96e14529c4e8b76650d3351442f911751b401"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_LOD1_r76422f98bee9.mwm",
       "bytes": 1049004,
-      "sha256": "7a1a4391024e337ccb0ac08fe97e339bed69ad28503a27b165d015436fc27791"
+      "sha256": "76422f98bee9b9633e30fd742918984f6fa2968e016be125b3db33b09db021d0"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_LOD2_r3c9cabe9224c.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbow_M_LOD2_r406317642323.mwm",
+      "bytes": 524716,
+      "sha256": "4063176423238d2362a8be97e2ef54d44f37e826ff71b19b34539bcec3f11d20"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryEndCapBare_M_LOD1_r77d7fa4e8d8e.mwm",
+      "bytes": 262572,
+      "sha256": "77d7fa4e8d8e9909cf8eb4a3739be33b15c6ea6a436adce1df26eaec399122c2"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryEndCapBare_M_LOD2_r80a16509e88a.mwm",
+      "bytes": 262572,
+      "sha256": "80a16509e88aa7d4a764053d810b45f2e8470002a533ff2a979a11d9ab70961c"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryEndCap_M_LOD1_rfe6af9031c9d.mwm",
+      "bytes": 524716,
+      "sha256": "fe6af9031c9da90ee8dc8399de535c01b5a28d8cf42f6d4d377c5fb4c10821aa"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryEndCap_M_LOD2_rb0c6466bda3e.mwm",
+      "bytes": 262572,
+      "sha256": "b0c6466bda3e88309598ea1983291bbb98a1a94e1a05e4672dd7871e3074697e"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapterBare_M_LOD1_r4ac5504629f5.mwm",
+      "bytes": 524716,
+      "sha256": "4ac5504629f55da9feda481721bdcf082303e79a9f31dd712a3cfcd1cbe8cdad"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapterBare_M_LOD2_rfaf9748bb307.mwm",
+      "bytes": 524716,
+      "sha256": "faf9748bb307aa91497ae0e1a11da92c344176805ca0e8ea26e3b617d26707b0"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_BS2_LOD1_r61e34a239535.mwm",
+      "bytes": 524716,
+      "sha256": "61e34a239535ff071757fdee01bb53d2dceb1417331128502ba2376cec75ca15"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_BS2_LOD2_r373b3a5c787f.mwm",
+      "bytes": 262572,
+      "sha256": "373b3a5c787faffed0da7b2c8a8544d131f0aa37868bcc18bbe867d7253d1257"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_BS3_LOD1_r633f7870463a.mwm",
+      "bytes": 524716,
+      "sha256": "633f7870463a0ca683b41803cf082ff5e9857b4e8fc1e930de056fcbd7705e03"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_BS3_LOD2_r1b7145208aeb.mwm",
+      "bytes": 262572,
+      "sha256": "1b7145208aeb8586723d0a76bda081e56210a74e782565f79139b12b1f05b4f3"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_LOD1_rf359a2630635.mwm",
+      "bytes": 524716,
+      "sha256": "f359a2630635cb2fbbee57b12ff0d546b6f521659cd69e14b6a878031f80d948"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapter_M_LOD2_r9aad905a2c87.mwm",
+      "bytes": 524716,
+      "sha256": "9aad905a2c87a85845cede5b2e9553d2a4027ea3bba55319b14bfc13500acef9"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_BS2_LOD1_rf96c7b896ff5.mwm",
+      "bytes": 524716,
+      "sha256": "f96c7b896ff54c0b01ea7f02b94399e898131494d7d675473499012a0ce2838a"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_BS2_LOD2_r9fcc28fc01e6.mwm",
+      "bytes": 262572,
+      "sha256": "9fcc28fc01e63db5c08931f3729023d39261819d2e913c4bee47a88e5e5eb842"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_BS3_LOD1_r0ad680f12abc.mwm",
+      "bytes": 524716,
+      "sha256": "0ad680f12abcfbe8023f1b1381c2ec4bb6f68ca1f556caa6b8f967c472b7d95b"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_BS3_LOD2_r5ba07ba43089.mwm",
+      "bytes": 262572,
+      "sha256": "5ba07ba43089d1ae107655102a5a181cde30809901f989ca501eff749b08dcc3"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_LOD1_r36a4c723d25f.mwm",
       "bytes": 1049004,
-      "sha256": "3c9cabe9224c647a75d419e985942a59a84604e05e93b9187a9fc99f3dc84fa3"
+      "sha256": "36a4c723d25f3b43a3ce57b3416a389068f9e0bfd345ea1a872a6f44fe73adfe"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_BS2_LOD1_r8fa211dbf138.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserBare_M_LOD2_r9c6e34b6536f.mwm",
+      "bytes": 524716,
+      "sha256": "9c6e34b6536fe776035101dc7629ecc550cfe3ed034bd502735507f290d254f8"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_BS2_LOD1_r03f3d9425df8.mwm",
+      "bytes": 524716,
+      "sha256": "03f3d9425df86b205e540ac9ec8ec76ee1331b35d1e68fbd509232adecccae40"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_BS2_LOD2_re4b1747ea1e7.mwm",
+      "bytes": 262572,
+      "sha256": "e4b1747ea1e7afea0c771b83b160e6d4e7e04184781e3dba9573860ec42db5de"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_BS3_LOD1_rc09c57a40cb0.mwm",
+      "bytes": 524716,
+      "sha256": "c09c57a40cb0017afc87a2b66573e8535705f5fc47327770be4014db63ed4fb8"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_BS3_LOD2_ra85cca8b4e94.mwm",
+      "bytes": 524716,
+      "sha256": "a85cca8b4e949a17addfc0c4e967f454a98287a73f8e16ffd9966117f41c4b3d"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_LOD1_r20f493f59b1a.mwm",
       "bytes": 1049004,
-      "sha256": "8fa211dbf1382d6b4cc00d8583fefe1607bde75c71e247bc552888ee301f9003"
+      "sha256": "20f493f59b1ae0ed80fb6cb9ddbfeeb08249b9becf4a4283c37c80aac71bfd9c"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_BS2_LOD2_r660886ce0880.mwm",
-      "bytes": 524716,
-      "sha256": "660886ce08807a5e354df7a41ab8159f89d9cd7c6e7e902fbee05a203fd56cda"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_BS3_LOD1_ra9b0b7355ca9.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiser_M_LOD2_r2670fc626d8c.mwm",
       "bytes": 1049004,
-      "sha256": "a9b0b7355ca9da36500b770c1ef97016efc4661e4820cd2c271067a3d2129a48"
+      "sha256": "2670fc626d8c020385d50f30acaef9f3d042383174688eb33e8b2f3487876c33"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_BS3_LOD2_rb2381f1abda2.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_BS2_LOD1_r92479469f95f.mwm",
       "bytes": 524716,
-      "sha256": "b2381f1abda2cfbae1fc43a09ebd3433d2fca1db15b4ad5d96290c98a2a927be"
+      "sha256": "92479469f95f2653ce3644a40ab051d07b130bbba43ad76d727f148348fc4a7a"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_LOD1_rc46c3752682a.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_BS2_LOD2_r283f3c17ca61.mwm",
+      "bytes": 262572,
+      "sha256": "283f3c17ca61263c62dad66bd239605f34f2deb89d7ec76cab658867773821cb"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_BS3_LOD1_r9c5aa9e80870.mwm",
+      "bytes": 524716,
+      "sha256": "9c5aa9e808706fc69e85706f096d56e4b7788afc583af8a5c0785bab6ec689f2"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_BS3_LOD2_r86a975a6dae0.mwm",
+      "bytes": 262572,
+      "sha256": "86a975a6dae0ad315f13fb46e9158580d687082217566e729b158088259c8836"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_LOD1_r7b8dc6619451.mwm",
       "bytes": 1049004,
-      "sha256": "c46c3752682a347099e26437e04df279fd89719f2b7e2e9de3f5a311b5634f58"
+      "sha256": "7b8dc66194515d891b76eb8ff2745c250bd1ac9bc91ba7da1b8ac26d7b7f9e23"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_LOD2_r88ae57109356.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterBare_M_LOD2_re213befc8733.mwm",
       "bytes": 1049004,
-      "sha256": "88ae57109356d4271ce849bc3f06ebed75a98de375eb88d4db636e1c4efbb77c"
+      "sha256": "e213befc8733d249ea60d1c053791366b0a875bb7808bcc9c5be590eaa9a8d59"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraightBare_M_LOD1_r55af1543072b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_BS2_LOD1_r4cb13f3a1d07.mwm",
+      "bytes": 1049004,
+      "sha256": "4cb13f3a1d07b242e7de18ab4762cc885b5b9270c15f0249144f0927ba0ef0b2"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_BS2_LOD2_ra2361c52a18e.mwm",
+      "bytes": 524716,
+      "sha256": "a2361c52a18e36478750ac74ea5ef5aa1fe282332d75f1c9c23625536e6e78ed"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_BS3_LOD1_r77e89c837812.mwm",
+      "bytes": 1049004,
+      "sha256": "77e89c837812f5e555b509dff8a1d88fb8783580cf2d6acf6804607900f5ba50"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_BS3_LOD2_reb67822d7a62.mwm",
+      "bytes": 524716,
+      "sha256": "eb67822d7a62bd85a06962432e8095dca2c9425c2fad0f7af5ba31b7fd0dbac7"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_LOD1_rfa4868e668a2.mwm",
+      "bytes": 1049004,
+      "sha256": "fa4868e668a208c1515477722e6d6e2431ed874b72145d61cc7a8df64a203792"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapter_M_LOD2_rb441402c08fb.mwm",
+      "bytes": 1049004,
+      "sha256": "b441402c08fba3fce77a78804be405036e5b1761a0dba7bdb0eff23151bb228e"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraightBare_M_LOD1_rf9691e1714d1.mwm",
       "bytes": 262572,
-      "sha256": "55af1543072bba29eea24328cb2461ebd9a967f63b26ee0e6a474741754afaf2"
+      "sha256": "f9691e1714d194e1a70343c9dd7d89ad377fa61363386be19a033a6796463f18"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraightBare_M_LOD2_r14fd4155e774.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraightBare_M_LOD2_r67e7b4afadda.mwm",
       "bytes": 262572,
-      "sha256": "14fd4155e774ebd649f96852ff369ebded05927496eb8f235d7c1f9b0b010966"
+      "sha256": "67e7b4afadda559d567bc96826a16031cb34748e2df013bfa6351b4d0eaeb239"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_BS2_LOD1_ra65fb54db4ea.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_BS2_LOD1_rb02714b1c638.mwm",
       "bytes": 524716,
-      "sha256": "a65fb54db4eacacd8f0571b96202867f19d7b0fa5b45a8e901dda1b02fa5860f"
+      "sha256": "b02714b1c638e7f390e8af918fa5e6559101dfa8ad6b606258e2fa03c926cac3"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_BS2_LOD2_rd12d509cc6eb.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_BS2_LOD2_r4d4a7827d974.mwm",
       "bytes": 262572,
-      "sha256": "d12d509cc6eb73febcd019ce4088b541b8365fa91f194dd4dbca085b638496ce"
+      "sha256": "4d4a7827d97484cd158927af68c7cb6f026181d8c5630e0aa95353fdd6295cb6"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_BS3_LOD1_r61c1cc1165d7.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_BS3_LOD1_r7cc72445403b.mwm",
       "bytes": 524716,
-      "sha256": "61c1cc1165d7afe75f61b71423f8eb72d946e10971a9f7b2139275f809a856cd"
+      "sha256": "7cc72445403b533adb9abb1fd7d81267418067e8650cc05a097920806ebb7f8b"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_BS3_LOD2_rf024031ee94a.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_BS3_LOD2_r88974134e50d.mwm",
       "bytes": 262572,
-      "sha256": "f024031ee94a5e51d0b5ed926f8c42585f4ef1b64a987b08ed094e06eb9f43d9"
+      "sha256": "88974134e50dd54f0a7235fe34fe85c492d808f6aad4b51c23617684dce10743"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_LOD1_r7ffd70023b5a.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_LOD1_raf6256acbd33.mwm",
       "bytes": 524716,
-      "sha256": "7ffd70023b5af73bb0111e90b1e45e15064688e567b156f6fec01770545b1210"
+      "sha256": "af6256acbd33d0fc4c6553ed0a60b52e60a7f147fa3ef2a8b5773f0fe34e0fc5"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_LOD2_ra1450cb84385.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryStraight_M_LOD2_r652c40835e70.mwm",
       "bytes": 524716,
-      "sha256": "a1450cb8438544c5385da2d641f8687b7ee81e645fa62772458960ddc91b8ebc"
+      "sha256": "652c40835e70e64d3d142ae621102ca7fde06332f0105ecba75527cada95d99c"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTeeBare_M_LOD1_rc267a2b0cadf.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTeeBare_M_LOD1_rc9df4e2d4c2b.mwm",
       "bytes": 524716,
-      "sha256": "c267a2b0cadf6fe304297f8534427bfff48b99282a4729e4f97d7bcc94956db6"
+      "sha256": "c9df4e2d4c2b9202cf1d50bd5cc61b9b28807e6884668ebccecbe43d1abe0ad0"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTeeBare_M_LOD2_r333165cb61ce.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTeeBare_M_LOD2_rf5b8cba4e46d.mwm",
       "bytes": 524716,
-      "sha256": "333165cb61ce6c5e2fc0ef3179e46251470327090ee4af17804e292602d9ad8b"
+      "sha256": "f5b8cba4e46d870a1249fd6d2bd11cbb5e537c48ce9da64a25eba0942b4d7780"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_BS2_LOD1_r1529ae46ffec.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_BS2_LOD1_rf3a60af28b47.mwm",
       "bytes": 524716,
-      "sha256": "1529ae46ffec6a2ac26e9642be6bf7626a630252578857bfcd3d81b687079da1"
+      "sha256": "f3a60af28b4789361e495254894ea6a8c338ad43350a9af1759e28e3a7cc3438"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_BS2_LOD2_ra77e8d612868.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_BS2_LOD2_re578977b5d51.mwm",
       "bytes": 262572,
-      "sha256": "a77e8d612868d10c6845da8768c631d4efefb91219b6c26f430205ece6103646"
+      "sha256": "e578977b5d51b320d2a4259c22b43f135c8a9cae7ad4f46ffee95f64235f2095"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_BS3_LOD1_r8a37b6e666e7.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_BS3_LOD1_r0ced1be6cb4e.mwm",
       "bytes": 524716,
-      "sha256": "8a37b6e666e739e81f3abd27aa2f586f9b00c5f41e398e4e9b41b5000795d145"
+      "sha256": "0ced1be6cb4e48d82c53925cf8dd65b981057f5ffe39aa3ffc2fb80211ae4805"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_BS3_LOD2_ra6afe4a03d5b.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_BS3_LOD2_r345e2d71ee96.mwm",
       "bytes": 262572,
-      "sha256": "a6afe4a03d5b0cf5b266f829c375fadf077fb0d08668cd0d957fd5c46dd6a4a4"
+      "sha256": "345e2d71ee96421cb7cbcdd30ce93e165408eef5a2412702f8aa8124d902f0b9"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_LOD1_rb4d649e65600.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_LOD1_rbeef2a4ff4be.mwm",
+      "bytes": 1049004,
+      "sha256": "beef2a4ff4be6382f809e8ccf1a7c9c0719243ded51380ce107406a457a1306f"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_LOD2_r08c63286dd44.mwm",
       "bytes": 524716,
-      "sha256": "b4d649e65600706d7ee1df12af3b0c5cfc9052b06130f12e87636e4cca37e6ea"
+      "sha256": "08c63286dd44d040fca55c39046733dadbe39092243dac2a0bd09845dfa9d459"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_PrimaryTee_M_LOD2_read6aac0dfb5.mwm",
-      "bytes": 524716,
-      "sha256": "ead6aac0dfb5fb1dd77fb3dec784ce37e55c7ac1b0538be9e27e7595d054d385"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_RadiatorPanel_M_LOD1_rbec2e2a7e553.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_RadiatorPanel_M_LOD1_re3bce333a323.mwm",
       "bytes": 131500,
-      "sha256": "bec2e2a7e5539b89feca1164821b2dd8a6c15c2afebde41792dec241aee26eb4"
+      "sha256": "e3bce333a323b39b4ed53c7cded425e4d08bd01e93979817161699e783b525be"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_RadiatorPanel_M_LOD2_rad538f248b87.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_RadiatorPanel_M_LOD2_r78dd01932e29.mwm",
       "bytes": 33196,
-      "sha256": "ad538f248b8735ab101190ef5e4aee023969a952e8a2d03e6ce90f87de6183a1"
+      "sha256": "78dd01932e29e4a0062c69f0712dc8f336fcdfb841d4f34e070318a99a6c3a84"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_RadiatorPanel_RadiatorPanels_M_LOD1_r60d6ba032131.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_RadiatorPanel_RadiatorPanels_M_LOD1_r64791fc02d72.mwm",
       "bytes": 1049004,
-      "sha256": "60d6ba0321313adb268cce210d681cdb43fb02778b610571df2c058a5c517b37"
+      "sha256": "64791fc02d7295ac4efcf19e1b9ea840ea0906808df8e764cee028783bb067c7"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_RadiatorPanel_RadiatorPanels_M_LOD2_raad5417c6747.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_RadiatorPanel_RadiatorPanels_M_LOD2_re3782b3a7558.mwm",
       "bytes": 1049004,
-      "sha256": "aad5417c67475025cec591d20b1d0076338f5ec26b725fe7c227b802016b034c"
+      "sha256": "e3782b3a7558314de97ded52309a58550f27c822bde0ba7eff1a068c98e8d9b9"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LA_Carriage_M_LOD1_rb58cc7c75e1e.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LA_Carriage_M_LOD1_rcf810c825557.mwm",
       "bytes": 262572,
-      "sha256": "b58cc7c75e1e73af02fcff74198a0406d3d4559524561c7cbc3be440acc85083"
+      "sha256": "cf810c825557d69f66c7fe0d5ac053e7d6be429ae54a4f7878bc8a13be6a0a29"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LA_Carriage_M_LOD2_r1a1f38d757e8.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LA_Carriage_M_LOD2_r849d56dcb99c.mwm",
       "bytes": 262572,
-      "sha256": "1a1f38d757e8558a401d3aa919eaed29e8c948067915593635b26e1af2a0b930"
+      "sha256": "849d56dcb99c954f520ae5a023dd938ed13217dabfeb2aa38d947e0f5b54ee81"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LB_Carriage_M_LOD1_r40a8180b88cb.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LB_Carriage_M_LOD1_ra7216c02b6e2.mwm",
       "bytes": 262572,
-      "sha256": "40a8180b88cb3915c412e0b04367fc9bcbfcebc1f5380a6a240ea4cb9e4f76f5"
+      "sha256": "a7216c02b6e2499b5f556dfca4ecd8f1425f8e1f5b9766d15b2526dd2c6b9a63"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LB_Carriage_M_LOD2_r82655cad3b11.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_LB_Carriage_M_LOD2_rfb65e19de9bd.mwm",
       "bytes": 262572,
-      "sha256": "82655cad3b11ceb6ad8cb3045970d84f88298113cf1e8b76d601c96b95db4c08"
+      "sha256": "fb65e19de9bd9bb2fd4cab96ae0e062b32e45da63baea462f1b63ab38758a594"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS2_LOD1_r3d9408321129.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS2_LOD1_rf6799faf94c7.mwm",
       "bytes": 8389036,
-      "sha256": "3d9408321129f1a7b6d4aedc15471e35cc709f2d8e942231515f771dca27e5a9"
+      "sha256": "f6799faf94c7b59c7fbae54997bcc11c723d4f9c576f2f0cd407490cf4a44eba"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS2_LOD2_rab8b12648a07.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS2_LOD2_r70aa2b0291c7.mwm",
       "bytes": 8389036,
-      "sha256": "ab8b12648a0762080156db2f4b6ffd31408d2641da213199684be4c5f6e84397"
+      "sha256": "70aa2b0291c74d527ca43046e7ef7bd1a1e43297ffcadca5cb70606518f9053e"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS3_LOD1_r7c86a745aab4.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS3_LOD1_r9e18cbbbbf80.mwm",
       "bytes": 8389036,
-      "sha256": "7c86a745aab485f5a04e09824dab55b349b906bcc9f62c0999ac91d54b94792f"
+      "sha256": "9e18cbbbbf80b7733c66583cedf3b50816df359c75d326b0b20a22e881d1f2b8"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS3_LOD2_rd781352992db.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_BS3_LOD2_rcd7888f7e47a.mwm",
       "bytes": 8389036,
-      "sha256": "d781352992dbf561c07842f4c3880c8cdc7bcd3d8fd5903662ab1b14e177fa81"
+      "sha256": "cd7888f7e47a056f3a9c1bcc4433b14d2422040e5b2a915004ae5ffcb020fe14"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_LOD1_r05e8b4163d67.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_LOD1_ra9925960c6bc.mwm",
       "bytes": 8389036,
-      "sha256": "05e8b4163d67950e6132a2ca3d21840b687038bdc0f1698cf9012f98249be23d"
+      "sha256": "a9925960c6bc26db45fc2cd352ef199133de7ec8f5c18bed76e6a3993597df5f"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_LOD2_r94831ac0e029.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_M_LOD2_rd79f5a340937.mwm",
       "bytes": 8389036,
-      "sha256": "94831ac0e0290e70201b1359f7a33dd569bf4b6326419621ea0f60dc3b38dc3a"
+      "sha256": "d79f5a34093729ea085294f64a35963309bb43c1b5e31a2b7193fb547729f2d9"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RA_Carriage_M_LOD1_r5ca2093cda13.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RA_Carriage_M_LOD1_r0b0399c5abb4.mwm",
       "bytes": 262572,
-      "sha256": "5ca2093cda13ea2521404891c81b7c894420caece614c0b9bb6eaf5da2799b95"
+      "sha256": "0b0399c5abb47c841209eea3fe9b0da69f59a4e7d2bedadb4e8c46872f7dbe33"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RA_Carriage_M_LOD2_ra3acabc94ede.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RA_Carriage_M_LOD2_r1ec91320db49.mwm",
       "bytes": 262572,
-      "sha256": "a3acabc94ede0bf14e2dc5c94d5c8712d25c5d8a2e33fbeffa4ff79f4cdf3fc6"
+      "sha256": "1ec91320db49a64a6aacd9d5fe61bbbabbb718ce14ee4c97e4e7ec0be854a3a4"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RB_Carriage_M_LOD1_r25c22db446a6.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RB_Carriage_M_LOD1_r63a709da2964.mwm",
       "bytes": 262572,
-      "sha256": "25c22db446a603b178dbcecfc09129088142b92d4d0bd20558f744f093ce91b7"
+      "sha256": "63a709da2964ca06032f31a442f105304bfec09dbddd87bb0fa1c3db4a8c0584"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RB_Carriage_M_LOD2_r44e582f075fb.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_ReactorHousing_RB_Carriage_M_LOD2_r04d08e81ad01.mwm",
       "bytes": 262572,
-      "sha256": "44e582f075fbd95ebde79941660d517462bb429e129234a0587c745076e12980"
+      "sha256": "04d08e81ad017282bf407423ff0e82f5414974fe330bcdd7313e6b9b67a4db33"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_M_BS2_LOD1_r0966b5b3a3fb.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_M_BS3_LOD1_r2aef64815a5f.mwm",
       "bytes": 524716,
-      "sha256": "0966b5b3a3fb0d3953a552afdf21eef13cadcf4a2305bb844c1656d78ed794d8"
+      "sha256": "2aef64815a5fd1bb3a302ae6b04a770377d0d721591dc7513070335c610b0289"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_M_BS2_LOD2_r0dc1a20a67db.mwm",
-      "bytes": 262572,
-      "sha256": "0dc1a20a67db5b83475de1a81287170c0221d1459861f89a0aa933e8f9401c0a"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_M_BS3_LOD1_r95b45dc1c678.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_M_BS3_LOD2_r8655eba2b1dd.mwm",
       "bytes": 524716,
-      "sha256": "95b45dc1c67872f5590e894e9a1d7ff52185aeda5a6a356b3b2ca257882a9304"
+      "sha256": "8655eba2b1dd15f8ad63678c888c94c31ae463fd353777ca1811b02d8d01fa5d"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_M_BS3_LOD2_r25a0cefaed5e.mwm",
-      "bytes": 262572,
-      "sha256": "25a0cefaed5e3f9a2bd89cd5f8b5d0ab891a9f15aabe3357448cb7c18806767b"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_M_LOD1_r200381815e54.mwm",
-      "bytes": 262572,
-      "sha256": "200381815e543860ca227b5ba21791938d6b308b0dc59f20c49ca03e2389c287"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_M_LOD2_re8c9672dc49b.mwm",
-      "bytes": 262572,
-      "sha256": "e8c9672dc49b76ce0d8d2ee5654a1f30f66a17419ea2893fb42a8665f334038c"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_RadiatorPanels_M_LOD1_r713cb1714897.mwm",
+      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_M_LOD1_rd13d4a7fa8e9.mwm",
       "bytes": 1049004,
-      "sha256": "713cb17148975e1c7ce0a11bfe7384e7a73862c0552d70245647625db12fdc80"
+      "sha256": "d13d4a7fa8e91ce43a5f04e3c346dc87436f779b97433802c5c99d3b1e219523"
     },
     {
-      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_RadiatorPanels_M_LOD2_rd3d4691aee9e.mwm",
-      "bytes": 1049004,
-      "sha256": "d3d4691aee9ea348893ab4c4a454dfe292644e247bf6fe55252addc4d9399f3a"
+      "path": "Models/Cubes/large/Thermal/LOD/APT_SpaceRadiator_M_LOD2_r0c56e22f9308.mwm",
+      "bytes": 524716,
+      "sha256": "0c56e22f9308ee3bdb412dd405c02b6d7ee659369deb78df23aa03e285fec18f"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M.mwm",
-      "bytes": 262739,
-      "sha256": "b6515f2ebb01623900bc790b8d1dbc6da44b2b116fb47965596d08bddba5d4c9"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M_BS1.mwm",
-      "bytes": 131500,
-      "sha256": "2fe87c5ca7cb9a35b8d7455e474a3af3e0d3d03f5a6aaffa98d3ddd99e8a3a5e"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M_BS2.mwm",
-      "bytes": 1049004,
-      "sha256": "b19e952d848d9366d0a4d01c1b5d1676d3f1c5e35e0e174ecb03218a8070621b"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M_BS3.mwm",
-      "bytes": 1049004,
-      "sha256": "28786d73567adfacf6ead4a0f65d3b27b6470a5d3ce5964f009027beabc61fd5"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_RadiatorPanels_M.mwm",
-      "bytes": 1049201,
-      "sha256": "51eb49e6eecf8d6dcd1aeaf459b0b6603568f423e7a743d2b707b4776ad9a60b"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotorHead_M.mwm",
       "bytes": 1049171,
-      "sha256": "69e83a62c53395ce6a69dbd783551a4a47bf3372562255c5f0f85afabfa81eb5"
+      "sha256": "16bafc1cdf3733d5af6f4034f8aa8e324ab5660923d6bfaa6c33bec06d47d219"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M_BS1.mwm",
-      "bytes": 380136,
-      "sha256": "67f5c1c4d57dc7d7c8f0aa8c4f6c0fbec86e101e604fcd8c4c7f0931fdf7d2fb"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M_BS2.mwm",
-      "bytes": 1049179,
-      "sha256": "ff6047df98686ade3ece03aa2e9018f29f34cc66204f722be4a0864977c7dc51"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M_BS3.mwm",
-      "bytes": 1049179,
-      "sha256": "2acbe4d6c1e178a41ae3000504f23672ee1ecc875af1312e201ef71e5de80b76"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_RadiatorPanels_M.mwm",
-      "bytes": 1049201,
-      "sha256": "e778484b3f4e7125a1be3d490bb8019a86509ff7e29857bf0197523b951a1172"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LA_Carriage_M.mwm",
-      "bytes": 524909,
-      "sha256": "49a68ef941a79ee8217afaacbe93e50f3276f71ca4eb807642d9166f08166c63"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LA_ChamberVent_M.mwm",
-      "bytes": 8620,
-      "sha256": "23f6e11d5ca5270aac341fb6f9776374ffe4dc7bcbe621a4b8f7b66b472bb0c8"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LA_ConnectorTail_M.mwm",
-      "bytes": 16812,
-      "sha256": "cef401491102bfc433c860a01bae44be9a45dd66087e696baa8f7b14750b7d93"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LA_CoverMinus_M.mwm",
-      "bytes": 8620,
-      "sha256": "aaa6b01712fecde46ecd4a802498cbcfca0afeb5cf299946c56be5169c2887e5"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LA_CoverPlus_M.mwm",
-      "bytes": 8620,
-      "sha256": "8eb3f1e2d4442ebb9ffbf9e8668bceaa6ba7e01e7d4645c9f54613b0e41654d2"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LA_Intermediate_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotorHead_M_BS1.mwm",
       "bytes": 131500,
-      "sha256": "510edac9d561b3f6124de9a6f7d56f80f454c7d0142baccd5e585b41ce9e0e30"
+      "sha256": "da68d00d1e8a7ad09fcb71b216961bb3e20b5ed06f20a8860193648c19117ca0"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LB_Carriage_M.mwm",
-      "bytes": 524909,
-      "sha256": "186d3a486ef57285a80a048f7bb515e280f302a4b81193a5b69d49fe4f3616bc"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LB_ChamberVent_M.mwm",
-      "bytes": 8620,
-      "sha256": "3970d7021822257de1e1c602a52657f9713bcde5face054456fdb09d499f2a33"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LB_ConnectorTail_M.mwm",
-      "bytes": 16812,
-      "sha256": "63390f21b2b107facca6f520a1f5ac09708ab64afbd1e555669c0e7c9e7cf2a2"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LB_CoverMinus_M.mwm",
-      "bytes": 8620,
-      "sha256": "8b6c5fb4f62a1f683941af26db088a04921e2d29cd95898aa397612b149192a4"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LB_CoverPlus_M.mwm",
-      "bytes": 8620,
-      "sha256": "903d0b69e9d634b387109d31a3943d314fa457c8e0fce8a4b462da95a53896f3"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_LB_Intermediate_M.mwm",
-      "bytes": 131500,
-      "sha256": "51f1ac38d63ad2523ab039f7a9854b915225f1409731b8e38321f4b3e114aaf7"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M.mwm",
-      "bytes": 16777813,
-      "sha256": "38d70dbe289dbcc768350632d36ac13e389b7b9a84c20be3cdfee38f0cdb828d"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M_BS1.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotorHead_M_BS2.mwm",
       "bytes": 524716,
-      "sha256": "fb170c95fb8dba4df0af5a0c23deea58fcb05a58315de14eb6158005b4d21f82"
+      "sha256": "eff264b26dd962ad5f922bb2bd0c676b45ecec3f432713f519f8e7b1cdd7bb15"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M_BS2.mwm",
-      "bytes": 16777821,
-      "sha256": "f293ab28501b920a4fa9dfb034bd15fe1a834cfe3c89cd856449d5789a41fb5d"
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotorHead_M_BS3.mwm",
+      "bytes": 1049179,
+      "sha256": "f7841944838cc56aa096477a7e71d56dceba825a3367a89cd5a4dad9e97355f0"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M_BS3.mwm",
-      "bytes": 16777821,
-      "sha256": "86edff11f9f744cc65e84dbbe33514649cfdf1e6426fa138429eb9e34119d130"
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotor_M.mwm",
+      "bytes": 1049163,
+      "sha256": "d621b4a21ee1a01072e145d3d458a4929795c54d22122000eb6f22b0512d7ccd"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RA_Carriage_M.mwm",
-      "bytes": 524909,
-      "sha256": "8f9ad9f8b0cb7d034e44f8175f8afa299fc75fd3bfb0ccda97315a3742efa237"
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotor_M_BS1.mwm",
+      "bytes": 65964,
+      "sha256": "2e1f99a8ab81bf85f8b7f42ead005f6a39b1ac367ecbadd97a03286fcdd17215"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RA_ChamberVent_M.mwm",
-      "bytes": 8620,
-      "sha256": "b3f17f7e6419db397f98183ce980dc015ab1af0131ef1ed329b995dd118727b5"
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotor_M_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "2a6ae583643a3623f31d2ea30a180092f0d429206f266ffc6dd4d4e0369e1ef7"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RA_ConnectorTail_M.mwm",
-      "bytes": 16812,
-      "sha256": "19383c5a12b05d4416d70a4eecf732e672113604a30f0eb558e2d82feb27bbe9"
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotor_M_BS3.mwm",
+      "bytes": 1049171,
+      "sha256": "79935f7e87d914829ec778300b30489258ca3fd9d680fa23336c1237a7a1fc66"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RA_CoverMinus_M.mwm",
-      "bytes": 8620,
-      "sha256": "8113ddbfafe3dbec9e94804955be2df94c6152d2afe7a8623463dc0accde6b75"
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M.mwm",
+      "bytes": 1049171,
+      "sha256": "1a0d95bd6f4d66f111ab16647a25ebda0593f9b34be81c06485e3cdc813a5a45"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RA_CoverPlus_M.mwm",
-      "bytes": 8620,
-      "sha256": "e02596209f71e5acde29cbf6fe37fd7bc02513b798498e33530b63d1cd145213"
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M_BS1.mwm",
+      "bytes": 65964,
+      "sha256": "d71610faf3b38ab8300589509833057e65f78ae6163107f421f19952e5864441"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RA_Intermediate_M.mwm",
-      "bytes": 131500,
-      "sha256": "6149a93e52bb212750afc62e16dfac9e641f015bc3a0a4ae19b3771c10be39a6"
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "6aa2add0ff7502686bb8c116723e6f9f2fb4cc192e003761eb3bc6ce3d0b244e"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RB_Carriage_M.mwm",
-      "bytes": 524909,
-      "sha256": "997d1d3cb4801345ffdde35c30c9cfd706bcae3ad89320bec4104b864d62af87"
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M_BS3.mwm",
+      "bytes": 1049179,
+      "sha256": "7f6c8a89ab116810d140360b28416ea17c432d4bbdfd7329dc794139f844ae58"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RB_ChamberVent_M.mwm",
-      "bytes": 8620,
-      "sha256": "80b7bada9f9ced076809b9eb8bfa43ad4e32d31513a43e5306b2940eab9ed1fd"
+      "path": "Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_RadiatorPanels_M.mwm",
+      "bytes": 161178,
+      "sha256": "03256caefa347b272983019ba877ed4b43a1d1767c54445964c9245a8fd4d92b"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RB_ConnectorTail_M.mwm",
-      "bytes": 16812,
-      "sha256": "f98246de728bcfb356cabbd8a0a41898ba6f95e2f23001ef71a51c57176ff445"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RB_CoverMinus_M.mwm",
-      "bytes": 8620,
-      "sha256": "1ce55e26b553f189b266c4f966152ec90bd3fd15c050e5a7dc86bd5d6a3f5994"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RB_CoverPlus_M.mwm",
-      "bytes": 8620,
-      "sha256": "2089c6da086405b2a90f28191f9cde649dc373655f81abc721a45c0b4711e85e"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_RB_Intermediate_M.mwm",
-      "bytes": 131500,
-      "sha256": "5ef1d533a6d93f476d3615bcd95537088964432aad7c179fd7cfec81f17edc6d"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_BlastShield1.mwm",
-      "bytes": 524869,
-      "sha256": "fea1b73f6d41acf72c7c61a204e4f4c68bd3aec1801ac335400770fed8fd67ef"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_BlastShield2.mwm",
-      "bytes": 524869,
-      "sha256": "2ac67c3309298864055c6ba1f7473a19f191b688ee79ce80c247eca565c4760d"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_BlastShield3.mwm",
-      "bytes": 524869,
-      "sha256": "9ce6ee5b85beff97cc7c3e1eee9c1e3b773265e1b39d14385c8311e2fffe5963"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_BlastShield4.mwm",
-      "bytes": 524869,
-      "sha256": "924259c6f096440c19b2f6f83710ac778bf11b59fd816d2d10f9ba77b7842cab"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_BlastShield5.mwm",
-      "bytes": 524869,
-      "sha256": "add744b8cec37730726b422a236050bf1c2dea8d80d01f0600428d2ced06ee2f"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_BlastShield6.mwm",
-      "bytes": 524869,
-      "sha256": "7072aad8a73ffb29fb1b6a18ac0c98f6e0b00dce41eb5c3ef4c8a15f5f7949e8"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_FloorLeaf.mwm",
-      "bytes": 66111,
-      "sha256": "a0a97f0dbf9181cff7a499ba89899306ebb2dfba5f404bb348228a540dcebb53"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_Plasma.mwm",
-      "bytes": 262572,
-      "sha256": "23011252d84e9a09f5ce0d841d2c76424b468f703fcb6e587b7e5e114f66ac3e"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_Ring1.mwm",
-      "bytes": 262711,
-      "sha256": "1a26ea5c42d21a79a7d2b9732c5352f226df39e1c86a7b1edfd7b7c76efb4bba"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_Ring2.mwm",
-      "bytes": 262711,
-      "sha256": "ba7486dbb658bd7839ea7ecbc4cc5ae9a805834a94c83c21298b210f114e8030"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_Ring3.mwm",
-      "bytes": 262711,
-      "sha256": "bf6a6fc0bf60099570fb3dd127b62ff7a159b198c91bb453db525224f073c9c8"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_Ring4.mwm",
-      "bytes": 262711,
-      "sha256": "2409325870e60e5e89983278e03933de1f0585f68b8fc111f85a8ad6b1e9b6e0"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_Tile1.mwm",
-      "bytes": 37808,
-      "sha256": "bdeb1b7f8689dfb8436f0b586fe115b43d42d5d5dffd152f8ae61c208512945e"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_Tile2.mwm",
-      "bytes": 37848,
-      "sha256": "d1237b3ca5b622ab6fd8151c1af8fe28fca78099021e7f59a44022a66a0985b5"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2749aa682eba/ArcanePower_VentHatch.mwm",
-      "bytes": 131647,
-      "sha256": "385616e20f2be7f4a81a9fc18c71df1128c7fa0ea8b54b584516d1fa44d29b18"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M.mwm",
       "bytes": 2097755,
-      "sha256": "f7f1c8f44bba447f553022d988494a7eb6a49320185a87057b743bd644b0b88c"
+      "sha256": "f54639cbe5acdd2294f8315453eb9d592f985e4e01b85b2a5fa03392c334540e"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M_BS1.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M_BS1.mwm",
       "bytes": 350776,
-      "sha256": "fcf9927e29123bd9c64690fb71165982a702d70c223e7a51891b930aa4def10b"
+      "sha256": "847d526c3fd5ea8ff5fc54c55c8a88a8459c7a7f086c4f7b821bc54ca836c403"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M_BS2.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M_BS2.mwm",
       "bytes": 1049187,
-      "sha256": "078c3116d28aadbc5b1d99206ef361c38cdd6148277e258b31b159bdfb1e8919"
+      "sha256": "792c2b454765ab6f631d27b191fe314a9835f551da16c33ec8d39691755818f0"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M_BS3.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M_BS3.mwm",
       "bytes": 1049187,
-      "sha256": "5812f32c197dbd94cab733f5f361c1eab8844d14f4961b7df333128b43685004"
+      "sha256": "465aa7619cf07e41257d2e9da444fe5350d7bcc87ac6bd534a2eda03dc873556"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M.mwm",
-      "bytes": 1049177,
-      "sha256": "7111976ca51b68ef37ffe00d70e001ea108c8ec80414c0349581a5b9e940acd9"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS1.mwm",
-      "bytes": 524716,
-      "sha256": "c44ecfa2a1d40d634d987520305410cf55a98c8660f00bf339340309bf6c845f"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS2.mwm",
-      "bytes": 1049185,
-      "sha256": "4d30de7caee07a499418579bb565189fe8e5f87d3f9fff7fc2701cf538cfd8bb"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS3.mwm",
-      "bytes": 1049185,
-      "sha256": "9c898bce1d2f991e40cc721daca97c6f23a3dfc62f25c5ace6a1b29f29c3f1d5"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M.mwm",
-      "bytes": 2097745,
-      "sha256": "b67e7491d839f36d886dd479fbee9cb34ce3a9120df1ff1894b2b7af5d7693ef"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS1.mwm",
-      "bytes": 372966,
-      "sha256": "656f9dc02e316b64958230b05625a2688c1c84690c9e63502d4d0dc834efe1c4"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS2.mwm",
-      "bytes": 1049177,
-      "sha256": "a61282baf1e109f22cd2178bf8e31184da673150dca1e415148c83d6ba57318e"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS3.mwm",
-      "bytes": 1049177,
-      "sha256": "0fb22963e5319953916148c846eddd650f4ae62eacb5690a494e9f964eb4d538"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M.mwm",
-      "bytes": 1049177,
-      "sha256": "4722078f3b19ab96d700db316cd0146158c20cd69b4d93f0181679221ee60c82"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS1.mwm",
-      "bytes": 844352,
-      "sha256": "326d91833c84d21eaef59ac91515535ca11740f157554dafb4f6da93c24b8667"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS2.mwm",
-      "bytes": 1049185,
-      "sha256": "50486f02506e513af8a9ceaa8bf0ede8e10d74794f67550eb6ca8e4121f4aad2"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS3.mwm",
-      "bytes": 1049185,
-      "sha256": "995f80afcd6fb487c298443ecee363b954cc319eeae6b5b4d7b28b3b26b3f638"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M.mwm",
-      "bytes": 1049169,
-      "sha256": "0a6a421c557f7258a6544a73ae7495fe5226eb479adccd82b09542ac0bc1b589"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS1.mwm",
-      "bytes": 636074,
-      "sha256": "7c18ddb964ae8f24342a0caa051fb4038e2d97ff5b7df39c8935d978c26fa5ef"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS2.mwm",
-      "bytes": 1049177,
-      "sha256": "8426526274b62f7bb41129b2cba2e51d88ed6b07acd312fd20974c8bbf65f285"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS3.mwm",
-      "bytes": 1049177,
-      "sha256": "86566e261d8f634384ee08b5e83113287cc037f53a9f3eda208bffa08279c621"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M.mwm",
-      "bytes": 524891,
-      "sha256": "04cf5d76e0c31f5a85e91996f455e449280244580b39df7febf69b84db4df603"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS1.mwm",
-      "bytes": 262572,
-      "sha256": "cd3de64de39738e0da742193c2e85642653604f447dde23237b1e85f72b9bc3b"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS2.mwm",
-      "bytes": 524716,
-      "sha256": "4688b6ea792f13c3b6637fd44c17e4ddd0a4d2ae78eb3829603d4fd70b9511cd"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS3.mwm",
-      "bytes": 524716,
-      "sha256": "eb9dfcfd941b64f32a59b06c97a492209bfc3df0a2fa4862647615c65dd5b0b8"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M.mwm",
-      "bytes": 524883,
-      "sha256": "31e2e04692516f8543d8f0888f136426989a42152340affd7f592f9f68c8082d"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS1.mwm",
-      "bytes": 332230,
-      "sha256": "49f32638d5c01536911cacf2e81d26e2407eeb9395719d9d64e93533ce97d37a"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS2.mwm",
-      "bytes": 524716,
-      "sha256": "575ae2fa140e09cf060088375dcfbc739d6467562fa4b44f2fd71a539808802a"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS3.mwm",
-      "bytes": 524716,
-      "sha256": "4d26a265ecb57a19db759a77b3273ee2758bb04985f82a3c290c8da1cf974deb"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapterBare_M.mwm",
-      "bytes": 1049195,
-      "sha256": "13d673aa8e2775ce305164a1a97f5499f619290e09dfa43abc7b586dae215d5d"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapterBare_M_BS1.mwm",
-      "bytes": 524716,
-      "sha256": "b57202885875f78d32d49353b98976d194fe82e5e369c427f183a1ae007f3e1c"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapterBare_M_BS2.mwm",
-      "bytes": 524716,
-      "sha256": "945ae3dd37f349391f91436da104c1bd2e24a0278e70afce8ede1d1d9cb615d3"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapterBare_M_BS3.mwm",
-      "bytes": 524716,
-      "sha256": "1b858a2d8525007bc6127eff5168d940a362ddc7ebd1ff5fdc934b634ae85262"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapter_M.mwm",
-      "bytes": 1049187,
-      "sha256": "cf8dd58a837de30d70a22e8eff7d871b512af54e65ef305347622270c77ff197"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapter_M_BS1.mwm",
-      "bytes": 372848,
-      "sha256": "3412525b06ff27723d2cb4357d6f58c4f938f0bc928a60991838ecc3d3496202"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapter_M_BS2.mwm",
-      "bytes": 1049195,
-      "sha256": "a29eb329141fb961cd801376eeda6b1629f3822e2ab4b1b361bcfd878940da9e"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapter_M_BS3.mwm",
-      "bytes": 1049195,
-      "sha256": "3d24fe07433b6fbc42dc1fd2c4dd7348018926f2a50eb24ac3a487e654b2da74"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M.mwm",
-      "bytes": 1049177,
-      "sha256": "d5354357406dd9a1f31dd3c19a1230ff062aac3d49e914d9d67c0baf2dbb7c09"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS1.mwm",
-      "bytes": 975174,
-      "sha256": "d9fd48f197ecda9c5d023ebbe1be84a2a3f41a40d8fe32a179b175002715ac1d"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS2.mwm",
-      "bytes": 1049185,
-      "sha256": "97ebf4d971a508ef9816c8a4a8be45a00caa2115d41d914eaa5ab0eb8d862672"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS3.mwm",
-      "bytes": 1049185,
-      "sha256": "64b09bcf882011a4e02f7807fce311535bb5d8f97ac8b2479809cbc9917a7da6"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M.mwm",
-      "bytes": 2097745,
-      "sha256": "86d34872509d9d629a0545bb49117efe8bd910fd6a0e28f47b9ba2b11a4c1af1"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS1.mwm",
-      "bytes": 800686,
-      "sha256": "5216bf828f3d63a4b5a6ed77c514ed76c83e17cff10f3654737a8b33cb4ea2eb"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS2.mwm",
-      "bytes": 2097753,
-      "sha256": "10343d5a76351f0dc725c33f98492e65dcc2a167ba2c644b92064c9e2956cd1d"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS3.mwm",
-      "bytes": 2097753,
-      "sha256": "7ace0cde7a1826ef0e1fd8ed34ead37c05f324f1936bef35c38d7c89e23efcbb"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M.mwm",
-      "bytes": 2097765,
-      "sha256": "1f2fb5ebedb583d7ac25c39e983b3f1a85629425f42d029cbe7fb3b4ae4e2f35"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS1.mwm",
-      "bytes": 524716,
-      "sha256": "2acd4eae3c23524e4f14c1b20874a971c6b937a549f12fa2f136bf94b63270bf"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS2.mwm",
-      "bytes": 1049197,
-      "sha256": "ef3de4d221ef40dfc3571a52f4ee328f3097db333deeb23be684e93483e91116"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS3.mwm",
-      "bytes": 1049197,
-      "sha256": "3fef429b8aab9c81229bff063dac1f46162ab0361eddc35763544594209043ce"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M.mwm",
-      "bytes": 2097757,
-      "sha256": "186653321ef7895c97a02be63762723ccc90636d343195238dd80ddf8fc6b86b"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS1.mwm",
-      "bytes": 586672,
-      "sha256": "8ac9e9bfa5fecaddf2fe7ad6fad4bf11e0e47f93e2d84b952e2d2d41e2e7c45f"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS2.mwm",
-      "bytes": 2097765,
-      "sha256": "18823fc4974cf01ff57aaca1048657cd84f18c59e206f11f168915dca4a25b7a"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS3.mwm",
-      "bytes": 2097765,
-      "sha256": "1aeea283af6a8092051ebb5aab3b44f532814b9922161d5c98177a3550475e2b"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M.mwm",
-      "bytes": 524895,
-      "sha256": "5bd2e62eb8a6eaf16767c96c72286a1fc0a46a088a78cf341d0b99c2b8f0503b"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS1.mwm",
-      "bytes": 262572,
-      "sha256": "9cec34a2872f8483048126c61d16a2f91455f55285f8d4784d7626f0b86f2590"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS2.mwm",
-      "bytes": 524716,
-      "sha256": "4830c75940eeea0f27f6c9104876f4e20199a7adbd6ebd5837f896349eb11a7c"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS3.mwm",
-      "bytes": 524716,
-      "sha256": "84f18efad0b687bd1f65c55eeed2da58b2e328e5c0fd369106ad602569d49ade"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M.mwm",
-      "bytes": 1049175,
-      "sha256": "dc864c4292df4ebd34e49b09a85e1ae5dbd5b1d6e63e241215c340c0cf8d78c7"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS1.mwm",
-      "bytes": 304322,
-      "sha256": "7b81e3adaab2b4196b848bcd90b2ba6803bfe80c219d5b4ee47413c7cb1d5d2f"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS2.mwm",
-      "bytes": 1049183,
-      "sha256": "4dabf39288e7d6d5cb3a886582edaf5ef8f6f94a27067ef63b66a97dea0cea89"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS3.mwm",
-      "bytes": 1049183,
-      "sha256": "9bada9f5b8f0d73509d3c10c99685cd9445ef1e3a1a727e49638697d60b0aa8d"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M.mwm",
-      "bytes": 1049173,
-      "sha256": "7e2ea83a57e22ecd907a3cf00039abfc2e481464e49b3b97521dcb621663725d"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS1.mwm",
-      "bytes": 524716,
-      "sha256": "056c35ed3b0793f80df204d4ecb863adeb684ff73ed961b50d69505c8cd4fd46"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS2.mwm",
-      "bytes": 1049004,
-      "sha256": "5ada59485767aecfcbd81038721cde80877aa15ba318401b9e4d9ff558f585af"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS3.mwm",
-      "bytes": 1049004,
-      "sha256": "eb2ad42008253373e7507865d388db5341fc58b0401bcc4ca640f6b0392a1e37"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M.mwm",
-      "bytes": 1049165,
-      "sha256": "f46a7765cd0b3bec1e7195102901be03561f8cd527715e67d6379c71a0c41eeb"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS1.mwm",
-      "bytes": 334416,
-      "sha256": "93730d80d680c1bb5143d9d5f753422e3bab0641855560722cfccd6920aac89e"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS2.mwm",
-      "bytes": 1049173,
-      "sha256": "ab08031522bb63339286e9b66624e8fecffc67afcfdf5cbfa6e1823a124c3066"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS3.mwm",
-      "bytes": 1049173,
-      "sha256": "3a0335879170d6fe640d12657f9c88b65437755d4c9375981a9b646677018810"
-    },
-    {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_CompressorRotor_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMirUpgraded_CompressorRotor_M.mwm",
       "bytes": 4194951,
-      "sha256": "0522f4820db300c7274deab3b2e4bc487d0955c706653a68d692a56bc1cc8e9c"
+      "sha256": "bd2a9a511ecb5ba707378d1eaf5bd00151f723b9ca7f05652ef69c3dd39df1f9"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMirUpgraded_M.mwm",
       "bytes": 16777831,
-      "sha256": "1f2db91e86de2851c29780de5d36ed498729a47bbb5d0666cc91f7a610c7be72"
+      "sha256": "7d1ef6dca2f7c7d47711bc9ddd2249a49f30ddfb3fc0dba78db6b2070071cb32"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M_BS1.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMirUpgraded_M_BS1.mwm",
       "bytes": 590300,
-      "sha256": "61d24126fc7ca10c9d751156335e204de99183d7a5d7e960f69548260d9bf20c"
+      "sha256": "b87b54b8424e3d388a5c0b6a59c712ab1ae58f098bf280426d1110df88307732"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M_BS2.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMirUpgraded_M_BS2.mwm",
       "bytes": 33555055,
-      "sha256": "21750bc74faf89f9a4b54218e9658754ba49c66ad054a7036ae52ee49b48d77d"
+      "sha256": "aa6d73634a820d50e642dc6aa1fc08fc0c4d7072e17326c2d0f874ca53779332"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M_BS3.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMirUpgraded_M_BS3.mwm",
       "bytes": 33555055,
-      "sha256": "f6012de82b87a5134a8ade06e5cc733e0b99eb060e8ffa6b1517edbb62941398"
+      "sha256": "334d144929d803266765db27e736550f862f6dcf7f575ce4351d901a56902fe1"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_TurbineRotor_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMirUpgraded_TurbineRotor_M.mwm",
       "bytes": 16777857,
-      "sha256": "ad540c15b60cf166d07e5de11cdb2a638ae4ec0462d74d4e0523dcfa0d7b7612"
+      "sha256": "eaf9bfe2039c97e629bac6ccbb0db8a1cb596c1e24f4225e0fa24f03e48b631d"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_CompressorRotor_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMir_CompressorRotor_M.mwm",
       "bytes": 4194935,
-      "sha256": "4cf15a1698d6e06f802fe81d1d1625b7543945fd9d5e5b2d890731a91a26d443"
+      "sha256": "91107be09f3aa8a4b379166b0de671c4426f4b7d539a67f24f9fe0160d172e52"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMir_M.mwm",
       "bytes": 16777815,
-      "sha256": "89e3b81f9255ae2fc49972aed18c22155b2a2224cef0f86ebb6130b51fe65168"
+      "sha256": "eb42026543f8e8bc1c32eab57a5548b250221191427b7709c3b18a51ec279ddc"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M_BS1.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMir_M_BS1.mwm",
       "bytes": 591126,
-      "sha256": "a14c93f3d3800d7ce540b0a904dc98f05311d36ca6e1544bb13b698a7d8df5b1"
+      "sha256": "f2a35f910e17b4130703584bb358e80010a78dd073107f84ac936b3258543504"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M_BS2.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMir_M_BS2.mwm",
       "bytes": 33555039,
-      "sha256": "66e724a13375234e92950fb2b8a86bc202678fc9e84b9d4204a2bd8fca528e53"
+      "sha256": "e591695c42b7bee75ad383befc67610eeb05c06ed5ff8dae909feb07ac02c14d"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M_BS3.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMir_M_BS3.mwm",
       "bytes": 33555039,
-      "sha256": "71c6e5628b82d85451eab033294c254f677d83c42be2b16c08e62c97b0d62bdd"
+      "sha256": "cdf3afd50cfc35147a060fe8f515f527377db3eb4b11114ae2fee43b7310144b"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_TurbineRotor_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMir_TurbineRotor_M.mwm",
       "bytes": 16777841,
-      "sha256": "0fdeb3c65851432dde7a0d521ed8d0499054bfcd63956be90f143268ba39d099"
+      "sha256": "7fdd2effb01506bafce17061f6f6485ddcaf645a12e8a786eb0b0e901f424eba"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_CompressorRotor_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainUpgraded_CompressorRotor_M.mwm",
       "bytes": 4194945,
-      "sha256": "8b1aca0fbc1984e3e3145005d3c3347ed6301d97493b104055c341eab3b33431"
+      "sha256": "52c7c6f1b0f45e037d51aa599eceff213e5804dd0fd0bee7e9b3b5ad06faea35"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainUpgraded_M.mwm",
       "bytes": 16777825,
-      "sha256": "90a800a67138de5a695e545488201c9e9000f3ceee5334ef411ab85bea0939e0"
+      "sha256": "56492616da9700eb816df98af2d23e39167b5967a5181e2fcc1fdbd991488858"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M_BS1.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainUpgraded_M_BS1.mwm",
       "bytes": 590524,
-      "sha256": "a98a8ddb3d4b1351e45573c3f8605439ec5b78a006882fb30031e4b1566e0b67"
+      "sha256": "2490fa5ff5953b4f2b950ba5069737cfa83003d90019aa67b4b2e47d93e4a671"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M_BS2.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainUpgraded_M_BS2.mwm",
       "bytes": 33555049,
-      "sha256": "379cc603fe97014874ebb99e47484b4cffda837caabdc558c3bee7baef7eceef"
+      "sha256": "b5431f8e90cd43f5c40dd1cbe1caff6215901f0bce7bcad7c22db058c6baaa11"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M_BS3.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainUpgraded_M_BS3.mwm",
       "bytes": 33555049,
-      "sha256": "d6e7168a3eacf498717fe144a03b3a18752ea8aab4c2c92ba49ff505c4552b36"
+      "sha256": "4ac9b40f9744b7acec584c696492dba106ea9e1302fff8bb8788544a3778daf6"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_TurbineRotor_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainUpgraded_TurbineRotor_M.mwm",
       "bytes": 16777851,
-      "sha256": "0f5f546caa9c029942a66463c976dbd87f189eab021eb912c4b88c0b730a9de7"
+      "sha256": "39a95b85ef031807adc42ca64135bd2a87ef1b7fbdce51300c993878bb6bc594"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_CompressorRotor_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrain_CompressorRotor_M.mwm",
       "bytes": 4194929,
-      "sha256": "09e8e211cf79367481cceabac531c4abcd049b929d6c08a6c6c889997fdbbaa5"
+      "sha256": "103b2a9e05263720b896f22af710df104ad2e6ba21b0914a415b8596b4a9fc50"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrain_M.mwm",
       "bytes": 16777809,
-      "sha256": "e4b7e21c5400de318f6dc7c5c8c89b9d5724a839b31e4dcebe7678e1f6e2b3a0"
+      "sha256": "9af5639c44aa6ed2059afdbf2252f087ceb15448e17071685c742e76faff542f"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M_BS1.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrain_M_BS1.mwm",
       "bytes": 591432,
-      "sha256": "537678e362bfb4c18fb96cc831bfaf3462b7c88e44e51161bcb32d40dcc8a730"
+      "sha256": "2bb8cad0f2716c4b72d261f94b42797b7972e71d8e3a4bf8f88bc00013ce9043"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M_BS2.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrain_M_BS2.mwm",
       "bytes": 33555033,
-      "sha256": "2b4b0c1781b888b0b396cc81f2b8446059a8ae0d24ba85f9eb542491773db054"
+      "sha256": "854087feea38bf3766303b2d4647e82b49df774ecbf1877492fbef42e2fa1bd4"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M_BS3.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrain_M_BS3.mwm",
       "bytes": 33555033,
-      "sha256": "f69cb6312612fc23b99898076aa02305ef11c98ae60514c13f53644b33abcd9a"
+      "sha256": "53d9ad4d2d55c3a77dc03dffac956fd8d6a3a7a47c4eb74f2c515c5c6e1e2b36"
     },
     {
-      "path": "Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_TurbineRotor_M.mwm",
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrain_TurbineRotor_M.mwm",
       "bytes": 16777835,
-      "sha256": "536166dfd090065afccfc7adec6db12af40dbc84db64c16a85c5068c0495ad66"
+      "sha256": "ffabec2a4f6fdd7b8a9a73b819feaeed0beef23c4bfc4dcba406a2edad67857c"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M.mwm",
+      "bytes": 1049169,
+      "sha256": "45b487d66f64a76138dba157025abf8840218dab31d85f061381b8cd44453f9a"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M_BS1.mwm",
+      "bytes": 131500,
+      "sha256": "e24730cd41e7fe6dc14af3fb7aee08c90a71acbcef0f9e1c68c3f43c24665311"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M_BS2.mwm",
+      "bytes": 1049177,
+      "sha256": "c31b8c19a76cc3139de10e9555bda68000bc2e94fa83f99a2b518684599c092a"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M_BS3.mwm",
+      "bytes": 1049177,
+      "sha256": "34dcc9de24c0f433024b131b8ea0e6456142590c3b42c1a0540e451f43ba2a4d"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M.mwm",
+      "bytes": 1049177,
+      "sha256": "107854dcbbf0fe168548726bbc0256b1799813bf3a694c021d249184da423493"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS1.mwm",
+      "bytes": 524716,
+      "sha256": "86a7e2d1796e807ca9cbeea756f89b267f4799eacb3273c8a9af469e30ae2b09"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS2.mwm",
+      "bytes": 1049185,
+      "sha256": "3531c4acc65947e795349f633c143235aed34806f432dd8848f2dfb961781d76"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS3.mwm",
+      "bytes": 1049185,
+      "sha256": "ee30a44ed02afbb87eaddbf264f632565ca3103c551b3449bfeaa9be893f3354"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M.mwm",
+      "bytes": 2097745,
+      "sha256": "cc75dbde370b5e1b534508be3151f906233fca2a134fc91dffb3a3faa8b9d755"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS1.mwm",
+      "bytes": 131500,
+      "sha256": "a13b4c97cb3f62a8b1fb2fa44200ca7b3c81bacaac4a269f973bc2ab1c4e9b40"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS2.mwm",
+      "bytes": 1049177,
+      "sha256": "074d43d0bb9c73969e4e5dcf379186b39a065e9b24ad962b6f2586a6762d2607"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS3.mwm",
+      "bytes": 1049177,
+      "sha256": "27071420738b4f9bc716162780390cd013f19e65017b09767e1cc305999e11d4"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M.mwm",
+      "bytes": 1049177,
+      "sha256": "eb9953fa9fa77e7b183466d9a56a2f7a092dd9170e91c60b98f79704c03f575e"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS1.mwm",
+      "bytes": 844352,
+      "sha256": "5da6f23971138df5cd78d5d2d3d00768deb0e5adf72875dbacae5f0953098566"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS2.mwm",
+      "bytes": 1049185,
+      "sha256": "9d50c23f47950cd6bab031569a864ce32b758709846712b2125f39efe57459d8"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS3.mwm",
+      "bytes": 1049185,
+      "sha256": "e118191c9a94bd44d709e46ecd88d02e00316a7074b29e5671c1447a44357532"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M.mwm",
+      "bytes": 1049169,
+      "sha256": "9789e92925e4f9f17e12f46cf0fbd1ec7600399592f5bdad75dcff4ae97ab9d2"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS1.mwm",
+      "bytes": 131500,
+      "sha256": "0bf0d5ab5168ca11d4bbdc2882c67fddd75fbd90862d96b9f5706bc6273c6a5d"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS2.mwm",
+      "bytes": 1049177,
+      "sha256": "7168bcc5b1dcf04ea5b87f345ad4579222215a7e34f0bd79a377ae418dbf4efd"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS3.mwm",
+      "bytes": 1049177,
+      "sha256": "1cd839653ebb4bc8aebc504444040e06643fb18ba1339cf53eb3dcf345d1e93f"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M.mwm",
+      "bytes": 524891,
+      "sha256": "a81a1bacaf0213423b145586652ba6f088fc46a90690a544d6db2cf579b968d4"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS1.mwm",
+      "bytes": 262572,
+      "sha256": "867b599596dd9298978225cb215253a55d5f9a6068cacba387e0cb7ec335210d"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "1ca4e31591b4b44385a45ceae19b84feea6e52279dd9170a8be316205050df62"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS3.mwm",
+      "bytes": 524716,
+      "sha256": "34ab74a88d6337391b17d00ab1b698b6e4434053521501b510afa01fea6c8c52"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M.mwm",
+      "bytes": 524883,
+      "sha256": "5bc6bbe9031de14f63466b28e035c7ae3675e86da1e9d601e50daa29fd1d5bb5"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS1.mwm",
+      "bytes": 131500,
+      "sha256": "12ff62d30161f025b6442917043b94265671ef1894f668c403b7bf182ae1068f"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "0bb5acde390fb83b058d35ba859ed91b3749b15f42a2656c1403e81ae66dd923"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS3.mwm",
+      "bytes": 524716,
+      "sha256": "e4782b58c6a5d4f49333dbec93be9f11ce2b014ff053ec150e23dee904f058f1"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapterBare_M.mwm",
+      "bytes": 1049195,
+      "sha256": "325eddb0501a28fdaa477195d7324bf7b7223c457e8fd88eb67934a82d2062da"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapterBare_M_BS1.mwm",
+      "bytes": 524716,
+      "sha256": "efb3d24454f9736779a45585dae5e591317bfce66472ec586390b29fbf993c43"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapterBare_M_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "9ca7dbfa0ea1b9c309c7a70e4074a0b0165d9906c4a11e6e4daba9bf4e6aaf5d"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapterBare_M_BS3.mwm",
+      "bytes": 524716,
+      "sha256": "d51c2f21b33a1b10679f680ab44963732aecd5870ebed47c3130d0e4bc424b58"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapter_M.mwm",
+      "bytes": 1049187,
+      "sha256": "98a7bd82f878fd059d9f7f8faa2d62fa764fe636ef584ccc7df7f59f70b3c2d5"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapter_M_BS1.mwm",
+      "bytes": 131500,
+      "sha256": "720fba3b4a61d4d7c2c8f8f573b2a3a693f791342fcc4af4831e9cbf488b64ec"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapter_M_BS2.mwm",
+      "bytes": 1049195,
+      "sha256": "41908f9c6fc271c82094ac032f011700c857f524af1baf6543ca39756687aae4"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapter_M_BS3.mwm",
+      "bytes": 1049195,
+      "sha256": "0b054f87f0d063703e09c948794c97cd98ef4b9d633be62c53fe9f1dba2401fe"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M.mwm",
+      "bytes": 1049177,
+      "sha256": "11e3e25207b01f7082a17d40343b1515f6cfe24d19b4cc1d6ec98d156bd1b27d"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS1.mwm",
+      "bytes": 975174,
+      "sha256": "117913173c7a4ef2237665cdd6fbfe48f3a957e8e4c3ee298fe08358b80fe57f"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS2.mwm",
+      "bytes": 1049185,
+      "sha256": "15ec90694a56b17e69f267b019b7536eb722167bdf7fbdab3375ab597dfe3889"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS3.mwm",
+      "bytes": 1049185,
+      "sha256": "7b7baddb4011a267b98bdb0c948bee9c92cf4a6fb4a446184510651da0ba9fb9"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M.mwm",
+      "bytes": 1049169,
+      "sha256": "4f5bfc814ad0f9004fcceeabf4301cb3a31af87b251aea806811c1af41257450"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS1.mwm",
+      "bytes": 131500,
+      "sha256": "591381bcc680e81e71a8e822630cea9041590416f42de872de6ea35e00fc36fc"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS2.mwm",
+      "bytes": 1049177,
+      "sha256": "a0089462aa65d4ff2e3e5a8d147b3fa9e57300937d3c4a11a0fe381320cb6c80"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS3.mwm",
+      "bytes": 1049177,
+      "sha256": "69d2d55994cf52d14a86823f6ec5863a66c5f9012230dcfaedf312598f659bad"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M.mwm",
+      "bytes": 2097765,
+      "sha256": "c9f4eae106642838213248814f95d083676bc019aed5ca4a001be0515a089593"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS1.mwm",
+      "bytes": 524716,
+      "sha256": "5d50529a12cc78fb31aed76af28806d767c367ac7d9dd3dbcdfb78df17f5bc37"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS2.mwm",
+      "bytes": 1049197,
+      "sha256": "a891bd3593592c2dfbe4fc36f8304ce07975afbfe1ca646f1fb9e3c4a0011cc0"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS3.mwm",
+      "bytes": 1049197,
+      "sha256": "f6eeca7c84ce69200021cf7374518676890eadf3cc716ac8fc44c2403d5fa222"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M.mwm",
+      "bytes": 2097757,
+      "sha256": "6c35331de6965a6914183c805f2718bd3e0860f73a948644da714c8ac5f27bc3"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS1.mwm",
+      "bytes": 131500,
+      "sha256": "0fbb4df324a2683adee060e8969b55c0c485c484687d35b65fe7b04e787a85f1"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS2.mwm",
+      "bytes": 1049189,
+      "sha256": "eaba9b8f7f9e6831a800c40dd820469eb59b12ecbe85b92b7dcc9ac0458490c1"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS3.mwm",
+      "bytes": 1049189,
+      "sha256": "9ce7587f5299b8f8a44ec31f5472a9754d01ef779053d42eb3586608888a74f2"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M.mwm",
+      "bytes": 524895,
+      "sha256": "4d1217ae44b03059e6226314be19ae360f05cfa75615962814936968462a7c65"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS1.mwm",
+      "bytes": 262572,
+      "sha256": "1fbad9f8d8213d85b4cbf44551b92e12645bd12181286c0b53a2cefb8b3c75cb"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS2.mwm",
+      "bytes": 524716,
+      "sha256": "a6cd4537383b63f26c6f6b47046270d4f91b17e98aae2ad455c0e9780ca6478b"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS3.mwm",
+      "bytes": 524716,
+      "sha256": "7910a6a4c6a779a54449403243b935144c7657f2c300bb3890193187cbd85a8e"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M.mwm",
+      "bytes": 1049175,
+      "sha256": "27a159229f9e0c37753e7025f0ddfebe23c92bcb7e7d35b133a36fc43527975e"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS1.mwm",
+      "bytes": 131500,
+      "sha256": "812dc7d8ba870617f9101ea91f94f1b3e01351a572331931f5faefafbc611181"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS2.mwm",
+      "bytes": 1049183,
+      "sha256": "54482b233f1a5ba0f893e22facc6d5a5f08f2ac04fc2396b43415cb4ea960f29"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS3.mwm",
+      "bytes": 1049183,
+      "sha256": "8b4d8ce7f0ef3ba59d539ac9d8bd4c9730dc6779d341ca8aad04e33c49da7cb0"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M.mwm",
+      "bytes": 1049173,
+      "sha256": "9e0fe0f5d80f1be436f7eac64e26b373dd9d884ebb32ce316bfd79da70ef88fc"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS1.mwm",
+      "bytes": 524716,
+      "sha256": "dbf0bebd075f3bb34e88ccd3f88ca72c440d282a881e6f44c82e4a693bfd7e78"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS2.mwm",
+      "bytes": 1049004,
+      "sha256": "9f4af0c1ff7788c07e4a347594162f922b78bbadac77615b8076c7d1a7bdb2f1"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS3.mwm",
+      "bytes": 1049004,
+      "sha256": "ebc32e0d51e26c1c583b2305de447d4a8eb42ee780135fd9a306076fb0542fc3"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M.mwm",
+      "bytes": 1049165,
+      "sha256": "8ff3e7c014d3a353ded335c3525b8f7cef58ae865f67dd6941d1a2116f6b2fa4"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS1.mwm",
+      "bytes": 131500,
+      "sha256": "13592df71594de4805017274338d1e46a48dd302d482014259e7fb829e4d9645"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS2.mwm",
+      "bytes": 1049173,
+      "sha256": "0966f6f2b71038a3e3958606276cc067e6dac83683b91e56e8fa8770145c23dd"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS3.mwm",
+      "bytes": 1049173,
+      "sha256": "71708f9ddea7588eab6d779795ca209c0668a0996c7f3efd08c9658b6591a78d"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M.mwm",
+      "bytes": 262739,
+      "sha256": "ffae7adae109021cd9245f648d0c2bae385a71d3290d7cc455f1f05221914152"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M_BS1.mwm",
+      "bytes": 131500,
+      "sha256": "c678b1d6b2e2a28c609535dc23b38326d9f8e31fcc54f9e2d7622aba4bee2d6a"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M_BS2.mwm",
+      "bytes": 1049004,
+      "sha256": "522b9cfd2dd6c735aef22e3556247d6cbca3477a8d2c54d33891556af4ba73a8"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M_BS3.mwm",
+      "bytes": 1049004,
+      "sha256": "c01c63d0cb89f8e2b6d140604614c8f29f59939c968ddc848aad4dde1504790e"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_RadiatorPanels_M.mwm",
+      "bytes": 1049201,
+      "sha256": "f36064609ac0f0dbb0953150e2e0b863075020c0429facb643e8ea9fc3a6f560"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LA_Carriage_M.mwm",
+      "bytes": 524909,
+      "sha256": "ad7e510e520d098d043898ee97d302119a60491f08e10a070867d8826d9ef909"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LA_ChamberVent_M.mwm",
+      "bytes": 8620,
+      "sha256": "3c0e1b88edcf23ce98537ba316a638f3c31f03ddd5c1745c325160018b27d750"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LA_ConnectorTail_M.mwm",
+      "bytes": 16812,
+      "sha256": "bc4749e54955005097c601d1a3516cecf6945f063c2d2911ecd3cb6284eec79b"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LA_CoverMinus_M.mwm",
+      "bytes": 8620,
+      "sha256": "96ae006add842a0fdd5056e0ffd3db54240fcee63a155d2668f6886a4b46a08b"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LA_CoverPlus_M.mwm",
+      "bytes": 8620,
+      "sha256": "58af8aec1b0c0b8ffe2378c9ed27c969f8b70bb583605e2acf55e9b51b95d9c7"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LA_Intermediate_M.mwm",
+      "bytes": 131500,
+      "sha256": "6a9424df8ad0bb6858e57488faa9d83d4c5aa3a61f96c13827d45af0cffa48c4"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LB_Carriage_M.mwm",
+      "bytes": 524909,
+      "sha256": "65cc57bc9068f6e1a35d0d851fc5523d43c82230a873bb00c2daab0ada73a043"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LB_ChamberVent_M.mwm",
+      "bytes": 8620,
+      "sha256": "6db36ccbd69187b945fb72b8238d027ac4ba4f09f99d82f66ca88bdddfcb0079"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LB_ConnectorTail_M.mwm",
+      "bytes": 16812,
+      "sha256": "1541a9e6519bd3566c8ec4cdf6c6369292c4e300c4c68bd3bf4e056c7979c163"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LB_CoverMinus_M.mwm",
+      "bytes": 8620,
+      "sha256": "5babb43ef07827bbca1596cda5569e75b8d32521d6dd6377d2b12185ff112034"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LB_CoverPlus_M.mwm",
+      "bytes": 8620,
+      "sha256": "1043d296b01bed77b33607e1730aadc36d94ee06731cc21200d038cac73ce217"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_LB_Intermediate_M.mwm",
+      "bytes": 131500,
+      "sha256": "f838dc08f5de3b4aee2cec8f4a687e29f75eaab02780959d55defe07b4cad0ce"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_M.mwm",
+      "bytes": 16777813,
+      "sha256": "7489617d3ba22c13486b5d15522e195791b93269a95da72c9e5d95c456c40634"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_M_BS1.mwm",
+      "bytes": 524716,
+      "sha256": "85a312f82503adedc90fddd0764e3f9ba65024cc1428da22d61878a2dad23da6"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_M_BS2.mwm",
+      "bytes": 16777821,
+      "sha256": "683743bc6830c895d8317ee685e7af2107dc1ff636152c24668feb12c8aabb9b"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_M_BS3.mwm",
+      "bytes": 16777821,
+      "sha256": "c7c63488b40edbeb7ae3a0d85ee9497c5b0386f0da305bb99ff91c7ba2cbd5c9"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RA_Carriage_M.mwm",
+      "bytes": 524909,
+      "sha256": "9d8ab0c18b623f98705818a62e30b83798885afc9eb91aae4d21311dfc0a0e98"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RA_ChamberVent_M.mwm",
+      "bytes": 8620,
+      "sha256": "e86aa33a9c248effd9a35bb0b2cf5a0acd11ffc74fd7830a2e033ec7b5aae017"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RA_ConnectorTail_M.mwm",
+      "bytes": 16812,
+      "sha256": "e8a0c6b28f3d674aabedcecd7acf312c99be1c9ad62138549e7e690d3f01319a"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RA_CoverMinus_M.mwm",
+      "bytes": 8620,
+      "sha256": "7bb50674e7132bc346c38af726689aceaa539e4b443e8901a906af4c0de35604"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RA_CoverPlus_M.mwm",
+      "bytes": 8620,
+      "sha256": "9596cab330b76a59d37559375d77d429ab630c2aa1c177586dfb8cc77714bb0c"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RA_Intermediate_M.mwm",
+      "bytes": 131500,
+      "sha256": "3c9f3730e02a84c930295e2b10b7610b460b9fbb020a50f36946d283df6695b6"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RB_Carriage_M.mwm",
+      "bytes": 524909,
+      "sha256": "16e6384adb801e07582784e8b3a32e1b2bd9ee18c8f4192617f4b44dc96ed031"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RB_ChamberVent_M.mwm",
+      "bytes": 8620,
+      "sha256": "90a77a2fa0b0ca3a3430c8525c195aad7d325e5c754f6310e347d49f7546513d"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RB_ConnectorTail_M.mwm",
+      "bytes": 16812,
+      "sha256": "6f4836340ccbbe9a3da57516d28ee8005c71d0f275b1a373b145f899ef501c5b"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RB_CoverMinus_M.mwm",
+      "bytes": 8620,
+      "sha256": "23ca0efa94a9fef982d7cb776c8d213ded5fe9f47fd0269a084dac16ec594be2"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RB_CoverPlus_M.mwm",
+      "bytes": 8620,
+      "sha256": "a08c05bbc2be5a53f694e918723ebfff04c65a002d9f4cddcf753493366a2c16"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_RB_Intermediate_M.mwm",
+      "bytes": 131500,
+      "sha256": "f83cff0264e538f59f2073b376c1b1a63e4400eb00f8462f68ad21d1d7c9421b"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_BlastShield1.mwm",
+      "bytes": 524869,
+      "sha256": "f63cf698592b6b6032dccfb6748eddb4cccb036a59a5af6c98ebfe6184821b27"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_BlastShield2.mwm",
+      "bytes": 524869,
+      "sha256": "1cd67ef11a573d0a8f0b2d30ec64c3da34ae756b73684e5d497124d64eba5318"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_BlastShield3.mwm",
+      "bytes": 524869,
+      "sha256": "bdf9a89b2b58e3dbbff54f588cb21bc3930a21e6ac23f1a085cf49d946c1161e"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_BlastShield4.mwm",
+      "bytes": 524869,
+      "sha256": "e864890f98486e1d65d0cec2ea333c74d6cdfea0ed5f301aa0d9fcc13e2f9ca4"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_BlastShield5.mwm",
+      "bytes": 524869,
+      "sha256": "1a180e7427cba8f0b61b63329c63e9e18de055e24b92ea8417f01ce986ef7f3d"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_BlastShield6.mwm",
+      "bytes": 524869,
+      "sha256": "9c6d109dcc65b2183bf82607e1d11b3c5ae53cf5ae2ce27f887d5d2e4d2f9e6c"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_FloorLeaf.mwm",
+      "bytes": 65964,
+      "sha256": "bd51ccacd9ee508faa1ceae133af82924273de7e883aafc33a2a4aabf4da7d61"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_Plasma.mwm",
+      "bytes": 262572,
+      "sha256": "c793a4215bb4a437eee51ebf34165f192ad7a792df815b7f44f7568f081236f1"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_Ring1.mwm",
+      "bytes": 262711,
+      "sha256": "1bd18962af99841111f740978792e04e7838feb2a7a46fa852efd354bbd76ec2"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_Ring2.mwm",
+      "bytes": 262711,
+      "sha256": "a69597d1a4bf340f55d7e70c762764ce2d3760d509736537b66419ecaf9b18ed"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_Ring3.mwm",
+      "bytes": 262711,
+      "sha256": "cddbf33a6028198d705831065d31f1afdf4f8f2fdf135e0fa36951fb5adab21c"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_Ring4.mwm",
+      "bytes": 262711,
+      "sha256": "78d384094d4a40cb765e4f51d9acb8a0981b93a36f0ab6ae8d6a7b8d6b679613"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_Tile1.mwm",
+      "bytes": 37808,
+      "sha256": "c5341c30c6032addd7e9ff30fb4301d654da214e61a937e451324d3c51008092"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_Tile2.mwm",
+      "bytes": 37848,
+      "sha256": "5e0d008c355c312961dd6330840e10a54e3cfce9b4272a63ef48c434836ec546"
+    },
+    {
+      "path": "Models/Cubes/large/Thermal/thermal_7ebca2a08762/ArcanePower_VentHatch.mwm",
+      "bytes": 131647,
+      "sha256": "9a374bf417684cf3fc10aca6de127e174c081d970eafc99023df79c6980f7d3b"
     },
     {
       "path": "Models/Cubes/large/energy_109d27f880a0/ArcanePower_EnergyCapacity.mwm",
@@ -2536,59 +2651,69 @@
       "sha256": "2409325870e60e5e89983278e03933de1f0585f68b8fc111f85a8ad6b1e9b6e0"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_ContainmentTile.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_AdvancedContainmentController.mwm",
+      "bytes": 524903,
+      "sha256": "a4e56e54d2b90bae0a4b855b2f65876e58f2ce7c255a2d1c50e6f32f7b247d84"
+    },
+    {
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_ContainmentController.mwm",
+      "bytes": 262743,
+      "sha256": "87fb68ae5b4e5d8435f9beb96b2a9e2c6da4c1557d8a81b3073a1ccb68b4218a"
+    },
+    {
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_ContainmentTile.mwm",
       "bytes": 23056,
-      "sha256": "fa9840200440b1013072ac2c85714b21e0c581fdc43c670ec5b9e63f338b8347"
+      "sha256": "d0a2f6e34c002ca61e4a8f271f25a330138b90ad920fbad2849240fc7eb47f35"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_Plasma.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Plasma.mwm",
       "bytes": 262572,
-      "sha256": "23011252d84e9a09f5ce0d841d2c76424b468f703fcb6e587b7e5e114f66ac3e"
+      "sha256": "c793a4215bb4a437eee51ebf34165f192ad7a792df815b7f44f7568f081236f1"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_Ring1.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Ring1.mwm",
       "bytes": 262711,
-      "sha256": "1a26ea5c42d21a79a7d2b9732c5352f226df39e1c86a7b1edfd7b7c76efb4bba"
+      "sha256": "1bd18962af99841111f740978792e04e7838feb2a7a46fa852efd354bbd76ec2"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_Ring2.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Ring2.mwm",
       "bytes": 262711,
-      "sha256": "ba7486dbb658bd7839ea7ecbc4cc5ae9a805834a94c83c21298b210f114e8030"
+      "sha256": "a69597d1a4bf340f55d7e70c762764ce2d3760d509736537b66419ecaf9b18ed"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_Ring3.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Ring3.mwm",
       "bytes": 262711,
-      "sha256": "bf6a6fc0bf60099570fb3dd127b62ff7a159b198c91bb453db525224f073c9c8"
+      "sha256": "cddbf33a6028198d705831065d31f1afdf4f8f2fdf135e0fa36951fb5adab21c"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_Ring4.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Ring4.mwm",
       "bytes": 262711,
-      "sha256": "2409325870e60e5e89983278e03933de1f0585f68b8fc111f85a8ad6b1e9b6e0"
+      "sha256": "78d384094d4a40cb765e4f51d9acb8a0981b93a36f0ab6ae8d6a7b8d6b679613"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_Tile1.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Tile1.mwm",
       "bytes": 37808,
-      "sha256": "bdeb1b7f8689dfb8436f0b586fe115b43d42d5d5dffd152f8ae61c208512945e"
+      "sha256": "c5341c30c6032addd7e9ff30fb4301d654da214e61a937e451324d3c51008092"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_Tile2.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Tile2.mwm",
       "bytes": 37848,
-      "sha256": "d1237b3ca5b622ab6fd8151c1af8fe28fca78099021e7f59a44022a66a0985b5"
+      "sha256": "5e0d008c355c312961dd6330840e10a54e3cfce9b4272a63ef48c434836ec546"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_VentDuct.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_VentDuct.mwm",
       "bytes": 524861,
-      "sha256": "5f97a015535e1321e7698d784653f6c90e29aa6b400a959a99c474624677d0c9"
+      "sha256": "0781aebc316e9eef8f129daac35fcdc16394a2d3f4726ba6c848ab64ba51caf4"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_VentHatch.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_VentHatch.mwm",
       "bytes": 131647,
-      "sha256": "385616e20f2be7f4a81a9fc18c71df1128c7fa0ea8b54b584516d1fa44d29b18"
+      "sha256": "9a374bf417684cf3fc10aca6de127e174c081d970eafc99023df79c6980f7d3b"
     },
     {
-      "path": "Models/Cubes/large/reactor_87e093611a46/ArcanePower_VentOutlet.mwm",
+      "path": "Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_VentOutlet.mwm",
       "bytes": 524865,
-      "sha256": "3a00b75afdcbc40eb1e3f863a55e224602b2e80e3307b839562546045329d4ae"
+      "sha256": "3084c655737baa5d5e0f183da0c3db202804a70c7ba30fec2da23de3454b2d27"
     },
     {
       "path": "Models/Items/ArcanePower/ArcaneAetherCanister.mwm",
@@ -2646,19 +2771,19 @@
       "sha256": "df81adf00e016b413932f453385114be330a157d58992dcaf55ec1e10ee92037"
     },
     {
-      "path": "Models/Items/ArcanePower_Tablet_LOD1_r7b74ba24c96c.mwm",
-      "bytes": 131500,
-      "sha256": "7b74ba24c96c7cf40941288021993134e236df03c115521c7c806e675026c618"
+      "path": "Models/Items/ArcanePower_Tablet_LOD1_rcf62d8deea4f.mwm",
+      "bytes": 65964,
+      "sha256": "cf62d8deea4f59e2cbf9e69739f521bd0e7ff2a3be98d6562896d9fcc6f0bb8a"
     },
     {
-      "path": "Models/Items/ArcanePower_Tablet_LOD2_r37a4f4a6d095.mwm",
-      "bytes": 33196,
-      "sha256": "37a4f4a6d095e5282c3c66a22768f7709ab1080d77620a8b4d1defd809ce08d9"
+      "path": "Models/Items/ArcanePower_Tablet_LOD2_r6e0cba344ced.mwm",
+      "bytes": 16812,
+      "sha256": "6e0cba344ced41feacb3c42ebf3705d2b64cb45e3bcb830b69dcc78cc51357fc"
     },
     {
-      "path": "Models/Items/ArcanePower_Tablet_r02607b908104.mwm",
+      "path": "Models/Items/ArcanePower_Tablet_rb8c7101e0e29.mwm",
       "bytes": 524845,
-      "sha256": "02607b9081046384ae41cb6625d7e76b6583597ba08c1102e12c451d2a4b3371"
+      "sha256": "b8c7101e0e2946de999597a43bbca8dde14a8882021b089c3db1147ac522b1b5"
     },
     {
       "path": "Textures/GUI/Icons/ArcaneAdvancedContainmentController.dds",
@@ -2808,7 +2933,7 @@
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCooler.dds",
       "bytes": 349700,
-      "sha256": "7897a746d97231c179d51ba268b23b45d84e23720abd6487f9302999483e6d0a"
+      "sha256": "90a6e17d1e50e661c4a20e05df206632587992d64da2760c9c20d1a298b566da"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCoolerUpgraded.dds",
@@ -2818,127 +2943,147 @@
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrain.dds",
       "bytes": 349700,
-      "sha256": "8e83fcb6b0c18495456e4a737e42ee17b8723f8f5c9f02c9e0116316d43556c5"
+      "sha256": "7c4299b29986cb50c68acc7194f7408343b9e63635b0aa8fdf0481ebc0b20f9e"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainMirrored.dds",
       "bytes": 349700,
-      "sha256": "999e25d996ee34675931af1f1d6fb20749c486a92b5c818e7ee9f192d8b1c53a"
+      "sha256": "8036101ad99e3536562cbd522d30f449a2851f44e83092024031fac197512dee"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainMirroredUpgraded.dds",
       "bytes": 349700,
-      "sha256": "34bfb75a5de22c9377c6a102a14c84f515296fcf652ad21c7fd2588b53561a3c"
+      "sha256": "23478bb43fda222373dea2fe77e7028eb32fddc0b3332ada2cf90f4bdf200ef2"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainUpgraded.dds",
       "bytes": 349700,
-      "sha256": "8778cccc3457535f975452adf1f9ad9d084604c734ea35b1903cf214bb7f2c4a"
+      "sha256": "726fb2ccb9f1f6aac5592deaeab2d1dccefcf7c81d1dbbfe999cfffb8fb2f51e"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_HullRadiator.dds",
+      "bytes": 349700,
+      "sha256": "ffbab76852bf99e34e4fe19f901851eb9b16b352cafedd81d3a4d30bc6746481"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_HullRadiatorUpgraded.dds",
+      "bytes": 349700,
+      "sha256": "6749660f2dbc13e5e2cff50886dd43b19651293d03fe25262facc92970716443"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PipeRotor.dds",
+      "bytes": 349700,
+      "sha256": "9f84e31f60af49b16d543497096934caccb6909c5eb236caec1b5d11bf0c7c0c"
+    },
+    {
+      "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PipeRotorHead.dds",
+      "bytes": 349700,
+      "sha256": "2c3e310fdb1ac49b104dff7aa12fdeb70065beaf1653fc62841a90754bfe3cb2"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCross.dds",
       "bytes": 349700,
-      "sha256": "98899cbecf3bd7a52dea043e92c5ffc8ce1ea1e38ba8cfd208746eaf49cb62a2"
+      "sha256": "e04e2e2ac07c6a2e768d5a1995ba4d7f3cc91d0e74dc9bdec04586f11a8d8c94"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCrossBare.dds",
       "bytes": 349700,
-      "sha256": "47478e626e93d93c0ac9a6cb413216a2b822e7c1c2c57cdbcbb489b1931c9c4e"
+      "sha256": "5bd5bd9e3a6fc045bbdb324b77902261dfe962771d5b297715a5f0994f87faa3"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbow.dds",
       "bytes": 349700,
-      "sha256": "5b28caf6b0c273b5f92c8ba94f041239a66490eac3027dc3c2f6300557714ec2"
+      "sha256": "d2e8e0acc9c14bc2b86322a5765b89f9e4aee3ae3909afac82c10545db58118e"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowBare.dds",
       "bytes": 349700,
-      "sha256": "690ee89b155f24954c4c07be0bb2ff19630d5e2a5fdf4aad5f7ee8a4d5c7aa3e"
+      "sha256": "ffc697fb338553bc7c1638a32ae46a55317fd71c33d1a93d816e8068bba4ace6"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCap.dds",
       "bytes": 349700,
-      "sha256": "1f0ead46148832de0fb2368d093c61e4e86b44b191d24611ccf723976631b20a"
+      "sha256": "46c436fc268d7030d1d8b1f65ce2d7e606e0132f8ffca48cb4211eb3a7cada20"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCapBare.dds",
       "bytes": 349700,
-      "sha256": "f699f5c7a89f1517fe612e41d212400c90ee9d420d225daafef2526af2b9c0df"
+      "sha256": "758b0668d3b797c0e0590634f5968430a590ed9e96ac009af76610f288404b78"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryReactorAdapter.dds",
       "bytes": 349700,
-      "sha256": "bbe4000552da98295cf330842bddc81f30c7b97fd667f9903c89cd7af6a4c620"
+      "sha256": "92c30e2a1c2bc852d602caf57b506702909b821c9d895b64719581a461426c19"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryReactorAdapterBare.dds",
       "bytes": 349700,
-      "sha256": "1bb6a9a609c3635cb25aac3f9bb950df828e737664b4c29f32bbffeff93ca8f2"
+      "sha256": "98856e253d1ab0bc73549f2427dcdcc8666f0da6ac1ec057a358f6dee4cb8258"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiser.dds",
       "bytes": 349700,
-      "sha256": "247d071da41e43d690b4324f64e2bae68c24335417f85075e2b68b6959e73237"
+      "sha256": "fe231fbe970f5cc05d9133e8cec17e9c195c77bfb4b0336696c1c34e6eb10961"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiserBare.dds",
       "bytes": 349700,
-      "sha256": "956ad9bedf388f258efb23392fa1990af13a06fe36f79ce3090665b4c1254f5e"
+      "sha256": "57865e2c9da40af67eef1eb5f527821582df69d058730727d01debf0c0d1cb95"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapter.dds",
       "bytes": 349700,
-      "sha256": "3539ef0f207dd5790ff710b54dd92399e7faf85b413b688bebac591eea1c18d8"
+      "sha256": "70a49a68f0dba88055b28fb5deeb2c0b8ee97d3a13db54d565de10e18edd0831"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapterBare.dds",
       "bytes": 349700,
-      "sha256": "50076f5b05d5f283114f930f6c5f013884848e1d840677bc2bf915faff2bb68a"
+      "sha256": "f88a8b3e73891db75806df065c8d6652d1bd7ea423024c3bab446a8cb20f9ad4"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraight.dds",
       "bytes": 349700,
-      "sha256": "5634a4f2431327e095fe2368b2929d84f278616777228e12c3fe98ded6721466"
+      "sha256": "8e422ccc797444bb78a7bfa996167edc070aea4a7d957f59090d786935d64644"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraightBare.dds",
       "bytes": 349700,
-      "sha256": "7090d371a77d3df3aa394ed33561ea0169143f8325cac629b02c3e344320e275"
+      "sha256": "0dfbdfb118dcfb6b9b30f68d95f7e444d9a669845e6f973d3ae399f456efc708"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTee.dds",
       "bytes": 349700,
-      "sha256": "d4c8df71660fe2b01d73056319e667074f04c584d79ad955d570003ac18ea1e4"
+      "sha256": "62ca3f4a1fa6770a07bfbafce2ef90452c546ce8059a64cb3714738bd3adf1d0"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTeeBare.dds",
       "bytes": 349700,
-      "sha256": "f65ab6430bfcd9dd4680dd1573d8834bb0b5ab0c1d6d1a0a0ab45bac2e2e42cb"
+      "sha256": "55ad6de198240fc3e2955f51b8f7a1c3fb1583a06d2a206cad121d1daa814f56"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_RadiatorPanel.dds",
       "bytes": 349700,
-      "sha256": "c1c81a516abf5d0968c8fbb80a2faf9224d2f89b02090c59c366fed640679f76"
+      "sha256": "d67fd87c99d9981a301ac762483ff92109cbadf8f19d08fa2d14f8b26235f365"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_RadiatorPanelUpgraded.dds",
       "bytes": 349700,
-      "sha256": "12f1789f78fe7897ec2407d304c881463e973772f048920e8e9ab1ed4541173d"
+      "sha256": "a587ae67999eec1794430f6e35a6585e34699add32cb0efd15e4e497123ec05f"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_ReactorHousing.dds",
       "bytes": 349700,
-      "sha256": "b370493f70bba23b29f98cab1515327a594036da39306736ff741e09d0029595"
+      "sha256": "858d62196533fe3222ed8f31bee0d08fee8df4838b7bd1a7c2a07c7802fcfbf2"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiator.dds",
       "bytes": 349700,
-      "sha256": "a19105e4351727bc082d89460ce28f41bc757212ae4ce23fba3a248528059ff7"
+      "sha256": "f66216902f6524bb49bd00ca379d16732741acd4fe1601e72e1c47faa0b8db29"
     },
     {
       "path": "Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiatorUpgraded.dds",
       "bytes": 349700,
-      "sha256": "12a91d3ddef0c16ac3d1019e1b4ce4b0aad2a3eb414aedbd2a5f12f0d542b410"
+      "sha256": "4f00c4e0a8e325abb1974552aa3da9250d824a893e76d71ab1b8a03875fe2943"
     },
     {
       "path": "Textures/GUI/Icons/ArcaneReactor.dds",
@@ -2953,7 +3098,7 @@
     {
       "path": "Textures/GUI/Icons/ArcaneVentOutlet.dds",
       "bytes": 349700,
-      "sha256": "407933ae6900424587c1809789b23ed50de4ee8cd052279acecf4ecad6e8fa36"
+      "sha256": "e2deef39d090394bce110d8e33c6c5a1259c637a6dd2637ac93f9cb4f66b9c68"
     },
     {
       "path": "Textures/Models/ArcanePower/ArcaneTabletLight_add.dds",
@@ -3318,7 +3463,7 @@
     {
       "path": "metadata.mod",
       "bytes": 200,
-      "sha256": "91ee1dce32bfa42758cbd42560a0bb27a1dcba691133f53246f574b91ce604e9"
+      "sha256": "33e3a980963bf461d3fa2861f00ed1bc934dee980b14519840795f2a0fe49169"
     }
   ],
   "native_assets": [

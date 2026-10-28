@@ -56,11 +56,11 @@ def main():
         members=[n.get('Type').removeprefix('MyObjectBuilder_')+'/'+n.get('Subtype') for n in group.findall('Blocks/Block')]
         assert items.intersection(members)=={members[0]}, 'Scroll group must have exactly one menu entry'
         reachable.update(members)
-    assert len(items)==5 and len(reachable)==len(playable), 'Expected reactor plus four thermal scroll groups'
+    assert len(items)==6 and len(reachable)==len(playable), 'Expected reactor plus five thermal scroll groups'
     files=[]
     for name,spec in models.items():
         d=blocks[spec['subtype']]
-        expected='Reactor' if name=='Reactor housing' or name.startswith('Brayton train') else 'UpgradeModule'
+        expected=contract['PIPE_ROTORS'].get(name, 'Reactor' if name=='Reactor housing' or name.startswith('Brayton train') else 'UpgradeModule')
         assert d.findtext('Id/TypeId')==expected,(name,'Wrong runtime owner')
         assert expected+'/'+spec['subtype'] in reachable
         assert [int(d.find('Size').get(k)) for k in ('x','y','z')]==spec['cells_se']

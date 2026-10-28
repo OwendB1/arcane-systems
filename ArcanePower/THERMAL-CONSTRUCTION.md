@@ -1,6 +1,6 @@
 # Building and verifying a Brayton plant
 
-The construction guide, 27 public thermal blocks and 28 hidden pipe compatibility definitions and native models are
+The construction guide, 31 public thermal blocks and 28 hidden pipe compatibility definitions and native models are
 included in the local alpha package. Live SE validation of these instructions
 remains pending. Construction verification is separate from server permission
 to start the reactor.
@@ -92,8 +92,9 @@ No separate generator, tank or filling conveyor is needed.
 Build **one turbine and its own coolers per reactor manifold**. Use tees/crosses
 inside that circuit; match opposing faces and H/C roll. Never connect two reactor
 manifolds or share a cooler/turbine between circuits. Cap unused pipe mouths;
-unconnected reactor manifolds remain closed automatically. Keep the plant on
-one physical large grid; subgrid rotors/pistons/connectors do not transport heat.
+unconnected reactor manifolds remain closed automatically. The Arcane pipe rotor
+provides a native subgrid connection; vanilla rotors, pistons and connectors still do
+not transport Arcane heat.
 Regular/mirrored turbines provide opposite-side sockets and both equipment tiers.
 
 Fuel ratings are 5 / 50 / 250 GW for Aether / Helion / Empyrean.
@@ -107,8 +108,26 @@ One clear T1 atmospheric cooler per circuit handles Aether/T1 Helion at full den
 one T2 handles T2 Helion/Empyrean. Empyrean uses its entire 50 GW cooling rating.
 In ideal shaded vacuum, radiator requirements per circuit are one T1 section,
 two T1 sections, one T2 section, or three T2 sections respectively. Sunlight and
-atmosphere reduce radiator capacity. A base plus two extensions is one full stack;
+atmosphere reduce radiator capacity. A rotor base plus three separate panels is one full stack;
 use additional bases within the same circuit when more sections are needed.
+
+The **Hull radiator** is a fixed surface alternative, **1 block deep ×
+2 high × 3 wide**. Its full backing seals the hull, and the panel face sits flush
+with adjacent armor. Tile matching radiators on any of its four edges; feed the
+array through a standard H/C socket in the lower rear cell. Unused edge unions
+and rear sockets self-seal. Ordinary pipes connect only to the rear. One rear
+feed serves a contiguous array; keep each array on one reactor manifold circuit.
+A present damaged radiator still seals and passes coolant, but loses its cooling.
+An incompatible connection still faults the circuit. Removing a radiator makes
+its neighboring hull sockets self-seal, reducing available cooling without
+breaching the remaining array. Any exposed ordinary pipe still needs a cap.
+
+Keep the front face exposed to space. These panels do not track the sun, and
+armor behind them does not obstruct cooling. Each has one radiating face, rated
+at **1 GW standard / 10 GW upgraded** in shaded vacuum; front sunlight and
+atmosphere reduce capacity. Upgraded hull radiators cost 10 Aether Residuum.
+The existing panel and new hull radiator recipes contain **no Solar Cells**.
+The native models and construction stages are included in the 0.3.0 local package.
 
 All four trains occupy **2 blocks wide × 2 high × 5 long** (5×5×12.5 m). The socket
 is in the lower side cell near the compressor. The shaft line sits 0.55 m lower.
@@ -132,8 +151,8 @@ leaves none. Armor, another grid or terrain in the exhaust path reduces capacity
 Select the cooler, radiator base or extension panel in the native terminal to
 see its dedicated **Arcane Power** cooling readout. It shows cooling efficiency
 and available/rated capacity using server measurements, including while stopped.
-Radiator bases include their attached extensions in the stack total and show the
-base panel separately; each extension shows its own contribution. Percentages
+Radiator bases show the total for their attached panels; the base has no cooling
+of its own. Each panel shows its own contribution. Percentages
 are weighted by rated capacity, so mixed 2/20 GW panels are counted correctly.
 All cooling blocks show measured air density. Radiators also show clear sky,
 solar and ambient cooling factors; atmospheric coolers show exhaust clearance
@@ -177,10 +196,19 @@ integrated housing details; they require no separately placed pump block.
 
 ## Circuit damage and recovery
 
-The reactor manifolds carry the automatic butterfly shut-offs. Damage, a missing
-pipe/machine, open junction outlet, H/C fault or grid split makes that entire
+The reactor manifolds carry the automatic butterfly shut-offs. Pipe/turbine
+damage, a missing pipe/machine, open junction outlet, H/C fault or grid split makes that entire
 circuit unavailable immediately. Both reactor bores close together over 0.35 s;
 other circuits keep their own efficiency and heat-flow allocation.
+Damaged, unfinished or disabled coolers and radiators remain physically sealed
+while present, but provide no cooling. Losing too much cooling therefore keeps
+the pressure valve open while heat accumulates and can cause thermal runaway.
+A damaged middle stack panel still carries coolant to healthy panels above it.
+Removing an installed tracking panel breaches its stack; replace it to restore
+the seal. Stack connection history survives saves and is replicated to clients.
+Hull-radiator arrays are the exception: neighboring hull sockets self-seal when
+a radiator disappears, so the remaining fed array can keep running with less
+cooling. Ordinary pipes exposed by removal still breach their circuit.
 Once a complete circuit passes its checks, its reactor valve opens even while
 the reactor is off and the circuit is cold. Paid native output determines reaction heat; circuit cooling is independent of load. Unused or invalid
 circuits stay closed; moving/retracted manifolds stay closed too.
@@ -206,7 +234,9 @@ refilling and retain existing heat and fuel accounting.
 Functional-state and on/off events invalidate the changed block's circuit snapshot,
 including damage and repair completed between simulation ticks. Rechecks run on
 the next server update after output accounting; ordinary power loss is not a
-repair event. Full-weld, ownership and placement checks remain active.
+repair event. Ownership and placement checks remain active. Full welding and
+functionality govern cooling output; pipes and turbines still require them to
+join a circuit.
 These updates also recheck retained runtime faults on the changed circuit once
 its layout is complete. Radiator extension changes count as updates to their base.
 Valid inventories and zero native output allow a retry; invalid saved inventories,
@@ -235,7 +265,8 @@ Aim at a block in the assembly and resolve the guide's next instruction:
    graph, so a bad joint or missing weld cannot hide the rest of the build.
 2. **Functions:** one turbine and cooling per manifold circuit; keep manifold circuits separate. Detached unfinished assemblies are
    checked separately. A projection is a reference, never a verified real build.
-3. **Welding/access:** no unfinished, damaged or unavailable blocks. The guide
+3. **Welding/access:** pipes and turbines must be complete and functional, and all
+   blocks must be accessible. Present failed coolers retain their pipe path. The guide
    then reports **Construction verified**. This confirms the observed topology
    and build state; it does not certify thermal capacity or enable startup.
 4. **Cooling:** use an atmospheric cooler in atmosphere with reactor auxiliary power
@@ -260,17 +291,19 @@ conversion efficiency: 25%, 50%, 75% or 100% of nominal reactor allocation.
 There is exactly one turbine per circuit. Standalone remains a separate 10% mode.
 Restore cooling or shut down early when waste accumulates; keep cooldown power.
 
-Space radiators connect within their own manifold circuit through the bottom socket. The base occupies 3×3×3
-large-grid cells with a full-height pedestal in the bottom cell. Stack up to two
-3×2×3 Radiator Panel blocks directly above it on the same physical grid. Match
+Space radiators connect within their own manifold circuit through the bottom socket.
+The fully enclosed rotor base occupies **1×1×1 large-grid cell** and is airtight
+on all six faces, so it can seal a hull opening. Stack up to **three separate
+3×2×3 Radiator Panel blocks** directly above it on the same physical grid. Match
 the vertical Up axis; all four placed yaw orientations work. The moving panel and
 its H/C pipes automatically align with the base after welding and enabling.
 Aim at the top axial coupling to place the next section. The guide highlights
 that dock and shows RED/GREEN tilt arrows when Up is wrong; BLUE marks panel Up.
 Both panel faces and the main frame have collision that turns with the section,
 so you can aim a grinder from either side to remove it.
-Centres must remain on the same shaft, and the first extension must be present
-before the second. Weld and enable all sections;
+Centres must remain on the same shaft, with every preceding panel present.
+The first panel centre is 3.75 m above the base centre; subsequent centres are
+5 m apart. Weld and enable all sections;
 access is checked against the base owner. Connected panels turn together at
 3°/s, edge-on to the sun. Their 25 cm frame gaps leave the sealed couplings clear.
 Cooling follows inverse solar exposure: 0% sun gives 100% cooling, 50% sun
@@ -280,7 +313,16 @@ angle, partial shade, planetary shadow and weather. The terminal shows
 space; shade alone does not compensate for enclosing the panels.
 Three equally exposed standard panels dissipate up to 6 GW, or 60 GW with all
 three upgraded. Mixed stacks add each section's own 2/20 GW rating.
-A detached, misaligned, unfinished, disabled or third extension adds no cooling.
+
+Existing combined radiator blocks now use the one-cell rotor base. Remove and
+rebuild their panels in the new positions; existing thermal piping may also need
+repositioning to meet the base's bottom socket. No legacy combined variant is retained.
+
+**Manifold pipe variants** have fully enclosed casings and are airtight on every
+face, including the duplex socket faces. Bare pipe variants remain open and do
+not seal a hull. The atmospheric cooler retains its airtight casing. Native
+construction-stage rules determine when these blocks become airtight while welding.
+A detached, misaligned, unfinished, disabled or fourth panel adds no cooling.
 Keep both faces open to space and the entire rotation envelope clear. The faint
 red-orange panel glow follows actual heat rejection, not requested power.
 

@@ -112,9 +112,9 @@
       "APT_SpaceRadiator_M"
     ],
     "cells": [
-      3,
-      3,
-      3
+      1,
+      1,
+      1
     ],
     "moving_parts": [
       "Thermal_RadiatorPanels"
@@ -745,5 +745,41 @@
       "Thermal_TurbineRotor",
       "Thermal_CompressorRotor"
     ]
+  },
+  "Pipe rotor": {
+    "source": "ArcanePower_Thermal_PipeRotor",
+    "scenes": [
+      "APT_PipeRotor_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "Pipe rotor head": {
+    "source": "ArcanePower_Thermal_PipeRotorHead",
+    "scenes": [
+      "APT_PipeRotorHead_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "Hull radiator": {
+    "source": "ArcanePower_Thermal_HullRadiator",
+    "scenes": [
+      "APT_HullRadiator_M"
+    ],
+    "cells": [
+      3,
+      1,
+      2
+    ],
+    "moving_parts": []
   }
 }

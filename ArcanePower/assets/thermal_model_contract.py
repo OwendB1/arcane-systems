@@ -34,10 +34,28 @@ MACHINES = {
     'Recuperator': (3, 2, 3),
     'Recuperator upgraded': (3, 2, 3),
     'Atmospheric cooler': (3, 2, 3),
-    'Space radiator': (3, 3, 3),
+    'Space radiator': (1, 1, 1),
     'Radiator panel': (3, 3, 2),
+    'Hull radiator': (3, 1, 2),
+    'Pipe rotor': (1, 1, 1),
+    'Pipe rotor head': (1, 1, 1),
     'Reactor housing': (5, 5, 3),
 }
+PIPE_ROTORS = {'Pipe rotor': 'MotorAdvancedStator', 'Pipe rotor head': 'MotorAdvancedRotor'}
+# Native MyMotorStator constrains the head BLOCK ORIGIN to electric_motor;
+# the wheel dummy and initial placement offset do not offset the live hinge.
+PIPE_ROTOR_HEAD_CENTRE = 2.70
+PIPE_ROTOR_DISPLACEMENT = (-.10, .10)
+PIPE_ROTOR_CUFF_BOTTOM = -1.85
+HULL_RADIATOR_PORTS = [
+    dict(id='Rear H C', type='CO2', position=(0, 1.25, -1.25), normal=(0, 1, 0),
+         hot_axis=(0, 0, 1), self_sealing=True),
+] + [dict(id=label, type='CO2', position=p, normal=n, hot_axis=(0, -1, 0),
+          hull_only=True, self_sealing=True) for label, p, n in (
+    ('Left edge', (-3.75, 0, 0), (-1, 0, 0)), ('Right edge', (3.75, 0, 0), (1, 0, 0)),
+    ('Top edge', (0, 0, 2.5), (0, 0, 1)), ('Bottom edge', (0, 0, -2.5), (0, 0, -1)))]
+HULL_RADIATOR_SAMPLES = [(x, -1.28, z) for x in (-2.725, -1.975, -1.225, -.475, .475, 1.225, 1.975, 2.725)
+                        for z in (-1.52, -.52, .48, 1.48)]
 # (face normal, positive/H offset direction). Negative is C, never swapped.
 PIPE_PORTS = {
     'Straight': (((-1, 0, 0), (0, 0, 1)), ((1, 0, 0), (0, 0, 1))),
@@ -60,7 +78,7 @@ RETIRED = {'Primary heater', 'Primary heater upgraded', 'Recuperator', 'Recupera
 PIPE_ALIASES = {name: 'PRIMARY / '+name.split(' / ')[1] for name in SPECS
                 if name.startswith(('CO2_HP / ', 'CO2_LP / '))}
 # Gameplay variants reuse the accepted base geometry, weld stages and LODs.
-COOLER_UPGRADES = {name+' upgraded': name for name in ('Atmospheric cooler', 'Space radiator', 'Radiator panel')}
+COOLER_UPGRADES = {name+' upgraded': name for name in ('Atmospheric cooler', 'Space radiator', 'Radiator panel', 'Hull radiator')}
 RUNTIME = {name: cells for name, cells in SPECS.items() if name not in RETIRED}
 RUNTIME.update({name: SPECS[base] for name, base in COOLER_UPGRADES.items()})
 PLAYABLE = {name: cells for name, cells in RUNTIME.items() if name not in PIPE_ALIASES}

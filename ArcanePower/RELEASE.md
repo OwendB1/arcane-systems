@@ -3,7 +3,7 @@
 Workshop item: [3819727962](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962).
 The publishing source of truth is `workshop/title.txt`, `workshop/version.txt`,
 `workshop/description.bbcode`, `src/modinfo.sbmi.main` and `src/thumb.gif`.
-The title is generated as **Arcane Power (0.2.0)** from the two text files.
+The title is generated as **Arcane Power (0.3.0)** from the two text files.
 The animated preview uses the 480×270 GIF below 1 MB.
 
 `.github/workflows/arcane-power-workshop-upload.yml` calls the existing shared
@@ -69,7 +69,30 @@ python3 ArcanePower/tools/compose_workshop_blueprints.py
 
 The render scripts use temporary scenes and do not save the authoring blends. The renderer reads the saved SEUT Main collections directly, uses the actual mesh crease edges, and runs without the Blender UI or export add-on callbacks.
 
-The ten plates cover the reactor, controllers/vent route, storage cutaway, four turbine variants, atmospheric cooling, radiator stacks, framed pipes, bare pipes, full Energy Core bank, and all six storage modules. The three original filenames remain stable; the seven additions use matching 1600×900 cyan-on-navy layouts. The full-bank plate retains the complete casing, glazing outlines and four attached modules.
+The twelve plates cover the reactor, controllers/vent route, storage cutaway,
+four turbine variants, atmospheric cooling, radiator stacks, enclosed pipes,
+bare pipes, the full Energy Core bank, all six storage modules, the native pipe
+rotor and hull radiator arrays. Existing filenames remain stable, including
+`framed-pipes-blueprint.png`, which now shows the enclosed casings. All plates
+use matching 1600×900 cyan-on-navy layouts. The full-bank plate retains the
+complete casing, glazing outlines and four attached modules.
+
+The 0.3.0 gallery refresh uses the final saved models for plates 01, 02, 05, 06
+and 07, and adds `pipe-rotor-blueprint.png` (11) and
+`hull-radiators-blueprint.png` (12). The radiator stack shows the separate
+1×1×1 base and three panels at their actual grid spacing; only the panels
+provide cooling. The outlet drawing includes all four hatch subparts. The
+rotor assembly uses its native default head offset, and the hull array uses
+four adjoining radiators with self-sealing edge unions. Local image updates
+are authorized; uploading the gallery remains paused.
+
+Rebuild selected plates with `compose_workshop_blueprints.py --plates 01 02 05 06 07 11 12`
+after rendering their named studies. The local image bundle is
+`.cache/arcane-power-workshop-blueprints.zip`; it is separate from the mod ZIP.
+All twelve PNGs were checked at 1600×900, and the seven changed/new plates were
+visually reviewed. The five unaffected plates, three authoring blends and
+0.3.0 mod ZIP retain their pre-refresh hashes. Temporary render studies and
+logs were removed after verifying the image bundle against the final PNGs.
 
 ## Local alpha package
 
@@ -94,8 +117,9 @@ ordinary charging limits stay unchanged during surge. Recovery is the stabilizat
 reload. The single-drive picker is replaced by a batch summary in core details;
 existing terminal/toolbar action IDs remain valid.
 
-The current thermal catalog contains 24 public blocks: 16 pipe fittings, four
-train variants, the reactor, atmospheric cooler, radiator and panel extension.
+The current thermal catalog contains 31 public blocks: 16 pipe fittings, four
+train variants, the reactor, two native pipe rotor parts and eight cooling
+variants (tracking bases, panels, hull arrays and atmospheric coolers).
 The 28 former HP/LP pipe IDs are hidden compatibility definitions sharing current
 assets. All public blocks have icons, three construction stages and LODs where
 required. Native checks cover collision, material dependencies, the reactor's
@@ -163,7 +187,7 @@ meshes. Hidden legacy icons are unchanged.
 The 13 October runtime pass closes construction-stage startup/generation gaps,
 restricts cold-start reserve requests to eligible reactors, revokes removed storage
 module allocations immediately and finishes offline/distant storage visuals.
-The native shared menu includes eleven Power blocks and 24 public thermal blocks. Earlier compact banks
+The native shared menu includes eleven Power blocks and 31 public thermal blocks. Earlier compact banks
 retain their original hidden definitions and assets, preserving existing saves.
 
 Build the runtime ZIP from the repository root:
@@ -171,6 +195,7 @@ Build the runtime ZIP from the repository root:
 ```sh
 python3 ArcanePower/tools/compile_mod.py
 python3 ArcanePower/tools/check_thermal_runtime.py
+python3 ArcanePower/tools/check_thermal_installation.py
 python3 ArcanePower/tools/check_construction_stages.py
 python3 ArcanePower/tools/check_energy_core.py
 python3 ArcanePower/tools/check_native_thermal_motion.py
@@ -178,7 +203,16 @@ python3 ArcanePower/tools/package_release.py
 python3 ArcanePower/tools/check_thermal_delivery.py
 ```
 
-The output is `.cache/release/ArcanePower-0.2.0.zip` under ArcanePower.
+The output is `.cache/release/ArcanePower-0.3.0.zip` under ArcanePower.
+Manifold pipe variants now use fully enclosed, airtight casings. Radiators use
+an airtight 1×1×1 rotor base and up to three separate panels. Existing combined
+radiators are replaced by the base; rebuild their panels and reconnect the
+bottom socket as described in [the construction guide](THERMAL-CONSTRUCTION.md).
+The eight enclosed pipe shapes and rotor base passed geometry audits and live
+Blender reviews at 1.8, 2.4 and 3.0 m, including socket faces and the three-panel
+assembly. Refreshed construction stages, LODs, collisions and icons accompany
+the native models. Automated checks cover welded airtightness, panel linking,
+cooling readouts and exported motion; this change still needs an in-game check.
 Extract its contents into a local mod directory and enable it in an experimental
 SE1 world. The local development symlink already exposes `src` on the next world
 load. Do not load both the extracted package and the development copy together.
@@ -203,3 +237,45 @@ mixed-mod gameplay and complete mining-to-generation survival remain open.
 
 The local ZIP remains a separate development artifact; CI uploads the current
 `src` tree with the selected metadata profile and animated preview.
+
+The 0.3.0 source preflight reconciled the protected prototype fingerprint after
+the authorized ejection hatch seal repair. Comparing against
+`arcane-power-before-hatch-seal.blend` found 2,577 unchanged source/collision
+objects, zero modified or removed objects, and exactly six additions: the hatch
+pressure seal, outlet seat collar and four outlet hull corners. Existing reactor
+exterior and controller detail audits also passed. The accepted prototype SHA-256
+is `71122cff83d47918664085f89820b2d4a5e410adbf4550be70454b8e52917526` (previous protected fingerprint `2acf06e52fdd1ec7aa9210d1be61b992f7ec4b8e5a3b1341cd5b52367449657b`).
+
+The final radiator-base finish keeps a recessed bearing dock: a 2.30 m square
+deck sits 100 mm below the side-wall rim, with eight raised bolt heads and a
+5 mm radial clearance around the bearing. The pressure seal backs that clearance
+below the deck. Butt-jointed side armor removes the overlapping exterior strips;
+eight recessed H/C lamps match the pipe rotor. Live Blender inspection covered
+both top corners, side lamps and the underside at 1.8, 2.4 and 3.0 m with a fixed
+48 mm lens and studio light. Both LODs and all three construction stages were
+also inspected. Side fittings now follow their supporting panel through the
+radiator and rotor construction stages, and their frames stay inside the casing.
+
+The source audit passed all 59 models; a focused recheck passed after the final
+construction attachment changes. Native installation checks extract and compare
+the actual shipped collision bytes, verify hot/cold emissives on the three mains
+and both LODs (plus radiator status), and exercise six flat Havok hulls per block:
+486 face contacts and 44 clear sweeps above each casing. The radiator's moving
+subpart collision remains unchanged; its old casing inputs have a named checkpoint.
+The 255 native airtightness/stack-link checks and 1,820 exported-motion checks
+passed. Solution and SE compatibility/whitelist builds passed.
+
+Native compilation is **not warning-free**: the full thermal batch emitted
+18,399 degenerate-triangle warnings from MWMBuilder's packed-vertex checks, mostly
+in reactor/turbine fine detail. The native import, material, collision and motion
+checks pass, but these warnings remain a visual-validation limitation. No live
+game reload or new in-game acceptance test was performed for this 0.3.0 export.
+
+The completed 0.3.0 local package contains 692 files (444,406,459 bytes), including
+466 native meshes across the mod. Its thermal catalog has 27 authored families,
+31 public variants, 81 construction models and 158 LODs. The existing scripts
+also refreshed 23 prototype scenes and 15 hardware construction stages, using
+the thermal source's accepted sealed blast shields. Delivery validation checks
+every ZIP member against the installed mod, including all 51 scripts and 25
+definition files. The package SHA-256 is
+`68c990b2966d6019ac77c4caef372e03b8058a69cad5f88b0e3e4f5319aefa7d`.

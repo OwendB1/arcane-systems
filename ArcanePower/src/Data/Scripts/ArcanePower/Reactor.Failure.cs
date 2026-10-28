@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Sandbox.Common.ObjectBuilders;
 using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using VRage;
 using VRage.Game;
 using VRage.Game.Entity;
+using VRage.Game.ModAPI;
 using VRage.ModAPI;
 using VRageMath;
 
@@ -14,6 +16,7 @@ namespace ArcanePower
     {
         private readonly Random ejectRandom = new Random();
         private ThermalForecast heatForecast;
+        private int overheatDamageTick;
 
         private void UpdateThermal()
         {
@@ -62,14 +65,15 @@ namespace ArcanePower
             Motion.ForecastCooldownSeconds = (float)heatForecast.CooldownSeconds;
         }
 
-        internal void TrackCore(CoreHazard core)
+        internal bool TrackCore(CoreHazard core)
         {
-            if (Motion.PayloadReleased) return;
+            if (!IsLive || Motion.PayloadReleased) return false;
             core.Heat = Motion.Heat;
             core.Position = CoreWorldPosition();
             if (reactor.CubeGrid.Physics != null) core.Velocity = reactor.CubeGrid.Physics.GetVelocityAtPoint(core.Position);
             Motion.Critical = true;
             Motion.CriticalSeconds = CoreHazards.Seconds(core);
+            return true;
         }
 
         private Vector3D CoreWorldPosition()
@@ -125,29 +129,111 @@ namespace ArcanePower
             if (ringY + EjectionOffset().Y < outletHeight + 1.94) return;
             Matrix rotation = ContainmentRotation(age);
             bool plasma = PlasmaScale(age) > 0;
-            if (plasma || Motion.Critical)
+            bool critical = Motion.Critical || Motion.Heat >= CoreHazards.SupercriticalHeat;
+            if (plasma || critical)
             {
                 UpdateCriticalCore();
                 MatrixD world = WorldPose(PayloadPlasmaPose(age));
                 if (!CoreHazards.Release(Id, Motion.FuelTier, Motion.Heat, world,
-                    LaunchVelocity(world.Translation, .8f), RandomVector(1.3f))) return;
+                    LaunchVelocity(world.Translation, .8f), RandomVector(1.3f),
+                    critical ? CaptureCoreShell(world, age, rotation) : null)) return;
             }
             // Persist the one-way handoff before scheduling asynchronous debris.
+            CompletePayloadRelease();
+            if (!critical)
+            {
+                for (int i = 0; i < Motion.RingCount; i++)
+                    SpawnSpent("ArcaneSpentRing" + (i + 1), WorldPose(PayloadRingPose(i, age)), 1.5f);
+                foreach (var tile in AnimationGeometry.Tiles)
+                {
+                    // Do not eject tiles still inside their dispensers.
+                    if (age < 320 + 36 * tile.Batch + 34) continue;
+                    SpawnSpent("ArcaneSpentTile" + tile.Variant, WorldPose(PayloadTilePose(tile, age, rotation)), 3f);
+                }
+            }
+            PublishMotion();
+        }
+
+        private List<CoreShellPart> CaptureCoreShell(MatrixD world, float age, Matrix rotation)
+        {
+            var shell = new List<CoreShellPart>();
+            MatrixD inverse = MatrixD.Invert(world);
+            for (int i = 0; i < Motion.RingCount; i++)
+            {
+                MatrixD pose = WorldPose(PayloadRingPose(i, age)) * inverse;
+                shell.Add(new CoreShellPart { Subtype = "ArcaneSpentRing" + (i + 1),
+                    Pose = (Matrix)pose });
+            }
+            foreach (var tile in AnimationGeometry.Tiles)
+                if (age >= 320 + 36 * tile.Batch + 34)
+                {
+                    MatrixD pose = WorldPose(PayloadTilePose(tile, age, rotation)) * inverse;
+                    shell.Add(new CoreShellPart { Subtype = "ArcaneSpentTile" + tile.Variant,
+                        Pose = (Matrix)pose });
+                }
+            return shell;
+        }
+
+        private void CompletePayloadRelease()
+        {
             Motion.PayloadReleased = true;
             Motion.Critical = false;
             Motion.CriticalSeconds = 0;
+            Motion.Heat = 0;
             DiscardTiles();
             SaveMotion();
-            for (int i = 0; i < Motion.RingCount; i++)
-                SpawnSpent("ArcaneSpentRing" + (i + 1), WorldPose(PayloadRingPose(i, age)), 1.5f);
-            foreach (var tile in AnimationGeometry.Tiles)
-            {
-                // Part-built shells eject only already deployed quartets. A tile
-                // still inside its dispenser is not teleported above the roof.
-                if (age < 320 + 36 * tile.Batch + 34) continue;
-                SpawnSpent("ArcaneSpentTile" + tile.Variant, WorldPose(PayloadTilePose(tile, age, rotation)), 3f);
-            }
+        }
+
+        private void TryReleaseFailedHousing()
+        {
+            if (!MyAPIGateway.Multiplayer.IsServer || !receivedState || Motion.PayloadReleased
+                || Motion.Core == CorePhase.Off || reactor.IsFunctional) return;
+            float age = Motion.CoreTick + Motion.CoreSubtick;
+            if (PlasmaScale(age) <= 0 && !Motion.Critical && Motion.Heat < CoreHazards.SupercriticalHeat) return;
+            UpdateCriticalCore();
+            Vector3D position = CoreWorldPosition();
+            MatrixD world = MatrixD.CreateWorld(position, Entity.WorldMatrix.Forward, Entity.WorldMatrix.Up);
+            var physics = reactor.CubeGrid.Physics;
+            // No launch impulse: collision with the vessel traps this ball until
+            // the housing is opened or destroyed. Grid motion is still inherited.
+            if (!CoreHazards.Release(Id, Motion.FuelTier, Motion.Heat, world,
+                physics == null ? Vector3.Zero : physics.GetVelocityAtPoint(position),
+                physics == null ? Vector3.Zero : physics.AngularVelocity)) return;
+            reactor.Enabled = false;
+            Motion.Core = CorePhase.Off;
+            Motion.CoreTick = 0;
+            Motion.CoreSubtick = 0;
+            Motion.PowerRamp = 0;
+            CompletePayloadRelease();
+            RefreshFuelCapacity();
             PublishMotion();
+        }
+
+        private void ApplyOverheatDamage()
+        {
+            if (!MyAPIGateway.Multiplayer.IsServer || Motion.PayloadReleased || Motion.Core == CorePhase.Off
+                || Motion.Heat <= 1 || !reactor.IsFunctional)
+            { overheatDamageTick = 0; return; }
+            // One damage update per simulation second; the rate rises linearly
+            // with heat above 100%. At 125%: vessel 1%/s, controllers 1.5%/s.
+            if (++overheatDamageTick < 60) return;
+            overheatDamageTick = 0;
+            float excess = Motion.Heat - 1;
+            var modules = new List<IMySlimBlock>();
+            var native = (MyCubeBlock)Entity;
+            if (native.CurrentAttachedUpgradeModules != null)
+                foreach (var entry in native.CurrentAttachedUpgradeModules.Values)
+                    if (entry.Compatible && entry.Block != null && !entry.Block.Closed
+                        && entry.Block.CubeGrid == reactor.CubeGrid
+                        && entry.Block.GameLogic.GetAs<ContainmentController>() != null
+                        && !modules.Contains(entry.Block.SlimBlock))
+                        modules.Add(entry.Block.SlimBlock);
+            foreach (var module in modules)
+                module.DoDamage(module.MaxIntegrity * .06f * excess,
+                    VRage.Utils.MyStringHash.GetOrCompute("Overheat"), true, attackerId: Id);
+            reactor.SlimBlock.DoDamage(reactor.SlimBlock.MaxIntegrity * .04f * excess,
+                VRage.Utils.MyStringHash.GetOrCompute("Overheat"), true, attackerId: Id);
+            TryReleaseFailedHousing();
         }
 
         private MatrixD WorldPose(Matrix local)
@@ -165,10 +251,11 @@ namespace ArcanePower
         private Vector3 LaunchVelocity(Vector3D position, float scatter)
         {
             Vector3 inherited = reactor.CubeGrid.Physics == null ? Vector3.Zero : reactor.CubeGrid.Physics.GetVelocityAtPoint(position);
-            // The outlet supplies a final launch impulse, at least 30 m/s.
+            // The outlet supplies a final launch impulse, at least 45 m/s.
             // Longer ducts may already exceed that speed under authored acceleration.
-            float speed = Math.Max(30, Motion.EjectionTravel * Motion.EjectTick / 120f);
+            float speed = VentSpeed * Math.Max(30, Motion.EjectionTravel * (Motion.EjectTick + Motion.EjectSubtick) / 120f);
             Vector3 jitter = RandomVector(scatter);
+            jitter.Y = 0; // Scatter is lateral; it cannot weaken the launch impulse.
             return inherited + (Vector3)Entity.WorldMatrix.Up * speed + Vector3.TransformNormal(jitter, Entity.WorldMatrix);
         }
 

@@ -42,12 +42,15 @@ def generate():
     assert len(exhaust)==18 and all(len(p)==3 and all(math.isfinite(v) for v in p) for p in exhaust)
     rows[8:8] = ['        public static readonly Vector3[] AirCoolerExhaustSamples = { '
                  + ', '.join(vector(p) for p in exhaust) + ' };']
+    rows[8:8] = ['        public static readonly Vector3[] HullRadiatorSamples = { '
+                 + ', '.join(vector(p) for p in contract['HULL_RADIATOR_SAMPLES']) + ' };']
     for name, model in models.items():
         kind = ('Reactor' if name == 'Reactor housing' else 'Train' if name.startswith('Brayton train')
                 else 'AirCooler' if name.startswith('Atmospheric cooler') else 'Radiator' if name.startswith('Space radiator')
-                else 'RadiatorPanel' if name.startswith('Radiator panel') else 'Pipe')
+                else 'RadiatorPanel' if name.startswith('Radiator panel')
+                else 'HullRadiator' if name.startswith('Hull radiator') else 'Pipe')
         grade = 3 if 'upgraded' in name or kind == 'Pipe' else 0
-        cooler = kind in ('AirCooler', 'Radiator', 'RadiatorPanel')
+        cooler = kind in ('AirCooler', 'Radiator', 'RadiatorPanel', 'HullRadiator')
         if kind == 'Train':
             rating = 62500 if grade == 3 else 4375
         elif kind == 'Reactor':
@@ -60,11 +63,16 @@ def generate():
         cooling = (20000 if grade == 3 else 2000) if cooler else 0
         if kind == 'AirCooler':
             cooling = 50000 if grade == 3 else 5000
+        elif kind == 'Radiator':
+            cooling = 0  # The one-cell rotor base carries up to three separate panels.
+        elif kind == 'HullRadiator':
+            cooling //= 2  # One exposed face of the same two-sided graphite panel.
         subtype = model['subtype']
         assert model['cells_se'] == [model['cells_blender'][i] for i in (0, 2, 1)]
         rows += [f'            models.Add("{subtype}", new ThermalModel {{',
                  f'                Subtype = "{subtype}", Cells = {vector(model["cells_blender"], True)},',
-                 f'                Kind = ThermalKind.{kind}, Grade = {grade}, RatingMW = {rating}, CoolingMW = {cooling}, Ports = new ThermalPort[] {{']
+                 f'                Kind = ThermalKind.{kind}, Grade = {grade}, RatingMW = {rating}, CoolingMW = {cooling}, '
+                 + ('Rotary = true, ' if name in contract['PIPE_ROTORS'] else '') + 'Ports = new ThermalPort[] {']
         source = models[contract['PIPE_ALIASES'].get(name, contract['COOLER_UPGRADES'].get(name, name))]
         # Compatibility IDs render the canonical model, so their socket geometry
         # must agree with it before an old saved block can share that asset.
@@ -72,17 +80,24 @@ def generate():
             {k:v for k,v in p.items() if k != 'type'} for p in source['ports']]
         for p in source['ports']:
             circuit = contract['runtime_circuit'](name, p['type'])
-            role = ', true' if p.get('reactor_transition') else ''
+            role = ', reactorOnly: true' if p.get('reactor_transition') else ''
+            if p.get('hull_only'): role += ', hullOnly: true'
+            if p.get('self_sealing'): role += ', selfSealing: true'
             rows.append(f'                    new ThermalPort("{circuit}", {vector(p["position"])}, {vector(p["normal"])}, {vector(p["hot_axis"])}{role}),')
         rows.append('                } });')
     rows += ['            return models;', '        }', '    }']
     for kind, base_type, class_name in [('Train', 'Reactor', 'ThermalTrain'), ('Other', 'UpgradeModule', 'ThermalMachine')]:
         names = [m['subtype'] for n, m in models.items() if
-                 (n.startswith('Brayton train') if kind == 'Train' else not n.startswith('Brayton train') and n != 'Reactor housing')]
+                 (n.startswith('Brayton train') if kind == 'Train' else not n.startswith('Brayton train')
+                  and n != 'Reactor housing' and n not in contract['PIPE_ROTORS'])]
         rows += ['    [VRage.Game.Components.MyEntityComponentDescriptor(',
                  f'        typeof(Sandbox.Common.ObjectBuilders.MyObjectBuilder_{base_type}), false,',
                  '        ' + ', '.join('"' + n + '"' for n in names) + ')]',
                  f'    public sealed class {class_name} : ThermalBlock {{ }}']
+    for name, base_type in contract['PIPE_ROTORS'].items():
+        rows += ['    [VRage.Game.Components.MyEntityComponentDescriptor(',
+                 f'        typeof(Sandbox.Common.ObjectBuilders.MyObjectBuilder_{base_type}), false, "{contract["subtype"](name)}")]',
+                 f'    public sealed class Thermal{base_type} : ThermalPipeJoint {{ }}']
     rows.append('}')
     return '\n'.join(rows) + '\n'
 

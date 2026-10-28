@@ -95,7 +95,8 @@ class Check {
  void UpdateStatus(){}
  void AdvanceMotion(){advances++;}
  void UpdateThermal(){thermal++;}
- void ApplyVentDamage(){}
+ void TryReleaseFailedHousing(){}
+ void ApplyOverheatDamage(){}
  void TryReleasePayload(){}
  void UpdateCriticalCore(){critical++;}
  void RefreshFuelCapacity(){}

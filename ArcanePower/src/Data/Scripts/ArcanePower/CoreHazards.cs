@@ -18,6 +18,13 @@ using VRageMath;
 namespace ArcanePower
 {
     [ProtoContract]
+    public sealed class CoreShellPart
+    {
+        [ProtoMember(1)] public string Subtype;
+        [ProtoMember(2)] public Matrix Pose;
+    }
+
+    [ProtoContract]
     public sealed class CoreHazard
     {
         [ProtoMember(1)] public long SourceId;
@@ -33,6 +40,9 @@ namespace ArcanePower
         [ProtoMember(10)] public Vector3 Velocity;
         // Missing in legacy saves, where Fuse stored heat-weighted units.
         [ProtoMember(11)] public int FuseVersion;
+        [ProtoMember(12)] public Quaternion Rotation = Quaternion.Identity;
+        [ProtoMember(13)] public Vector3 Spin;
+        [ProtoMember(14)] public List<CoreShellPart> Shell;
     }
 
     // The hazard is world state, independent of the disposable physics carrier.
@@ -48,7 +58,9 @@ namespace ArcanePower
         private List<CoreHazard> cores = new List<CoreHazard>();
         private readonly Dictionary<long, MyLight> lights = new Dictionary<long, MyLight>();
         private readonly Dictionary<long, MyEntity3DSoundEmitter> coreSounds = new Dictionary<long, MyEntity3DSoundEmitter>();
+        private readonly Dictionary<long, CoreShellVisuals> shells = new Dictionary<long, CoreShellVisuals>();
         private readonly List<long> unusedLights = new List<long>();
+        private readonly List<long> unusedShells = new List<long>();
         private int tick;
         private bool ready;
 
@@ -88,12 +100,28 @@ namespace ArcanePower
             return core;
         }
 
-        internal static bool Release(long sourceId, int tier, float heat, MatrixD world, Vector3 velocity, Vector3 spin)
+        internal static bool Release(long sourceId, int tier, float heat, MatrixD world, Vector3 velocity, Vector3 spin,
+            List<CoreShellPart> shell = null)
         {
             if (instance == null) return false;
+            var core = Inside(sourceId);
+            bool added = core == null;
+            if (added)
+                core = new CoreHazard { SourceId = sourceId, Tier = tier, Heat = heat, PeakHeat = heat,
+                    Critical = heat >= SupercriticalHeat, FuseVersion = 1 };
+            if (!CreateCarrier(core, world, velocity, spin)) return false;
+            core.Shell = core.Critical ? shell : null;
+            if (added) instance.cores.Add(core);
+            instance.Broadcast();
+            return true;
+        }
+
+        private static bool CreateCarrier(CoreHazard core, MatrixD world, Vector3 velocity, Vector3 spin)
+        {
             var builder = new MyObjectBuilder_CubeGrid
             {
                 GridSizeEnum = MyCubeSize.Small, IsStatic = false, CreatePhysics = true,
+                DestructibleBlocks = !core.Critical, Editable = !core.Critical,
                 PositionAndOrientation = new MyPositionAndOrientation(world),
                 LinearVelocity = velocity, AngularVelocity = spin,
                 DisplayName = "Ejected Arcane Core",
@@ -108,21 +136,28 @@ namespace ArcanePower
             if (carrier == null || carrier.Physics == null)
             {
                 if (carrier != null) carrier.Close();
-                MyLog.Default.WriteLine("ArcanePower: physical core creation failed; retaining the vent payload for retry.");
+                MyLog.Default.WriteLine("ArcanePower: physical core creation failed; retaining the hazard for retry.");
                 return false;
             }
-            var core = Inside(sourceId);
-            if (core == null)
-            {
-                core = new CoreHazard { SourceId = sourceId, Tier = tier, Heat = heat, PeakHeat = heat,
-                    Critical = heat >= SupercriticalHeat, FuseVersion = 1 };
-                instance.cores.Add(core);
-            }
+            // Apply the handoff momentum to the ready body, including the
+            // outlet impulse. Do not rely only on object-builder initialization.
+            carrier.Physics.LinearVelocity = velocity;
+            carrier.Physics.AngularVelocity = spin;
             core.CarrierId = carrier.EntityId;
             core.Position = world.Translation;
             core.Velocity = velocity;
-            instance.Broadcast();
+            core.Rotation = Quaternion.CreateFromRotationMatrix((Matrix)world);
+            core.Spin = spin;
+            MyLog.Default.WriteLine("ArcanePower: physical core source=" + core.SourceId + " carrier=" + core.CarrierId
+                + " critical=" + core.Critical + " fuse=" + Seconds(core) + " position=" + core.Position);
             return true;
+        }
+
+        private static void RestoreCarrier(CoreHazard core)
+        {
+            MatrixD world = MatrixD.CreateFromQuaternion(core.Rotation);
+            world.Translation = core.Position;
+            CreateCarrier(core, world, core.Velocity, core.Spin);
         }
 
         internal static float Seconds(CoreHazard core)
@@ -152,18 +187,31 @@ namespace ArcanePower
                     if (core.CarrierId != 0)
                     {
                         MyAPIGateway.Entities.TryGetEntityById(core.CarrierId, out carrier);
-                        if (carrier != null && !carrier.Closed)
+                        if (carrier != null && !carrier.Closed && !carrier.MarkedForClose)
                         {
-                            core.Position = carrier.WorldMatrix.Translation;
+                            // Also protect carriers restored from older, destructible saves.
+                            var grid = carrier as MyCubeGrid;
+                            if (core.Critical && grid != null)
+                            { grid.DestructibleBlocks = false; grid.Editable = false; }
+                            MatrixD world = carrier.WorldMatrix;
+                            core.Position = world.Translation;
+                            core.Rotation = Quaternion.CreateFromRotationMatrix((Matrix)world);
                             if (carrier.Physics != null)
                             {
                                 core.Velocity = carrier.Physics.LinearVelocity;
+                                core.Spin = carrier.Physics.AngularVelocity;
                                 float interference;
                                 MyAPIGateway.Physics.CalculateNaturalGravityAt(core.Position, out interference);
                                 Vector3 artificial = MyAPIGateway.Physics.CalculateArtificialGravityAt(core.Position, interference);
                                 carrier.Physics.AddForce(MyPhysicsForceType.APPLY_WORLD_FORCE,
                                     artificial * carrier.Physics.Mass, null, null);
                             }
+                        }
+                        else if (core.Critical)
+                        {
+                            // Cleanup or removal must not strand an invisible stationary bomb.
+                            RestoreCarrier(core);
+                            MyAPIGateway.Entities.TryGetEntityById(core.CarrierId, out carrier);
                         }
                         // Ejection cools an ordinary core, but never lengthens an armed fuse.
                         core.Heat = Math.Max(0, core.Heat - 1f / 600);
@@ -175,9 +223,10 @@ namespace ArcanePower
                         if (MyAPIGateway.Entities.TryGetEntityById(core.SourceId, out source) && !source.Closed)
                         {
                             var reactor = source.GameLogic.GetAs<Reactor>();
-                            if (reactor != null) reactor.TrackCore(core);
+                            if (reactor == null || !reactor.TrackCore(core)) RestoreCarrier(core);
                         }
-                        // If the housing disappears, keep the last known blast position.
+                        else if (core.Critical) RestoreCarrier(core);
+                        if (core.CarrierId != 0) MyAPIGateway.Entities.TryGetEntityById(core.CarrierId, out carrier);
                     }
                     if (core.Critical)
                     {
@@ -207,7 +256,9 @@ namespace ArcanePower
             var explosion = new MyExplosionInfo(0, damage, new BoundingSphereD(core.Position, radius),
                 MyExplosionTypeEnum.CUSTOM, true)
             {
-                OriginEntity = core.SourceId, Velocity = core.Velocity,
+                // OriginEntity excludes its grid under SE's turret friendly-fire
+                // setting. A core blast must damage every grid within its radius.
+                OriginEntity = 0, Velocity = core.Velocity,
                 StrengthImpulse = 1.2f, ObjectsRemoveDelayInMiliseconds = 40,
                 CustomSound = new MySoundPair("ArcaneReactorExplosion"),
                 CustomEffect = "Explosion_Warhead_50",
@@ -224,7 +275,8 @@ namespace ArcanePower
                 var reactor = source.GameLogic.GetAs<Reactor>();
                 if (reactor != null) reactor.CoreDetonated();
             }
-            MyLog.Default.WriteLine("ArcanePower: tier " + core.Tier + " core detonated at " + core.Position
+            MyLog.Default.WriteLine("ArcanePower: tier " + core.Tier + " core source=" + core.SourceId
+                + " carrier=" + core.CarrierId + " detonated at " + core.Position
                 + ", damage=" + damage + ", radius=" + radius);
             return true;
         }
@@ -232,7 +284,7 @@ namespace ArcanePower
         internal static float EjectedCountdown(long sourceId, out int count)
         {
             count = 0;
-            float earliest = 45;
+            float earliest = CriticalDurationSeconds;
             if (instance == null) return earliest;
             foreach (var core in instance.cores)
                 if (core.SourceId == sourceId && core.CarrierId != 0 && core.Critical)
@@ -244,6 +296,8 @@ namespace ArcanePower
         {
             unusedLights.Clear();
             unusedLights.AddRange(lights.Keys);
+            unusedShells.Clear();
+            unusedShells.AddRange(shells.Keys);
             foreach (var core in cores)
             {
                 if (core.CarrierId == 0) continue;
@@ -253,6 +307,14 @@ namespace ArcanePower
                 var block = grid == null ? null : grid.GetCubeBlock(Vector3I.Zero);
                 var model = block == null ? null : block.FatBlock as MyEntity;
                 if (model == null) continue;
+                if (core.Shell != null && core.Shell.Count > 0)
+                {
+                    CoreShellVisuals shell;
+                    if (!shells.TryGetValue(core.CarrierId, out shell))
+                    { shell = new CoreShellVisuals(model, core.Shell); shells.Add(core.CarrierId, shell); }
+                    unusedShells.Remove(core.CarrierId);
+                    shell.Update();
+                }
                 Color color = Reactor.FuelColors[core.Tier - 1];
                 float fade = core.Critical ? 1 : MathHelper.Clamp(core.Decay / 5, 0, 1);
                 model.SetEmissiveParts("ArcanePlasma", color, 0);
@@ -295,6 +357,7 @@ namespace ArcanePower
                 MyEntity3DSoundEmitter sound;
                 if (coreSounds.TryGetValue(id, out sound)) { sound.StopSound(true); coreSounds.Remove(id); }
             }
+            foreach (long id in unusedShells) { shells[id].Close(); shells.Remove(id); }
         }
 
         private void Broadcast()
@@ -332,6 +395,8 @@ namespace ArcanePower
             if (ready) MyAPIGateway.Multiplayer.UnregisterSecureMessageHandler(Channel, Receive);
             foreach (var light in lights.Values) MyLights.RemoveLight(light);
             foreach (var sound in coreSounds.Values) sound.StopSound(true);
+            foreach (var shell in shells.Values) shell.Close();
+            shells.Clear();
             coreSounds.Clear();
             lights.Clear(); cores.Clear(); ready = false; instance = null;
         }

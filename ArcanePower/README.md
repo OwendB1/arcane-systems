@@ -3,6 +3,23 @@
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962)
 · [Publishing workflow and gallery sources](RELEASE.md)
 
+Version **0.3.0** adds sealed 1×1×1 pipe rotors with a real rotating cuff,
+native Advanced Rotor mechanics and a 10–30 cm adjustable casing gap. The head
+carries a real subgrid and a duplex thermal connection. The radiator tracking
+base remains a separate same-grid mechanism with up to three panels. See
+[rotor details](THERMAL-RUNTIME.md#sealed-pipe-rotor).
+
+Fixed hull radiators are **1 deep × 2 high × 3 wide**, with airtight full-block
+backing, four self-sealing radiator edge unions and a lower rear H/C pipe socket.
+They provide 1/10 GW standard/upgraded cooling in shaded vacuum and use no Solar
+Cells. See [hull radiator details](THERMAL-RUNTIME.md#hull-radiator).
+
+Manifold pipes, tracking bases, atmospheric coolers and top vent outlets seal
+against adjacent hull blocks. Existing combined radiators become the new base;
+rebuild their panels. Failed cooling blocks retain their physical circuit while
+rejecting no heat, allowing thermal runaway. Removed blocks can breach ordinary
+pipes; hull-radiator neighbors close their sockets automatically.
+
 Cleanup is required after every completed modelling pass; follow
 [the asset workflow](assets/AGENTS.md#cleanup-after-every-modelling-pass).
 Scratch scripts, renders, recordings, logs, export staging and obsolete validation
@@ -87,7 +104,7 @@ includes mirrored versions. The two pipe groups remain separate. The reactor and
 Energy Core retain their own entries. Individual variants remain buildable by
 scrolling through their group. The definition generators preserve this layout.
 
-The current thermal catalog has 27 public blocks plus the hidden pipe aliases.
+The current thermal catalog has 31 public blocks plus the hidden pipe aliases.
 Each reactor manifold supplies an independent circuit with one turbine and its
 own cooling. Four circuits provide full capacity; a breach isolates the affected
 circuit, and losing all valid circuits stops generation. Only an explicit manual
@@ -259,13 +276,13 @@ unfinished; transit through the reactor and tube is scripted until outlet releas
 
 [Reactor.Motion.cs](src/Data/Scripts/ArcanePower/Reactor.Motion.cs) implements `Off → Starting → Running → Cooling → Stopping`. The base startup spans 1,170 authored simulation ticks: annular leaves open around the fixed solid island, rings rise, dispensers assemble twenty four-tile batches, the plasma grows from zero over ticks 1038–1170 (2.2 seconds after the final quartet latches), and rings enter armillary motion. For a hot running reactor, normal shutdown first holds the assembled shell in Cooling, slowing the rings until heat falls to 15% or lower (about 57 seconds from full heat with the 30-second cooling response). It then brakes both ring axes over 90 ticks while the plasma shrinks and fades to nothing over the same 90 ticks, and reverses deployment at its original 1× pace. Passive cooling continues if damage pauses the mechanisms. An interrupted startup reverses from its current age, including its fractional position.
 
-Venting is a committed, finite **core-ejection cycle**: shield closes for 4 seconds, intake/hatch opens for 1.5, the core and deployed rings eject upward for 2, intake closes for 1.5, and shield retracts for 4 (about 13 seconds total). Native power is cut only once the shield is fully closed. The cycle ends automatically and leaves the reactor Off; a manual restart builds a fresh containment field. Another toolbar click does not reverse an active ejection.
+Venting is a committed, finite **core-ejection cycle**, running at 1.5× the original speed: shield closes for about 2.67 seconds, intake/hatch opens for 1, the core and deployed rings eject upward for 1.33, intake closes for 1, and shield retracts for 2.67 (about 8.7 seconds total). Once clear of the outlet, the physical core receives at least 45 m/s along the tube axis relative to the ship, or the faster scripted exit velocity for a long duct. Native power is cut only once the shield is fully closed. The cycle ends automatically and leaves the reactor Off; a manual restart builds a fresh containment field. Another toolbar click does not reverse an active ejection.
 
 Healthy heat approaches actual load with the existing heating/cooling response. Tile starvation now cuts output to 10% of the captured operating load while burning fuel at 10× its normal rate and accelerating heat. At 125% heat, an irreversible saved detonation timer starts. Tier I/II/III cores use 5×/20×/100× large-warhead damage with cube-root radius scaling. Ejection transfers that hazard to the physical core; subcritical ejected cores decay. Details, provisional values and limits are in [THERMAL-FAILURE.md](THERMAL-FAILURE.md).
 
-After a payload vent completes, server damage applies once: reactor `1% + 4% × load + 10% × heat`, compatible attached modules `2% + 6% × load + 12% × heat`. Heat above 100% can exceed the old 15%/20% healthy maxima. The scripted payload now becomes physical spent rings/tiles and a plasma carrier once clear of the outlet. Moving shutter collision remains unfinished.
+While a core remains contained, heat above 100% damages the vessel and attached controllers once per simulation second. With heat expressed as a fraction, damage is `4% × (heat − 1)` of vessel integrity and `6% × (heat − 1)` of controller integrity per second: at 125% heat, 1%/1.5% per second. Ejection ends this damage and has no separate vent penalty. Subcritical ejections produce spent rings/tiles; critical ejections keep the assembled shell attached to one protected physical core until detonation. If the housing becomes nonfunctional, its core becomes a physical ball inside the vessel without an ejection impulse; destroying the vessel can free it. The existing core heat gauge drives contained overheating damage. Moving shutter collision remains unfinished.
 
-Damage at **60% reactor integrity remaining or lower** automatically requests core ejection once a payload is deployed. Both attached controllers must be fully built and functional. Every vent tube and the outlet must also be fully built, functional and aligned; blocked ejection retries when the route is repaired. Damage to the reactor itself does not disable emergency vent actuation while the controllers and containment power/reserve remain available. Losing a controller or vent before physical release pauses ejection without stopping heat or critical timers.
+Damage at **60% reactor integrity remaining or lower** automatically requests core ejection once a payload is deployed. Both attached controllers must be fully built and functional. Every vent tube and the outlet must also be fully built, functional and aligned; blocked ejection retries when the route is repaired. While the housing remains functional, damage does not disable emergency vent actuation while the controllers and containment power/reserve remain available. A nonfunctional housing instead releases a trapped physical ball, without requiring controllers or vents. Losing a controller or vent before physical release pauses ejection without stopping heat or critical timers.
 
 The terminal **Security mode** switch defaults to **On**: losing the vent route while running causes controlled shutdown. **Off** allows an already-running reactor to keep generating with a visible vent-fault warning. Both modes require a complete route for initial startup and shut down an interrupted startup if that route breaks. Automatic damage ejection remains active in both modes. Security mode is saved, synchronized and changed through the existing access-checked server command path.
 

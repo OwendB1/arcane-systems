@@ -84,7 +84,7 @@ namespace ArcanePower {
     for(int i=0;i<coolingLabels.Length;i++)report.Rows.Add(new StatusRow{Section="POWER",Label=coolingLabels[i],Value=coolingValues[i],Tone="yellow"});
    }
    if(cooling){
-    report.State="COOLING DOWN";report.Heat=.8;report.Tone="yellow";report.CooldownProgress=.5;
+    report.State="COOLING DOWN";report.Heat=.8;report.Tone="cyan";report.CooldownProgress=.5;
     report.Rows.Add(new StatusRow{Section="POWER",Label="Cooldown ETA",Value="~50 s to 15%",Tone="white"});
     report.Rows.Add(new StatusRow{Section="POWER",Label="Cooldown progress",Value="50%",Tone="white"});
     report.Rows.Add(new StatusRow{Section="POWER",Label="Core cooldown",Value="80.0% / target 15%",Tone="white"});
@@ -137,6 +137,8 @@ namespace ArcanePower {
       Need(heading.Position.Value.Y+heading.RotationOrScale*37<=bar.Position.Value.Y-1.5f,"charge bar clears state text");
      }
      var lcd=ReactorDashboard.Draw(report,page,"unused","LCD / "+ReactorDashboard.Pages[page]);
+     Need(sprites.Single(s=>s.Data==report.State).Color==ReactorDashboard.Tone(report.Tone)
+       && lcd.Single(s=>s.Data==report.State).Color==ReactorDashboard.Tone(report.Tone),"LCD and tablet headings use the shared status tone on every page");
      Need(lcd.Any(s=>s.Data==(report.Precharging?"STARTUP CHARGE":"EMERGENCY RESERVE")),"LCD identifies charge or reserve correctly");
      if(report.CoolingDown && page<=1){
       foreach(var label in new[]{"Core cooldown","Cooldown progress","Cooldown ETA","Shutdown stage","Cooldown backlog","Cooling rate","Cooling capacity","Containment"}){

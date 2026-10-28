@@ -92,7 +92,8 @@ Atmospheric coolers reject **5/50 GW per T1/T2 unit**. Radiator sections retain
   and weather; clearance to space remains a separate limit. Trace atmosphere
   no longer triggers the full atmospheric penalty: at 0.1% density, 99.91% of
   capacity remains before sun and clearance losses; at full density, 12.36% remains.
-- A radiator base supports two extensions. Three equally exposed sections provide
+- A one-cell airtight radiator rotor base supports three separate panels and
+  provides no cooling itself. Three equally exposed panels provide
   6 GW standard or 60 GW upgraded; mixed stacks add each section's capacity.
   Disconnected or excess extensions contribute nothing and cannot duplicate MJ.
 

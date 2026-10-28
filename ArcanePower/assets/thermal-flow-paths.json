@@ -1271,12 +1271,12 @@
           [
             0.0,
             -0.46,
-            -3.75
+            -1.25
           ],
           [
             0.0,
             -0.46,
-            -1.4
+            0.85
           ]
         ],
         "circuit": "CO2_LP",
@@ -1291,12 +1291,12 @@
           [
             0.0,
             0.46,
-            -3.75
+            -1.25
           ],
           [
             0.0,
             0.46,
-            -1.4
+            0.85
           ]
         ],
         "circuit": "CO2_LP",
@@ -11650,6 +11650,292 @@
         "radius": 0.1885,
         "internal": false,
         "label": "Brayton train mirrored upgraded / cold rear return"
+      }
+    ],
+    "ArcanePower_Thermal_PipeRotor": [
+      {
+        "points": [
+          [
+            0.0,
+            -0.46,
+            -1.25
+          ],
+          [
+            0.0,
+            -0.46,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": false,
+        "port": 0,
+        "radius": 0.16,
+        "internal": false,
+        "label": "rotary union channel"
+      },
+      {
+        "points": [
+          [
+            0.0,
+            0.46,
+            -1.25
+          ],
+          [
+            0.0,
+            0.46,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": true,
+        "port": 0,
+        "radius": 0.16,
+        "internal": false,
+        "label": "rotary union channel"
+      }
+    ],
+    "ArcanePower_Thermal_PipeRotorHead": [
+      {
+        "points": [
+          [
+            0.0,
+            -0.46,
+            1.25
+          ],
+          [
+            0.0,
+            -0.46,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": false,
+        "port": 0,
+        "radius": 0.16,
+        "internal": false,
+        "label": "rotary union channel"
+      },
+      {
+        "points": [
+          [
+            0.0,
+            0.46,
+            1.25
+          ],
+          [
+            0.0,
+            0.46,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": true,
+        "port": 0,
+        "radius": 0.16,
+        "internal": false,
+        "label": "rotary union channel"
+      }
+    ],
+    "ArcanePower_Thermal_HullRadiator": [
+      {
+        "points": [
+          [
+            0.0,
+            1.25,
+            -1.7100000381469727
+          ],
+          [
+            -0.46,
+            0.0,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": false,
+        "port": 0,
+        "radius": 0.16,
+        "internal": false,
+        "label": "Rear H C"
+      },
+      {
+        "points": [
+          [
+            0.0,
+            1.25,
+            -0.7899999618530273
+          ],
+          [
+            0.46,
+            0.0,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": true,
+        "port": 0,
+        "radius": 0.16,
+        "internal": false,
+        "label": "Rear H C"
+      },
+      {
+        "points": [
+          [
+            -3.75,
+            0.46000000834465027,
+            0.0
+          ],
+          [
+            -0.46,
+            0.0,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": false,
+        "port": 1,
+        "radius": 0.16,
+        "internal": false,
+        "label": "Left edge"
+      },
+      {
+        "points": [
+          [
+            -3.75,
+            -0.46000000834465027,
+            0.0
+          ],
+          [
+            0.46,
+            0.0,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": true,
+        "port": 1,
+        "radius": 0.16,
+        "internal": false,
+        "label": "Left edge"
+      },
+      {
+        "points": [
+          [
+            3.75,
+            0.46000000834465027,
+            0.0
+          ],
+          [
+            -0.46,
+            0.0,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": false,
+        "port": 2,
+        "radius": 0.16,
+        "internal": false,
+        "label": "Right edge"
+      },
+      {
+        "points": [
+          [
+            3.75,
+            -0.46000000834465027,
+            0.0
+          ],
+          [
+            0.46,
+            0.0,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": true,
+        "port": 2,
+        "radius": 0.16,
+        "internal": false,
+        "label": "Right edge"
+      },
+      {
+        "points": [
+          [
+            0.0,
+            0.46000000834465027,
+            2.5
+          ],
+          [
+            -0.46,
+            0.0,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": false,
+        "port": 3,
+        "radius": 0.16,
+        "internal": false,
+        "label": "Top edge"
+      },
+      {
+        "points": [
+          [
+            0.0,
+            -0.46000000834465027,
+            2.5
+          ],
+          [
+            0.46,
+            0.0,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": true,
+        "port": 3,
+        "radius": 0.16,
+        "internal": false,
+        "label": "Top edge"
+      },
+      {
+        "points": [
+          [
+            0.0,
+            0.46000000834465027,
+            -2.5
+          ],
+          [
+            -0.46,
+            0.0,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": false,
+        "port": 4,
+        "radius": 0.16,
+        "internal": false,
+        "label": "Bottom edge"
+      },
+      {
+        "points": [
+          [
+            0.0,
+            -0.46000000834465027,
+            -2.5
+          ],
+          [
+            0.46,
+            0.0,
+            0.0
+          ]
+        ],
+        "circuit": "CO2",
+        "hot": true,
+        "port": 4,
+        "radius": 0.16,
+        "internal": false,
+        "label": "Bottom edge"
       }
     ]
   }

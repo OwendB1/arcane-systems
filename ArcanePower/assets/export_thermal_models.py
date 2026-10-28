@@ -132,6 +132,11 @@ def stages(s, source_objects, name, root):
     p=[o.matrix_world@v.co for o in meshes for v in o.data.vertices]
     low=Vector([min(v[i] for v in p)+.025 for i in range(3)])
     high=Vector([max(v[i] for v in p)-.025 for i in range(3)])
+    if name in ('Pipe rotor', 'Pipe rotor head', 'Space radiator'):
+        # The cuff projects into the stator; a full-width cage must stay in
+        # its own casing. Account for the 120 mm beam cross-section too.
+        low=Vector((-1.19,-1.19,-1.19))
+        high=Vector((1.19,1.19,1.19))
     def panel(o):
         # The block name "Radiator panel" must not classify its shafts and
         # pipe ribs as panel skins during intermediate construction.
@@ -159,6 +164,12 @@ def stages(s, source_objects, name, root):
         if name=='Reactor housing': BUILD['reactor_frame'](frame)
         else: BUILD['rectangular_frame'](frame,low,high,.065 if ' / ' in name else .12)
         frame.finish()
+        if name in ('Pipe rotor', 'Pipe rotor head', 'Space radiator'):
+            assert all(abs(v.co[i])<=1.250001 for o in col.objects if o.type=='MESH'
+                       for v in o.data.vertices for i in range(3)), 'Rotor weld frame exceeds its casing'
+        if level==1 and name=='Pipe rotor head':
+            core=next(o for o in meshes if o.name==name+' / rotating cuff core')
+            copy_mesh(core,col,root,construction=True)
         if level>1:
             chosen={}
             def include(o,trail=None):
@@ -201,7 +212,7 @@ def collision(s, col, root):
         points=[o.matrix_world@v.co for v in o.data.vertices]
         dims=[max(v[i] for v in points)-min(v[i] for v in points) for i in range(3)]
         return math.prod(dims) if min(dims)>.045 else 0
-    moving_radiator=s.seut.sceneType=='subpart' and '_RadiatorPanels_' in s.seut.subtypeId
+    moving_radiator=s.seut.sceneType=='subpart' and s.seut.subtypeId.startswith('APT_RadiatorPanel_RadiatorPanels_')
     if moving_radiator:
         selected=[o for o in meshes if any(part in o.get('thermal_export_source','') for part in (
             ' / radiator panel substrate', ' / panel carrier beam',
@@ -209,28 +220,40 @@ def collision(s, col, root):
         assert len(selected)==6, 'Missing rotating radiator face/frame collision sources'
     else:
         selected=sorted(meshes,key=volume,reverse=True)[:10]
+    casings=[o for o in meshes if o.get('thermal_pipe_casing')]
+    if casings:
+        assert len(casings)==6, 'Enclosed pipes need all six collision faces'
+        selected=casings
+    if s.seut.subtypeId in ('APT_PipeRotor_M', 'APT_PipeRotorHead_M'):
+        selected=[o for o in meshes if o.get('pipe_rotor_collision')]
+        assert len(selected)==6, 'Rotary union needs six casing collision faces'
+    if s.seut.subtypeId == 'APT_HullRadiator_M':
+        selected=[o for o in meshes if o.get('hull_radiator_collision')
+                  or ' / radiator panel substrate' in o.get('thermal_export_source','')]
+        assert len(selected)==7, 'Hull radiator needs backing, four frame rails and two panel substrates'
     radiator = s.seut.subtypeId in ('APT_SpaceRadiator_M', 'APT_RadiatorPanel_M')
     extension = s.seut.subtypeId == 'APT_RadiatorPanel_M'
     if radiator and not extension:
-        # The panels are subparts, so the static main otherwise has collision
-        # only at the pedestal. Its rotation-invariant top dock must be aimable
-        # when placing the first extension. Use the real axial collar, not a
-        # broad invisible slab across the moving panel or its cooling rays.
-        docks=[o for o in M['main_for']('Space radiator').objects
-               if o.type=='MESH' and ' / stack axis collar' in o.name]
-        assert len(docks)==1, 'Missing radiator stack docking collider source'
-        selected=selected[:9]+docks  # SEUT supports at most ten hulls per model.
+        # The recessed deck includes the axial dock. Six explicit casing
+        # hulls avoid invisible internal equipment blocking neighboring cells.
+        selected=[o for o in meshes if o.get('radiator_base_collision')]
+        assert len(selected)==6, 'Radiator base needs its six casing collision faces'
     template=next(o for o in bpy.data.objects if o.type=='MESH' and o.rigid_body)
     for source in selected:
         if volume(source)<=0:continue
         mesh=bpy.data.meshes.new('Thermal collision hull')
         bm=bmesh.new()
         points=[source.matrix_world@v.co for v in source.data.vertices]
+        if s.seut.subtypeId in ('APT_PipeRotor_M', 'APT_PipeRotorHead_M'):
+            # Native rotor spindle is noncolliding. Inset the two bodies so
+            # Preserve the existing Havok margin inset around the casings.
+            for point in points:
+                point.z=max(-1.215,min(1.215,point.z))
         if radiator:
             # Leave 50 mm between adjoining collider faces, retaining the full
             # visual couplings and occupied grid cells. Convex margins must not
             # obstruct placement of the next block at a shared cell boundary.
-            height=2.5 if extension else 3.75
+            height=2.5 if extension else 1.25
             for point in points:
                 point.z=min(point.z,height-.025)
                 if extension:point.z=max(point.z,-height+.025)
@@ -302,6 +325,8 @@ def prepare(name):
         copies={}
         for obj in objects:
             if obj.type=='MESH' and obj not in moving:copies[obj]=copy_mesh(obj,col,root)
+            elif obj.type=='EMPTY' and obj.get('native_dummy'):
+                copies[obj]=dummy(col,root,obj['native_dummy'],matrices[obj])
             elif obj.type=='EMPTY' and obj.name.startswith('Thermal reactor / '):
                 native=obj.name.removeprefix('Thermal reactor / ')
                 if native.startswith(('detector_','subpart_')):

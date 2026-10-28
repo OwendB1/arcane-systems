@@ -115,6 +115,8 @@ namespace ArcanePower
             captureFlow = MyAPIGateway.Multiplayer.IsServer && tick % 30 == 0;
             if (!captureFlow) return;
             foreach (var block in Blocks.Values) ResetFlow(block.Entity, block.Healthy);
+            foreach (var joint in ThermalPipeJoint.All)
+                ResetFlow(joint, joint.IsFunctional && joint.SlimBlock.BuildLevelRatio >= 1);
             foreach (var source in VentSession.All)
                 if (source.ThermalVariant) ResetFlow(source.Entity, source.ThermalInitialized && !source.Motion.Thermal.Faulted);
         }

@@ -5,7 +5,7 @@ using ProtoBuf;
 namespace ArcanePower
 {
     public enum ThermalMode { Standalone, Brayton }
-    public enum ThermalKind { Reactor = 0, Train = 2, AirCooler = 4, Radiator = 5, Pipe = 6, RadiatorPanel = 7 }
+    public enum ThermalKind { Reactor = 0, Train = 2, AirCooler = 4, Radiator = 5, Pipe = 6, RadiatorPanel = 7, HullRadiator = 8 }
 
     [ProtoContract]
     public sealed class ThermalStore
@@ -288,7 +288,7 @@ namespace ArcanePower
                     if (train != null) { plan.Limit = "Use exactly one turbine per manifold circuit"; return plan; }
                     train = unit;
                 }
-                if ((unit.Kind == ThermalKind.AirCooler || unit.Kind == ThermalKind.Radiator)
+                if ((unit.Kind == ThermalKind.AirCooler || unit.Kind == ThermalKind.Radiator || unit.Kind == ThermalKind.HullRadiator)
                     && Finite(unit.CoolingMW) && unit.CoolingMW >= 0)
                 { hasCooling = true; plan.CoolingMW += unit.CoolingMW; }
             }

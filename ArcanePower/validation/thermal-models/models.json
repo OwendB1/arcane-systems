@@ -602,23 +602,23 @@
   "Space radiator": {
     "subtype": "ArcanePower_Thermal_SpaceRadiator",
     "cells_blender": [
-      3,
-      3,
-      3
+      1,
+      1,
+      1
     ],
     "cells_se": [
-      3,
-      3,
-      3
+      1,
+      1,
+      1
     ],
     "metres_blender": [
-      7.5,
-      7.5,
-      7.5
+      2.5,
+      2.5,
+      2.5
     ],
     "phase": "textures",
-    "meshes": 191,
-    "triangles": 18121,
+    "meshes": 111,
+    "triangles": 14021,
     "ports": [
       {
         "id": "CO2",
@@ -626,7 +626,7 @@
         "position": [
           0.0,
           0.0,
-          -3.75
+          -1.25
         ],
         "normal": [
           0.0,
@@ -648,7 +648,7 @@
         "pivot_blender": [
           0.0,
           0.0,
-          -1.100000023841858
+          1.0
         ]
       }
     ],
@@ -672,8 +672,8 @@
       2.5
     ],
     "phase": "textures",
-    "meshes": 77,
-    "triangles": 9722,
+    "meshes": 83,
+    "triangles": 10026,
     "ports": [
       {
         "id": "socket 1",
@@ -737,8 +737,8 @@
       2.5
     ],
     "phase": "textures",
-    "meshes": 77,
-    "triangles": 15610,
+    "meshes": 83,
+    "triangles": 15914,
     "ports": [
       {
         "id": "socket 1",
@@ -802,8 +802,8 @@
       2.5
     ],
     "phase": "textures",
-    "meshes": 76,
-    "triangles": 18426,
+    "meshes": 82,
+    "triangles": 18730,
     "ports": [
       {
         "id": "socket 1",
@@ -867,8 +867,8 @@
       2.5
     ],
     "phase": "textures",
-    "meshes": 101,
-    "triangles": 13843,
+    "meshes": 107,
+    "triangles": 14167,
     "ports": [
       {
         "id": "socket 1",
@@ -951,8 +951,8 @@
       2.5
     ],
     "phase": "textures",
-    "meshes": 127,
-    "triangles": 18476,
+    "meshes": 133,
+    "triangles": 18820,
     "ports": [
       {
         "id": "socket 1",
@@ -1054,8 +1054,8 @@
       2.5
     ],
     "phase": "textures",
-    "meshes": 79,
-    "triangles": 22266,
+    "meshes": 85,
+    "triangles": 22570,
     "ports": [
       {
         "id": "socket 1",
@@ -1119,8 +1119,8 @@
       2.5
     ],
     "phase": "textures",
-    "meshes": 55,
-    "triangles": 7121,
+    "meshes": 61,
+    "triangles": 7405,
     "ports": [
       {
         "id": "socket 1",
@@ -2275,8 +2275,8 @@
       2.5
     ],
     "phase": "textures",
-    "meshes": 77,
-    "triangles": 11514,
+    "meshes": 83,
+    "triangles": 11818,
     "ports": [
       {
         "id": "socket 2",
@@ -4081,5 +4081,216 @@
       }
     ],
     "flow_revision": 1
+  },
+  "Pipe rotor": {
+    "subtype": "ArcanePower_Thermal_PipeRotor",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 105,
+    "triangles": 13505,
+    "ports": [
+      {
+        "id": "CO2",
+        "type": "CO2",
+        "position": [
+          0.0,
+          0.0,
+          -1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "Pipe rotor head": {
+    "subtype": "ArcanePower_Thermal_PipeRotorHead",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 115,
+    "triangles": 15397,
+    "ports": [
+      {
+        "id": "CO2",
+        "type": "CO2",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      }
+    ]
+  },
+  "Hull radiator": {
+    "subtype": "ArcanePower_Thermal_HullRadiator",
+    "cells_blender": [
+      3,
+      1,
+      2
+    ],
+    "cells_se": [
+      3,
+      2,
+      1
+    ],
+    "metres_blender": [
+      7.5,
+      2.5,
+      5.0
+    ],
+    "phase": "textures",
+    "meshes": 158,
+    "triangles": 16053,
+    "ports": [
+      {
+        "id": "Rear H C",
+        "type": "CO2",
+        "position": [
+          0.0,
+          1.25,
+          -1.25
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "self_sealing": true
+      },
+      {
+        "id": "Left edge",
+        "type": "CO2",
+        "position": [
+          -3.75,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "self_sealing": true,
+        "hull_only": true
+      },
+      {
+        "id": "Right edge",
+        "type": "CO2",
+        "position": [
+          3.75,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "self_sealing": true,
+        "hull_only": true
+      },
+      {
+        "id": "Top edge",
+        "type": "CO2",
+        "position": [
+          0.0,
+          0.0,
+          2.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "self_sealing": true,
+        "hull_only": true
+      },
+      {
+        "id": "Bottom edge",
+        "type": "CO2",
+        "position": [
+          0.0,
+          0.0,
+          -2.5
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "hot_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "self_sealing": true,
+        "hull_only": true
+      }
+    ]
   }
 }

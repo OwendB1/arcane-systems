@@ -37,15 +37,25 @@ for label, name in [('turbine', 'Brayton train'), ('turbine-upgraded', 'Brayton 
                     ('turbine-mirrored-upgraded', 'Brayton train mirrored upgraded'),
                     ('air-cooler', 'Atmospheric cooler'), ('air-cooler-rear', 'Atmospheric cooler'),
                     ('space-radiator', 'Space radiator'), ('radiator-stack', 'Space radiator'),
-                    ('radiator-panel', 'Radiator panel')]:
+                    ('radiator-panel', 'Radiator panel'), ('pipe-rotor', 'Pipe rotor'),
+                    ('pipe-rotor-head', 'Pipe rotor head'), ('pipe-rotor-assembly', 'Pipe rotor'),
+                    ('hull-radiator-rear', 'Hull radiator'), ('hull-radiator-array', 'Hull radiator')]:
     direction = (10, -17, 8) if name.startswith('Brayton') else (10, -14, 9)
     if label == 'air-cooler-rear': direction = (-10, 14, 7)
+    if label == 'pipe-rotor-head': direction = (10, -14, -9)
+    if label == 'hull-radiator-rear': direction = (-10, 14, 7)
+    if label == 'hull-radiator-array': direction = (6, -18, 8)
     JOBS.append((label, CONTRACT['subtype'](name), direction))
 for shape in [*CONTRACT['PIPE_PORTS'], 'Reactor adapter']:
     for bare in (False, True):
         name = 'PRIMARY / '+shape+(' bare' if bare else '')
         label = 'pipe-'+shape.lower().replace(' ', '-')+('-bare' if bare else '')
-        JOBS.append((label, CONTRACT['subtype'](name), (-8, -12, 8)))
+        direction = (-8, -12, 8)
+        if not bare:
+            # Opaque casings hide the branch and rolled sockets from the old view.
+            if shape in ('Elbow', 'Tee'): direction = (-8, 12, 8)
+            if shape == 'Roll adapter': direction = (8, -12, 8)
+        JOBS.append((label, CONTRACT['subtype'](name), direction))
 
 
 def setup(labels=None):
@@ -57,9 +67,13 @@ def setup(labels=None):
     thermal_names = {job[1] for job in active if job[1].startswith('ArcanePower_Thermal_')}
     if any(job[0] == 'radiator-stack' for job in active):
         thermal_names.add(CONTRACT['subtype']('Radiator panel'))
+    if any(job[0] == 'pipe-rotor-assembly' for job in active):
+        thermal_names.add(CONTRACT['subtype']('Pipe rotor head'))
     hardware_names = {job[1] for job in active if job in JOBS[1:5]}
     energy = any(job[1].startswith('ArcanePower_Energy') for job in active)
     common = set()
+    if any(job[0] == 'outlet' for job in active):
+        common.add('ArcanePower_VentHatch')
     if any(job[0] == 'reactor' for job in active):
         common.update({'ArcanePower_Ring1', 'ArcanePower_Ring2', 'ArcanePower_Ring3',
                        'ArcanePower_Ring4', 'ArcanePower_FloorLeaf', 'ArcanePower_VentHatch'})
@@ -185,8 +199,15 @@ def prepare(label):
             pose = Matrix.Translation(position) @ Matrix.Rotation(angle, 4, 'Z')
             parts.extend(geometry(sources['ArcanePower_Energy'+subtype], pose, cutaway=cutaway))
     if label == 'radiator-stack':
-        for height in (6.25, 11.25):
+        # One-cell tracking base plus three separate two-cell-high panels.
+        for height in (3.75, 8.75, 13.75):
             parts.extend(geometry(sources[CONTRACT['subtype']('Radiator panel')], Matrix.Translation((0, 0, height))))
+    if label == 'pipe-rotor-assembly':
+        parts.extend(geometry(sources[CONTRACT['subtype']('Pipe rotor head')],
+                              Matrix.Translation((0, 0, CONTRACT['PIPE_ROTOR_HEAD_CENTRE']))))
+    if label == 'hull-radiator-array':
+        for position in ((7.5, 0, 0), (0, 0, 5), (7.5, 0, 5)):
+            parts.extend(geometry(sources[name], Matrix.Translation(position)))
     bpy.context.window.scene = scene
     points = [pose @ v.co for mesh, pose, _ in parts for v in mesh.data.vertices]
     assert points, label

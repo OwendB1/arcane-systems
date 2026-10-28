@@ -119,12 +119,13 @@ def check_catalog():
         'Power_Controllers': ['UpgradeModule/ArcanePower_'+name for name in ('ContainmentController','AdvancedContainmentController')],
         'Power_Vents': ['Conveyor/ArcanePower_Vent'+name for name in ('Duct','Outlet')],
         'Thermal_Cooling': ['UpgradeModule/ArcanePower_Thermal_'+name for name in ('SpaceRadiator','SpaceRadiatorUpgraded',
-                            'RadiatorPanel','RadiatorPanelUpgraded','AtmosphericCooler','AtmosphericCoolerUpgraded')],
+                            'RadiatorPanel','RadiatorPanelUpgraded','HullRadiator','HullRadiatorUpgraded','AtmosphericCooler','AtmosphericCoolerUpgraded')],
+        'Thermal_PipeRotors': ['MotorAdvancedStator/ArcanePower_Thermal_PipeRotor','MotorAdvancedRotor/ArcanePower_Thermal_PipeRotorHead'],
         'Thermal_Turbines': ['Reactor/ArcanePower_Thermal_BraytonTrain'+suffix for suffix in ('','Upgraded','Mirrored','MirroredUpgraded')],
     }
     for key,members in expected_groups.items():
         assert variants['ArcanePower_'+key]==members, ('Wrong scroll group membership or primary',key)
-    assert len(variants)==7 and len(menu)==9, 'Expected seven scroll groups plus the reactor and energy core'
+    assert len(variants)==8 and len(menu)==10, 'Expected eight scroll groups plus the reactor and energy core'
     assert menu-grouped=={'Reactor/ArcanePower_Thermal_ReactorHousing','BatteryBlock/ArcanePower_EnergyCore_Pillar'}
     assert len({packaged[row['icon']]['sha256'] for row in public_thermal}) == len(public_thermal), 'Public thermal icons must be distinct'
     result = {'status': 'passed', 'blocks': len(rows), 'public_blocks': sum(row['public'] for row in rows),

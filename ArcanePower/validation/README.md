@@ -46,3 +46,14 @@ once the check succeeds. Use the same approach for other disposable outputs
 regenerated during verification.
 
 The mandatory modelling cleanup workflow is in [assets/AGENTS.md](../assets/AGENTS.md).
+
+During the 0.3.0 preflight, the energy construction and derived-model
+fingerprints were reconciled to that same independently accepted, unchanged
+Energy Core file (SHA-256 `0476a63ae76ba21a3a701f355bd28a7b565c1f0e85f7eb11dfcbe11da1ddea55`).
+The older `arcane-energy-before-lod-refresh.blend` matched all 5,118 original
+construction fingerprints. Comparison found 308 fitted mesh adjustments, 126
+transform changes, seven metadata changes and seven terminal-to-section renames
+from the accepted surface-clearance/control-access work. Mesh topology, UVs and
+materials were unchanged in the adjusted entries. Current geometry and native
+energy checks passed; no energy geometry, construction meshes or collision were
+changed for 0.3.0.

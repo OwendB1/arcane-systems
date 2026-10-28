@@ -157,7 +157,7 @@ for block in thermal.findall('CubeBlocks/Definition'):
         assert len(required)==1 and int(required[0].get('Count'))==(20 if 'BraytonTrain' in name else 10), name
         assert block.find('CriticalComponent').attrib=={'Subtype':'ArcaneAetherResiduum','Index':'0'}, name
     else:assert not required, name
-assert upgrades==5
+assert upgrades==6
 # Repeated catalog regeneration cannot duplicate or remove the progression gate.
 import prepare_thermal_release as release
 with tempfile.TemporaryDirectory(prefix='arcane-thermal-catalog-') as directory:
@@ -169,4 +169,4 @@ with tempfile.TemporaryDirectory(prefix='arcane-thermal-catalog-') as directory:
         for name in ('ThermalCategories.sbc','CubeBlocks/ArcanePower_ThermalVariants.sbc'):
             assert (release.MOD/'Data'/name).read_bytes()==(original/'Data'/name).read_bytes(), name
     finally:release.MOD=original
-print('PASS: uncraftable Residuum, five material-gated upgrades, idempotent block catalog')
+print('PASS: uncraftable Residuum, six material-gated upgrades, idempotent block catalog')

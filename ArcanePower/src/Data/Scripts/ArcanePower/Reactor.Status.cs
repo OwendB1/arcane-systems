@@ -286,7 +286,7 @@ namespace ArcanePower
                 var thermal = Motion.Thermal;
                 if (Array.Exists(thermal.Loops, loop => loop.Connected && loop.CoolingMW + .001 < loop.RequiredCoolingMW)
                     && (thermal.ProducedMW > .001 || thermal.RetainedHeatMJ > .001))
-                { action = "Add or unblock cooling units; monitor the 60 s heat forecast."; return "INSUFFICIENT LOOP COOLING"; }
+                { tone = "yellow"; action = "Add or unblock cooling units; monitor the 60 s heat forecast."; return "INSUFFICIENT LOOP COOLING"; }
             }
             if (ThermalVariant && Motion.Thermal != null)
             {
@@ -303,7 +303,7 @@ namespace ArcanePower
                 { tone = "yellow"; action = "Repair at least one separate circuit, then start manually. Keep cooldown power supplied."; return "STARTUP BLOCKED / ALL FOUR CIRCUITS DEFECTIVE"; }
             }
             if (Motion.Core == CorePhase.Cooling)
-            { tone = "yellow"; action = "Holding the shell until heat falls to 15%."; return "COOLING DOWN"; }
+            { tone = "cyan"; action = "Holding the shell until heat falls to 15%."; return "COOLING DOWN"; }
             if (Motion.Core == CorePhase.Stopping) { tone = "yellow"; return "DISMANTLING CONTAINMENT"; }
             if (!Motion.VentReady)
             {

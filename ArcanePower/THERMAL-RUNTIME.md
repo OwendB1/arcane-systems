@@ -1,7 +1,7 @@
 # Thermal runtime — 25 October 2026
 
 The sole playable reactor is `ArcanePower_Thermal_ReactorHousing`. The current
-catalog has 27 public thermal blocks and 28 hidden pipe compatibility aliases. The old reactor prototype, heaters and recuperators are excluded from
+catalog has 31 public thermal blocks and 28 hidden pipe compatibility aliases. The old reactor prototype, heaters and recuperators are excluded from
 the shipped definitions. Authoring sources remain available for rebuilding.
 Live SE world validation remains pending; native and kernel checks are recorded
 in the [delivery summary](validation/thermal-models/delivery-check.json).
@@ -147,15 +147,15 @@ to review the native appearance after material-definition changes.
 `ThermalRotors` drives both cosmetic shafts linearly from delivered output divided
 by the circuit's allocated electrical rating. Temperature colour follows the same
 load and the fuel tier. No stored-heat or circulation multiplier controls speed.
-Healthy enabled turbines idle at 10 RPM. Both shafts target
-`10 + 190 × utilization` RPM, reaching 200 RPM at full utilization.
-With no load, both shafts ramp from rest to idle over five seconds (2 RPM per
+Healthy enabled turbines idle at 5 RPM. Both shafts target
+`5 + 95 × utilization` RPM, reaching 100 RPM at full utilization.
+With no load, both shafts ramp from rest to idle over five seconds (1 RPM per
 second). Load present at startup or arriving during that ramp immediately uses
 the existing four-second response toward its load-dependent target; it never waits
 to reach idle first. Disabled, damaged or faulted turbines coast to rest with the
 existing eight-second response; an unloaded restart below idle resumes the gentle
 ramp from the current speed. Valid saved speeds from the former 4,000 RPM range
-are clamped to 200 RPM on reload, preserving shaft pose and stored heat.
+are clamped to 100 RPM on reload, preserving shaft pose and stored heat.
 Shaft motion does not alter energy accounting.
 The displayed block name is **Arcane Turbine**; subtype IDs remain unchanged for
 existing grids. Dense blades can appear to strobe at these speeds as frames sample
@@ -320,9 +320,10 @@ heat, while unused paid credit remains saved until used or drained at shutdown.
 
 Prototype boundaries:
 
-- One reactor supplies four independent duplex circuits on a single physical grid.
+- One reactor supplies four independent duplex circuits. Ordinary sockets mate only
+  on the same physical grid; the Arcane pipe rotor is the explicit exception.
   Each has one turbine and its own cooling; shared reactor supplies are rejected.
-- Socket positions, facing and hot/return roll come from all 55 runtime model
+- Socket positions, facing and hot/return roll come from all 59 runtime model
   contracts, including the 170 mm adapter. Unused ports require caps. Failed/off
   machines and missing pipes invalidate their circuit, closing its reactor valve.
   The adapter's authored `reactor_transition` port generates a `ReactorOnly`
@@ -376,8 +377,9 @@ Prototype boundaries:
 
 Radiator sections use `Thermal_RadiatorPanels` root subparts. The base pivots at
 native `(0,-1.1,0)`; the extension pivots at zero. `ThermalRadiators.Pose` supplies
-the native rotation. Server attachment checks accept at most two consecutive,
-healthy, accessible, upright extensions on the same grid. Placed yaw is unrestricted;
+the native rotation. Server attachment checks accept at most three consecutive,
+present, accessible, upright extensions on the same grid. Only functional enabled
+panels contribute cooling. Placed yaw is unrestricted;
 `ThermalRadiators.PanelAngle` compensates block yaw in server/client motion and
 solar/clearance sampling, keeping each H/C coupling in the base world frame.
 Radiator collision includes the axial top dock for placement; adjoining stack
@@ -495,3 +497,174 @@ MJ to fit both the reserved allocation and remaining paid fuel inventory. This
 prevents false isolation at GW output without granting unpaid electricity.
 Outstanding reservations survive a runtime exception long enough to settle the
 last native interval; stopping output must not discard their accounting evidence.
+
+
+## Sealed pipe rotor
+
+The new `Pipe rotor` and `Pipe rotor head` in `arcane-thermal-models.blend` use
+`MotorAdvancedStator` and `MotorAdvancedRotor`. Native SE owns head creation,
+attachment, torque/limits, locking, detachment, replication and item conveyors.
+The base and head each occupy 1×1×1 large-grid cells; the base's sealed pressure
+bulkhead closes the hull even when detached. Both definitions are
+airtight. Oxygen rooms remain separate across subgrids. Ordinary thermal pipe
+blocks still do not carry inventory items.
+
+The radiator/“solar” tracking base remains a separate UpgradeModule with animated
+model subparts, up to three same-grid radiator panels, no physical rotor head and
+no new subgrid. Native motor head creation always creates another cube grid, so
+one interchangeable native base cannot also preserve that behavior. Both bases
+reuse `build_pipe_rotor.py::side_shell`; existing radiator IDs are preserved.
+
+`ThermalPipeJoint` accepts only the reciprocal, nonpending native attachment
+between the two exact Arcane pipe rotor subtypes. Both blocks must be complete,
+functional and accessible to the source owner, on distinct physical grids.
+Switching the motor off stops rotation without opening the sealed pipe. A missing,
+foreign, damaged or inaccessible head breaks that circuit; there is no proximity
+or general mechanical-group heat transfer. Attachment/build revisions invalidate
+cached circuits. Ordinary sockets still use grid-local positions and H/C axes.
+The construction guide, coolant flow display and circuit accounting follow the
+explicit rotary connection. A detached union does not stop unrelated circuits.
+
+The rotating cuff belongs to the native head. Native displacement spans −0.10 to
++0.10 m, giving a 10–30 cm casing gap and a 20 cm gap at zero. The deep sealed
+bearing well retains at least 295 mm of cuff engagement, 70 mm of bottom clearance
+and 19.5 mm of radial clearance throughout travel. The six casing collision inputs
+and their existing Havok margin inset are preserved; the cuff remains noncolliding.
+
+`MyMotorStator.SetConstraintPosition` and `AlignGridsForAttach` constrain the head's
+block origin to the stator's displaced `electric_motor`, not to the head's `wheel`
+dummy. The stator dummy is therefore at 2.70 m, the head dummy and its initial
+placement offset are zero, and `RotorDisplacementInModel` is zero. This corrects the
+earlier source-only dummy/placement assumption. The maximum position still overlaps
+the native large-grid head query box after the casing collider inset.
+
+Pipe-rotor armor uses butt joints instead of coincident exterior strips. Recessed
+H/C lamps, machined service latches, bearing retainer bolts and segmented cyan cuff
+inlays use existing native/thermal materials and the existing runtime emissive
+controls. The radiator base now shares the recessed H/C side lamps and service
+latches. Its 2.30 m square bearing deck fits inside the side walls, 100 mm below
+their rim, with raised bolts and a 5 mm radial bearing clearance backed by a
+pressure seal. The six casing solids meet without overlapping exterior strips.
+No new textures or runtime animation controller are needed.
+The head's square body sweeps outside its stationary footprint; keep that area
+clear of other blocks. Native models and collision are built by the existing SEUT/MWM pipeline.
+Motion/attachment behavior in a running Space Engineers world still needs validation.
+
+Source validation for the cuff: 15 tests of the production native attachment
+adapter; prospective definition/displacement checks; 174 closed solids, 7,500 hull
+samples and 216 actual-mesh poses over full rotation at minimum/default/maximum
+displacement. Both the solution and SE compatibility/whitelist builds passed with
+zero warnings/errors. Live Blender
+5.2.1, official MCP, reviewed covers, corners, sockets, deck and underside at
+1.8/2.4/3.0 m using the same 48 mm lens and studio light, plus the assembled
+bearing from opposite sides and a 1.9 m scale figure. The cuff pass inspected 24
+settled live views covering both assembled sides, the two travel limits, the open
+base seat, the head underside and the two service-cover orientations. The 0.3.0 preflight reconciled the old prototype fingerprint against its saved
+hatch checkpoint: 2,577 existing objects unchanged, with exactly six authorized
+seal additions. The full thermal geometry audit passes.
+
+Checkpoints: `assets/arcane-thermal-before-pipe-rotor.blend` and
+`assets/arcane-thermal-before-rotor-cuff.blend`. Rebuild with
+`assets/build_pipe_rotor.py::build`, validate with its `audit()` and
+`tools/check_pipe_rotor.py`; `review_travel()` shows the three casing gaps in the
+live UI without saving its temporary scene into production. Rotor weld frames
+stay within their casing instead of extending a full-width cage along the cuff.
+Bearing surfaces and the cuff retain their exact radial profiles in both LODs.
+
+References: [Advanced Rotor](https://spaceengineers.wiki.gg/wiki/Advanced_Rotor),
+[Advanced Rotor Part](https://spaceengineers.wiki.gg/wiki/Advanced_Rotor_Part),
+and [Keen's visual rotor comparison](https://support.keenswh.com/spaceengineers/pc/topic/25699-rotor-not-passing-ore-log-block-no-mods-dedicated-server).
+Native `MyMechanicalConnectionBlockBase.CreateTopPart` creates a new CubeGrid;
+`MyMotorAdvancedStator.Attach` links conveyors only to the native advanced head.
+
+## Hull radiator
+
+`Hull radiator` is a fixed **1 deep × 2 high × 3 wide** large-grid block
+(native size 3×2×1). Its 7.5×2.5×5 m envelope has full airtight backing and a
+flush front frame. The 36 graphite tiles, substrates, edge pipes and retention
+hardware reuse one face of the existing radiator panel, preserving its UVs.
+There are no tracking subparts or new grids. Standard/upgraded cooling is
+1/10 GW, half the two-sided panel rating. Neither recipe uses Solar Cells.
+
+Four midpoint edge unions join only other hull radiator edges, with H toward
+the exterior. A standard H/C socket occupies the lower rear cell. All five
+sockets start closed when unused, so one rear connection can feed a contiguous
+array. Matching peers still need valid H/C roll, access and grid identity;
+incompatible or crowded peers fault the loop. Failed radiators retain their
+physical connection with zero heat rejection. Hull sockets self-seal whenever
+their peer disappears; remaining connected radiators retain flow with lower
+total cooling. Ordinary feed pipes exposed by removal still breach the circuit.
+The existing circuit
+rules forbid sharing an array between reactor manifolds. Ordinary pipe mouths
+retain their cap requirement. Closed unions carry no flow and are excluded
+from construction fault markers.
+
+Cooling uses 32 samples outside the fixed front plane, same-grid occupancy and
+forward/reverse physics rays. Backing and armor behind the radiator do not
+obstruct the front. Only front-facing sunlight heats the panel; planet shadow,
+weather and atmospheric losses use the existing radiator calculation. The
+native terminal reports fixed-face capacity and clearance without tracking or
+panel-stack controls. Heat glow applies to the main model.
+
+Source validation: 1,407,492 compiled thermal checks, 55 cooling/telemetry checks,
+and 43,657 checks of the production fixed-face sampler across all 24 block
+orientations. Prospective definitions pass dimensions, airtightness and recipe
+checks without modifying the installed catalog. The source geometry has 141
+closed solids, 3,750 sealed hull samples, 36 front tiles and five sockets. The
+general audit passes, including the reconciled prototype preservation baseline.
+The required solution build passes with five existing NexusAPI field warnings;
+the SE compatibility/whitelist build passes with zero warnings and errors.
+
+Live Blender 5.2.1/official MCP review covered tiles, fasteners, corners, side/top
+unions, rear feed, horizontal/vertical array seams and rear backing at
+1.8/2.4/3.0 m, with a fixed target, 48 mm lens and studio light per set. An
+assembled array beside armor and a 1.9 m figure confirms scale and flush fit.
+The production file excludes the temporary array review scene.
+
+Source: `assets/arcane-thermal-models.blend`; checkpoint:
+`assets/arcane-thermal-before-hull-radiator.blend`. Reproduce with
+`assets/build_hull_radiator.py::build`, inspect with `review()`, and check with
+`audit()` and `tools/check_hull_radiator.py` after the solution build.
+The standard export generates the hull backing/frame collision, two LODs and
+three construction stages; upgraded variants reuse that geometry. Native and
+package checks cover the installed catalog. No live game check is claimed.
+
+## Cooling failure versus pressure loss
+
+`ThermalBlock.CircuitReady` separates physical cooling connections from
+`HardwareReady`/`Healthy`, which still govern heat rejection. A damaged,
+unfinished or switched-off cooling block remains sealed while present on a
+physical grid. Owner access and exact socket placement remain required.
+Ordinary pipe, turbine and native rotary-union damage rules are unchanged.
+Invalid saved heat and electrical-accounting faults retain their safety gates.
+
+Stack linking also uses physical presence: a failed middle panel remains in the
+stack, healthy panels above it still contribute, and only healthy panels add
+cooling capacity. A disabled or failed base rejects no heat. Zero cooling does
+not disconnect an otherwise sealed circuit or throttle its paid generation;
+the existing waste-heat, forecast, critical-core and ejection logic applies.
+
+`ThermalRadiatorState.RequiredPanels` records the installed tracking-stack height,
+with a zero default for old saves. Removing a stacked panel leaves a breach until
+it is replaced. This state survives reloads and reaches client construction
+guides through existing radiator telemetry. Shortening a tracking stack requires
+rebuilding its base to establish fresh connections.
+
+Hull-radiator sockets self-seal after removal and carry no connection history.
+Arrays can therefore shrink without rebuilding surviving radiators. Retired
+wire tag 11 and the former XML `RequiredPorts` field are ignored on load; they
+cannot preserve an obsolete hull-socket breach. A grid split excludes detached
+radiators from cooling and seals the remaining hull edges. Mismatched, crowded
+or inaccessible peers still fail validation while present.
+
+`tools/check_cooling_integrity.py` executes the production eligibility, stack
+linking and cooling methods against block-state fixtures, plus the real network,
+dispatch, heat budget and valve mask. It covers failed/disabled/incomplete
+coolers, removal, access, projections, repaired and missing stack panels, saved
+connection history, client state and thermal runaway. These are offline checks;
+a running game remains the final integration check.
+
+Validation passes: 1,407,974 thermal runtime checks, 152,405 production
+fuel/mode/dispatcher checks, 3,715 cooling-integrity checks and 56 cooling
+terminal/telemetry checks. The solution and SE compatibility/whitelist builds
+pass. Temporary test logs are pruned after recording these results.

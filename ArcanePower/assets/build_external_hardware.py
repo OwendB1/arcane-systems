@@ -1,5 +1,5 @@
 """Grid-sized vent sections, crescent controllers and the inventory tile model."""
-import ast,bpy,bmesh,importlib,json,math
+import ast,bpy,bmesh,importlib,json,math,runpy
 from pathlib import Path
 from mathutils import Matrix,Vector
 from mathutils.bvhtree import BVHTree
@@ -191,6 +191,7 @@ for o in source.objects:
   c.data.materials.clear();c.data.materials.append(native['BlueFrostedMetal'])
  else:collision(c,hkt,parent)
 s['ap_item']='ArcaneContainmentTile: one craftable physical tile per shell facet'
+runpy.run_path(str(ROOT/'assets/seal_vent_hatch.py'))['apply']()
 # Display the new pieces as an authoring lineup; never exported or animated.
 review=bpy.data.scenes.get('Arcane Power external hardware review') or bpy.data.scenes.new('Arcane Power external hardware review')
 for o in list(review.objects):bpy.data.objects.remove(o,do_unlink=True)

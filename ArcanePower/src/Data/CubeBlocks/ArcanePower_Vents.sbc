@@ -25,7 +25,7 @@ Security mode selects shutdown or warning on vent loss after startup.</Descripti
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="1" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_VentDuct.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_VentDuct.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="180" />
         <Component Subtype="InteriorPlate" Count="40" />
@@ -65,9 +65,9 @@ Security mode selects shutdown or warning on vent loss after startup.</Descripti
         <MountPoint Side="Right" StartX="0" StartY="0" EndX="3" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_VentDuct_BS1_r89bdaa1d0dfb.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_VentDuct_BS2_rb8f82aee2535.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_VentDuct_BS3_r2078e033ae36.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_VentDuct_BS1_rd5d87bcc32b5.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_VentDuct_BS2_r306deb89d120.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_VentDuct_BS3_rb2fae94b400b.mwm" />
       </BuildProgressModels>
     </Definition>
     <Definition>
@@ -94,7 +94,7 @@ Security mode selects shutdown or warning on vent loss after startup.</Descripti
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="1" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_VentOutlet.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_VentOutlet.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="280" />
         <Component Subtype="InteriorPlate" Count="60" />
@@ -117,7 +117,7 @@ Security mode selects shutdown or warning on vent loss after startup.</Descripti
       <DestroyEffect>BlockDestroyed_Large</DestroyEffect>
       <DestroySound>PoofExplosionCat3</DestroySound>
       <PCU>25</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <Center x="1" y="0" z="1" />
       <MountPoints>
         <MountPoint Side="Top" StartX="0" StartY="0" EndX="3" EndY="0.65" />
@@ -134,9 +134,9 @@ Security mode selects shutdown or warning on vent loss after startup.</Descripti
         <MountPoint Side="Right" StartX="0" StartY="0" EndX="3" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_VentOutlet_BS1_reff662b918b3.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_VentOutlet_BS2_r1989c0db1011.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_VentOutlet_BS3_r2abe99e31535.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_VentOutlet_BS1_r6cde5eb475ed.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_VentOutlet_BS2_r5787ea2034b7.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_VentOutlet_BS3_r7e97998c21f5.mwm" />
       </BuildProgressModels>
     </Definition>
   </CubeBlocks>

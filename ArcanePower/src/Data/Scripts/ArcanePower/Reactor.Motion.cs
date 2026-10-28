@@ -81,6 +81,7 @@ namespace ArcanePower
         [ProtoMember(59)] public int ForecastCircuit;
         [ProtoMember(60)] public float CooldownStartHeat;
         [ProtoMember(61)] public float ForecastCooldownSeconds = -1;
+        [ProtoMember(62)] public float EjectSubtick;
 
         // Timing is decided on the server; clients display the same confirmed
         // warning throughout its recovery hold instead of toggling independently.
@@ -102,6 +103,7 @@ namespace ArcanePower
     {
         private const float CooldownHeat = ThermalMath.CooldownHeat;
         private const int PlasmaStartTick = 1038; // Last quartet has latched.
+        private const float VentSpeed = 1.5f;
         internal static readonly Guid MotionStorage = new Guid("d85a5399-b527-45ac-bcc0-aa1c442b2710");
         internal MotionState Motion = new MotionState();
         private readonly Dictionary<string, Matrix> restPoses = new Dictionary<string, Matrix>();
@@ -214,6 +216,8 @@ namespace ArcanePower
                 && state.PowerRamp >= 0 && state.PowerRamp <= 1
                 && state.CoreSubtick >= 0 && state.CoreSubtick < 1
                 && state.EjectTick >= 0 && state.EjectTick <= 120
+                && state.EjectSubtick >= 0 && state.EjectSubtick < 1
+                && state.EjectTick + state.EjectSubtick <= 120
                 && state.StarvedLoad >= 0 && state.StarvedLoad <= 1
                 && state.CriticalSeconds >= 0 && state.CriticalSeconds <= 60
                 && state.ForecastPeakHeat >= 0 && state.ForecastPeakHeat <= 4
@@ -254,6 +258,7 @@ namespace ArcanePower
             Motion.PayloadReleased = false;
             Motion.Requested = true;
             Motion.EjectTick = 0;
+            Motion.EjectSubtick = 0;
             Motion.VentHadPayload = false;
             Motion.VentDamageApplied = false;
             Motion.VentLoad = Math.Max(Motion.Load, Motion.TargetLoad);
@@ -335,10 +340,11 @@ namespace ArcanePower
                 if (oldVent != VentPhase.Idle && Motion.Vent == VentPhase.Idle)
                 {
                     reactor.Enabled = false;
-                    ApplyVentDamage();
                 }
-                TryReleasePayload();
                 UpdateCriticalCore();
+                TryReleaseFailedHousing();
+                TryReleasePayload();
+                ApplyOverheatDamage();
                 RefreshFuelCapacity();
                 UpdateStatus();
             }
@@ -414,7 +420,7 @@ namespace ArcanePower
             switch (Motion.Vent)
             {
                 case VentPhase.ShieldClosing:
-                    Motion.Shield = Math.Min(1, Motion.Shield + 1f / 240);
+                    Motion.Shield = Math.Min(1, Motion.Shield + VentSpeed / 240);
                     if (Motion.Shield >= 1)
                     {
                         Motion.VentHadPayload = Motion.Core != CorePhase.Off && Motion.CoreTick >= 90;
@@ -422,7 +428,7 @@ namespace ArcanePower
                     }
                     break;
                 case VentPhase.IntakeOpening:
-                    Motion.Intake = Math.Min(1, Motion.Intake + 1f / 90);
+                    Motion.Intake = Math.Min(1, Motion.Intake + VentSpeed / 90);
                     if (Motion.Intake >= 1) Motion.Vent = VentPhase.Ejecting;
                     break;
                 case VentPhase.Open: // Legacy saves which held the intake open.
@@ -430,23 +436,23 @@ namespace ArcanePower
                     Motion.Vent = VentPhase.Ejecting;
                     break;
                 case VentPhase.Ejecting:
-                    Motion.EjectTick++;
+                    float ejectAge = Math.Min(120, Motion.EjectTick + Motion.EjectSubtick + VentSpeed);
+                    Motion.EjectTick = (int)ejectAge;
+                    Motion.EjectSubtick = ejectAge - Motion.EjectTick;
                     // Keep the hot core and its fuse intact until the physical handoff.
                     if (Motion.PayloadReleased) Motion.Heat = Math.Max(0, Motion.Heat - .04f);
-                    if (Motion.EjectTick >= 120 && Motion.VentHadPayload && !Motion.PayloadReleased)
-                        Motion.EjectTick = 119;
-                    if (Motion.EjectTick >= 120)
+                    if (Motion.EjectTick >= 120 && (!Motion.VentHadPayload || Motion.PayloadReleased))
                     {
                         DiscardTiles();
                         Motion.Vent = VentPhase.IntakeClosing;
                     }
                     break;
                 case VentPhase.IntakeClosing:
-                    Motion.Intake = Math.Max(0, Motion.Intake - 1f / 90);
+                    Motion.Intake = Math.Max(0, Motion.Intake - VentSpeed / 90);
                     if (Motion.Intake <= 0) Motion.Vent = VentPhase.ShieldOpening;
                     break;
                 case VentPhase.ShieldOpening:
-                    Motion.Shield = Math.Max(0, Motion.Shield - 1f / 240);
+                    Motion.Shield = Math.Max(0, Motion.Shield - VentSpeed / 240);
                     if (Motion.Shield <= 0)
                     {
                         Motion.Vent = VentPhase.Idle;
@@ -459,6 +465,7 @@ namespace ArcanePower
                         Motion.SecondaryRate = 0;
                         Motion.PowerRamp = 0;
                         Motion.EjectTick = 0;
+                        Motion.EjectSubtick = 0;
                     }
                     break;
             }
@@ -469,28 +476,6 @@ namespace ArcanePower
             Motion.SpinPhase = (Motion.SpinPhase + Motion.SpinRate) % 36000;
             Motion.SecondaryRate = RingMotion.SecondaryRate(Motion.SpinRate, Motion.CoreTick);
             Motion.SecondaryPhase = (Motion.SecondaryPhase + Motion.SecondaryRate) % 36000;
-        }
-
-        private void ApplyVentDamage()
-        {
-            if (Motion.VentDamageApplied || !Motion.VentHadPayload) return;
-            Motion.VentDamageApplied = true;
-            SaveMotion();
-            // Snapshot actual attached modules before damage can change the
-            // connection dictionary. Nearby reactors/modules are never scanned.
-            var modules = new List<IMySlimBlock>();
-            var native = (Sandbox.Game.Entities.MyCubeBlock)Entity;
-            if (native.CurrentAttachedUpgradeModules != null)
-                foreach (var entry in native.CurrentAttachedUpgradeModules.Values)
-                    if (entry.Compatible && entry.Block != null && !entry.Block.Closed
-                        && entry.Block.BlockDefinition.SubtypeName.StartsWith("ArcanePower_"))
-                        modules.Add(entry.Block.SlimBlock);
-            float reactorFraction = .01f + .04f * Motion.VentLoad + .10f * Motion.VentHeat;
-            float moduleFraction = .02f + .06f * Motion.VentLoad + .12f * Motion.VentHeat;
-            foreach (var module in modules)
-                module.DoDamage(module.MaxIntegrity * moduleFraction, VRage.Utils.MyStringHash.GetOrCompute("Overheat"), true, attackerId: Id);
-            reactor.SlimBlock.DoDamage(reactor.SlimBlock.MaxIntegrity * reactorFraction,
-                VRage.Utils.MyStringHash.GetOrCompute("Overheat"), true, attackerId: Id);
         }
 
         private void PublishMotion()
@@ -566,7 +551,7 @@ namespace ArcanePower
             if (Motion.Core == CorePhase.Off) return Vector3.Zero;
             bool stopping = Motion.Core == CorePhase.Stopping;
             double ticks = stopping ? Motion.StopSpinAge + Math.Min(90, Motion.StopTick)
-                : (double)Motion.CoreTick + Motion.CoreSubtick + Motion.EjectTick;
+                : (double)Motion.CoreTick + Motion.CoreSubtick + Motion.EjectTick + Motion.EjectSubtick;
             double time = ticks / 60.0;
             float weight = stopping && Motion.StopSpinAge >= 1170
                 ? 1 - Span(Motion.StopTick, 0, 90) : Span(age, 1160, 1170);
@@ -583,7 +568,7 @@ namespace ArcanePower
         private Matrix ContainmentRotation(float age)
         {
             double time = (Motion.Core == CorePhase.Stopping ? Motion.StopSpinAge + Math.Min(90, Motion.StopTick)
-                : (double)Motion.CoreTick + Motion.CoreSubtick + Motion.EjectTick) / 60;
+                : (double)Motion.CoreTick + Motion.CoreSubtick + Motion.EjectTick + Motion.EjectSubtick) / 60;
             float rotationWeight = Span(age, 1160, 1170);
             if (Motion.Core == CorePhase.Stopping) rotationWeight *= 1 - Span(Motion.StopTick, 0, 90);
             float rotationSize = MathHelper.ToRadians(6f + 3.25f * Motion.Load) * rotationWeight;
@@ -620,7 +605,8 @@ namespace ArcanePower
 
         private Vector3 EjectionOffset()
         {
-            return Motion.VentHadPayload ? Vector3.Up * (Motion.EjectionTravel * Motion.EjectTick * Motion.EjectTick / 14400f) : Vector3.Zero;
+            float age = Motion.EjectTick + Motion.EjectSubtick;
+            return Motion.VentHadPayload ? Vector3.Up * (Motion.EjectionTravel * age * age / 14400f) : Vector3.Zero;
         }
 
         private Matrix PayloadRingPose(int i, float age)

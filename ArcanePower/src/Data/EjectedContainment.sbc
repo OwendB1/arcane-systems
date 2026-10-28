@@ -10,7 +10,7 @@
       <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
       <Mass>1</Mass>
       <Volume>2</Volume>
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_Tile1.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Tile1.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
       <MaxIntegrity>30</MaxIntegrity>
       <Health>25</Health>
@@ -31,7 +31,7 @@
       <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
       <Mass>1</Mass>
       <Volume>2</Volume>
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_Tile2.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Tile2.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
       <MaxIntegrity>30</MaxIntegrity>
       <Health>25</Health>
@@ -52,7 +52,7 @@
       <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
       <Mass>60</Mass>
       <Volume>100</Volume>
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_Ring1.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Ring1.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
       <MaxIntegrity>30</MaxIntegrity>
       <Health>25</Health>
@@ -73,7 +73,7 @@
       <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
       <Mass>80</Mass>
       <Volume>120</Volume>
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_Ring2.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Ring2.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
       <MaxIntegrity>30</MaxIntegrity>
       <Health>25</Health>
@@ -94,7 +94,7 @@
       <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
       <Mass>100</Mass>
       <Volume>140</Volume>
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_Ring3.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Ring3.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
       <MaxIntegrity>30</MaxIntegrity>
       <Health>25</Health>
@@ -115,7 +115,7 @@
       <Icon>Textures/GUI/Icons/ArcaneContainmentTile.dds</Icon>
       <Mass>120</Mass>
       <Volume>160</Volume>
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_Ring4.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Ring4.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
       <MaxIntegrity>30</MaxIntegrity>
       <Health>25</Health>
@@ -140,7 +140,7 @@
       <GuiVisible>false</GuiVisible>
       <CubeSize>Small</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_Plasma.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_Plasma.mwm</Model>
       <BlockPairName>ArcanePower_EjectedCore</BlockPairName>
       <BuildTimeSeconds>1</BuildTimeSeconds>
       <PCU>0</PCU>

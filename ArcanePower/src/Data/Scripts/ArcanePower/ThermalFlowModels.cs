@@ -17,8 +17,8 @@ new ThermalFlowPath("CO2", false, 0, 0.16f, false, new Vector3[] { new Vector3(-
 new ThermalFlowPath("CO2", true, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, 0.46f, 2.5f), new Vector3(-0f, 0.46f, 1.7f) }),
 }},
 {"ArcanePower_Thermal_SpaceRadiator", new ThermalFlowPath[] {
-new ThermalFlowPath("CO2", false, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -3.75f, -0.46f), new Vector3(-0f, -1.4f, -0.46f) }),
-new ThermalFlowPath("CO2", true, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -3.75f, 0.46f), new Vector3(-0f, -1.4f, 0.46f) }),
+new ThermalFlowPath("CO2", false, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -1.25f, -0.46f), new Vector3(-0f, 0.85f, -0.46f) }),
+new ThermalFlowPath("CO2", true, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -1.25f, 0.46f), new Vector3(-0f, 0.85f, 0.46f) }),
 }},
 {"ArcanePower_Thermal_PrimaryStraight", new ThermalFlowPath[] {
 new ThermalFlowPath("CO2", false, 0, 0.22f, false, new Vector3[] { new Vector3(1.194f, -0.46f, 0f), new Vector3(-1.194f, -0.46f, 0f) }),
@@ -286,13 +286,45 @@ new ThermalFlowPath("CO2", false, 0, 0.1885f, false, new Vector3[] { new Vector3
 new ThermalFlowPath("CO2", true, 0, 0.1885f, false, new Vector3[] { new Vector3(5f, -0.79f, 2.41936f), new Vector3(5f, -0.79f, 2.4f), new Vector3(5f, -0.79f, 2.1f), new Vector3(5.00196f, -0.790672f, 2.05962f), new Vector3(5.00756f, -0.792527f, 2.02224f), new Vector3(5.0164f, -0.795326f, 1.98752f), new Vector3(5.02808f, -0.798829f, 1.95511f), new Vector3(5.04219f, -0.802795f, 1.92468f), new Vector3(5.05832f, -0.806985f, 1.89587f), new Vector3(5.07607f, -0.811159f, 1.86835f), new Vector3(5.09504f, -0.815077f, 1.84177f), new Vector3(5.11482f, -0.818498f, 1.81578f), new Vector3(5.135f, -0.821184f, 1.79005f), new Vector3(5.15518f, -0.822893f, 1.76422f), new Vector3(5.17496f, -0.823387f, 1.73796f), new Vector3(5.19393f, -0.822424f, 1.71091f), new Vector3(5.21168f, -0.819766f, 1.68274f), new Vector3(5.22781f, -0.815172f, 1.65311f), new Vector3(5.24192f, -0.808401f, 1.62166f), new Vector3(5.2536f, -0.799215f, 1.58805f), new Vector3(5.26244f, -0.787374f, 1.55194f), new Vector3(5.26804f, -0.772636f, 1.51299f), new Vector3(5.27f, -0.754763f, 1.47084f), new Vector3(5.27f, -0.608357f, 1.14196f), new Vector3(5.27f, -0.567688f, 1.0506f) }),
 new ThermalFlowPath("CO2", false, 0, 0.1885f, false, new Vector3[] { new Vector3(5f, -1.71f, 2.41936f), new Vector3(5f, -1.71f, 2.4f), new Vector3(5f, -1.71f, 2.006f), new Vector3(4.99124f, -1.71f, 1.91704f), new Vector3(4.96529f, -1.71f, 1.8315f), new Vector3(4.92315f, -1.71f, 1.75266f), new Vector3(4.86644f, -1.71f, 1.68356f), new Vector3(4.79734f, -1.71f, 1.62685f), new Vector3(4.7185f, -1.71f, 1.58471f), new Vector3(4.63296f, -1.71f, 1.55876f), new Vector3(4.544f, -1.71f, 1.55f), new Vector3(-2.00927f, -1.71f, 1.55f), new Vector3(-2.06404f, -1.70611f, 1.54626f), new Vector3(-2.1167f, -1.6946f, 1.53518f), new Vector3(-2.16523f, -1.67592f, 1.51719f), new Vector3(-2.20777f, -1.65077f, 1.49297f), new Vector3(-2.24269f, -1.62012f, 1.46347f), new Vector3(-2.26863f, -1.58515f, 1.42981f), new Vector3(-2.28461f, -1.54721f, 1.39328f), new Vector3(-2.29f, -1.50776f, 1.3553f), new Vector3(-2.29f, -1.36071f, 1.21372f), new Vector3(-2.29f, -1.28866f, 1.14437f) }),
 }},
+{"ArcanePower_Thermal_PipeRotor", new ThermalFlowPath[] {
+new ThermalFlowPath("CO2", false, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -1.25f, -0.46f), new Vector3(-0f, 0f, -0.46f) }),
+new ThermalFlowPath("CO2", true, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -1.25f, 0.46f), new Vector3(-0f, 0f, 0.46f) }),
+}},
+{"ArcanePower_Thermal_PipeRotorHead", new ThermalFlowPath[] {
+new ThermalFlowPath("CO2", false, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, 1.25f, -0.46f), new Vector3(-0f, 0f, -0.46f) }),
+new ThermalFlowPath("CO2", true, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, 1.25f, 0.46f), new Vector3(-0f, 0f, 0.46f) }),
+}},
+{"ArcanePower_Thermal_HullRadiator", new ThermalFlowPath[] {
+new ThermalFlowPath("CO2", false, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -1.71f, 1.25f), new Vector3(0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", true, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -0.79f, 1.25f), new Vector3(-0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", false, 1, 0.16f, false, new Vector3[] { new Vector3(3.75f, 0f, 0.46f), new Vector3(0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", true, 1, 0.16f, false, new Vector3[] { new Vector3(3.75f, 0f, -0.46f), new Vector3(-0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", false, 2, 0.16f, false, new Vector3[] { new Vector3(-3.75f, 0f, 0.46f), new Vector3(0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", true, 2, 0.16f, false, new Vector3[] { new Vector3(-3.75f, 0f, -0.46f), new Vector3(-0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", false, 3, 0.16f, false, new Vector3[] { new Vector3(-0f, 2.5f, 0.46f), new Vector3(0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", true, 3, 0.16f, false, new Vector3[] { new Vector3(-0f, 2.5f, -0.46f), new Vector3(-0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", false, 4, 0.16f, false, new Vector3[] { new Vector3(-0f, -2.5f, 0.46f), new Vector3(0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", true, 4, 0.16f, false, new Vector3[] { new Vector3(-0f, -2.5f, -0.46f), new Vector3(-0.46f, 0f, 0f) }),
+}},
 {"ArcanePower_Thermal_AtmosphericCoolerUpgraded", new ThermalFlowPath[] {
 new ThermalFlowPath("CO2", false, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -0.46f, 2.5f), new Vector3(-0f, -0.46f, 1.7f) }),
 new ThermalFlowPath("CO2", true, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, 0.46f, 2.5f), new Vector3(-0f, 0.46f, 1.7f) }),
 }},
 {"ArcanePower_Thermal_SpaceRadiatorUpgraded", new ThermalFlowPath[] {
-new ThermalFlowPath("CO2", false, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -3.75f, -0.46f), new Vector3(-0f, -1.4f, -0.46f) }),
-new ThermalFlowPath("CO2", true, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -3.75f, 0.46f), new Vector3(-0f, -1.4f, 0.46f) }),
+new ThermalFlowPath("CO2", false, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -1.25f, -0.46f), new Vector3(-0f, 0.85f, -0.46f) }),
+new ThermalFlowPath("CO2", true, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -1.25f, 0.46f), new Vector3(-0f, 0.85f, 0.46f) }),
+}},
+{"ArcanePower_Thermal_HullRadiatorUpgraded", new ThermalFlowPath[] {
+new ThermalFlowPath("CO2", false, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -1.71f, 1.25f), new Vector3(0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", true, 0, 0.16f, false, new Vector3[] { new Vector3(-0f, -0.79f, 1.25f), new Vector3(-0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", false, 1, 0.16f, false, new Vector3[] { new Vector3(3.75f, 0f, 0.46f), new Vector3(0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", true, 1, 0.16f, false, new Vector3[] { new Vector3(3.75f, 0f, -0.46f), new Vector3(-0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", false, 2, 0.16f, false, new Vector3[] { new Vector3(-3.75f, 0f, 0.46f), new Vector3(0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", true, 2, 0.16f, false, new Vector3[] { new Vector3(-3.75f, 0f, -0.46f), new Vector3(-0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", false, 3, 0.16f, false, new Vector3[] { new Vector3(-0f, 2.5f, 0.46f), new Vector3(0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", true, 3, 0.16f, false, new Vector3[] { new Vector3(-0f, 2.5f, -0.46f), new Vector3(-0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", false, 4, 0.16f, false, new Vector3[] { new Vector3(-0f, -2.5f, 0.46f), new Vector3(0.46f, 0f, 0f) }),
+new ThermalFlowPath("CO2", true, 4, 0.16f, false, new Vector3[] { new Vector3(-0f, -2.5f, -0.46f), new Vector3(-0.46f, 0f, 0f) }),
 }},
 };
 }

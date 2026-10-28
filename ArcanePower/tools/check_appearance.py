@@ -185,12 +185,21 @@ checks = r'''
    for(int i=0;i<connected;i++)stopped.Motion.Thermal.Loops[i].Connected=true;
    Need(stopped.ReadStatus(false).State=="COOLING DOWN","normal shutdown shows cooldown for every circuit defect count");
    var circuitReport=stopped.ReadStatus(false);
+   Need(circuitReport.Tone=="cyan" && circuitReport.Rows[0].Tone=="cyan","normal cooldown status and action are cyan");
    Need(circuitReport.Value("Circuits available")==connected+" / 4 ("+connected*25+"% allocation)","available count follows validated circuits immediately");
    for(int i=0;i<4;i++)Need(circuitReport.Value("Circuit "+(i+1))==(i<connected?"Ready / valve open":"Unavailable / valve closed"),"dashboard valve state matches the actual valve mask");
    Need(!circuitReport.Text().Contains("MPa") && !circuitReport.Text().Contains("charged / valve"),"circuit diagnostics contain no retired pressure or filling state");
 
    stopped.Motion.Thermal.LoopTrip=true;
    Need(stopped.ReadStatus(false).State=="STARTUP BLOCKED / ALL FOUR CIRCUITS DEFECTIVE","only explicit rejected startup shows the circuit latch");
+  }
+  foreach(var phase in new[]{CorePhase.Running,CorePhase.Cooling}){
+   var r=new Reactor();r.Motion.Core=phase;r.reactor.Enabled=phase==CorePhase.Running;
+   var thermal=r.Motion.Thermal;thermal.Mode=thermal.Requested=ThermalMode.Brayton;thermal.Deployment=1;
+   thermal.Loops[0].Connected=true;thermal.Loops[0].OutputMW=100;
+   if(phase==CorePhase.Running)thermal.ProducedMW=100;else thermal.Loops[0].ExcessMJ=100;
+   var report=r.ReadStatus(false);
+   Need(report.State=="INSUFFICIENT LOOP COOLING" && report.Tone=="yellow" && report.Rows[0].Tone=="yellow","active or retained heat with insufficient cooling warns in yellow before normal cooldown");
   }
   foreach(Action<Reactor> change in new Action<Reactor>[]{
    r=>r.reactor.Enabled=false, r=>r.receivedState=false, r=>r.initializationFrames=120,

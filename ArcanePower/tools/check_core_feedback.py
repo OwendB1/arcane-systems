@@ -26,7 +26,7 @@ motion = (SRC / 'Reactor.Motion.cs').read_text()
 state = motion[motion.index('    public enum CorePhase'):motion.index('    public sealed partial class Reactor')]
 state = re.sub(r'\[Proto(?:Contract|Member\([^]]+\))\]', '', state)
 constant = re.search(r'private const int PlasmaStartTick = \d+;', motion).group()
-source = 'using System; using VRageMath;\n' + state + '\nclass Check {\n' + constant + r'''
+source = 'using System; using VRageMath;\npublic class ThermalReactorState {}\n' + state + '\nclass Check {\n' + constant + r'''
  MotionState Motion=new MotionState();
  Matrix Rest(string name){var m=Matrix.CreateRotationZ(.3f);m.Translation=new Vector3(0,2,0);return m;}
  Vector3 ContainmentOffset(float age){return new Vector3(.01f,.02f,.03f);}

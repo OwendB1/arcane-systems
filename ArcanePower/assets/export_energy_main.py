@@ -1,6 +1,7 @@
 """Export finished battery or prototype meshes without rebuilding derived art.
 
-Run in arcane-energy-core.blend. EXPORT_NAMES can restrict a batch. Native MWM
+Run in an accepted production blend. EXPORT_NAMES can restrict a batch;
+export_sources(names, isolate=True) is for disposable background processes. Native MWM
 compilation and definition/cache-path wiring follow in tools/export_energy_main.py.
 """
 import importlib
@@ -25,7 +26,8 @@ class Reporter:
         print(kind, message, flush=True)
 
 
-def export_sources(names):
+def export_sources(names, isolate=False):
+    assert not isolate or bpy.app.background, 'Isolated exports must never discard live authoring scenes'
     assert Path(bpy.data.filepath).name in ('arcane-energy-core.blend', 'arcane-power-prototype.blend', 'arcane-thermal-models.blend'), 'Export production, not the review assembly'
     if THERMAL_SUBPARTS:
         assert set(names) <= {'ArcanePower_BlastShield'+str(i) for i in range(1, 7)}, 'Thermal blocks use export_thermal_models.py'
@@ -44,6 +46,19 @@ def export_sources(names):
         importlib.import_module('space-engineers-utilities.seut_errors').show_popup_report = lambda *args: print('SEUT', args, flush=True)
     for audit in (() if THERMAL_SUBPARTS else ('audit_reactor_exterior.py', 'audit_controller_details.py') if PROTOTYPE else ('audit_energy_geometry.py',)):
         runpy.run_path(str(ROOT/'assets'/audit))['main']()
+    if isolate and not THERMAL_SUBPARTS:
+        # Match the thermal exporter: isolate one reviewed family in a disposable
+        # process, avoiding costly global linked-material remaps between models.
+        scenes=[bpy.data.scenes[name] for name in names]
+        for scene in scenes:
+            for obj in scene.objects:
+                if obj.type=='EMPTY' and 'file' in obj and obj.seut.linkedScene:
+                    obj['file']=EXPORT.correct_for_export_type(scene,EXPORT.get_subpart_reference(obj,COLS.get_collections(scene)))
+        bpy.context.window.scene=scenes[0]
+        keep={obj for scene in scenes for obj in scene.objects}
+        bpy.data.batch_remove(ids=[obj for obj in bpy.data.objects if obj not in keep])
+        bpy.data.batch_remove(ids=[scene for scene in bpy.data.scenes if scene not in scenes])
+        bpy.data.orphans_purge(do_local_ids=True,do_linked_ids=True,do_recursive=True)
     STAGING.mkdir(parents=True, exist_ok=True)
     rows = {}
     area = next(a for a in bpy.context.screen.areas if a.type == 'VIEW_3D')

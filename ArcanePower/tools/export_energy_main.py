@@ -202,6 +202,9 @@ def main(prototype=False, update=False):
     else:
         revision = refresh_models()
         delivered={name:revision/(name+'.mwm') for name in names}
+    if prototype:
+        from prepare_thermal_release import refresh_shared_subparts
+        refresh_shared_subparts({name+'.mwm':staging/(name+'.mwm') for name in names})
     assert all(settings(p)==value for p,value in original_settings.items()), 'Non-model definition settings changed'
     assert digest(legacy) == legacy_hash, 'Legacy definitions changed'
     assert all(digest(p) == value for p, value in derived.items()), 'Build-stage models changed'

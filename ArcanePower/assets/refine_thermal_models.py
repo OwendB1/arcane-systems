@@ -690,6 +690,8 @@ def textures(name):
     if p.scene.get('thermal_texture_revision') == REVISION:
         runpy.run_path(str(ROOT/'assets/refine_thermal_visibility.py'))['apply'](name)
         runpy.run_path(str(ROOT/'assets/refine_thermal_flow.py'))['apply'](name)
+        if ' / ' in name and name not in M['CONTRACT']['BARE_PIPES']:
+            return runpy.run_path(str(ROOT/'assets/enclose_thermal_pipes.py'))['apply'](name)
         return M['record'](name)
     assert p.scene['thermal_phase'] == 'geometry'
     original = list(p.col.objects)
@@ -763,4 +765,6 @@ def textures(name):
     bpy.context.view_layer.update()
     runpy.run_path(str(ROOT/'assets/refine_thermal_visibility.py'))['apply'](name)
     runpy.run_path(str(ROOT/'assets/refine_thermal_flow.py'))['apply'](name)
+    if ' / ' in name and name not in M['CONTRACT']['BARE_PIPES']:
+        return runpy.run_path(str(ROOT/'assets/enclose_thermal_pipes.py'))['apply'](name)
     return M['record'](name)

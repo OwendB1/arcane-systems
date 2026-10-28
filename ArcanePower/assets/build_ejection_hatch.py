@@ -5,6 +5,7 @@ import bmesh
 import importlib
 import json
 import math
+import runpy
 from pathlib import Path
 from mathutils import Matrix, Vector
 
@@ -105,5 +106,6 @@ data['intake']['radial_slide_m']=.60
 data['hatch']={'count':4,'model':name,'bore_radius_m':1.86,'park_z':3.58,'drop_m':.30,'slides':slides}
 data['status']='Direct top ejection hatch; centred conveyor connection retained'
 (ROOT/'assets/vent.json').write_text(json.dumps(data,indent=2)+'\n')
+runpy.run_path(str(ROOT/'assets/seal_vent_hatch.py'))['apply']()
 bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath)
 print('Four retracting vent leaves; 3.72m clear bore; top conveyor dummy retained')

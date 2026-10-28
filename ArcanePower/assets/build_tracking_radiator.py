@@ -1,7 +1,7 @@
-"""Reviewed radiator: fixed bottom duplex socket, full-cell pedestal, yawing panels.
+"""One-cell airtight rotor base and separate, interchangeable radiator panels.
 
-Run apply() in the visible production Blender session. Only this main is rebuilt.
-The 3-cell square envelope contains the entire sweep; the 2.5 m pedestal is fixed.
+Run apply() in the visible production Blender session to rebuild only the base.
+The existing two-cell-high panels retain their full three-cell-square sweep.
 """
 import json
 import math
@@ -11,7 +11,7 @@ import bpy
 from mathutils import Matrix, Vector
 
 ROOT = Path(__file__).resolve().parents[1]
-PIVOT = (0, 0, -1.1)
+PIVOT = (0, 0, 1.0)
 PART = 'Thermal_RadiatorPanels'
 HEAT = [('ThermalRadiatorHeatRoot', (1,.16,.07,1), .12),
         ('ThermalRadiatorHeatMid', (1,.075,.035,1), .07),
@@ -147,71 +147,136 @@ def apply():
         bpy.data.objects.remove(obj, do_unlink=True)
     p.ports = []
     p.col.pop('thermal_seal_fit_revision', None)
-    heat_material(p)
-    # A hollow pedestal seats the manifold without a solid slab closing its bores.
-    for x in (-1.14, 1.14):
-        p.box('pedestal side armor', (x, 0, -2.5), (.20, 2.48, 2.5), 'PaintedMetal_Colorable')
-    for y in (-1.14, 1.14):
-        p.box('pedestal end armor', (0, y, -2.5), (2.08, .20, 2.5), 'PaintedMetal_Colorable')
-    deck = p.box('pedestal bearing deck', (0, 0, -1.33), (2.08, 2.08, .16), 'PaintedMetal_Darker')
-    for y in (-1, 1):
-        door = p.panel('rotary union service cover', (0, y*1.249, -2.55), (1.66, .018, 1.66), (0, y, 0))
-        p.label(door, 'ROTARY CO2 / AUTO TRACK', (0, y*1.260, -2.13), (y*-1, 0, 0), (0, 0, 1), .086)
-        for x in (-.48, .48):
-            p.box('service handle foot', (x, y*1.28, -2.84), (.07, .07, .11), 'Metal_Dull')
-        p.box('service handle', (0, y*1.32, -2.84), (1.02, .045, .07), 'Metal_Dull')
-    p.port('CO2', (0, 0, -3.75), (0, 0, -1), 'CO2_LP', (0, 1, 0))
+    # Butt the side walls at the corners, sharing the pipe rotor's recessed
+    # lamps. The radiator's deck seats inside the walls, 100 mm below their rim.
+    flow = runpy.run_path(str(ROOT/'assets/refine_thermal_flow.py'))
+    flow['materials'](p)
+    rotor = runpy.run_path(str(ROOT/'assets/build_pipe_rotor.py'))
+    rotor['side_shell'](p, detailed=True)
+    for obj in p.col.objects:
+        if obj.get('pipe_rotor_collision'):
+            # Extend only the upper edge; preserve the service recess and UVs.
+            for vertex in obj.data.vertices:
+                if vertex.co.z > 1.10:vertex.co.z = 1.25
+    bottom = p.box('pedestal socket surround', (0, 0, -1.20), (2.5, 2.5, .10), 'PaintedMetal_Colorable', 0)
+    deck = p.box('pedestal bearing deck', (0, 0, 1.10), (2.30, 2.30, .10), 'PaintedMetal_Darker', 0)
+    bottom['radiator_base_collision']=deck['radiator_base_collision']=True
+    for obj in p.col.objects:
+        if obj.get('pipe_rotor_collision'):obj['radiator_base_collision']=True
+    for target, cutter in (
+        (bottom, p.box('temporary socket aperture', (0, 0, -1.20), (1.98, 1.98, .4), chamfer=0)),
+        (deck, p.cylinder('temporary shaft aperture', (0, 0, .9), (0, 0, 1.4), .260, sides=48))):
+        bpy.context.view_layer.objects.active = target
+        mod = target.modifiers.new('Sealed union aperture', 'BOOLEAN')
+        mod.operation, mod.solver, mod.object = 'DIFFERENCE', 'EXACT', cutter
+        bpy.ops.object.modifier_apply(modifier=mod.name)
+        bpy.data.objects.remove(cutter, do_unlink=True)
+        m['BUILD']['uv'](target)
+    p.port('CO2', (0, 0, -1.25), (0, 0, -1), 'CO2_LP', (0, 1, 0))
     for sign in (-1, 1):
-        p.tube('fixed coolant riser', [(0, sign*.46, -3.52), (0, sign*.46, -1.40)], .275, 'Metal_Dull', .045, 40)
-    p.cylinder('fixed rotary union', (0, 0, -1.30), (0, 0, -1.10), .92, 'Metal_Dull', 64)
-    for i in range(12):
-        a=i*math.tau/12
-        p.bolt('bearing deck bolt', (math.cos(a)*.99, math.sin(a)*.99, -1.242), (0, 0, 1), deck, .035)
-    fixed=set(p.col.objects)
-    p.cylinder('rotating union crown', (0, 0, -1.085), (0, 0, -.91), .88, 'PaintedMetal_Darker', 64)
-    p.cylinder('rotary shaft', (0, 0, -.92), (0, 0, -.76), .42, 'Metal_Dull', 48)
-    p.box('carrier bearing saddle', (0, 0, -.715), (1.12, 1.0, .09), 'PaintedMetal_Darker')
-    panels(p,-.57,3.515)
-    for x in (-3.05,3.05):side_pipe(p,x,-.70,3.75)
-    p.cylinder('stack axis coupling',(0,0,3.515),(0,0,3.744),.21,'Metal_Dull',48)
-    axis_collar(p,'stack axis collar',3.66,3.75)
-    # Distribution runs inside the carrier beam. Only the two straight,
-    # solid-capped vertical side pipes remain exposed above the rotary union.
+        p.tube('fixed coolant riser', [(0, sign*.46, -1.12), (0, sign*.46, .85)], .275, 'Metal_Dull', .045, 40)
+    p.cylinder('fixed rotary union', (0, 0, .76), (0, 0, .92), .92, 'Metal_Dull', 64)
+    seal=p.tube('rotary shaft pressure seal', [(0, 0, 1.03), (0, 0, 1.13)], .280, 'PaintedMetal_VeryDark', .075, 48)
+    collar=axis_collar(p, 'stack axis collar', 1.10, 1.25)
+    for obj in (deck,seal,collar):obj['lod_keep']=True
+    for i in range(8):
+        angle = i*math.tau/8
+        point=Vector((math.cos(angle)*.90, math.sin(angle)*.90, 1.15))
+        p.bolt('bearing deck bolt', point+Vector((0,0,.009)), (0, 0, 1), deck, .032)
+    fixed = set(p.col.objects)
+    p.cylinder('rotating union crown', (0, 0, .925), (0, 0, 1.04), .88, 'PaintedMetal_Darker', 64)
+    p.cylinder('stack axis coupling', (0, 0, 1.035), (0, 0, 1.244), .21, 'Metal_Dull', 48)
     bpy.context.view_layer.update()
-    moving=set(p.col.objects)-fixed
-    root=bpy.data.objects.new('Space radiator / sun tracking pivot',None);p.col.objects.link(root)
-    root.location=PIVOT;root['native_subpart']=PART;root.empty_display_size=.3
+    root = bpy.data.objects.new('Space radiator / sun tracking pivot', None)
+    p.col.objects.link(root)
+    root.location = PIVOT; root['native_subpart'] = PART; root.empty_display_size = .3
     bpy.context.view_layer.update()
-    for obj in moving:
-        world=obj.matrix_world.copy();obj.parent=root
-        obj.matrix_parent_inverse=Matrix.Identity(4);obj.matrix_basis=Matrix.Translation(-Vector(PIVOT))@world
-    refinement=runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))
+    for obj in set(p.col.objects)-fixed-{root}:
+        world = obj.matrix_world.copy(); obj.parent = root
+        obj.matrix_parent_inverse = Matrix.Identity(4)
+        obj.matrix_basis = Matrix.Translation(-Vector(PIVOT))@world
+    refinement = runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))
     refinement['tighten_ports'](p)
     for obj in p.col.objects:
-        if obj.type=='FONT' and obj.data.body=='CO2 / LP':obj.location=(0,.92,-3.738)
-    # Convert authored labels to exportable meshes, keeping parent-local transforms.
-    for obj in list(p.col.objects):
-        if obj.type=='FONT':
-            obj['thermal_text']=obj.data.body
-            obj['thermal_decal_support']=obj['thermal_marking_support']
-            bpy.ops.object.select_all(action='DESELECT');obj.select_set(True)
-            bpy.context.view_layer.objects.active=obj;bpy.ops.object.convert(target='MESH')
-            m['BUILD']['uv'](bpy.context.object)
+        if obj.type == 'FONT' and obj.data.body == 'CO2 / LP':
+            obj.location = (0, .92, -1.238)
+    refinement['mesh_markings'](p)
     refinement['pressure_seal_fit'](p)
     for obj in p.col.objects:
-        if obj.type=='MESH':refinement['cylindrical_uv'](obj, Vector((.17,.31)))
-    flow=runpy.run_path(str(ROOT/'assets/refine_thermal_flow.py'))
+        if obj.type == 'MESH': refinement['cylindrical_uv'](obj, Vector((.17, .31)))
+    for face in deck.data.polygons: face.use_smooth = False
     flow['indicators'](p)
-    p.col['grid_cells']=(3,3,3)
-    for axis in ('X','Y','Z'):p.scene.seut['bBox_'+axis]=3
-    p.scene['radiator_tracking_revision']=1
-    p.scene['thermal_detail_revision']=p.scene['thermal_texture_revision']=1
-    p.finish();p.scene['thermal_phase']='textures';m['record'](p.name)
-    # Opaque rotary plumbing hides the transfer beyond the stationary bottom bores.
-    data=json.loads((ROOT/'assets/thermal-flow-paths.json').read_text())
-    data['models'][p.scene.name]=[flow['path_row']([(0,s*.46,-3.75),(0,s*.46,-1.40)],'CO2_LP',s>0,0,.16,label='fixed pedestal riser') for s in (-1,1)]
-    (ROOT/'assets/thermal-flow-paths.json').write_text(json.dumps(data,indent=2)+'\n')
+    # The old side-facing socket lamps are internal to the closed hull.
+    # Put them on the bottom flange beside its two bores instead.
+    c, n, up = Vector((0, 0, -1.25)), Vector((0, 0, -1)), Vector((0, 1, 0))
+    across = up.cross(n)
+    for label, inset in (('status bezel', .0185), ('status lens', .007)):
+        obj = next(o for o in p.col.objects if o.name == p.name+' / CO2 '+label)
+        obj.matrix_world = Matrix((across, up, n)).transposed().to_4x4()
+        obj.location = c+across*.78-n*inset
+    p.col['grid_cells'] = (1, 1, 1)
+    for axis in ('X', 'Y', 'Z'): p.scene.seut['bBox_'+axis] = 1
+    p.scene['radiator_tracking_revision'] = 3
+    p.scene['thermal_detail_revision'] = p.scene['thermal_texture_revision'] = 1
+    p.finish(); p.scene['thermal_phase'] = 'textures'
+    data = json.loads((ROOT/'assets/thermal-flow-paths.json').read_text())
+    data['models'][p.scene.name] = [flow['path_row']([(0, sign*.46, -1.25), (0, sign*.46, .85)],
+        'CO2_LP', sign > 0, 0, .16, label='fixed pedestal riser') for sign in (-1, 1)]
+    (ROOT/'assets/thermal-flow-paths.json').write_text(json.dumps(data, indent=2)+'\n')
     return m['record'](p.name)
+
+
+def audit_base():
+    """Closed casing, recessed deck, supported lamps and exact shaft seating."""
+    import bmesh
+    from mathutils.bvhtree import BVHTree
+    m=runpy.run_path(str(ROOT/'assets/build_thermal_models.py'))
+    scene=m['scene_for']('Space radiator');bpy.context.window.scene=scene;bpy.context.view_layer.update()
+    col=m['main_for']('Space radiator');points=[];faces=[];solids=0
+    for obj in col.objects:
+        if obj.type!='MESH' or obj.get('thermal_text') or obj.get('source_asset'):continue
+        bm=bmesh.new();bm.from_mesh(obj.data)
+        assert all(e.is_manifold for e in bm.edges),obj.name
+        bm.free();solids+=1
+        offset=len(points);points.extend(obj.matrix_world@v.co for v in obj.data.vertices)
+        faces.extend(tuple(offset+i for i in f.vertices) for f in obj.data.polygons)
+    assert all(abs(p[i])<=1.2501 for p in points for i in range(3)), 'Base exceeds one cell'
+    tree=BVHTree.FromPolygons(points,faces);samples=0
+    for axis in range(3):
+        for sign in (-1,1):
+            for u in range(-12,13):
+                for v in range(-12,13):
+                    origin=Vector((0,0,0));origin[axis]=sign*1.30
+                    origin[(axis+1)%3]=u*.10;origin[(axis+2)%3]=v*.10
+                    direction=Vector((0,0,0));direction[axis]=-sign
+                    assert tree.ray_cast(origin,direction,2.6)[0] is not None,('Open base',axis,sign,u,v)
+                    samples+=1
+    casing=[o for o in col.objects if o.get('radiator_base_collision')]
+    assert len(casing)==6
+    def bounds(obj):
+        p=[obj.matrix_world@v.co for v in obj.data.vertices]
+        return [min(v[i] for v in p) for i in range(3)],[max(v[i] for v in p) for i in range(3)]
+    for i,a in enumerate(casing):
+        lo,hi=bounds(a)
+        for b in casing[i+1:]:
+            low,high=bounds(b)
+            assert min(min(hi[j],high[j])-max(lo[j],low[j]) for j in range(3))<1e-5,('Overlapping casing slabs',a.name,b.name)
+    lamps=[o for o in col.objects if ' / recessed channel emitter' in o.name]
+    assert len(lamps)==8 and all(o.get('pipe_rotor_emitter') for o in lamps)
+    for obj in lamps:
+        normal=obj.matrix_world.to_3x3()@Vector((0,0,1));centre=obj.matrix_world.translation
+        nearest=tree.ray_cast(centre+normal*.05,-normal,.06)
+        assert nearest[0] is not None and (nearest[0]-centre).length<.004,('Occluded emitter',obj.name)
+    shaft=next(o for o in col.objects if ' / stack axis coupling' in o.name)
+    assert abs(bounds(shaft)[1][2]-1.244)<1e-5
+    deck=next(o for o in casing if ' / pedestal bearing deck' in o.name)
+    assert all(abs(a-b)<1e-5 for a,b in zip(bounds(deck)[1],(1.15,1.15,1.15))), 'Deck must retain its 100 mm recess'
+    bolts=[o for o in col.objects if ' / bearing deck bolt' in o.name]
+    assert len(bolts)==8 and all(bounds(o)[0][2]>=1.149 and bounds(o)[1][2]>1.16 for o in bolts), 'Deck bolts must protrude'
+    # The bearing has 5 mm radial deck clearance; the seal backs the gap below.
+    aperture=min(math.hypot(v.co.x,v.co.y) for v in deck.data.vertices)
+    assert abs(aperture-.260)<1e-5, 'Bearing clearance aperture changed'
+    return {'status':'passed','closed_solids':solids,'hull_samples':samples,'casing_hulls':len(casing),'visible_side_lamps':len(lamps),'deck_recess_m':.10,'bearing_radial_clearance_m':.005}
 
 
 def extension():
@@ -224,7 +289,7 @@ def extension():
         axis_collar(p,'fixed axial dock',z,z+.09)
     fixed=set(p.col.objects)
     # 250 mm between horizontal frame rails at every stack joint. The block
-    # centres remain exactly 6.25 m / 5 m apart on the large-grid lattice.
+    # centres remain exactly 3.75 m / 5 m apart on the large-grid lattice.
     panels(p,-2.235,2.265)
     for bottom,top in ((-2.494,-2.235),(2.265,2.494)):
         p.cylinder('rotating axial coupling',(0,0,bottom),(0,0,top),.21,'Metal_Dull',48)

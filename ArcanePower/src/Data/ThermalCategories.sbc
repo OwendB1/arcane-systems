@@ -9,11 +9,12 @@
       <DisplayName>Arcane Systems</DisplayName>
       <Name>ArcaneSystems</Name>
       <ItemIds>
+        <string>Reactor/ArcanePower_Thermal_BraytonTrain</string>
+        <string>UpgradeModule/ArcanePower_Thermal_SpaceRadiator</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryStraight</string>
         <string>Reactor/ArcanePower_Thermal_ReactorHousing</string>
         <string>UpgradeModule/ArcanePower_Thermal_PrimaryStraightBare</string>
-        <string>UpgradeModule/ArcanePower_Thermal_SpaceRadiator</string>
-        <string>Reactor/ArcanePower_Thermal_BraytonTrain</string>
+        <string>MotorAdvancedStator/ArcanePower_Thermal_PipeRotor</string>
       </ItemIds>
     </Category>
   </CategoryClasses>

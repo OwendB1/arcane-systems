@@ -22,7 +22,7 @@ Right click: change page.</Description>
       </Size>
       <Mass>1.4</Mass>
       <Volume>3</Volume>
-      <Model>Models/Items/ArcanePower_Tablet_r02607b908104.mwm</Model>
+      <Model>Models/Items/ArcanePower_Tablet_rb8c7101e0e29.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
       <HitDistance>0</HitDistance>
       <ShowAmmoCount>false</ShowAmmoCount>

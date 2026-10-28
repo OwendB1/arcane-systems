@@ -13,7 +13,7 @@ namespace ProtoBuf {
 }
 namespace ArcanePower {
  public class ThermalRotorState { public bool Valid(long id){return true;} }
- public class ThermalRadiatorState { public bool Valid(long id){return true;} }
+ public class ThermalRadiatorState { public int RequiredPanels;public bool Valid(long id){return true;} }
 }
 class Grid {
  public long EntityId=1;
@@ -114,6 +114,7 @@ static class ThermalManifolds {
  public static int Pose(int bay,string part,float deployment){return 0;}
 }
 static class ThermalRadiators {
+ public const int MaxPanels=3;
  // PRODUCTION_RADIATOR_FIT
 }
 // PRODUCTION_STATE
@@ -604,6 +605,22 @@ class Reactor {
   foreach(var host in hosts) host.Generator.CurrentOutput=(float)host.OutputGrantMW;
   session.Step(r,machines);
   Near(r.Motion.Thermal.CoolingMW,capacity,"cooling capacity is independent of load");
+  var failedCooler=machines[2];
+  failedCooler.Store.Radiator=new ThermalRadiatorState();
+  foreach(var kind in new[]{ThermalKind.AirCooler,ThermalKind.Radiator,ThermalKind.HullRadiator}){
+   failedCooler.Spec.Kind=kind;failedCooler.Block.IsFunctional=false;failedCooler.CircuitRevision++;session.Step(r,machines);
+   Need(r.Motion.Thermal.ConnectedLoops==4 && session.Valves==15,"failed cooler retains pressure in production dispatcher");
+   Near(r.Motion.Thermal.Loops[0].CoolingMW,0,"failed cooler has zero production rejection");
+   Need(hosts[0].OutputGrantMW>0,"failed cooling does not revoke paid generation");
+   failedCooler.Block.IsFunctional=true;failedCooler.Block.Enabled=false;failedCooler.CircuitRevision++;session.Step(r,machines);
+   Need(session.Valves==15 && r.Motion.Thermal.Loops[0].CoolingMW==0,"disabled cooler keeps pressure without cooling");
+   failedCooler.Block.Enabled=true;failedCooler.CircuitRevision++;
+  }
+  failedCooler.Spec.Kind=ThermalKind.AirCooler;
+  machines.Remove(failedCooler);ThermalSession.Blocks.Remove(failedCooler.Block.EntityId);session.Step(r,machines);
+  Need(r.Motion.Thermal.ConnectedLoops==3 && session.Valves==14,"removed cooler closes only its circuit in production dispatcher");
+  machines.Insert(2,failedCooler);ThermalSession.Blocks[failedCooler.Block.EntityId]=failedCooler;session.Step(r,machines);
+  Need(session.Valves==15 && r.Motion.Thermal.Loops[0].CoolingMW>0,"replacement cooler restores seal and cooling");
   var broken=machines[0];broken.Block.IsFunctional=false;session.Step(r,machines);
   Need(r.Motion.Thermal.ConnectedLoops==3 && session.Valves==14,"breach isolates only its quarter allocation");
   broken.Block.IsFunctional=true;broken.Block.EntityId=99;broken.Node.Id=99;ThermalSession.Blocks.Remove(10);ThermalSession.Blocks.Add(99,broken);
@@ -752,7 +769,7 @@ class ThermalBlock {
  internal Block Block,Entity;
  internal ReactorBlock Generator;
  internal ThermalModel Spec;
- internal ThermalStore Store=new ThermalStore();
+ internal ThermalStore Store=new ThermalStore{Radiator=new ThermalRadiatorState()};
  internal ThermalEndpoint Node;
  internal ThermalBlock RadiatorBase;
  internal int CircuitRevision;
@@ -768,10 +785,12 @@ class ThermalBlock {
  internal ThermalOutputGrant OutputGrant;
  internal bool CoolingConnected,CoolingPowered;
  internal double RotorLoad,RotorHotC,OutputGrantMW,CoolingRejectedMW;
- internal ThermalUnit Unit(){return new ThermalUnit{Id=Block.EntityId,Kind=Spec.Kind,Grade=Spec.Grade,RatingMW=Spec.RatingMW,CoolingMW=Spec.CoolingMW};}
- internal ThermalEndpoint Endpoint(long owner){Node.Healthy=HardwareReady;Node.Revision=CircuitRevision;return Node;}
+ internal bool IsCooling {get{return Spec.Kind==ThermalKind.AirCooler || Spec.Kind==ThermalKind.Radiator || Spec.Kind==ThermalKind.HullRadiator || Spec.Kind==ThermalKind.RadiatorPanel;}}
+ internal ThermalUnit Unit(){return new ThermalUnit{Id=Block.EntityId,Kind=Spec.Kind,Grade=Spec.Grade,RatingMW=Spec.RatingMW,CoolingMW=Healthy?Spec.CoolingMW:0};}
+ internal ThermalEndpoint Endpoint(long owner){Node.Healthy=CircuitReady;Node.Revision=CircuitRevision;return Node;}
  // PRODUCTION_BLOCK_CHECKS
 }
+static class ThermalPipeJoint {internal static List<ThermalEndpoint> Snapshot(long owner){return new List<ThermalEndpoint>();}}
 class ThermalSession {
  internal static Dictionary<long,ThermalBlock> Blocks=new Dictionary<long,ThermalBlock>();
  internal static Dictionary<long,ThermalCircuitCache> circuitGraphs=new Dictionary<long,ThermalCircuitCache>();

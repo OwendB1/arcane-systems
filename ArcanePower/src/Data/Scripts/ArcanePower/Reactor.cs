@@ -87,7 +87,8 @@ namespace ArcanePower
                 {
                     // A restored critical core must keep its independent fuse
                     // even while native controller discovery is pending.
-                    if (MyAPIGateway.Multiplayer.IsServer) UpdateCriticalCore();
+                    if (MyAPIGateway.Multiplayer.IsServer)
+                    { UpdateCriticalCore(); TryReleaseFailedHousing(); }
                     if (initializationFrames <= 2)
                     {
                         CheckVentRoute();

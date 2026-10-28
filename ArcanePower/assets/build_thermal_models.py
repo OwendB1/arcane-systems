@@ -269,6 +269,10 @@ def pipe_frame(p):
 
 
 def build_base(name):
+    if name == 'Hull radiator':
+        return runpy.run_path(str(ROOT/'assets/build_hull_radiator.py'))['build']()
+    if name in CONTRACT['PIPE_ROTORS']:
+        return runpy.run_path(str(ROOT/'assets/build_pipe_rotor.py'))['build'](name)
     if name not in CONTRACT['RUNTIME']:
         raise ValueError('No current block builder for '+name)
     if 'mirrored' in name:
@@ -333,7 +337,7 @@ def build_bare_pipe(name):
     p.ports = json.loads(source['ports'])
     owners = ('thermal_support', 'thermal_decal_support', 'thermal_marking_support',
               'thermal_seated_on', 'thermal_support_space')
-    removed = {o.name for o in source.objects if o.get('interface_type') or any(
+    removed = {o.name for o in source.objects if o.get('interface_type') or o.get('thermal_pipe_casing') or any(
         term in o.name.lower() for term in ('pipe cage', 'pipe base mounting shoe',
                                            'flange load web', 'flange load gusset',
                                            'status bezel', 'status lens'))}
@@ -364,7 +368,7 @@ def build_bare_pipe(name):
                 obj[key] = renamed[obj[key]]
     p.finish()
     for key, value in source_scene.items():
-        if key.startswith('thermal_') and key not in ('thermal_model',):
+        if key.startswith('thermal_') and key not in ('thermal_model', 'thermal_enclosed_revision'):
             p.scene[key] = value
     p.scene['thermal_variant_of'] = base
     p.scene['thermal_bare_revision'] = 1

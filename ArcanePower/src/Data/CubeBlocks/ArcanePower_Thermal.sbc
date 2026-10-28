@@ -1,6 +1,271 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_ReactorDefinition">
+      <Id>
+        <TypeId>Reactor</TypeId>
+        <SubtypeId>ArcanePower_Thermal_BraytonTrain</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Turbine</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrain.dds</Icon>
+      <Description>OUTPUT
+3.5 GW electrical ceiling per turbine.
+Helion: 3.5 GW electrical and cooling load per circuit; 14 GW across four.
+Aether: 1 GW electrical and cooling load per circuit; 4 GW across four.
+Brayton: flat 80% fuel conversion. Cooling load equals delivered electricity.
+
+FUELS
+T1/T2 fuels only; T3 Empyrean requires upgraded turbines.
+
+INSTALLATION
+2 wide x 2 high x 5 long large-grid turbine/compressor.
+One lower-cell duplex H/C socket; mirrored versions move it to the opposite side.
+
+CIRCUIT
+Connect exactly one turbine and cooling per reactor manifold.
+Keep the four circuits separate; each receives up to 25% of reactor heat.
+The reactor supplies CO2 internally.
+Running auxiliaries are included in conversion efficiency.
+Keep reactor auxiliary power available for active coolers during cooldown.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="5" y="2" z="2" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrain_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="60" />
+        <Component Subtype="Construction" Count="30" />
+        <Component Subtype="LargeTube" Count="15" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_BraytonTrain</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
+      <MaxPowerOutput>3500</MaxPowerOutput>
+      <InventorySize>
+        <X>2</X>
+        <Y>1</Y>
+        <Z>1</Z>
+      </InventorySize>
+      <InventoryFillFactorMin>0.0005</InventoryFillFactorMin>
+      <InventoryFillFactorMax>0.001</InventoryFillFactorMax>
+      <FuelPullAmountFromConveyorInMinutes>10.0</FuelPullAmountFromConveyorInMinutes>
+      <FuelInfos />
+      <PrimarySound />
+      <DamageEffectName>Damage_Reactor_Damaged</DamageEffectName>
+      <DamagedSound>ParticleReactor</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>80</PCU>
+      <IsAirTight>false</IsAirTight>
+      <TieredUpdateTimes>
+        <unsignedInt>900</unsignedInt>
+        <unsignedInt>1800</unsignedInt>
+        <unsignedInt>3600</unsignedInt>
+      </TieredUpdateTimes>
+      <TargetingGroups>
+        <string>PowerSystems</string>
+      </TargetingGroups>
+      <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrain_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrain_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrain_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_ReactorDefinition">
+      <Id>
+        <TypeId>Reactor</TypeId>
+        <SubtypeId>ArcanePower_Thermal_BraytonTrainUpgraded</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Turbine Upgraded</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainUpgraded.dds</Icon>
+      <Description>OUTPUT
+Up to 50 GW electrical per turbine; Helion 40 GW / Empyrean 200 GW across four.
+Brayton: flat 80% fuel conversion. Cooling load equals delivered electricity.
+
+FUELS
+Compatible with T3 Empyrean heat.
+Requires 20 Aether Residuum.
+
+INSTALLATION
+2 wide x 2 high x 5 long large-grid turbine/compressor.
+One lower-cell duplex H/C socket; mirrored versions move it to the opposite side.
+
+CIRCUIT
+Connect exactly one turbine and cooling per reactor manifold.
+Keep the four circuits separate; each receives up to 25% of reactor heat.
+The reactor supplies CO2 internally.
+Running auxiliaries are included in conversion efficiency.
+Keep reactor auxiliary power available for active coolers during cooldown.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="5" y="2" z="2" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainUpgraded_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="60" />
+        <Component Subtype="Construction" Count="30" />
+        <Component Subtype="LargeTube" Count="15" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+        <Component Subtype="ArcaneAetherResiduum" Count="20" />
+      </Components>
+      <CriticalComponent Subtype="ArcaneAetherResiduum" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_BraytonTrainUpgraded</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
+      <MaxPowerOutput>50000</MaxPowerOutput>
+      <InventorySize>
+        <X>2</X>
+        <Y>1</Y>
+        <Z>1</Z>
+      </InventorySize>
+      <InventoryFillFactorMin>0.0005</InventoryFillFactorMin>
+      <InventoryFillFactorMax>0.001</InventoryFillFactorMax>
+      <FuelPullAmountFromConveyorInMinutes>10.0</FuelPullAmountFromConveyorInMinutes>
+      <FuelInfos />
+      <PrimarySound />
+      <DamageEffectName>Damage_Reactor_Damaged</DamageEffectName>
+      <DamagedSound>ParticleReactor</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>80</PCU>
+      <IsAirTight>false</IsAirTight>
+      <TieredUpdateTimes>
+        <unsignedInt>900</unsignedInt>
+        <unsignedInt>1800</unsignedInt>
+        <unsignedInt>3600</unsignedInt>
+      </TieredUpdateTimes>
+      <TargetingGroups>
+        <string>PowerSystems</string>
+      </TargetingGroups>
+      <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainUpgraded_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_AtmosphericCooler</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Atmospheric cooler</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCooler.dds</Icon>
+      <Description>5 GW ideal heat rejection per unit/panel.
+
+INSTALLATION
+Airtight hull casing, rear manifold.
+Keep 2.5 m clear beyond both exhaust fans.
+Requires reactor auxiliary power for active cooling.
+
+ENVIRONMENT
+Zero cooling in vacuum; full rating at 1 atmosphere.
+Half-clear exhaust gives 25% cooling; blocked gives none.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="2" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="36" />
+        <Component Subtype="Construction" Count="18" />
+        <Component Subtype="LargeTube" Count="9" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_AtmosphericCooler</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>30</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_SpaceRadiator</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Radiator rotor base</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiator.dds</Icon>
+      <Description>Airtight radiator rotor base.
+
+INSTALLATION
+Airtight 1x1x1 hull mount with a bottom duplex socket.
+Automatic edge-on sun tracking. The base provides no cooling.
+
+PANELS
+Stack up to three separate panels on the top shaft coupling.
+Match Up; any yaw works. Mixed tiers add their own cooling.
+Keep both panel faces exposed to space.
+Grind either panel face to remove a section.
+
+ENVIRONMENT
+Shade or edge-on: 100% cooling. Full sun: 50%.
+Angle, shade and weather follow solar-panel exposure.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_SpaceRadiator</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>30</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+    </Definition>
     <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
       <Id>
         <TypeId>UpgradeModule</TypeId>
@@ -9,7 +274,8 @@
       <DisplayName>Arcane Straight Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraight.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -18,7 +284,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -38,11 +304,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -56,7 +322,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Elbow Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbow.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -65,7 +332,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -85,11 +352,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -103,7 +370,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Riser Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiser.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -112,7 +380,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -132,11 +400,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -150,7 +418,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Tee Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTee.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -159,7 +428,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -179,11 +448,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -197,7 +466,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Cross Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCross.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -206,7 +476,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -226,11 +496,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -244,7 +514,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Roll adapter Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapter.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -253,7 +524,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -273,11 +544,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -291,7 +562,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane End cap Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCap.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -300,7 +572,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -320,11 +592,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -363,7 +635,7 @@ Normal Stop does not latch. Stop and cool before changing mode.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="3" z="5" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="2400" />
         <Component Subtype="Construction" Count="1000" />
@@ -430,9 +702,9 @@ Normal Stop does not latch. Stop and cool before changing mode.</Description>
         <MountPoint Side="Right" StartX="2" EndX="3" StartY="0" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_2749aa682eba/APT_ReactorHousing_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_ReactorHousing_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -445,6 +717,7 @@ Normal Stop does not latch. Stop and cool before changing mode.</Description>
       <DisplayName>Arcane Reactor adapter Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryReactorAdapter.dds</Icon>
       <Description>170 mm reactor offset adapter.
+Fully enclosed, airtight on all six faces.
 
 The offset end connects only to the Arcane Reactor vessel.
 Use the opposite end for normal duplex pipes.
@@ -455,7 +728,7 @@ Keep each reactor manifold circuit separate and cap unused pipe mouths.</Descrip
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapter_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapter_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -475,11 +748,11 @@ Keep each reactor manifold circuit separate and cap unused pipe mouths.</Descrip
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapter_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapter_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapter_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapter_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -493,7 +766,7 @@ Keep each reactor manifold circuit separate and cap unused pipe mouths.</Descrip
       <DisplayName>Arcane Straight Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraightBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -502,7 +775,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -524,9 +797,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -540,7 +813,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Elbow Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -549,7 +822,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -571,9 +844,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -587,7 +860,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Riser Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiserBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -596,7 +869,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -618,9 +891,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -634,7 +907,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Tee Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTeeBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -643,7 +916,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -665,9 +938,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -681,7 +954,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Cross Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCrossBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -690,7 +963,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -712,9 +985,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -728,7 +1001,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Roll adapter Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapterBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -737,7 +1010,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -759,9 +1032,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -775,7 +1048,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane End cap Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCapBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -784,7 +1057,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -806,9 +1079,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -832,7 +1105,7 @@ Keep each reactor manifold circuit separate and cap unused pipe mouths.</Descrip
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapterBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapterBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -854,68 +1127,13 @@ Keep each reactor manifold circuit separate and cap unused pipe mouths.</Descrip
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapterBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapterBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryReactorAdapterBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapterBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapterBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryReactorAdapterBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
       <BuildTimeSeconds>8</BuildTimeSeconds>
-    </Definition>
-    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
-      <Id>
-        <TypeId>UpgradeModule</TypeId>
-        <SubtypeId>ArcanePower_Thermal_SpaceRadiator</SubtypeId>
-      </Id>
-      <DisplayName>Arcane Space radiator</DisplayName>
-      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiator.dds</Icon>
-      <Description>2 GW ideal heat rejection per unit/panel.
-
-INSTALLATION
-Bottom socket; automatic edge-on sun tracking.
-Keep both faces exposed to space.
-
-EXTENSIONS
-Stack up to two panels on the top shaft coupling.
-Match Up; any yaw works. Mixed tiers add their own cooling.
-Grind either panel face to remove a section.
-
-ENVIRONMENT
-Shade or edge-on: 100% cooling. Full sun: 50%.
-Angle, shade and weather follow solar-panel exposure.</Description>
-      <CubeSize>Large</CubeSize>
-      <BlockTopology>TriangleMesh</BlockTopology>
-      <Size x="3" y="3" z="3" />
-      <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M.mwm</Model>
-      <Components>
-        <Component Subtype="SteelPlate" Count="54" />
-        <Component Subtype="Construction" Count="27" />
-        <Component Subtype="LargeTube" Count="13" />
-        <Component Subtype="Motor" Count="12" />
-        <Component Subtype="Computer" Count="15" />
-        <Component Subtype="SteelPlate" Count="4" />
-      </Components>
-      <CriticalComponent Subtype="Computer" Index="0" />
-      <BlockPairName>ArcanePower_Thermal_SpaceRadiator</BlockPairName>
-      <EdgeType>Light</EdgeType>
-      <Upgrades />
-      <PrimarySound />
-      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
-      <DamagedSound>ParticleElectrical</DamagedSound>
-      <EmissiveColorPreset>Default</EmissiveColorPreset>
-      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
-      <DestroySound>WepSmallWarheadExpl</DestroySound>
-      <PCU>30</PCU>
-      <IsAirTight>false</IsAirTight>
-      <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M_BS3.mwm" />
-      </BuildProgressModels>
-      <Public>true</Public>
-      <AvailableInSurvival>true</AvailableInSurvival>
-      <BuildTimeSeconds>40</BuildTimeSeconds>
     </Definition>
     <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
       <Id>
@@ -927,10 +1145,10 @@ Angle, shade and weather follow solar-panel exposure.</Description>
       <Description>2 GW ideal heat rejection per unit/panel.
 
 INSTALLATION
-Stack directly above a radiator or its first extension.
+Stack directly above a rotor base or the preceding panel.
 Aim at the top shaft coupling on the same grid.
 Match the base Up axis; any yaw works. Panels align automatically.
-Maximum two extensions; unattached panels provide no cooling.
+Maximum three panels per base; unattached panels provide no cooling.
 Grind either panel face to remove a section.
 
 ENVIRONMENT
@@ -939,7 +1157,7 @@ Shade or edge-on: 100% cooling. Full sun: 50%.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="2" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="36" />
         <Component Subtype="Construction" Count="18" />
@@ -961,222 +1179,13 @@ Shade or edge-on: 100% cooling. Full sun: 50%.</Description>
       <PCU>30</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
       <BuildTimeSeconds>40</BuildTimeSeconds>
-    </Definition>
-    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
-      <Id>
-        <TypeId>UpgradeModule</TypeId>
-        <SubtypeId>ArcanePower_Thermal_AtmosphericCooler</SubtypeId>
-      </Id>
-      <DisplayName>Arcane Atmospheric cooler</DisplayName>
-      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_AtmosphericCooler.dds</Icon>
-      <Description>5 GW ideal heat rejection per unit/panel.
-
-INSTALLATION
-Airtight hull casing, rear manifold.
-Keep 2.5 m clear beyond both exhaust fans.
-Requires reactor auxiliary power for active cooling.
-
-ENVIRONMENT
-Zero cooling in vacuum; full rating at 1 atmosphere.
-Half-clear exhaust gives 25% cooling; blocked gives none.</Description>
-      <CubeSize>Large</CubeSize>
-      <BlockTopology>TriangleMesh</BlockTopology>
-      <Size x="3" y="3" z="2" />
-      <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M.mwm</Model>
-      <Components>
-        <Component Subtype="SteelPlate" Count="36" />
-        <Component Subtype="Construction" Count="18" />
-        <Component Subtype="LargeTube" Count="9" />
-        <Component Subtype="Motor" Count="12" />
-        <Component Subtype="Computer" Count="15" />
-        <Component Subtype="SteelPlate" Count="4" />
-      </Components>
-      <CriticalComponent Subtype="Computer" Index="0" />
-      <BlockPairName>ArcanePower_Thermal_AtmosphericCooler</BlockPairName>
-      <EdgeType>Light</EdgeType>
-      <Upgrades />
-      <PrimarySound />
-      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
-      <DamagedSound>ParticleElectrical</DamagedSound>
-      <EmissiveColorPreset>Default</EmissiveColorPreset>
-      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
-      <DestroySound>WepSmallWarheadExpl</DestroySound>
-      <PCU>30</PCU>
-      <IsAirTight>true</IsAirTight>
-      <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M_BS3.mwm" />
-      </BuildProgressModels>
-      <Public>true</Public>
-      <AvailableInSurvival>true</AvailableInSurvival>
-      <BuildTimeSeconds>40</BuildTimeSeconds>
-    </Definition>
-    <Definition xsi:type="MyObjectBuilder_ReactorDefinition">
-      <Id>
-        <TypeId>Reactor</TypeId>
-        <SubtypeId>ArcanePower_Thermal_BraytonTrain</SubtypeId>
-      </Id>
-      <DisplayName>Arcane Turbine</DisplayName>
-      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrain.dds</Icon>
-      <Description>OUTPUT
-3.5 GW electrical ceiling per turbine.
-Helion: 3.5 GW electrical and cooling load per circuit; 14 GW across four.
-Aether: 1 GW electrical and cooling load per circuit; 4 GW across four.
-Brayton: flat 80% fuel conversion. Cooling load equals delivered electricity.
-
-FUELS
-T1/T2 fuels only; T3 Empyrean requires upgraded turbines.
-
-INSTALLATION
-2 wide x 2 high x 5 long large-grid turbine/compressor.
-One lower-cell duplex H/C socket; mirrored versions move it to the opposite side.
-
-CIRCUIT
-Connect exactly one turbine and cooling per reactor manifold.
-Keep the four circuits separate; each receives up to 25% of reactor heat.
-The reactor supplies CO2 internally.
-Running auxiliaries are included in conversion efficiency.
-Keep reactor auxiliary power available for active coolers during cooldown.</Description>
-      <CubeSize>Large</CubeSize>
-      <BlockTopology>TriangleMesh</BlockTopology>
-      <Size x="5" y="2" z="2" />
-      <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M.mwm</Model>
-      <Components>
-        <Component Subtype="SteelPlate" Count="60" />
-        <Component Subtype="Construction" Count="30" />
-        <Component Subtype="LargeTube" Count="15" />
-        <Component Subtype="Motor" Count="12" />
-        <Component Subtype="Computer" Count="15" />
-        <Component Subtype="SteelPlate" Count="4" />
-      </Components>
-      <CriticalComponent Subtype="Computer" Index="0" />
-      <BlockPairName>ArcanePower_Thermal_BraytonTrain</BlockPairName>
-      <EdgeType>Light</EdgeType>
-      <BuildTimeSeconds>40</BuildTimeSeconds>
-      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>3500</MaxPowerOutput>
-      <InventorySize>
-        <X>2</X>
-        <Y>1</Y>
-        <Z>1</Z>
-      </InventorySize>
-      <InventoryFillFactorMin>0.0005</InventoryFillFactorMin>
-      <InventoryFillFactorMax>0.001</InventoryFillFactorMax>
-      <FuelPullAmountFromConveyorInMinutes>10.0</FuelPullAmountFromConveyorInMinutes>
-      <FuelInfos />
-      <PrimarySound />
-      <DamageEffectName>Damage_Reactor_Damaged</DamageEffectName>
-      <DamagedSound>ParticleReactor</DamagedSound>
-      <EmissiveColorPreset>Default</EmissiveColorPreset>
-      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
-      <DestroySound>WepSmallWarheadExpl</DestroySound>
-      <PCU>80</PCU>
-      <IsAirTight>false</IsAirTight>
-      <TieredUpdateTimes>
-        <unsignedInt>900</unsignedInt>
-        <unsignedInt>1800</unsignedInt>
-        <unsignedInt>3600</unsignedInt>
-      </TieredUpdateTimes>
-      <TargetingGroups>
-        <string>PowerSystems</string>
-      </TargetingGroups>
-      <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
-      <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrain_M_BS3.mwm" />
-      </BuildProgressModels>
-      <Public>true</Public>
-      <AvailableInSurvival>true</AvailableInSurvival>
-    </Definition>
-    <Definition xsi:type="MyObjectBuilder_ReactorDefinition">
-      <Id>
-        <TypeId>Reactor</TypeId>
-        <SubtypeId>ArcanePower_Thermal_BraytonTrainUpgraded</SubtypeId>
-      </Id>
-      <DisplayName>Arcane Turbine Upgraded</DisplayName>
-      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainUpgraded.dds</Icon>
-      <Description>OUTPUT
-Up to 50 GW electrical per turbine; Helion 40 GW / Empyrean 200 GW across four.
-Brayton: flat 80% fuel conversion. Cooling load equals delivered electricity.
-
-FUELS
-Compatible with T3 Empyrean heat.
-Requires 20 Aether Residuum.
-
-INSTALLATION
-2 wide x 2 high x 5 long large-grid turbine/compressor.
-One lower-cell duplex H/C socket; mirrored versions move it to the opposite side.
-
-CIRCUIT
-Connect exactly one turbine and cooling per reactor manifold.
-Keep the four circuits separate; each receives up to 25% of reactor heat.
-The reactor supplies CO2 internally.
-Running auxiliaries are included in conversion efficiency.
-Keep reactor auxiliary power available for active coolers during cooldown.</Description>
-      <CubeSize>Large</CubeSize>
-      <BlockTopology>TriangleMesh</BlockTopology>
-      <Size x="5" y="2" z="2" />
-      <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M.mwm</Model>
-      <Components>
-        <Component Subtype="SteelPlate" Count="60" />
-        <Component Subtype="Construction" Count="30" />
-        <Component Subtype="LargeTube" Count="15" />
-        <Component Subtype="Motor" Count="12" />
-        <Component Subtype="Computer" Count="15" />
-        <Component Subtype="SteelPlate" Count="4" />
-        <Component Subtype="ArcaneAetherResiduum" Count="20" />
-      </Components>
-      <CriticalComponent Subtype="ArcaneAetherResiduum" Index="0" />
-      <BlockPairName>ArcanePower_Thermal_BraytonTrainUpgraded</BlockPairName>
-      <EdgeType>Light</EdgeType>
-      <BuildTimeSeconds>40</BuildTimeSeconds>
-      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>50000</MaxPowerOutput>
-      <InventorySize>
-        <X>2</X>
-        <Y>1</Y>
-        <Z>1</Z>
-      </InventorySize>
-      <InventoryFillFactorMin>0.0005</InventoryFillFactorMin>
-      <InventoryFillFactorMax>0.001</InventoryFillFactorMax>
-      <FuelPullAmountFromConveyorInMinutes>10.0</FuelPullAmountFromConveyorInMinutes>
-      <FuelInfos />
-      <PrimarySound />
-      <DamageEffectName>Damage_Reactor_Damaged</DamageEffectName>
-      <DamagedSound>ParticleReactor</DamagedSound>
-      <EmissiveColorPreset>Default</EmissiveColorPreset>
-      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
-      <DestroySound>WepSmallWarheadExpl</DestroySound>
-      <PCU>80</PCU>
-      <IsAirTight>false</IsAirTight>
-      <TieredUpdateTimes>
-        <unsignedInt>900</unsignedInt>
-        <unsignedInt>1800</unsignedInt>
-        <unsignedInt>3600</unsignedInt>
-      </TieredUpdateTimes>
-      <TargetingGroups>
-        <string>PowerSystems</string>
-      </TargetingGroups>
-      <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
-      <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainUpgraded_M_BS3.mwm" />
-      </BuildProgressModels>
-      <Public>true</Public>
-      <AvailableInSurvival>true</AvailableInSurvival>
     </Definition>
     <Definition xsi:type="MyObjectBuilder_ReactorDefinition">
       <Id>
@@ -1208,7 +1217,7 @@ Keep reactor auxiliary power available for active coolers during cooldown.</Desc
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMir_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -1250,9 +1259,9 @@ Keep reactor auxiliary power available for active coolers during cooldown.</Desc
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMir_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMir_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMir_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMir_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1286,7 +1295,7 @@ Keep reactor auxiliary power available for active coolers during cooldown.</Desc
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="5" y="2" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMirUpgraded_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="60" />
         <Component Subtype="Construction" Count="30" />
@@ -1329,12 +1338,193 @@ Keep reactor auxiliary power available for active coolers during cooldown.</Desc
       </TargetingGroups>
       <FuelProductionToCapacityMultiplier>3600</FuelProductionToCapacityMultiplier>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_f0a29e82270f/APT_BraytonTrainMirUpgraded_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMirUpgraded_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMirUpgraded_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_BraytonTrainMirUpgraded_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_MotorAdvancedStatorDefinition">
+      <Id>
+        <TypeId>MotorAdvancedStator</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PipeRotor</SubtypeId>
+      </Id>
+      <Public>true</Public>
+      <DisplayName>Arcane Pipe rotor</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PipeRotor.dds</Icon>
+      <Description>Sealed Arcane duplex pipe rotary union.
+Native advanced rotor: its matching pipe head creates a real subgrid.
+Connect H/C underneath the base and above the head.
+Rotor displacement adjusts the casing gap from 10 to 30 cm (20 cm at zero).
+Weld both parts fully; detaching either side breaks the thermal circuit.
+The stationary 1x1x1 casing seals the hull even without a head.
+Oxygen rooms do not connect across grids. Keep the head sweep clear.
+For automatic radiator tracking without a subgrid, use the radiator rotor base.</Description>
+      <CubeSize>Large</CubeSize>
+      <GuiVisible>true</GuiVisible>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotor_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotor_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotor_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotor_M_BS3.mwm" />
+      </BuildProgressModels>
+      <BlockPairName>ArcanePower_Thermal_PipeRotor</BlockPairName>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+      <PrimarySound>BlockRotor</PrimarySound>
+      <ResourceSinkGroup>Utility</ResourceSinkGroup>
+      <RequiredPowerInput>0.002</RequiredPowerInput>
+      <MaxForceMagnitude>1000000000</MaxForceMagnitude>
+      <DangerousTorqueThreshold>33600000</DangerousTorqueThreshold>
+      <RotorPart>ArcanePower_Thermal_PipeRotorHead</RotorPart>
+      <RotorDisplacementMin>-0.1</RotorDisplacementMin>
+      <RotorDisplacementMax>0.1</RotorDisplacementMax>
+      <RotorDisplacementMinSmall>-0.1</RotorDisplacementMinSmall>
+      <RotorDisplacementMaxSmall>0.1</RotorDisplacementMaxSmall>
+      <RotorDisplacementInModel>0</RotorDisplacementInModel>
+      <DamageEffectName>Damage_HeavyMech_Damaged</DamageEffectName>
+      <DamagedSound>ParticleHeavyMech</DamagedSound>
+      <SafetyDetach>5</SafetyDetach>
+      <SafetyDetachMax>5</SafetyDetachMax>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <RotorType>Rotor</RotorType>
+      <PCU>30</PCU>
+      <IsAirTight>true</IsAirTight>
+      <ForbiddenTopPartSubtypes>
+        <SubtypeId>LargeHingeHead</SubtypeId>
+        <SubtypeId>MediumHingeHead</SubtypeId>
+        <SubtypeId>SmallHingeHead</SubtypeId>
+      </ForbiddenTopPartSubtypes>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <MountPoints>
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+    </Definition>
+    <Definition>
+      <Id>
+        <TypeId>MotorAdvancedRotor</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PipeRotorHead</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Pipe rotor head</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PipeRotorHead.dds</Icon>
+      <Description>Sealed Arcane duplex pipe rotary union.
+Native advanced rotor: its matching pipe head creates a real subgrid.
+Connect H/C underneath the base and above the head.
+Rotor displacement adjusts the casing gap from 10 to 30 cm (20 cm at zero).
+Weld both parts fully; detaching either side breaks the thermal circuit.
+The stationary 1x1x1 casing seals the hull even without a head.
+Oxygen rooms do not connect across grids. Keep the head sweep clear.
+For automatic radiator tracking without a subgrid, use the radiator rotor base.</Description>
+      <Public>true</Public>
+      <CubeSize>Large</CubeSize>
+      <GuiVisible>true</GuiVisible>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotorHead_M.mwm</Model>
+      <UseModelIntersection>true</UseModelIntersection>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotorHead_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotorHead_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_PipeRotorHead_M_BS3.mwm" />
+      </BuildProgressModels>
+      <DamageEffectName>Damage_HeavyMech_Damaged</DamageEffectName>
+      <DamagedSound>ParticleHeavyMech</DamagedSound>
+      <BlockPairName>ArcanePower_Thermal_PipeRotorHead</BlockPairName>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+      <PCU>30</PCU>
+      <IsAirTight>true</IsAirTight>
+      <MechanicalTopInitialPlacementOffset x="0" y="0" z="0" />
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <MountPoints>
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Front" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="1" EndY="1" />
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="1" EndY="1" />
+      </MountPoints>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_HullRadiator</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Hull radiator</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_HullRadiator.dds</Icon>
+      <Description>1 GW ideal heat rejection.
+Fixed 1 deep x 2 high x 3 wide airtight hull backing.
+Recessed front graphite face; keep it exposed to space.
+Daisy-chain matching radiator edges on all four sides.
+Normal H/C pipes connect at the lower rear socket.
+Hull sockets self-seal when a connected radiator is removed.
+Failed radiators keep the pipe seal but lose cooling. Keep reactor circuits separate.
+Single exposed face: half the two-sided panel rating. No sun tracking.
+Shade: 100% cooling; front in full sun: 50%.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="2" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="12" />
+        <Component Subtype="Construction" Count="6" />
+        <Component Subtype="LargeTube" Count="3" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_HullRadiator</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>30</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
     </Definition>
     <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
       <Id>
@@ -1360,7 +1550,7 @@ Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="3" z="2" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="36" />
         <Component Subtype="Construction" Count="18" />
@@ -1383,9 +1573,9 @@ Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <PCU>30</PCU>
       <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_2efd04f1e544/APT_AtmosphericCooler_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_AtmosphericCooler_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1396,17 +1586,18 @@ Requires 10 Aether Residuum recovered from T1 fuel.</Description>
         <TypeId>UpgradeModule</TypeId>
         <SubtypeId>ArcanePower_Thermal_SpaceRadiatorUpgraded</SubtypeId>
       </Id>
-      <DisplayName>Arcane Space radiator upgraded</DisplayName>
+      <DisplayName>Arcane Radiator rotor base upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_SpaceRadiatorUpgraded.dds</Icon>
-      <Description>20 GW ideal heat rejection per unit/panel.
+      <Description>Airtight radiator rotor base.
 
 INSTALLATION
-Bottom socket; automatic edge-on sun tracking.
-Keep both faces exposed to space.
+Airtight 1x1x1 hull mount with a bottom duplex socket.
+Automatic edge-on sun tracking. The base provides no cooling.
 
-EXTENSIONS
-Stack up to two panels on the top shaft coupling.
+PANELS
+Stack up to three separate panels on the top shaft coupling.
 Match Up; any yaw works. Mixed tiers add their own cooling.
+Keep both panel faces exposed to space.
 Grind either panel face to remove a section.
 
 ENVIRONMENT
@@ -1417,13 +1608,13 @@ CRAFTING
 Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <CubeSize>Large</CubeSize>
       <BlockTopology>TriangleMesh</BlockTopology>
-      <Size x="3" y="3" z="3" />
+      <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M.mwm</Model>
       <Components>
-        <Component Subtype="SteelPlate" Count="54" />
-        <Component Subtype="Construction" Count="27" />
-        <Component Subtype="LargeTube" Count="13" />
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
         <Component Subtype="Motor" Count="12" />
         <Component Subtype="Computer" Count="15" />
         <Component Subtype="SteelPlate" Count="4" />
@@ -1440,11 +1631,11 @@ Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>30</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_SpaceRadiator_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_413b1b89812e/APT_SpaceRadiator_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1460,10 +1651,10 @@ Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <Description>20 GW ideal heat rejection per unit/panel.
 
 INSTALLATION
-Stack directly above a radiator or its first extension.
+Stack directly above a rotor base or the preceding panel.
 Aim at the top shaft coupling on the same grid.
 Match the base Up axis; any yaw works. Panels align automatically.
-Maximum two extensions; unattached panels provide no cooling.
+Maximum three panels per base; unattached panels provide no cooling.
 Grind either panel face to remove a section.
 
 ENVIRONMENT
@@ -1475,7 +1666,7 @@ Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="2" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="36" />
         <Component Subtype="Construction" Count="18" />
@@ -1498,9 +1689,60 @@ Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <PCU>30</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_24e660488b5a/APT_RadiatorPanel_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_RadiatorPanel_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>40</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_HullRadiatorUpgraded</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Hull radiator upgraded</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_HullRadiatorUpgraded.dds</Icon>
+      <Description>10 GW ideal heat rejection.
+Fixed 1 deep x 2 high x 3 wide airtight hull backing.
+Recessed front graphite face; keep it exposed to space.
+Daisy-chain matching radiator edges on all four sides.
+Normal H/C pipes connect at the lower rear socket.
+Hull sockets self-seal when a connected radiator is removed.
+Failed radiators keep the pipe seal but lose cooling. Keep reactor circuits separate.
+Single exposed face: half the two-sided panel rating. No sun tracking.
+Shade: 100% cooling; front in full sun: 50%.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="2" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="12" />
+        <Component Subtype="Construction" Count="6" />
+        <Component Subtype="LargeTube" Count="3" />
+        <Component Subtype="Motor" Count="12" />
+        <Component Subtype="Computer" Count="15" />
+        <Component Subtype="SteelPlate" Count="4" />
+        <Component Subtype="ArcaneAetherResiduum" Count="10" />
+      </Components>
+      <CriticalComponent Subtype="ArcaneAetherResiduum" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_HullRadiatorUpgraded</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>30</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_HullRadiator_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>true</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1514,7 +1756,8 @@ Requires 10 Aether Residuum recovered from T1 fuel.</Description>
       <DisplayName>Arcane Straight Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraight.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -1523,7 +1766,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1543,11 +1786,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1562,7 +1805,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Elbow Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbow.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -1571,7 +1815,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1591,11 +1835,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1610,7 +1854,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Riser Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiser.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -1619,7 +1864,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1639,11 +1884,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1658,7 +1903,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Tee Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTee.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -1667,7 +1913,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1687,11 +1933,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1706,7 +1952,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Cross Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCross.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -1715,7 +1962,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1735,11 +1982,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1754,7 +2001,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Roll adapter Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapter.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -1763,7 +2011,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1783,11 +2031,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1802,7 +2050,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane End cap Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCap.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -1811,7 +2060,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1831,11 +2080,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1850,7 +2099,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Straight Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraight.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -1859,7 +2109,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1879,11 +2129,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraight_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraight_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1898,7 +2148,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Elbow Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbow.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -1907,7 +2158,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1927,11 +2178,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbow_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbow_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1946,7 +2197,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Riser Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiser.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -1955,7 +2207,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -1975,11 +2227,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiser_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiser_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -1994,7 +2246,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Tee Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTee.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2003,7 +2256,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2023,11 +2276,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTee_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTee_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2042,7 +2295,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Cross Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCross.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2051,7 +2305,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2071,11 +2325,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCross_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCross_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2090,7 +2344,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Roll adapter Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapter.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2099,7 +2354,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2119,11 +2374,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapter_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapter_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2138,7 +2393,8 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane End cap Pipe (Manifold)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCap.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2147,7 +2403,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2167,11 +2423,11 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
       <DestroySound>WepSmallWarheadExpl</DestroySound>
       <PCU>2</PCU>
-      <IsAirTight>false</IsAirTight>
+      <IsAirTight>true</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCap_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCap_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2186,7 +2442,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Straight Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraightBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2195,7 +2451,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2217,9 +2473,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2234,7 +2490,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Elbow Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2243,7 +2499,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2265,9 +2521,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2282,7 +2538,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Riser Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiserBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2291,7 +2547,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2313,9 +2569,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2330,7 +2586,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Tee Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTeeBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2339,7 +2595,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2361,9 +2617,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2378,7 +2634,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Cross Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCrossBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2387,7 +2643,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2409,9 +2665,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2426,7 +2682,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Roll adapter Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapterBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2435,7 +2691,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2457,9 +2713,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2474,7 +2730,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane End cap Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCapBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2483,7 +2739,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2505,9 +2761,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2522,7 +2778,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Straight Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryStraightBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2531,7 +2787,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2553,9 +2809,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryStraightBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryStraightBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2570,7 +2826,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Elbow Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2579,7 +2835,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2601,9 +2857,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryElbowBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryElbowBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2618,7 +2874,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Riser Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiserBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2627,7 +2883,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2649,9 +2905,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRiserBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRiserBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2666,7 +2922,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Tee Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryTeeBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2675,7 +2931,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2697,9 +2953,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryTeeBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryTeeBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2714,7 +2970,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Cross Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCrossBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2723,7 +2979,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2745,9 +3001,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryCrossBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryCrossBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2762,7 +3018,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Roll adapter Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapterBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2771,7 +3027,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2793,9 +3049,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryRollAdapterBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryRollAdapterBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>
@@ -2810,7 +3066,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane End cap Pipe (Bare)</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryEndCapBare.dds</Icon>
       <Description>CO2 supply/return pipe for one independent reactor manifold circuit.
-Keep the circuit on one physical grid.
+Use an Arcane pipe rotor to cross to a subgrid.
 
 Align H to H and C to C.
 Cap unused pipe mouths; a breach closes this circuit at the reactor.
@@ -2819,7 +3075,7 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="1" y="1" z="1" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M.mwm</Model>
+      <Model>Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="6" />
         <Component Subtype="Construction" Count="4" />
@@ -2841,9 +3097,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <PCU>2</PCU>
       <IsAirTight>false</IsAirTight>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS1.mwm" />
-        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS2.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_99b3ac65d8fc/APT_PrimaryEndCapBare_M_BS3.mwm" />
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_7ebca2a08762/APT_PrimaryEndCapBare_M_BS3.mwm" />
       </BuildProgressModels>
       <Public>false</Public>
       <AvailableInSurvival>true</AvailableInSurvival>

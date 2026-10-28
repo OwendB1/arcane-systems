@@ -28,6 +28,38 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def refresh_shared_subparts(replacements):
+    """Repackage inherited prototype subparts without recompiling thermal mains."""
+    path=MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc'
+    tree=ET.parse(path)
+    families={}
+    for node in tree.iter('Model'):
+        if not node.text or not node.text.strip().endswith('.mwm'):continue
+        parent=(MOD/node.text.strip()).parent
+        changed={name:source for name,source in replacements.items()
+                 if (parent/name).is_file() and digest(parent/name)!=digest(source)}
+        if changed:families.setdefault(parent,{}).update(changed)
+    for parent,changed in families.items():
+        bundle={p.name:changed.get(p.name,p) for p in parent.glob('*.mwm')}
+        stamp=hashlib.sha256(b''.join(name.encode()+source.read_bytes()
+                                    for name,source in sorted(bundle.items()))).hexdigest()[:12]
+        target=MOD/'Models/Cubes/large/Thermal'/('thermal_'+stamp)
+        target.mkdir(parents=True,exist_ok=True)
+        for name,source in bundle.items():
+            destination=target/name
+            if destination.exists():assert digest(destination)==digest(source),'Immutable thermal path collision'
+            else:shutil.copy2(source,destination)
+        before=parent.relative_to(MOD).as_posix()+'/'
+        after=target.relative_to(MOD).as_posix()+'/'
+        for node in tree.iter():
+            if node.text and node.text.startswith(before):node.text=after+node.text[len(before):]
+            for key,value in node.attrib.items():
+                if value.startswith(before):node.set(key,after+value[len(before):])
+        print('Refreshed shared thermal subparts:',', '.join(sorted(changed)),after)
+    if families:save(tree.getroot(),path)
+    return len(families)
+
+
 def manifest(additions=False):
     rows=json.loads((STAGING/'sources.json').read_text())
     models={name:spec for name,spec in json.loads((OUT/'models.json').read_text()).items() if name in CONTRACT['PLAYABLE']}
@@ -68,8 +100,8 @@ def compile_all(additions=False):
         assert path.is_file() and path.stat().st_mtime>=(STAGING/(stem+'.fbx')).stat().st_mtime,('Missing/stale MWM',stem)
 
 
-def probe_exe():
-    exe=STAGING/'EnergyModelProbe.exe'
+def probe_exe(folder=STAGING):
+    exe=folder/'EnergyModelProbe.exe'
     subprocess.run(['mcs','-out:'+str(exe),'-r:/usr/lib/mono/4.5/Facades/netstandard.dll',
                     *['-r:'+str(GAME/'Bin64'/(n+'.dll')) for n in ('VRage.Render','VRage.Math','VRage.Library')],
                     str(ROOT/'tools/EnergyModelProbe.cs')],check=True)
@@ -89,9 +121,10 @@ def dummies(exe,path):
             for line in output.splitlines() if (parts:=line.split('\t'))}
 
 
-def definitions(models,mains,revision,additions=False):
+def definitions(models,mains,revision,additions=False,write=True):
     reactor=ET.parse(REACTOR_TEMPLATE).find('CubeBlocks/Definition')
     module=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_ContainmentController.sbc').find('CubeBlocks/Definition')
+    mechanical=ET.parse(GAME/'Content/Data/CubeBlocks/CubeBlocks_Mechanical.sbc').findall('CubeBlocks/Definition')
     root=ET.Element('Definitions');blocks=ET.SubElement(root,'CubeBlocks')
     if additions:
         root=ET.parse(MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc').getroot()
@@ -102,12 +135,29 @@ def definitions(models,mains,revision,additions=False):
     for name,spec in models.items():
         ident=spec['subtype'];is_source=name=='Reactor housing';is_train=name.startswith('Brayton train')
         definition=copy.deepcopy(reactor if is_source or is_train else module)
+        if name in CONTRACT['PIPE_ROTORS']:
+            native='LargeAdvancedStator' if name=='Pipe rotor' else 'LargeAdvancedRotor'
+            definition=copy.deepcopy(next(b for b in mechanical if b.findtext('Id/SubtypeId')==native))
+            definition.find('ModelOffset').attrib.update(x='0',y='0',z='0')
+            set_text(definition,'GuiVisible','true')
+            if name=='Pipe rotor':
+                set_text(definition,'RotorPart',CONTRACT['subtype']('Pipe rotor head'))
+                medium=definition.find('MediumTopPart')
+                if medium is not None:definition.remove(medium)
+                low,high=CONTRACT['PIPE_ROTOR_DISPLACEMENT']
+                for suffix in ('','Small'):
+                    set_text(definition,'RotorDisplacementMin'+suffix,low)
+                    set_text(definition,'RotorDisplacementMax'+suffix,high)
+                set_text(definition,'RotorDisplacementInModel',0)
+            else:
+                # Native hinge attaches the head origin to electric_motor.
+                ET.SubElement(definition,'MechanicalTopInitialPlacementOffset',x='0',y='0',z='0')
         previous=next((b for b in blocks if b.findtext('Id/SubtypeId')==ident),None)
         if previous is None:blocks.append(definition)
         else:
             index=list(blocks).index(previous)
             blocks.remove(previous);blocks.insert(index,definition)
-        typeid='Reactor' if is_source or is_train else 'UpgradeModule'
+        typeid=CONTRACT['PIPE_ROTORS'].get(name,'Reactor' if is_source or is_train else 'UpgradeModule')
         set_text(definition,'Id/TypeId',typeid);set_text(definition,'Id/SubtypeId',ident)
         set_text(definition,'DisplayName','Arcane '+('Reactor' if is_source else name.replace(' / ',' ').replace('CO2','CO₂')))
         if spec.get('variant_of'):
@@ -116,7 +166,6 @@ def definitions(models,mains,revision,additions=False):
         set_text(definition,'BlockPairName',ident)
         set_text(definition,'Model',(revision/(mains[name]+'.mwm')).as_posix())
         set_text(definition,'Public','true');set_text(definition,'AvailableInSurvival','true')
-        if name=='Atmospheric cooler':set_text(definition,'IsAirTight','true')
         size=definition.find('Size');size.attrib.clear();size.attrib.update(zip(('x','y','z'),map(str,spec['cells_se'])))
         if is_source:
             hardware_components(definition)
@@ -127,7 +176,7 @@ def definitions(models,mains,revision,additions=False):
         else:
             if definition.find('Upgrades') is not None:definition.find('Upgrades').clear()
             set_text(definition,'PCU',2 if ' / ' in name else 30)
-            set_text(definition,'PrimarySound','')
+            if name not in CONTRACT['PIPE_ROTORS']:set_text(definition,'PrimarySound','')
         set_text(definition,'Description',description(name))
         if not is_source:
             components=definition.find('Components');components.clear()
@@ -142,6 +191,10 @@ def definitions(models,mains,revision,additions=False):
             set_text(definition,'BuildTimeSeconds',8 if ' / ' in name else 40)
             mounts=definition.find('MountPoints')
             if mounts is not None:definition.remove(mounts)
+            if name in CONTRACT['PIPE_ROTORS']:
+                mounts=ET.SubElement(definition,'MountPoints')
+                for side in ('Left','Right','Front','Back','Bottom' if name=='Pipe rotor' else 'Top'):
+                    ET.SubElement(mounts,'MountPoint',Side=side,StartX='0',StartY='0',EndX='1',EndY='1')
             # Native default full-face mounting permits arbitrary grid orientation;
             # thermal socket compatibility remains the authoritative flow gate.
         stages=definition.find('BuildProgressModels')
@@ -149,10 +202,10 @@ def definitions(models,mains,revision,additions=False):
         stages.clear()
         for i,percent in ((1,'.33'),(2,'.67'),(3,'1.00')):
             ET.SubElement(stages,'Model',BuildPercentUpperBound=percent,File=(revision/(mains[name]+'_BS'+str(i)+'.mwm')).as_posix())
-    write_catalog(root)
+    return write_catalog(root,write=write)
 
 
-def write_catalog(root):
+def write_catalog(root,write=True):
     """One public pipe family, with asset-sharing aliases for saved grids."""
     blocks=root.find('CubeBlocks')
     names={CONTRACT['subtype'](name):name for name in CONTRACT['PLAYABLE']}
@@ -171,6 +224,11 @@ def write_catalog(root):
     assert set(canonical)==set(names), 'Incomplete public thermal catalog'
     for ident,block in canonical.items():
         name=names[ident]
+        base=CONTRACT['COOLER_UPGRADES'].get(name,name)
+        encased_pipe=' / ' in name and name not in CONTRACT['BARE_PIPES']
+        set_text(block,'IsAirTight',str(encased_pipe or base in ('Atmospheric cooler','Space radiator','Hull radiator') or name in CONTRACT['PIPE_ROTORS']).lower())
+        if base=='Space radiator':
+            set_text(block,'DisplayName','Arcane Radiator rotor base'+(' upgraded' if name.endswith('upgraded') else ''))
         if name.startswith('Brayton train'):
             # Keep subtype IDs stable for existing grids and projections.
             set_text(block,'DisplayName','Arcane '+name.replace('Brayton train','Turbine').title())
@@ -193,11 +251,13 @@ def write_catalog(root):
         set_text(block,'Public','false');set_text(block,'GuiVisible','false')
         # Keep survival availability so existing projections can still be welded.
         blocks.append(block)
+    if not write:return root
     save(root,MOD/'Data/CubeBlocks/ArcanePower_Thermal.sbc')
     variant_groups(blocks)
     # Alias icons are no longer referenced; retain their authored PNG sources.
     for alias in CONTRACT['PIPE_ALIASES']:
         (MOD/'Textures/GUI/Icons/ArcanePower/Thermal'/(CONTRACT['subtype'](alias)+'.dds')).unlink(missing_ok=True)
+    return root
 
 
 def trim_native_manifest(report):
@@ -213,6 +273,25 @@ def trim_native_manifest(report):
 
 
 def description(name):
+    if name.startswith('Hull radiator'):
+        return (('10 GW' if name.endswith('upgraded') else '1 GW')+' ideal heat rejection.\n'
+                'Fixed 1 deep x 2 high x 3 wide airtight hull backing.\n'
+                'Recessed front graphite face; keep it exposed to space.\n'
+                'Daisy-chain matching radiator edges on all four sides.\n'
+                'Normal H/C pipes connect at the lower rear socket.\n'
+                'Hull sockets self-seal when a connected radiator is removed.\n'
+                'Failed radiators keep the pipe seal but lose cooling. Keep reactor circuits separate.\n'
+                'Single exposed face: half the two-sided panel rating. No sun tracking.\n'
+                'Shade: 100% cooling; front in full sun: 50%.')
+    if name in CONTRACT['PIPE_ROTORS']:
+        return ('Sealed Arcane duplex pipe rotary union.\n'
+                'Native advanced rotor: its matching pipe head creates a real subgrid.\n'
+                'Connect H/C underneath the base and above the head.\n'
+                'Rotor displacement adjusts the casing gap from 10 to 30 cm (20 cm at zero).\n'
+                'Weld both parts fully; detaching either side breaks the thermal circuit.\n'
+                'The stationary 1x1x1 casing seals the hull even without a head.\n'
+                'Oxygen rooms do not connect across grids. Keep the head sweep clear.\n'
+                'For automatic radiator tracking without a subgrid, use the radiator rotor base.')
     base=CONTRACT['COOLER_UPGRADES'].get(name,name)
     if base in CONTRACT['COOLER_UPGRADES'].values():
         rating='20 GW' if name.endswith('upgraded') else '2 GW'
@@ -225,22 +304,23 @@ def description(name):
                 'ENVIRONMENT\nZero cooling in vacuum; full rating at 1 atmosphere.\n'
                 'Half-clear exhaust gives 25% cooling; blocked gives none.'),
             'Space radiator': (
-                'INSTALLATION\nBottom socket; automatic edge-on sun tracking.\n'
-                'Keep both faces exposed to space.\n\n'
-                'EXTENSIONS\nStack up to two panels on the top shaft coupling.\n'
+                'INSTALLATION\nAirtight 1x1x1 hull mount with a bottom duplex socket.\n'
+                'Automatic edge-on sun tracking. The base provides no cooling.\n\n'
+                'PANELS\nStack up to three separate panels on the top shaft coupling.\n'
                 'Match Up; any yaw works. Mixed tiers add their own cooling.\n'
+                'Keep both panel faces exposed to space.\n'
                 'Grind either panel face to remove a section.\n\n'
                 'ENVIRONMENT\nShade or edge-on: 100% cooling. Full sun: 50%.\n'
                 'Angle, shade and weather follow solar-panel exposure.'),
             'Radiator panel': (
-                'INSTALLATION\nStack directly above a radiator or its first extension.\n'
+                'INSTALLATION\nStack directly above a rotor base or the preceding panel.\n'
                 'Aim at the top shaft coupling on the same grid.\n'
                 'Match the base Up axis; any yaw works. Panels align automatically.\n'
-                'Maximum two extensions; unattached panels provide no cooling.\n'
+                'Maximum three panels per base; unattached panels provide no cooling.\n'
                 'Grind either panel face to remove a section.\n\n'
                 'ENVIRONMENT\nShade or edge-on: 100% cooling. Full sun: 50%.')
         }[base]
-        return rating+' ideal heat rejection per unit/panel.\n\n'+detail+(
+        return ('Airtight radiator rotor base.\n\n' if base=='Space radiator' else rating+' ideal heat rejection per unit/panel.\n\n')+detail+(
             '\n\nCRAFTING\nRequires 10 Aether Residuum recovered from T1 fuel.' if name.endswith('upgraded') else '')
     if name=='Reactor housing':
         return (
@@ -277,14 +357,14 @@ def description(name):
             'Keep reactor auxiliary power available for active coolers during cooldown.')
     if name in ('PRIMARY / Reactor adapter', 'PRIMARY / Reactor adapter bare'):
         return (
-            '170 mm reactor offset adapter.\n\n'
+            '170 mm reactor offset adapter.\n'+('Fully enclosed, airtight on all six faces.\n\n' if not name.endswith(' bare') else '\n')+
             'The offset end connects only to the Arcane Reactor vessel.\n'
             'Use the opposite end for normal duplex pipes.\n\n'
             'Align H with H and C with C.\n'
             'Keep each reactor manifold circuit separate and cap unused pipe mouths.')
     return (
         'CO2 supply/return pipe for one independent reactor manifold circuit.\n'
-        'Keep the circuit on one physical grid.\n\n'
+        'Use an Arcane pipe rotor to cross to a subgrid.\n'+('Fully enclosed, airtight on all six faces.\n\n' if name not in CONTRACT['BARE_PIPES'] else '\n')+
         'Align H to H and C to C.\n'
         'Cap unused pipe mouths; a breach closes this circuit at the reactor.\n'
         'Ordinary conveyors do not replace thermal pipes.')
@@ -304,9 +384,11 @@ def variant_groups(blocks):
         groups.append((key,'Arcane Pipes ('+label+')',
             'Scroll through '+label.lower()+' thermal pipes and fittings. Connect the shared supply/return network; align H/C on every socket face.',subtypes))
     groups.extend([
+        ('PipeRotors','Arcane Pipe Rotors','Sealed native rotor and matching pipe head. The head carries a real subgrid.',
+         ['ArcanePower_Thermal_PipeRotor','ArcanePower_Thermal_PipeRotorHead']),
         ('Cooling','Arcane Radiators and Coolers','Scroll through radiators, extension panels and atmospheric coolers, including upgraded versions.',
          ['ArcanePower_Thermal_'+name for name in ('SpaceRadiator','SpaceRadiatorUpgraded','RadiatorPanel',
-          'RadiatorPanelUpgraded','AtmosphericCooler','AtmosphericCoolerUpgraded')]),
+          'RadiatorPanelUpgraded','HullRadiator','HullRadiatorUpgraded','AtmosphericCooler','AtmosphericCoolerUpgraded')]),
         ('Turbines','Arcane Turbines','Scroll through standard, upgraded and mirrored Brayton turbines.',
          ['ArcanePower_Thermal_BraytonTrain'+suffix for suffix in ('','Upgraded','Mirrored','MirroredUpgraded')])])
     write_block_menu(blocks,'Thermal',groups,MOD)
@@ -371,9 +453,13 @@ def install(additions=False):
                     assert key in actual,('Missing manifold subpart',key)
                     identity=[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
                     assert max(abs(a-b) for a,b in zip(actual[key][0],identity))<1e-5,('Nonidentity manifold rest',key,actual[key])
+        elif name in CONTRACT['PIPE_ROTORS']:
+            key='electric_motor' if name=='Pipe rotor' else 'wheel'
+            expected=[0,CONTRACT['PIPE_ROTOR_HEAD_CENTRE'] if name=='Pipe rotor' else 0,0]
+            assert key in actual and max(abs(a-b) for a,b in zip(actual[key][0][12:15],expected))<1e-5,('Wrong native pipe rotor attachment',name,actual)
         elif name in ('Space radiator','Radiator panel'):
             key='subpart_Thermal_RadiatorPanels'
-            expected=[1,0,0,0,0,1,0,0,0,0,1,0,0,-1.1 if name=='Space radiator' else 0,0,1]
+            expected=[1,0,0,0,0,1,0,0,0,0,1,0,0,1.0 if name=='Space radiator' else 0,0,1]
             assert key in actual and max(abs(a-b) for a,b in zip(actual[key][0],expected))<1e-5,('Wrong radiator pivot',actual)
         elif name.startswith('Brayton train'):
             rotors=json.loads((ROOT/'assets/thermal-rotor-runtime.json').read_text())

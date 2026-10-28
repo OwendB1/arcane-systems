@@ -15,7 +15,7 @@
       </Size>
       <Mass>1</Mass>
       <Volume>2</Volume>
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_ContainmentTile.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_ContainmentTile.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
       <MaxIntegrity>30</MaxIntegrity>
       <DropProbability>0.5</DropProbability>
@@ -44,7 +44,7 @@ Normal shutdown retains tiles; venting discards them.</Description>
       </Size>
       <Mass>1</Mass>
       <Volume>2</Volume>
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_ContainmentTile.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_ContainmentTile.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
       <MaxIntegrity>30</MaxIntegrity>
       <DropProbability>0.5</DropProbability>
@@ -73,7 +73,7 @@ Normal shutdown retains tiles; venting discards them.</Description>
       </Size>
       <Mass>1</Mass>
       <Volume>2</Volume>
-      <Model>Models/Cubes/large/reactor_87e093611a46/ArcanePower_ContainmentTile.mwm</Model>
+      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_ContainmentTile.mwm</Model>
       <PhysicalMaterial>Metal</PhysicalMaterial>
       <MaxIntegrity>30</MaxIntegrity>
       <DropProbability>0.5</DropProbability>

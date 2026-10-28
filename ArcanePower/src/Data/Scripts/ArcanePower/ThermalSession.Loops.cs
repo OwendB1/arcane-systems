@@ -12,12 +12,16 @@ namespace ArcanePower
             if (state.Faulted) source.StopForLoopLoss();
             bool running = source.ThermalCanRun;
             var endpoints = new List<ThermalEndpoint> { source.ThermalEndpoint() };
+            var rotary = ThermalPipeJoint.Snapshot(source.Block.OwnerId);
+            var grids = ThermalNetwork.ConnectedGrids(source.Block.CubeGrid.EntityId, rotary);
             foreach (var machine in machines)
-                if (!machine.Block.Closed && machine.Block.CubeGrid == source.Block.CubeGrid)
+                if (!machine.Block.Closed && grids.Contains(machine.Block.CubeGrid.EntityId))
                     endpoints.Add(machine.Endpoint(source.Block.OwnerId));
             foreach (var other in sources)
-                if (other != source && other.ThermalInitialized && other.Block.CubeGrid == source.Block.CubeGrid)
+                if (other != source && other.ThermalInitialized && grids.Contains(other.Block.CubeGrid.EntityId))
                     endpoints.Add(other.ThermalEndpoint());
+            foreach (var joint in rotary)
+                if (grids.Contains(joint.GridId)) endpoints.Add(joint);
             ThermalCircuitCache graph;
             bool rebuilt = !circuitGraphs.TryGetValue(source.Id, out graph) || !graph.Matches(endpoints);
             var previous = graph;
@@ -97,7 +101,7 @@ namespace ArcanePower
                 foreach (var cooler in bank)
                 {
                     bool air = cooler.Spec.Kind == ThermalKind.AirCooler;
-                    if (!air && cooler.Spec.Kind != ThermalKind.Radiator) continue;
+                    if (!air && cooler.Spec.Kind != ThermalKind.Radiator && cooler.Spec.Kind != ThermalKind.HullRadiator) continue;
                     cooler.CoolingConnected = true;
                     cooler.CoolingPowered = !air || source.ThermalAuxiliaryReady;
                     double potential = cooler.Unit().CoolingMW;

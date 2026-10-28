@@ -63,7 +63,7 @@ fixture = fixture.replace('// PRODUCTION_LOOPS', ''.join(member('ThermalSession.
     + member('ThermalSession.Radiators.cs', 'private static void LinkRadiators()')
     + member('ThermalFlowVisuals.cs', 'private void CapturePlantFlow('))
 fixture = fixture.replace('// PRODUCTION_BLOCK_CHECKS', ''.join(member('ThermalBlock.cs', signature)
-    for signature in ('internal bool HardwareReady', 'internal bool Healthy', 'internal void RecheckCircuitFault()',
+    for signature in ('internal bool HardwareReady', 'internal bool Healthy', 'internal bool CircuitReady', 'internal void RecheckCircuitFault()',
                       'private void WatchCircuitChanges()', 'private void UnwatchCircuitChanges()',
                       'private void CircuitEnabledChanged(', 'private void CircuitStateChanged()', 'internal void AccountOutput()', 'internal void SetOutput('))
     + member('ThermalBlock.Radiator.cs', 'internal void InvalidateRadiatorCooling()'))

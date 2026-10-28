@@ -98,7 +98,11 @@ def render(subtype):
             obj.location = Vector(position)*span
             obj.rotation_euler = (-obj.location).to_track_quat('-Z', 'Y').to_euler()
         if ' / ' in name:
-            if 'Roll adapter' in name:
+            if name not in CONTRACT['BARE_PIPES']:
+                shape=name.split(' / ')[1]
+                badge(scene, {'Straight':'I','Elbow':'L','Riser':'UP','Tee':'T','Cross':'+',
+                              'Roll adapter':'90','End cap':'CAP','Reactor adapter':'R'}[shape], (.8,.9,1), .24)
+            elif 'Roll adapter' in name:
                 badge(scene, '90', (.8, .9, 1), .24)
             elif 'reactor adapter' in name.lower():
                 badge(scene, 'R', (.8, .9, 1), .24)

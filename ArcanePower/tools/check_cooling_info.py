@@ -52,7 +52,8 @@ namespace ArcanePower {
   internal ThermalModel Spec=new ThermalModel();internal ThermalStore Store=new ThermalStore();
   internal ThermalBlock RadiatorBase;internal List<ThermalBlock> RadiatorPanels=new List<ThermalBlock>();
   internal double PanelCoolingMW,CoolingRejectedMW;internal bool CoolingConnected,CoolingPowered=true;double coolingMW,clearExhaust;internal int Samples;
-  internal bool IsRadiator {get{return Spec.Kind==ThermalKind.Radiator || Spec.Kind==ThermalKind.RadiatorPanel;}}
+  internal bool IsRadiator {get{return Spec.Kind==ThermalKind.Radiator || Spec.Kind==ThermalKind.RadiatorPanel || Spec.Kind==ThermalKind.HullRadiator;}}
+  internal bool RadiatorBreached {get{return Spec.Kind==ThermalKind.Radiator && Store.Radiator!=null && RadiatorPanels.Count<Store.Radiator.RequiredPanels;}}
   internal bool Healthy {get{return Block.Enabled && Block.IsFunctional && Block.SlimBlock.BuildLevelRatio>=1 && Fault==null;}}
   internal string Fault {get{return Store.Fault;}}
   private void UpdateEnvironment(){Samples++;}
@@ -78,6 +79,11 @@ namespace ArcanePower {
   static CoolingProbe Block(ThermalKind kind,double rating=1000){return new CoolingProbe{Spec=new ThermalModel{Kind=kind,CoolingMW=rating}};}
   static byte[] Wire(ThermalRotorPacket packet){return MyAPIGateway.Utilities.SerializeToBinary(packet);}
   static void Main(){
+   var hull=Block(ThermalKind.HullRadiator);hull.Store.Radiator=new ThermalRadiatorState{EntityId=1,Exposure=.5,SunIncidence=0};
+   hull.Sample(500,500,0,0);hull.CaptureCooling();
+   Need(hull.Text().Contains("HULL RADIATOR") && hull.Text().Contains("front radiator face"),"fixed hull radiator explains its one exposed face");
+   Need(!hull.Text().Contains("Tracking:") && !hull.Text().Contains("Panel angle:") && !hull.Text().Contains("Panel stack:"),"fixed radiator has no tracking or stack controls");
+   Need(ThermalSession.Eligible(hull) && hull.CaptureCooling().Valid(1),"fixed radiator participates in measured cooling telemetry");
    var air=Block(ThermalKind.AirCooler);Need(air.Text().Contains("Waiting for cooling readings"),"unmeasured state is explicit");
    double capacity=ThermalMath.AirCooling(1000,.5,.5);air.Sample(capacity,capacity,.5,.5);
    air.Store.HotMJ=20;air.Store.WasteMJ=30;
@@ -86,7 +92,7 @@ namespace ArcanePower {
    Need(air.Text().Contains("Efficiency: 12.5%") && air.Text().Contains("125 MW / 1 GW rated"),"capacity includes both density and squared clearance");
    Need(air.Text().Contains("Airflow factor: 25%") && air.Text().Contains("Clear 2.5 m"),"partial blockage explains nonlinear loss");
    Near(measured.AvailableMW,capacity,"display preserves simulation capacity before circulation");
-   air.Block.Enabled=false;air.CaptureCooling();Need(air.Text().Contains("SWITCHED OFF") && air.Text().Contains("Efficiency: 0%"),"disabled cooler is unavailable");
+   air.Block.Enabled=false;air.CaptureCooling();Need(air.Text().Contains("SWITCHED OFF") && air.Text().Contains("Efficiency: 0%") && air.Text().Contains("still seals its pipe connections"),"disabled cooler loses cooling but retains plumbing");
    air.Block.Enabled=true;air.Block.SlimBlock.BuildLevelRatio=.9f;air.CaptureCooling();Need(air.Text().Contains("FINISH WELDING"),"unfinished cooler is explained");
    air.Block.SlimBlock.BuildLevelRatio=1;air.Sample(0,0,0,1);air.CaptureCooling();Need(air.Text().Contains("Requires atmosphere"),"vacuum loss is explained");
    var active=Block(ThermalKind.AirCooler,50000);active.Sample(50000,50000,1,1);
@@ -100,14 +106,18 @@ namespace ArcanePower {
    var thin=Block(ThermalKind.Radiator,10000);thin.Store.Radiator=new ThermalRadiatorState{EntityId=1,Exposure=1};
    double thinCapacity=ThermalRadiators.Cooling(10000,1,.0011,0);thin.Sample(thinCapacity,thinCapacity,.0011,1);thin.CaptureCooling();
    Need(thin.Text().Contains("Air density: 0.1%") && thin.Text().Contains("Ambient cooling factor: 99.9%"),"terminal uses measured density without a full-atmosphere cutoff");
-   var root=Block(ThermalKind.Radiator);var panel=Block(ThermalKind.RadiatorPanel,10000);
+   var empty=Block(ThermalKind.Radiator,0);empty.Store.Radiator=new ThermalRadiatorState{EntityId=1,Panels=0};
+   Need(empty.CaptureCooling().Valid(1) && empty.Text().Contains("Panel stack: 0 / 3") && empty.Text().Contains("Efficiency: 0%"),"empty rotor base has a valid zero-capacity reading");
+   Need(empty.Text().Contains("the base provides no cooling") && !empty.Text().Contains("NaN"),"empty base explains missing panels without dividing by zero");
+   var root=Block(ThermalKind.Radiator,0);var panel=Block(ThermalKind.RadiatorPanel,10000);
+   var first=Block(ThermalKind.RadiatorPanel,1000);first.RadiatorBase=root;root.RadiatorPanels.Add(first);
    root.Store.Radiator=new ThermalRadiatorState{EntityId=1,Exposure=1,SunIncidence=1};
    panel.Store.Radiator=new ThermalRadiatorState{EntityId=2,Exposure=.75};panel.Block.EntityId=2;
    root.RadiatorPanels.Add(panel);panel.RadiatorBase=root;
-   root.Sample(8000,500,0,0);panel.Sample(0,7500,0,0);
+   root.Sample(8000,0,0,0);first.Sample(0,500,0,0);panel.Sample(0,7500,0,0);
    measured=root.CaptureCooling();Near(measured.RatedMW,11000,"mixed panel ratings summed once");
    Near(measured.AvailableMW,8000,"extension counted once in stack capacity");
-   Need(root.Text().Contains("Efficiency: 72.7%") && root.Text().Contains("Base panel: 50% / 500 MW"),"stack efficiency weighted by capacity");
+   Need(root.Text().Contains("Efficiency: 72.7%") && root.Text().Contains("Panel stack: 2 / 3") && !root.Text().Contains("Base panel:"),"stack efficiency weighted by capacity");
    Need(root.Text().Contains("Solar cooling factor: 50%") && root.Text().Contains("Ambient cooling factor: 100%") && root.Text().Contains("Air density: 0%"),"radiator losses and vacuum measurement exposed");
    panel.CaptureCooling();Need(panel.Text().Contains("Efficiency: 75%") && panel.Text().Contains("7.5 GW / 10 GW rated"),"extension shows its own contribution");
    Need(panel.Text().Contains("attached to radiator axis") && root.Samples==2,"extension reads its base's cached environment");
@@ -117,9 +127,11 @@ namespace ArcanePower {
    foreach(var target in new[]{air,root,panel,Block(ThermalKind.Train)})Need(ThermalSession.Eligible(target),"all cooling blocks and shafts have telemetry");
    Need(!ThermalSession.Eligible(Block(ThermalKind.Pipe)),"pipes do not gain cooling broadcasts");
    var packet=ThermalSession.Packet(root);packet.Cooling.Fault=new string('x',256);
+   packet.Radiator.RequiredPanels=3;
    byte[] bytes=Wire(packet);Need(bytes.Length<=1024,"cooling plus radiator snapshot fits existing packet limit");
    var copy=MyAPIGateway.Utilities.SerializeFromBinary<ThermalRotorPacket>(bytes);
    Need(copy.Cooling.Valid(1) && copy.Cooling.Fault.Length==256,"real protobuf preserves cooling fields");
+   Need(copy.Radiator.RequiredPanels==3,"stack connection history reaches clients");
    Near(copy.Cooling.AvailableMW,8000,"protobuf preserves measured capacity");
    var client=Block(ThermalKind.Radiator);ThermalSession.Blocks[1]=client;var receiver=new ThermalSession();
    MyAPIGateway.Multiplayer.IsServer=false;receiver.Receive(bytes,false);

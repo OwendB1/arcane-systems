@@ -18,6 +18,9 @@ namespace ArcanePower
         [ProtoMember(8)] public double SunIncidence;
         [ProtoMember(9)] public long ParentId;
         [ProtoMember(10)] public int Panels = 1;
+        // Tag 11 was hull socket history; retired because those sockets self-seal.
+        // Stacked panels still require replacement after removal.
+        [ProtoMember(12)] public int RequiredPanels;
 
         public bool Valid(long id)
         {
@@ -26,7 +29,8 @@ namespace ArcanePower
                 && ThermalMath.Finite(Target) && Target >= 0 && Target < Math.PI * 2
                 && ThermalMath.Finite(Glow) && Glow >= 0 && Glow <= 1
                 && ThermalMath.Finite(RejectedMW) && RejectedMW >= 0 && RejectedMW <= 300000.001
-                && ParentId >= 0 && Panels >= 1 && Panels <= 3
+                && ParentId >= 0 && Panels >= 0 && Panels <= ThermalRadiators.MaxPanels
+                && RequiredPanels >= 0 && RequiredPanels <= ThermalRadiators.MaxPanels
                 && ThermalMath.Finite(Exposure) && Exposure >= 0 && Exposure <= 1
                 && ThermalMath.Finite(SunIncidence) && SunIncidence >= 0 && SunIncidence <= 1;
         }
@@ -35,13 +39,14 @@ namespace ArcanePower
     public static class ThermalRadiators
     {
         public const string Subpart = "Thermal_RadiatorPanels";
+        public const int MaxPanels = 3;
         public const double Speed = Math.PI / 60; // Three degrees per second.
         public static Vector3D ExtensionCentre(MatrixD root, int index)
-        { return root.Translation + root.Up * (6.25 + 5 * index); }
+        { return root.Translation + root.Up * (3.75 + 5 * index); }
 
         public static bool FitsExtension(MatrixD root, MatrixD panel, int index)
         {
-            return index >= 0 && index < 2
+            return index >= 0 && index < MaxPanels
                 && Vector3D.DistanceSquared(panel.Translation, ExtensionCentre(root, index)) < .0001
                 && Vector3D.Dot(root.Up, panel.Up) > .99999;
         }
@@ -75,7 +80,7 @@ namespace ArcanePower
         public static Matrix Pose(double angle, bool extension = false)
         {
             Matrix pose = Matrix.CreateRotationY((float)angle);
-            pose.Translation = extension ? Vector3.Zero : new Vector3(0, -1.1f, 0);
+            pose.Translation = extension ? Vector3.Zero : new Vector3(0, 1f, 0);
             return pose;
         }
 

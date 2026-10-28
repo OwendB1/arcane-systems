@@ -1,21 +1,21 @@
 {
   "style": "SE channel frames, diagonal webs, exposed equipment, partial cladding",
   "source": {
-    "ArcanePower_AdvancedContainmentController": [
+    "ArcanePower_ReactorPrototype": [
       {
         "stage": 1,
         "meshes": 1,
-        "triangles": 776
+        "triangles": 6368
       },
       {
         "stage": 2,
-        "meshes": 69,
-        "triangles": 2238
+        "meshes": 447,
+        "triangles": 29852
       },
       {
         "stage": 3,
-        "meshes": 111,
-        "triangles": 4020
+        "meshes": 1208,
+        "triangles": 90985
       }
     ],
     "ArcanePower_ContainmentController": [
@@ -35,21 +35,21 @@
         "triangles": 2691
       }
     ],
-    "ArcanePower_ReactorPrototype": [
+    "ArcanePower_AdvancedContainmentController": [
       {
         "stage": 1,
         "meshes": 1,
-        "triangles": 6368
+        "triangles": 776
       },
       {
         "stage": 2,
-        "meshes": 447,
-        "triangles": 29852
+        "meshes": 69,
+        "triangles": 2238
       },
       {
         "stage": 3,
-        "meshes": 1208,
-        "triangles": 90985
+        "meshes": 111,
+        "triangles": 4020
       }
     ],
     "ArcanePower_VentDuct": [
@@ -82,8 +82,8 @@
       },
       {
         "stage": 3,
-        "meshes": 47,
-        "triangles": 7488
+        "meshes": 49,
+        "triangles": 8520
       }
     ]
   },
@@ -93,86 +93,86 @@
     {
       "subtype": "ArcanePower_ContainmentController",
       "stage": 1,
-      "file": "Models/Cubes/large/ArcanePower_ContainmentController_BS1_r7d89d01ce5d5.mwm",
-      "sha256": "7d89d01ce5d5350d3eabc6080f6a752e9dd99afd64ec18a67f2a761d6823a8cf",
+      "file": "Models/Cubes/large/ArcanePower_ContainmentController_BS1_ra1007c695e05.mwm",
+      "sha256": "a1007c695e0550087b9d39dc07829cd7ea86f16cf9d01c68e7d9a7356abd1edc",
       "bytes": 65964
     },
     {
       "subtype": "ArcanePower_ContainmentController",
       "stage": 2,
-      "file": "Models/Cubes/large/ArcanePower_ContainmentController_BS2_rd5c7cb9cb554.mwm",
-      "sha256": "d5c7cb9cb554b6b524d904baf3478a7a741946afd11a28e76bbe28141b1048a7",
+      "file": "Models/Cubes/large/ArcanePower_ContainmentController_BS2_r9b5be5d2da21.mwm",
+      "sha256": "9b5be5d2da21958703d2fd980b0800f4baa060fb1553d1e6ead8a55723582e72",
       "bytes": 131500
     },
     {
       "subtype": "ArcanePower_ContainmentController",
       "stage": 3,
-      "file": "Models/Cubes/large/ArcanePower_ContainmentController_BS3_r79942c45e395.mwm",
-      "sha256": "79942c45e395da5fbcb37e9bf5096bd1ef8728b483963e7bdfd445c83657b609",
+      "file": "Models/Cubes/large/ArcanePower_ContainmentController_BS3_rc29e9eb1bb19.mwm",
+      "sha256": "c29e9eb1bb194f4519aa8dc9d054867b2a5b972d3b714486f2cbdd4f5e6dc329",
       "bytes": 262572
     },
     {
       "subtype": "ArcanePower_AdvancedContainmentController",
       "stage": 1,
-      "file": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS1_r824172364e5f.mwm",
-      "sha256": "824172364e5f62d20e645ddb3648c2af02af0f93a3e257fdf195948c2f247408",
+      "file": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS1_r0952d4f25e1e.mwm",
+      "sha256": "0952d4f25e1e24ba9a4efb7a5a71c9ed7d7f27a26a9575f681088778713627d4",
       "bytes": 65964
     },
     {
       "subtype": "ArcanePower_AdvancedContainmentController",
       "stage": 2,
-      "file": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS2_r19385e8accdd.mwm",
-      "sha256": "19385e8accdd220ffff9424db99f7d05aed8d542c39589538a71524178942fea",
+      "file": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS2_rb27aecc294e9.mwm",
+      "sha256": "b27aecc294e90dc39d83e008ef6a50e556a3b22d4787b115e9b3ca809e3a8fff",
       "bytes": 262572
     },
     {
       "subtype": "ArcanePower_AdvancedContainmentController",
       "stage": 3,
-      "file": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS3_raf14008023e6.mwm",
-      "sha256": "af14008023e63ae08e96aede347876eb6020be9257e6f4eb4b20d77496b607fb",
+      "file": "Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS3_r4e2060312696.mwm",
+      "sha256": "4e206031269670553a77e5161c7cdbb630ea55c633de81e98dad2d8e33fccf18",
       "bytes": 524716
     },
     {
       "subtype": "ArcanePower_VentDuct",
       "stage": 1,
-      "file": "Models/Cubes/large/ArcanePower_VentDuct_BS1_r89bdaa1d0dfb.mwm",
-      "sha256": "89bdaa1d0dfba71179fe105a463b89f9f7339d1826cfa7e924165d3c06b535dd",
+      "file": "Models/Cubes/large/ArcanePower_VentDuct_BS1_rd5d87bcc32b5.mwm",
+      "sha256": "d5d87bcc32b564b04acf32cbc9e91a6a4c10bf609af2268afbb72e3d132602d8",
       "bytes": 262572
     },
     {
       "subtype": "ArcanePower_VentDuct",
       "stage": 2,
-      "file": "Models/Cubes/large/ArcanePower_VentDuct_BS2_rb8f82aee2535.mwm",
-      "sha256": "b8f82aee2535956d3b6617f354d802e3565848ba345042abd825796a93549462",
+      "file": "Models/Cubes/large/ArcanePower_VentDuct_BS2_r306deb89d120.mwm",
+      "sha256": "306deb89d1202a4d40cabc813e9dbbce0573dbb1a2c6a9c700121c62e229c86c",
       "bytes": 524716
     },
     {
       "subtype": "ArcanePower_VentDuct",
       "stage": 3,
-      "file": "Models/Cubes/large/ArcanePower_VentDuct_BS3_r2078e033ae36.mwm",
-      "sha256": "2078e033ae36c270ae75e447c008db0946bcbbd5ef5d93f702892008903b75e7",
+      "file": "Models/Cubes/large/ArcanePower_VentDuct_BS3_rb2fae94b400b.mwm",
+      "sha256": "b2fae94b400b2091fd56dc9e0bbb2e3c8a24a110b55c62325d3a63d28537c660",
       "bytes": 524716
     },
     {
       "subtype": "ArcanePower_VentOutlet",
       "stage": 1,
-      "file": "Models/Cubes/large/ArcanePower_VentOutlet_BS1_reff662b918b3.mwm",
-      "sha256": "eff662b918b3b9bcb5eaea520f816a8974445c78fa0ce3731bf5feaa01037424",
+      "file": "Models/Cubes/large/ArcanePower_VentOutlet_BS1_r6cde5eb475ed.mwm",
+      "sha256": "6cde5eb475edee2c2a7e056b4e629b05029cc739f9b5472f638a721c15a1927a",
       "bytes": 262572
     },
     {
       "subtype": "ArcanePower_VentOutlet",
       "stage": 2,
-      "file": "Models/Cubes/large/ArcanePower_VentOutlet_BS2_r1989c0db1011.mwm",
-      "sha256": "1989c0db10119d0e647f9ae18c515b19fa13b5a86fe523e60e0627bd63cebb0b",
+      "file": "Models/Cubes/large/ArcanePower_VentOutlet_BS2_r5787ea2034b7.mwm",
+      "sha256": "5787ea2034b77c65a4a236f3a48c595712ce942f23f0fbec3e16ca70327a9ed1",
       "bytes": 524716
     },
     {
       "subtype": "ArcanePower_VentOutlet",
       "stage": 3,
-      "file": "Models/Cubes/large/ArcanePower_VentOutlet_BS3_r2abe99e31535.mwm",
-      "sha256": "2abe99e31535d85f9332aec6c6ca52c988711b8883af200bafe6648579126f52",
-      "bytes": 524716
+      "file": "Models/Cubes/large/ArcanePower_VentOutlet_BS3_r7e97998c21f5.mwm",
+      "sha256": "7e97998c21f5a7c0fab509c05049d6f9b0b43f8098d8fcb02721a94e875a7e66",
+      "bytes": 1049004
     }
   ],
   "native_model_import_passed": true,

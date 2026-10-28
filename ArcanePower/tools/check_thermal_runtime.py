@@ -70,7 +70,7 @@ def main():
             print(result.stderr, end='')
             raise SystemExit(result.returncode)
         report = dict(status='passed', scope='Compiled production kernel with native math; no live SE world',
-                      runtime_contracts=55, authored_starter_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-starter-layout.json').read_text())['instances']), manifold_samples=47,
+                      runtime_contracts=59, authored_starter_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-starter-layout.json').read_text())['instances']), manifold_samples=47,
                       authored_room_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-room-layout.json').read_text())['instances']),
                       conservation_hours_per_efficiency=1, efficiencies=[.10, .80],
                       cooling_checks='Per-circuit adequate/half/zero rejection, early recovery, hottest-circuit critical threshold, paid-energy conservation, idempotent migration, reload and idle credit',

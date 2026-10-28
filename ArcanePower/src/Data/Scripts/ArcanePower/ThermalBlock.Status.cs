@@ -28,8 +28,9 @@ namespace ArcanePower
 
         public bool Valid(long id)
         {
-            return EntityId == id && Sequence >= 0 && Panels >= 1 && Panels <= 3
-                && ThermalMath.Finite(RatedMW) && RatedMW > 0 && RatedMW <= 300000
+            return EntityId == id && Sequence >= 0 && Panels >= 0 && Panels <= ThermalRadiators.MaxPanels
+                && ThermalMath.Finite(RatedMW) && RatedMW >= 0 && RatedMW <= 300000
+                && (Panels == 0 ? RatedMW == 0 : RatedMW > 0)
                 && ThermalMath.Finite(AvailableMW) && AvailableMW >= 0 && AvailableMW <= RatedMW + .001
                 && ThermalMath.Finite(PotentialMW) && PotentialMW >= 0 && PotentialMW <= RatedMW + .001
                 && ThermalMath.Finite(PanelMW) && PanelMW >= 0 && PanelMW <= AvailableMW + .001
@@ -69,8 +70,9 @@ namespace ArcanePower
                 Clearance = IsRadiator ? (radiator == null ? 0 : radiator.Exposure) : clearExhaust,
                 SunExposure = radiator == null ? 0 : radiator.SunIncidence,
                 AirDensity = extension && RadiatorBase != null ? RadiatorBase.airDensity : airDensity,
-                Panels = 1 + RadiatorPanels.Count, Attached = attached,
-                Fault = Fault ?? (extension && RadiatorBase != null ? RadiatorBase.Fault : null),
+                Panels = Spec.Kind == ThermalKind.Radiator ? RadiatorPanels.Count : 1, Attached = attached,
+                Fault = Fault ?? (RadiatorBreached ? "Radiator panel missing: replace it to seal the circuit"
+                    : extension && RadiatorBase != null ? RadiatorBase.Fault : null),
                 StoredHeatMJ = Store.HotMJ + Store.WasteMJ,
                 RejectedMW = extension && RadiatorBase != null
                     ? (RadiatorBase.coolingMW > 0 ? RadiatorBase.CoolingRejectedMW * PanelCoolingMW / RadiatorBase.coolingMW : 0)
@@ -92,16 +94,21 @@ namespace ArcanePower
         private void AppendCoolingInfo(StringBuilder info)
         {
             bool air = Spec.Kind == ThermalKind.AirCooler;
+            bool hull = Spec.Kind == ThermalKind.HullRadiator;
             bool extension = Spec.Kind == ThermalKind.RadiatorPanel;
-            info.Append("\nARCANE POWER / ").AppendLine(air ? "ATMOSPHERIC COOLER" : extension ? "RADIATOR PANEL" : "SPACE RADIATOR");
+            info.Append("\nARCANE POWER / ").AppendLine(air ? "ATMOSPHERIC COOLER" : hull ? "HULL RADIATOR" : extension ? "RADIATOR PANEL" : "SPACE RADIATOR");
             var state = coolingState;
             if (state == null) { info.AppendLine("Waiting for cooling readings"); return; }
             info.AppendLine(state.Fault != null ? "ISOLATED / " + state.Fault
                 : !Block.IsFunctional || Block.SlimBlock.BuildLevelRatio < 1 ? "FINISH WELDING / REPAIR"
                 : !Block.Enabled ? "SWITCHED OFF" : !state.Attached ? "UNATTACHED PANEL"
                 : state.AvailableMW <= 0 ? "NO COOLING AVAILABLE" : "COOLING AVAILABLE");
+            if (!Block.Enabled || !Block.IsFunctional || Block.SlimBlock.BuildLevelRatio < 1)
+                info.AppendLine(hull
+                    ? "Cooling stopped. A present radiator keeps its pipe path; neighboring hull sockets self-seal on removal."
+                    : "Cooling stopped. A present cooler still seals its pipe connections; removal causes pressure loss.");
             info.AppendLine("\nCOOLING");
-            info.Append("Efficiency: ").AppendLine(CoolingPercent(state.AvailableMW / state.RatedMW));
+            info.Append("Efficiency: ").AppendLine(CoolingPercent(state.RatedMW > 0 ? state.AvailableMW / state.RatedMW : 0));
             info.Append("Available: ").Append(CoolingPower(state.AvailableMW)).Append(" / ")
                 .Append(CoolingPower(state.RatedMW)).AppendLine(" rated");
             info.Append("Potential at current exposure: ").AppendLine(CoolingPower(state.PotentialMW));
@@ -112,11 +119,11 @@ namespace ArcanePower
             if (Spec.Kind == ThermalKind.Radiator)
             {
                 info.Append("Panel stack: ").Append(state.Panels).AppendLine(" / 3");
-                info.Append("Base panel: ").Append(CoolingPercent(state.PanelMW / Spec.CoolingMW))
-                    .Append(" / ").AppendLine(CoolingPower(state.PanelMW));
+                if (state.Panels == 0) info.AppendLine("Attach up to three panels above the rotor base; the base provides no cooling.");
             }
             if (extension) info.AppendLine(state.Attached ? "Link: attached to radiator axis" : "Link: stack above an aligned radiator and enable");
-            if (IsRadiator && Store.Radiator != null)
+            if (hull) info.AppendLine("Fixed face: four self-sealing radiator edges; rear H/C pipe feed.");
+            else if (IsRadiator && Store.Radiator != null)
             {
                 info.Append("Panel angle: ").Append((Store.Radiator.Angle * 180 / Math.PI).ToString("0.0", CultureInfo.InvariantCulture)).AppendLine(" degrees");
                 if (!extension) info.AppendLine("Tracking: automatic, edge-on to the sun");
@@ -137,9 +144,9 @@ namespace ArcanePower
                 info.Append("Solar cooling factor: ").AppendLine(CoolingPercent(ThermalRadiators.SolarEfficiency(state.SunExposure)));
                 info.Append("Ambient cooling factor: ").AppendLine(CoolingPercent(
                     ThermalRadiators.AmbientEfficiency(state.AirDensity)));
-                if (state.Clearance < .999) info.AppendLine("Expose both panel faces to open space.");
+                if (state.Clearance < .999) info.AppendLine(hull ? "Expose the front radiator face to open space." : "Expose both panel faces to open space.");
                 if (Spec.Kind == ThermalKind.Radiator && state.Panels > 1)
-                    info.AppendLine("Environment factors above describe the base panel.");
+                    info.AppendLine("Environment factors are weighted by each attached panel's rated capacity.");
             }
             info.AppendLine("Available capacity follows the environment. Heat removal follows circuit demand and retained heat.");
         }

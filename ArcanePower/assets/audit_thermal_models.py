@@ -260,9 +260,10 @@ def audit(names=None):
                 inherited = obj.get('reactor_source_name')
                 exhaust = name == 'Atmospheric cooler' and obj.get('cooler_exhaust_part')
                 coupling = name in ('PRIMARY / Reactor adapter', 'PRIMARY / Reactor adapter bare') and obj.get('thermal_reactor_coupling') == 2
+                spindle = name == 'Pipe rotor head' and obj.get('pipe_rotor_spindle')
                 # Only the receiving sleeve crosses the reactor socket plane;
                 # cell size and the accepted placement collision stay unchanged.
-                if not inherited and any(p[i] > half[i]+.001 or p[i] < (-3.06 if exhaust and i == 1 else -half[i]-.001-(.065 if coupling and i == 0 else 0))
+                if not inherited and any(p[i] > half[i]+.001 or p[i] < (-3.06 if exhaust and i == 1 else C['PIPE_ROTOR_CUFF_BOTTOM']-.001 if spindle and i == 2 else -half[i]-.001-(.065 if coupling and i == 0 else 0))
                                          for p in points for i in range(3)):
                     fail(name, '2.5 m envelope', obj.name)
                 mesh = obj.data
@@ -611,7 +612,7 @@ def audit(names=None):
                 base = C['BARE_PIPES'][name]
                 if ports != json.loads(M['main_for'](base)['ports']):
                     fail(name, 'bare and framed sockets are interchangeable', scene.name)
-                if any(o.get('interface_type') or any(t in o.name.lower() for t in
+                if any(o.get('interface_type') or o.get('thermal_pipe_casing') or any(t in o.name.lower() for t in
                        ('pipe cage', 'pipe base mounting shoe', 'flange load web', 'status bezel', 'status lens'))
                        for o in col.objects):
                     fail(name, 'pipe-only silhouette without plate or cage hardware', scene.name)
@@ -785,7 +786,15 @@ def audit(names=None):
             axis = max(range(3), key=lambda i: abs(n[i]))
             if abs(abs(pos[axis])-half[axis]) > 1e-5 or n.dot(pos) <= 0 or abs(n.dot(up)) > 1e-5:
                 fail(name, 'socket face/normal/roll', port['id'])
-            for i in range(3):
+            # Radiator-only edge unions sit at the edge midpoint, including
+            # between two occupied cells. Standard rear pipes stay cell-centred.
+            edge_union = port.get('hull_only', False)
+            if edge_union and not (name == 'Hull radiator' and any(
+                p.get('hull_only') and p['id'] == port['id']
+                and Vector(p['position']) == pos and Vector(p['normal']) == n
+                and Vector(p['hot_axis']) == up for p in C['HULL_RADIATOR_PORTS'])):
+                fail(name, 'radiator edge union contract', port['id'])
+            for i in (() if edge_union else range(3)):
                 if i != axis:
                     offset = port.get('cell_offset', [0, 0, 0])
                     if offset != [0, 0, 0] and (C['BARE_PIPES'].get(name, name) not in ('Reactor housing', 'PRIMARY / Reactor adapter') or offset != [0, 0, .17]):
@@ -861,15 +870,15 @@ def audit(names=None):
     # Stacked radiator couplings meet at cell boundaries, centred in equal
     # frame gaps. Inspect real vertices so later panel edits cannot shift them.
     stack = {}
-    for name, half_height in (('Space radiator', 3.75), ('Radiator panel', 2.5)):
+    for name, half_height in (('Space radiator', 1.25), ('Radiator panel', 2.5)):
         bpy.context.window.scene = M['scene_for'](name)
         bpy.context.view_layer.update()
         col = M['main_for'](name)
-        for label, key in (('radiator top rail', 'top'), ('panel carrier beam', 'bottom')):
+        for label, key in (() if name == 'Space radiator' else (('radiator top rail', 'top'), ('panel carrier beam', 'bottom'))):
             obj = next(o for o in col.objects if o.name.startswith(name+' / '+label))
             points = [obj.matrix_world@v.co for v in obj.data.vertices]
             stack[name, key] = max(p.z for p in points) if key == 'top' else min(p.z for p in points)
-        if abs(half_height-stack[name, 'top']-.125) > .00001:
+        if name == 'Radiator panel' and abs(half_height-stack[name, 'top']-.125) > .00001:
             fail(name, 'stack connector not centred above top rail', str(stack[name, 'top']))
         if name == 'Radiator panel':
             if abs(stack[name, 'bottom']+half_height-.125) > .00001:
@@ -923,6 +932,10 @@ def audit(names=None):
             audit_blast_shields()
         except AssertionError as error:
             fail('Reactor housing', 'continuous blast-shield seals', str(error))
+    try:
+        runpy.run_path(str(ROOT/'assets/build_tracking_radiator.py'))['audit_base']()
+    except AssertionError as error:
+        fail('Space radiator', 'sealed base joints and emissives', str(error))
     protected = json.loads((OUT/'protected-sources.json').read_text())
     hashes = {n: hashlib.sha256((ROOT/'assets'/n).read_bytes()).hexdigest() for n in protected}
     if hashes != protected:

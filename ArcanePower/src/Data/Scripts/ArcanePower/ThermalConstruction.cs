@@ -26,13 +26,15 @@ namespace ArcanePower
 
         public static string Role(ThermalModel model)
         {
+            if (model.Rotary) return "Sealed Arcane pipe rotor. Attach its matching pipe head to carry H/C and conveyors to a subgrid. The stationary casing seals the hull even without its head. Keep the rotating head's sweep clear; oxygen rooms do not connect across grids.";
             switch (model.Kind)
             {
                 case ThermalKind.Reactor: return "Four independent manifold circuits; one turbine and cooling per circuit. Each supplies up to 25% capacity. Unused reactor manifolds stay closed. Stop/cool before changing mode.";
                 case ThermalKind.Train: return "One lower-cell duplex H/C socket on a 2x2x5 train. Use exactly one turbine plus cooling per reactor manifold circuit. Keep the four circuits separate. Its built-in compressor needs grid power for startup and hot shutdown circulation.";
-                case ThermalKind.RadiatorPanel: return "Stack above the base or first panel on the same grid. Centre the shaft and match Up; any yaw works. Up to two extensions share the base's axis and cooling loop.";
+                case ThermalKind.RadiatorPanel: return "Stack above the rotor base or preceding panel on the same grid. Centre the shaft and match Up; any yaw works. Up to three panels share the base's axis and cooling loop.";
                 case ThermalKind.AirCooler: return "Connect the rear cooling socket. Mount casing flush in hull; keep 2.5 m clear beyond both front fan guards. Blocked exhaust stops cooling; needs atmosphere and circulation.";
-                case ThermalKind.Radiator: return "Connect cooling underneath the pedestal. Panels automatically track edge-on to the sun; keep both faces open to space and the 3x3x3 sweep clear. Red glow shows heat dissipation.";
+                case ThermalKind.Radiator: return "Airtight 1x1x1 hull mount; connect cooling underneath. Add up to three separate panels above; the base provides no cooling. Panels track edge-on to the sun; keep their 3x2x3 sweep and both faces clear.";
+                case ThermalKind.HullRadiator: return "Airtight fixed radiator: 1 deep x 2 high x 3 wide. Tile matching edges on all four sides; normal H/C pipes use the lower rear socket. Hull sockets self-seal when a neighbor is removed. Failed radiators retain the pipe path with no cooling. Keep the front exposed and reactor circuits separate.";
                 default: return model.Subtype.EndsWith("ReactorAdapter") || model.Subtype.EndsWith("ReactorAdapterBare")
                     ? "Offset inlet connects only to the reactor vessel; the opposite end connects to normal pipes. Bridge the 170 mm socket offset and keep H aligned."
                     : "Duplex H/C pipe within one manifold circuit. Align H with H and C with C. Seal unused junction mouths with end caps. A breach closes that circuit at the reactor.";
@@ -48,6 +50,8 @@ namespace ArcanePower
                 case ThermalJointStatus.Roll: return "Rotate around the socket axis: H must meet H";
                 case ThermalJointStatus.Crowded: return "Overlapping sockets: one peer per socket";
                 case ThermalJointStatus.ReactorOnly: return "This adapter end connects only to the reactor vessel; use the opposite end for pipes";
+                case ThermalJointStatus.HullOnly: return "Edge unions connect only to another hull radiator edge; normal pipes use the rear socket";
+                case ThermalJointStatus.Closed: return "Unused union is sealed";
                 default: return "Reactor manifold stays closed; cap open pipe mouths or reconnect";
             }
         }
@@ -63,7 +67,7 @@ namespace ArcanePower
             foreach (var node in blocks)
             {
                 var copy = new ThermalEndpoint { Id = node.Id, GridId = node.GridId,
-                    Model = node.Model, Ports = node.Ports, Healthy = true };
+                    Model = node.Model, Ports = node.Ports, Healthy = true, RotaryPeerId = node.RotaryPeerId };
                 geometry.Add(copy); health[node.Id] = node.Healthy;
                 if (copy.Id == selected) anchor = copy;
             }
@@ -74,6 +78,7 @@ namespace ArcanePower
             {
                 result.Nodes.Add(node);
                 if (!health[node.Id]) result.Pending++;
+                if (node.Model.Rotary && !network.RotaryConnected(node)) result.Open++;
                 if (node.Model.Kind == ThermalKind.Reactor) { sources++; result.Source = node; }
                 if (node.Model.Kind == ThermalKind.Train) result.Trains++;
             }
@@ -82,11 +87,12 @@ namespace ArcanePower
                 if (!component.Contains(joint.Node)) continue;
                 if (anchor != null && anchor.Model.Kind != ThermalKind.Reactor && joint.Node.Model.Kind == ThermalKind.Reactor
                     && !network.Joints.Exists(other => other.Node != joint.Node && component.Contains(other.Node)
+                        && other.Node.GridId == joint.Node.GridId
                         && Vector3.DistanceSquared(other.Port.Position, joint.Port.Position) <= .00000001f)) continue;
                 if (joint.Status == ThermalJointStatus.Open) result.Open++;
                 // Keep both ends for highlighting, but count each faulty joint once.
-                else if (joint.Status != ThermalJointStatus.Matched && !result.Joints.Exists(other =>
-                    other.Status != ThermalJointStatus.Open && other.Status != ThermalJointStatus.Matched
+                else if (joint.Status != ThermalJointStatus.Matched && joint.Status != ThermalJointStatus.Closed && !result.Joints.Exists(other =>
+                    other.Status != ThermalJointStatus.Open && other.Status != ThermalJointStatus.Matched && other.Status != ThermalJointStatus.Closed
                     && other.Node.GridId == joint.Node.GridId
                     && Vector3.DistanceSquared(other.Port.Position, joint.Port.Position) <= .00000001f)) result.Wrong++;
                 result.Joints.Add(joint);
@@ -94,7 +100,7 @@ namespace ArcanePower
             if (anchor == null) result.Next = "Select a thermal block";
             else if (result.Wrong > 0)
             {
-                var mismatch = result.Joints.Find(j => j.Status != ThermalJointStatus.Open && j.Status != ThermalJointStatus.Matched);
+                var mismatch = result.Joints.Find(j => j.Status != ThermalJointStatus.Open && j.Status != ThermalJointStatus.Matched && j.Status != ThermalJointStatus.Closed);
                 result.Next = result.Wrong + (result.Wrong == 1 ? " mismatched connection: " : " mismatched connections: ")
                     + JointHint(mismatch.Status);
             }
@@ -119,7 +125,8 @@ namespace ArcanePower
                 }
                 foreach (var node in plant.Nodes)
                 {
-                    if (component.Contains(node) && (node.Model.Kind == ThermalKind.AirCooler || node.Model.Kind == ThermalKind.Radiator)) result.Cooling++;
+                    if (component.Contains(node) && (node.Model.Kind == ThermalKind.AirCooler || node.Model.Kind == ThermalKind.Radiator
+                        || node.Model.Kind == ThermalKind.HullRadiator)) result.Cooling++;
                 }
                 if (fault != null) result.Next = fault;
                 else if (!plant.Ready) result.Next = plant.Diagnostic;

@@ -8,9 +8,11 @@ namespace ArcanePower
     {
         public string Circuit;
         public Vector3 Position, Normal, HotAxis;
-        public bool ReactorOnly;
-        public ThermalPort(string circuit, Vector3 position, Vector3 normal, Vector3 hotAxis, bool reactorOnly = false)
-        { Circuit = circuit; Position = position; Normal = normal; HotAxis = hotAxis; ReactorOnly = reactorOnly; }
+        public bool ReactorOnly, HullOnly, SelfSealing;
+        public ThermalPort(string circuit, Vector3 position, Vector3 normal, Vector3 hotAxis, bool reactorOnly = false,
+            bool hullOnly = false, bool selfSealing = false)
+        { Circuit = circuit; Position = position; Normal = normal; HotAxis = hotAxis;
+            ReactorOnly = reactorOnly; HullOnly = hullOnly; SelfSealing = selfSealing; }
     }
 
     public sealed class ThermalModel
@@ -21,6 +23,7 @@ namespace ArcanePower
         public int Grade;
         public double RatingMW, CoolingMW;
         public ThermalPort[] Ports;
+        public bool Rotary;
         // Keep accepting pre-rebalance saved heat; admission and dispatch use RatingMW.
         public double CapacityMJ
         {
@@ -32,8 +35,12 @@ namespace ArcanePower
     public sealed class ThermalEndpoint
     {
         public long Id, GridId;
+        // Physical circuit eligibility, including owner access. Cooling output
+        // is evaluated separately; present failed coolers still admit flow.
         public bool Healthy;
         public int Revision;
+        // Native stator/head attachment, never inferred from world proximity.
+        public long RotaryPeerId;
         public ThermalModel Model;
         public ThermalPort[] Ports;
 
@@ -44,13 +51,14 @@ namespace ArcanePower
             {
                 var p = model.Ports[i];
                 ports[i] = new ThermalPort(p.Circuit, Vector3.Transform(p.Position, rotation) + centre,
-                    Vector3.TransformNormal(p.Normal, rotation), Vector3.TransformNormal(p.HotAxis, rotation), p.ReactorOnly);
+                    Vector3.TransformNormal(p.Normal, rotation), Vector3.TransformNormal(p.HotAxis, rotation),
+                    p.ReactorOnly, p.HullOnly, p.SelfSealing);
             }
             return new ThermalEndpoint { Id = id, GridId = gridId, Model = model, Ports = ports, Healthy = healthy };
         }
     }
 
-    public enum ThermalJointStatus { Open, Matched, Facing, Roll, Crowded, ReactorOnly }
+    public enum ThermalJointStatus { Open, Matched, Facing, Roll, Crowded, ReactorOnly, Closed, HullOnly }
 
     public sealed class ThermalJoint
     {
@@ -83,10 +91,12 @@ namespace ArcanePower
                 for (int i = 0; i < ports.Length; i++)
                 {
                     var port = node.Ports[i];
-                    ports[i] = new ThermalPort(port.Circuit, port.Position, port.Normal, port.HotAxis, port.ReactorOnly);
+                    ports[i] = new ThermalPort(port.Circuit, port.Position, port.Normal, port.HotAxis,
+                        port.ReactorOnly, port.HullOnly, port.SelfSealing);
                 }
                 Nodes.Add(new ThermalEndpoint { Id = node.Id, GridId = node.GridId,
-                    Healthy = node.Healthy, Revision = node.Revision, Model = node.Model, Ports = ports });
+                    Healthy = node.Healthy, Revision = node.Revision, RotaryPeerId = node.RotaryPeerId,
+                    Model = node.Model, Ports = ports });
             }
             Network = new ThermalNetwork(Nodes);
             Circuits = Network.Loops(Nodes[0]);
@@ -113,12 +123,14 @@ namespace ArcanePower
         private static bool Same(ThermalEndpoint a, ThermalEndpoint b)
         {
             if (a == null || b == null || a.Id != b.Id || a.GridId != b.GridId || a.Healthy != b.Healthy
-                || a.Revision != b.Revision || a.Model != b.Model || a.Ports.Length != b.Ports.Length) return false;
+                || a.Revision != b.Revision || a.RotaryPeerId != b.RotaryPeerId
+                || a.Model != b.Model || a.Ports.Length != b.Ports.Length) return false;
             for (int j = 0; j < a.Ports.Length; j++)
             {
                 var p = a.Ports[j]; var q = b.Ports[j];
                 if (p.Circuit != q.Circuit || p.Position != q.Position || p.Normal != q.Normal
-                    || p.HotAxis != q.HotAxis || p.ReactorOnly != q.ReactorOnly) return false;
+                    || p.HotAxis != q.HotAxis || p.ReactorOnly != q.ReactorOnly
+                    || p.HullOnly != q.HullOnly || p.SelfSealing != q.SelfSealing) return false;
             }
             return true;
         }
@@ -129,11 +141,16 @@ namespace ArcanePower
     public sealed class ThermalNetwork
     {
         private readonly Dictionary<ThermalEndpoint, byte> openPorts = new Dictionary<ThermalEndpoint, byte>();
+        private readonly Dictionary<ThermalEndpoint, byte> closedPorts = new Dictionary<ThermalEndpoint, byte>();
         public byte OpenPorts(ThermalEndpoint node) { byte mask; return openPorts.TryGetValue(node, out mask) ? mask : (byte)0; }
+        private byte ClosedPorts(ThermalEndpoint node) { byte mask; return closedPorts.TryGetValue(node, out mask) ? mask : (byte)0; }
 
         private readonly List<List<Socket>> socketGroups = new List<List<Socket>>();
         private List<ThermalJoint> joints;
         private Dictionary<ThermalEndpoint, List<ThermalEndpoint>> physical;
+        private readonly Dictionary<ThermalEndpoint, ThermalEndpoint> rotary
+            = new Dictionary<ThermalEndpoint, ThermalEndpoint>();
+        public bool RotaryConnected(ThermalEndpoint node) { return rotary.ContainsKey(node); }
         public List<ThermalJoint> Joints
         {
             get
@@ -149,12 +166,14 @@ namespace ArcanePower
                         Socket b = sockets.Count == 2 ? sockets[a == sockets[0] ? 1 : 0] : null;
                         joints.Add(new ThermalJoint { Node = a.Node, Port = a.Port, Peer = b == null ? null : b.Node,
                             Status = sockets.Count > 2 ? ThermalJointStatus.Crowded
-                                : b == null ? ThermalJointStatus.Open : Match(a.Node, a.Port, b.Node, b.Port) });
+                                : b == null ? (a.Port.SelfSealing ? ThermalJointStatus.Closed : ThermalJointStatus.Open)
+                                : Match(a.Node, a.Port, b.Node, b.Port) });
                         List<ThermalEndpoint> peers;
                         if (!physical.TryGetValue(a.Node, out peers)) physical[a.Node] = peers = new List<ThermalEndpoint>();
                         foreach (var other in sockets)
                             if (other.Node != a.Node && !peers.Contains(other.Node)) peers.Add(other.Node);
                     }
+                foreach (var pair in rotary) physical[pair.Key].Add(pair.Value);
                 return joints;
             }
         }
@@ -176,14 +195,46 @@ namespace ArcanePower
             if (!(Vector3.Dot(p.HotAxis, q.HotAxis) >= .9999f)) return ThermalJointStatus.Roll;
             if ((p.ReactorOnly && (b.Model == null || b.Model.Kind != ThermalKind.Reactor))
                 || (q.ReactorOnly && (a.Model == null || a.Model.Kind != ThermalKind.Reactor))) return ThermalJointStatus.ReactorOnly;
+            if ((p.HullOnly && (b.Model == null || b.Model.Kind != ThermalKind.HullRadiator || !q.HullOnly))
+                || (q.HullOnly && (a.Model == null || a.Model.Kind != ThermalKind.HullRadiator || !p.HullOnly))) return ThermalJointStatus.HullOnly;
             return ThermalJointStatus.Matched;
         }
 
         private static bool Mates(Socket a, Socket b)
         { return b != null && Match(a.Node, a.Port, b.Node, b.Port) == ThermalJointStatus.Matched; }
 
+        private static bool RotaryMates(ThermalEndpoint a, ThermalEndpoint b)
+        {
+            return b != null && a.Id != b.Id && a.GridId != b.GridId && a.Healthy && b.Healthy
+                && a.Model.Rotary && b.Model.Rotary && a.Ports.Length > 0 && b.Ports.Length > 0
+                && a.RotaryPeerId == b.Id && b.RotaryPeerId == a.Id;
+        }
+
+        // Only validated Arcane rotary unions admit another grid to a plant.
+        // Ordinary sockets always remain in their own grid-local coordinates.
+        public static HashSet<long> ConnectedGrids(long start, IList<ThermalEndpoint> joints)
+        {
+            var byId = new Dictionary<long, ThermalEndpoint>();
+            foreach (var node in joints) byId[node.Id] = node;
+            var grids = new HashSet<long> { start };
+            bool changed;
+            do
+            {
+                changed = false;
+                foreach (var node in joints)
+                {
+                    ThermalEndpoint peer;
+                    if (grids.Contains(node.GridId) && byId.TryGetValue(node.RotaryPeerId, out peer)
+                        && RotaryMates(node, peer) && grids.Add(peer.GridId)) changed = true;
+                }
+            } while (changed);
+            return grids;
+        }
+
         public ThermalNetwork(IList<ThermalEndpoint> nodes)
         {
+            var byId = new Dictionary<long, ThermalEndpoint>();
+            foreach (var node in nodes) byId[node.Id] = node;
             var grids = new Dictionary<long, Dictionary<Vector3I, List<Socket>>>();
             foreach (var node in nodes)
             {
@@ -207,6 +258,10 @@ namespace ArcanePower
                 {
                     if (!a.Node.Healthy) continue;
                     Socket b = sockets.Count == 2 ? sockets[a == sockets[0] ? 1 : 0] : null;
+                    // Hull sockets self-seal whenever their peer is absent.
+                    // Present mismatched, crowded or inaccessible peers still fault.
+                    if (sockets.Count == 1 && a.Port.SelfSealing)
+                        closedPorts[a.Node] = (byte)(ClosedPorts(a.Node) | (1 << Array.IndexOf(a.Node.Ports, a.Port)));
                     // This mask describes valid joints, not automatic pipe caps.
                     // Loops() rejects breaches; reactor valves own isolation.
                     if (Mates(a, b) && b.Node.Healthy)
@@ -215,6 +270,12 @@ namespace ArcanePower
                         openPorts[a.Node] = (byte)(OpenPorts(a.Node) | (1 << Array.IndexOf(a.Node.Ports, a.Port)));
                     }
                 }
+            foreach (var node in nodes)
+            {
+                ThermalEndpoint peer;
+                if (byId.TryGetValue(node.RotaryPeerId, out peer) && RotaryMates(node, peer))
+                { rotary[node] = peer; links[node].Add(peer); }
+            }
         }
 
         // Construction follows coincident joints even when their facing/roll is
@@ -272,9 +333,11 @@ namespace ArcanePower
                 bool sealedCircuit = true;
                 foreach (var node in found)
                 {
-                    if (OpenPorts(node) != (1 << node.Ports.Length) - 1) sealedCircuit = false;
+                    if ((OpenPorts(node) | ClosedPorts(node)) != (1 << node.Ports.Length) - 1) sealedCircuit = false;
+                    if (node.Model.Rotary && !RotaryConnected(node)) sealedCircuit = false;
                     if (node.Model.Kind == ThermalKind.Train) trains++;
-                    if (node.Model.Kind == ThermalKind.AirCooler || node.Model.Kind == ThermalKind.Radiator) coolers++;
+                    if (node.Model.Kind == ThermalKind.AirCooler || node.Model.Kind == ThermalKind.Radiator
+                        || node.Model.Kind == ThermalKind.HullRadiator) coolers++;
                 }
                 if (otherSource) loop.Diagnostic = "Separate reactor supplies";
                 else if (rootPorts != 1) loop.Diagnostic = "Separate manifold circuits: two reactor outlets are cross-connected";

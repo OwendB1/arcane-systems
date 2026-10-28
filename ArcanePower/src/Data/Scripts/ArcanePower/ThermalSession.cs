@@ -51,7 +51,7 @@ namespace ArcanePower
         private static void InvalidateCircuits(long gridId)
         {
             foreach (var entry in circuitGraphs)
-                if (entry.Value.Nodes[0].GridId == gridId) entry.Value.Invalidated = true;
+                if (entry.Value.Nodes.Exists(node => node.GridId == gridId)) entry.Value.Invalidated = true;
         }
 
         public override void BeforeStart()
@@ -174,8 +174,12 @@ namespace ArcanePower
                     AdvanceLoops(source, sources, machines, claimed);
                     if (!source.ThermalCanRun) CoolHousing(source);
                 }
+                ThermalCircuitCache assembly;
+                circuitGraphs.TryGetValue(source.Id, out assembly);
                 foreach (var machine in machines)
-                    if (machine.SourceId == source.Id && machine.Block.CubeGrid == source.Block.CubeGrid)
+                    if (machine.SourceId == source.Id && (machine.Block.CubeGrid == source.Block.CubeGrid
+                        || (state.Mode == ThermalMode.Brayton && assembly != null
+                            && assembly.Nodes.Exists(node => node.Id == machine.Entity.EntityId))))
                         state.AttachedHeatMJ += machine.Store.HotMJ + machine.Store.WasteMJ;
                 if (!state.Settled) state.Diagnostic = source.ThermalModeTransitionHint;
                 // Forecast only a completed interval: settled production and
@@ -186,7 +190,8 @@ namespace ArcanePower
             {
                 // Unattached old radiator inventories can still radiate locally.
                 // New operation stores no heat in machinery or pipe blocks.
-                if (!claimed.Contains(machine.Entity.EntityId) && machine.Healthy && machine.Spec.Kind == ThermalKind.Radiator)
+                if (!claimed.Contains(machine.Entity.EntityId) && machine.Healthy
+                    && (machine.Spec.Kind == ThermalKind.Radiator || machine.Spec.Kind == ThermalKind.HullRadiator))
                 {
                     double capacity = machine.Unit().CoolingMW / 60;
                     double rejected = ThermalMath.Reject(machine.Store, capacity, false);
@@ -217,6 +222,7 @@ namespace ArcanePower
         {
             if (ready) MyAPIGateway.Multiplayer.UnregisterSecureMessageHandler(RotorChannel, ReceiveRotor);
             UnloadFlow();
+            ThermalPipeJoint.Unload();
             ready = false;
             Blocks.Clear(); circuitGraphs.Clear();
         }

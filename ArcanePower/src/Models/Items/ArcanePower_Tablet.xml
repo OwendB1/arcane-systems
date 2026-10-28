@@ -21,9 +21,9 @@
     <Parameter Name="AddMapsTexture">Textures/Models/ArcanePower/ArcaneTabletLight_add.dds</Parameter>
   </Material>
   <LOD Distance="35">
-    <Model>Models/Items/ArcanePower_Tablet_LOD1_r7b74ba24c96c.mwm</Model>
+    <Model>Models/Items/ArcanePower_Tablet_LOD1_rcf62d8deea4f.mwm</Model>
   </LOD>
   <LOD Distance="90">
-    <Model>Models/Items/ArcanePower_Tablet_LOD2_r37a4f4a6d095.mwm</Model>
+    <Model>Models/Items/ArcanePower_Tablet_LOD2_r6e0cba344ced.mwm</Model>
   </LOD>
 </Model>

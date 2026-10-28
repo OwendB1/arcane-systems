@@ -8,9 +8,9 @@ SOURCE = ROOT / '.cache/workshop-blueprints'
 OUT = ROOT / 'workshop/images'
 OUT.mkdir(parents=True, exist_ok=True)
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--plates', nargs='+', choices=[f'{i:02}' for i in range(1, 11)],
+parser.add_argument('--plates', nargs='+', choices=[f'{i:02}' for i in range(1, 13)],
                     help='Rebuild only these plates from their Blender studies.')
-selected = set(parser.parse_args().plates or [f'{i:02}' for i in range(1, 11)])
+selected = set(parser.parse_args().plates or [f'{i:02}' for i in range(1, 13)])
 SANS = '/usr/share/fonts/nerd-fonts/Overpass/OverpassNerdFont-ExtraBold.otf'
 MONO = '/usr/share/fonts/liberation-mono-fonts/LiberationMono-Regular.ttf'
 INK = '#d3f2ff'
@@ -79,7 +79,7 @@ if '02' in selected:
         text(d, (x+4, 592), title, 22, GOLD, True)
         text(d, (x+4, 628), label, 17, CYAN)
     note(d, 58, 706, 'A', 'PAIR THE CONTROLLERS', ['Standard, mixed or advanced pairs set ring capacity.'])
-    note(d, 848, 706, 'B', 'COMPLETE THE ROUTE', ['1-15 aligned ducts, then one terminal outlet.'])
+    note(d, 848, 706, 'B', 'COMPLETE THE ROUTE', ['1-15 aligned ducts, then one terminal outlet.', 'Airtight outlet with a sealed ejection hatch.'])
     im.save(OUT/'hardware-blueprint.png', optimize=True)
 
 if '03' in selected:
@@ -128,29 +128,29 @@ if '04' in selected:
         '2 WIDE x 2 HIGH x 5 LONG LG  /  ALIGN H + C  /  EACH CIRCUIT RECEIVES UP TO 25% OF SOURCE HEAT')
 
 if '05' in selected:
-    im, d = plate('05', 'ATMOSPHERIC / HEAT REJECTION', 'TWIN FAN ASSEMBLY  //  DUPLEX MANIFOLD  //  CLEAR EXHAUST REQUIRED')
+    im, d = plate('05', 'ATMOSPHERIC / HEAT REJECTION', 'AIRTIGHT HULL CASING  //  DUPLEX MANIFOLD  //  CLEAR EXHAUST REQUIRED')
     model(im, 'air-cooler', (45, 177, 740, 460))
     model(im, 'air-cooler-rear', (815, 177, 740, 460))
     text(d, (66, 635), 'FRONT / TWIN FAN GUARDS', 23, GOLD, True)
     text(d, (824, 635), 'REAR / H + C CONNECTIONS', 23, GOLD, True)
-    note(d, 65, 692, '01', 'TWO EQUIPMENT TIERS', ['5 GW standard / 50 GW upgraded', 'Same 3 x 3 x 2 LG body'])
+    note(d, 65, 692, '01', 'TWO EQUIPMENT TIERS', ['5 GW standard / 50 GW upgraded', 'Fits a 3 x 3 hull opening / 2 cells deep'])
     note(d, 824, 692, '02', 'LEAVE THE FANS CLEAR', ['2.5 m beyond both guards', 'Vacuum provides no active cooling'])
     im.save(OUT/'cooling-blueprint.png', optimize=True)
 
 if '06' in selected:
-    im, d = plate('06', 'RADIATORS / MODULAR ARRAY', 'PASSIVE HEAT REJECTION  //  SUN TRACKING  //  BASE + TWO EXTENSIONS')
+    im, d = plate('06', 'RADIATORS / MODULAR ARRAY', 'PASSIVE HEAT REJECTION  //  SUN TRACKING  //  BASE + UP TO THREE PANELS')
     model(im, 'radiator-stack', (48, 175, 700, 635))
-    text(d, (70, 805), 'COMPLETE THREE-SECTION STACK / AUTHORING POSE', 15, CYAN)
+    text(d, (70, 805), 'SEALED BASE + THREE SEPARATE PANELS / AUTHORING POSE', 15, CYAN)
     d.line((778, 185, 778, 805), fill='#315a70', width=2)
     model(im, 'space-radiator', (800, 177, 340, 330))
     model(im, 'radiator-panel', (1170, 177, 340, 330))
-    text(d, (822, 522), 'RADIATOR BASE', 22, GOLD, True)
-    text(d, (1190, 522), 'EXTENSION PANEL', 22, GOLD, True)
-    note(d, 812, 592, '01', 'MIXED TIERS ADD CAPACITY', ['2 / 20 GW per standard / upgraded section', 'Three sections: 6 / 60 GW in ideal exposure'])
-    note(d, 812, 710, '02', 'BUILD ON THE TOP SHAFT', ['Match Up; any yaw / maximum two extensions', 'Shade and edge-on tracking preserve capacity'])
+    text(d, (822, 522), '1 x 1 x 1 / SEALED BASE', 21, GOLD, True)
+    text(d, (1190, 522), 'SEPARATE PANEL', 22, GOLD, True)
+    note(d, 812, 592, '01', 'PANELS PROVIDE THE COOLING', ['2 / 20 GW per standard / upgraded panel', 'Three panels: 6 / 60 GW in shaded vacuum'])
+    note(d, 812, 710, '02', 'SEAL THE BASE INTO THE HULL', ['Bottom H/C feed / base has no cooling itself', 'Match Up; any yaw / tracking stays on-grid'])
     im.save(OUT/'radiators-blueprint.png', optimize=True)
 
-for bare, number, title in [(False, '07', 'FRAMED'), (True, '08', 'BARE')]:
+for bare, number, title in [(False, '07', 'ENCLOSED'), (True, '08', 'BARE')]:
     parts = []
     for shape, label, detail in [
         ('straight', 'STRAIGHT', 'Opposed H / C ports'), ('elbow', 'ELBOW', 'Horizontal turn'),
@@ -160,7 +160,8 @@ for bare, number, title in [(False, '07', 'FRAMED'), (True, '08', 'BARE')]:
         parts.append(('pipe-'+shape+('-bare' if bare else ''), label, detail))
     grid_plate(number, 'DUPLEX PIPEWORK / '+title, 'ONE LARGE-GRID CELL  //  SHARED SUPPLY + RETURN  //  KEEP REACTOR CIRCUITS SEPARATE',
                ('bare' if bare else 'framed')+'-pipes-blueprint.png', parts,
-               footnote='MATCH OPPOSING FACES AND H/C ROLL  /  CAP OPEN MOUTHS  /  CONVEYORS DO NOT CARRY HEAT')
+               footnote=('MATCH OPPOSING FACES AND H/C ROLL  /  CAP OPEN MOUTHS  /  CONVEYORS DO NOT CARRY HEAT'
+                         if bare else 'MATCH H/C ROLL  /  CAP OPEN MOUTHS  /  FULL BLOCK CASINGS SEAL AGAINST ADJACENT ARMOR'))
 
 if '09' in selected:
     im, d = plate('09', 'ENERGY CORE / COMPLETE BANK', 'FULL ASSEMBLY  //  FOUR UNIVERSAL BAYS  //  COMPLETE CASING + GLAZING OUTLINES')
@@ -181,4 +182,29 @@ if '10' in selected:
         ('transfer', 'ADVANCED TRANSFER', '200 GW charge / 1 TW discharge'),
         ('stabilizer', 'ADVANCED STABILIZER', 'Supports both equipment tiers')], 3,
         'STRONGEST TRANSFER / STABILIZER TIER APPLIES  /  MATCHING OR STRONGER STABILIZER REQUIRED')
+
+if '11' in selected:
+    im, d = plate('11', 'PIPE ROTOR / SEALED ROTARY UNION', 'NATIVE ADVANCED ROTOR  //  H + C ACROSS GRIDS  //  ADJUSTABLE CASING GAP')
+    model(im, 'pipe-rotor-assembly', (48, 177, 700, 615))
+    text(d, (70, 805), 'ASSEMBLED AT DEFAULT DISPLACEMENT / 200 mm CASING GAP', 15, CYAN)
+    d.line((778, 185, 778, 805), fill='#315a70', width=2)
+    model(im, 'pipe-rotor', (800, 180, 340, 330))
+    model(im, 'pipe-rotor-head', (1170, 180, 340, 330))
+    text(d, (822, 522), 'SEALED STATOR', 22, GOLD, True)
+    text(d, (1190, 522), 'HEAD + ROTATING CUFF', 21, GOLD, True)
+    note(d, 812, 592, '01', 'ONE CELL PER CASING', ['100-300 mm adjustable separation', 'Keep the rotating square head sweep clear'])
+    note(d, 812, 710, '02', 'MATCH THE ARCANE HEAD', ['Native conveyor connection + duplex heat', 'Radiator tracking uses its separate base'])
+    im.save(OUT/'pipe-rotor-blueprint.png', optimize=True)
+
+if '12' in selected:
+    im, d = plate('12', 'HULL RADIATORS / SURFACE ARRAY', 'FLUSH HULL FIT  //  FOUR SELF-SEALING EDGES  //  REAR DUPLEX FEED')
+    model(im, 'hull-radiator-array', (45, 177, 755, 490))
+    model(im, 'hull-radiator-rear', (835, 177, 705, 340))
+    text(d, (66, 672), 'DAISY-CHAIN ON ALL FOUR EDGES', 23, GOLD, True)
+    text(d, (850, 532), 'REAR / STANDARD H + C SOCKET', 22, GOLD, True)
+    note(d, 65, 720, '01', 'FIXED / SINGLE RADIATING FACE', ['1 GW standard / 10 GW upgraded per block', '1 DEEP x 2 HIGH x 3 WIDE / full airtight backing'])
+    note(d, 838, 592, '02', 'ONE FEED SERVES THE ARRAY', ['Only matching radiators join the edges.', 'Normal pipes connect at the lower rear.'])
+    note(d, 838, 710, '03', 'NEIGHBORS SELF-SEAL', ['Removing a panel closes adjacent sockets.', 'Failed panels stay sealed but stop cooling.'])
+    im.save(OUT/'hull-radiators-blueprint.png', optimize=True)
+
 print('Wrote', len(selected), '1600x900 Workshop blueprint plates to', OUT)

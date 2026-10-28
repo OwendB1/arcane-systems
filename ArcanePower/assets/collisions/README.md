@@ -5,10 +5,17 @@ already embed the collision bytes. Keep these inputs when deleting generated
 FBX/XML/MWM staging: material and fitted-detail exports reuse the accepted physics.
 
 `Cubes/large/` holds the original reactor, storage and hardware inputs;
-`Cubes/large/Thermal/` holds the 53 thermal mains and 159 construction inputs,
-including the 22 bare pipe variants. Their hulls follow actual pipe solids;
-the removed cages and manifold plates do not leave collision surfaces behind.
-The native export and construction validators read them from here.
+`Cubes/large/Thermal/` holds thermal main, moving-subpart and construction inputs,
+including retained historical variants. The current native export ledger identifies
+the active families. Bare-pipe hulls follow the pipe solids; enclosed fittings,
+rotors and the radiator base follow their sealed casings. The native export and
+construction validators read these inputs from here.
+
+The 0.3.0 radiator base uses six flat convex casing hulls, including its recessed
+bearing deck. `tools/check_thermal_installation.py` extracts the actual installed
+HKT and checks it against these inputs, then runs native Havok face-contact and
+upper-clearance sweeps for the radiator and both pipe rotor parts. The original
+radiator inputs are retained in `checkpoints/radiator-base-before-finish/`.
 
 The thermal reactor main and its three construction stages contain **ten flat
 convex hulls**: the original deck and roof, four glass quadrants and four fitted

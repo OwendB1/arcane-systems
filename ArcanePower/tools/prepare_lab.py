@@ -273,7 +273,7 @@ def external_hardware_definitions():
                                'Central ports also carry conveyor items.\n\n'
                                'SAFETY\nMissing or damaged sections prevent startup.\n'
                                'Security mode selects shutdown or warning on vent loss after startup.'),
-                'Model':'Models/Cubes/large/'+subtype+'.mwm','EmissiveColorPreset':'ArcaneVentDisconnected','Icon':'Textures/GUI/Icons/'+('ArcaneVentOutlet' if subtype.endswith('Outlet') else 'ArcaneVentDuct')+'.dds','BlockPairName':subtype,'IsAirTight':'false','GuiVisible':'true','PCU':25,'BuildTimeSeconds':30}.items():set_text(n,path,value)
+                'Model':'Models/Cubes/large/'+subtype+'.mwm','EmissiveColorPreset':'ArcaneVentDisconnected','Icon':'Textures/GUI/Icons/'+('ArcaneVentOutlet' if subtype.endswith('Outlet') else 'ArcaneVentDuct')+'.dds','BlockPairName':subtype,'IsAirTight':str(subtype.endswith('Outlet')).lower(),'GuiVisible':'true','PCU':25,'BuildTimeSeconds':30}.items():set_text(n,path,value)
         n.find('Size').attrib.update(x='3',y='1',z='3')
         for tag in ['BuildProgressModels','MountPoints','MirroringX','MirroringY','MirroringZ','Center']:
             for child in list(n.findall(tag)):n.remove(child)
