@@ -50,7 +50,7 @@ namespace ArcanePower
     // Electrical load drives the shafts; visual inertia never grants MW.
     public static class ThermalRotors
     {
-        public const double IdleRpm = 5, MaxRpm = 100, MaxCompressorRpm = MaxRpm;
+        public const double IdleRpm = 2, MaxRpm = 50, MaxCompressorRpm = MaxRpm;
         private const double IdleRampSeconds = 5;
         public static void Drive(ThermalRotorState state, double load, double hotC, bool running, double seconds)
         {

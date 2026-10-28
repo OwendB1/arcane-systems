@@ -147,15 +147,15 @@ to review the native appearance after material-definition changes.
 `ThermalRotors` drives both cosmetic shafts linearly from delivered output divided
 by the circuit's allocated electrical rating. Temperature colour follows the same
 load and the fuel tier. No stored-heat or circulation multiplier controls speed.
-Healthy enabled turbines idle at 5 RPM. Both shafts target
-`5 + 95 × utilization` RPM, reaching 100 RPM at full utilization.
-With no load, both shafts ramp from rest to idle over five seconds (1 RPM per
+Healthy enabled turbines idle at 2 RPM. Both shafts target
+`2 + 48 × utilization` RPM, reaching 50 RPM at full utilization.
+With no load, both shafts ramp from rest to idle over five seconds (0.4 RPM per
 second). Load present at startup or arriving during that ramp immediately uses
 the existing four-second response toward its load-dependent target; it never waits
 to reach idle first. Disabled, damaged or faulted turbines coast to rest with the
 existing eight-second response; an unloaded restart below idle resumes the gentle
 ramp from the current speed. Valid saved speeds from the former 4,000 RPM range
-are clamped to 100 RPM on reload, preserving shaft pose and stored heat.
+are clamped to 50 RPM on reload, preserving shaft pose and stored heat.
 Shaft motion does not alter energy accounting.
 The displayed block name is **Arcane Turbine**; subtype IDs remain unchanged for
 existing grids. Dense blades can appear to strobe at these speeds as frames sample

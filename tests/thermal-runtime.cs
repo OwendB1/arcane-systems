@@ -638,28 +638,28 @@ public static partial class ThermalRuntimeChecks
             ThermalRotors.Drive(startingLoaded, 1, 650, true, 1.0 / 60);
             if (i == 60 || i == 150 || i == 300)
             {
-                Near(cold.Rpm, i / 60.0, "unloaded startup reaches 1, 2.5 and 5 RPM at 1, 2.5 and 5 seconds");
+                Near(cold.Rpm, i * .4 / 60.0, "unloaded startup reaches 0.4, 1 and 2 RPM at 1, 2.5 and 5 seconds");
                 Near(cold.CompressorRpm, cold.Rpm, "both shafts share the idle startup ramp");
-                Near(startingLoaded.Rpm, 100 * (1 - Math.Exp(-i / 240.0)),
+                Near(startingLoaded.Rpm, 50 * (1 - Math.Exp(-i / 240.0)),
                     "existing load immediately uses the normal response toward its target");
                 Near(startingLoaded.CompressorRpm, startingLoaded.Rpm, "both shafts share the loaded response");
             }
         }
-        Near(cold.Rpm, 5, "healthy enabled turbine idles at 5 RPM without generating power");
-        Near(cold.CompressorRpm, 5, "both shafts share the idle speed");
+        Near(cold.Rpm, 2, "healthy enabled turbine idles at 2 RPM without generating power");
+        Near(cold.CompressorRpm, 2, "both shafts share the idle speed");
         var interrupted = new ThermalRotorState { EntityId = 1 };
         for (int i = 0; i < 150; i++) ThermalRotors.Drive(interrupted, 0, 650, true, 1.0 / 60);
         ThermalRotors.Drive(interrupted, 0, 650, false, 1);
         double coast = interrupted.Rpm;
-        Check(coast > 0 && coast < 2.5 && interrupted.TargetRpm == 0, "turning off during startup immediately coasts");
+        Check(coast > 0 && coast < 1 && interrupted.TargetRpm == 0, "turning off during startup immediately coasts");
         ThermalRotors.Drive(interrupted, 0, 650, true, 1);
-        Near(interrupted.Rpm, coast + 1, "restarting resumes the idle ramp from the current speed");
+        Near(interrupted.Rpm, coast + .4, "restarting resumes the idle ramp from the current speed");
         double beforeLoad = interrupted.Rpm;
         ThermalRotors.Drive(interrupted, .5, 650, true, 1);
-        Near(interrupted.Rpm, 52.5 + (beforeLoad - 52.5) * Math.Exp(-.25),
-            "load arriving during idle startup immediately takes over without waiting for 5 RPM");
-        var idleA = new ThermalRotorState { Rpm = 4.3, TargetRpm = 5 };
-        var idleB = new ThermalRotorState { Rpm = 4.3, TargetRpm = 5 };
+        Near(interrupted.Rpm, 26 + (beforeLoad - 26) * Math.Exp(-.25),
+            "load arriving during idle startup immediately takes over without waiting for 2 RPM");
+        var idleA = new ThermalRotorState { Rpm = 1.72, TargetRpm = 2 };
+        var idleB = new ThermalRotorState { Rpm = 1.72, TargetRpm = 2 };
         ThermalRotors.Advance(idleA, 1);
         for (int i = 0; i < 60; i++) ThermalRotors.Advance(idleB, 1.0 / 60);
         Near(idleA.Rpm, idleB.Rpm, "idle ramp settles identically across frame sizes");
@@ -676,15 +676,15 @@ public static partial class ThermalRuntimeChecks
         }
         Check(hot.Rpm == warm.Rpm && hot.Rpm > low.Rpm && hot.Rpm > ThermalRotors.MaxRpm * .98,
             "load drives shaft speed independently of fuel temperature");
-        Near(low.TargetRpm, 28.75, "quarter utilization gives 5 plus one quarter of the 95 RPM range");
-        Near(hot.TargetRpm, 100, "full utilization targets 100 RPM");
+        Near(low.TargetRpm, 14, "quarter utilization gives 2 plus one quarter of the 48 RPM range");
+        Near(hot.TargetRpm, 50, "full utilization targets 50 RPM");
         Near(hot.CompressorTargetRpm, hot.TargetRpm, "compressor and turbine share the load response");
         ThermalRotors.Drive(low, .5, 650, true, 1.0 / 60);
-        Near(low.TargetRpm, 52.5, "half utilization targets 52.5 RPM");
+        Near(low.TargetRpm, 26, "half utilization targets 26 RPM");
         ThermalRotors.Drive(low, 2, 650, true, 1.0 / 60);
-        Near(low.TargetRpm, 100, "overload cannot exceed maximum RPM");
+        Near(low.TargetRpm, 50, "overload cannot exceed maximum RPM");
         ThermalRotors.Drive(low, 0, 650, true, 1.0 / 60);
-        Near(low.TargetRpm, 5, "load removal returns to idle without stopping");
+        Near(low.TargetRpm, 2, "load removal returns to idle without stopping");
         double spinning = hot.Rpm;
         ThermalRotors.Drive(hot, 1, 2200, false, 1.0 / 60);
         Check(hot.Rpm > 0 && hot.Rpm < spinning && hot.TargetRpm == 0, "disabled or faulted turbine coasts, never snaps");
@@ -706,10 +706,10 @@ public static partial class ThermalRuntimeChecks
         Check(restored.Valid(1, 100), "old RPM save migrates without isolating heat inventory");
         Near(restored.HotMJ, 50, "RPM migration preserves stored heat");
         Near(restored.Rotor.Phase, warm.Phase, "RPM migration preserves shaft pose");
-        Near(restored.Rotor.Rpm, 100, "saved turbine speed clamps to the new maximum");
-        Near(restored.Rotor.CompressorRpm, 100, "saved compressor speed clamps to the new maximum");
-        Near(restored.Rotor.TargetRpm, 100, "saved turbine target clamps to the new maximum");
-        Near(restored.Rotor.CompressorTargetRpm, 100, "saved compressor target clamps to the new maximum");
+        Near(restored.Rotor.Rpm, 50, "saved turbine speed clamps to the new maximum");
+        Near(restored.Rotor.CompressorRpm, 50, "saved compressor speed clamps to the new maximum");
+        Near(restored.Rotor.TargetRpm, 50, "saved turbine target clamps to the new maximum");
+        Near(restored.Rotor.CompressorTargetRpm, 50, "saved compressor target clamps to the new maximum");
         foreach (double invalid in new[] { double.NaN, double.PositiveInfinity, -1.0, 4001.0 })
         {
             var invalidSaved = new ThermalRotorState { EntityId = 1, Rpm = invalid };

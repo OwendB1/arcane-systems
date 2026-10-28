@@ -166,7 +166,7 @@ namespace ArcanePower
                 Row(text, "Conveyors", reactor.UseConveyorSystem ? "Automatic supply enabled" : "Automatic supply disabled");
                 Row(text, "Route", !Motion.VentReady ? "Missing / unfinished / misaligned" : Motion.VentDucts + " tube(s) + outlet connected",
                     !Motion.VentReady ? "yellow" : "white");
-                if (Motion.Vent != VentPhase.Idle)
+                if (Motion.Vent != VentPhase.Idle || Motion.ShieldTest != ShieldTestPhase.Idle)
                     Row(text, "Doors", "shield " + Percent(Motion.Shield) + "   intake " + Percent(Motion.Intake));
                 if (Motion.TileStarved && Motion.TileWear >= 1)
                     Line(text, "red", "Tile failure: 10% output / 10x fuel at pre-failure load.");
@@ -249,8 +249,10 @@ namespace ArcanePower
             if (!receivedState) { tone = "yellow"; return "WAITING FOR REACTOR STATE"; }
             if (Motion.Critical)
             {
-                tone = "red"; action = !Motion.ControllersReady ? "Repair both controllers urgently; core cannot eject."
-                    : Motion.VentReady ? "Eject the core to move the blast away." : "Repair the vent route urgently; core cannot eject.";
+                tone = "red"; action = !Motion.VentReady ? "Repair the vent route urgently; core cannot eject."
+                    : Motion.PowerPaused || !VentPowerAvailable ? "Restore containment power urgently; ejection reserve exhausted."
+                    : !Motion.ControllersReady ? "Eject using reserve power before it runs out."
+                    : "Eject the core to move the blast away.";
                 return "SUPERCRITICAL  /  ~" + Number(Motion.CriticalSeconds, "0.0") + " s";
             }
             if (Motion.ThermalWarning)
@@ -266,14 +268,13 @@ namespace ArcanePower
             { tone = "cyan"; action = "Restoring saved state while grid connections initialize."; return "RECONNECTING CONTAINMENT"; }
             if (Motion.PowerPaused)
             { tone = "red"; action = "Restore containment power; reserve exhausted."; return "MECHANISMS PAUSED"; }
-            if (Motion.Vent != VentPhase.Idle && !Motion.PayloadReleased && !Motion.ControllersReady)
-            { tone = "red"; action = "Restore both fully built, functional controllers; heat and fuse continue."; return "CONTROLLERS BROKEN / EJECTION PAUSED"; }
             if (!Motion.VentReady && Motion.Vent != VentPhase.Idle && !Motion.PayloadReleased)
             { tone = "red"; action = "Restore the original tube stack and outlet; heat and fuse continue."; return "VENT ROUTE BROKEN / EJECTION PAUSED"; }
             if (Motion.Vent != VentPhase.Idle)
-            { tone = "yellow"; action = "Reactor stays off after this cycle."; return "VENTING  /  " + VentStatus().ToUpperInvariant(); }
-            if (NeedsAutoEjection && !Motion.ControllersReady)
-            { tone = "red"; action = "Restore both fully built, functional controllers to auto eject."; return "AUTO EJECTION BLOCKED / CONTROLLERS"; }
+            { tone = "yellow"; action = !Motion.ControllersReady ? "Ejecting on reserve power; reactor stays off after this cycle."
+                : "Reactor stays off after this cycle."; return "VENTING  /  " + VentStatus().ToUpperInvariant(); }
+            if (NeedsAutoEjection && !VentPowerAvailable)
+            { tone = "red"; action = "Restore containment power to auto eject; reserve exhausted."; return "AUTO EJECTION BLOCKED / POWER"; }
             if (NeedsAutoEjection && !Motion.VentReady)
             { tone = "red"; action = "Repair the complete vent route to auto eject."; return "AUTO EJECTION BLOCKED / VENTS"; }
             if (!reactor.IsFunctional || reactor.SlimBlock.BuildLevelRatio < 1)
@@ -341,6 +342,8 @@ namespace ArcanePower
 
         private string VentStatus()
         {
+            if (Motion.ShieldTest != ShieldTestPhase.Idle)
+                return "Shield test / " + (Motion.ShieldTest == ShieldTestPhase.Lowering ? "lowering" : "retracting");
             if (!Motion.VentReady) return Motion.Vent != VentPhase.Idle && !Motion.PayloadReleased ? "Route broken / paused" : "Tube + outlet required";
             switch (Motion.Vent)
             {

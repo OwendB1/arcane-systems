@@ -14,6 +14,7 @@ namespace ArcanePower
 {
     public enum CorePhase { Off, Starting, Running, Stopping, Cooling }
     public enum VentPhase { Idle, ShieldClosing, IntakeOpening, Open, IntakeClosing, ShieldOpening, Ejecting }
+    public enum ShieldTestPhase { Idle, Lowering, Retracting }
     public enum ReactorStatus { ShutOff, Incomplete, OutOfFuel, Active }
 
     [ProtoContract]
@@ -82,6 +83,7 @@ namespace ArcanePower
         [ProtoMember(60)] public float CooldownStartHeat;
         [ProtoMember(61)] public float ForecastCooldownSeconds = -1;
         [ProtoMember(62)] public float EjectSubtick;
+        [ProtoMember(63)] public ShieldTestPhase ShieldTest;
 
         // Timing is decided on the server; clients display the same confirmed
         // warning throughout its recovery hold instead of toggling independently.
@@ -194,6 +196,8 @@ namespace ArcanePower
             // half a quantum of credit. Keep it, with tolerance for double arithmetic.
             return state != null && state.Core >= CorePhase.Off && state.Core <= CorePhase.Cooling
                 && state.Vent >= VentPhase.Idle && state.Vent <= VentPhase.Ejecting
+                && state.ShieldTest >= ShieldTestPhase.Idle && state.ShieldTest <= ShieldTestPhase.Retracting
+                && (state.ShieldTest == ShieldTestPhase.Idle || (state.Vent == VentPhase.Idle && state.Intake == 0))
                 && state.CoreTick >= 0 && state.CoreTick <= 2000000000 && state.StopTick >= 0 && state.StopTick <= 1260
                 && state.StopSpinAge >= 0 && state.StopSpinAge <= 2000000000
                 && state.Shield >= 0 && state.Shield <= 1 && state.Intake >= 0 && state.Intake <= 1
@@ -246,15 +250,47 @@ namespace ArcanePower
             reactor.RefreshCustomInfo();
         }
 
+        internal bool CanTestVentShields
+        {
+            get { return IsLive && receivedState && initializationFrames == 0 && reactor.IsFunctional
+                && Motion.ControllersReady && !Motion.Critical && Motion.Vent == VentPhase.Idle
+                && Motion.Intake == 0 && Motion.ShieldTest == ShieldTestPhase.Idle; }
+        }
+
+        internal void RequestVentShieldTest()
+        {
+            if (!MyAPIGateway.Multiplayer.IsServer || !CanTestVentShields || !HasIntactControllers()
+                || !restPoses.ContainsKey("BlastShield6")) return;
+            Motion.ShieldTest = ShieldTestPhase.Lowering;
+            PublishMotion();
+        }
+
+        private void AdvanceVentShieldTest()
+        {
+            if (!Motion.ControllersReady || !reactor.IsFunctional) return;
+            if (Motion.ShieldTest == ShieldTestPhase.Lowering)
+            {
+                Motion.Shield = Math.Min(1, Motion.Shield + VentSpeed / 240);
+                if (Motion.Shield >= 1) Motion.ShieldTest = ShieldTestPhase.Retracting;
+            }
+            else if (Motion.ShieldTest == ShieldTestPhase.Retracting)
+            {
+                Motion.Shield = Math.Max(0, Motion.Shield - VentSpeed / 240);
+                if (Motion.Shield <= 0) Motion.ShieldTest = ShieldTestPhase.Idle;
+            }
+        }
+
         internal void RequestVent(bool open)
         {
             // Ejection is a finite committed cycle: another toolbar click must
             // not reverse a hatch onto a core which is still passing through it.
             if (!MyAPIGateway.Multiplayer.IsServer || !open || Motion.Vent != VentPhase.Idle) return;
-            if (!HasIntactControllers()) return;
             if (!restPoses.ContainsKey("VentHatch4")) return;
+            Motion.ControllersReady = HasIntactControllers();
             RefreshVentRoute();
-            if (!Motion.VentReady) { PublishMotion(); return; }
+            if (!CanStartVent) { PublishMotion(); return; }
+            // Real ejection takes ownership of the current shield position.
+            Motion.ShieldTest = ShieldTestPhase.Idle;
             Motion.PayloadReleased = false;
             Motion.Requested = true;
             Motion.EjectTick = 0;
@@ -295,12 +331,13 @@ namespace ArcanePower
             var oldCore = Motion.Core;
             var oldVent = Motion.Vent;
             var oldStatus = Motion.Status;
+            var oldShieldTest = Motion.ShieldTest;
             if (server)
             {
                 // A broken route freezes the committed launch, never its heat/fuse.
                 bool ejecting = Motion.Vent != VentPhase.Idle && !Motion.PayloadReleased;
                 Motion.Paused = Motion.PowerPaused || (Motion.Vent == VentPhase.Idle && !reactor.IsFunctional)
-                    || (ejecting && (!Motion.ControllersReady || !Motion.VentReady));
+                    || (ejecting && !Motion.VentReady);
                 if (Motion.Core == CorePhase.Off && Motion.Vent == VentPhase.Idle && reactor.Enabled && !thermalStartRequested && Motion.VentReady && HasUsableFuel() && Motion.PowerReady && !PrepareTiles())
                     reactor.Enabled = false;
                 UpdateStatus();
@@ -354,12 +391,14 @@ namespace ArcanePower
                 DrawVentOutlet();
             }
             networkTick++;
-            if (server && (oldCore != Motion.Core || oldVent != Motion.Vent || oldStatus != Motion.Status || networkTick % 30 == 0)) PublishMotion();
+            if (server && (oldCore != Motion.Core || oldVent != Motion.Vent || oldStatus != Motion.Status
+                || oldShieldTest != Motion.ShieldTest || networkTick % 30 == 0)) PublishMotion();
             else if (!server && !receivedState && networkTick % 120 == 0) VentSession.SendCommand(Id, VentCommand.Sync);
         }
 
         private void AdvanceMotion()
         {
+            AdvanceVentShieldTest();
             // One-second response filters abrupt power demand changes. The server
             // supplies the target and accumulated phase for late joins/reloads.
             Motion.Load += (Motion.TargetLoad - Motion.Load) / 60f;

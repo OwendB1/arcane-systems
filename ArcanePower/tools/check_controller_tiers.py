@@ -32,6 +32,7 @@ fuel_fields = fuel[fuel.index("        private static readonly string[] Fuels"):
 methods = "\n".join([
     method(reactor, "        private void CheckContainment()"),
     method(motion, "        private void AdvanceMotion()"),
+    method(motion, "        private void AdvanceVentShieldTest()"),
     method(motion, "        private void AdvanceSpin()"),
     method(motion, "        private void BeginDismantling()"),
     method(motion, "        private void BeginShutdown()"),
@@ -43,6 +44,7 @@ methods = "\n".join([
     method(fuel, "        private void PayFuel("),
     method((SCRIPTS / "Reactor.Tiles.cs").read_text(), "        private static bool ValidTileGrades("),
 ])
+methods += re.search(r'        private const float VentSpeed = [^;]+;', motion).group() + '\n'
 safety = (SCRIPTS / "Reactor.Safety.cs").read_text()
 methods += safety[safety.index("        private bool CanOperate"):safety.index("        private bool NeedsAutoEjection")]
 STUBS = r'''
@@ -270,6 +272,11 @@ CHECKS = r'''
             saved.SecurityMode=true;packet=new MemoryStream();model.Serialize(packet,saved);packet.Position=0;
             copy=(MotionState)model.Deserialize(packet,null,typeof(MotionState));
             Need(copy.SecurityMode,"protobuf preserves default security-on mode");
+            copy.ShieldTest=ShieldTestPhase.Lowering;
+            Need(Valid(copy),"valid shield dry run is accepted");
+            copy.Intake=.5f;Need(!Valid(copy),"dry run with an open hatch is rejected");copy.Intake=0;
+            copy.Vent=VentPhase.ShieldClosing;Need(!Valid(copy),"dry run cannot coexist with real ejection");copy.Vent=VentPhase.Idle;
+            copy.ShieldTest=(ShieldTestPhase)3;Need(!Valid(copy),"unknown dry-run phase is rejected");
             saved.FuelDebt=-2.288216908615642E-07;packet=new MemoryStream();model.Serialize(packet,saved);packet.Position=0;
             copy=(MotionState)model.Deserialize(packet,null,typeof(MotionState));
             Need(Valid(copy) && copy.FuelDebt==saved.FuelDebt,"network packet preserves valid negative rounding credit");

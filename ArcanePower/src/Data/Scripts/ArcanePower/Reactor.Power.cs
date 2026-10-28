@@ -17,6 +17,7 @@ namespace ArcanePower
         internal bool NeedsStorageSupport
         {
             get { return motionInitialized && initializationFrames == 0 && IsLive && (Motion.Vent != VentPhase.Idle
+                || Motion.ShieldTest != ShieldTestPhase.Idle
                 || Motion.Core == CorePhase.Cooling || Motion.Core == CorePhase.Stopping
                 || Motion.Core == CorePhase.Starting
                 || (Motion.Core == CorePhase.Off && CanPrepareContainment) || ThermalNeedsPowerSupport); }
@@ -24,6 +25,14 @@ namespace ArcanePower
         private readonly List<ContainmentController> powerControllers = new List<ContainmentController>(2);
         private float ContainmentMW { get { return PowerMW[Motion.FuelTier - 1] * .0001f; } }
         private double ReserveCapacityMJ { get { return ContainmentMW * 90.0; } }
+        internal bool VentPowerAvailable
+        {
+            get { return Motion.ControllersReady || Motion.ReserveMJ + .000001 >= ContainmentMW / 60.0; }
+        }
+        internal bool CanStartVent
+        {
+            get { return Motion.Vent == VentPhase.Idle && Motion.VentReady && VentPowerAvailable; }
+        }
 
         // Presentation uses the same replicated reserve/input values as power
         // accounting. Requested power alone must never imply charging progress.
@@ -44,6 +53,7 @@ namespace ArcanePower
         {
             bool server = MyAPIGateway.Multiplayer.IsServer;
             bool active = Motion.Core != CorePhase.Off || Motion.Vent != VentPhase.Idle
+                || Motion.ShieldTest != ShieldTestPhase.Idle
                 || (ThermalVariant && Motion.Thermal != null && !Motion.Thermal.Settled);
             bool preparing = CanPrepareContainment;
             float operating = active || preparing ? ContainmentMW : 0;

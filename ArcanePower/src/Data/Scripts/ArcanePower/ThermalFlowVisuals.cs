@@ -197,6 +197,8 @@ namespace ArcanePower
                     else if (mode == ThermalFlowMode.Ready) status = new Color(35, 175, 220);
                 }
                 float statusIntensity = pipeFault ? .325f : .65f;
+                if (source != null && source.Motion.Critical)
+                    statusIntensity *= now % 60 < 30 ? 1f : 0f;
                 entity.SetEmissiveParts("ThermalStatus", status, current ? statusIntensity : 0);
                 entity.SetEmissivePartsForSubparts("ThermalStatus", status, current ? statusIntensity : 0);
                 float intensity = pipeFault ? statusIntensity : (float)(.08 + view.Rate * .65);

@@ -48,7 +48,7 @@ namespace ArcanePower
         {
             if (!MyAPIGateway.Multiplayer.IsServer || initializationFrames > 0) return;
             Motion.ControllersReady = HasIntactControllers();
-            if (NeedsAutoEjection && Motion.ControllersReady && Motion.VentReady && Motion.Vent == VentPhase.Idle)
+            if (NeedsAutoEjection && CanStartVent)
                 RequestVent(true);
         }
 

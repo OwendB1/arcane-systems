@@ -84,7 +84,7 @@ and 07, and adds `pipe-rotor-blueprint.png` (11) and
 provide cooling. The outlet drawing includes all four hatch subparts. The
 rotor assembly uses its native default head offset, and the hull array uses
 four adjoining radiators with self-sealing edge unions. Local image updates
-are authorized; uploading the gallery remains paused.
+and gallery uploads are authorized; publishing the mod package remains paused.
 
 Rebuild selected plates with `compose_workshop_blueprints.py --plates 01 02 05 06 07 11 12`
 after rendering their named studies. The local image bundle is

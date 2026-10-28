@@ -2,7 +2,7 @@
 
 Use the installed `blender-live-workflow` skill for Blender work. Work in the user's visible Blender window and inspect images after meaningful changes. Numerical checks and successful MWM builds do not establish visual quality.
 
-- The user authorized the whole-set asset export, LOD/build-stage refresh, mod installation and local validation/package for 0.3.0, plus updates to the local Workshop wireframe images. Workshop publication and gallery uploads remain paused.
+- The user authorized the whole-set asset export, LOD/build-stage refresh, mod installation and local validation/package for 0.3.0, plus updates and uploads of the Workshop wireframe gallery images. Publishing the mod package remains paused.
 
 - Use the actual live Blender viewport and fresh UI screenshots for improvement decisions. Verify the view has settled before judging it. After derived-model checks or exports, restore the finished main model and its useful review view; do not leave a distant LOD or export subpart active.
 
@@ -26,7 +26,7 @@ Use the installed `blender-live-workflow` skill for Blender work. Work in the us
 - `build_energy_core.py` is procedural source. Reconcile accepted interactive edits into that source before regeneration. Use the existing SEUT/export pipeline and validate the resulting asset in SE when claiming game behavior.
 - `Battery / assembled review` is a temporary inspection scene. Save it to a separate checkpoint; do not overwrite `arcane-energy-core.blend` with the review assembly.
 - After main-mesh edits, refresh review copies with `sync_energy_review.py`. Activate and update each source and destination scene before reading world matrices; inactive-scene caches can be stale after reopening. Check the assembled and comparison scenes after reload, including each copy's fastener references.
-- Keep Workshop gallery uploads paused until the user lifts the hold. Local image updates are authorized. Do not push `main` as part of asset inspection: CI publishes the Workshop item.
+- Workshop gallery image updates and uploads are authorized. Do not push `main` as part of asset inspection or gallery updates: CI publishes the mod package, which remains paused.
 
 ## Cleanup after every modelling pass
 

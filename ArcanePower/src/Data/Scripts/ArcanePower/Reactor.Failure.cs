@@ -116,7 +116,9 @@ namespace ArcanePower
         private void TryReleasePayload()
         {
             if (Motion.Vent != VentPhase.Ejecting || !Motion.VentHadPayload || Motion.PayloadReleased || !Motion.VentReady) return;
-            if (!HasIntactControllers()) return;
+            // UpdatePower pays for this simulation step from input or reserve.
+            // Controller failure must not strand an otherwise powered ejection.
+            if (Motion.PowerPaused) return;
             // Keep the authored launch through the housing/duct. Hand off only
             // once the largest hoop is fully beyond the open outlet plane.
             IMyEntity outlet;
@@ -136,11 +138,11 @@ namespace ArcanePower
                 MatrixD world = WorldPose(PayloadPlasmaPose(age));
                 if (!CoreHazards.Release(Id, Motion.FuelTier, Motion.Heat, world,
                     LaunchVelocity(world.Translation, .8f), RandomVector(1.3f),
-                    critical ? CaptureCoreShell(world, age, rotation) : null)) return;
+                    CaptureCoreShell(world, age, rotation))) return;
             }
             // Persist the one-way handoff before scheduling asynchronous debris.
             CompletePayloadRelease();
-            if (!critical)
+            if (!plasma && !critical)
             {
                 for (int i = 0; i < Motion.RingCount; i++)
                     SpawnSpent("ArcaneSpentRing" + (i + 1), WorldPose(PayloadRingPose(i, age)), 1.5f);
@@ -198,7 +200,8 @@ namespace ArcanePower
             // the housing is opened or destroyed. Grid motion is still inherited.
             if (!CoreHazards.Release(Id, Motion.FuelTier, Motion.Heat, world,
                 physics == null ? Vector3.Zero : physics.GetVelocityAtPoint(position),
-                physics == null ? Vector3.Zero : physics.AngularVelocity)) return;
+                physics == null ? Vector3.Zero : physics.AngularVelocity,
+                CaptureCoreShell(world, age, ContainmentRotation(age)))) return;
             reactor.Enabled = false;
             Motion.Core = CorePhase.Off;
             Motion.CoreTick = 0;
@@ -212,10 +215,12 @@ namespace ArcanePower
         private void ApplyOverheatDamage()
         {
             if (!MyAPIGateway.Multiplayer.IsServer || Motion.PayloadReleased || Motion.Core == CorePhase.Off
-                || Motion.Heat <= 1 || !reactor.IsFunctional)
+                || Motion.Heat < CoreHazards.SupercriticalHeat || !reactor.IsFunctional)
             { overheatDamageTick = 0; return; }
-            // One damage update per simulation second; the rate rises linearly
-            // with heat above 100%. At 125%: vessel 1%/s, controllers 1.5%/s.
+            // Damage starts at 125% and rises with heat. The vessel coefficient
+            // reaches its ~86% functional cutoff after ~45 s of the normal
+            // supercritical heat ramp from full integrity; controllers use their
+            // own damage rate. Repairs and external damage still apply normally.
             if (++overheatDamageTick < 60) return;
             overheatDamageTick = 0;
             float excess = Motion.Heat - 1;
@@ -231,7 +236,7 @@ namespace ArcanePower
             foreach (var module in modules)
                 module.DoDamage(module.MaxIntegrity * .06f * excess,
                     VRage.Utils.MyStringHash.GetOrCompute("Overheat"), true, attackerId: Id);
-            reactor.SlimBlock.DoDamage(reactor.SlimBlock.MaxIntegrity * .04f * excess,
+            reactor.SlimBlock.DoDamage(reactor.SlimBlock.MaxIntegrity * .00135f * excess,
                 VRage.Utils.MyStringHash.GetOrCompute("Overheat"), true, attackerId: Id);
             TryReleaseFailedHousing();
         }
@@ -251,12 +256,12 @@ namespace ArcanePower
         private Vector3 LaunchVelocity(Vector3D position, float scatter)
         {
             Vector3 inherited = reactor.CubeGrid.Physics == null ? Vector3.Zero : reactor.CubeGrid.Physics.GetVelocityAtPoint(position);
-            // The outlet supplies a final launch impulse, at least 45 m/s.
-            // Longer ducts may already exceed that speed under authored acceleration.
+            // Halve the outlet impulse, including scatter, but retain ship motion.
+            // Minimum axial speed is 22.5 m/s; longer ducts scale with travel.
             float speed = VentSpeed * Math.Max(30, Motion.EjectionTravel * (Motion.EjectTick + Motion.EjectSubtick) / 120f);
             Vector3 jitter = RandomVector(scatter);
             jitter.Y = 0; // Scatter is lateral; it cannot weaken the launch impulse.
-            return inherited + (Vector3)Entity.WorldMatrix.Up * speed + Vector3.TransformNormal(jitter, Entity.WorldMatrix);
+            return inherited + ((Vector3)Entity.WorldMatrix.Up * speed + Vector3.TransformNormal(jitter, Entity.WorldMatrix)) * .5f;
         }
 
         private void SpawnSpent(string subtype, MatrixD world, float scatter)

@@ -177,7 +177,9 @@ namespace ArcanePower
                 : Motion.Status == ReactorStatus.Active ? FuelColors[Motion.FuelTier - 1]
                 : Motion.Status == ReactorStatus.OutOfFuel ? Color.White : Color.Red;
             float intensity = EmissiveIntensity;
-            if (incomplete || (precharging && !charging))
+            if (Motion.Critical)
+                intensity *= pulseTick % 60 < 30 ? 1f : 0f;
+            else if (incomplete || (precharging && !charging))
                 intensity *= .5f + .5f * (float)System.Math.Cos(pulseTick * System.Math.PI / 60);
             else if (charging)
                 intensity *= pulseTick % 60 < 30 ? 1f : 0f;

@@ -8,10 +8,25 @@ import os
 import re
 import subprocess
 import tempfile
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / 'src/Data/Scripts/ArcanePower'
 GAME = Path.home() / '.local/share/Steam/steamapps/common/SpaceEngineers/Bin64'
+# Match SE's component-derived functional cutoff for the shipped housing.
+components = ET.parse(GAME.parent / 'Content/Data/Components.sbc')
+component_integrity = {c.findtext('Id/SubtypeId'): float(c.findtext('MaxIntegrity'))
+                       for c in components.findall('.//Component') if c.find('MaxIntegrity') is not None}
+housing = next(b for b in ET.parse(ROOT / 'src/Data/CubeBlocks/ArcanePower_Thermal.sbc').findall('.//Definition')
+               if b.findtext('Id/SubtypeId') == 'ArcanePower_Thermal_ReactorHousing')
+housing_integrity = housing_cutoff = critical_group = 0
+for component in housing.find('Components'):
+    integrity = component_integrity[component.get('Subtype')]
+    housing_integrity += integrity * int(component.get('Count'))
+    if component.get('Subtype') == housing.find('CriticalComponent').get('Subtype'):
+        if critical_group == int(housing.find('CriticalComponent').get('Index')):
+            housing_cutoff = housing_integrity - integrity
+        critical_group += 1
 
 
 def member(file, name):
@@ -37,12 +52,19 @@ reactor_methods = ''.join(member('Reactor.Failure.cs', name) for name in (
     'CaptureCoreShell', 'CompletePayloadRelease', 'TryReleaseFailedHousing', 'ApplyOverheatDamage',
     'WorldPose', 'RandomVector', 'LaunchVelocity'))
 reactor_methods += ''.join(member('Reactor.Motion.cs', name) for name in (
-    'UpdateMotion', 'AdvanceMotion', 'AdvanceSpin', 'BeginShutdown', 'BeginDismantling',
+    'UpdateMotion', 'AdvanceMotion', 'AdvanceVentShieldTest', 'RequestVentShieldTest', 'RequestVent',
+    'AdvanceSpin', 'BeginShutdown', 'BeginDismantling',
     'Span', 'Ease', 'RingOrientation', 'ShutdownRingOrientation', 'ContainmentOffset',
     'ContainmentRotation', 'EjectionOffset', 'PayloadRingPose', 'PayloadTilePose',
     'PlasmaScale', 'PayloadPlasmaPose'))
 reactor_methods += member('Reactor.Tiles.cs', 'DiscardTiles')
+reactor_methods += member('Reactor.Power.cs', 'UpdatePower')
+power = (SRC / 'Reactor.Power.cs').read_text()
+reactor_methods += power[power.index('        internal bool VentPowerAvailable'):power.index('        // Presentation')]
+reactor_methods += motion[motion.index('        internal bool CanTestVentShields'):motion.index('        internal void RequestVentShieldTest')]
 reactor_methods += re.search(r'        private const float VentSpeed = [^;]+;', motion).group() + '\n'
+
+heat_methods = ''.join(member('ThermalPlant.cs', name) for name in ('CoreHeatResponse', 'ApproachCoreHeat'))
 
 stubs = r'''
 using System;
@@ -105,19 +127,21 @@ namespace ArcanePower {
  class MyCubeGrid:MyEntity,IMyCubeGrid {public bool DestructibleBlocks=true,Editable=true;}
  interface IMySlimBlock {float MaxIntegrity{get;}void DoDamage(float amount,MyStringHash type,bool sync,long attackerId);}
  class Slim:IMySlimBlock {
-  public float Integrity=1000;public float MaxIntegrity{get{return 1000;}}public int Hits;
+  public float Integrity=1000,Maximum=1000,FunctionalCutoff=600;public float MaxIntegrity{get{return Maximum;}}public int Hits;
   public void DoDamage(float amount,MyStringHash type,bool sync,long attackerId){Integrity-=amount;Hits++;}
  }
  class Attachment {public bool Compatible=true;public MyCubeBlock Block;}
  class MyCubeBlock:MyEntity {
-  public bool Enabled=true,Functional=true;public bool IsFunctional{get{return Functional && SlimBlock.Integrity>600;}}
+  public bool Enabled=true,Functional=true;public bool IsFunctional{get{return Functional && SlimBlock.Integrity>SlimBlock.FunctionalCutoff;}}
   public float CurrentOutput,MaxOutput=1;
   public Slim SlimBlock=new Slim();public MyCubeGrid CubeGrid=new MyCubeGrid();
   public Dictionary<int,Attachment> CurrentAttachedUpgradeModules=new Dictionary<int,Attachment>();
  }
- class ContainmentController {}
- public class ThermalReactorState {public double ProducedMW;}
- static class ThermalMath {public static double Clamp(double v,double lo,double hi){return Math.Max(lo,Math.Min(hi,v));}}
+ class ContainmentController {public float Request(long id,float demand){return 0;}}
+ [ProtoContract] public class ThermalReactorState {public double ProducedMW;public bool Settled=true;}
+ static class ThermalMath {public static double Clamp(double v,double lo,double hi){return Math.Max(lo,Math.Min(hi,v));}
+''' + heat_methods + r'''
+}
  enum VentCommand {Sync}
  static class VentSession {public static void SendCommand(long id,VentCommand command){}}
  static class MyAPIGateway {
@@ -151,7 +175,12 @@ harness = r'''
  class Reactor {
   MyCubeBlock Entity=new MyCubeBlock();MyCubeBlock reactor{get{return Entity;}}
   long Id{get{return Entity.EntityId;}}bool IsLive{get{return !Entity.Closed && !Entity.MarkedForClose;}}
-  MotionState Motion=new MotionState();bool receivedState=true;int overheatDamageTick,spent,published;
+  MotionState Motion=new MotionState();bool receivedState=true,intactControllers=true;int overheatDamageTick,spent,published,initializationFrames;
+  Dictionary<string,Matrix> restPoses=new Dictionary<string,Matrix>{{"BlastShield6",Matrix.Identity},{"VentHatch4",Matrix.Identity}};
+  void RefreshVentRoute(){}
+  const float ContainmentMW=1;const double ReserveCapacityMJ=90;int reloadPowerFrames;
+  bool CanPrepareContainment{get{return false;}}
+  readonly List<ContainmentController> powerControllers=new List<ContainmentController>();
   bool thermalStartRequested,ThermalVariant;bool CanOperate{get{return reactor.IsFunctional;}}
   const double ThermalHeatMW=5000;const float CooldownHeat=.15f;int controllerRingCapacity=4,appearanceRefresh,networkTick;
   const int PlasmaStartTick=1038;Random ejectRandom=new Random(1);
@@ -172,7 +201,7 @@ harness = r'''
    r.Motion.Core=CorePhase.Running;r.Motion.CoreTick=1170;r.Motion.Heat=heat;r.Motion.RingCount=4;r.Motion.InstalledTiles=80;
    return r;
   }
-  bool HasIntactControllers(){return true;}
+  bool HasIntactControllers(){return intactControllers;}
   void ReadyVent(){
    Motion.Vent=VentPhase.Ejecting;Motion.VentHadPayload=true;Motion.VentReady=true;Motion.VentOutletId=2;Motion.EjectTick=119;
    MyAPIGateway.Entities.All[2]=new MyEntity{EntityId=2,WorldMatrix=Entity.WorldMatrix};
@@ -204,10 +233,18 @@ harness = r'''
     Need(restored.Shell.Count==84 && restored.Shell[0].Pose==core.Shell[0].Pose,"multiplayer snapshots preserve intact shell geometry");
     Need(restored.Rotation==core.Rotation && restored.Spin==core.Spin,"multiplayer snapshots preserve physical rotation and spin");
    }
-   session=CoreHazards.Reset();r=Running(.8f);r.ReadyVent();r.TryReleasePayload();
-   Need(!session.cores[0].Critical && session.cores[0].Shell==null && r.spent==84,"ordinary ejections retain spent debris behavior");
+   session=CoreHazards.Reset();r=Running(.8f);r.ReadyVent();
+   MyAPIGateway.Entities.Fail=true;r.TryReleasePayload();
+   Need(!r.Motion.PayloadReleased && r.Motion.InstalledTiles==80 && r.spent==0 && session.cores.Count==0,"failed subcritical launch retains the entire payload for retry");
+   MyAPIGateway.Entities.Fail=false;r.TryReleasePayload();
+   Need(!session.cores[0].Critical && session.cores[0].Shell.Count==84 && r.spent==0,"subcritical vent ejection keeps all tiles and rings attached to the ball");
+   Need(r.Motion.PayloadReleased && r.Motion.InstalledTiles==0,"subcritical launch transfers tile stock once");
+   count=MyAPIGateway.Entities.Creates;r.TryReleasePayload();
+   Need(MyAPIGateway.Entities.Creates==count && session.cores.Count==1 && r.spent==0,"repeated subcritical launch cannot duplicate the ball or shell");
    var ordinary=session.cores[0];ordinary.Decay=.001f;session.UpdateBeforeSimulation();
    Need(session.cores.Count==0 && MyExplosions.Blasts.Count==0 && MyAPIGateway.Entities.All[ordinary.CarrierId].Closed,"subcritical core decays without an explosion");
+   session=CoreHazards.Reset();r=Running(.8f);r.Motion.CoreTick=354;r.ReadyVent();r.TryReleasePayload();
+   Need(session.cores.Count==0 && r.Motion.PayloadReleased && r.spent==8,"before plasma forms, venting ejects four rings and only the first latched tile quartet as debris");
   }
   static void Tracking(){
    var session=CoreHazards.Reset();var r=Running();r.ReadyVent();r.UpdateCriticalCore();r.TryReleasePayload();var core=session.cores[0];
@@ -236,23 +273,35 @@ harness = r'''
    r.Entity.CurrentAttachedUpgradeModules[0]=new Attachment{Block=module};
    r.Entity.CurrentAttachedUpgradeModules[1]=new Attachment{Block=module};
    var unrelated=new MyCubeBlock{CubeGrid=r.reactor.CubeGrid};r.Entity.CurrentAttachedUpgradeModules[2]=new Attachment{Block=unrelated};
-   for(int i=0;i<120;i++)r.ApplyOverheatDamage();Need(r.reactor.SlimBlock.Hits==0 && module.SlimBlock.Hits==0,"no heat damage at or below one hundred percent");
-   r.Motion.Heat=1.25f;for(int i=0;i<60;i++)r.ApplyOverheatDamage();
-   Near(r.reactor.SlimBlock.Integrity,990,"125 percent heat damages vessel one percent per second");Near(module.SlimBlock.Integrity,985,"125 percent heat damages controllers one and a half percent per second");
+   foreach(float heat in new[]{0f,1f,1.1f,1.2f,1.2499f}){
+    r.Motion.Heat=heat;for(int i=0;i<120;i++)r.ApplyOverheatDamage();
+    Need(r.reactor.SlimBlock.Hits==0 && module.SlimBlock.Hits==0,"no heat damage below 125 percent");
+   }
+   r.Motion.Heat=1.25f;for(int i=0;i<59;i++)r.ApplyOverheatDamage();
+   r.Motion.Heat=1.2499f;r.ApplyOverheatDamage();
+   r.Motion.Heat=1.25f;for(int i=0;i<59;i++)r.ApplyOverheatDamage();
+   Need(r.reactor.SlimBlock.Hits==0,"falling below 125 percent resets the damage interval");
+   r.ApplyOverheatDamage();
+   Near(r.reactor.SlimBlock.Integrity,999.6625,"125 percent heat damages vessel 0.03375 percent per second");Near(module.SlimBlock.Integrity,985,"125 percent heat damages controllers one and a half percent per second");
    Need(module.SlimBlock.Hits==1 && unrelated.SlimBlock.Hits==0,"duplicate sockets do not multiply damage and unrelated modules are untouched");
-   r.Motion.Heat=2;for(int i=0;i<60;i++)r.ApplyOverheatDamage();Near(r.reactor.SlimBlock.Integrity,950,"damage rate increases with excess heat");Near(module.SlimBlock.Integrity,925,"controller damage also increases");
-   MyAPIGateway.Multiplayer.IsServer=false;for(int i=0;i<60;i++)r.ApplyOverheatDamage();Near(r.reactor.SlimBlock.Integrity,950,"clients cannot apply heat damage");MyAPIGateway.Multiplayer.IsServer=true;
-   r.Motion.PayloadReleased=true;for(int i=0;i<120;i++)r.ApplyOverheatDamage();Near(r.reactor.SlimBlock.Integrity,950,"ejection immediately ends vessel heat damage even with stale hot telemetry");Near(module.SlimBlock.Integrity,925,"ejection ends controller damage");
+   r.Motion.Heat=2;for(int i=0;i<60;i++)r.ApplyOverheatDamage();Near(r.reactor.SlimBlock.Integrity,998.3125,"damage rate increases with excess heat");Near(module.SlimBlock.Integrity,925,"controller damage also increases");
+   MyAPIGateway.Multiplayer.IsServer=false;for(int i=0;i<60;i++)r.ApplyOverheatDamage();Near(r.reactor.SlimBlock.Integrity,998.3125,"clients cannot apply heat damage");MyAPIGateway.Multiplayer.IsServer=true;
+   r.Motion.PayloadReleased=true;for(int i=0;i<120;i++)r.ApplyOverheatDamage();Near(r.reactor.SlimBlock.Integrity,998.3125,"ejection immediately ends vessel heat damage even with stale hot telemetry");Near(module.SlimBlock.Integrity,925,"ejection ends controller damage");
    session=CoreHazards.Reset();r=Running();r.Entity.Functional=false;r.UpdateCriticalCore();var core=session.cores[0];core.Fuse=35;MyAPIGateway.Entities.Fail=true;r.TryReleaseFailedHousing();
-   Need(!r.Motion.PayloadReleased && core.CarrierId==0,"failed housing release retries without dropping its hazard");
+   Need(!r.Motion.PayloadReleased && r.Motion.InstalledTiles==80 && core.CarrierId==0,"failed housing release retries without dropping its hazard or tiles");
+   var tile=AnimationGeometry.Tiles[0];
+   MatrixD tileWorld=r.WorldPose(r.PayloadTilePose(tile,1170,r.ContainmentRotation(1170)));
    MyAPIGateway.Entities.Fail=false;r.TryReleaseFailedHousing();
-   Need(r.Motion.PayloadReleased && r.Motion.Core==CorePhase.Off && core.CarrierId!=0 && core.Shell==null,"nonfunctional vessel becomes one physical meltdown ball without controllers or vents");
+   MatrixD carriedTile=(MatrixD)core.Shell[4].Pose*MyAPIGateway.Entities.All[core.CarrierId].WorldMatrix;
+   Need(Vector3D.Distance(carriedTile.Translation,tileWorld.Translation)<.0001
+    && Vector3D.Distance(carriedTile.Forward,tileWorld.Forward)<.0001,"failed housing preserves tile position and orientation at handoff");
+   Need(r.Motion.PayloadReleased && r.Motion.Core==CorePhase.Off && core.CarrierId!=0 && core.Shell.Count==84 && r.Motion.InstalledTiles==0 && r.spent==0,"nonfunctional vessel transfers all tiles and rings onto one physical meltdown ball without controllers or vents");
    Need(core.Velocity==new Vector3(7,0,0),"trapped ball inherits ship velocity without a launch impulse");Near(core.Fuse,35,"housing failure preserves fuse");
    int creates=MyAPIGateway.Entities.Creates;r.TryReleaseFailedHousing();Need(MyAPIGateway.Entities.Creates==creates,"failed housing cannot release twice");
-   session=CoreHazards.Reset();r=Running();r.reactor.SlimBlock.Integrity=605;r.UpdateCriticalCore();for(int i=0;i<60;i++)r.ApplyOverheatDamage();
+   session=CoreHazards.Reset();r=Running();r.reactor.SlimBlock.Integrity=600.1f;r.UpdateCriticalCore();for(int i=0;i<60;i++)r.ApplyOverheatDamage();
    Need(r.Motion.PayloadReleased && session.cores[0].CarrierId!=0,"overheating crossing functionality materializes the core in the same update");
    session=CoreHazards.Reset();r=Running();r.ReadyVent();r.Entity.Functional=false;r.UpdateMotion();
-   Need(session.cores.Count==1 && session.cores[0].Shell==null && session.cores[0].Velocity==new Vector3(7,0,0),"actual update prioritizes failed housing ball over normal vent launch");
+   Need(session.cores.Count==1 && session.cores[0].Shell.Count==84 && session.cores[0].Velocity==new Vector3(7,0,0),"actual update prioritizes failed housing ball over normal vent launch");
    r.UpdateMotion();Need(session.cores.Count==1 && MyAPIGateway.Entities.Creates==1,"next update cannot rearm a failed housing after physical handoff");
   }
   static void VentTiming(){
@@ -268,9 +317,11 @@ harness = r'''
      if(!released && r.Motion.PayloadReleased){
       released=true;var core=session.cores[0];var carrier=MyAPIGateway.Entities.All[core.CarrierId];
       Vector3 relative=carrier.Physics.LinearVelocity-r.Entity.CubeGrid.Physics.LinearVelocity;
-      Need(Vector3D.Dot(relative,up)>=45-.0001,"outlet applies at least 45 m/s along its axis for every duct length and orientation");
+      Need(Vector3D.Dot(relative,up)>=22.5-.0001,"outlet applies at least 22.5 m/s along its axis for every duct length and orientation");
+      Vector3D lateral=relative-up*Vector3D.Dot(relative,up);
+      Need(lateral.Length()<=Math.Sqrt(2)*.4+.0001,"launch scatter is halved while ship velocity is inherited in full");
       double travelSpeed=VentSpeed*r.Motion.EjectionTravel*(r.Motion.EjectTick+r.Motion.EjectSubtick)/120;
-      Near(Vector3D.Dot(relative,up),Math.Max(45,travelSpeed),"physical launch matches faster scripted travel or minimum impulse");
+      Near(Vector3D.Dot(relative,up),Math.Max(45,travelSpeed)*.5,"physical launch halves the previous impulse for every duct length and orientation");
       double clear=Vector3D.Dot(carrier.WorldMatrix.Translation-outlet.WorldMatrix.Translation,up);
       Need(clear>3,"physical handoff remains beyond the outlet and full hoop radius");
       Need(frames<=302 && core.Critical && core.Fuse>54.9,"faster ejection transfers the armed core within five seconds without speeding its fuse");
@@ -290,14 +341,99 @@ harness = r'''
    var restored=(MotionState)serializer.Deserialize(new StringReader(writer.ToString()));
    Near(restored.EjectTick+restored.EjectSubtick,45.5,"reload preserves fractional ejection progress");
   }
-  static void Main(){Ejection();Tracking();Damage();VentTiming();Console.WriteLine("PASS: "+checks+" production meltdown ownership, vent timing/impulse, shell, damage, recovery, save and explosion checks");}
+  static void ReserveEjection(){
+   foreach(bool failDuringLaunch in new[]{false,true}){
+    var session=CoreHazards.Reset();var r=Running();r.ReadyVent();r.Motion.Vent=VentPhase.Idle;r.Motion.EjectTick=0;
+    r.intactControllers=failDuringLaunch;r.Motion.ControllersReady=failDuringLaunch;r.Motion.ReserveMJ=90;
+    Need(r.CanStartVent,"toolbar can start emergency vent on reserve with failed controllers");r.RequestVent(true);
+    int frames=0;bool released=false;
+    while(r.Motion.Vent!=VentPhase.Idle && frames++<600){
+     if(frames==50){r.intactControllers=false;r.Motion.ControllersReady=false;}
+     r.UpdatePower();r.UpdateMotion();session.UpdateBeforeSimulation();
+     if(!released && r.Motion.PayloadReleased){
+      released=true;Need(!r.Motion.ControllersReady && session.cores.Count==1 && session.cores[0].Shell.Count==84,"physical release succeeds with failed controllers and retains tiles and rings");
+      Need(r.Motion.ReserveMJ<90 && r.Motion.ReserveMJ>80,"emergency launch consumes real stored reserve");
+      Need(session.cores[0].Fuse>54,"reserve ejection preserves the critical countdown");
+     }
+    }
+    Need(released && frames<600 && r.Motion.Shield==0 && r.Motion.Intake==0,"reserve drives the entire vent cycle after controller failure");
+   }
+   CoreHazards.Reset();var stopped=Running();stopped.ReadyVent();stopped.intactControllers=false;stopped.Motion.ControllersReady=false;stopped.Motion.ReserveMJ=0;
+   stopped.UpdatePower();stopped.UpdateMotion();
+   Need(stopped.Motion.PowerPaused && !stopped.Motion.PayloadReleased && MyAPIGateway.Entities.Creates==0,"exhausted reserve blocks motion and physical release even at the outlet");
+   stopped.Motion.ReserveMJ=10;stopped.Motion.VentReady=false;stopped.UpdatePower();stopped.UpdateMotion();
+   Need(!stopped.Motion.PayloadReleased,"reserve cannot bypass a broken vent route");
+   stopped.Motion.VentReady=true;stopped.UpdatePower();stopped.UpdateMotion();
+   Need(stopped.Motion.PayloadReleased && MyAPIGateway.Entities.Creates==1,"restored power and route resume a single handoff without controller repair");
+   CoreHazards.Reset();stopped=Running();stopped.Motion.VentReady=true;stopped.intactControllers=false;stopped.Motion.ControllersReady=false;
+   Need(!stopped.CanStartVent,"toolbar rejects failed controllers without reserve");stopped.RequestVent(true);
+   Need(stopped.Motion.Vent==VentPhase.Idle,"server rejects an unpowered emergency start");
+  }
+  static void HousingLifetime(){
+   var session=CoreHazards.Reset();var r=Running();var vessel=r.reactor.SlimBlock;
+   vessel.Maximum=vessel.Integrity=HOUSING_MAXIMUM;vessel.FunctionalCutoff=HOUSING_CUTOFF;
+   r.UpdateCriticalCore();var core=session.cores[0];int releaseFrame=0;
+   for(int frame=1;frame<=3601;frame++){
+    if(!r.Motion.PayloadReleased){
+     r.Motion.Heat=(float)ThermalMath.ApproachCoreHeat(r.Motion.Heat,4,true);
+     r.UpdateCriticalCore();r.ApplyOverheatDamage();
+     if(r.Motion.PayloadReleased)releaseFrame=frame;
+    }
+    session.UpdateBeforeSimulation();
+    if(frame==44*60)Need(r.reactor.IsFunctional && !r.Motion.PayloadReleased,"full-integrity housing remains functional through 44 supercritical seconds");
+    if(frame==45*60){
+     Need(releaseFrame==45*60 && !r.reactor.IsFunctional,"housing becomes nonfunctional at 45 seconds with shipped component integrity");
+     Need(core.CarrierId!=0 && core.Shell.Count==84 && MyExplosions.Blasts.Count==0,"45-second failure transfers the intact core before detonation");
+     Need(Math.Abs(core.Fuse-15)<.01,"housing failure leaves fifteen seconds on the original fuse");
+    }
+    if(frame==59*60)Need(MyExplosions.Blasts.Count==0,"housing failure does not accelerate detonation");
+   }
+   Need(MyExplosions.Blasts.Count==1 && session.cores.Count==0,"core still explodes once at sixty seconds");
+  }
+  static void ShieldTests(){
+   foreach(bool running in new[]{false,true}){
+    var session=CoreHazards.Reset();var r=Running(.8f);r.Motion.ControllersReady=true;r.Motion.VentReady=running;
+    if(!running){r.Motion.Core=CorePhase.Off;r.reactor.Enabled=false;}
+    r.RequestVentShieldTest();Need(r.Motion.ShieldTest==ShieldTestPhase.Lowering,"shield test starts even without a vent route on an idle reactor");
+    int frames=0;float peak=0;
+    while(r.Motion.ShieldTest!=ShieldTestPhase.Idle && frames++<400){
+     r.UpdateMotion();peak=Math.Max(peak,r.Motion.Shield);
+     Need(r.Motion.Intake==0 && r.Motion.Vent==VentPhase.Idle && r.Motion.EjectTick==0,"dry run never opens the hatch or enters ejection");
+     Need(!r.Motion.PayloadReleased && r.Motion.InstalledTiles==80 && r.spent==0 && session.cores.Count==0,"dry run retains the payload without spawning a ball or debris");
+     Need(r.reactor.Enabled==running && r.Motion.Core==(running?CorePhase.Running:CorePhase.Off),"dry run preserves reactor operation");
+     if(frames==80){
+      float shield=r.Motion.Shield;r.RequestVentShieldTest();Near(r.Motion.Shield,shield,"repeated test request cannot restart active motion");
+      var xml=new XmlSerializer(typeof(MotionState));var writer=new StringWriter();xml.Serialize(writer,r.Motion);
+      r.Motion=(MotionState)xml.Deserialize(new StringReader(writer.ToString()));
+      Need(r.Motion.ShieldTest==ShieldTestPhase.Lowering,"save/reload preserves the dry-run phase");
+      var wire=ProtoBuf.Meta.RuntimeTypeModel.Create();using(var buffer=new MemoryStream()){
+       wire.Serialize(buffer,r.Motion);buffer.Position=0;r.Motion=(MotionState)wire.Deserialize(buffer,null,typeof(MotionState));
+      }
+      Need(r.Motion.ShieldTest==ShieldTestPhase.Lowering,"multiplayer preserves the dry-run phase");Near(r.Motion.Shield,shield,"reload/sync preserves shield position");
+      r.Motion.PowerPaused=true;r.UpdateMotion();Near(r.Motion.Shield,shield,"loss of containment power pauses the shield test");r.Motion.PowerPaused=false;
+      r.Motion.ControllersReady=false;r.UpdateMotion();Near(r.Motion.Shield,shield,"loss of controllers pauses the shield test");r.Motion.ControllersReady=true;
+     }
+    }
+    Need(frames>=320 && frames<=324 && peak==1 && r.Motion.Shield==0,"dry run fully lowers then retracts shields at the existing speed");
+   }
+   CoreHazards.Reset();var blocked=Running(.8f);blocked.Motion.ControllersReady=true;
+   MyAPIGateway.Multiplayer.IsServer=false;blocked.RequestVentShieldTest();Need(blocked.Motion.ShieldTest==ShieldTestPhase.Idle,"clients cannot start a shield test directly");MyAPIGateway.Multiplayer.IsServer=true;
+   blocked.intactControllers=false;blocked.RequestVentShieldTest();Need(blocked.Motion.ShieldTest==ShieldTestPhase.Idle,"server rechecks actual controllers");blocked.intactControllers=true;
+   blocked.Motion.Critical=true;blocked.RequestVentShieldTest();Need(blocked.Motion.ShieldTest==ShieldTestPhase.Idle,"critical core rejects a new dry run");blocked.Motion.Critical=false;
+   blocked.Motion.Intake=.5f;blocked.RequestVentShieldTest();Need(blocked.Motion.ShieldTest==ShieldTestPhase.Idle,"open hatch rejects a dry run");blocked.Motion.Intake=0;
+   blocked.RequestVentShieldTest();for(int i=0;i<80;i++)blocked.UpdateMotion();float partial=blocked.Motion.Shield;
+   blocked.Motion.VentReady=true;blocked.RequestVent(true);
+   Need(blocked.Motion.ShieldTest==ShieldTestPhase.Idle && blocked.Motion.Vent==VentPhase.ShieldClosing,"real ejection preempts the dry run");Near(blocked.Motion.Shield,partial,"emergency handoff preserves shield position");
+   blocked.RequestVentShieldTest();Need(blocked.Motion.ShieldTest==ShieldTestPhase.Idle,"dry run cannot interrupt committed ejection");
+  }
+  static void Main(){Ejection();Tracking();Damage();VentTiming();ReserveEjection();HousingLifetime();ShieldTests();Console.WriteLine("PASS: "+checks+" production meltdown ownership, shield dry run, vent timing/impulse, shell, damage, recovery, save and explosion checks");}
  }
 }
 '''
 
 with tempfile.TemporaryDirectory(prefix='arcane-meltdown-') as directory:
     path = Path(directory) / 'check.cs'
-    path.write_text(stubs + types + state + harness)
+    path.write_text(stubs + types + state + harness.replace('HOUSING_MAXIMUM', str(housing_integrity) + 'f').replace('HOUSING_CUTOFF', str(housing_cutoff) + 'f'))
     exe = path.with_suffix('.exe')
     # Native Matrix conversions use readonly ref parameters. Roslyn handles their
     # metadata correctly; mcs emits invalid IL for these conversions.

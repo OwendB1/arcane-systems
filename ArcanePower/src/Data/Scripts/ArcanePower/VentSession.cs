@@ -9,7 +9,7 @@ using VRage.Utils;
 
 namespace ArcanePower
 {
-    public enum VentCommand { Sync, Start, Stop, Toggle, SecurityOn, SecurityOff, Standalone, Brayton }
+    public enum VentCommand { Sync, Start, Stop, TestShields, SecurityOn, SecurityOff, Standalone, Brayton }
 
     [ProtoContract]
     public sealed class VentPacket
@@ -27,6 +27,7 @@ namespace ArcanePower
         private static bool ready;
         private readonly List<IMyTerminalAction> actions = new List<IMyTerminalAction>();
         private IMyTerminalControlButton control;
+        private IMyTerminalControlButton shieldTest;
         private IMyTerminalControlOnOffSwitch security;
         private IMyTerminalControlOnOffSwitch thermalMode;
 
@@ -35,10 +36,16 @@ namespace ArcanePower
             MyAPIGateway.Multiplayer.RegisterSecureMessageHandler(Channel, Receive);
             control = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlButton, IMyReactor>("ArcanePower_Venting");
             control.Title = MyStringId.GetOrCompute("Vent reactor");
-            control.Tooltip = MyStringId.GetOrCompute("Eject the core and shut down. Requires working controllers and a vent route.");
+            control.Tooltip = MyStringId.GetOrCompute("Eject the core and shut down. Requires an intact vent route; reserve power can drive ejection with failed controllers.");
             control.SupportsMultipleBlocks = true;
-            control.Enabled = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.Motion.Vent == VentPhase.Idle && r.Motion.VentReady && r.Motion.ControllersReady; };
+            control.Enabled = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.CanStartVent; };
             control.Action = b => SendCommand(b.EntityId, VentCommand.Start);
+            shieldTest = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlButton, IMyReactor>("ArcanePower_TestVentShields");
+            shieldTest.Title = MyStringId.GetOrCompute("Test vent shields");
+            shieldTest.Tooltip = MyStringId.GetOrCompute("Dry run: lower and retract the shields without opening the hatch or ejecting the core. Requires working controllers and containment power.");
+            shieldTest.SupportsMultipleBlocks = true;
+            shieldTest.Enabled = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.CanTestVentShields; };
+            shieldTest.Action = b => SendCommand(b.EntityId, VentCommand.TestShields);
             security = MyAPIGateway.TerminalControls.CreateControl<IMyTerminalControlOnOffSwitch, IMyReactor>("ArcanePower_SecurityMode");
             security.Title = MyStringId.GetOrCompute("Security mode");
             security.Tooltip = MyStringId.GetOrCompute("On: stop if the vent route fails. Off: warn and keep running.");
@@ -59,7 +66,7 @@ namespace ArcanePower
             thermalMode.Getter = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.Motion.Thermal != null && r.Motion.Thermal.Requested == ThermalMode.Brayton; };
             thermalMode.Setter = (b, enabled) => SendCommand(b.EntityId, enabled ? VentCommand.Brayton : VentCommand.Standalone);
             AddAction("ArcanePower_StartVent", "Vent reactor", VentCommand.Start);
-            AddAction("ArcanePower_ToggleVent", "Vent reactor", VentCommand.Toggle);
+            AddAction("ArcanePower_TestVentShields", "Test vent shields", VentCommand.TestShields);
             MyAPIGateway.TerminalControls.CustomControlGetter += Controls;
             MyAPIGateway.TerminalControls.CustomActionGetter += Actions;
             ready = true;
@@ -73,15 +80,19 @@ namespace ArcanePower
             action.Name = new StringBuilder(title);
             action.Icon = @"Textures\GUI\Icons\Actions\Toggle.dds";
             action.ValidForGroups = true;
-            action.Enabled = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r) && r.Motion.Vent == VentPhase.Idle && r.Motion.VentReady && r.Motion.ControllersReady; };
+            action.Enabled = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r)
+                && (command == VentCommand.TestShields ? r.CanTestVentShields
+                    : r.CanStartVent); };
             action.Action = b => SendCommand(b.EntityId, command);
-            action.Writer = (b, text) => { Reactor r; if (Reactors.TryGetValue(b.EntityId, out r)) text.Append(r.Motion.VentReady ? r.Motion.Vent.ToString() : "Route required"); };
+            action.Writer = (b, text) => { Reactor r; if (Reactors.TryGetValue(b.EntityId, out r))
+                text.Append(command == VentCommand.TestShields ? r.Motion.ShieldTest.ToString()
+                    : r.Motion.VentReady ? r.Motion.Vent.ToString() : "Route required"); };
             actions.Add(action);
         }
 
         private void Controls(IMyTerminalBlock block, List<IMyTerminalControl> list)
         {
-            if (Reactors.ContainsKey(block.EntityId)) { list.Add(control); list.Add(security); }
+            if (Reactors.ContainsKey(block.EntityId)) { list.Add(control); list.Add(shieldTest); list.Add(security); }
             Reactor r;
             if (Reactors.TryGetValue(block.EntityId, out r) && r.ThermalVariant) list.Add(thermalMode);
         }
@@ -121,7 +132,7 @@ namespace ArcanePower
         {
             if (command == VentCommand.Start) reactor.RequestVent(true);
             else if (command == VentCommand.Stop) reactor.RequestVent(false);
-            else if (command == VentCommand.Toggle) reactor.RequestVent(!reactor.Motion.Requested);
+            else if (command == VentCommand.TestShields) reactor.RequestVentShieldTest();
             else if (command == VentCommand.SecurityOn) reactor.SetSecurityMode(true);
             else if (command == VentCommand.SecurityOff) reactor.SetSecurityMode(false);
             else if (command == VentCommand.Standalone) reactor.RequestThermalMode(ThermalMode.Standalone);

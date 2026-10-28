@@ -35,6 +35,8 @@ methods = ''.join(member(source, signature) for source, signature in [
     ((SRC / 'Reactor.Failure.cs').read_text(), '        private void UpdateThermal()'),
     ((SRC / 'Reactor.Failure.cs').read_text(), '        internal void UpdateThermalForecast()'),
     (power, '        private bool CanPrepareContainment'),
+    (power, '        internal bool VentPowerAvailable'),
+    (power, '        internal bool CanStartVent'),
     (power, '        private float ContainmentMW'),
     (power, '        private double ReserveCapacityMJ'),
     (power, '        private bool Precharging'),
@@ -260,7 +262,16 @@ checks = r'''
    r.Motion.Thermal.RequiredCoolingMW=5000;
    for(int i=0;i<135;i++){r.UpdateThermal();r.UpdateThermalForecast();}r.UpdateAppearance();
    Need(r.Entity.Color.Equals(Color.Yellow),"retained circuit heat that will drive the core higher still warns during shutdown");
-   r.Motion.Critical=true;r.UpdateAppearance();Need(r.Entity.Color.Equals(Color.Red),"critical warning takes priority over yellow");
+   r.Motion.Critical=true;r.Motion.ForecastWarning=true;
+   int redOn=0,redOff=0;
+   for(int i=0;i<120;i++){
+    r.UpdateAppearance();
+    Need(!r.Motion.ThermalWarning && r.Entity.Color.Equals(Color.Red)
+     && r.Entity.Subparts["Ring1"].Color.Equals(Color.Red),"critical warning immediately overrides held cooling warning on housing and rings");
+    if(r.Entity.Intensity==EmissiveIntensity)redOn++;else if(r.Entity.Intensity==0)redOff++;
+   }
+   Need(redOn==60 && redOff==60,"critical red blinks on and off once per second instead of fading");
+   Need(r.ReadStatus(false).Tone=="red","critical telemetry overrides insufficient cooling");
    r.Motion.Critical=false;r.Motion.Vent=VentPhase.ShieldClosing;r.UpdateAppearance();Need(r.Entity.Color.Equals(Color.Red),"ejection takes priority over yellow");
    r.Motion.Vent=VentPhase.Idle;r.Motion.Heat=1;r.Motion.ForecastPeakHeat=1;r.Motion.ForecastWarning=false;r.UpdateAppearance();Need(!r.Entity.Color.Equals(Color.Yellow),"server-cleared warning restores the normal colour");
    r.Motion.ForecastPeakHeat=3;MyAPIGateway.Multiplayer.IsServer=false;r.UpdateThermal();r.UpdateThermalForecast();
@@ -341,7 +352,31 @@ checks = r'''
   guide=r.ReadAssemblyGuide();Need(guide.State=="WAITING FOR REACTOR STATE" && guide.Value("1 Controllers")=="--","unreplicated state cannot advertise assembly readiness");
   Console.WriteLine("PASS: reactor assembly steps, current fuel/controller requirements, startup power, readiness and warning priority");
  }
- static void Main(){Charging();Priority();RenderRecovery();ThermalWarnings();AssemblyGuide();ShutdownCooling();}
+ static void ReserveEjectionStatus(){
+  var r=new Reactor();r.Motion.Core=CorePhase.Running;r.Motion.Critical=true;r.Motion.CriticalSeconds=40;
+  r.Motion.ControllersReady=false;r.Motion.ReserveMJ=r.ReserveCapacityMJ;
+  foreach(var module in r.reactor.CurrentAttachedUpgradeModules.Values)module.Block.IsFunctional=false;
+  r.Supply(0);r.UpdatePower();
+  Need(r.CanStartVent && !r.Motion.PowerPaused && r.ReadStatus(false).Rows[0].Value.Contains("reserve power"),"critical status advertises reserve ejection with failed controllers");
+  r.Motion.ReserveMJ=0;r.UpdatePower();
+  Need(!r.CanStartVent && r.Motion.PowerPaused && r.ReadStatus(false).Rows[0].Value.Contains("exhausted"),"critical status reports exhausted reserve");
+  r.Motion.Critical=false;r.Motion.ReserveMJ=r.ReserveCapacityMJ;r.Motion.Vent=VentPhase.Ejecting;r.UpdatePower();
+  Need(r.ReadStatus(false).State.StartsWith("VENTING"),"controller failure does not claim powered ejection is paused");
+  Console.WriteLine("PASS: reserve-backed emergency ejection controls and status");
+ }
+ static void ShieldTestPower(){
+  var r=new Reactor();r.reactor.Enabled=false;r.Motion.ShieldTest=ShieldTestPhase.Lowering;r.Motion.VentReady=false;
+  r.Motion.ReserveMJ=r.ReserveCapacityMJ;double before=r.Motion.ReserveMJ;r.Supply(0);r.UpdatePower();
+  Near(r.Motion.PowerDemandMW,r.ContainmentMW,"off-reactor dry run requests containment power");
+  Near(r.Motion.ReserveMJ,before-r.ContainmentMW/60.0,"unpowered dry run pays from reserve");
+  Need(!r.Motion.PowerPaused && !r.reactor.Enabled,"reserve funds the test without enabling the reactor");
+  Need(r.ReadStatus(true).Value("Vent")=="Shield test / lowering","dry run status takes priority over absent vent route");
+  r.Motion.ReserveMJ=0;r.UpdatePower();Need(r.Motion.PowerPaused,"empty reserve pauses an unpowered dry run");
+  r.Supply(r.ContainmentMW);r.UpdatePower();Need(!r.Motion.PowerPaused,"restoring power resumes a dry run");
+  r.Motion.ShieldTest=ShieldTestPhase.Idle;r.UpdatePower();Near(r.Motion.PowerDemandMW,0,"completed dry run stops idle power demand");
+  Console.WriteLine("PASS: shield dry-run power accounting, pause/resume and terminal status");
+ }
+ static void Main(){Charging();Priority();RenderRecovery();ThermalWarnings();AssemblyGuide();ShutdownCooling();ShieldTestPower();ReserveEjectionStatus();}
 }
 '''
 with tempfile.TemporaryDirectory(prefix='arcane-appearance-') as folder:

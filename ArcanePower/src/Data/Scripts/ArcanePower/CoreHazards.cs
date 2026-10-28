@@ -110,7 +110,7 @@ namespace ArcanePower
                 core = new CoreHazard { SourceId = sourceId, Tier = tier, Heat = heat, PeakHeat = heat,
                     Critical = heat >= SupercriticalHeat, FuseVersion = 1 };
             if (!CreateCarrier(core, world, velocity, spin)) return false;
-            core.Shell = core.Critical ? shell : null;
+            core.Shell = shell;
             if (added) instance.cores.Add(core);
             instance.Broadcast();
             return true;

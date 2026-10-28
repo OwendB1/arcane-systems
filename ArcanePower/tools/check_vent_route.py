@@ -32,6 +32,7 @@ methods = methods.replace('VRage.Game.ModAPI.IMyCubeBlock', 'Block')
 methods += method('Reactor.Motion.cs', 'RequestVent')
 power = (SCRIPTS / 'Reactor.Power.cs').read_text()
 methods += power[power.index('        private bool CanPrepareContainment'):power.index('        private readonly List<ContainmentController>')]
+methods += power[power.index('        internal bool VentPowerAvailable'):power.index('        // Presentation')]
 source = r'''
 using System;
 using System.Collections.Generic;
@@ -86,6 +87,7 @@ class Check {
  bool IsLive {get{return !Entity.Closed;}}
  bool ThermalVariant=false,ThermalNeedsPowerSupport=false;
  double ThermalHeatMW=25000;
+ const float ContainmentMW=1;
  float previousControllers=2;
  int networkTick,appearanceRefresh,initializationFrames;
  long Id=1;
@@ -159,12 +161,15 @@ class Check {
   Need(c.Motion.Vent==VentPhase.ShieldClosing && !c.Motion.Paused,"60% auto ejection works despite damaged reactor");
   int sent=c.publications;c.Tick();Need(c.Motion.Vent==VentPhase.ShieldClosing && c.publications==sent,"committed ejection starts only once");
   c.Entity.CurrentAttachedUpgradeModules[1].Block.IsFunctional=false;c.Tick();
-  Need(c.Motion.Paused && !c.Motion.ControllersReady,"controller damage pauses committed ejection");
+  Need(!c.Motion.Paused && !c.Motion.ControllersReady,"controller failure alone does not pause a powered vent");
+  c.Motion.PowerPaused=true;c.Tick();Need(c.Motion.Paused,"exhausted reserve pauses the vent");c.Motion.PowerPaused=false;
   c.Entity.CurrentAttachedUpgradeModules[1].Block.IsFunctional=true;c.Tick();Need(!c.Motion.Paused,"controller repair resumes ejection");
   foreach(int controllers in new[]{0,1}) {
    c=new Check();c.Route(1);c.Controllers(controllers);c.Motion.Core=CorePhase.Running;c.Motion.CoreTick=1170;c.reactor.SlimBlock.Integrity=50;c.Tick();
-   Need(c.Motion.Vent==VentPhase.Idle,"auto ejection requires both controllers");c.RequestVent(true);Need(c.Motion.Vent==VentPhase.Idle,"manual ejection also requires both controllers");
+   Need(c.Motion.Vent==VentPhase.Idle,"without reserve, auto ejection requires both controllers");c.RequestVent(true);Need(c.Motion.Vent==VentPhase.Idle,"without reserve, manual ejection also requires both controllers");
   }
+  c=new Check();c.Route(1);c.Controllers(0);c.Motion.Core=CorePhase.Running;c.Motion.CoreTick=1170;c.reactor.SlimBlock.Integrity=50;c.Motion.ReserveMJ=90;c.Tick();
+  Need(c.Motion.Vent==VentPhase.ShieldClosing && !c.Motion.ControllersReady,"reserve allows automatic ejection after controller failure");
   c=new Check();c.Controllers(2);c.Entity.CurrentAttachedUpgradeModules[1]=c.Entity.CurrentAttachedUpgradeModules[0];
   Need(!c.HasIntactControllers(),"same controller cannot count twice");
   c.Controllers(2);c.Entity.CurrentAttachedUpgradeModules[1].Block.SlimBlock.BuildLevelRatio=.99f;Need(!c.HasIntactControllers(),"unfinished controller cannot eject");
@@ -226,10 +231,10 @@ with tempfile.TemporaryDirectory(prefix='arcane-vent-check-') as directory:
 
 failure = (SCRIPTS / 'Reactor.Failure.cs').read_text()
 release = method('Reactor.Failure.cs', 'TryReleasePayload')
-assert 'if (!HasIntactControllers()) return;' in release
-assert release.index('if (!HasIntactControllers()) return;') < release.index('CoreHazards.Release(')
+assert 'HasIntactControllers' not in release
+assert release.index('if (Motion.PowerPaused) return;') < release.index('CoreHazards.Release(')
 session = (SCRIPTS / 'VentSession.cs').read_text()
 assert 'packet.Command > VentCommand.Brayton' in session
 assert session.index('!r.Block.HasPlayerAccess(identity)') < session.index('Apply(r, packet.Command)')
 assert 'SendCommand(b.EntityId, enabled ? VentCommand.SecurityOn : VentCommand.SecurityOff)' in session
-print('PASS: physical handoff checks controllers; security switch uses authorized server commands')
+print('PASS: physical handoff checks paid actuation power; security switch uses authorized server commands')
