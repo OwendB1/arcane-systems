@@ -3,7 +3,7 @@
 Workshop item: [3819727962](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962).
 The publishing source of truth is `workshop/title.txt`, `workshop/version.txt`,
 `workshop/description.bbcode`, `src/modinfo.sbmi.main` and `src/thumb.gif`.
-The title is generated as **Arcane Power (0.1.3)** from the two text files.
+The title is generated as **Arcane Power (0.2.0)** from the two text files.
 The animated preview uses the 480×270 GIF below 1 MB.
 
 `.github/workflows/arcane-power-workshop-upload.yml` calls the existing shared
@@ -20,14 +20,24 @@ assets, so it publishes real models without downloading Blender checkpoints.
 Existing Git history is preserved. After cloning for local asset work, run
 `git lfs pull`; source-only CI builds do not need those binary downloads.
 
-The corrected fuel heat ratings are **2.5 / 25 / 250 GW** for Aether, Helion and
-Empyrean, including canister names and assembly instructions. Standalone Aether
-exports **500 MW** at 20%; T1 turbines export **250 MW each / 1 GW total**.
-T2 turbines export **50 GW each / 200 GW total** with Empyrean at 80%.
-Cooling is **5 / 50 GW** per atmospheric unit and **2 / 20 GW** per radiator
-section (T1/T2). Old saved heat remains valid without rescaling its stored MJ.
-Fuel endurance and controller efficiencies remain unchanged. Native caps, runtime
-values, definition generators and the four affected gallery plates agree.
+Fuel input ratings are **5 / 50 / 250 GW** for Aether / Helion / Empyrean,
+including canister names and assembly instructions. Standalone Aether converts
+10% for **500 MW**. Brayton converts a flat **80%** with every fuel.
+
+| Setup | Electrical output |
+| --- | ---: |
+| Standalone Aether | 500 MW |
+| T1 Brayton Aether | 4 GW |
+| T1 Brayton Helion | 14 GW |
+| T2 Brayton Helion | 40 GW |
+| T2 Brayton Empyrean | 200 GW |
+
+Regular and mirrored turbine limits match.
+Standard/mirrored T1 turbines are capped at **3.5 GW each**; T2 at **50 GW each**.
+Brayton cooling load equals delivered electricity, independently of fuel use.
+Coolers retain **5/50 GW** ratings; radiator sections **2/20 GW**. Full Empyrean
+needs 50 GW cooling per circuit, or 200 GW total. Existing saved heat is retained
+without rescaling. Full-load canister endurance and controller economy are preserved.
 
 Runtime isolation now stops generation and enters cooldown while keeping intact
 cooling circuits open. Native GW output rounding no longer causes false accounting
@@ -40,6 +50,12 @@ with native line breaks preserved by their definition generators.
 The corrected ratings passed compiled runtime, fuel accounting, cooling telemetry,
 fuel-definition regeneration and MDK compatibility checks. The current live world
 has not been reloaded for this balance change; reload it to load new definitions.
+
+Version 0.2.0 applies the gameplay cooling scale, simplifies flat conversion and
+removes duplicate diagnostics and serialized telemetry. Retired ProtoBuf tags
+remain reserved. LCD/tablet Power pages show cooling load, capacity, weakest-circuit
+margin, potential cooling, cooldown backlog and fuel burn. Shutdown progress and
+ETA remain available. Reactor and turbine blueprint plates use the new ratings.
 
 Blueprint gallery images live in `workshop/images/` and are uploaded through
 Steam's gallery editor. Upload the same filenames to replace images without
@@ -65,12 +81,15 @@ fuel/voxel art, containment hardware, vents, LCD and tablet implementations.
 Energy Core bays now accept any module type in any of the four positions. The
 strongest attached stabilizer and transfer tiers apply without stacking; alignment,
 access, construction and stabilizer support checks remain. Up to three capacity
-modules can share one stabilizer. Existing modules reconnect after a world reload.
+modules can share one stabilizer. Charging tiers are 4/40/200 GW; ordinary
+discharge stays 10/100/1,000 GW. Capacity shares are applied independently to each
+ceiling, and native battery input caps match the 200 GW upper tier.
+Existing modules reconnect after a world reload.
 
 Jump-drive surge now charges an automatic affordable batch, selecting the smallest
 charge deficits first and accounting for 90% efficiency and protected reserve.
-All selected drives share the bank's existing transfer ceiling; large batches
-can take longer. Recovery after the batch is the current stabilization base plus
+Selected drives charge in five seconds through a batch-scaled discharge boost;
+ordinary charging limits stay unchanged during surge. Recovery is the stabilization base plus
 25% of that base per additional accepted drive, retained across cancellation and
 reload. The single-drive picker is replaced by a batch summary in core details;
 existing terminal/toolbar action IDs remain valid.
@@ -117,14 +136,14 @@ and outer glass boundaries, including framed/bare pipes and moving manifolds.
 Metal annular faces close the ferrule walls toward the glass while keeping the
 flow bore open; the glass is seated 2 mm behind each shoulder.
 
-Brayton efficiency now reaches its tier ceiling with four active turbines:
-one through four provide 40%, 60%, 80% and 100% of that ceiling. Cooling deficits
+Brayton fuel conversion is a flat 80% with every fuel.
+Each complete circuit keeps that efficiency. One through four circuits receive
+25%, 50%, 75% and 100% of the reactor's nominal heat allocation. Cooling deficits
 retain paid return waste in the reactor instead of silently limiting production.
 Accumulated heat feeds the existing 125% irreversible failure/ejection lifecycle.
 The Power page reports cooling capacity, required rejection and retained waste.
-Review existing one-train/one-cooler builds: at standard source power a single
-train now needs two fully effective cooling units, or use four trains with at
-least one fully effective cooler. Allow headroom for environmental losses.
+Each circuit needs cooling equal to output: 1 GW Aether, 3.5 GW T1 Helion,
+10 GW T2 Helion or 50 GW Empyrean. Allow headroom for environmental losses.
 
 [Block catalog check](tools/check_block_catalog.py) and
 [native delivery evidence](validation/thermal-models/delivery-check.json) cover the
@@ -159,7 +178,7 @@ python3 ArcanePower/tools/package_release.py
 python3 ArcanePower/tools/check_thermal_delivery.py
 ```
 
-The output is `.cache/release/ArcanePower-0.1.3.zip` under ArcanePower.
+The output is `.cache/release/ArcanePower-0.2.0.zip` under ArcanePower.
 Extract its contents into a local mod directory and enable it in an experimental
 SE1 world. The local development symlink already exposes `src` on the next world
 load. Do not load both the extracted package and the development copy together.

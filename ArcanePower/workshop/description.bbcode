@@ -3,7 +3,7 @@
 
 [i]There is something moving inside the containment field.
 The instruments call it a reaction. The engineers call it a power source.
-Neither explanation makes the emergency shutters feel thick enough.[/i]
+Neither makes the emergency shutters feel thick enough.[/i]
 
 You have learned how to wake it. You have learned how to draw power from it.
 [b]Make sure you also learn how to let it go.[/b]
@@ -14,13 +14,23 @@ Build an industrial arcane power plant: mine rare fuel, maintain its containment
 
 [list]
 [*]One large-grid [b]Arcane Reactor[/b] with animated assembly, rotating rings, tile replacement and core ejection
-[*][b]20% standalone efficiency[/b], or [b]40% starter / up to 80% exotic Brayton[/b] with eligible fuel, turbines and cooling
-[*][b]Standalone Aether: 500 MW electrical[/b] from 2.5 GW heat at 20%; Helion and Empyrean require Brayton
-[*]Fuel heat: [b]Aether 2.5 GW / Helion 25 GW / Empyrean 250 GW[/b]; four turbines export up to [b]1 GW T1 / 200 GW T2[/b]
+[*][b]10% standalone / flat 80% Brayton conversion[/b]; Brayton needs [b]1 GW cooling per GW electrical output[/b]
+[*]Fuel input: [b]Aether 5 GW / Helion 50 GW / Empyrean 250 GW[/b]; Helion and Empyrean require Brayton
 [*]Two functional controllers provide 2/3/4 rings; [b]at least one advanced controller unlocks Brayton[/b]
 [*]Demand-based fuel use, gradual ramp, grid-powered containment and a shutdown reserve
 [*]Manifolds retract behind curved sliding panels; mode changes wait for shutdown and cooling
 [/list]
+
+[h2]Power Progression[/h2]
+
+[table]
+[tr][th]Setup[/th][th]Electrical output[/th][/tr]
+[tr][td]Standalone Aether[/td][td]500 MW[/td][/tr]
+[tr][td]T1 Brayton Aether[/td][td]4 GW[/td][/tr]
+[tr][td]T1 Brayton Helion[/td][td]14 GW[/td][/tr]
+[tr][td]T2 Brayton Helion[/td][td]40 GW[/td][/tr]
+[tr][td]T2 Brayton Empyrean[/td][td]200 GW[/td][/tr]
+[/table]
 
 [h2]Build a Brayton Plant[/h2]
 
@@ -28,16 +38,16 @@ Build up to [b]four independent circuits[/b], each with one turbine and its own 
 
 [list]
 [*]One duplex pipe family with framed/bare straights, elbows, risers, tees, crosses, adapters and caps
-[*]T1 turbines: [b]250 MW each[/b]; T2: [b]50 GW each[/b] with Empyrean. Regular/mirrored, [b]2x2x5 cells[/b], one lower socket
+[*]T1 turbines: [b]3.5 GW each[/b]; T2: [b]50 GW each[/b], unlocking Empyrean. Regular/mirrored, [b]2x2x5 cells[/b], one lower socket
 [*]Reflective glass, animated flow, spinning blades and a copper-wound armature behind inspection windows
 [*]Built-in compressors and reactor-generated CO2; no separate tank, generator, heater or recuperator
 [/list]
 
-Circuits need no filling or pressure setup. Keep containment powered during startup/cooldown. Cooling shortages retain waste heat; irreversible failure arms at [b]125% heat[/b]. Invalid circuits isolate; losing all stops generation. [b]Manual Start with all four circuits defective latches a fault.[/b] One valid circuit permits startup. Advanced-controller loss stops Brayton.
+Circuits need no filling or pressure setup. Keep containment powered during startup/cooldown. Cooling below electrical output builds a backlog; irreversible failure arms at [b]125% heat[/b]. Invalid circuits isolate; losing all stops generation. [b]Manual Start with all four circuits defective latches a fault.[/b] One valid circuit permits startup. Advanced-controller loss stops Brayton.
 
 Atmospheric coolers reject [b]5 GW T1 / 50 GW T2[/b] at full air density; vacuum gives none. Fit a [b]3x3x2-cell hull opening[/b] and leave [b]2.5 m beyond both fans[/b]: half-clear gives 25% cooling; blocked gives none.
 
-Space radiator sections reject [b]2 GW T1 / 20 GW T2[/b] in ideal exposure. Bases connect underneath and track edge-on to the sun. Stack up to [b]two extensions[/b] on the same grid: aim at the top shaft coupling and match the base Up axis; [b]any yaw works[/b]. The guide marks the dock and tilt correction. Grind either panel face to remove a section. Keep the 3x3-cell sweep and both faces clear. Each panel retains [b]100/75/50% cooling at 0/50/100% sun[/b], including shade/weather. Glow follows actual rejection; detached/excess panels add no cooling. Full-output Empyrean needs [b]12.5 GW cooling per circuit / 50 GW total[/b].
+Space radiator sections reject [b]2 GW T1 / 20 GW T2[/b] in ideal exposure. Connect underneath; bases track edge-on. Add [b]two extensions[/b] at the top shaft on the same grid; match Up; [b]any yaw works[/b]. Grind either panel face to remove a section. Keep the 3x3-cell sweep and both faces clear. Each panel retains [b]100/75/50% cooling at 0/50/100% sun[/b], including shade/weather. Glow shows cooling; detached/excess panels provide none. Full-output Empyrean needs [b]50 GW cooling per circuit / 200 GW total[/b].
 
 [h2]Feed the Field[/h2]
 
@@ -55,7 +65,7 @@ Fit [b]1-15 aligned vent ducts and an outlet[/b] above the reactor. Keep the out
 
 [h2]Arcane Energy Core[/h2]
 
-A [b]3x3x3 battery[/b] stores [b]1,000 MWh[/b] at [b]10 GW[/b]. Four bays accept capacity, transfer or stabilizer modules. Capacities add 10,000/100,000 MWh; transfer raises the ceiling to 100 GW/1 TW. The strongest stabilizer supports matching/lower tiers and reduces upkeep/recovery; duplicate tiers do not stack.
+A [b]3x3x3 battery[/b] stores [b]1,000 MWh[/b]. Base/standard/advanced transfer: [b]4/40/200 GW charging[/b], [b]10/100/1,000 GW discharge[/b]. Four bays accept capacity, transfer or stabilizer modules. Capacity adds 10,000/100,000 MWh. Stabilizers support matching/lower tiers and reduce upkeep/recovery; duplicate tiers do not stack.
 
 [list]
 [*]Native Auto/Recharge/Discharge modes with 90% charging efficiency

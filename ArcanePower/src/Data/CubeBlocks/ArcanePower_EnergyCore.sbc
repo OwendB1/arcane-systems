@@ -14,9 +14,10 @@ Four upright 1x3x1 bays accept capacity, transfer or stabilizer modules.
 Align module Up with core Up and face its connectors toward the core.
 
 STORAGE AND TRANSFER
-Base: 1,000 MWh capacity / 10 GW transfer.
+Base: 1,000 MWh capacity / 4 GW charging / 10 GW discharge.
 Capacity modules add 10,000 or 100,000 MWh.
-Transfer modules raise the bank ceiling to 100 GW / 1 TW.
+Standard transfer: 40 GW charging / 100 GW discharge.
+Advanced transfer: 200 GW charging / 1 TW discharge.
 Standard/advanced stabilizers support matching or lower tier modules.
 Duplicate stabilizer/transfer modules use the strongest tier without stacking.
 
@@ -85,7 +86,7 @@ Passive loss continues while disabled or detached.</Description>
       <ResourceSourceGroup>Battery</ResourceSourceGroup>
       <MaxPowerOutput>2000000</MaxPowerOutput>
       <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
-      <RequiredPowerInput>1000000</RequiredPowerInput>
+      <RequiredPowerInput>200000</RequiredPowerInput>
       <AdaptibleInput>true</AdaptibleInput>
       <MaxStoredPower>1000</MaxStoredPower>
       <InitialStoredPowerRatio>0</InitialStoredPowerRatio>
@@ -153,7 +154,7 @@ The core sets bank transfer limits and charge mode.</Description>
       <ResourceSourceGroup>Battery</ResourceSourceGroup>
       <MaxPowerOutput>2000000</MaxPowerOutput>
       <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
-      <RequiredPowerInput>1000000</RequiredPowerInput>
+      <RequiredPowerInput>200000</RequiredPowerInput>
       <AdaptibleInput>true</AdaptibleInput>
       <MaxStoredPower>10000</MaxStoredPower>
       <InitialStoredPowerRatio>0</InitialStoredPowerRatio>
@@ -221,7 +222,7 @@ The core sets bank transfer limits and charge mode.</Description>
       <ResourceSourceGroup>Battery</ResourceSourceGroup>
       <MaxPowerOutput>2000000</MaxPowerOutput>
       <ResourceSinkGroup>BatteryBlock</ResourceSinkGroup>
-      <RequiredPowerInput>1000000</RequiredPowerInput>
+      <RequiredPowerInput>200000</RequiredPowerInput>
       <AdaptibleInput>true</AdaptibleInput>
       <MaxStoredPower>100000</MaxStoredPower>
       <InitialStoredPowerRatio>0</InitialStoredPowerRatio>
@@ -240,7 +241,7 @@ Attach to any of the four Energy Core bays.
 Align Up with core Up and face the connectors toward the core.
 
 TRANSFER
-Raises the bank charge/discharge ceiling to 100 GW.
+Raises bank charging / discharge ceilings to 40 GW / 100 GW.
 Effective tier is limited by the strongest attached stabilizer.
 Does not add capacity. Duplicate transfer modules do not stack.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/Energy/ArcanePower_EnergyTransfer_rcff9277ebdd3.dds</Icon>
@@ -304,7 +305,7 @@ Attach to any of the four Energy Core bays.
 Align Up with core Up and face the connectors toward the core.
 
 TRANSFER
-Raises the bank charge/discharge ceiling to 1 TW.
+Raises bank charging / discharge ceilings to 200 GW / 1 TW.
 Effective tier is limited by the strongest attached stabilizer.
 Does not add capacity. Duplicate transfer modules do not stack.</Description>
       <Icon>Textures/GUI/Icons/ArcanePower/Energy/ArcanePower_EnergyTransferAdvanced_r40e49e2d4ecd.dds</Icon>

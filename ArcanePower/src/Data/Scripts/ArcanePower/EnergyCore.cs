@@ -37,7 +37,7 @@ namespace ArcanePower
         private string settingsText;
         private float reserve = .10f;
         private bool emergencyEnabled = true, emergency, changingLimit, initialized;
-        private float outputLimit, inputLimit, stored, capacity, transfer;
+        private float outputLimit, inputLimit, stored, capacity, transfer, chargeCeiling;
         private int tick;
         private string status = "Connecting storage";
         private Matrix rotorRest;
@@ -231,6 +231,7 @@ namespace ArcanePower
             transferTier = Math.Min(transferTier, stabilizer);
             stabilizationTier = Healthy(block) ? stabilizer : 0;
             transfer = transferTier == 2 ? 1000000 : transferTier == 1 ? 100000 : 10000;
+            chargeCeiling = transferTier == 2 ? 200000 : transferTier == 1 ? 40000 : 4000;
             foreach (var module in modules)
             {
                 int tier = Tier(module, "ArcanePower_EnergyCapacity");
@@ -265,14 +266,15 @@ namespace ArcanePower
             foreach (var cell in cells)
             {
                 if (MyAPIGateway.Multiplayer.IsServer && cell != this) cell.block.ChargeMode = block.ChargeMode;
-                float share = capacity > 0 ? transfer * cell.block.MaxStoredPower / capacity : 0;
+                float fraction = capacity > 0 ? cell.block.MaxStoredPower / capacity : 0;
+                float share = transfer * fraction;
                 cell.upkeepTier = stabilizationTier;
                 float protectedEnergy = emergency ? 0 : reserve * cell.block.MaxStoredPower;
                 // Native batteries account every 100 ticks. Bound each interval
                 // by energy above reserve instead of overshooting a threshold.
                 float output = Math.Min(share * (gameplay.BurstTicks > 0 && !emergency ? 2 : 1), Math.Max(0, cell.StoredEnergy - protectedEnergy) * 2160);
                 cell.status = status;
-                cell.ApplyLimits(Healthy(block) ? share : 0, Healthy(block) ? output : 0);
+                cell.ApplyLimits(Healthy(block) ? chargeCeiling * fraction : 0, Healthy(block) ? output : 0);
             }
         }
 
@@ -388,7 +390,7 @@ namespace ArcanePower
             if (IsController)
             {
                 text.Append("Bank: ").Append(stored.ToString("N1")).Append(" / ").Append(capacity.ToString("N1")).Append(" MWh\n");
-                text.Append("Transfer ceiling: ").Append(transfer.ToString("N0")).Append(" MW\nCapacity modules: ").Append(Math.Max(0, cells.Count - 1)).Append('\n');
+                text.Append("Charge / discharge ceilings: ").Append(chargeCeiling.ToString("N0")).Append(" / ").Append(transfer.ToString("N0")).Append(" MW\nCapacity modules: ").Append(Math.Max(0, cells.Count - 1)).Append('\n');
                 text.Append("Reserve: ").Append((reserve * 100).ToString("N0")).Append("%; emergency support ").Append(emergencyEnabled ? "on" : "off").Append('\n');
                 text.Append("Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto.\n");
                 text.Append("Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true\n");

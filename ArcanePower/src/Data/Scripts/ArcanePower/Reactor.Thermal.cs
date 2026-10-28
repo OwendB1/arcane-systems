@@ -29,7 +29,7 @@ namespace ArcanePower
             get { return ThermalInitialized ? ThermalMath.Clamp(Motion.Thermal.ProducedMW / ThermalHeatMW, 0, 1) : 0; }
         }
         internal bool ThermalAuxiliaryReady { get { return ThermalManifoldPower; } }
-        internal double ThermalHeatMW { get { return PowerMW[Motion.FuelTier - 1] / .40; } }
+        internal double ThermalHeatMW { get { return ThermalMath.FuelRatingMW(Motion.FuelTier); } }
         internal double ThermalHotC { get { return Motion.FuelTier == 1 ? 650 : Motion.FuelTier == 2 ? 1000 : 2200; } }
         private bool ThermalNeedsPowerSupport
         {
@@ -45,7 +45,7 @@ namespace ArcanePower
         }
         private float ElectricalRatingMW
         {
-            get { return ThermalVariant ? (float)(ThermalHeatMW * (Motion.Thermal != null && Motion.Thermal.Mode == ThermalMode.Standalone ? .20 : .80)) : PowerMW[Motion.FuelTier - 1]; }
+            get { return ThermalVariant ? (float)(ThermalHeatMW * (Motion.Thermal != null && Motion.Thermal.Mode == ThermalMode.Standalone ? ThermalMath.StandaloneEfficiency : ThermalMath.BraytonEfficiency)) : PowerMW[Motion.FuelTier - 1]; }
         }
         private bool ThermalCold
         {
@@ -237,7 +237,7 @@ namespace ArcanePower
         internal void GrantStandaloneOutput()
         {
             standaloneGrant = Motion.Thermal.Mode == ThermalMode.Standalone
-                ? ReserveThermalOutput(null, ThermalHeatMW, .20) : null;
+                ? ReserveThermalOutput(null, ThermalHeatMW, ThermalMath.StandaloneEfficiency) : null;
             RefreshThermalCapacity();
         }
 

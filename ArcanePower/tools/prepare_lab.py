@@ -310,8 +310,8 @@ def fuel_definitions():
     native=E.parse(GAME/'Content/Data/VoxelMaterials_asteroids.sbc').getroot()
     voxel_template=next(n for n in native.iter('VoxelMaterial') if n.findtext('Id/SubtypeId')=='Uraninite_01')
     tiers=[
-        ('Aether','Aetherite','ArcaneOre','ArcaneFuelI','ArcaneAetherConcentrate','ArcaneAetherOreToConcentrate','ArcaneAetherFuel',20,.2,.001,.01,10,'2.5 GW'),
-        ('Helion','Helionite','ArcaneHelionOre','ArcaneFuelII','ArcaneHelionConcentrate','ArcaneHelionOreToConcentrate','ArcaneHelionFuel',2,.03,.0001,.005,20,'25 GW'),
+        ('Aether','Aetherite','ArcaneOre','ArcaneFuelI','ArcaneAetherConcentrate','ArcaneAetherOreToConcentrate','ArcaneAetherFuel',20,.2,.001,.01,10,'5 GW'),
+        ('Helion','Helionite','ArcaneHelionOre','ArcaneFuelII','ArcaneHelionConcentrate','ArcaneHelionOreToConcentrate','ArcaneHelionFuel',2,.03,.0001,.005,20,'50 GW'),
         ('Empyrean','Empyrite','ArcaneEmpyreanOre','ArcaneFuelIII','ArcaneEmpyreanConcentrate','ArcaneEmpyreanOreToConcentrate','ArcaneEmpyreanFuel',1,.01,.00001,.001,40,'250 GW')]
 
     def recipe(subtype,name,prerequisites,result,amount,seconds,category,result_type='Ingot',whole_canister=False):

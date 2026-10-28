@@ -9,7 +9,7 @@ namespace ArcanePower
     internal static class ReactorDashboard
     {
         internal static readonly string[] Pages = { "Overview", "Power", "Containment", "Supplies", "Vent" };
-        private static readonly string[] CooldownRows = { "Core cooldown", "Cooldown progress", "Cooldown ETA", "Shutdown stage", "Heat to drain", "Heat removed", "Cooling capacity", "Containment", "Reaction heat" };
+        private static readonly string[] CooldownRows = { "Core cooldown", "Cooldown progress", "Cooldown ETA", "Shutdown stage", "Cooldown backlog", "Cooling rate", "Cooling capacity", "Containment" };
         internal const float TabletWidth = 640;
         internal const float TabletHeight = TabletWidth * .174f / .270f;
         internal static Color Tone(string tone)
@@ -59,7 +59,7 @@ namespace ArcanePower
                     ? new[] { "Containment", "Charge rate", "Charge ETA", "Reserve energy", "Net" }
                     : report.CoolingDown && (page == 0 || page == 1) ? CooldownRows
                     : page == 0 ? new[] { "Net", "Field", "Fuel stock", "Vent" }
-                    : page == 1 && report.Brayton ? new[] { "Circuits available", "Reaction heat", "Cooling capacity", "Potential cooling", "Cooling required", "Full-load cooling", "Heat removed", "Heat to drain" }
+                    : page == 1 && report.Brayton ? new[] { "Circuits available", "Cooling load", "Cooling capacity", "Cooling margin", "Potential cooling", "Cooldown backlog", "Fuel burn" }
                     : page == 1 ? new[] { "Net", "Ramp", "Containment", "Fuel burn", "Fuel remaining" }
                     : page == 2 ? new[] { "60 s heat peak", "Thermal outlook", "Controllers", "Field", "Reserve energy", "Tile grade", "Replacing", "Dismantle at" }
                     : page == 3 ? new[] { "Fuel stock", "Fuel remaining", "Tile demand", "Tile reserve", "Tile stock", "Conveyors" }
@@ -113,10 +113,10 @@ namespace ArcanePower
                     ? new[] { "Startup charge", "Reserve energy", "Containment", "Charge rate", "Charge ETA", "Net", "Vent" }
                     : report.CoolingDown && (page == 0 || page == 1) ? CooldownRows
                     : page == 0 ? new[] { "Output", "Heat", "Reserve", "Fuel stock", "Spare tiles", "Vent" }
-                    : page == 1 && report.Brayton ? new[] { "Output", "Circuits available", "Reaction heat", "Cooling capacity", "Potential cooling", "Cooling required", "Full-load cooling", "Heat removed", "Heat to drain" }
-                    : page == 1 ? new[] { "Output", "Net", "Ramp", "Containment", "Fuel efficiency", "Fuel burn", "Fuel remaining" }
+                    : page == 1 && report.Brayton ? new[] { "Output", "Circuits available", "Cooling load", "Cooling capacity", "Cooling margin", "Potential cooling", "Cooldown backlog", "Fuel burn" }
+                    : page == 1 ? new[] { "Output", "Net", "Ramp", "Containment", "Controller economy", "Fuel burn", "Fuel remaining" }
                     : page == 2 ? new[] { "60 s heat peak", "Thermal outlook", "Security mode", "Integrity", "Controllers", "Field", "Reserve energy", "Tile grade", "Quartet wear", "Replacing", "Dismantle at" }
-                    : page == 3 ? new[] { "Fuel efficiency", "Fuel stock", "Fuel burn", "Fuel remaining", "Spare tiles", "Tile demand", "Tile reserve", "Tile stock", "Startup tiles", "Conveyors" }
+                    : page == 3 ? new[] { "Controller economy", "Fuel stock", "Fuel burn", "Fuel remaining", "Spare tiles", "Tile demand", "Tile reserve", "Tile stock", "Startup tiles", "Conveyors" }
                     : new[] { "Vent", "Route", "Doors", "Security mode", "Integrity" };
                 var rows = new List<StatusRow>();
                 foreach (string label in labels)

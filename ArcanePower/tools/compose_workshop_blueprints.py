@@ -61,7 +61,7 @@ if '01' in selected:
     model(im, 'reactor', (35, 170, 940, 640))
     text(d, (67, 805), 'CUTAWAY: SHIELDS / GLAZING / TILE SHELL OMITTED; RINGS POSED', 15, CYAN)
     d.line((992, 185, 992, 802), fill='#315a70', width=2)
-    note(d, 1030, 206, '01', 'THREE FUEL TIERS', ['Aether / Helion / Empyrean', '2.5 / 25 / 250 GW heat', 'Up to 200 GW electrical'])
+    note(d, 1030, 206, '01', 'THREE FUEL TIERS', ['Aether / Helion / Empyrean', '5 / 50 / 250 GW fuel input', 'Up to 200 GW electrical'])
     note(d, 1030, 367, '02', 'ACTIVE CONTAINMENT', ['Two external controllers', 'Four independent heat circuits', '80 replaceable shell tiles'])
     note(d, 1030, 528, '03', 'A COMMITTED EXIT', ['Straight duct + outlet route', 'Physical core ejection', 'Critical fuse survives launch'])
     d.rectangle((1030, 718, 1525, 789), outline=GOLD, width=1)
@@ -86,12 +86,12 @@ if '03' in selected:
     im, d = plate('03', 'ENERGY CORE / MODULAR STORAGE', 'NATIVE BATTERY STORAGE  //  CAPACITY  //  TRANSFER  //  STABILIZATION')
     model(im, 'energy-bank', (38, 181, 700, 550))
     text(d, (70, 745), 'ASSEMBLED BANK / NATIVE SE UPGRADE SOCKETS', 17, GOLD)
-    text(d, (70, 777), 'CORE: 3 x 3 x 3 LG / 1,000 MWh / 10 GW BASE', 17, CYAN)
+    text(d, (70, 777), 'CORE: 3 x 3 x 3 LG / 1,000 MWh / 4 GW IN / 10 GW OUT', 17, CYAN)
     text(d, (70, 806), 'GLAZING OMITTED TO SHOW INTERNAL ASSEMBLY', 14, MUTED)
     d.line((770, 185, 770, 805), fill='#315a70', width=2)
     for i, (name, title, line1, line2) in enumerate([
         ('capacity', 'CAPACITY', 'Any compatible bay', '+10,000 / +100,000 MWh'),
-        ('transfer', 'TRANSFER', 'Any compatible bay', '100 GW / 1 TW ceiling'),
+        ('transfer', 'TRANSFER', '40 / 200 GW charge', '100 GW / 1 TW discharge'),
         ('stabilizer', 'STABILIZER', 'Any compatible bay', 'Matching / lower tiers')]):
         x=805+i*250
         model(im, name, (x, 225, 230, 295))
@@ -121,10 +121,10 @@ def grid_plate(number, title, subtitle, filename, parts, columns=4, footnote='')
 
 if '04' in selected:
     grid_plate('04', 'BRAYTON / TURBINE FAMILY', 'ONE TURBINE PER CIRCUIT  //  INTEGRATED COMPRESSOR  //  REGULAR + MIRRORED', 'turbines-blueprint.png', [
-        ('turbine', 'T1 / STANDARD', '250 MW per turbine / starter conversion'),
-        ('turbine-upgraded', 'T2 / UPGRADED', '50 GW per turbine / Empyrean eligible'),
-        ('turbine-mirrored', 'T1 / MIRRORED', 'Opposite-side duplex socket / same rating'),
-        ('turbine-mirrored-upgraded', 'T2 / MIRRORED UPGRADED', 'Four T2 circuits provide up to 200 GW')], 2,
+        ('turbine', 'T1 / STANDARD', '3.5 GW max / flat 80% Brayton conversion'),
+        ('turbine-upgraded', 'T2 / UPGRADED', '50 GW max / Helion 40 GW across four'),
+        ('turbine-mirrored', 'T1 / MIRRORED', 'Four T1 / Helion: 14 GW out + cooling'),
+        ('turbine-mirrored-upgraded', 'T2 / MIRRORED UPGRADED', 'Empyrean: 200 GW output + 200 GW cooling')], 2,
         '2 WIDE x 2 HIGH x 5 LONG LG  /  ALIGN H + C  /  EACH CIRCUIT RECEIVES UP TO 25% OF SOURCE HEAT')
 
 if '05' in selected:
@@ -175,10 +175,10 @@ if '09' in selected:
 if '10' in selected:
     grid_plate('10', 'STORAGE / UPGRADE MODULES', '1 x 3 x 1 LARGE-GRID PILLARS  //  ANY CORE BAY  //  ALIGN UP AND FACE CONNECTORS INWARD', 'energy-modules-blueprint.png', [
         ('capacity-standard', 'STANDARD CAPACITY', '+10,000 MWh'),
-        ('transfer-standard', 'STANDARD TRANSFER', '100 GW bank ceiling'),
+        ('transfer-standard', 'STANDARD TRANSFER', '40 GW charge / 100 GW discharge'),
         ('stabilizer-standard', 'STANDARD STABILIZER', 'Supports standard modules'),
         ('capacity', 'ADVANCED CAPACITY', '+100,000 MWh'),
-        ('transfer', 'ADVANCED TRANSFER', '1 TW bank ceiling'),
+        ('transfer', 'ADVANCED TRANSFER', '200 GW charge / 1 TW discharge'),
         ('stabilizer', 'ADVANCED STABILIZER', 'Supports both equipment tiers')], 3,
         'STRONGEST TRANSFER / STABILIZER TIER APPLIES  /  MATCHING OR STRONGER STABILIZER REQUIRED')
 print('Wrote', len(selected), '1600x900 Workshop blueprint plates to', OUT)

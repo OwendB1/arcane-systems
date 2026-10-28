@@ -41,7 +41,7 @@ static class EnergySession {public static Dictionary<long,JumpDriveSurge> Drives
 class EnergyCore {
  const string CoreSubtype="ArcanePower_EnergyCore";const int Electricity=0;
  IMyBatteryBlock block,battery;bool initialized=true,emergencyEnabled=true,emergency,changingLimit;
- float reserve=.1f,outputLimit,inputLimit,stored,capacity,transfer;int tick=1;string status;
+ float reserve=.1f,outputLimit,inputLimit,stored,capacity,transfer,chargeCeiling;int tick=1;string status;
  List<EnergyCore> cells=new List<EnergyCore>(),previousCells=new List<EnergyCore>();List<IMyReactor> reactors=new List<IMyReactor>();
  bool IsController {get {return BaseSubtype(block)==CoreSubtype;}}
  IMyTerminalBlock Entity {get {return block;}}
@@ -67,17 +67,17 @@ class EnergyCore {
  }
  static void Main(){
   var grid=new Grid();var c=Cell(grid,Vector3I.Zero,CoreSubtype,1000);
-  c.UpdateBank();Near(c.transfer,10000,"base 10GW");Near(c.capacity,1000,"base capacity");
+  c.UpdateBank();Near(c.transfer,10000,"base 10GW discharge");Near(c.chargeCeiling,4000,"base 4GW charging");Near(c.capacity,1000,"base capacity");
   var left=Cell(grid,new Vector3I(-2,0,0),"ArcanePower_EnergyCapacity",10000,Base6Directions.Direction.Right);
   var right=Cell(grid,new Vector3I(2,0,0),"ArcanePower_EnergyCapacityAdvanced",100000,Base6Directions.Direction.Left);
   c.UpdateBank();Need(c.cells.Count==1,"modules require stabilizer");
   var stable=Module(grid,new Vector3I(0,2,0),"ArcanePower_EnergyStabilizer",Base6Directions.Direction.Down);
   var transfer=Module(grid,new Vector3I(0,0,2),"ArcanePower_EnergyTransfer",Base6Directions.Direction.Forward);
-  c.UpdateBank();Need(c.cells.Count==2,"standard stabilizer accepts only standard capacity");Near(c.capacity,11000,"fixed capacities aggregate");Near(c.transfer,100000,"transfer tier independent of capacity");
+  c.UpdateBank();Need(c.cells.Count==2,"standard stabilizer accepts only standard capacity");Near(c.capacity,11000,"fixed capacities aggregate");Near(c.transfer,100000,"transfer tier independent of capacity");Near(c.chargeCeiling,40000,"standard 40GW charging");
   stable.BlockDefinition.SubtypeName+="Advanced";transfer.BlockDefinition.SubtypeName+="Advanced";
-  c.UpdateBank();Need(c.cells.Count==3,"advanced supports both capacity tiers");Near(c.capacity,111000,"mixed bank capacity");Near(c.transfer,1000000,"advanced transfer");
+  c.UpdateBank();Need(c.cells.Count==3,"advanced supports both capacity tiers");Near(c.capacity,111000,"mixed bank capacity");Near(c.transfer,1000000,"advanced transfer");Near(c.chargeCeiling,200000,"advanced 200GW charging");
   float input=0,output=0;foreach(var cell in c.cells){input+=cell.inputLimit;output+=cell.outputLimit;}
-  Near(input,1000000,"sum input limits equals bank limit");Need(output<=1000000.2f,"output cannot exceed bank ceiling");
+  Near(input,200000,"sum input limits equals independent charging ceiling");Need(output<=1000000.2f,"output cannot exceed bank ceiling");
   float bound=right.outputLimit;right.battery.SourceComp.SetMaxOutputByType(0,1000000);Near(right.battery.SourceComp.Max,bound,"native refresh cannot bypass limit");
   right.battery.SourceComp.SetMaxOutputByType(0,0);Near(right.battery.SourceComp.Max,0,"native off remains off");
   right.block.Enabled=false;right.battery.SourceComp.SetMaxOutputByType(0,1000000);Near(right.battery.SourceComp.Max,0,"disabled cell cannot restore a stale output allocation");
@@ -189,7 +189,7 @@ class EnergyCore {
         core.UpdateBank();
         Need(core.cells.Contains(standard) && core.cells.Contains(advanced)==(tier==2),"any bay accepts supported capacity tiers");
         Near(core.capacity,tier==2?111000:11000,"capacity aggregates across universal bays");
-        Near(core.transfer,tier==2?1000000:100000,"transfer tier works from any bay");
+        Near(core.transfer,tier==2?1000000:100000,"transfer tier works from any bay");Near(core.chargeCeiling,tier==2?200000:40000,"charging tier works from any bay");
         Need(core.IsModuleRunning(stable) && core.IsModuleRunning(transfer),"module activity follows universal attachment");
         stable.Enabled=false;
         Need(!core.IsModuleRunning(transfer),"transfer immediately loses activity without a stabilizer in any bay");
@@ -205,15 +205,15 @@ class EnergyCore {
   Module(g,new Vector3I(-2,0,0),"ArcanePower_EnergyTransfer_Pillar",Base6Directions.Direction.Right);
   Module(g,new Vector3I(2,0,0),"ArcanePower_EnergyTransferAdvanced_Pillar",Base6Directions.Direction.Left);
   c.UpdateBank();Need(c.stabilizationTier==2,"strongest stabilizer wins");Near(c.transfer,1000000,"duplicate transfer tiers do not stack");
-  highStable.Enabled=false;c.UpdateBank();Need(c.stabilizationTier==1,"fallback to remaining stabilizer");Near(c.transfer,100000,"strongest transfer remains bounded by stabilization");
-  lowStable.Enabled=false;c.UpdateBank();Near(c.transfer,10000,"no stabilization restores base transfer");
+  highStable.Enabled=false;c.UpdateBank();Need(c.stabilizationTier==1,"fallback to remaining stabilizer");Near(c.transfer,100000,"strongest transfer remains bounded by stabilization");Near(c.chargeCeiling,40000,"charging falls back with stabilization");
+  lowStable.Enabled=false;c.UpdateBank();Near(c.transfer,10000,"no stabilization restores base transfer");Near(c.chargeCeiling,4000,"no stabilization restores base charging");
   var full=new Grid();var bank=Cell(full,Vector3I.Zero,CoreSubtype+"_Pillar",1000);
   Module(full,new Vector3I(0,0,-2),"ArcanePower_EnergyStabilizerAdvanced_Pillar",Base6Directions.Direction.Backward);
   Cell(full,new Vector3I(0,0,2),"ArcanePower_EnergyCapacityAdvanced_Pillar",100000);
   var b=Cell(full,new Vector3I(-2,0,0),"ArcanePower_EnergyCapacityAdvanced_Pillar",100000,Base6Directions.Direction.Right);
   Cell(full,new Vector3I(2,0,0),"ArcanePower_EnergyCapacityAdvanced_Pillar",100000,Base6Directions.Direction.Left);
   bank.UpdateBank();Need(bank.cells.Count==4,"three capacity modules can share a stabilizer");Near(bank.capacity,301000,"all supported physical cells aggregate");
-  float input=0;foreach(var cell in bank.cells)input+=cell.inputLimit;Near(input,10000,"extra capacity does not multiply transfer ceiling");
+  float input=0;foreach(var cell in bank.cells)input+=cell.inputLimit;Near(input,4000,"extra capacity does not multiply charging ceiling");
   b.block.Access=false;bank.UpdateBank();Need(bank.cells.Count==3,"universal bays preserve ownership checks");Near(b.inputLimit,0,"lost access revokes capacity allocation");
   Console.WriteLine("PASS universal bays: "+layouts+" rotated tier/layout combinations, module activity, duplicate tiers, three capacities and revocation");
  }
@@ -391,7 +391,7 @@ class EnergyCore {
   drive.CubeGrid=new Grid();original=c.block.CurrentStoredPower;c.UpdateSurge();Need(c.gameplay.SurgeTicks==0 && c.block.CurrentStoredPower==original,"split cancels surge without spending");drive.CubeGrid=grid;
   var saved=drive.Storage[JumpDriveSurge.RecoveryKey];var restored=new JumpDriveSurge{Entity=drive};restored.Init(null);restored.UpdateOnceBeforeFrame();Need(!restored.Claim(999),"drive recovery survives reload");
   drive.Storage[JumpDriveSurge.RecoveryKey]="999:7200";var copied=new JumpDriveSurge{Entity=drive};copied.Init(null);copied.UpdateOnceBeforeFrame();Need(copied.Claim(999),"copied identity does not inherit cooldown");copied.Release(999);drive.Storage[JumpDriveSurge.RecoveryKey]=saved;
-  c.gameplay.RecoveryTicks=0;c.RequestBurst();Need(c.gameplay.BurstTicks==600,"burst lasts ten seconds");Near(c.outputLimit,20000,"burst doubles base discharge");Near(c.inputLimit,10000,"burst leaves charge ceiling unchanged");
+  c.gameplay.RecoveryTicks=0;c.RequestBurst();Need(c.gameplay.BurstTicks==600,"burst lasts ten seconds");Near(c.outputLimit,20000,"burst doubles base discharge");Near(c.inputLimit,4000,"burst leaves charge ceiling unchanged");
   c.RequestSurge();Need(c.gameplay.SurgeTicks==0,"burst and surge share recovery");
   c.SaveGameplay();var state=c.block.Storage[GameplayKey];c.gameplay=new EnergyGameplayState();c.InitializeGameplay(true);Need(c.gameplay.BurstTicks==600 && c.gameplay.RecoveryTicks>0,"bank recovery and burst survive reload");
   for(int i=0;i<600;i++)c.UpdateRecovery();Near(c.outputLimit,10000,"burst ends at normal ceiling");Need(c.gameplay.RecoveryTicks>0,"recovery continues after burst");

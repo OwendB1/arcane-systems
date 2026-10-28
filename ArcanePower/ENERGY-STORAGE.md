@@ -67,11 +67,11 @@ the required alignment or stabilizer tier.
 
 | Block | Position | Capacity or capability |
 | --- | --- | --- |
-| Energy Core | Center | 1,000 MWh; base 10 GW bank transfer |
+| Energy Core | Center | 1,000 MWh; 4 GW charge / 10 GW discharge |
 | Capacity Module | Any bay | +10,000 MWh each |
 | Advanced Capacity Module | Any bay | +100,000 MWh each |
-| Transfer Module | Any bay | 100 GW bank transfer |
-| Advanced Transfer Module | Any bay | 1 TW bank transfer |
+| Transfer Module | Any bay | 40 GW charge / 100 GW discharge |
+| Advanced Transfer Module | Any bay | 200 GW charge / 1 TW discharge |
 | Stabilizer | Any bay | Supports standard modules |
 | Advanced Stabilizer | Any bay | Supports standard and advanced modules |
 
@@ -82,7 +82,8 @@ is limited by stabilization. Losing a module falls back to the remaining tiers,
 or disables unsupported expansions and restores the base transfer ceiling when
 no stabilizer remains. Component costs,
 capacity, PCU and transfer ratings are provisional. Ratings align with the
-reactor's 10/100/1,000 GW tiers; they are not final survival balance.
+reactor's 4/40/200 GW Brayton fuel outputs for charging. Discharge remains
+10/100/1,000 GW, with the existing temporary surge/burst boosts.
 
 ## Existing compact banks
 
@@ -95,8 +96,9 @@ Compact and pillar modules cannot be mixed.
 ## Native energy accounting
 
 Each storage cell is a native battery with fixed capacity. The core reports the
-aggregate and divides the bank transfer allowance proportionally among attached
-cells. It never changes shared definitions or copies charge between storage cells.
+aggregate and divides charging and discharge ceilings independently, in proportion
+to each attached cell's capacity. Charging tiers are 4/40/200 GW; ordinary discharge
+tiers remain 10/100/1,000 GW. Capacity modules cannot multiply either bank ceiling. It never changes shared definitions or copies charge between storage cells.
 Upkeep consumes each physical cell's charge; a surge debits those cells and credits
 an affordable batch of jump drives through the public Mod API.
 Charging demand follows actual stored charge through the public resource sink,
@@ -113,7 +115,7 @@ that battery loses its stored energy. Creative mode retains native creative
 battery behavior; conservation claims apply to survival.
 
 The normal battery details can display the definition's 2 TW burst maximum. The
-**ARCANE ENERGY STORAGE** custom information reports the bank ceiling and each
+**ARCANE ENERGY STORAGE** custom information reports separate charging/discharge ceilings and each
 cell's effective input/output limits. Actual transfer still depends on grid demand
 and supply. Vanilla batteries remain usable for reactor startup and backup.
 

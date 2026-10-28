@@ -17,7 +17,7 @@ namespace ArcanePower
             var models = new Dictionary<string, ThermalModel>();
             models.Add("ArcanePower_Thermal_BraytonTrain", new ThermalModel {
                 Subtype = "ArcanePower_Thermal_BraytonTrain", Cells = new Vector3I(5, 2, 2),
-                Kind = ThermalKind.Train, Grade = 0, RatingMW = 625, CoolingMW = 0, Ports = new ThermalPort[] {
+                Kind = ThermalKind.Train, Grade = 0, RatingMW = 4375, CoolingMW = 0, Ports = new ThermalPort[] {
                     new ThermalPort("CO2", new Vector3(5f, -1.25f, -2.5f), new Vector3(-0f, 0f, -1f), new Vector3(-0f, 1f, 0f)),
                 } });
             models.Add("ArcanePower_Thermal_BraytonTrainUpgraded", new ThermalModel {
@@ -325,7 +325,7 @@ namespace ArcanePower
                 } });
             models.Add("ArcanePower_Thermal_BraytonTrainMirrored", new ThermalModel {
                 Subtype = "ArcanePower_Thermal_BraytonTrainMirrored", Cells = new Vector3I(5, 2, 2),
-                Kind = ThermalKind.Train, Grade = 0, RatingMW = 625, CoolingMW = 0, Ports = new ThermalPort[] {
+                Kind = ThermalKind.Train, Grade = 0, RatingMW = 4375, CoolingMW = 0, Ports = new ThermalPort[] {
                     new ThermalPort("CO2", new Vector3(5f, -1.25f, 2.5f), new Vector3(-0f, 0f, 1f), new Vector3(-0f, 1f, 0f)),
                 } });
             models.Add("ArcanePower_Thermal_BraytonTrainMirroredUpgraded", new ThermalModel {

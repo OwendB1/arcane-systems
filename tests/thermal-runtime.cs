@@ -8,6 +8,16 @@ using VRageMath;
 
 public static partial class ThermalRuntimeChecks
 {
+    [ProtoBuf.ProtoContract]
+    private sealed class LegacyCircuitTelemetry
+    {
+        [ProtoBuf.ProtoMember(3)] public double HeatMW = 999;
+        [ProtoBuf.ProtoMember(6)] public double RequiredCoolingMW = 123;
+        [ProtoBuf.ProtoMember(8)] public double ExcessMJ = 75;
+        [ProtoBuf.ProtoMember(9)] public double OutputMW = 20;
+        [ProtoBuf.ProtoMember(10)] public double ReactionMW = 999;
+        [ProtoBuf.ProtoMember(11)] public double DesignCoolingMW = 999;
+    }
     private static int checks;
     private static void Check(bool condition, string message)
     { checks++; if (!condition) throw new Exception(message); }
@@ -77,28 +87,28 @@ public static partial class ThermalRuntimeChecks
     private static void Budgets()
     {
         TurbineRatings();
-        double[] temperatures = { 650, 1000, 1600, 2200 };
-        double[] ceilings = { 40, 55, 66, 80 };
-        for (int tier = 0; tier < 4; tier++)
+        double[] temperatures = { 650, 1000, 2200 };
+        double[] ceilings = { 80, 80, 80 };
+        for (int tier = 0; tier < 3; tier++)
             for (int count = 1; count <= 4; count++)
             {
                 double net = 0;
                 for (int circuit = 0; circuit < count; circuit++)
                 {
-                    var point = ThermalMath.Dispatch(ThermalLoops.Allocation(100), temperatures[tier], Bank(1, 2, tier));
+                    var point = ThermalMath.Dispatch(ThermalLoops.Allocation(100), temperatures[tier], Bank(1, 2, tier == 2 ? 3 : 0));
                     Near(point.Efficiency, ceilings[tier] / 100, "surviving circuits preserve fuel/turbine efficiency");
                     net += point.NetMW;
                 }
                 Near(net, ceilings[tier] * count / 4, "capacity scales linearly across four fixed circuit allocations");
             }
-        Near(ThermalMath.Dispatch(100, 650, Bank(1, 2, 3)).NetMW, 40, "source temperature gates higher tiers");
+        Near(ThermalMath.Dispatch(100, 650, Bank(1, 2, 3)).NetMW, 80, "flat conversion applies to every eligible fuel");
         Check(ThermalMath.Dispatch(200, 650, Bank(2, 2)).NetMW == 0, "two turbines cannot share one manifold circuit");
         var smallCooling = Bank(1, 1); smallCooling[1].CoolingMW = 30;
         var undersized = ThermalMath.Dispatch(100, 650, smallCooling);
-        Near(undersized.NetMW, 40, "cooling shortage does not silently throttle away the heat hazard");
+        Near(undersized.NetMW, 80, "cooling shortage does not silently throttle away the heat hazard");
         Check(undersized.RequiredCoolingMW > undersized.CoolingMW && undersized.SustainableMW < undersized.NetMW,
             "undersized circuit exposes unsafe rejection");
-        Near(ThermalMath.Dispatch(200, 650, Bank(1, 2)).NetMW, 40, "turbine rating still limits its own circuit");
+        Near(ThermalMath.Dispatch(200, 650, Bank(1, 2)).NetMW, 80, "turbine rating still limits its own circuit");
         Near(ThermalMath.Dispatch(100, 650, Bank(0, 1)).NetMW, 0, "train required");
         Near(ThermalMath.Dispatch(100, 650, Bank(1, 0)).NetMW, 0, "cooler required");
         double previous = 0;
@@ -112,8 +122,8 @@ public static partial class ThermalRuntimeChecks
         Check(blockedT3.Limit.Contains("upgraded"), "T3 gate reports required hardware");
         var exotic = Bank(1, 1, 3);
         Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 80, "one exotic circuit retains its grade efficiency");
-        exotic.Add(new ThermalUnit { Id = 101, Kind = ThermalKind.AirCooler, RatingMW = 100, CoolingMW = 60, ColdC = 200 });
-        Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 80, "warm extra cooling cannot worsen a cold circuit");
+        exotic.Add(new ThermalUnit { Id = 101, Kind = ThermalKind.AirCooler, RatingMW = 100, CoolingMW = 60 });
+        Near(ThermalMath.Dispatch(100, 2200, exotic).NetMW, 80, "extra cooling does not change fuel conversion");
         Near(ThermalMath.AirCooling(60, 0, 1), 0, "vacuum fan cooling");
         Near(ThermalMath.AirCooling(60, .2, 1), 12, "thin atmosphere");
         Near(ThermalMath.AirCooling(60, 1, 1), 60, "unobstructed exhaust");
@@ -143,10 +153,8 @@ public static partial class ThermalRuntimeChecks
                 Check(Vector3.Dot(transformed, normal) > 3.06f, "exhaust follows block orientation");
             }
         }
-        Near(ThermalMath.RadiativeCooling(60, 0, -270.15), 0, "occluded radiator");
-        Near(ThermalMath.RadiativeCooling(60, 1, 35), 0, "warm radiative sink");
-        Near(ThermalMath.RadiativeCooling(60, 1, -270.15), 60, "space radiator");
-        Check(ThermalMath.Efficiency(0, 650, 80) < .4, "warm inlet derating");
+        Near(ThermalMath.StandaloneEfficiency, .1, "standalone fuel conversion");
+        Near(ThermalMath.BraytonEfficiency, .8, "flat Brayton fuel conversion");
         foreach (double invalid in new[] { -1.0, double.NaN, double.PositiveInfinity })
             Near(ThermalMath.Dispatch(invalid, 650, Bank(1, 1)).NetMW, 0, "invalid offered heat");
     }
@@ -157,20 +165,34 @@ public static partial class ThermalRuntimeChecks
         {
             if (model.Kind != ThermalKind.Train) continue;
             bool upgraded = model.Grade == 3;
-            double sourceMW = upgraded ? 250000 : 2500;
-            double outputMW = upgraded ? 50000 : 250;
+            double maximumMW = upgraded ? 50000 : 3500;
             var cooler = ThermalModels.All["ArcanePower_Thermal_AtmosphericCooler" + (upgraded ? "Upgraded" : "")];
             var units = new List<ThermalUnit> {
                 new ThermalUnit { Kind = ThermalKind.Train, Grade = model.Grade, RatingMW = model.RatingMW },
                 new ThermalUnit { Kind = ThermalKind.AirCooler, CoolingMW = cooler.CoolingMW }
             };
-            var plan = ThermalMath.Dispatch(ThermalLoops.Allocation(sourceMW), upgraded ? 2200 : 650, units);
-            Near(plan.NetMW, outputMW, "per-port electrical rating: " + model.Subtype);
-            Near(plan.RequiredCoolingMW, upgraded ? 12500 : 375, "full-load waste heat per circuit");
-            Near(plan.SustainableMW, outputMW, "one matching atmospheric cooler sustains full output at ideal exposure");
-            Near(plan.NetMW * ThermalLoops.Count, upgraded ? 200000 : 1000, "four-port electrical maximum");
-            Near(ThermalMath.Dispatch(sourceMW, upgraded ? 2200 : 650, units).NetMW, outputMW,
-                "turbine cannot exceed rating with excess source heat");
+            Near(model.RatingMW * ThermalMath.BraytonEfficiency, maximumMW,
+                "native theoretical electrical ceiling: " + model.Subtype);
+            var maximum = ThermalMath.Dispatch(model.RatingMW * 2, upgraded ? 2200 : 1000, units);
+            Near(maximum.NetMW, maximumMW, "excess heat cannot exceed the turbine ceiling");
+            Near(maximum.SustainableMW, maximumMW, "one matching atmospheric cooler sustains theoretical output");
+            double[] heat = { 5000, 50000, 250000 };
+            double[] hot = { 650, 1000, 2200 };
+            double[] eta = { .8, .8, .8 };
+            for (int tier = 0; tier < heat.Length; tier++)
+            {
+                var plan = ThermalMath.Dispatch(ThermalLoops.Allocation(heat[tier]), hot[tier], units);
+                if (tier == 2 && !upgraded)
+                {
+                    Near(plan.NetMW, 0, "Empyrean still requires upgraded turbines");
+                    continue;
+                }
+                Near(plan.AcceptedMW, Math.Min(heat[tier] / 4, model.RatingMW), "fuel allocation and turbine limit bound fuel throughput");
+                Near(plan.Efficiency, eta[tier], "fuel determines net efficiency at either turbine tier");
+                Near(plan.NetMW, Math.Min(heat[tier] * eta[tier] / 4, maximumMW), "per-circuit fuel and turbine-limited electricity");
+                Near(plan.RequiredCoolingMW, plan.NetMW, "cooling load equals electrical output");
+                Near(plan.SustainableMW, plan.NetMW, "one matching atmospheric cooler sustains full fuel output");
+            }
             Check(new ThermalStore { EntityId = 1, HotMJ = upgraded ? 20000000 : 200000 }.Valid(1, model.CapacityMJ),
                 "pre-rebalance turbine heat remains valid");
         }
@@ -178,17 +200,32 @@ public static partial class ThermalRuntimeChecks
 
     private static void Stores()
     {
-        foreach (double eta in new[] { .20, .40, .80 })
+        var legacyWire = ProtoBuf.Meta.RuntimeTypeModel.Create();
+        using (var stream = new MemoryStream())
+        {
+            legacyWire.Serialize(stream, new LegacyCircuitTelemetry()); stream.Position = 0;
+            var circuit = (ThermalLoopState)legacyWire.Deserialize(stream, null, typeof(ThermalLoopState));
+            Check(circuit.Valid(), "retired telemetry tags do not invalidate old circuit snapshots");
+            Near(circuit.ExcessMJ, 75, "saved cooling backlog survives without rescaling");
+            Near(circuit.RequiredCoolingMW, 20, "cooling load derives from output instead of stale saved duplicates");
+        }
+        var standalone = new ThermalReactorState { Store = new ThermalStore { EntityId = 1, HotMJ = 100 } };
+        var standaloneGrant = new ThermalOutputGrant(standalone, null, 100, ThermalMath.StandaloneEfficiency);
+        Check(standaloneGrant.Settle(standaloneGrant.MaximumMW), "standalone output stays fuel-backed");
+        Near(standalone.Store.HotMJ + standalone.Store.WasteMJ + standalone.NetOutputMW / 60, 100,
+            "standalone retains integrated cooling and its original energy accounting");
+        foreach (double eta in new[] { .80 })
             foreach (double load in new[] { 0.0, .01, .1, .25, .5, 1.0 })
             {
-                var state = new ThermalReactorState { Store = new ThermalStore { EntityId = 1, HotMJ = 100 }, LoopVersion = 2 };
+                var state = new ThermalReactorState { Mode = ThermalMode.Brayton, Store = new ThermalStore { EntityId = 1, HotMJ = 100 }, LoopVersion = 2 };
                 var loop = state.Loops[0];
                 var grant = new ThermalOutputGrant(state, loop, 100, eta);
                 double output = (float)(grant.MaximumMW * load);
                 Check(grant.Settle(output), "native float output is paid");
                 Near(state.ProducedMW, output / eta, "reaction is linear in delivered power");
-                Near(loop.RequiredCoolingMW, output * (1 / eta - 1), "waste is linear in delivered power");
-                Near(100, state.Store.HotMJ + loop.ExcessMJ + output / 60, "every reserved MJ conserved");
+                Near(loop.RequiredCoolingMW, output, "cooling load is equal to delivered power");
+                Near(100, state.Store.HotMJ + output / (60 * eta), "every reserved fuel MJ is accounted for");
+                Near(loop.ExcessMJ, output / 60, "every delivered electrical MJ creates one cooling-load unit");
                 Near(state.NetOutputMW, output, "actual output telemetry");
                 Check(!grant.Settle(output), "an interval cannot be charged twice");
             }
@@ -196,12 +233,13 @@ public static partial class ThermalRuntimeChecks
         for (int step = 1; step <= 100000; step++)
         {
             double heat = (50000.0 * step / 100000) / (.8 * 60);
-            var state = new ThermalReactorState { Store = new ThermalStore { EntityId = 1, HotMJ = heat } };
+            var state = new ThermalReactorState { Mode = ThermalMode.Brayton, Store = new ThermalStore { EntityId = 1, HotMJ = heat } };
             var grant = new ThermalOutputGrant(state, state.Loops[0], heat, .8);
             double output = (float)((float)(grant.MaximumMW / 216000.0) * 216000f);
             Check(grant.Settle(output), "T2 native float roundtrip must not spuriously isolate runtime");
-            Near(heat, state.Store.HotMJ + state.Loops[0].ExcessMJ + output / 60, "rounded native output remains fully paid");
-            var unpaid = new ThermalReactorState { Store = new ThermalStore { EntityId = 1, HotMJ = heat } };
+            Near(heat, state.Store.HotMJ + output / (.8 * 60), "rounded native output remains fully paid");
+            Near(state.Loops[0].ExcessMJ, output / 60, "rounded native output creates matching cooling load");
+            var unpaid = new ThermalReactorState { Mode = ThermalMode.Brayton, Store = new ThermalStore { EntityId = 1, HotMJ = heat } };
             Check(!new ThermalOutputGrant(unpaid, unpaid.Loops[0], heat, .8).Settle(heat * .8 * 60 * 1.000001),
                 "rounding tolerance never admits output beyond allocated paid heat");
         }
@@ -232,10 +270,10 @@ public static partial class ThermalRuntimeChecks
 
     private static void CoolingFailure()
     {
-        foreach (double capacity in new[] { 15.0, 7.5, 0 })
+        foreach (double capacity in new[] { 20.0, 10, 0 })
             foreach (bool recover in new[] { false, true })
             {
-                var state = new ThermalReactorState { LoopVersion = 2 };
+                var state = new ThermalReactorState { Mode = ThermalMode.Brayton, LoopVersion = 2 };
                 float heat = 0; bool critical = false, restored = false;
                 double paid = 0, exported = 0, rejected = 0;
                 for (int tick = 0; tick < 24000; tick++)
@@ -244,7 +282,7 @@ public static partial class ThermalRuntimeChecks
                     paid += ThermalMath.AdmitHeat(state.Store, 100.0 / 60, 100.0 / 60, 1000000);
                     foreach (var loop in state.Loops)
                     {
-                        var grant = new ThermalOutputGrant(state, loop, 25.0 / 60, .4);
+                        var grant = new ThermalOutputGrant(state, loop, 25.0 / 60, .8);
                         Check(grant.Settle(grant.MaximumMW), "load remains paid during cooling loss");
                         exported += grant.MaximumMW / 60;
                     }
@@ -255,9 +293,10 @@ public static partial class ThermalRuntimeChecks
                     critical |= heat >= 1.25;
                     Near(state.Loops[1].ExcessMJ, 0, "healthy circuit cannot absorb another circuit's waste");
                 }
-                Near(paid, exported + rejected + state.Store.HotMJ + state.RetainedHeatMJ, "failure/recovery conserve energy");
-                Check(critical == (capacity < 15 && !recover), "persistent shortage reaches failure; early repair prevents it");
-                if (capacity >= 15 || recover) Near(state.RetainedHeatMJ, 0, "adequate cooling clears excess");
+                Near(paid, exported / .8 + state.Store.HotMJ, "failure/recovery preserves paid fuel credit");
+                Near(exported, rejected + state.RetainedHeatMJ, "failure/recovery preserves every cooling-load unit");
+                Check(critical == (capacity < 20 && !recover), "persistent shortage reaches failure; early repair prevents it");
+                if (capacity >= 20 || recover) Near(state.RetainedHeatMJ, 0, "adequate cooling clears excess");
             }
         var stopped = new ThermalReactorState { LoopVersion = 2 };
         stopped.Loops[0].ExcessMJ = 100;
@@ -1032,7 +1071,7 @@ public static partial class ThermalRuntimeChecks
                 }
                 var plan=ThermalMath.Dispatch(ThermalLoops.Allocation(400),650,circuitUnits);
                 Near(plan.AcceptedMW,100,"one circuit accepts its fixed quarter heat allocation");
-                Near(plan.NetMW,40,"one circuit retains normal tier conversion efficiency");
+                Near(plan.NetMW,80,"one circuit retains normal tier conversion efficiency");
                 var directions=network.FlowDirections(new HashSet<long>{source.Id},sinks);
                 var states=new Dictionary<long,ThermalFlowState>();
                 foreach(var member in single)states[member.Id]=new ThermalFlowState{
@@ -1106,7 +1145,7 @@ public static partial class ThermalRuntimeChecks
         var restored=(ThermalReactorState)xml.Deserialize(new StringReader(writer.ToString().Replace("</ThermalLoopState>", "<Charge>0.5</Charge></ThermalLoopState>")));
         Near(restored.Store.HotMJ + restored.Store.WasteMJ, 150, "legacy charge fields are ignored without losing saved heat");
         Check(restored.Valid(1) && !restored.Valid(2),"loop snapshots remain identity-bound through save/reload");
-        restored.Loops[0].HeatMW=double.NaN;Check(!restored.Valid(1),"nonfinite thermal diagnostics rejected");
+        restored.Loops[0].NetMW=double.NaN;Check(!restored.Valid(1),"nonfinite thermal diagnostics rejected");
         restored.Loops=ThermalLoops.Empty();restored.Loops[0]=null;Check(!restored.Valid(1),"missing circuit state rejected");
         restored.Loops=new ThermalLoopState[5];Check(!restored.Valid(1),"excess loop slots rejected");
         double opening=1;
@@ -1133,9 +1172,9 @@ public static partial class ThermalRuntimeChecks
 
     private static void LoopEnergy()
     {
-        foreach (double eta in new[] { .4, .80 })
+        foreach (double eta in new[] { .80 })
         {
-            var state = new ThermalReactorState { LoopVersion = 2 };
+            var state = new ThermalReactorState { Mode = ThermalMode.Brayton, LoopVersion = 2 };
             double paid = 0, exported = 0, rejected = 0;
             for (int active = 4; active >= 0; active--)
                 foreach (double load in new[] { 0.0, .1, .4, 1.0, .2, 0.0 })
@@ -1152,7 +1191,8 @@ public static partial class ThermalRuntimeChecks
                         }
                         foreach (var loop in state.Loops) rejected += ThermalMath.CoolCircuit(loop, 60) / 60;
                         Near(state.ProducedMW, state.NetOutputMW / eta, "demand steps preserve linear reaction");
-                        Near(paid, exported + rejected + state.Store.HotMJ + state.RetainedHeatMJ, "load/loss/no-load energy balance");
+                        Near(paid, exported / eta + state.Store.HotMJ, "load/loss/no-load fuel-credit balance");
+                        Near(exported, rejected + state.RetainedHeatMJ, "load/loss/no-load cooling budget");
                     }
         }
     }
@@ -1398,7 +1438,7 @@ public static partial class ThermalRuntimeChecks
                 {
                     var state = new ThermalReactorState { Mode = ThermalMode.Brayton, ProducedMW = 80, RequiredCoolingMW = 20 };
                     var loop = state.Loops[0]; loop.Connected = true;
-                    loop.ExcessMJ = retained; loop.RequiredCoolingMW = 20; loop.CoolingMW = 20 - rate;
+                    loop.ExcessMJ = retained; loop.OutputMW = 20; loop.CoolingMW = 20 - rate;
                     // Rejection is what this interval actually removed; spare
                     // capacity must still be available to the future forecast.
                     loop.RejectedMW = state.RejectedMW = Math.Min(20 + retained * 60, loop.CoolingMW);
@@ -1425,7 +1465,7 @@ public static partial class ThermalRuntimeChecks
                     Near(loop.ExcessMJ, retained, "forecast never changes physical heat inventories");
                 }
         var balanced = new ThermalReactorState { Mode = ThermalMode.Brayton, ProducedMW = 80, RequiredCoolingMW = 20 };
-        var first = balanced.Loops[0]; first.Connected = true; first.RequiredCoolingMW = first.CoolingMW = 20;
+        var first = balanced.Loops[0]; first.Connected = true; first.OutputMW = first.CoolingMW = 20;
         var stable = Forecast(.8, .8, balanced);
         first.CoolingMW = 18.3;
         for (int i = 1; i <= 120; i++)
@@ -1443,12 +1483,12 @@ public static partial class ThermalRuntimeChecks
         first.CoolingMW = 25;
         for (int i = 0; i < 12; i++)
         {
-            balanced.ProducedMW = 100; first.RequiredCoolingMW = balanced.RequiredCoolingMW = 60;
+            balanced.ProducedMW = 100; first.OutputMW = balanced.RequiredCoolingMW = 60;
             first.ExcessMJ += 35.0 / 60;
             stable.Update(.8, 1, false, balanced, 100, true);
             Check(!stable.Warning && stable.PeakHeat <= 1, "200 ms load spike is not projected for a full minute");
         }
-        balanced.ProducedMW = 80; first.RequiredCoolingMW = balanced.RequiredCoolingMW = 20;
+        balanced.ProducedMW = 80; first.OutputMW = balanced.RequiredCoolingMW = 20;
         for (int i = 0; i < 300; i++)
         {
             first.ExcessMJ = Math.Max(0, first.ExcessMJ - 5.0 / 60);
@@ -1465,7 +1505,7 @@ public static partial class ThermalRuntimeChecks
             "shutdown and circuit isolation stop projected production immediately despite recent load");
         var isolated = new ThermalReactorState { Mode = ThermalMode.Brayton, ProducedMW = 80, RequiredCoolingMW = 40 };
         isolated.Loops[0].Connected = isolated.Loops[1].Connected = true;
-        isolated.Loops[0].RequiredCoolingMW = isolated.Loops[1].RequiredCoolingMW = 20;
+        isolated.Loops[0].OutputMW = isolated.Loops[1].OutputMW = 20;
         isolated.Loops[0].CoolingMW = 100; isolated.Loops[1].CoolingMW = 0;
         var hot = Forecast(.8, .8, isolated);
         Check(hot.Warning && hot.Circuit == 2 && hot.MeltdownSeconds > 0, "cold circuit surplus cannot mask circuit 2");

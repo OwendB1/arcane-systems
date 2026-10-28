@@ -185,7 +185,7 @@ The **3×3×3 Energy Core** uses full-block **1×3×1 upgrade pillars**. All fou
 upgrade bays accept any capacity, transfer or stabilizer module in either tier.
 The strongest stabilizer and transfer tiers apply without stacking. Pillars face the
 core and share its Up direction. Existing compact banks retain their geometry and charge. Standard/advanced expansions provide
-fixed native storage and 10/100/1,000 GW bank transfer tiers. It includes native
+fixed native storage, 4/40/200 GW bank charging and 10/100/1,000 GW discharge tiers. It includes native
 charge modes, emergency reserve controls, charge-dependent glow, slow rotation,
 icons and construction models. [Setup, ratings and validation](ENERGY-STORAGE.md)
 · Stage sheet.
@@ -277,8 +277,8 @@ The terminal **Security mode** switch defaults to **On**: losing the vent route 
 
 | Fuel | Minimum controller ring capacity | Colour | Rated reactor heat |
 | --- | --- | --- | --- |
-| Aether | 2 | Cyan | 2.5 GW |
-| Helion | 3 | Amber | 25 GW |
+| Aether | 2 | Cyan | 5 GW |
+| Helion | 3 | Amber | 50 GW |
 | Empyrean | 4 | Violet | 250 GW |
 
 The highest mode- and controller-compatible fuel present is selected only while Off, vent Idle, output zero and thermally cold, after outstanding heat charges are accounted. Fuel stays locked through operation/shutdown. Standalone selection and automatic conveyor replenishment are limited to Aether; higher-tier canisters may remain stored for later Brayton use. Each filled canister holds 10 fuel units. Aether lasts **2.5 ideal full-load minutes**, or **2/2.25/2.475 minutes** with controller tiers 1/2/3. Helion and Empyrean retain 10 ideal minutes, scaled by their compatible controllers' 90%/99% efficiency. Consumption divides by controller efficiency and falls with demand. Native inventory amounts include the remaining fraction of a canister; telemetry labels stock and burn in canisters. Refineries retain base yields of 0.1%/0.01%/0.001% for Aether/Helion/Empyrean concentrates.
@@ -326,19 +326,31 @@ longer. Canister and concentrate demand also increase fourfold; with doubled
 mining yield, the required excavation volume doubles. Power and heat ratings,
 crafting recipes, and higher-tier fuel endurance are unchanged.
 
-Atmospheric coolers reject **2.5 GW per T1 unit** or **25 GW per T2 unit** at full
+Atmospheric coolers reject **5 GW per T1 unit** or **50 GW per T2 unit** at full
 air density with clear exhausts; vacuum provides no active cooling. Radiator
-sections retain **1 GW per T1 panel** or **10 GW per T2 panel**.
-Three-panel radiator stacks provide **3 GW / 30 GW** under ideal exposure;
+sections retain **2 GW per T1 panel** or **20 GW per T2 panel**.
+Three-panel radiator stacks provide **6 GW / 60 GW** under ideal exposure;
 mixed stacks sum each panel's rating. Atmospheric radiator losses scale smoothly
 with measured density; blockage and solar exposure also reduce rejection.
-Reactor fuel heat ratings are **2.5 / 25 / 250 GWth**. Each of four Aether
-circuits receives up to 0.625 GWth, exports **250 MW** and needs
-375 MW rejection at 40% conversion. Give each circuit its own standard cooler or
-radiator connection; a single circuit can operate at one quarter of full capacity.
-Empyrean supplies ten times Helion's heat. Each upgraded turbine accepts up to
-62.5 GWth and exports **50 GW** at 80% conversion: **200 GW** across four ports.
-Regular and mirrored turbines have matching native and effective output limits.
+Reactor fuel input ratings are **5 / 50 / 250 GW**. Standalone Aether converts
+10% into **500 MW** with integrated cooling. Brayton converts a flat **80%**.
+T1 turbines export up to **3.5 GW each / 14 GW across four**; T2 turbines export
+up to **50 GW each / 200 GW across four** and unlock Empyrean.
+
+| Setup | Electrical output |
+| --- | ---: |
+| Standalone Aether | 500 MW |
+| T1 Brayton Aether | 4 GW |
+| T1 Brayton Helion | 14 GW |
+| T2 Brayton Helion | 40 GW |
+| T2 Brayton Empyrean | 200 GW |
+
+Regular and mirrored turbine limits match.
+Each circuit requires **1 GW cooling per GW electricity actually delivered**.
+Capacity-limited turbines reduce fuel consumption; unused output potential is not
+turned into extra heat. Cooling deficits accumulate a backlog in that circuit,
+which still drains after shutdown. Main diagnostics show cooling load, capacity,
+weakest-circuit margin and cooldown backlog instead of duplicate heat/output rows.
 
 Native `FuelInfos` is empty because multiple native entries represent concurrent inputs rather than alternative fuels. The mod allows all three fuels in its inventory, maintains native energy capacity for the selected fuel and consumes it explicitly. Conveyor replenishment uses public inventory transfers with conveyor reachability and access checks.
 

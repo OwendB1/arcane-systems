@@ -122,7 +122,7 @@ def definitions(models,mains,revision,additions=False):
             hardware_components(definition)
             set_text(definition,'MaxPowerOutput',1000)
         elif is_train:
-            set_text(definition,'MaxPowerOutput',50000 if name.endswith('upgraded') else 250)
+            set_text(definition,'MaxPowerOutput',50000 if name.endswith('upgraded') else 3500)
             set_text(definition,'PCU',80)
         else:
             if definition.find('Upgrades') is not None:definition.find('Upgrades').clear()
@@ -244,9 +244,9 @@ def description(name):
             '\n\nCRAFTING\nRequires 10 Aether Residuum recovered from T1 fuel.' if name.endswith('upgraded') else '')
     if name=='Reactor housing':
         return (
-            'FUELS AND OUTPUT\nAether: 2.5 GW heat. Helion: 25 GW. Empyrean: 250 GW.\n'
-            'Standalone: Aether only, 20% net / 500 MW electrical.\n'
-            'Brayton: up to 40% starter / 80% exotic conversion.\n'
+            'FUELS AND OUTPUT\nAether: 5 GW fuel input. Helion: 50 GW. Empyrean: 250 GW.\n'
+            'Standalone: Aether only, 10% conversion / 500 MW electrical.\n'
+            'Brayton: flat 80% fuel conversion; 1 GW output needs 1 GW cooling.\n'
             'Helion and Empyrean require Brayton to prevent meltdown.\n\n'
             'ASSEMBLY\nTwo working controllers and a complete vent route are required.\n'
             'At least one fully built, functional advanced controller unlocks Brayton.\n'
@@ -261,7 +261,12 @@ def description(name):
             'Normal Stop does not latch. Stop and cool before changing mode.')
     if name.startswith('Brayton train'):
         return (
-            'FUELS\n'+('Compatible with T3 Empyrean heat.\nRequires 20 Aether Residuum.'
+            'OUTPUT\n'+('Up to 50 GW electrical per turbine; Helion 40 GW / Empyrean 200 GW across four.'
+                if name.endswith('upgraded') else '3.5 GW electrical ceiling per turbine.\n'
+                'Helion: 3.5 GW electrical and cooling load per circuit; 14 GW across four.\n'
+                'Aether: 1 GW electrical and cooling load per circuit; 4 GW across four.')+
+            '\nBrayton: flat 80% fuel conversion. Cooling load equals delivered electricity.'+
+            '\n\nFUELS\n'+('Compatible with T3 Empyrean heat.\nRequires 20 Aether Residuum.'
                 if name.endswith('upgraded') else 'T1/T2 fuels only; T3 Empyrean requires upgraded turbines.')+
             '\n\nINSTALLATION\n2 wide x 2 high x 5 long large-grid turbine/compressor.\n'
             'One lower-cell duplex H/C socket; mirrored versions move it to the opposite side.\n\n'

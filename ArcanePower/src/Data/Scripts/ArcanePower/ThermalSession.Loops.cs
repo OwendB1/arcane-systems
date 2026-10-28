@@ -48,7 +48,7 @@ namespace ArcanePower
             {
                 var circuit = circuits[index];
                 var loop = state.Loops[index];
-                loop.HeatMW = loop.NetMW = loop.CoolingMW = loop.DesignCoolingMW = loop.PotentialCoolingMW = 0;
+                loop.NetMW = loop.CoolingMW = loop.PotentialCoolingMW = 0;
                 loop.Connected = circuit.Ready;
                 loop.Diagnostic = circuit.Diagnostic ?? "Circuit ready";
                 var bank = new List<ThermalBlock>();
@@ -86,12 +86,9 @@ namespace ArcanePower
                     MigrateMachineHeat(machine, loop);
                     foreach (var panel in machine.RadiatorPanels) MigrateMachineHeat(panel, loop);
                 }
-                loop.HeatMW = plan.AcceptedMW;
                 loop.NetMW = plan.NetMW;
-                loop.DesignCoolingMW = plan.RequiredCoolingMW;
                 state.SupportedMW += loop.NetMW;
-                state.DesignCoolingMW += loop.DesignCoolingMW;
-                availableHeatMW += loop.HeatMW;
+                availableHeatMW += plan.AcceptedMW;
                 host.RotorLoad = plan.NetMW > 0 ? ThermalMath.Clamp(loop.OutputMW / plan.NetMW, 0, 1) : 0;
                 host.RotorHotC = source.ThermalHotC;
                 // Environmental capacity never depends on electrical load.
@@ -117,9 +114,9 @@ namespace ArcanePower
                 loop.Diagnostic = loop.CoolingMW <= 0 && bank.Exists(machine => machine.Spec.Kind == ThermalKind.AirCooler && !machine.CoolingPowered)
                     ? "Active coolers waiting for reactor auxiliary power"
                     : loop.CoolingMW + .001 < loop.RequiredCoolingMW
-                    ? "Cooling below current waste heat; circuit heat is accumulating"
-                    : loop.CoolingMW + .001 < loop.DesignCoolingMW
-                    ? "Ready at current load; cooling below full-load requirement" : plan.Limit;
+                    ? "Cooling below output; cooling backlog is accumulating"
+                    : loop.CoolingMW + .001 < loop.NetMW
+                    ? "Ready at current load; cooling below maximum output" : plan.Limit;
                 if (running)
                 {
                     host.OutputGrant = source.ReserveThermalOutput(loop, plan.AcceptedMW, plan.Efficiency);

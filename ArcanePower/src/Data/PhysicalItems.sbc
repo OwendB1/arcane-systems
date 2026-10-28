@@ -53,7 +53,7 @@ Assembler ingredient for Aether fuel.</Description>
         <TypeId>Ingot</TypeId>
         <SubtypeId>ArcaneFuelI</SubtypeId>
       </Id>
-      <DisplayName>Aether Fuel Canister — 2.5 GW</DisplayName>
+      <DisplayName>Aether Fuel Canister — 5 GW</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/ArcaneFuelI.dds</Icon>
       <Size>
         <X>0.261</X>
@@ -67,7 +67,7 @@ Assembler ingredient for Aether fuel.</Description>
       <Description>Sealed canister holding 10 fuel units.
 
 OUTPUT
-Rated reactor heat: 2.5 GW.
+Rated reactor heat: 5 GW.
 Ideal full-load endurance: 2.5 minutes before controller efficiency.
 
 REQUIREMENTS
@@ -131,7 +131,7 @@ Assembler ingredient for Helion fuel.</Description>
         <TypeId>Ingot</TypeId>
         <SubtypeId>ArcaneFuelII</SubtypeId>
       </Id>
-      <DisplayName>Helion Fuel Canister — 25 GW</DisplayName>
+      <DisplayName>Helion Fuel Canister — 50 GW</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/ArcaneFuelII.dds</Icon>
       <Size>
         <X>0.261</X>
@@ -145,7 +145,7 @@ Assembler ingredient for Helion fuel.</Description>
       <Description>Sealed canister holding 10 fuel units.
 
 OUTPUT
-Rated reactor heat: 25 GW.
+Rated reactor heat: 50 GW.
 Ideal full-load endurance: 10 minutes before controller efficiency.
 
 REQUIREMENTS

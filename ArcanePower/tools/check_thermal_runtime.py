@@ -39,8 +39,8 @@ def main():
                   for block in definitions if block.find('MaxPowerOutput') is not None}
     assert generators == {
         'ArcanePower_Thermal_ReactorHousing': 1000,
-        'ArcanePower_Thermal_BraytonTrain': 250,
-        'ArcanePower_Thermal_BraytonTrainMirrored': 250,
+        'ArcanePower_Thermal_BraytonTrain': 3500,
+        'ArcanePower_Thermal_BraytonTrainMirrored': 3500,
         'ArcanePower_Thermal_BraytonTrainUpgraded': 50000,
         'ArcanePower_Thermal_BraytonTrainMirroredUpgraded': 50000,
     }, generators
@@ -72,7 +72,7 @@ def main():
         report = dict(status='passed', scope='Compiled production kernel with native math; no live SE world',
                       runtime_contracts=55, authored_starter_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-starter-layout.json').read_text())['instances']), manifold_samples=47,
                       authored_room_blocks=len(json.loads((ROOT / 'tests/fixtures/thermal-room-layout.json').read_text())['instances']),
-                      conservation_hours_per_efficiency=1, efficiencies=[.20, .40, .80],
+                      conservation_hours_per_efficiency=1, efficiencies=[.10, .80],
                       cooling_checks='Per-circuit adequate/half/zero rejection, early recovery, hottest-circuit critical threshold, paid-energy conservation, idempotent migration, reload and idle credit',
                       bank_checks='Four independent manifold circuits at fixed 25% heat allocations; unchanged tier efficiency, immediate availability, sealed topology, isolated failure and last-loop trip',
                       rotor_checks='Linear load targets, no-demand idle, coastdown, reload/copy identity, invalid inputs, phase integration and native pivots',

@@ -158,14 +158,14 @@ namespace ArcanePower
                 if (state.Mode == ThermalMode.Standalone)
                 {
                     foreach (var loop in state.Loops) loop.Connected = false;
-                    state.Efficiency = .20;
-                    state.CoolingMW = state.DesignCoolingMW = source.ThermalHeatMW * .8;
+                    state.Efficiency = ThermalMath.StandaloneEfficiency;
+                    state.CoolingMW = source.ThermalHeatMW * (1 - ThermalMath.StandaloneEfficiency);
                     state.RejectedMW = ThermalMath.Reject(state.Store, state.CoolingMW / 60, false) * 60;
                     if (!source.ThermalCanRun)
                         state.RejectedMW += ThermalMath.Reject(state.Store,
                             Math.Max(0, state.CoolingMW - state.RejectedMW) / 60, true) * 60;
                     state.Diagnostic = "Standalone / integrated cooling";
-                    if (state.Settled && source.ThermalCanRun) state.SupportedMW = source.ThermalHeatMW * .20;
+                    if (state.Settled && source.ThermalCanRun) state.SupportedMW = source.ThermalHeatMW * ThermalMath.StandaloneEfficiency;
                     source.GrantStandaloneOutput();
                     CaptureInternalFlow(source);
                 }

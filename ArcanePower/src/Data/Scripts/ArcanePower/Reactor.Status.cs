@@ -77,18 +77,21 @@ namespace ArcanePower
                     HasAdvancedController() ? "white" : "yellow");
                 Row(text, "Fuel safety", "Standalone: Aether only / Helion and Empyrean require Brayton");
                 Row(text, "Manifolds", Percent(thermal.Deployment) + " deployed");
-                Row(text, "Conversion efficiency", Percent(thermal.Efficiency));
-                Row(text, "Reaction heat", Power(thermal.ProducedMW) + " / " + Power(ThermalHeatMW));
-                Row(text, "Heat to drain", Energy(heatToDrain));
+                Row(text, "Fuel conversion", Percent(thermal.Efficiency));
+                Row(text, "Cooldown backlog", Energy(heatToDrain));
                 Row(text, "Circuits available", thermal.ConnectedLoops + " / 4 (" + thermal.ConnectedLoops * 25 + "% allocation)");
                 bool shortfall = Array.Exists(thermal.Loops, loop => loop.RequiredCoolingMW > loop.CoolingMW + .001);
                 Row(text, "Cooling capacity", Power(thermal.CoolingMW), shortfall ? "yellow" : "white");
                 Row(text, "Potential cooling", Power(thermal.PotentialCoolingMW) + " at current exposure");
-                Row(text, "Cooling required", Power(thermal.RequiredCoolingMW) + " at current load");
-                Row(text, "Full-load cooling", Power(thermal.DesignCoolingMW));
-                Row(text, "Heat removed", Power(thermal.RejectedMW));
+                Row(text, "Cooling load", Power(thermal.RequiredCoolingMW));
+                double coolingMargin = thermal.CoolingMW - thermal.RequiredCoolingMW;
+                if (text.Brayton)
+                    foreach (var loop in thermal.Loops)
+                        if (loop.Connected) coolingMargin = Math.Min(coolingMargin, loop.CoolingMW - loop.OutputMW);
+                Row(text, "Cooling margin", Power(coolingMargin) + (text.Brayton ? " / weakest circuit" : ""), shortfall ? "yellow" : "white");
+                Row(text, "Cooling rate", Power(thermal.RejectedMW));
                 if (text.CoolingDown)
-                    Line(text, "muted", "Cooldown ETA: simulation time to 15% at current cooling; excludes tile replacement, dismantling and final heat drain. Reaction heat is new production.");
+                    Line(text, "muted", "Cooldown ETA: simulation time to 15% at current cooling; excludes tile replacement, dismantling and final backlog drain.");
                 if (text.Brayton)
                 {
                     byte valves = ThermalLoops.OpenValves(thermal);
@@ -98,12 +101,12 @@ namespace ArcanePower
                         Row(text, "Circuit " + (i + 1), (loop.Connected ? "Ready" : "Unavailable")
                             + " / valve " + ((valves & (1 << i)) != 0 ? "open" : "closed"),
                             loop.Connected ? "white" : "yellow");
-                        Line(text, "muted", loop.Diagnostic + " / cooling " + Power(loop.CoolingMW) + " / potential " + Power(loop.PotentialCoolingMW) + " / required " + Power(loop.RequiredCoolingMW) + " / retained " + Number(loop.ExcessMJ, "0.0") + " MJ");
+                        Line(text, "muted", loop.Diagnostic + " / output " + Power(loop.OutputMW) + " / " + Power(loop.NetMW) + " / cooling " + Power(loop.CoolingMW) + " / backlog " + Energy(loop.ExcessMJ));
                     }
                 }
                 Line(text, thermalRestoreFault || thermal.Faulted ? "red" : "muted", thermal.Diagnostic);
                 Line(text, "muted", "Setup: one turbine and cooling per manifold circuit. Keep circuits separate; cap unused pipe mouths and match H/C.");
-                Line(text, "muted", "Each circuit supplies up to 25% capacity. Retained waste still triggers the existing failure at 125% heat.");
+                Line(text, "muted", "Brayton: 1 GW electrical output needs 1 GW cooling in that circuit. Cooling backlog causes failure at 125% core heat.");
                 Line(text, "muted", "Construction guide: aim at thermal blocks or select them in build mode. Verify build, then deployment, cooling and startup power.");
                 Section(text, "POWER");
             }
@@ -145,7 +148,7 @@ namespace ArcanePower
                 if (Motion.ResiduumMicroUnits >= ResiduumScale)
                     Line(text, "yellow", "Clear reactor inventory space or connect cargo to collect retained Residuum.");
             }
-            Row(text, "Fuel efficiency", Percent(FuelEfficiency) + "   Controller tier " + (Motion.RingCount - 1));
+            Row(text, "Controller economy", Percent(FuelEfficiency) + "   Controller tier " + (Motion.RingCount - 1));
             Row(text, "Fuel stock", creative ? "Creative supply" : Number(fuel, "0.###") + " canisters", !creative && fuel <= 0 ? "yellow" : "white");
             Row(text, "Spare tiles", creative ? "Creative supply" : Number(tiles, "0")
                 + (needed > tiles ? "   Need " + Number(needed - tiles, "0") + " more" : ""), !creative && tiles < Math.Max(4, needed) ? "yellow" : "white");
@@ -210,7 +213,7 @@ namespace ArcanePower
                 string requirement = i == 0 ? "2 rings; standalone or Brayton"
                     : i == 1 ? "3 rings; Brayton; mixed/advanced pair"
                     : "4 rings; Brayton; 2 advanced + T2 turbines";
-                Row(guide, FuelNames[i], Power(PowerMW[i] / .40) + " heat / " + requirement, "white");
+                Row(guide, FuelNames[i], Power(ThermalMath.FuelRatingMW(i + 1)) + " heat / " + requirement, "white");
             }
             Line(guide, "muted", "Two standard controllers = 2 rings; mixed = 3; two advanced = 4.");
             Line(guide, "muted", "Load filled canisters + tiles through conveyor hatches, not the controller sockets.");

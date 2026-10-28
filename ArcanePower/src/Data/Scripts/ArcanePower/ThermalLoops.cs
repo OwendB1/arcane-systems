@@ -9,28 +9,25 @@ namespace ArcanePower
     {
         // ProtoMember(1) was CO2 charge; retired, never reuse.
         [ProtoMember(2)] public bool Connected;
-        [ProtoMember(3)] public double HeatMW;
+        // ProtoMember(3) was duplicate fuel throughput telemetry; never reuse.
         [ProtoMember(4)] public double NetMW;
         [ProtoMember(5)] public double CoolingMW;
-        [ProtoMember(6)] public double RequiredCoolingMW;
+        // ProtoMember(6) was duplicate cooling-load telemetry; never reuse.
+        public double RequiredCoolingMW { get { return OutputMW; } }
         [ProtoMember(7)] public string Diagnostic = "Connect one turbine and cooling; cap unused pipe mouths";
         [ProtoMember(8)] public double ExcessMJ;
         [ProtoMember(9)] public double OutputMW;
-        [ProtoMember(10)] public double ReactionMW;
-        [ProtoMember(11)] public double DesignCoolingMW;
+        // ProtoMember(10) was duplicate reaction telemetry; never reuse.
+        // ProtoMember(11) was duplicate full-load cooling telemetry; never reuse.
         [ProtoMember(12)] public double RejectedMW;
         [ProtoMember(13)] public double PotentialCoolingMW;
 
         public bool Valid()
         {
-            return ThermalMath.Finite(HeatMW) && HeatMW >= 0 && HeatMW <= 625000
-                && ThermalMath.Finite(NetMW) && NetMW >= 0 && NetMW <= 487500
+            return ThermalMath.Finite(NetMW) && NetMW >= 0 && NetMW <= 487500
                 && ThermalMath.Finite(CoolingMW) && CoolingMW >= 0
-                && ThermalMath.Finite(RequiredCoolingMW) && RequiredCoolingMW >= 0 && RequiredCoolingMW <= 625000
                 && ThermalMath.Finite(ExcessMJ) && ExcessMJ >= 0
                 && ThermalMath.Finite(OutputMW) && OutputMW >= 0 && OutputMW <= 487500.1
-                && ThermalMath.Finite(ReactionMW) && ReactionMW >= 0 && ReactionMW <= 625000.1
-                && ThermalMath.Finite(DesignCoolingMW) && DesignCoolingMW >= 0 && DesignCoolingMW <= 625000
                 && ThermalMath.Finite(RejectedMW) && RejectedMW >= 0
                 && ThermalMath.Finite(PotentialCoolingMW) && PotentialCoolingMW >= 0
                 && Diagnostic != null && Diagnostic.Length <= 256;

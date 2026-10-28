@@ -22,11 +22,11 @@ passive housing drainage and the core's thermal response. It is simulation time
 at current conditions, excluding tile replacement, mechanical dismantling and the
 final energy drain. An unavailable estimate is stated explicitly.
 
-`Reaction heat` remains instantaneous new production, so it correctly reaches
-zero when generation stops. `Heat to drain` includes paid hot inventory, housing
-waste, all circuit excess and attached legacy stores, with MJ/GJ/TJ units.
-Cooling remains visible after these inventories empty while the core temperature
-continues falling. Critical and ejected-core warnings retain priority.
+`Cooldown backlog` includes unused paid fuel credit, housing stores, circuit cooling
+backlog and attached legacy stores in MJ/GJ/TJ. `Cooling load` reaches zero when
+generation stops; `Cooling rate` shows actual removal during cooldown. Maximum
+Brayton electrical output is also the maximum cooling target. Cooling remains
+visible after the stores empty while the core cools. Critical warnings retain priority.
 
 Complete Brayton circuits expose `Potential cooling` at current environmental
 exposure even while off. `Cooling capacity` remains the actually available cooling;
@@ -313,9 +313,9 @@ visual confirmation.
 
 ## Thermal readings
 
-Reaction heat follows actual electrical output divided by conversion efficiency.
-Cooling capacity is the connected equipment's available rejection, independent of
-turbine load. Cooling required shows current waste heat; Full-load cooling is a
-separate sizing target. Heat removed is actual rejection, bounded by available heat.
-Accumulated heat is retained excess across the four independent circuits. Cooling
-unit terminals also show connection/auxiliary-power state and their own heat removal.
+Brayton fuel use follows electrical output divided by flat 80% conversion;
+standalone Aether uses 10% conversion. Brayton cooling load equals delivered
+output. Available cooling depends on environment and auxiliary power. The Power
+page shows cooling load/capacity, weakest-circuit margin, potential cooling and
+cooldown backlog; output already shows the maximum cooling target. Unit terminals
+retain environmental, connection, auxiliary-power and actual cooling-rate details.

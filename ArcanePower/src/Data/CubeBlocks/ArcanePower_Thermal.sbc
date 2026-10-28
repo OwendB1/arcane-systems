@@ -338,9 +338,9 @@ Ordinary conveyors do not replace thermal pipes.</Description>
       <DisplayName>Arcane Reactor</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_ReactorHousing.dds</Icon>
       <Description>FUELS AND OUTPUT
-Aether: 2.5 GW heat. Helion: 25 GW. Empyrean: 250 GW.
-Standalone: Aether only, 20% net / 500 MW electrical.
-Brayton: up to 40% starter / 80% exotic conversion.
+Aether: 5 GW fuel input. Helion: 50 GW. Empyrean: 250 GW.
+Standalone: Aether only, 10% conversion / 500 MW electrical.
+Brayton: flat 80% fuel conversion; 1 GW output needs 1 GW cooling.
 Helion and Empyrean require Brayton to prevent meltdown.
 
 ASSEMBLY
@@ -1027,7 +1027,13 @@ Half-clear exhaust gives 25% cooling; blocked gives none.</Description>
       </Id>
       <DisplayName>Arcane Turbine</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrain.dds</Icon>
-      <Description>FUELS
+      <Description>OUTPUT
+3.5 GW electrical ceiling per turbine.
+Helion: 3.5 GW electrical and cooling load per circuit; 14 GW across four.
+Aether: 1 GW electrical and cooling load per circuit; 4 GW across four.
+Brayton: flat 80% fuel conversion. Cooling load equals delivered electricity.
+
+FUELS
 T1/T2 fuels only; T3 Empyrean requires upgraded turbines.
 
 INSTALLATION
@@ -1058,7 +1064,7 @@ Keep reactor auxiliary power available for active coolers during cooldown.</Desc
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>250</MaxPowerOutput>
+      <MaxPowerOutput>3500</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -1100,7 +1106,11 @@ Keep reactor auxiliary power available for active coolers during cooldown.</Desc
       </Id>
       <DisplayName>Arcane Turbine Upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainUpgraded.dds</Icon>
-      <Description>FUELS
+      <Description>OUTPUT
+Up to 50 GW electrical per turbine; Helion 40 GW / Empyrean 200 GW across four.
+Brayton: flat 80% fuel conversion. Cooling load equals delivered electricity.
+
+FUELS
 Compatible with T3 Empyrean heat.
 Requires 20 Aether Residuum.
 
@@ -1175,7 +1185,13 @@ Keep reactor auxiliary power available for active coolers during cooldown.</Desc
       </Id>
       <DisplayName>Arcane Turbine Mirrored</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainMirrored.dds</Icon>
-      <Description>FUELS
+      <Description>OUTPUT
+3.5 GW electrical ceiling per turbine.
+Helion: 3.5 GW electrical and cooling load per circuit; 14 GW across four.
+Aether: 1 GW electrical and cooling load per circuit; 4 GW across four.
+Brayton: flat 80% fuel conversion. Cooling load equals delivered electricity.
+
+FUELS
 T1/T2 fuels only; T3 Empyrean requires upgraded turbines.
 
 INSTALLATION
@@ -1206,7 +1222,7 @@ Keep reactor auxiliary power available for active coolers during cooldown.</Desc
       <EdgeType>Light</EdgeType>
       <BuildTimeSeconds>40</BuildTimeSeconds>
       <ResourceSourceGroup>Reactors</ResourceSourceGroup>
-      <MaxPowerOutput>250</MaxPowerOutput>
+      <MaxPowerOutput>3500</MaxPowerOutput>
       <InventorySize>
         <X>2</X>
         <Y>1</Y>
@@ -1248,7 +1264,11 @@ Keep reactor auxiliary power available for active coolers during cooldown.</Desc
       </Id>
       <DisplayName>Arcane Turbine Mirrored Upgraded</DisplayName>
       <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_BraytonTrainMirroredUpgraded.dds</Icon>
-      <Description>FUELS
+      <Description>OUTPUT
+Up to 50 GW electrical per turbine; Helion 40 GW / Empyrean 200 GW across four.
+Brayton: flat 80% fuel conversion. Cooling load equals delivered electricity.
+
+FUELS
 Compatible with T3 Empyrean heat.
 Requires 20 Aether Residuum.
 

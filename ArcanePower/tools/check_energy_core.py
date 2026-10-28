@@ -45,7 +45,7 @@ for filename in ('ArcanePower_EnergyCore.sbc','ArcanePower_EnergyCoreLegacy.sbc'
  for block in ET.parse(MOD/'Data/CubeBlocks'/filename).findall('CubeBlocks/Definition'):
   if block.find('MaxStoredPower') is not None:
    assert float(block.findtext('MaxPowerOutput'))==2000000
-   assert float(block.findtext('RequiredPowerInput'))==1000000
+   assert float(block.findtext('RequiredPowerInput'))==200000
 guids={g.text for g in ET.parse(MOD/'Data/EntityComponents.sbc').findall('.//guid')}
 assert {'f2451ae5-ea04-47b8-a5f5-59f75583cdb4','619d89c8-88c2-46f5-bdb1-1f60d7b3f00e'}<=guids
 print('PASS burst-capable native definitions and registered bank/drive recovery storage')

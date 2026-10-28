@@ -83,9 +83,10 @@ def description(name):
    '3x3x3 Energy Core storage controller.\n\n'
    'INSTALLATION\nFour upright 1x3x1 bays accept capacity, transfer or stabilizer modules.\n'
    'Align module Up with core Up and face its connectors toward the core.\n\n'
-   'STORAGE AND TRANSFER\nBase: 1,000 MWh capacity / 10 GW transfer.\n'
+   'STORAGE AND TRANSFER\nBase: 1,000 MWh capacity / 4 GW charging / 10 GW discharge.\n'
    'Capacity modules add 10,000 or 100,000 MWh.\n'
-   'Transfer modules raise the bank ceiling to 100 GW / 1 TW.\n'
+   'Standard transfer: 40 GW charging / 100 GW discharge.\n'
+   'Advanced transfer: 200 GW charging / 1 TW discharge.\n'
    'Standard/advanced stabilizers support matching or lower tier modules.\n'
    'Duplicate stabilizer/transfer modules use the strongest tier without stacking.\n\n'
    'CHARGING\nNative Auto / Recharge / Discharge modes.\n'
@@ -113,7 +114,7 @@ def description(name):
    'The core sets bank transfer limits and charge mode.')
  if 'Transfer' in name:
   return installation+(
-   '\n\nTRANSFER\nRaises the bank charge/discharge ceiling to '+('1 TW' if multiplier==10 else '100 GW')+'.\n'
+   '\n\nTRANSFER\nRaises bank charging / discharge ceilings to '+('200 GW / 1 TW' if multiplier==10 else '40 GW / 100 GW')+'.\n'
    'Effective tier is limited by the strongest attached stabilizer.\n'
    'Does not add capacity. Duplicate transfer modules do not stack.')
  return installation+(
@@ -154,7 +155,7 @@ def main():
    E.SubElement(mounts,'MountPoint',Side=side,StartX='0',StartY='0',EndX=str(width),EndY=str(width if side in ('Top','Bottom') else 3))
   if capacity:
    for path,value in {'ResourceSourceGroup':'Battery','MaxPowerOutput':2000000,'ResourceSinkGroup':'BatteryBlock',
-    'RequiredPowerInput':1000000,'AdaptibleInput':'true','MaxStoredPower':capacity,'InitialStoredPowerRatio':0,'RechargeMultiplier':.9}.items():set_text(definition,path,value)
+    'RequiredPowerInput':200000,'AdaptibleInput':'true','MaxStoredPower':capacity,'InitialStoredPowerRatio':0,'RechargeMultiplier':.9}.items():set_text(definition,path,value)
   else:
    upgrades=E.SubElement(definition,'Upgrades')
    upgrade=E.SubElement(upgrades,'MyUpgradeModuleInfo')

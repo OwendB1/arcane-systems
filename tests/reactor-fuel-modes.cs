@@ -167,18 +167,18 @@ class Reactor {
   var r=new Reactor();
   for(int tier=1;tier<=3;tier++){
    r.Motion.FuelTier=tier;
-   Near(r.ThermalHeatMW,new[]{2500.0,25000,250000}[tier-1],"fuel heat rating");
+   Near(r.ThermalHeatMW,new[]{5000.0,50000,250000}[tier-1],"fuel heat rating");
    r.Mode(ThermalMode.Brayton);
-   Near(r.ElectricalRatingMW,new[]{2000.0,20000,200000}[tier-1],"Brayton native electrical ceiling");
+   Near(r.ElectricalRatingMW,new[]{4000.0,40000,200000}[tier-1],"Brayton native electrical ceiling");
   }
   r.Motion.FuelTier=1;r.Mode(ThermalMode.Standalone);
-  Near(r.ElectricalRatingMW,500,"standalone Aether converts 2.5 GW heat into 500 MW electricity");
-  Near(r.ThermalHeatMW-r.ElectricalRatingMW,2000,"standalone Aether rejects 2 GW waste heat at full load");
+  Near(r.ElectricalRatingMW,500,"standalone Aether converts 5 GW fuel input into 500 MW electricity");
+  Near(r.ThermalHeatMW-r.ElectricalRatingMW,4500,"standalone Aether integrated cooling handles 4.5 GW at full load");
   r.Motion.FuelTier=3;r.Mode(ThermalMode.Brayton);
   foreach(bool upgraded in new[]{false,true}){
-   double expected=upgraded?50000:250;
+   double expected=upgraded?50000:3500;
    var block=new ThermalBlock{Block=new Block(),Generator=new ReactorBlock(),
-    Spec=new ThermalModel{Grade=upgraded?3:0,RatingMW=upgraded?62500:625}};
+    Spec=new ThermalModel{Grade=upgraded?3:0,RatingMW=upgraded?62500:4375}};
    block.Generator.BlockDefinition.MaxPowerOutput=(float)expected;
    block.SetOutput(expected);
    Near(block.Generator.PowerOutputMultiplier*block.Generator.BlockDefinition.MaxPowerOutput,expected,"native theoretical turbine maximum");
@@ -447,19 +447,35 @@ class Reactor {
   r.Stock(1,0);Need(grant.Settle(grant.MaximumMW),"removing remaining fuel cannot make the issued grant unpaid");
   r.BeginThermalFrame();Need(r.ReserveThermalOutput(r.Motion.Thermal.Loops[0],r.ThermalHeatMW,.4)==null,"exhausted stock cannot fund another grant");
  }
+ static void FixedElectricalDemand(){
+  foreach(var mode in new[]{ThermalMode.Standalone,ThermalMode.Brayton}){
+   var r=new Reactor();r.Mode(mode);r.Stock(1,10);r.Running();
+   double eta=mode==ThermalMode.Standalone?.10:.80;
+   for(int tick=0;tick<3600;tick++){
+    r.BeginThermalFrame();
+    var grant=r.ReserveThermalOutput(null,r.ThermalHeatMW,eta);
+    Need(grant.Settle(100),"constant electrical demand stays within paid fuel grant");
+    r.UpdateFuel();r.Motion.Thermal.Store.WasteMJ=0;
+   }
+   double energyPerCanister=r.ThermalHeatMW*2.5*60*r.FuelEfficiency;
+   double spent=10-r.Stock(1)+r.Motion.FuelDebt-r.Motion.Thermal.Store.HotMJ/energyPerCanister;
+   Near(spent,100/eta*60/energyPerCanister,"same electrical demand burns fuel in inverse proportion to conversion efficiency");
+   Near(r.FuelUnitsPerMinute(),100/eta*60/energyPerCanister,"fuel-use display follows the higher Brayton efficiency");
+  }
+ }
  static void FuelBalance(){
   foreach(var mode in new[]{ThermalMode.Standalone,ThermalMode.Brayton})
   for(int rings=2;rings<=4;rings++)for(int tier=1;tier<rings;tier++){
    if((mode==ThermalMode.Standalone && tier!=1) || (mode==ThermalMode.Brayton && rings==2))continue;
    double minutes=tier==1?2.5:10,efficiency=new[]{.8,.9,.99}[rings-2];
-   double rating=new[]{2500.0,25000,250000}[tier-1];
+   double rating=new[]{5000.0,50000,250000}[tier-1];
    foreach(double load in new[]{0.0,.25,.5,.75,1.0}){
     var r=new Reactor();r.Mode(mode);r.Motion.RingCount=rings;r.Motion.FuelTier=tier;r.Stock(tier,10);r.Running();
     double admitted=0;
     for(int tick=0;tick<3600;tick++){
      r.BeginThermalFrame();
      double before=r.Motion.Thermal.Store.HotMJ;
-     var grant=r.ReserveThermalOutput(null,rating,.4);
+     var grant=r.ReserveThermalOutput(null,rating,mode==ThermalMode.Standalone?.10:.80);
      admitted+=r.Motion.Thermal.Store.HotMJ-before;
      Need(grant.Settle(grant.MaximumMW*load),"fuel-backed output settles once");
      r.UpdateFuel();r.Motion.Thermal.Store.WasteMJ=0; // Adequate integrated cooling.
@@ -582,7 +598,7 @@ class Reactor {
    host.Generator.CurrentOutput=(float)(host.OutputGrantMW*.25);
   }
   session.Step(r,machines);
-  Near(r.Motion.Thermal.ProducedMW,r.Motion.Thermal.NetOutputMW/.4,"actual demand sets reaction heat");
+  Near(r.Motion.Thermal.ProducedMW,r.Motion.Thermal.NetOutputMW/.8,"actual demand sets reaction heat");
   foreach(var host in hosts) Near(host.RotorLoad,.25*.999999,"quarter demand gives quarter shaft target");
   double capacity=r.Motion.Thermal.CoolingMW;
   foreach(var host in hosts) host.Generator.CurrentOutput=(float)host.OutputGrantMW;
@@ -728,7 +744,7 @@ class Reactor {
   Need(root.CircuitRevision==4 && panel.CircuitRevision==2,"removed extension unsubscribes even after GameLogic.Entity is released");
   ThermalSession.Blocks.Clear();
  }
- static void Main(){RuntimeFaultShutdown();RebalancedRatings();ReloadInitialization();OutputLifetime();ReservationSafety();FuelBalance();Residuum();FuelMatrix();ControllerAndCommands();CoolingAndAccounting();CircuitShutdown();CircuitAccounting();RadiatorRemoval();Console.WriteLine("PASS: "+checks+" production fuel/mode/controller checks; survival/creative, terminal/server, inventory/conveyors, restore, cooldown and paid-heat accounting");}
+ static void Main(){RuntimeFaultShutdown();RebalancedRatings();ReloadInitialization();OutputLifetime();ReservationSafety();FixedElectricalDemand();FuelBalance();Residuum();FuelMatrix();ControllerAndCommands();CoolingAndAccounting();CircuitShutdown();CircuitAccounting();RadiatorRemoval();Console.WriteLine("PASS: "+checks+" production fuel/mode/controller checks; survival/creative, terminal/server, inventory/conveyors, restore, cooldown and paid-heat accounting");}
 }
 
 // Recording engine doubles; the circuit dispatcher and heat transport are injected unchanged.

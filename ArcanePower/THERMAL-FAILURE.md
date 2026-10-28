@@ -23,7 +23,7 @@ The core is the source of the catastrophic explosion. Ejecting it can save the h
   accumulates in the reactor when the cooling bank cannot reject it. Full stores
   stop fresh fuel use but do not clear retained heat. Restore cooling or shut down
   early, maintaining circulation power; once 125% is reached the existing fuse
-  remains irreversible. Standalone retains its integrated 20% conversion/cooling.
+  remains irreversible. Standalone retains its integrated 10% conversion/cooling.
   The retained-waste warning precedes the core's temperature response; delaying
   recovery until the core itself reaches 100% can still let it cross 125% while
   the accumulated heat drains.
@@ -40,7 +40,7 @@ The core is the source of the catastrophic explosion. Ejecting it can save the h
 - The reactor disables native emissive-state handling. In Brayton mode its own electrical source is intentionally idle, which otherwise makes vanilla reactor logic overwrite the mod's fuel colour with yellow even when the thermal forecast is safe.
 - A subcritical ejected core fades and disappears after 20 simulation seconds. A supercritical ejected core retains its fuse and peak heat. The reactor reports outstanding ejected-core countdowns in terminal info.
 
-The legacy direct generator has 1/10/100 GW electrical ratings and falls to 10% of the captured load on tile failure. Fuel burn accelerates to 10 times its normal rate. The thermal reactor supplies 2.5/25/250 GW of heat; its mode and connected turbines determine electrical output.
+The legacy direct generator has 1/10/100 GW electrical ratings and falls to 10% of the captured load on tile failure. Fuel burn accelerates to 10 times its normal rate. The thermal reactor supplies 5/50/250 GW of fuel input; its mode and connected turbines determine electrical output.
 
 ## Explosion scale
 

@@ -103,7 +103,7 @@ for name, ore, fuel, concentrate, refining, preparing, expected_yield in (
         assert volume / 1000 >= Decimal('.000001')
         assert Decimal(items[ore].findtext('Volume')) / volume >= 37
         assert name in node.findtext('DisplayName')
-    rating = {'Aether': '2.5 GW', 'Helion': '25 GW', 'Empyrean': '250 GW'}[name]
+    rating = {'Aether': '5 GW', 'Helion': '50 GW', 'Empyrean': '250 GW'}[name]
     assert items[fuel].findtext('DisplayName') == name + ' Fuel Canister — ' + rating
     assert 'Rated reactor heat: ' + rating + '.' in items[fuel].findtext('Description')
     assert Decimal(items[fuel].findtext('Volume')) == 24

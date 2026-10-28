@@ -76,11 +76,11 @@ namespace ArcanePower {
   static void Near(float a,float b,string message){Need(Math.Abs(a-b)<.01,message);}
   static StatusReport Report(bool precharging=false,bool waiting=false,bool brayton=false,bool cooling=false){
    var report=new StatusReport{Name="Arcane Reactor",State=precharging?(waiting?"STARTUP WAITING FOR POWER  /  50%":"CHARGING STARTUP RESERVE  /  50%"):brayton?"REACTOR OVERHEATING / FAILURE RISK":"RUNNING",Tone=precharging?"white":brayton?"red":"green",Fuel="Aether",Precharging=precharging,Brayton=brayton,CoolingDown=cooling,Reserve=.5};
-   string[] labels={"Output","Heat","60 s heat peak","Reserve","Fuel stock","Spare tiles","Vent","Net","Ramp","Containment","Fuel efficiency","Fuel burn","Fuel remaining","Security mode","Integrity","Controllers","Field","Reserve energy","Tile grade","Quartet wear","Replacing","Dismantle at","Tile demand","Tile reserve","Tile stock","Startup tiles","Conveyors","Route","Doors"};
+   string[] labels={"Output","Heat","60 s heat peak","Reserve","Fuel stock","Spare tiles","Vent","Net","Ramp","Containment","Controller economy","Fuel burn","Fuel remaining","Security mode","Integrity","Controllers","Field","Reserve energy","Tile grade","Quartet wear","Replacing","Dismantle at","Tile demand","Tile reserve","Tile stock","Startup tiles","Conveyors","Route","Doors"};
    foreach(string label in labels)report.Rows.Add(new StatusRow{Section="TEST",Label=label,Value=label=="Fuel stock"?"4991.814 units":label=="Tile stock"?"Standard 308 / Reinforced 0 / Advanced 0":"Test reading",Tone="white"});
    if(brayton){
-    string[] coolingLabels={"Circuits available","Conversion efficiency","Cooling capacity","Cooling required","Reaction heat","Full-load cooling","Heat removed","Heat to drain"};
-    string[] coolingValues={"4 / 4 (100% allocation)","78%","15 GW","21 GW at current load","128 GW / 250 GW","55 GW","15 GW","12.346 TJ"};
+    string[] coolingLabels={"Circuits available","Fuel conversion","Cooling capacity","Cooling load","Cooling margin","Potential cooling","Cooling rate","Cooldown backlog"};
+    string[] coolingValues={"4 / 4 (100% allocation)","80%","15 GW","21 GW","-6 GW / weakest circuit","15 GW at current exposure","15 GW","12.346 TJ"};
     for(int i=0;i<coolingLabels.Length;i++)report.Rows.Add(new StatusRow{Section="POWER",Label=coolingLabels[i],Value=coolingValues[i],Tone="yellow"});
    }
    if(cooling){
@@ -90,10 +90,9 @@ namespace ArcanePower {
     report.Rows.Add(new StatusRow{Section="POWER",Label="Core cooldown",Value="80.0% / target 15%",Tone="white"});
     report.Rows.Add(new StatusRow{Section="POWER",Label="Shutdown stage",Value="Mechanisms need containment power",Tone="white"});
     if(!brayton){
-     report.Rows.Add(new StatusRow{Section="POWER",Label="Heat to drain",Value="0 MJ",Tone="white"});
-     report.Rows.Add(new StatusRow{Section="POWER",Label="Heat removed",Value="0 MW",Tone="white"});
+     report.Rows.Add(new StatusRow{Section="POWER",Label="Cooldown backlog",Value="0 MJ",Tone="white"});
+     report.Rows.Add(new StatusRow{Section="POWER",Label="Cooling rate",Value="0 MW",Tone="white"});
      report.Rows.Add(new StatusRow{Section="POWER",Label="Cooling capacity",Value="2 GW",Tone="white"});
-     report.Rows.Add(new StatusRow{Section="POWER",Label="Reaction heat",Value="0 MW / 2.5 GW",Tone="white"});
     }
    }
    if(precharging){
@@ -140,7 +139,7 @@ namespace ArcanePower {
      var lcd=ReactorDashboard.Draw(report,page,"unused","LCD / "+ReactorDashboard.Pages[page]);
      Need(lcd.Any(s=>s.Data==(report.Precharging?"STARTUP CHARGE":"EMERGENCY RESERVE")),"LCD identifies charge or reserve correctly");
      if(report.CoolingDown && page<=1){
-      foreach(var label in new[]{"Core cooldown","Cooldown progress","Cooldown ETA","Shutdown stage","Heat to drain","Heat removed","Cooling capacity","Containment","Reaction heat"}){
+      foreach(var label in new[]{"Core cooldown","Cooldown progress","Cooldown ETA","Shutdown stage","Cooldown backlog","Cooling rate","Cooling capacity","Containment"}){
        Need(sprites.Any(s=>s.Data==label) && lcd.Any(s=>s.Data==label),"both overview/power pages show cooldown metric "+label);
        Need(sprites.Any(s=>s.Data==report.Value(label)) && lcd.Any(s=>s.Data==report.Value(label)),"both screens show live cooldown metric "+label);
       }
@@ -155,7 +154,7 @@ namespace ArcanePower {
       }
      }
      if(report.Brayton && !report.Precharging && !report.CoolingDown && page==1){
-      foreach(var label in new[]{"Circuits available","Reaction heat","Cooling capacity","Cooling required","Full-load cooling","Heat removed","Heat to drain"}){
+      foreach(var label in new[]{"Circuits available","Cooling load","Cooling capacity","Cooling margin","Potential cooling","Cooldown backlog","Fuel burn"}){
        Need(sprites.Any(s=>s.Data==label) && lcd.Any(s=>s.Data==label),"both power pages show "+label);
        Need(sprites.Any(s=>s.Data==report.Value(label)) && lcd.Any(s=>s.Data==report.Value(label)),"both power pages show live "+label);
       }

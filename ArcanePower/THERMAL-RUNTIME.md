@@ -33,9 +33,11 @@ fallback. Native in-game visual validation is still pending.
 
 The reactor owns modes, manifolds, fuel accounting, four independent circuit heat
 balances and replicated diagnostics. `ThermalSession` reads actual native electrical
-output before changing topology or granting the next interval. Reaction heat is
-`electrical output / net efficiency`; waste is reaction heat minus electrical output.
-Only actual demand produces reaction heat. Standalone uses the same accounting at 20%.
+output before changing topology or granting the next interval. Fuel input is
+`electrical output / conversion`: 80% in Brayton, 10% in standalone Aether.
+Brayton's gameplay cooling load equals delivered electricity. It is accounted
+separately from fuel credit; the two budgets are not a thermodynamic energy split.
+Standalone retains its automatic integrated cooling of unused input energy.
 
 Native grants reserve at most one simulation interval of paid source energy.
 Fuel is debited before a grant is exposed; unused credit remains saved in source
@@ -299,12 +301,17 @@ Restart is manual. Broken Brayton routing cuts conversion without awarding an
 additional standalone electrical path. A small passive housing rejection path
 remains available for trapped heat; it produces no electricity.
 
-Dispatch selects an eligible tier and cold-end temperature within each circuit.
-Standard trains handle 0.625 GWth and export up to 250 MW; upgraded trains
-handle 62.5 GWth and export up to 50 GW. Reactor fuel tiers provide
-2.5/25/250 GWth, with 40/55/80% eligible conversion. Four upgraded Empyrean
-circuits provide 200 GW. Generated model contracts own equipment ratings;
-native definitions and runtime multipliers use the same per-turbine ceilings.
+Dispatch checks one turbine, compatible fuel temperature and attached cooling.
+There is no cold-end temperature search or auxiliary-efficiency curve. Fuel ratings
+are 5/50/250 GW. Standard turbines accept up to 4.375 GW input and export 3.5 GW;
+upgraded turbines accept 62.5 GW and export 50 GW. Every Brayton circuit converts
+80%, needs cooling equal to its actual output, and never transfers spare capacity
+to another circuit. Full plants provide 4 GW Aether, 14 GW T1 Helion, 40 GW T2 Helion
+or 200 GW Empyrean. Capacity-limited operation throttles fuel use automatically.
+Generated model contracts own equipment ratings; native caps match them.
+Retired duplicate circuit input/reaction/cooling telemetry and standby counts leave
+their ProtoBuf tags reserved. Circuit cooling load derives from delivered output;
+maximum cooling demand is already the circuit's maximum electrical output.
 Pre-rebalance saved heat remains valid and retained; new admission and dispatch
 use the rebalanced ratings.
 Fuel is debited into the one-interval native output reserve; stock and saved
@@ -462,7 +469,7 @@ dotnet build arcane-systems.sln
 
 The focused checks execute the compiled production kernel with native math. They
 cover budgets, fixed four-circuit capacity, per-loop equipment limits, isolated losses, conservation
-scenarios at 20/40/80%, cooling overload/recovery and the 125% heat threshold,
+scenarios at 10% standalone and 80% Brayton, cooling overload/recovery and the 125% heat threshold,
 linear load response, per-circuit cooling isolation, fuel exhaustion,
 reload/copy identity, mode/startup guards,
 47 manifold poses, linear rotor response, cold startup without pump power,

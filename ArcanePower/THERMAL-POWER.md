@@ -18,23 +18,16 @@ Turbines have no separate compressor-startup electricity request. Running auxili
 cost is included once in conversion efficiency; active coolers require the existing
 reactor auxiliary supply/reserve. Space radiators cool passively.
 
-Actual electrical demand sets reaction heat linearly: `reaction = output / efficiency`
-and `waste = reaction - output`. Half load means half reaction heat, waste and steady
-fuel burn. Zero demand stops new reaction heat. A single interval of paid fuel energy
-is retained to safely back native output grants; unused credit persists without
-continued idle fuel consumption.
+Electrical demand sets fuel use: `fuel input = electrical output / conversion`.
+Standalone Aether converts 10% into electricity and uses integrated cooling.
+Brayton converts a flat 80%, independently of fuel or turbine tier. Its gameplay
+cooling rule is **1 GW electrical output requires 1 GW cooling** in that circuit.
+Half load means half fuel use and half cooling load. Zero demand stops new fuel
+use and cooling load after the small paid reserve is filled.
 
-| Mode / eligible turbine tier | Required hot-end temperature | Maximum net efficiency |
-| --- | ---: | ---: |
-| Standalone | Reactor fuel tier | 20% |
-| Starter | 650°C | 40% |
-| Improved | 1,000°C | 55% |
-| Optimized | 1,600°C | 66% |
-| Exotic | 2,200°C | 80% |
-
-The standard train supports starter operation. The upgraded train can use higher
-stages when the reactor's source temperature permits. A warmer compressor inlet
-derates efficiency. These are game balance values, not a real-fluid simulation.
+Fuel input and cooling backlog are separate budgets. The unused paid fuel reserve
+persists safely; accumulated cooling load remains until cooling removes it.
+Environmental conditions affect cooling capacity, not fuel conversion.
 Each complete circuit keeps its eligible conversion efficiency and receives
 at most one quarter of the reactor's nominal heat flow. Four equal circuits provide
 100% capacity; three provide 75%, two 50%, one 25%. There is no additional
@@ -59,31 +52,31 @@ full-load heat and safe cooldown remain neutral. Actual heat still arms irrevers
 failure at **125%**. Restore cooling or shut down early; retain containment power for
 active coolers. An already armed critical fuse cannot be cancelled by cooling.
 
-The terminal, LCD and tablet distinguish reaction heat, available cooling, current
-waste-heat requirements, actual heat removal and accumulated heat. Full-load cooling
-requirements remain a separate planning figure. Cooling unit terminals show their
-own environment, capacity, connection/power state and heat removal. Complete circuits
-also report potential capacity at current exposure while the reactor is off;
-available active cooling still requires containment auxiliary power. A generation
-runtime fault stops the core and keeps intact cooling paths open for cooldown.
-Cooldown progress and estimated simulation time to the 15% dismantling threshold
-remain visible on LCD/tablet Overview and Power pages after reaction heat stops.
+The LCD and tablet Power pages show cooling load, available capacity, weakest-circuit
+margin, potential cooling, cooldown backlog and fuel burn. Output already states
+current/maximum electricity, so a separate full-load cooling row is unnecessary:
+size cooling to that maximum output. Unit terminals retain environmental and power
+diagnostics. Complete offline circuits show potential cooling before startup.
+Cooldown progress and ETA remain visible after output and new cooling load stop.
 
-Fuel heat ratings are **2.5 / 25 / 250 GWth** for Aether / Helion / Empyrean.
-Each T1 turbine admits up to **0.625 GWth** and exports **250 MW** at 40% conversion;
-four provide **1 GW**. Each T2 turbine admits up to **62.5 GWth** and exports
-**50 GW** at 80% conversion; four Empyrean circuits provide **200 GW**.
-At full Empyrean load, each circuit rejects **12.5 GW** (50 GW total).
-One T2 atmospheric cooler per circuit provides headroom at ideal density and clearance.
-Space cooling needs at least one T2 section per circuit at ideal exposure, or two
-for full sunlight in vacuum.
-Regular and mirrored turbines share these limits. Helion reaches 55% conversion,
-providing 13.75 GW across four T2 turbines. Standalone Aether provides 500 MW.
-At full Aether load, each standard circuit needs **375 MW** rejection. Install at least one fully
-exposed 2 GW standard radiator panel or a 5 GW standard atmospheric cooler in
-each circuit: four circuits need four
-separate cooling connections. Leave headroom for sunlight, atmosphere and blockage.
-The same allocation and cooling accounting apply to upgraded equipment and fuels.
+Fuel input ratings are **5 / 50 / 250 GW** for Aether / Helion / Empyrean.
+Standalone Aether provides **500 MW** at 10% conversion. Brayton converts 80%:
+**4 GW Aether**, **14 GW Helion with T1**, **40 GW Helion with T2**, and
+**200 GW Empyrean with T2**. Standard turbines are capped at **3.5 GW each**
+(4.375 GW fuel input); upgraded turbines at **50 GW each** (62.5 GW fuel input).
+Turbine-limited operation burns less fuel; unused potential is not extra heat.
+Regular and mirrored variants share these limits. Full-load canister endurance
+remains 2.5 minutes for Aether and 10 minutes for higher fuels before controllers.
+
+Each of four circuits needs cooling equal to its own electrical output:
+**1 GW Aether**, **3.5 GW T1 Helion**, **10 GW T2 Helion**, **50 GW Empyrean**.
+At full air density with clear fans, fit one T1 atmospheric cooler per circuit for
+Aether/T1 Helion, or one T2 per circuit for T2 Helion/Empyrean. Empyrean has no
+spare capacity with exactly one T2 cooler per circuit.
+In ideal shaded vacuum, each circuit needs one T1 radiator section for Aether,
+two T1 sections for T1 Helion, one T2 section for T2 Helion, or three T2 sections
+for Empyrean. At full sunlight in vacuum, Empyrean needs five T2 sections per
+circuit across two stacks. Allow extra capacity for environmental losses.
 
 Atmospheric coolers reject **5/50 GW per T1/T2 unit**. Radiator sections retain
 **2/20 GW per T1/T2 panel**. Effective cooling depends on the installation:
@@ -112,11 +105,11 @@ runtime; do not use them as current construction blueprints. Independent-circuit
 checks cover all 24 grid rotations, branch failures, pressure, charging and retained
 energy. The reactor's 170 mm adapters and all native pipe sockets are unchanged.
 
-Normalized balance examples (100 MWth per train):
+Plant balance examples (effective cooling GW per circuit):
 
 ```sh
-python3 ArcanePower/tools/thermal_budget.py --heat-mw 200 --trains 4 --coolers 4
-python3 ArcanePower/tools/thermal_budget.py --stage exotic --cooler space
+python3 ArcanePower/tools/thermal_budget.py --fuel helion --cooling-gw 3.5
+python3 ArcanePower/tools/thermal_budget.py --fuel empyrean --turbine-tier 2 --cooling-gw 50
 ```
 
 Authoring sources, named checkpoints and accepted collision inputs are retained.

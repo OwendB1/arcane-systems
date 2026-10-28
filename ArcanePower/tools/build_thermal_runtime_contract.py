@@ -49,7 +49,7 @@ def generate():
         grade = 3 if 'upgraded' in name or kind == 'Pipe' else 0
         cooler = kind in ('AirCooler', 'Radiator', 'RadiatorPanel')
         if kind == 'Train':
-            rating = 62500 if grade == 3 else 625
+            rating = 62500 if grade == 3 else 4375
         elif kind == 'Reactor':
             rating = 250000
         elif cooler:

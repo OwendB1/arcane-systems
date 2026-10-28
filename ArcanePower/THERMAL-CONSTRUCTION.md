@@ -26,7 +26,7 @@ The vessel now shows a **reactor assembly guide in standalone and Brayton modes*
 It also stays available when aiming at its attached controllers or roof vent stack,
 including while placing those hardware blocks. The panel leads with the current
 operating warning, then shows controller, vent, tile, fuel and startup-power steps.
-It lists the **2.5 / 25 / 250 GW thermal** fuel ratings and the controller/mode
+It lists the **5 / 50 / 250 GW fuel input** fuel ratings and the controller/mode
 requirements; heat ratings are separate from electrical output.
 
 Amber rings mark the two native lower controller sockets and the next roof vent
@@ -96,13 +96,19 @@ unconnected reactor manifolds remain closed automatically. Keep the plant on
 one physical large grid; subgrid rotors/pistons/connectors do not transport heat.
 Regular/mirrored turbines provide opposite-side sockets and both equipment tiers.
 
-With Aether, each circuit receives up to 0.625 GWth, exports 250 MW at starter
-conversion and needs 375 MW rejection. Fit at least one effective standard
-2 GW radiator panel or 5 GW atmospheric cooler in each circuit, with environmental headroom. One circuit
-works at 25% of full capacity; four independent circuits provide full capacity.
-Upgraded radiators provide 20 GW per panel; upgraded atmospheric coolers provide
-50 GW per unit at full air density with clear exhausts. Empyrean requires upgraded
-turbines and enough cooling within every operating circuit.
+Fuel ratings are 5 / 50 / 250 GW for Aether / Helion / Empyrean.
+Standalone Aether converts 10% for 500 MW with automatic integrated cooling.
+Brayton converts 80% and requires cooling equal to delivered electricity.
+Four circuits provide 4 GW with Aether, 14 GW with T1 Helion, 40 GW with T2 Helion,
+or 200 GW with T2 Empyrean. T1 turbines export up to 3.5 GW each; T2 up to 50 GW.
+
+Size each circuit independently: 1 / 3.5 / 10 / 50 GW cooling for those four setups.
+One clear T1 atmospheric cooler per circuit handles Aether/T1 Helion at full density;
+one T2 handles T2 Helion/Empyrean. Empyrean uses its entire 50 GW cooling rating.
+In ideal shaded vacuum, radiator requirements per circuit are one T1 section,
+two T1 sections, one T2 section, or three T2 sections respectively. Sunlight and
+atmosphere reduce radiator capacity. A base plus two extensions is one full stack;
+use additional bases within the same circuit when more sections are needed.
 
 All four trains occupy **2 blocks wide × 2 high × 5 long** (5×5×12.5 m). The socket
 is in the lower side cell near the compressor. The shaft line sits 0.55 m lower.
@@ -235,23 +241,23 @@ Aim at a block in the assembly and resolve the guide's next instruction:
 4. **Cooling:** use an atmospheric cooler in atmosphere with reactor auxiliary power
    and clear fan exhausts,
    or give a space radiator unobstructed exposure to a cold sink. Enough cooling
-   must handle the dispatched plant's rejected heat. Welding a cooler does not
+   must match the circuit's electrical output. Welding a cooler does not
    establish that it can reject heat at its location. Compare **Cooling capacity**
-   with **Cooling required** on the reactor Power page. Insufficient rejection
+   with **Cooling load** on the reactor Power page. Insufficient rejection
    stores waste in the reactor; 100% heat warns and 125% starts irreversible failure.
 5. **Power and supplies:** supply containment startup power, fuel, tiles and compatible
    controllers. There is no turbine pump-startup demand or circulation gate. Keep
    containment power available during cooldown so active coolers can operate.
 6. **Startup:** start manually once the mode is settled. Circuit diagnostics show
    readiness, valve state and cooling margin. Both turbine shafts scale smoothly
-   with electrical load. Compare **Cooling required** at current load against
-   **Cooling capacity**; use **Full-load cooling** when sizing the plant. Monitor
-   **Accumulated heat** and **Heat removed** during recovery and shutdown.
+   with electrical load. Compare **Cooling load** at current load against
+   **Cooling capacity**; size for the maximum output shown. Monitor
+   **Cooling margin**, **Cooldown backlog** and **Cooling rate** during recovery and shutdown.
 
-Eligible turbines retain 40% starter conversion, then 55%, 66% or 80% with
-suitable temperature/equipment. Circuit count changes capacity rather than
+Brayton conversion is a flat 80% with every fuel.
+Both turbine tiers accept Aether/Helion; Empyrean needs upgraded turbines. Circuit count changes capacity rather than
 conversion efficiency: 25%, 50%, 75% or 100% of nominal reactor allocation.
-There is exactly one turbine per circuit. Standalone remains a separate 20% mode.
+There is exactly one turbine per circuit. Standalone remains a separate 10% mode.
 Restore cooling or shut down early when waste accumulates; keep cooldown power.
 
 Space radiators connect within their own manifold circuit through the bottom socket. The base occupies 3×3×3

@@ -247,7 +247,7 @@ checks = r'''
    Need(r.Entity.Color.Equals(FuelColors[tier-1]),"safe forecast clears yellow after recovery confirmation");
    r.Motion.Core=CorePhase.Cooling;r.reactor.Enabled=false;r.Motion.Heat=1.1f;r.UpdateThermal();r.UpdateThermalForecast();r.UpdateStatus();r.UpdateAppearance();
    Need(!r.Entity.Color.Equals(Color.Yellow) && r.ReadStatus(false).HeatTone=="white","hot residual core cooling safely does not claim runaway");
-   r.Motion.Thermal.Loops[0].ExcessMJ=50000;r.Motion.Thermal.Loops[0].RequiredCoolingMW=5000;
+   r.Motion.Thermal.Loops[0].ExcessMJ=50000;r.Motion.Thermal.Loops[0].OutputMW=5000;
    r.Motion.Thermal.RequiredCoolingMW=5000;
    for(int i=0;i<135;i++){r.UpdateThermal();r.UpdateThermalForecast();}r.UpdateAppearance();
    Need(r.Entity.Color.Equals(Color.Yellow),"retained circuit heat that will drive the core higher still warns during shutdown");
@@ -279,16 +279,17 @@ checks = r'''
    r.UpdateThermalForecast();var report=r.ReadStatus(false);
    Need(report.CoolingDown && report.Value("Core cooldown")=="80.0% / target 15%","shutdown tracks core heat independently of new reaction");
    Need(report.CooldownProgress==0 && report.Value("Cooldown ETA").StartsWith("~"),"shutdown starts at zero progress with a server estimate");
-   Need(report.Value("Reaction heat").StartsWith("0 MW / "),"new production still truthfully stops at shutdown");
-   Need(report.Value("Heat to drain")=="4 GJ","remaining energy includes housing, circuits and attached legacy stores once");
-   Need(report.Value("Heat removed")=="100 MW" && report.Value("Cooling capacity")=="2.5 GW","standalone and Brayton show actual removal separately from available capacity");
+   Need(report.Value("Cooling load")=="0 MW","shutdown stops new cooling load while preserving its backlog");
+   Need(!report.Rows.Exists(row=>row.Label=="Reaction heat" || row.Label=="Full-load cooling"),"simplified report omits duplicate reaction/full-load metrics");
+   Need(report.Value("Cooldown backlog")=="4 GJ","remaining energy includes housing, circuits and attached legacy stores once");
+   Need(report.Value("Cooling rate")=="100 MW" && report.Value("Cooling capacity")=="2.5 GW","standalone and Brayton show actual removal separately from available capacity");
    Need(report.Value("Containment")!="--","short reports keep cooldown power visible");
    thermal.Store.HotMJ=thermal.Store.WasteMJ=thermal.Loops[0].ExcessMJ=thermal.AttachedHeatMJ=0;
    thermal.RejectedMW=0;
    for(int i=0;i<300;i++){r.UpdateThermal();r.UpdateThermalForecast();}
    report=r.ReadStatus(false);
    Need(report.CoolingDown && r.Motion.Heat<.8f && r.Motion.Heat>.15f,"core cooldown remains visible after every energy store is drained");
-   Need(report.Value("Heat to drain")=="0 MJ" && report.Value("Heat removed")=="0 MW","zero stored energy/removal cannot imply core cooldown is finished");
+   Need(report.Value("Cooldown backlog")=="0 MJ" && report.Value("Cooling rate")=="0 MW","zero stored energy/removal cannot imply core cooldown is finished");
    Need(report.CooldownProgress>0 && report.CooldownProgress<1 && report.Value("Cooldown ETA").Contains("to 15%"),"progress and estimate remain visible after reaction stops");
    Need(report.Value("Core cooldown")!="80.0% / target 15%","core reading follows the real cooling simulation");
    r.Motion.PowerPaused=true;report=r.ReadStatus(false);
@@ -304,7 +305,7 @@ checks = r'''
    Need(!r.ReadStatus(false).CoolingDown,"cold off reactor returns to normal pages");
    thermal.Loops[1].ExcessMJ=.002;
    report=r.ReadStatus(false);
-   Need(report.CoolingDown && report.Value("Heat to drain")=="0.002 MJ","small retained heat still blocks cold transition and remains visible");
+   Need(report.CoolingDown && report.Value("Cooldown backlog")=="0.002 MJ","small retained heat still blocks cold transition and remains visible");
    r.Motion.Critical=true;report=r.ReadStatus(false);
    Need(!report.CoolingDown && report.State.StartsWith("SUPERCRITICAL"),"critical reactor cannot advertise ordinary cooldown");
    r.Motion.Critical=false;r.Motion.Vent=VentPhase.Ejecting;
@@ -317,7 +318,7 @@ checks = r'''
   var guide=r.ReadAssemblyGuide();
   Need(guide.State=="CONTAINMENT INCOMPLETE" && guide.Rows[0].Value.Contains("lower side upgrade sockets"),"look-at guide leads with actionable controller placement");
   Need(guide.Value("1 Controllers").Contains("0/2 attached"),"missing controllers are counted");
-  Need(guide.Value("Aether").StartsWith("2.5 GW heat") && guide.Value("Helion").StartsWith("25 GW heat")
+  Need(guide.Value("Aether").StartsWith("5 GW heat") && guide.Value("Helion").StartsWith("50 GW heat")
    && guide.Value("Empyrean").StartsWith("250 GW heat"),"guide uses current thermal fuel ratings");
   Need(guide.Value("Aether").Contains("standalone") && guide.Value("Helion").Contains("mixed/advanced")
    && guide.Value("Empyrean").Contains("2 advanced + T2 turbines"),"fuel tiers explain controller, mode and turbine requirements");

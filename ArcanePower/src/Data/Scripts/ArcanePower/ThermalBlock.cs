@@ -186,7 +186,7 @@ namespace ArcanePower
             { Fault = "Thermal train requires an empty native FuelInfos list"; mw = 0; }
             float nativeRating = Generator.BlockDefinition.MaxPowerOutput;
             if (nativeRating <= 0) { Fault = "Invalid native train rating"; Generator.Capacity = 0; return; }
-            float multiplier = (float)(Spec.RatingMW * (Spec.Grade == 3 ? .80 : .40) / nativeRating);
+            float multiplier = (float)(Spec.RatingMW * ThermalMath.BraytonEfficiency / nativeRating);
             if (((IMyReactor)Generator).PowerOutputMultiplier != multiplier) ((IMyReactor)Generator).PowerOutputMultiplier = multiplier;
             Generator.Capacity = (float)(Math.Max(0, mw) / 216000.0);
         }
@@ -220,7 +220,7 @@ namespace ArcanePower
         {
             UpdateEnvironment();
             return new ThermalUnit { Id = Entity.EntityId, Kind = Spec.Kind, Grade = Spec.Grade,
-                RatingMW = Spec.RatingMW, CoolingMW = Healthy ? coolingMW : 0, ColdC = 45 };
+                RatingMW = Spec.RatingMW, CoolingMW = Healthy ? coolingMW : 0 };
         }
 
         private void UpdateEnvironment()
