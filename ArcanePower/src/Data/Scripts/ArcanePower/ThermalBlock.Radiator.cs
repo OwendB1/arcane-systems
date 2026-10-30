@@ -4,7 +4,6 @@ using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using VRage.Game.Entity;
-using VRage.Game.Components;
 using VRageMath;
 
 namespace ArcanePower
@@ -85,22 +84,10 @@ namespace ArcanePower
             if (!((MyEntity)Entity).Subparts.TryGetValue(ThermalRadiators.Subpart, out part)) return;
             Matrix pose = ThermalRadiators.Pose(radiatorVisualAngle, Spec.Kind == ThermalKind.RadiatorPanel);
             part.PositionComp.SetLocalMatrix(ref pose);
-            // The native tool ray resolves subpart hits to the owning grid and
-            // section. Keep real panel hulls in the same frame on servers too;
-            // entity/model removal owns their physics cleanup.
-            if (Block.CubeGrid.Physics != null && part.Physics == null)
-                MyAPIGateway.Physics.CreateModelPhysics(MyAPIGateway.Physics.CreateSettingsForPhysics(
-                    part, part.WorldMatrix, Vector3.Zero, rigidBodyFlags:
-                    RigidBodyFlag.RBF_KINEMATIC | RigidBodyFlag.RBF_NO_POSITION_UPDATES));
-            if (part.Physics != null)
-            {
-                part.Physics.Enabled = Block.CubeGrid.Physics != null;
-                if (part.Physics.Enabled)
-                {
-                    part.Physics.LinearVelocity = Block.CubeGrid.Physics.LinearVelocity;
-                    part.Physics.AngularVelocity = Block.CubeGrid.Physics.AngularVelocity;
-                }
-            }
+            // Animated radiator parts are visual-only. Independently driven
+            // kinematic hulls can push against their own ship while tracking.
+            // Disable any existing subpart body; the base keeps native grid collision.
+            if (part.Physics != null && part.Physics.Enabled) part.Physics.Enabled = false;
             if (MyAPIGateway.Utilities.IsDedicated) return;
             RadiatorGlow(part, state.Glow);
         }

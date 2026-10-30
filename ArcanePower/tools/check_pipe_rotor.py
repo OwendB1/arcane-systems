@@ -54,18 +54,34 @@ def main():
 
     # Compile the actual adapter method against a minimal native-API fixture.
     source = (root/'src/Data/Scripts/ArcanePower/ThermalPipeJoint.cs').read_text()
-    start = source.index('internal static long Peer(')
-    end = source.index('{', start)+1
-    depth = 1
-    while depth:
-        depth += (source[end] == '{')-(source[end] == '}'); end += 1
-    method = source[start:end]
+    def member(signature):
+        start = source.index(signature)
+        end = source.index('{', start) + 1
+        depth = 1
+        while depth:
+            depth += (source[end] == '{') - (source[end] == '}')
+            end += 1
+        return source[start:end].replace('public override void', 'public void')
+
+    methods = '\n'.join(member(signature) for signature in (
+        'internal static long Peer(', 'public override void UpdateOnceBeforeFrame(',
+        'private void Changed(', 'public override void Close('))
     fixture = r'''
 using System;
+using System.Collections.Generic;
+static class MyAPIGateway {public static object Session=new object();}
+interface IMyComponentStack {event Action IsFunctionalChanged;}
+class Stack:IMyComponentStack {
+ public event Action IsFunctionalChanged;
+ public int Subscribers{get{return IsFunctionalChanged==null?0:IsFunctionalChanged.GetInvocationList().Length;}}
+ public void Change(){if(IsFunctionalChanged!=null)IsFunctionalChanged();}
+}
+class Slim {public Stack ComponentStack=new Stack();}
+interface IMyMotorBase {event Action<IMyMotorBase> AttachedEntityChanged;}
 class Definition { public string SubtypeName; }
 interface IMyCubeBlock {
  bool Closed{get;set;} bool MarkedForClose{get;set;} object CubeGrid{get;set;}
- long EntityId{get;set;} Definition BlockDefinition{get;}
+ long EntityId{get;set;} Definition BlockDefinition{get;} Slim SlimBlock{get;}
 }
 interface IMyMotorAdvancedStator:IMyCubeBlock {
  bool IsAttached{get;set;} bool PendingAttachment{get;set;} IMyCubeBlock Top{get;set;}
@@ -73,13 +89,20 @@ interface IMyMotorAdvancedStator:IMyCubeBlock {
 interface IMyMotorAdvancedRotor:IMyCubeBlock { IMyCubeBlock Base{get;set;} }
 class Block:IMyCubeBlock {
  public bool Closed{get;set;} public bool MarkedForClose{get;set;} public object CubeGrid{get;set;}
+ public Slim SlimBlock{get;private set;}=new Slim();
  public long EntityId{get;set;} public Definition BlockDefinition{get;private set;} = new Definition();
 }
-class Stator:Block,IMyMotorAdvancedStator {
+class Stator:Block,IMyMotorAdvancedStator,IMyMotorBase {
+ public event Action<IMyMotorBase> AttachedEntityChanged {
+  add {throw new ArgumentException("Native motor delegate adapter rejects mod handler");}
+  remove {throw new ArgumentException("Native motor delegate adapter rejects mod handler");}
+ }
  public bool IsAttached{get;set;} public bool PendingAttachment{get;set;} public IMyCubeBlock Top{get;set;}
 }
 class Head:Block,IMyMotorAdvancedRotor { public IMyCubeBlock Base{get;set;} }
 class Checks {
+ static readonly Dictionary<long,Checks> parts=new Dictionary<long,Checks>();
+ IMyCubeBlock block;object model=new object();IMyComponentStack components;int revision;
  // METHOD
  static int count;
  static void Need(bool value,string label){count++;if(!value)throw new Exception(label);}
@@ -88,6 +111,10 @@ class Checks {
   var b=new Head{EntityId=2,CubeGrid=new object(),Base=a};a.Top=b;
   a.BlockDefinition.SubtypeName="ArcanePower_Thermal_PipeRotor";
   b.BlockDefinition.SubtypeName="ArcanePower_Thermal_PipeRotorHead";
+  var adapter=new Checks{block=a};adapter.UpdateOnceBeforeFrame();
+  Need(parts.Count==1 && a.SlimBlock.ComponentStack.Subscribers==1,"adapter initializes without subscribing to broken native motor event");
+  a.SlimBlock.ComponentStack.Change();Need(adapter.revision==1,"functional changes still invalidate endpoints");
+  adapter.Close();Need(parts.Count==0 && a.SlimBlock.ComponentStack.Subscribers==0,"adapter closes without broken native event unsubscription or leaking handlers");
   Need(Peer(a)==2 && Peer(b)==1,"reciprocal native attachment");
   a.PendingAttachment=true;Need(Peer(a)==0 && Peer(b)==0,"pending native attachment");a.PendingAttachment=false;
   a.IsAttached=false;Need(Peer(a)==0 && Peer(b)==0,"detached native attachment");a.IsAttached=true;
@@ -106,7 +133,7 @@ class Checks {
   Console.WriteLine("PASS: "+count+" production attachment checks; definition preview leaves installed definitions unchanged");
  }
 }
-'''.replace('// METHOD', method)
+'''.replace('// METHOD', methods)
     with tempfile.TemporaryDirectory(prefix='arcane-pipe-rotor-') as directory:
         path = Path(directory)
         (path/'Check.cs').write_text(fixture)

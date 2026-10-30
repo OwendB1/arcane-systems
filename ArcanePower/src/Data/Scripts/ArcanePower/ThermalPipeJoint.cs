@@ -19,7 +19,6 @@ namespace ArcanePower
         private ThermalModel model;
         private int revision;
         private IMyComponentStack components;
-        private IMyMotorBase motor;
 
         public override void Init(MyObjectBuilder_EntityBase builder)
         {
@@ -34,12 +33,12 @@ namespace ArcanePower
             parts[block.EntityId] = this;
             components = block.SlimBlock.ComponentStack;
             components.IsFunctionalChanged += Changed;
-            motor = block as IMyMotorBase;
-            if (motor != null) motor.AttachedEntityChanged += AttachmentChanged;
+            // Peer() reads attachment live for every thermal snapshot. The cache
+            // compares RotaryPeerId, so no motor event subscription is needed.
+            // SE's AttachedEntityChanged delegate adapter rejects mod handlers.
         }
 
         private void Changed() { unchecked { revision++; } }
-        private void AttachmentChanged(IMyMotorBase ignored) { Changed(); }
 
         internal static long Peer(IMyCubeBlock block)
         {
@@ -98,7 +97,6 @@ namespace ArcanePower
         {
             if (block != null) parts.Remove(block.EntityId);
             if (components != null) components.IsFunctionalChanged -= Changed;
-            if (motor != null) motor.AttachedEntityChanged -= AttachmentChanged;
         }
     }
 }

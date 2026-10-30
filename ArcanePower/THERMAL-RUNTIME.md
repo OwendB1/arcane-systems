@@ -383,12 +383,13 @@ panels contribute cooling. Placed yaw is unrestricted;
 `ThermalRadiators.PanelAngle` compensates block yaw in server/client motion and
 solar/clearance sampling, keeping each H/C coupling in the base world frame.
 Radiator collision includes the axial top dock for placement; adjoining stack
-colliders are recessed 25 mm per face to clear their convex margins. Six solid-derived
-face/frame hulls belong to each rotating subpart. Native kinematic model physics
-follows its pose on clients and dedicated servers; native tool rays resolve those
-hits to the owning grid section for grinding. Model refresh/removal closes the
-subpart physics. Export checks cover both faces and unobstructed outward cooling
-rays. The base owns
+colliders are recessed 25 mm per face to clear their convex margins. The animated subparts are visual-only: runtime does not create independent
+kinematic bodies, and disables any existing subpart body on clients and dedicated
+servers. Independently driven hulls could collide with their own ship and impart
+rotation. Stationary block collision remains native; moving panels no longer
+provide physical contact or their own physics-ray targets. The authored subpart
+hulls remain in the models, but runtime leaves them inactive. Export checks cover
+both faces and unobstructed outward cooling rays. The base owns
 the only heat store and cooling budget. Extensions contribute sampled cooling
 without duplicating MJ. Their client visuals use the base's interpolated angle
 so side-pipe joints stay together between snapshots. Motion state is entity-bound,
@@ -515,12 +516,17 @@ no new subgrid. Native motor head creation always creates another cube grid, so
 one interchangeable native base cannot also preserve that behavior. Both bases
 reuse `build_pipe_rotor.py::side_shell`; existing radiator IDs are preserved.
 
+`ThermalPipeJoint` reads the live attachment for each thermal snapshot. It avoids
+`IMyMotorBase.AttachedEntityChanged`: the game rebinds that event to an incompatible
+mechanical-base delegate and can throw during mod initialization. Cached circuits
+already compare peer IDs, health, grid identity and port poses.
+
 `ThermalPipeJoint` accepts only the reciprocal, nonpending native attachment
 between the two exact Arcane pipe rotor subtypes. Both blocks must be complete,
 functional and accessible to the source owner, on distinct physical grids.
 Switching the motor off stops rotation without opening the sealed pipe. A missing,
 foreign, damaged or inaccessible head breaks that circuit; there is no proximity
-or general mechanical-group heat transfer. Attachment/build revisions invalidate
+or general mechanical-group heat transfer. Live peer IDs and build revisions invalidate
 cached circuits. Ordinary sockets still use grid-local positions and H/C axes.
 The construction guide, coolant flow display and circuit accounting follow the
 explicit rotary connection. A detached union does not stop unrelated circuits.
