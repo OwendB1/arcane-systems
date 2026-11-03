@@ -421,6 +421,17 @@ class EnergyCore {
   c.UpdateBank();Need(SurgeDuration==300 && c.RecoveryDuration()==5400,"standard surge window and recovery");
   stability.BlockDefinition.SubtypeName+="Advanced";transfer.BlockDefinition.SubtypeName+="Advanced";
   c.UpdateBank();Need(SurgeDuration==300 && c.RecoveryDuration()==3600,"advanced surge window and recovery");
+  for(int tier=0;tier<=2;tier++){
+   c.stabilizationTier=c.upkeepTier=tier;
+   var snapshot=c.CaptureBank();var wire=ProtoBuf.Meta.RuntimeTypeModel.Create();
+   using(var buffer=new MemoryStream()){wire.Serialize(buffer,snapshot);buffer.Position=0;snapshot=(EnergyBankState)wire.Deserialize(buffer,null,typeof(EnergyBankState));}
+   var fresh=Cell(new Grid(),Vector3I.Zero,CoreSubtype,1000);
+   MyAPIGateway.Multiplayer.IsServer=false;fresh.ReceiveBank(snapshot);
+   foreach(int count in new[]{1,4})Need(fresh.BatchRecoveryDuration(count)==c.BatchRecoveryDuration(count),"fresh client uses replicated cooldown tier for single and batch surges");
+   Need(fresh.stabilizationTier==tier && fresh.upkeepTier==tier,"snapshot restores upkeep and cooldown tiers together");
+   if(tier==2)Need(fresh.BatchRecoveryDuration(1)==3600,"fresh advanced bank advertises 60 seconds of recovery");
+   MyAPIGateway.Multiplayer.IsServer=true;
+  }
   var advanced=Drive(grid);c.RequestSurge();for(int i=0;i<30 && c.gameplay.SurgeTicks>0;i++){c.UpdateBank();c.UpdateSurge();}Need(advanced.CurrentStoredPower==3,"advanced surge fills in five seconds");
   c.gameplay.RecoveryTicks=0;c.RequestBurst();Near(c.outputLimit,(c.block.CurrentStoredPower-100)*2160,"burst respects energy-backed native interval bound");
   var left=Cell(grid,new Vector3I(-2,0,0),"ArcanePower_EnergyCapacity",10000,Base6Directions.Direction.Right);

@@ -153,10 +153,11 @@ namespace ArcanePower
                         if (identity == 0 || !core.Block.HasPlayerAccess(identity)) return;
                         if (packet.Command == EnergyCommand.Sync)
                         {
-                            if (PowerNetwork.CanRequest(Channel, sender, core.Block.EntityId, core.Block))
+                            if (PowerNetwork.CanRequest(Channel, sender, core.Block.EntityId) && PowerNetwork.Observe(sender, core.Block))
                                 PowerNetwork.Send(Channel, Snapshot(core), sender);
                         }
-                        else if (PowerNetwork.CanRequest(Channel, sender, core.Block.EntityId, core.Block, true)) Apply(core, packet);
+                        else if (PowerNetwork.CanRequest(Channel, sender, core.Block.EntityId, true))
+                        { PowerNetwork.Observe(sender, core.Block); Apply(core, packet); }
                     }
                     else if (fromServer && packet.Bank != null && packet.Bank.Valid() && packet.State != null && packet.State.Valid(packet.EntityId)
                         && packet.Stored >= 0 && packet.Stored <= core.Block.MaxStoredPower && core.CanReceiveBank(packet.Bank))

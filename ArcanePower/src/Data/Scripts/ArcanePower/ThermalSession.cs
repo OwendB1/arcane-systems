@@ -93,7 +93,7 @@ namespace ArcanePower
                         // Clients may ask for a read-only pose; they can never
                         // submit drive, pressure, inventory or speed state.
                         if (fromServer || packet.State != null || packet.Radiator != null || packet.Cooling != null) return;
-                        if (PowerNetwork.CanRequest(RotorChannel, sender, block.Entity.EntityId, block.Entity))
+                        if (PowerNetwork.CanRequest(RotorChannel, sender, block.Entity.EntityId) && PowerNetwork.Observe(sender, block.Entity))
                             PowerNetwork.Send(RotorChannel, MotionPacket(block), sender);
                     }
                     else if (fromServer)
@@ -133,11 +133,9 @@ namespace ArcanePower
                 if (!server)
                 {
                     int updated;
-                    if (!replicaTicks.TryGetValue(block.Entity.EntityId, out updated) || tick - updated > 180)
-                    {
-                        block.ExpireTelemetry();
-                        if (tick % 120 == 0 && HasTelemetry(block)) RequestRotor(block);
-                    }
+                    bool stale = !replicaTicks.TryGetValue(block.Entity.EntityId, out updated) || tick - updated > 180;
+                    if (stale) block.ExpireTelemetry();
+                    if (tick % 120 == 0 && HasTelemetry(block) && (stale || PowerNetwork.NeedsRemoteRefresh(block.Entity))) RequestRotor(block);
                 }
                 block.AdvanceRotor();
                 if (block.Spec.Kind != ThermalKind.Radiator) block.AdvanceRadiator();

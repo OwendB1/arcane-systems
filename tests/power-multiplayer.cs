@@ -13,6 +13,8 @@ using VRage.Utils;
 namespace VRage.ModAPI { public interface IMyEntity { bool Closed {get;} Vector3D GetPosition(); } }
 namespace VRage.Game.ModAPI {
  public class IMyModel {}
+ public class IMyCubeGrid {public long EntityId=1;}
+ public interface IMyCubeBlock:IMyEntity {IMyCubeGrid CubeGrid{get;}}
  public class IMyPlayer {public ulong SteamUserId;public long IdentityId;public Vector3D Position;public Vector3D GetPosition(){return Position;}}
 }
 namespace VRage.Game.Components {
@@ -22,7 +24,9 @@ namespace VRage.Game.Components {
 }
 namespace VRage.Utils {public class MyLog {public static MyLog Default=new MyLog();public int Entries;public void WriteLine(string value){Entries++;}}}
 namespace Sandbox.ModAPI {
- public class Block:IMyEntity {
+ public interface IMyTerminalBlock:IMyCubeBlock {bool HasPlayerAccess(long id);}
+ public class Block:IMyTerminalBlock {
+  public IMyCubeGrid CubeGrid{get;set;}=new IMyCubeGrid();
   public long EntityId,Owner=1;public bool Closed{get;set;}public Vector3D Position;
   public float CurrentStoredPower=10,MaxStoredPower=100;
   public bool HasPlayerAccess(long id){return id==Owner;}public Vector3D GetPosition(){return Position;}public void RefreshCustomInfo(){}
@@ -75,7 +79,7 @@ namespace Acceptance {
  class EnergyCore {
   public Block Block=new Block();internal Block block{get{return Block;}}internal Block Entity{get{return Block;}}
   public bool Controller=true;public EnergyGameplayState gameplay=new EnergyGameplayState();public EnergyGameplayState Gameplay{get{return gameplay;}}
-  internal EnergyBankState bankReplica;internal long bankSequence,bankControllerId;internal int replicaAge,upkeepTier,Commands;
+  internal EnergyBankState bankReplica;internal long bankSequence,bankControllerId;internal int replicaAge,upkeepTier,stabilizationTier,Commands;
   internal float replicatedStored,stored,capacity,transfer,chargeCeiling,reserve,inputLimit,outputLimit;internal bool emergencyEnabled,emergency;internal string status;
   public void RequestSurge(){Commands++;}public void RequestBurst(){Commands++;}public void SetPolicy(float? percent,bool? support){Commands++;}
   public void ApplyLimits(float input,float output){inputLimit=input;outputLimit=output;}
@@ -128,14 +132,48 @@ namespace Acceptance {
    Reset();var target=new Block();var packet=new VentPacket{EntityId=1,State=new MotionState()};
    int before=MyAPIGateway.Utilities.Serializations;PowerNetwork.Broadcast(49371,packet,target);
    Need(MyAPIGateway.Multiplayer.Sent.Count==2,"only two nearby clients receive state");Need(MyAPIGateway.Utilities.Serializations==before+1,"fanout serializes once");
-   Need(!PowerNetwork.CanRequest(49371,99,1,target),"unregistered sender rejected");Need(!PowerNetwork.CanRequest(49371,33,1,target),"far snapshot request rejected");
-   Need(PowerNetwork.CanRequest(49371,11,1,target),"first nearby request accepted");Need(!PowerNetwork.CanRequest(49371,11,1,target),"duplicate request throttled");
-   for(int i=2;i<=64;i++)Need(PowerNetwork.CanRequest(49371,11,i,target),"distinct streamed entities bootstrap");
-   Need(!PowerNetwork.CanRequest(49371,11,65,target),"per-peer rate bounded");MyAPIGateway.Session.GameplayFrameCounter=120;
-   Need(PowerNetwork.CanRequest(49371,11,1,target),"request budget recovers");
+   Need(!PowerNetwork.CanRequest(49371,99,1),"unregistered sender rejected");Need(!PowerNetwork.Observe(33,target),"distant snapshot requires access");
+   Need(PowerNetwork.CanRequest(49371,11,1),"first nearby request accepted");Need(!PowerNetwork.CanRequest(49371,11,1),"duplicate request throttled");
+   for(int i=2;i<=64;i++)Need(PowerNetwork.CanRequest(49371,11,i),"distinct streamed entities bootstrap");
+   Need(!PowerNetwork.CanRequest(49371,11,65),"per-peer rate bounded");MyAPIGateway.Session.GameplayFrameCounter=120;
+   Need(PowerNetwork.CanRequest(49371,11,1),"request budget recovers");
    int errors=VRage.Utils.MyLog.Default.Entries;MyAPIGateway.Multiplayer.Fail=true;Need(!PowerNetwork.Send(49371,packet,11),"send failure propagated");
    MyAPIGateway.Multiplayer.Throw=true;Need(!PowerNetwork.Send(49371,packet,11),"send exception isolated");Need(VRage.Utils.MyLog.Default.Entries>=errors+2,"send failures logged");
    MyAPIGateway.Multiplayer.Fail=MyAPIGateway.Multiplayer.Throw=false;PowerNetwork.OnGameThread(()=>{throw new Exception("bad packet");});MyAPIGateway.Utilities.Drain();
+  }
+  static void RemoteTerminals(){
+   Reset();var grid=new IMyCubeGrid{EntityId=70};
+   var r=new Reactor();r.reactor.EntityId=7;r.reactor.Owner=3;r.reactor.CubeGrid=grid;r.Motion.EntityId=7;VentSession.Reactors[7]=r;
+   var receiver=new VentSession();
+   receiver.Receive(49371,Raw(new VentPacket{EntityId=7,Command=VentCommand.Start}),33,false);MyAPIGateway.Utilities.Drain();
+   Need(r.Commands==1,"authenticated owner can vent through a distant antenna terminal");
+   receiver.Receive(49371,Raw(new VentPacket{EntityId=7,Command=VentCommand.Start}),22,false);MyAPIGateway.Utilities.Drain();
+   Need(r.Commands==1,"distant terminal support preserves ownership checks");
+   var cell=new EnergyCore();cell.Block.EntityId=8;cell.Block.Owner=3;cell.Block.CubeGrid=grid;EnergySession.Cells[8]=cell;
+   var er=new EnergySession();er.Receive(49374,Raw(new EnergyPacket{EntityId=8,Command=EnergyCommand.Burst}),33,false);MyAPIGateway.Utilities.Drain();
+   Need(cell.Commands==1,"authenticated owner can use a distant energy terminal");
+   er.Receive(49374,Raw(new EnergyPacket{EntityId=8,Command=EnergyCommand.Burst}),22,false);MyAPIGateway.Utilities.Drain();
+   Need(cell.Commands==1,"remote energy action still checks ownership");
+   MyAPIGateway.Multiplayer.Sent.Clear();receiver.Receive(49371,Raw(new VentPacket{EntityId=7,Command=VentCommand.Sync}),33,false);MyAPIGateway.Utilities.Drain();
+   Need(MyAPIGateway.Multiplayer.Sent.Exists(d=>d.Recipient==33),"remote owner receives initial reactor telemetry");
+   var pipe=new Block{Owner=3,CubeGrid=grid};var otherGrid=new Block{Owner=3,CubeGrid=new IMyCubeGrid{EntityId=80}};
+   Need(PowerNetwork.CanObserve(33,pipe) && !PowerNetwork.CanObserve(33,otherGrid),"remote interest includes the observed grid without including other owned grids");
+   for(int frame=120;frame<=1200;frame+=120){
+    MyAPIGateway.Session.GameplayFrameCounter=frame;
+    MyAPIGateway.Multiplayer.IsServer=false;MyAPIGateway.Session.Player=MyAPIGateway.Players.All[2];
+    Need(PowerNetwork.NeedsRemoteRefresh(r.Entity),"loaded distant reactor needs interest renewal");
+    MyAPIGateway.Multiplayer.IsServer=true;MyAPIGateway.Session.Player=null;MyAPIGateway.Multiplayer.Sent.Clear();
+    receiver.Receive(49371,Raw(new VentPacket{EntityId=7,Command=VentCommand.Sync}),33,false);MyAPIGateway.Utilities.Drain();
+    PowerNetwork.Broadcast(49371,new VentPacket{EntityId=7,State=r.Motion},r.Entity);
+    Need(MyAPIGateway.Multiplayer.Sent.FindAll(d=>d.Recipient==33).Count==2,"remote telemetry remains live beyond the original lease lifetime");
+   }
+   r.reactor.Owner=2;Need(!PowerNetwork.CanObserve(33,r.Entity) && !PowerNetwork.CanObserve(33,pipe),"ownership revocation immediately ends distant telemetry");
+   r.reactor.Owner=3;MyAPIGateway.Session.GameplayFrameCounter=1800;Need(!PowerNetwork.CanObserve(33,r.Entity),"interest expires when remote grid renewal stops");
+   MyAPIGateway.Multiplayer.Sent.Clear();receiver.Receive(49371,Raw(new VentPacket{EntityId=7,Command=VentCommand.Sync}),33,false);MyAPIGateway.Utilities.Drain();
+   Need(PowerNetwork.CanObserve(33,r.Entity),"returning remote terminal renews interest");
+   r.reactor.CubeGrid=otherGrid.CubeGrid;Need(!PowerNetwork.CanObserve(33,pipe),"grid split cannot leave unrelated telemetry subscribed");
+   MyAPIGateway.Multiplayer.IsServer=false;MyAPIGateway.Session.Player=MyAPIGateway.Players.All[2];r.reactor.Closed=true;
+   Need(!PowerNetwork.NeedsRemoteRefresh(r.Entity),"unloaded remote blocks stop renewing interest");
   }
   static void Commands(){
    Reset();var r=new Reactor();r.reactor.EntityId=7;r.Motion.EntityId=7;VentSession.Reactors[7]=r;var receiver=new VentSession();
@@ -198,6 +236,6 @@ namespace Acceptance {
    MyAPIGateway.Players.All[0].Position=Vector3D.Zero;MyAPIGateway.Session.GameplayFrameCounter++;MyAPIGateway.Multiplayer.Sent.Clear();server.Broadcast();var back=MyAPIGateway.Multiplayer.Sent.Find(d=>d.Recipient==11);
    Need(MyAPIGateway.Utilities.SerializeFromBinary<CoreHazardSnapshot>(back.Bytes).Cores[0].Shell.Count==1,"streaming back supplies geometry again");
   }
-  static void Main(){Contracts();Transport();Commands();Replicas();Hazards();Console.WriteLine("PASS: "+checks+" production multiplayer transport/handler checks; two clients, listen/dedicated roles, authority, relevance, throttling, late join/reconnect/streaming, ordering, validation and final-hazard removal (engine doubles)");}
+  static void Main(){Contracts();Transport();Commands();RemoteTerminals();Replicas();Hazards();Console.WriteLine("PASS: "+checks+" production multiplayer transport/handler checks; two clients, listen/dedicated roles, remote terminals, authority, relevance, throttling, late join/reconnect/streaming, ordering, validation and final-hazard removal (engine doubles)");}
  }
 }

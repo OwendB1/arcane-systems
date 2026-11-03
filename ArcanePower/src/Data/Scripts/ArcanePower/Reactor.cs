@@ -80,6 +80,8 @@ namespace ArcanePower
             RefreshRestPoses();
             if (initializationFrames > 0)
             {
+                if (!MyAPIGateway.Multiplayer.IsServer && controllerDiscoveryFrames % 120 == 0
+                    && PowerNetwork.NeedsRemoteRefresh(Entity)) VentSession.SendCommand(Id, VentCommand.Sync);
                 CheckContainment();
                 if (--controllerDiscoveryFrames > 0 && (previousControllers < 2 || !HasIntactControllers()))
                     initializationFrames = System.Math.Max(initializationFrames, 4);

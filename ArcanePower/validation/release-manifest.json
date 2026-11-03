@@ -2,8 +2,8 @@
   "version": "0.3.0",
   "published": false,
   "archive": "ArcanePower-0.3.0.zip",
-  "sha256": "32af2df78acb89c709e55ef507425a01069c44295bb3ae2d7a2ab660cdcb6312",
-  "bytes": 444417118,
+  "sha256": "fa93457ac356938a4c74d994f0e28966a57635ba8af6bebc184b702ae6fc6ffc",
+  "bytes": 444418013,
   "files": [
     {
       "path": "Audio/ArcanePower/Assembly.wav",
@@ -197,13 +197,13 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/EnergyCore.Replication.cs",
-      "bytes": 2759,
-      "sha256": "bf72bf395f96014d32cefb1c07149e2397db2aa0e7704b8b0284633f8a1324f7"
+      "bytes": 2859,
+      "sha256": "17ce54beb567efee2623492b8e4660440103271eb39c0523758f4ed19e008a37"
     },
     {
       "path": "Data/Scripts/ArcanePower/EnergyCore.cs",
-      "bytes": 22126,
-      "sha256": "c91f26e2edf734f8a4b3dba6d76730dc8e15f92ae403e4975f54b01f0ea2fd82"
+      "bytes": 22289,
+      "sha256": "b8a724f545750753380d51023a9858ad71b71bec34beb3773e1da82164653d78"
     },
     {
       "path": "Data/Scripts/ArcanePower/EnergyModule.cs",
@@ -212,8 +212,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/EnergySession.cs",
-      "bytes": 10962,
-      "sha256": "07cd621f02066bebeadbf0163c0977776d46f362849512a42ed3a30d696da3bf"
+      "bytes": 11052,
+      "sha256": "2801885d1f45871992882f980954744debb9c9ce3d0c48a75e6bb6bb12c5dde2"
     },
     {
       "path": "Data/Scripts/ArcanePower/HudAPIv2.cs",
@@ -227,8 +227,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/PowerNetwork.cs",
-      "bytes": 6138,
-      "sha256": "6d9147d100dfb3e18846001d5dbb71b29cab10dbf38bc7cacc6d41519afd781c"
+      "bytes": 9474,
+      "sha256": "7fb8e54d9db17590b81c72acc83268ed9bfe84e11864c1319684a245ee0a06a5"
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Failure.cs",
@@ -242,8 +242,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Motion.cs",
-      "bytes": 38503,
-      "sha256": "65ff7932cfbceea7fed132e90e44866d8876e99271950581257981f587375f60"
+      "bytes": 38564,
+      "sha256": "79862f6d249436eea5a214d4ce0305b8a5adf858e6f9d882d08835bc5637d051"
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.Power.cs",
@@ -287,8 +287,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/Reactor.cs",
-      "bytes": 13294,
-      "sha256": "7605fbba36ac664073a6345fd1c223515838d846e16050dadc34a805ec3e37ed"
+      "bytes": 13500,
+      "sha256": "efdc87e08351de9bf7db5d78b983eb97869beaac78bcaf2f103d43029eccd3cf"
     },
     {
       "path": "Data/Scripts/ArcanePower/ReactorDashboard.cs",
@@ -437,8 +437,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalSession.cs",
-      "bytes": 13236,
-      "sha256": "5df2b334f011b33a6c54f12fdc2d3b275d97ddeaab18ddf0ccca8b0b12581dea"
+      "bytes": 13296,
+      "sha256": "63c2989161452392c5abd92553e4547acaebc306494bd65ce08c4dcef062e4c9"
     },
     {
       "path": "Data/Scripts/ArcanePower/VentHardware.cs",
@@ -447,8 +447,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/VentSession.cs",
-      "bytes": 11869,
-      "sha256": "cea8207db6701260f6ce821ef668d8b34c3305f0dcbaf074a1ca003840dd60b2"
+      "bytes": 11956,
+      "sha256": "a0dfca73f5cf7e83a033adc9758f1631a9ebe8bed1bde635cddff2afd669adc9"
     },
     {
       "path": "Data/Tablet.sbc",

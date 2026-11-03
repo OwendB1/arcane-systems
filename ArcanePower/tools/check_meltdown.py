@@ -144,7 +144,8 @@ namespace ArcanePower {
 }
  enum VentCommand {Sync}
  static class VentSession {public static void SendCommand(long id,VentCommand command){}}
- static class MyAPIGateway {
+ static class PowerNetwork {public static bool NeedsRemoteRefresh(object entity){return false;}}
+static class MyAPIGateway {
   public static class Multiplayer {public static bool IsServer=true;}
   public static class Utilities {public static bool IsDedicated=true;}
   public static class Physics {

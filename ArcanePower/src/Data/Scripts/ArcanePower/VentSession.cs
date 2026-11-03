@@ -156,13 +156,14 @@ namespace ArcanePower
                         if (fromServer || packet.State != null || packet.Command < VentCommand.Sync || packet.Command > VentCommand.Brayton) return;
                         if (packet.Command == VentCommand.Sync)
                         {
-                            if (!PowerNetwork.CanRequest(Channel, sender, r.Id, r.Entity)) return;
+                            if (!PowerNetwork.CanRequest(Channel, sender, r.Id) || !PowerNetwork.Observe(sender, r.Entity)) return;
                             PowerNetwork.Send(Channel, new VentPacket { EntityId = r.Id, State = r.Snapshot() }, sender);
                             return;
                         }
                         long identity = MyAPIGateway.Players.TryGetIdentityId(sender);
                         if (identity == 0 || !r.Block.HasPlayerAccess(identity)) return;
-                        if (!PowerNetwork.CanRequest(Channel, sender, r.Id, r.Entity, true)) return;
+                        if (!PowerNetwork.CanRequest(Channel, sender, r.Id, true)) return;
+                        PowerNetwork.Observe(sender, r.Entity);
                         Apply(r, packet.Command);
                     }
                     else if (fromServer && packet.State != null && packet.State.EntityId == packet.EntityId)

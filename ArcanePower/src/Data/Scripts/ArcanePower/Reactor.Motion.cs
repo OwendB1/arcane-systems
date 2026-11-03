@@ -417,7 +417,8 @@ namespace ArcanePower
             networkTick++;
             if (server && (oldCore != Motion.Core || oldVent != Motion.Vent || oldStatus != Motion.Status
                 || oldShieldTest != Motion.ShieldTest || networkTick % 30 == 0)) PublishMotion();
-            else if (!server && !receivedState && networkTick % 120 == 0) VentSession.SendCommand(Id, VentCommand.Sync);
+            else if (!server && networkTick % 120 == 0 && (!receivedState || PowerNetwork.NeedsRemoteRefresh(Entity)))
+                VentSession.SendCommand(Id, VentCommand.Sync);
         }
 
         private void AdvanceMotion()

@@ -99,6 +99,9 @@ class Terminal {
   foreach(var block in Blocks){var b=block as T;if(b!=null && filter(b))list.Add(b);}
  }
 }
+enum VentCommand {Sync}
+static class VentSession {public static void SendCommand(long id,VentCommand command){}}
+static class PowerNetwork {public static bool NeedsRemoteRefresh(object entity){return false;}}
 static class MyAPIGateway {
  public static class Multiplayer {public static bool IsServer=true;}
  public static class Session {public static bool CreativeMode;public static int GameplayFrameCounter;}

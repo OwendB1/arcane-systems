@@ -191,6 +191,8 @@ namespace ArcanePower
             if (!initialized) return;
             UpdateReplication();
             tick = (tick + 1) % 7200;
+            if (!MyAPIGateway.Multiplayer.IsServer && tick % 120 == 1 && PowerNetwork.NeedsRemoteRefresh(Entity))
+                EnergySession.RequestSync(this);
             if (tick % 10 == 1)
             {
                 if (MyAPIGateway.Multiplayer.IsServer)

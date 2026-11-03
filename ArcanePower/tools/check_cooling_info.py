@@ -42,7 +42,8 @@ static class MyAPIGateway {
 }
 static class PowerNetwork {
  public const int MaxPacketBytes=65536;
- public static bool CanRequest(ushort channel,ulong sender,long target,object entity){return true;}
+ public static bool CanRequest(ushort channel,ulong sender,long target){return true;}
+ public static bool Observe(ulong sender,object entity){return true;}
  public static void OnGameThread(Action action){action();}
  public static void Send<T>(ushort channel,T packet,ulong target){MyAPIGateway.Multiplayer.SendMessageTo(channel,MyAPIGateway.Utilities.SerializeToBinary(packet),target);}
 }

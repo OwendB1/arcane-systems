@@ -39,7 +39,8 @@ namespace ArcanePower
             bankControllerId = state.ControllerId;
             stored = state.Stored; capacity = state.Capacity; transfer = state.Transfer; chargeCeiling = state.ChargeCeiling;
             reserve = state.Reserve; emergencyEnabled = state.EmergencyEnabled; emergency = state.Emergency;
-            upkeepTier = state.UpkeepTier; status = state.Status;
+            // The controller's upkeep tier also determines its surge cooldown.
+            stabilizationTier = upkeepTier = state.UpkeepTier; status = state.Status;
             ApplyLimits(state.InputLimit, state.OutputLimit);
             block.RefreshCustomInfo();
         }

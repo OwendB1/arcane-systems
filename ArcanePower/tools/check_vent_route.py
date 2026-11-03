@@ -39,6 +39,7 @@ using System.Collections.Generic;
 using Sandbox.Game.Entities;
 using VRageMath;
 using IMyCubeBlock = Block;
+static class PowerNetwork {public static bool Remote;public static bool NeedsRemoteRefresh(object entity){return Remote;}}
 static class MyAPIGateway {
  public static class Multiplayer { public static bool IsServer=true; }
  public static class Utilities { public static bool IsDedicated=true; }
@@ -72,7 +73,7 @@ class Grid {
  public Slim GetCubeBlock(Vector3I p) { Slim s; return Blocks.TryGetValue(p,out s)?s:null; }
 }
 enum VentCommand { Sync }
-static class VentSession { public static void SendCommand(long id,VentCommand c){} }
+static class VentSession {public static int Syncs;public static void SendCommand(long id,VentCommand c){Syncs++;}}
 public class ThermalReactorState { public double ProducedMW; }
 static class ThermalMath { public static double Clamp(double v,double lo,double hi){return Math.Max(lo,Math.Min(hi,v));} }
 ''' + state + r'''
@@ -216,6 +217,8 @@ class Check {
   c.SetSecurityMode(false);Need(c.Motion.SecurityMode,"client cannot mutate security mode locally");
   c=new Check();MyAPIGateway.Multiplayer.IsServer=false;c.receivedState=true;c.stateAge=180;
   c.Motion.Core=CorePhase.Running;c.UpdateMotion();Need(!c.receivedState && c.advances==0,"stale client snapshot freezes predicted mechanism progress");
+  c=new Check();c.receivedState=true;c.networkTick=119;PowerNetwork.Remote=true;int syncs=VentSession.Syncs;
+  c.UpdateMotion();Need(c.receivedState && VentSession.Syncs==syncs+1,"fresh distant reactor keeps renewing telemetry interest");PowerNetwork.Remote=false;
   MyAPIGateway.Multiplayer.IsServer=true;
   Console.WriteLine("PASS: vent route geometry, startup interlock, 60% auto ejection, intact/distinct controllers, damaged reactor ejection, blocked route repair, committed pause/resume, both security modes, restoration and server authority");
  }

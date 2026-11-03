@@ -73,6 +73,26 @@ measurements and animate presentation. Listen hosts run both roles.
     extended client telemetry, allocation, timeout and dedicated-render tests.
     Updated older fixtures to include their current runtime dependencies.
 
+## PR #98 review follow-up
+
+- [x] R1. Preserve distant antenna terminal commands and telemetry. Request
+  throttling no longer applies a player-distance gate. Command ownership checks
+  still use the authenticated sender. Authorized sync requests register interest
+  in the queried grid for 600 simulation frames; loaded distant reactors, energy
+  banks and thermal machines renew it every 120 frames, including reactor
+  initialization. Broadcasts recheck access, the grid and expiry. Unrelated grids
+  remain filtered, and interest expires when renewal stops. Commands and sync
+  queries have independent rate budgets and cooldowns.
+- [x] R2. Restore cooldown estimates on fresh energy-bank clients. The existing
+  validated `UpkeepTier` is also the controller's stabilization/cooldown tier;
+  `ReceiveBank` now restores both fields without adding another wire field.
+
+The packet suite now covers owner commands at 10 km with a 3 km SyncDistance,
+continuous remote telemetry beyond the original interest lifetime, ownership
+revocation, expiry, grid changes and unload. The production energy-policy harness
+round-trips all three tiers to fresh clients and compares single/batch recovery
+estimates, including the advanced bank's 60-second recovery.
+
 ## Final test results
 
 The final implementation passed all 23 runtime/contract suites, all 45 JavaScript
@@ -83,7 +103,7 @@ checks. Two pre-existing failures remain in unchanged inputs, listed below.
 
 | Check | Result |
 | --- | --- |
-| New multiplayer transport/handler acceptance | 130 checks passed |
+| New multiplayer transport/handler acceptance | 161 checks passed |
 | Thermal runtime/topology/conservation | 1,407,974 checks passed |
 | Reactor fuel/mode/controller integration | 152,405 checks passed |
 | Cooling integrity and isolation | 3,715 checks passed |
@@ -118,7 +138,7 @@ git diff --check
 ## Package and compatibility
 
 The unpublished local `ArcanePower/.cache/release/ArcanePower-0.3.0.zip` was
-rebuilt with all new runtime sources: 697 files, 444,417,118 bytes. Native
+rebuilt with all new runtime sources: 697 files, 444,418,013 bytes. Native
 dependencies, archive CRCs/checksums and the runtime dependency closure passed
 the delivery gate. Release and native-motion fingerprints were refreshed.
 Workshop publishing was not performed. The local package remains unpublished.
@@ -142,6 +162,7 @@ dedicated server and repeat the automation rows on a listen host:
 | --- | --- |
 | Two clients observe startup, load changes, maintenance and cooldown | Matching confirmed status; local visuals/audio; no dedicated-server visual transforms |
 | Join a running plant without opening its inventory | Correct fuel, tile, controller, bank and cooling readouts |
+| Open an owned reactor/bank through antennas beyond SyncDistance | Commands work; telemetry and recovery estimates stay current |
 | Disconnect/reconnect rapidly and leave/re-enter replication range | State and shell geometry recover; distant entries clear |
 | Change ownership, use a foreign block, trigger owner timers/PBs | Unauthorized remote actions fail; native authorized automation works independently of the host identity |
 | Save/reload during venting or with an armed/ejected core | Consumables, paid energy, physical handoff and fuse remain conserved |

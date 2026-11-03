@@ -45,6 +45,9 @@ class GatewayUtilities {
  public bool IsDedicated=true;
  public string SerializeToXML<T>(T value){using(var w=new StringWriter()){new XmlSerializer(typeof(T)).Serialize(w,value);return w.ToString();}}
 }
+enum VentCommand {Sync}
+static class VentSession {public static void SendCommand(long id,VentCommand command){}}
+static class PowerNetwork {public static bool NeedsRemoteRefresh(object entity){return false;}}
 static class MyAPIGateway {
  public static GatewayRole Multiplayer=new GatewayRole();
  public static GatewayUtilities Utilities=new GatewayUtilities();
