@@ -36,6 +36,8 @@ namespace ArcanePower
 
         private int[] SpareTileQuartets()
         {
+            if (!MyAPIGateway.Multiplayer.IsServer)
+                return Motion.Telemetry == null ? new int[3] : (int[])Motion.Telemetry.TileQuartets.Clone();
             var inventory = reactor.GetInventory();
             var stock = new int[TileTypes.Length];
             for (int grade = 0; grade < stock.Length; grade++)

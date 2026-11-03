@@ -159,7 +159,7 @@ class Reactor {
  void AppendInfo(IMyTerminalBlock b,StringBuilder s){}
  void RefreshRestPoses(){steps++;} void CheckVentRoute(){steps++;} void UpdatePower(){steps++;}
  void UpdateSafety(){steps++;} void UpdateThermalMode(){steps++;} void UpdateTiles(){steps++;}
- void UpdateMotion(){steps++;} void UpdateAppearance(){steps++;} void UpdateSound(){steps++;}
+ void UpdateMotion(){steps++;} void UpdateAppearance(){steps++;} void UpdateSound(){steps++;} void TryReleaseFailedHousing(){steps++;}
  void DrawMotion(){steps++;} void DrawVentOutlet(){steps++;}
  void CloseSound(){soundStops++;} void SaveMotion(){saves++;}
  void PullTiles(VRage.Game.Entity.MyInventoryBase source,VRage.Game.Entity.MyInventoryBase target){}

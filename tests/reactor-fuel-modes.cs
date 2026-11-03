@@ -130,7 +130,7 @@ class Reactor {
  int controllerRingCapacity=4,initializationFrames,networkTick=1,appearanceRefresh;
  int controllerDiscoveryFrames=600,reloadPowerFrames,criticalChecks;
  float previousControllers=2;
- bool restoreLegacyHardware,thermalStartRequested;
+ bool restoreLegacyHardware,thermalStartRequested,receivedState=true;
  bool IsLive=true,ThermalVariant=true,motionInitialized=true,thermalRestoreFault,CanOperate=true,ManifoldRigReady=true;
  List<IMyTerminalBlock> fuelSources=new List<IMyTerminalBlock>();
  List<MyInventoryItem> transferItems=new List<MyInventoryItem>();
@@ -144,7 +144,7 @@ class Reactor {
  void PullTiles(Inventory source,Inventory target){}
  void RefreshRestPoses(){} void DrawMotion(){} void DrawVentOutlet(){}
  void UpdateAppearance(){} void UpdateSound(){} void UpdateTiles(){}
- void UpdateCriticalCore(){criticalChecks++;}
+ void UpdateCriticalCore(){criticalChecks++;} void TryReleaseFailedHousing(){}
  void CheckVentRoute(){if(initializationFrames==0 && !CanOperate)reactor.Enabled=false;}
  void UpdateSafety(){Motion.ControllersReady=HasIntactControllers();}
  void UpdateMotion(){if(!reactor.Enabled)BeginShutdown();}

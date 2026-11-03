@@ -9,6 +9,12 @@ namespace ArcanePower
 {
     public sealed partial class Reactor
     {
+        private float DisplayControllers { get { return MyAPIGateway.Multiplayer.IsServer ? previousControllers : Motion.Telemetry == null ? 0 : Motion.Telemetry.Controllers; } }
+        private int DisplayRingCapacity { get { return MyAPIGateway.Multiplayer.IsServer ? controllerRingCapacity : Motion.Telemetry == null ? 2 : Motion.Telemetry.RingCapacity; } }
+        private bool DisplayAdvancedController { get { return MyAPIGateway.Multiplayer.IsServer ? HasAdvancedController() : Motion.Telemetry != null && Motion.Telemetry.AdvancedController; } }
+        private bool DisplayFuelReady { get { return MyAPIGateway.Multiplayer.IsServer ? HasUsableFuel() : Motion.Telemetry != null && Motion.Telemetry.FuelReady; } }
+        private int[] DisplayTiles { get { return MyAPIGateway.Multiplayer.IsServer ? SpareTileQuartets() : Motion.Telemetry == null ? new int[3] : Motion.Telemetry.TileQuartets; } }
+
         // LCD, tablet and native terminal text share live values and warning priority.
         internal StatusReport ReadStatus(bool detailed)
         {
@@ -23,8 +29,10 @@ namespace ArcanePower
                 && (Motion.Core == CorePhase.Cooling || Motion.Core == CorePhase.Stopping
                     || (Motion.Core == CorePhase.Off && (Motion.Heat > CooldownHeat || heatToDrain > .001)));
             bool creative = MyAPIGateway.Session.CreativeMode;
-            double fuel = (double)reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1]));
-            int[] tileStock = SpareTileQuartets();
+            double fuel = MyAPIGateway.Multiplayer.IsServer
+                ? (double)reactor.GetInventory().GetItemAmount(MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1]))
+                : Motion.Telemetry == null ? 0 : Motion.Telemetry.Fuel;
+            int[] tileStock = DisplayTiles;
             double tiles = (tileStock[0] + tileStock[1] + tileStock[2]) * 4;
             int needed = NeededTileQuartets() * 4;
             string action;
@@ -73,8 +81,8 @@ namespace ArcanePower
             {
                 Section(text, "THERMAL PLANT");
                 Row(text, "Conversion mode", thermal.Mode + (thermal.Settled ? "" : " -> " + thermal.Requested + " / shutdown, drain, move, restart"));
-                Row(text, "Brayton access", HasAdvancedController() ? "Advanced controller installed" : "Locked / install an advanced controller",
-                    HasAdvancedController() ? "white" : "yellow");
+                Row(text, "Brayton access", DisplayAdvancedController ? "Advanced controller installed" : "Locked / install an advanced controller",
+                    DisplayAdvancedController ? "white" : "yellow");
                 Row(text, "Fuel safety", "Standalone: Aether only / Helion and Empyrean require Brayton");
                 Row(text, "Manifolds", Percent(thermal.Deployment) + " deployed");
                 Row(text, "Fuel conversion", Percent(thermal.Efficiency));
@@ -128,8 +136,8 @@ namespace ArcanePower
                     + Number(ReserveCapacityMJ / 3600, "0.000") + " MWh");
             if (detailed)
             {
-                Row(text, "Controllers", Number(Math.Max(0, previousControllers), "0") + " / 2 required   Capacity " + controllerRingCapacity + " rings",
-                    previousControllers < 2 || Motion.FuelTier + 1 > controllerRingCapacity ? "red" : "white");
+                Row(text, "Controllers", Number(Math.Max(0, DisplayControllers), "0") + " / 2 required   Capacity " + DisplayRingCapacity + " rings",
+                    DisplayControllers < 2 || Motion.FuelTier + 1 > DisplayRingCapacity ? "red" : "white");
                 Row(text, "Tile grade", Motion.InstalledTiles > 0
                     ? TileNames[InstalledTileGrade(Motion.MaintenanceBatch)] + " / " + Percent(Motion.TileWear) + " wear"
                     : "No installed tiles");
@@ -143,7 +151,7 @@ namespace ArcanePower
             Section(text, "SUPPLIES & VENT");
             if (ThermalVariant)
             {
-                Row(text, "Aether Residuum", Number((double)reactor.GetInventory().GetItemAmount(MyItemType.MakeComponent(ResiduumSubtype)), "0") + " recovered units");
+                Row(text, "Aether Residuum", Number(MyAPIGateway.Multiplayer.IsServer ? (double)reactor.GetInventory().GetItemAmount(MyItemType.MakeComponent(ResiduumSubtype)) : Motion.Telemetry == null ? 0 : Motion.Telemetry.Residuum, "0") + " recovered units");
                 Row(text, "Residuum pending", Number(Motion.ResiduumMicroUnits / (double)ResiduumScale, "0.######") + " units / 10 per Aether canister");
                 if (Motion.ResiduumMicroUnits >= ResiduumScale)
                     Line(text, "yellow", "Clear reactor inventory space or connect cargo to collect retained Residuum.");
@@ -189,17 +197,17 @@ namespace ArcanePower
             if (!receivedState) return guide;
 
             Section(guide, "ASSEMBLY");
-            Row(guide, "1 Controllers", Motion.ControllersReady ? "Both ready / " + controllerRingCapacity + "-ring capacity"
-                : Number(Math.Max(0, previousControllers), "0") + "/2 attached; fully weld or repair both",
+            Row(guide, "1 Controllers", Motion.ControllersReady ? "Both ready / " + DisplayRingCapacity + "-ring capacity"
+                : Number(Math.Max(0, DisplayControllers), "0") + "/2 attached; fully weld or repair both",
                 Motion.ControllersReady ? "green" : "yellow");
             Line(guide, "muted", "Fit one to each highlighted LOWER side socket; face the connector inward.");
             Row(guide, "2 Vent", Motion.VentReady ? Motion.VentDucts + " duct(s) + outlet ready"
                 : "Stack 1-15 ducts above the roof, then one outlet; match Up", Motion.VentReady ? "green" : "yellow");
-            int[] stock = SpareTileQuartets();
+            int[] stock = DisplayTiles;
             int missing = MyAPIGateway.Session.CreativeMode ? 0 : Math.Max(0, NeededTileQuartets() - stock[0] - stock[1] - stock[2]) * 4;
             Row(guide, "3 Tiles", Motion.InstalledTiles + "/80 installed; " + (missing > 0 ? "load " + missing + " more"
                 : "startup supply ready") + ". Use same-grade sets of 4", missing > 0 || Motion.TileStarved ? "yellow" : "green");
-            Row(guide, "4 Fuel", live.Fuel + " selected / " + live.Value("Fuel stock"), HasUsableFuel() ? "green" : "yellow");
+            Row(guide, "4 Fuel", live.Fuel + " selected / " + live.Value("Fuel stock"), DisplayFuelReady ? "green" : "yellow");
             Row(guide, "5 Startup", "Battery/grid supply > " + Power(ContainmentMW) + "; fill 90 s reserve, then assemble",
                 Motion.PowerReady ? "green" : "yellow");
             if (Precharging)
@@ -246,7 +254,7 @@ namespace ArcanePower
         private string OperatingStatus(out string action, out string tone)
         {
             action = null; tone = "white";
-            if (!receivedState) { tone = "yellow"; return "WAITING FOR REACTOR STATE"; }
+            if (!receivedState) { tone = "yellow"; return Motion.Telemetry == null ? "WAITING FOR REACTOR STATE" : "REACTOR STATE STALE / RECONNECTING"; }
             if (Motion.Critical)
             {
                 tone = "red"; action = !Motion.VentReady ? "Repair the vent route urgently; core cannot eject."
@@ -279,7 +287,7 @@ namespace ArcanePower
             { tone = "red"; action = "Repair the complete vent route to auto eject."; return "AUTO EJECTION BLOCKED / VENTS"; }
             if (!reactor.IsFunctional || reactor.SlimBlock.BuildLevelRatio < 1)
             { tone = "red"; action = "Complete or repair the reactor."; return "REACTOR INCOMPLETE"; }
-            if (previousControllers < 2 || Motion.FuelTier + 1 > controllerRingCapacity)
+            if (DisplayControllers < 2 || Motion.FuelTier + 1 > DisplayRingCapacity)
             { tone = "red"; action = "Fit two controllers to the lower side upgrade sockets, connectors inward; weld both fully."; return "CONTAINMENT INCOMPLETE"; }
             if (!Motion.PayloadReleased && Motion.Core != CorePhase.Off && ThermalVariant && Motion.Thermal != null
                 && Motion.Thermal.Mode == ThermalMode.Brayton)
@@ -294,7 +302,7 @@ namespace ArcanePower
                 var thermal = Motion.Thermal;
                 if (thermal.Faulted)
                 { tone = "red"; action = thermal.Diagnostic; return "THERMAL RUNTIME ISOLATED"; }
-                if ((thermal.Mode == ThermalMode.Brayton || thermal.Requested == ThermalMode.Brayton) && !HasAdvancedController())
+                if ((thermal.Mode == ThermalMode.Brayton || thermal.Requested == ThermalMode.Brayton) && !DisplayAdvancedController)
                 { tone = "yellow"; action = "Install or repair an advanced controller. Keep cooldown power supplied; restart manually."; return "BRAYTON LOCKED / ADVANCED CONTROLLER REQUIRED"; }
                 if (Motion.FuelTier > 1 && (thermal.Mode != ThermalMode.Brayton || thermal.Requested != ThermalMode.Brayton))
                 { tone = "yellow"; action = "High-tier fuel blocked to prevent meltdown. Drain retained heat, then use Aether or enable Brayton."; return "FUEL SAFETY INTERLOCK / COOLING"; }
@@ -312,7 +320,7 @@ namespace ArcanePower
                 { tone = "yellow"; action = "Repair vents; ejection is unavailable. Security mode is off."; return "RUNNING / VENT ROUTE BROKEN"; }
                 tone = "red"; action = "Build 1-15 aligned vent tubes above the roof, then an outlet. Weld fully and switch on."; return "VENT TUBE / OUTLET REQUIRED";
             }
-            if (!HasUsableFuel())
+            if (!DisplayFuelReady)
             {
                 tone = "yellow";
                 if (ThermalVariant && Motion.Thermal != null && Motion.Thermal.Mode == ThermalMode.Standalone)

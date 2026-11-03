@@ -302,7 +302,7 @@ with tempfile.TemporaryDirectory(prefix="arcane-controller-check-") as folder:
     subprocess.run(["mono", str(exe)], check=True, env={**os.environ, "MONO_PATH": str(GAME)})
 
 # Presentation and physical payload must use the same saved deployed hardware.
-assert "i < Motion.RingCount && alive > 0" in method(motion, "        private void DrawMotion()")
+assert "i < Motion.RingCount && alive > 0" in method((SCRIPTS / "Reactor.Visuals.cs").read_text(), "        private void DrawMotion()")
 failure = (SCRIPTS / "Reactor.Failure.cs").read_text()
 assert "for (int i = 0; i < Motion.RingCount; i++)" in failure
 assert "Motion.RingCount = controllerRingCapacity;" in method(motion, "        private void UpdateMotion()")

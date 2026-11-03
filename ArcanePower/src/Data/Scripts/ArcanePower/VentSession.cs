@@ -83,7 +83,7 @@ namespace ArcanePower
             action.Enabled = b => { Reactor r; return Reactors.TryGetValue(b.EntityId, out r)
                 && (command == VentCommand.TestShields ? r.CanTestVentShields
                     : r.CanStartVent); };
-            action.Action = b => SendCommand(b.EntityId, command);
+            action.Action = b => SendCommand(b.EntityId, command, true);
             action.Writer = (b, text) => { Reactor r; if (Reactors.TryGetValue(b.EntityId, out r))
                 text.Append(command == VentCommand.TestShields ? r.Motion.ShieldTest.ToString()
                     : r.Motion.VentReady ? r.Motion.Vent.ToString() : "Route required"); };
@@ -111,21 +111,21 @@ namespace ArcanePower
         }
         internal static void Remove(Reactor reactor) { Reactors.Remove(reactor.Id); }
 
-        internal static void SendCommand(long entityId, VentCommand command)
+        internal static void SendCommand(long entityId, VentCommand command, bool nativeAction = false)
         {
             if (!ready) return;
             if (MyAPIGateway.Multiplayer.IsServer)
             {
                 Reactor r;
                 if (!Reactors.TryGetValue(entityId, out r)) return;
-                // Server-executed timer/PB actions have no local player; their
-                // normal toolbar/terminal access is already handled by SE.
+                // SE authorizes native toolbar/timer/PB actions. A listen host
+                // still has Session.Player while another owner's timer runs.
+                // The trusted flag is local only; remote packets always use sender identity.
                 var player = MyAPIGateway.Session.Player;
-                if (player != null && !r.Block.HasPlayerAccess(player.IdentityId)) return;
+                if (!nativeAction && player != null && !r.Block.HasPlayerAccess(player.IdentityId)) return;
                 Apply(r, command);
             }
-            else MyAPIGateway.Multiplayer.SendMessageToServer(Channel,
-                MyAPIGateway.Utilities.SerializeToBinary(new VentPacket { EntityId = entityId, Command = command }));
+            else PowerNetwork.Send(Channel, new VentPacket { EntityId = entityId, Command = command }, 0);
         }
 
         private static void Apply(Reactor reactor, VentCommand command)
@@ -141,27 +141,28 @@ namespace ArcanePower
 
         private void Receive(ushort channel, byte[] bytes, ulong sender, bool fromServer)
         {
-            if (bytes == null || bytes.Length == 0 || bytes.Length > 4096) return;
+            if (bytes == null || bytes.Length == 0 || bytes.Length > PowerNetwork.MaxPacketBytes) return;
             try
             {
                 var packet = MyAPIGateway.Utilities.SerializeFromBinary<VentPacket>(bytes);
                 if (packet == null) return;
-                MyAPIGateway.Utilities.InvokeOnGameThread(() =>
+                PowerNetwork.OnGameThread(() =>
                 {
                     if (!ready) return;
                     Reactor r;
                     if (!Reactors.TryGetValue(packet.EntityId, out r)) return;
                     if (MyAPIGateway.Multiplayer.IsServer)
                     {
-                        if (fromServer || packet.Command < VentCommand.Sync || packet.Command > VentCommand.Brayton) return;
+                        if (fromServer || packet.State != null || packet.Command < VentCommand.Sync || packet.Command > VentCommand.Brayton) return;
                         if (packet.Command == VentCommand.Sync)
                         {
-                            MyAPIGateway.Multiplayer.SendMessageTo(Channel,
-                                MyAPIGateway.Utilities.SerializeToBinary(new VentPacket { EntityId = r.Id, State = r.Motion }), sender);
+                            if (!PowerNetwork.CanRequest(Channel, sender, r.Id, r.Entity)) return;
+                            PowerNetwork.Send(Channel, new VentPacket { EntityId = r.Id, State = r.Snapshot() }, sender);
                             return;
                         }
                         long identity = MyAPIGateway.Players.TryGetIdentityId(sender);
                         if (identity == 0 || !r.Block.HasPlayerAccess(identity)) return;
+                        if (!PowerNetwork.CanRequest(Channel, sender, r.Id, r.Entity, true)) return;
                         Apply(r, packet.Command);
                     }
                     else if (fromServer && packet.State != null && packet.State.EntityId == packet.EntityId)
@@ -174,8 +175,11 @@ namespace ArcanePower
         internal static void Broadcast(MotionState state)
         {
             if (ready && MyAPIGateway.Multiplayer.IsServer)
-                MyAPIGateway.Multiplayer.SendMessageToOthers(Channel,
-                    MyAPIGateway.Utilities.SerializeToBinary(new VentPacket { EntityId = state.EntityId, State = state }));
+            {
+                var reactor = Find(state.EntityId);
+                if (reactor != null) PowerNetwork.Broadcast(Channel,
+                    new VentPacket { EntityId = state.EntityId, State = state }, reactor.Entity);
+            }
         }
 
         public override VRage.Game.MyObjectBuilder_SessionComponent GetObjectBuilder()

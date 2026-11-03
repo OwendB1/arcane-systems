@@ -151,7 +151,7 @@ with tempfile.TemporaryDirectory(prefix="arcane-tile-check-") as folder:
     rotor_state = Path(folder) / "ThermalRotors.cs"
     rotor_state.write_text(rotors[:rotors.index("        public static Matrix Pose(")] + "    }\n}\n")
     exe = source.with_suffix(".exe")
-    subprocess.run(["mcs", "-r:/usr/lib/mono/4.5/Facades/netstandard.dll", "-r:" + str(GAME / "VRage.Library.dll"), "-r:" + str(GAME / "VRage.Math.dll"), "-r:" + str(GAME / "ProtoBuf.Net.Core.dll"), "-r:" + str(GAME / "ProtoBuf.Net.dll"), "-out:" + str(exe), str(source), str(ROOT / "src/Data/Scripts/ArcanePower/ThermalPlant.cs"), str(rotor_state)], check=True)
+    subprocess.run(["mcs", "-r:/usr/lib/mono/4.5/Facades/netstandard.dll", "-r:" + str(GAME / "VRage.Library.dll"), "-r:" + str(GAME / "VRage.Math.dll"), "-r:" + str(GAME / "ProtoBuf.Net.Core.dll"), "-r:" + str(GAME / "ProtoBuf.Net.dll"), "-out:" + str(exe), str(source), str(ROOT / "src/Data/Scripts/ArcanePower/ThermalPlant.cs"), str(rotor_state), str(ROOT / "src/Data/Scripts/ArcanePower/ThermalLoops.cs"), str(ROOT / "src/Data/Scripts/ArcanePower/ThermalRadiators.cs")], check=True)
     subprocess.run(["mono", str(exe)], check=True, env={**os.environ, "MONO_PATH": str(GAME)})
 
 components = ET.parse(ROOT / "src/Data/ContainmentTiles.sbc").findall("Components/Component")

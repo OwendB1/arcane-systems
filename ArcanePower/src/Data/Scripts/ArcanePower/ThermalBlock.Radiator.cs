@@ -82,13 +82,13 @@ namespace ArcanePower
             }
             MyEntitySubpart part;
             if (!((MyEntity)Entity).Subparts.TryGetValue(ThermalRadiators.Subpart, out part)) return;
-            Matrix pose = ThermalRadiators.Pose(radiatorVisualAngle, Spec.Kind == ThermalKind.RadiatorPanel);
-            part.PositionComp.SetLocalMatrix(ref pose);
             // Animated radiator parts are visual-only. Independently driven
             // kinematic hulls can push against their own ship while tracking.
             // Disable any existing subpart body; the base keeps native grid collision.
             if (part.Physics != null && part.Physics.Enabled) part.Physics.Enabled = false;
             if (MyAPIGateway.Utilities.IsDedicated) return;
+            Matrix pose = ThermalRadiators.Pose(radiatorVisualAngle, Spec.Kind == ThermalKind.RadiatorPanel);
+            part.PositionComp.SetLocalMatrix(ref pose);
             RadiatorGlow(part, state.Glow);
         }
 

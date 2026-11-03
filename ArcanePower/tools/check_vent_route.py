@@ -89,7 +89,7 @@ class Check {
  double ThermalHeatMW=25000;
  const float ContainmentMW=1;
  float previousControllers=2;
- int networkTick,appearanceRefresh,initializationFrames;
+ int networkTick,stateAge,appearanceRefresh,initializationFrames;
  long Id=1;
  int tiles,advances,thermal,critical,publications;
  bool HasUsableFuel(){return hasFuel;}
@@ -214,6 +214,9 @@ class Check {
   c=new Check();MyAPIGateway.Multiplayer.IsServer=false;c.Motion.VentReady=true;c.CheckVentRoute();Need(c.Motion.VentReady,"client must use server readiness");
   c.UpdateSafety();Need(c.Motion.Vent==VentPhase.Idle,"client cannot auto eject");
   c.SetSecurityMode(false);Need(c.Motion.SecurityMode,"client cannot mutate security mode locally");
+  c=new Check();MyAPIGateway.Multiplayer.IsServer=false;c.receivedState=true;c.stateAge=180;
+  c.Motion.Core=CorePhase.Running;c.UpdateMotion();Need(!c.receivedState && c.advances==0,"stale client snapshot freezes predicted mechanism progress");
+  MyAPIGateway.Multiplayer.IsServer=true;
   Console.WriteLine("PASS: vent route geometry, startup interlock, 60% auto ejection, intact/distinct controllers, damaged reactor ejection, blocked route repair, committed pause/resume, both security modes, restoration and server authority");
  }
 }

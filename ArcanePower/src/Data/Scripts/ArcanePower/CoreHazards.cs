@@ -43,6 +43,39 @@ namespace ArcanePower
         [ProtoMember(12)] public Quaternion Rotation = Quaternion.Identity;
         [ProtoMember(13)] public Vector3 Spin;
         [ProtoMember(14)] public List<CoreShellPart> Shell;
+        [ProtoMember(15)] public bool HasShell;
+
+        public bool Valid()
+        {
+            float norm = Rotation.X * Rotation.X + Rotation.Y * Rotation.Y + Rotation.Z * Rotation.Z + Rotation.W * Rotation.W;
+            if (SourceId == 0 || Tier < 1 || Tier > 3 || !(Heat >= 0 && Heat <= 4) || !(PeakHeat >= 0 && PeakHeat <= 4)
+                || !(Fuse >= 0 && Fuse <= 60) || !(Decay >= 0 && Decay <= 20) || FuseVersion < 0 || FuseVersion > 1
+                || !Position.IsValid() || !Velocity.IsValid() || !Spin.IsValid() || !(norm >= .99f && norm <= 1.01f)
+                || (Shell != null && Shell.Count > 84)) return false;
+            if (Shell != null)
+                foreach (var part in Shell)
+                {
+                    if (part == null || (part.Subtype != "ArcaneSpentTile1" && part.Subtype != "ArcaneSpentTile2"
+                        && part.Subtype != "ArcaneSpentRing1" && part.Subtype != "ArcaneSpentRing2"
+                        && part.Subtype != "ArcaneSpentRing3" && part.Subtype != "ArcaneSpentRing4")
+                        || !part.Pose.IsValid() || part.Pose.Translation.LengthSquared() > 10000
+                        || Math.Abs(part.Pose.Right.LengthSquared() - 1) > .01
+                        || Math.Abs(part.Pose.Up.LengthSquared() - 1) > .01
+                        || Math.Abs(part.Pose.Backward.LengthSquared() - 1) > .01) return false;
+                }
+            return true;
+        }
+    }
+
+    [ProtoContract]
+    public sealed class CoreHazardSnapshot
+    {
+        // Always serialize an envelope, including when the final core is gone.
+        [ProtoMember(1)] public int Version = 1;
+        [ProtoMember(2)] public List<CoreHazard> Cores = new List<CoreHazard>();
+        [ProtoMember(3)] public long Sequence;
+        [ProtoMember(4)] public int BatchIndex;
+        [ProtoMember(5)] public int BatchCount = 1;
     }
 
     // The hazard is world state, independent of the disposable physics carrier.
@@ -63,6 +96,11 @@ namespace ArcanePower
         private readonly List<long> unusedShells = new List<long>();
         private int tick;
         private bool ready;
+        private long snapshotSequence, receivedSequence = -1, pendingSequence = -1;
+        private List<CoreHazard>[] pendingBatches;
+        private readonly Dictionary<ulong, HashSet<long>> knownShells = new Dictionary<ulong, HashSet<long>>();
+        private readonly Dictionary<long, List<CoreShellPart>> shellData = new Dictionary<long, List<CoreShellPart>>();
+        private int snapshotAge, shellRetryAt;
 
         public override void BeforeStart()
         {
@@ -76,7 +114,7 @@ namespace ArcanePower
             }
             MyAPIGateway.Multiplayer.RegisterSecureMessageHandler(Channel, Receive);
             ready = true;
-            if (!MyAPIGateway.Multiplayer.IsServer) MyAPIGateway.Multiplayer.SendMessageToServer(Channel, new byte[] { 0 });
+            if (!MyAPIGateway.Multiplayer.IsServer) PowerNetwork.Send(Channel, new CoreHazardSnapshot(), 0);
         }
 
         internal static CoreHazard Inside(long sourceId)
@@ -294,6 +332,12 @@ namespace ArcanePower
 
         private void DrawCores()
         {
+            if (!MyAPIGateway.Multiplayer.IsServer && ++snapshotAge > 180)
+            {
+                cores.Clear();
+                if (snapshotAge == 181) { pendingBatches = null; pendingSequence = -1; }
+                if (tick % 120 == 0) PowerNetwork.Send(Channel, new CoreHazardSnapshot(), 0);
+            }
             unusedLights.Clear();
             unusedLights.AddRange(lights.Keys);
             unusedShells.Clear();
@@ -362,23 +406,92 @@ namespace ArcanePower
 
         private void Broadcast()
         {
-            MyAPIGateway.Multiplayer.SendMessageToOthers(Channel, MyAPIGateway.Utilities.SerializeToBinary(cores));
+            foreach (var player in PowerNetwork.RemotePlayers) SendSnapshot(player.SteamUserId);
+            var connected = new HashSet<ulong>();
+            foreach (var player in PowerNetwork.RemotePlayers) connected.Add(player.SteamUserId);
+            foreach (var id in new List<ulong>(knownShells.Keys)) if (!connected.Contains(id)) knownShells.Remove(id);
+        }
+
+        private void SendSnapshot(ulong recipient)
+        {
+            HashSet<long> known;
+            if (!knownShells.TryGetValue(recipient, out known)) knownShells[recipient] = known = new HashSet<long>();
+            var visible = new List<CoreHazard>();
+            var carriers = new HashSet<long>();
+            foreach (var core in cores)
+            {
+                IMyEntity source;
+                bool sourceVisible = MyAPIGateway.Entities.TryGetEntityById(core.SourceId, out source) && PowerNetwork.CanObserve(recipient, source);
+                if (!sourceVisible && !PowerNetwork.CanObserve(recipient, core.Position)) continue;
+                carriers.Add(core.CarrierId);
+                visible.Add(new CoreHazard { SourceId = core.SourceId, CarrierId = core.CarrierId, Tier = core.Tier,
+                    Heat = core.Heat, PeakHeat = core.PeakHeat, Critical = core.Critical, Fuse = core.Fuse,
+                    Decay = core.Decay, Position = core.Position, Velocity = core.Velocity, FuseVersion = core.FuseVersion,
+                    Rotation = core.Rotation, Spin = core.Spin, HasShell = core.Shell != null && core.Shell.Count > 0,
+                    Shell = known.Contains(core.CarrierId) ? null : core.Shell });
+            }
+            known.IntersectWith(carriers);
+            long sequence = ++snapshotSequence;
+            int count = Math.Max(1, (visible.Count + 3) / 4);
+            bool sent = true;
+            for (int batch = 0; batch < count; batch++)
+                sent &= PowerNetwork.Send(Channel, new CoreHazardSnapshot { Sequence = sequence, BatchIndex = batch, BatchCount = count,
+                    Cores = visible.GetRange(batch * 4, Math.Min(4, visible.Count - batch * 4)) }, recipient);
+            if (sent) known.UnionWith(carriers);
+            else known.Clear();
+        }
+
+        private void ApplySnapshot(CoreHazardSnapshot snapshot)
+        {
+            if (snapshot.Version != 1 || snapshot.Sequence <= receivedSequence || snapshot.Sequence < pendingSequence
+                || snapshot.BatchCount < 1 || snapshot.BatchCount > 1024 || snapshot.BatchIndex < 0
+                || snapshot.BatchIndex >= snapshot.BatchCount || snapshot.Cores == null || snapshot.Cores.Count > 4) return;
+            foreach (var core in snapshot.Cores) if (core == null || !core.Valid()) return;
+            if (snapshot.Sequence != pendingSequence)
+            { pendingSequence = snapshot.Sequence; pendingBatches = new List<CoreHazard>[snapshot.BatchCount]; }
+            if (pendingBatches.Length != snapshot.BatchCount) return;
+            pendingBatches[snapshot.BatchIndex] = snapshot.Cores;
+            foreach (var batch in pendingBatches) if (batch == null) return;
+            var retained = new HashSet<long>();
+            bool missingShell = false;
+            var replacement = new List<CoreHazard>();
+            foreach (var batch in pendingBatches)
+                foreach (var core in batch)
+                {
+                    List<CoreShellPart> shell;
+                    if (core.Shell == null && shellData.TryGetValue(core.CarrierId, out shell)) core.Shell = shell;
+                    if (core.HasShell && core.Shell == null) missingShell = true;
+                    if (core.CarrierId != 0 && core.Shell != null)
+                    { shellData[core.CarrierId] = core.Shell; retained.Add(core.CarrierId); }
+                    replacement.Add(core);
+                }
+            foreach (long id in new List<long>(shellData.Keys)) if (!retained.Contains(id)) shellData.Remove(id);
+            cores = replacement; receivedSequence = snapshot.Sequence; snapshotAge = 0;
+            pendingBatches = null;
+            // A rapid reconnect may share the previous connection's request
+            // cooldown. Keep retrying missing descriptors even while poses arrive.
+            if (missingShell && tick >= shellRetryAt)
+            { shellRetryAt = tick + 120; PowerNetwork.Send(Channel, new CoreHazardSnapshot(), 0); }
         }
 
         private void Receive(ushort channel, byte[] bytes, ulong sender, bool fromServer)
         {
-            if (!ready || bytes == null || bytes.Length == 0) return;
-            if (MyAPIGateway.Multiplayer.IsServer)
-            {
-                if (!fromServer && bytes.Length == 1 && bytes[0] == 0)
-                    MyAPIGateway.Multiplayer.SendMessageTo(Channel, MyAPIGateway.Utilities.SerializeToBinary(cores), sender);
-                return;
-            }
-            if (!fromServer) return;
+            if (!ready || bytes == null || bytes.Length == 0 || bytes.Length > PowerNetwork.MaxPacketBytes) return;
             try
             {
-                var snapshot = MyAPIGateway.Utilities.SerializeFromBinary<List<CoreHazard>>(bytes);
-                if (snapshot != null) MyAPIGateway.Utilities.InvokeOnGameThread(() => { if (ready) cores = snapshot; });
+                var snapshot = MyAPIGateway.Utilities.SerializeFromBinary<CoreHazardSnapshot>(bytes);
+                if (snapshot != null)
+                    PowerNetwork.OnGameThread(() => {
+                        if (!ready) return;
+                        if (MyAPIGateway.Multiplayer.IsServer)
+                        {
+                            if (fromServer || snapshot.Version != 1 || snapshot.Sequence != 0 || snapshot.BatchIndex != 0
+                                || snapshot.BatchCount != 1 || snapshot.Cores == null || snapshot.Cores.Count != 0
+                                || !PowerNetwork.CanRequest(Channel, sender, 0)) return;
+                            knownShells.Remove(sender); SendSnapshot(sender);
+                        }
+                        else if (fromServer) ApplySnapshot(snapshot);
+                    });
             }
             catch (Exception e) { MyLog.Default.WriteLine("ArcanePower: invalid core snapshot: " + e.Message); }
         }
@@ -399,6 +512,7 @@ namespace ArcanePower
             shells.Clear();
             coreSounds.Clear();
             lights.Clear(); cores.Clear(); ready = false; instance = null;
+            knownShells.Clear(); shellData.Clear(); pendingBatches = null;
         }
     }
 }

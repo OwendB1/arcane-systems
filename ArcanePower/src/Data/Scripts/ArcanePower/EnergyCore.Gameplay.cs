@@ -35,6 +35,50 @@ namespace ArcanePower
         [ProtoMember(13)] public float SurgeEnergy;
         // XML persists targets; multiplayer snapshots only need the summary.
         public List<EnergySurgeTarget> SurgeTargets = new List<EnergySurgeTarget>();
+
+        public bool Valid(long id)
+        {
+            return EntityId == id && SurgeTicks >= 0 && SurgeTicks <= 300 && BurstTicks >= 0 && BurstTicks <= 600
+                && RecoveryTicks >= 0 && SurgeRate >= 0 && SurgeRate <= 1e9 && Result != null && Result.Length <= 256
+                && SurgeDriveCount >= 0 && SurgeCompleted >= 0 && SurgeCompleted <= SurgeDriveCount
+                && SurgeRecoveryTicks >= 0 && SurgeEligible >= 0 && SurgeAffordable >= 0 && SurgeAffordable <= SurgeEligible
+                && SurgeEnergy >= 0 && SurgeEnergy <= 1e9;
+        }
+    }
+
+    [ProtoContract]
+    public sealed class EnergyBankState
+    {
+        [ProtoMember(1)] public long ControllerId;
+        [ProtoMember(2)] public long[] Members = new long[0];
+        [ProtoMember(3)] public long[] ActiveModules = new long[0];
+        [ProtoMember(4)] public float Stored;
+        [ProtoMember(5)] public float Capacity;
+        [ProtoMember(6)] public float Transfer;
+        [ProtoMember(7)] public float ChargeCeiling;
+        [ProtoMember(8)] public float InputLimit;
+        [ProtoMember(9)] public float OutputLimit;
+        [ProtoMember(10)] public float Reserve;
+        [ProtoMember(11)] public bool EmergencyEnabled;
+        [ProtoMember(12)] public bool Emergency;
+        [ProtoMember(13)] public int UpkeepTier;
+        [ProtoMember(14)] public string Status;
+        [ProtoMember(15)] public float Loss;
+        [ProtoMember(16)] public float Input;
+        [ProtoMember(17)] public float Output;
+        [ProtoMember(18)] public long Sequence;
+
+        public bool Valid()
+        {
+            return Sequence >= 0 && ControllerId >= 0 && Members != null && Members.Length <= 5 && ActiveModules != null && ActiveModules.Length <= 4
+                && Array.TrueForAll(Members, id => id != 0) && Array.TrueForAll(ActiveModules, id => id != 0)
+                && Stored >= 0 && Stored <= 1e9 && Capacity >= Stored && Capacity <= 1e9
+                && Transfer >= 0 && Transfer <= 1e6 && ChargeCeiling >= 0 && ChargeCeiling <= 200000
+                && InputLimit >= 0 && InputLimit <= 200000 && OutputLimit >= 0 && OutputLimit <= 2e6
+                && Reserve >= 0 && Reserve <= .9f && UpkeepTier >= 0 && UpkeepTier <= 2
+                && Status != null && Status.Length <= 256 && Loss >= 0 && Loss <= 1e9
+                && Input >= 0 && Input <= 1e9 && Output >= 0 && Output <= 1e9;
+        }
     }
 
     public sealed class EnergySurgeTarget
@@ -56,10 +100,10 @@ namespace ArcanePower
         private float upkeepMW, replicatedStored = float.NaN;
         private double upkeepDebt;
         private readonly List<IMyJumpDrive> jumpDrives = new List<IMyJumpDrive>();
-        internal float ReservePercent { get { ReadSettings(); return reserve * 100; } }
-        internal bool EmergencySupport { get { ReadSettings(); return emergencyEnabled; } }
+        internal float ReservePercent { get { if (MyAPIGateway.Multiplayer.IsServer) ReadSettings(); return reserve * 100; } }
+        internal bool EmergencySupport { get { if (MyAPIGateway.Multiplayer.IsServer) ReadSettings(); return emergencyEnabled; } }
         private float StoredEnergy { get { return MyAPIGateway.Multiplayer.IsServer || float.IsNaN(replicatedStored) ? block.CurrentStoredPower : replicatedStored; } }
-        internal bool Ready { get { return initialized && Healthy(block) && !emergency && gameplay.RecoveryTicks == 0 && block.ChargeMode != ChargeMode.Recharge; } }
+        internal bool Ready { get { return initialized && (MyAPIGateway.Multiplayer.IsServer || bankReplica != null) && Healthy(block) && !emergency && gameplay.RecoveryTicks == 0 && block.ChargeMode != ChargeMode.Recharge; } }
 
         private void InitializeGameplay(bool original)
         {
@@ -139,7 +183,7 @@ namespace ArcanePower
 
         internal void ReceiveGameplay(EnergyGameplayState state, float energy)
         {
-            if (state == null || state.EntityId != Entity.EntityId || float.IsNaN(energy) || float.IsInfinity(energy)) return;
+            if (MyAPIGateway.Multiplayer.IsServer || state == null || !state.Valid(Entity.EntityId) || energy < 0 || energy > block.MaxStoredPower || float.IsNaN(energy)) return;
             gameplay = state;
             replicatedStored = Math.Max(0, Math.Min(block.MaxStoredPower, energy));
             block.RefreshCustomInfo();
@@ -409,6 +453,8 @@ namespace ArcanePower
         {
             float loss = 0, input = 0, output = 0;
             foreach (var cell in cells) { loss += UpkeepPower(cell.StoredEnergy, cell.block.MaxStoredPower, cell.upkeepTier); input += cell.block.CurrentInput; output += cell.block.CurrentOutput; }
+            if (!MyAPIGateway.Multiplayer.IsServer && bankReplica != null)
+            { loss = bankReplica.Loss; input = bankReplica.Input; output = bankReplica.Output; }
             text.Append("Bank upkeep: ").Append(loss.ToString("N1")).Append(" MW equivalent; loss rises with fill\n");
             text.Append("Net flow (approx.): ").Append((input * .9f - output - loss).ToString("N1")).Append(" MW\n");
             if (output + loss > input * .9f)

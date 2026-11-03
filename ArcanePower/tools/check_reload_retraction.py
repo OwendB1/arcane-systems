@@ -15,6 +15,8 @@ GAME = Path.home() / '.local/share/Steam/steamapps/common/SpaceEngineers/Bin64'
 
 def method(file, name):
     source = (SRC / file).read_text()
+    if file == 'Reactor.Motion.cs' and name == 'Valid':
+        source = source[source.index('    public sealed partial class Reactor'):]
     start = re.search(r'^        (?:private|internal|public) [^{\n]*?\b' + name + r'\(', source, re.M).start()
     opening = source.index('{', start)
     depth, end = 1, opening + 1
@@ -77,7 +79,7 @@ class Check {
  void UpdateSafety(){} void UpdateFuel(){} void UpdatePower(){} void UpdateTiles(){} void UpdateMotion(){}
  void UpdateAppearance(){} void UpdateSound(){} void DrawMotion(){} void DrawVentOutlet(){}
  void RefreshRestPoses(){}
- void UpdateThermalMode(){} void UpdateCriticalCore(){}
+ void UpdateThermalMode(){} void UpdateCriticalCore(){} void TryReleaseFailedHousing(){}
  bool HasIntactControllers(){return reactor.UpgradeValues["ArcaneControllerCount"]>=2;}
 ''' + ''.join(method(file, name) for file, name in (
     ('Reactor.Motion.cs', 'RestoreMotionState'), ('Reactor.Motion.cs', 'Valid'),

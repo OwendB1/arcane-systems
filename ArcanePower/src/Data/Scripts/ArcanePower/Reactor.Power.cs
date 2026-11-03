@@ -55,11 +55,13 @@ namespace ArcanePower
             bool active = Motion.Core != CorePhase.Off || Motion.Vent != VentPhase.Idle
                 || Motion.ShieldTest != ShieldTestPhase.Idle
                 || (ThermalVariant && Motion.Thermal != null && !Motion.Thermal.Settled);
-            bool preparing = CanPrepareContainment;
+            bool preparing = server && CanPrepareContainment;
             float operating = active || preparing ? ContainmentMW : 0;
             float charging = preparing && Motion.Vent == VentPhase.Idle
                 ? (float)Math.Min(ContainmentMW * 3, Math.Max(0, ReserveCapacityMJ - Motion.ReserveMJ) * 60) : 0;
-            Motion.PowerDemandMW = operating + charging;
+            // Clients mirror the confirmed native sink load; they never replace
+            // server measurements with local attachment/inventory estimates.
+            if (server) Motion.PowerDemandMW = operating + charging;
             powerControllers.Clear();
             var attached = ((MyCubeBlock)Entity).CurrentAttachedUpgradeModules;
             if (attached != null)
@@ -71,7 +73,7 @@ namespace ArcanePower
                 }
             float input = 0;
             foreach (var controller in powerControllers)
-                input += controller.Request(Id, Motion.PowerDemandMW / Math.Max(2, powerControllers.Count));
+                input += controller.Request(Id, server || receivedState ? Motion.PowerDemandMW / Math.Max(2, powerControllers.Count) : 0);
             // Request once before measuring: a newly created sink has no previous
             // distributed interval yet. Do not mistake that for a running-grid outage.
             if (!server || initializationFrames > 0) return;

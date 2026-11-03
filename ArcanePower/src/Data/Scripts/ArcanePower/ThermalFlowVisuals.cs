@@ -20,8 +20,8 @@ namespace ArcanePower
     {
         private const ushort FlowChannel = 49373;
         private bool captureFlow;
+        private int flowReceivedAt;
         private readonly Dictionary<long, FlowView> flows = new Dictionary<long, FlowView>();
-        private readonly Dictionary<ulong, int> flowRequests = new Dictionary<ulong, int>();
         private readonly List<FlowView> visibleFlow = new List<FlowView>();
         private readonly MyStringId gasMaterial = MyStringId.GetOrCompute("ArcaneThermal_Gas");
         private readonly MyStringId flowMaterial = MyStringId.GetOrCompute("ArcaneThermal_Liquid");
@@ -44,7 +44,7 @@ namespace ArcanePower
         {
             MyAPIGateway.Multiplayer.RegisterSecureMessageHandler(FlowChannel, ReceiveFlow);
             if (!MyAPIGateway.Multiplayer.IsServer)
-                MyAPIGateway.Multiplayer.SendMessageToServer(FlowChannel, MyAPIGateway.Utilities.SerializeToBinary(new ThermalFlowPacket()));
+                PowerNetwork.Send(FlowChannel, new ThermalFlowPacket(), 0);
         }
         private void ReceiveFlow(ushort channel, byte[] bytes, ulong sender, bool fromServer)
         {
@@ -53,15 +53,13 @@ namespace ArcanePower
             {
                 var packet = MyAPIGateway.Utilities.SerializeFromBinary<ThermalFlowPacket>(bytes);
                 if (packet == null || (packet.States != null && packet.States.Length > 64)) return;
-                MyAPIGateway.Utilities.InvokeOnGameThread(() =>
+                PowerNetwork.OnGameThread(() =>
                 {
                     if (!ready) return;
                     if (MyAPIGateway.Multiplayer.IsServer)
                     {
                         if (fromServer || packet.States != null) return;
-                        int previous, now = MyAPIGateway.Session.GameplayFrameCounter;
-                        if (flowRequests.TryGetValue(sender, out previous) && now - previous < 120) return;
-                        flowRequests[sender] = now;
+                        if (!PowerNetwork.CanRequest(FlowChannel, sender, 0)) return;
                         SendFlow(sender);
                     }
                     else if (fromServer && packet.States != null)
@@ -75,6 +73,7 @@ namespace ArcanePower
                             if (flows.TryGetValue(state.EntityId, out view) && state.Sequence <= view.State.Sequence) continue;
                             if (view == null) flows[state.EntityId] = view = new FlowView { Entity = entity };
                             view.State = state; view.Updated = MyAPIGateway.Session.GameplayFrameCounter;
+                            flowReceivedAt = view.Updated;
                         }
                 });
             }
@@ -82,9 +81,15 @@ namespace ArcanePower
         }
         private void SendFlow(ulong recipient)
         {
+            if (recipient == 0)
+            {
+                foreach (var player in PowerNetwork.RemotePlayers) SendFlow(player.SteamUserId);
+                return;
+            }
             var batch = new List<ThermalFlowState>();
             foreach (var view in flows.Values)
             {
+                if (!PowerNetwork.CanObserve(recipient, view.Entity)) continue;
                 batch.Add(view.State);
                 if (batch.Count == 64) { SendFlowBatch(batch.ToArray(), recipient); batch.Clear(); }
             }
@@ -92,9 +97,7 @@ namespace ArcanePower
         }
         private static void SendFlowBatch(ThermalFlowState[] states, ulong recipient)
         {
-            byte[] bytes = MyAPIGateway.Utilities.SerializeToBinary(new ThermalFlowPacket { States = states });
-            if (recipient == 0) MyAPIGateway.Multiplayer.SendMessageToOthers(FlowChannel, bytes);
-            else MyAPIGateway.Multiplayer.SendMessageTo(FlowChannel, bytes, recipient);
+            PowerNetwork.Send(FlowChannel, new ThermalFlowPacket { States = states }, recipient);
         }
         private void ResetFlow(IMyEntity entity, bool healthy)
         {
@@ -170,15 +173,17 @@ namespace ArcanePower
             if ((captureFlow || isolationChanged) && ready) SendFlow(0);
             isolationChanged = false;
             int now = MyAPIGateway.Session.GameplayFrameCounter;
+            if (!MyAPIGateway.Multiplayer.IsServer && now - flowReceivedAt > 180 && tick % 120 == 0)
+                PowerNetwork.Send(FlowChannel, new ThermalFlowPacket(), 0);
             foreach (long id in new List<long>(flows.Keys))
             {
                 var view = flows[id];
                 if (view.Entity == null || view.Entity.Closed) { if (view.Valves != null) view.Valves.Close(); flows.Remove(id); continue; }
+                if (MyAPIGateway.Utilities.IsDedicated) continue;
                 bool current = now - view.Updated <= 90;
                 double target = current && view.State.Mode == ThermalFlowMode.Pumping ? view.State.Rate : 0;
                 view.Rate = target > 0 ? view.Rate + (target - view.Rate) * .12 : 0;
                 view.Distance = (view.Distance + view.Rate * 1.25 / 60) % 768;
-                if (MyAPIGateway.Utilities.IsDedicated) continue;
                 if (tick % 15 != 0) { UpdateIsolation(view, current); continue; }
                 var entity = view.Entity as MyEntity;
                 if (entity == null) continue;
@@ -284,7 +289,7 @@ namespace ArcanePower
         {
             MyAPIGateway.Multiplayer.UnregisterSecureMessageHandler(FlowChannel, ReceiveFlow);
             foreach (var view in flows.Values) if (view.Valves != null) view.Valves.Close();
-            flows.Clear(); flowRequests.Clear(); visibleFlow.Clear();
+            flows.Clear(); visibleFlow.Clear();
         }
     }
 }

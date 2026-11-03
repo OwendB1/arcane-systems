@@ -49,7 +49,7 @@ methods = ''.join(member(source, signature) for source, signature in [
 ])
 # Compile the complete status builder too; terminal text and dashboard inputs
 # must agree with the actual reserve accounting, including short terminal reports.
-methods += status[status.index('        // LCD, tablet'):status.index('    internal sealed class StatusRow')].rsplit('    }', 1)[0]
+methods += status[status.index('        private float DisplayControllers'):status.index('    internal sealed class StatusRow')].rsplit('    }', 1)[0]
 types = status[status.index('    internal sealed class StatusRow'):].rsplit('}', 1)[0]
 stubs = r'''
 using System;
@@ -376,7 +376,21 @@ checks = r'''
   r.Motion.ShieldTest=ShieldTestPhase.Idle;r.UpdatePower();Near(r.Motion.PowerDemandMW,0,"completed dry run stops idle power demand");
   Console.WriteLine("PASS: shield dry-run power accounting, pause/resume and terminal status");
  }
- static void Main(){Charging();Priority();RenderRecovery();ThermalWarnings();AssemblyGuide();ShutdownCooling();ShieldTestPower();ReserveEjectionStatus();}
+ static void ClientPower(){
+  MyAPIGateway.Multiplayer.IsServer=false;
+  var r=new Reactor();r.Motion.PowerDemandMW=77;r.Motion.PowerInputMW=23;r.Motion.ReserveMJ=4;
+  r.UpdatePower();
+  Near(r.Motion.PowerDemandMW,77,"client preserves confirmed demand");
+  Near(r.Motion.PowerInputMW,23,"client preserves confirmed input");
+  Near(r.Motion.ReserveMJ,4,"client cannot spend reserve");
+  r.Motion.Telemetry=new ReactorTelemetry{Fuel=9,TileQuartets=new[]{1,2,3},Controllers=2,RingCapacity=4,AdvancedController=true,FuelReady=true};
+  var report=r.ReadStatus(true);
+  Need(report.Value("Fuel stock")=="9 canisters","client uses server fuel inventory");
+  Need(report.Value("Tile stock")=="Standard 4 / Reinforced 8 / Advanced 12","client uses server tile inventory");
+  MyAPIGateway.Multiplayer.IsServer=true;
+  Console.WriteLine("PASS: client preserves power telemetry and reads replicated supplies");
+ }
+ static void Main(){Charging();Priority();RenderRecovery();ThermalWarnings();AssemblyGuide();ShutdownCooling();ShieldTestPower();ReserveEjectionStatus();ClientPower();}
 }
 '''
 with tempfile.TemporaryDirectory(prefix='arcane-appearance-') as folder:

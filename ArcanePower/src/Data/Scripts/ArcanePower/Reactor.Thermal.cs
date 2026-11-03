@@ -140,19 +140,26 @@ namespace ArcanePower
                 StopForLoopLoss(); // Running loss stops safely without a startup latch.
         }
 
+        private VRage.Game.ModAPI.IMyModel manifoldModel;
+        private bool manifoldReady;
         internal bool ManifoldRigReady
         {
             get
             {
+                // Validate the immutable native model contract once per model
+                // replacement, independent of rendered subpart instances.
+                if (manifoldModel == restModel) return manifoldReady;
+                manifoldModel = restModel;
+                manifoldReady = false;
                 foreach (int bay in new[] { 0, 1, 2, 3 })
                     foreach (string part in ThermalManifolds.Parts)
                     {
                         string name = ThermalManifolds.Name(bay, part);
                         Matrix rest;
-                        if (!restPoses.TryGetValue(name, out rest) || !ThermalManifolds.CompatibleRest(rest)
-                            || !((VRage.Game.Entity.MyEntity)Entity).Subparts.ContainsKey(name)) return false;
+                        if (!restPoses.TryGetValue(name, out rest) || !ThermalManifolds.CompatibleRest(rest)) return false;
                     }
-                return true;
+                manifoldReady = true;
+                return manifoldReady;
             }
         }
 

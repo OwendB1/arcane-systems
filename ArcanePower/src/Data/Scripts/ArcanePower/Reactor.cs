@@ -128,6 +128,12 @@ namespace ArcanePower
         private void CheckContainment()
         {
             if (!IsLive) return;
+            if (!MyAPIGateway.Multiplayer.IsServer)
+            {
+                if (Motion.Telemetry != null)
+                { previousControllers = Motion.Telemetry.Controllers; controllerRingCapacity = Motion.Telemetry.RingCapacity; }
+                return;
+            }
             float controllers, capacity;
             reactor.UpgradeValues.TryGetValue("ArcaneControllerCount", out controllers);
             reactor.UpgradeValues.TryGetValue("ArcaneContainment", out capacity);
