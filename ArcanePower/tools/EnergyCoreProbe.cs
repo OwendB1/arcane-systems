@@ -37,7 +37,7 @@ class Session {public bool CreativeMode;}
 class Entities {public Dictionary<long,IMyEntity> Items=new Dictionary<long,IMyEntity>();public bool TryGetEntityById(long id,out IMyEntity e){return Items.TryGetValue(id,out e);} }
 class Utilities {public string SerializeToXML<T>(T value){var writer=new StringWriter();new XmlSerializer(typeof(T)).Serialize(writer,value);return writer.ToString();}public T SerializeFromXML<T>(string s){return (T)new XmlSerializer(typeof(T)).Deserialize(new StringReader(s));} }
 static class MyAPIGateway {public static Multi Multiplayer=new Multi();public static Helper TerminalActionsHelper=new Helper();public static Session Session=new Session();public static Entities Entities=new Entities();public static Utilities Utilities=new Utilities();}
-static class EnergySession {public static Dictionary<long,JumpDriveSurge> Drives=new Dictionary<long,JumpDriveSurge>();}
+static class EnergySession {public static int Syncs;public static void RequestSync(EnergyCore cell){Syncs++;}public static Dictionary<long,JumpDriveSurge> Drives=new Dictionary<long,JumpDriveSurge>();}
 class EnergyCore {
  const string CoreSubtype="ArcanePower_EnergyCore";const int Electricity=0;
  IMyBatteryBlock block,battery;bool initialized=true,emergencyEnabled=true,emergency,changingLimit;
@@ -46,6 +46,7 @@ class EnergyCore {
  bool IsController {get {return BaseSubtype(block)==CoreSubtype;}}
  IMyTerminalBlock Entity {get {return block;}}
  const int SurgeDuration=300;int stabilizationTier,upkeepTier;float upkeepMW,replicatedStored=float.NaN;double upkeepDebt;
+ EnergyBankState bankReplica;long bankControllerId,bankSequence;int replicaAge;
  EnergyGameplayState gameplay=new EnergyGameplayState();List<IMyJumpDrive> jumpDrives=new List<IMyJumpDrive>();
  static readonly Guid GameplayKey=new Guid("f2451ae5-ea04-47b8-a5f5-59f75583cdb4");
  float StoredEnergy {get {return MyAPIGateway.Multiplayer.IsServer || float.IsNaN(replicatedStored)?block.CurrentStoredPower:replicatedStored;}}
@@ -68,6 +69,14 @@ class EnergyCore {
  static void Main(){
   var grid=new Grid();var c=Cell(grid,Vector3I.Zero,CoreSubtype,1000);
   c.UpdateBank();Near(c.transfer,10000,"base 10GW discharge");Near(c.chargeCeiling,4000,"base 4GW charging");Near(c.capacity,1000,"base capacity");
+  var allocation=c.CaptureBank();Need(allocation.Valid(),"server allocation is valid");
+  allocation.InputLimit=1234;allocation.OutputLimit=4321;allocation.Reserve=.3f;allocation.Emergency=true;
+  MyAPIGateway.Multiplayer.IsServer=false;c.bankSequence=0;c.ReceiveBank(allocation);c.UpdateBank();
+  Near(c.inputLimit,1234,"client mirrors confirmed charging allocation");Near(c.outputLimit,4321,"client cannot recalculate server discharge allocation");
+  Need(c.emergency && c.reserve==.3f,"client uses server policy/emergency decision");
+  for(int n=0;n<240;n++)c.UpdateReplication();
+  Need(c.bankReplica==null && c.inputLimit==0 && c.outputLimit==0 && EnergySession.Syncs==1,"stale energy allocation expires and retries sync");
+  MyAPIGateway.Multiplayer.IsServer=true;c.reserve=.1f;c.UpdateBank();
   var left=Cell(grid,new Vector3I(-2,0,0),"ArcanePower_EnergyCapacity",10000,Base6Directions.Direction.Right);
   var right=Cell(grid,new Vector3I(2,0,0),"ArcanePower_EnergyCapacityAdvanced",100000,Base6Directions.Direction.Left);
   c.UpdateBank();Need(c.cells.Count==1,"modules require stabilizer");
@@ -135,8 +144,8 @@ class EnergyCore {
     pc.block.SlimBlock.BuildLevelRatio=.99f;Need(!pc.IsModuleRunning(st),"unfinished core stops fan");pc.block.SlimBlock.BuildLevelRatio=1;
     pc.block.CurrentStoredPower=cap.block.CurrentStoredPower=0;Need(!pc.IsModuleRunning(st),"empty bank stops fan");
     pc.block.CurrentInput=1;Need(pc.IsModuleRunning(st),"charging empty bank runs fan");pc.block.CurrentInput=0;
-    MyAPIGateway.Multiplayer.IsServer=false;pc.replicatedStored=300;
-    Need(pc.IsModuleRunning(st),"fan uses replicated charge on client");
+    MyAPIGateway.Multiplayer.IsServer=false;pc.replicatedStored=300;pc.bankReplica=new EnergyBankState{ActiveModules=new[]{st.EntityId}};
+    Need(pc.IsModuleRunning(st),"fan uses server-confirmed active modules on client");
     pc.replicatedStored=float.NaN;MyAPIGateway.Multiplayer.IsServer=true;
     pc.block.CurrentStoredPower=500;
 
@@ -412,6 +421,17 @@ class EnergyCore {
   c.UpdateBank();Need(SurgeDuration==300 && c.RecoveryDuration()==5400,"standard surge window and recovery");
   stability.BlockDefinition.SubtypeName+="Advanced";transfer.BlockDefinition.SubtypeName+="Advanced";
   c.UpdateBank();Need(SurgeDuration==300 && c.RecoveryDuration()==3600,"advanced surge window and recovery");
+  for(int tier=0;tier<=2;tier++){
+   c.stabilizationTier=c.upkeepTier=tier;
+   var snapshot=c.CaptureBank();var wire=ProtoBuf.Meta.RuntimeTypeModel.Create();
+   using(var buffer=new MemoryStream()){wire.Serialize(buffer,snapshot);buffer.Position=0;snapshot=(EnergyBankState)wire.Deserialize(buffer,null,typeof(EnergyBankState));}
+   var fresh=Cell(new Grid(),Vector3I.Zero,CoreSubtype,1000);
+   MyAPIGateway.Multiplayer.IsServer=false;fresh.ReceiveBank(snapshot);
+   foreach(int count in new[]{1,4})Need(fresh.BatchRecoveryDuration(count)==c.BatchRecoveryDuration(count),"fresh client uses replicated cooldown tier for single and batch surges");
+   Need(fresh.stabilizationTier==tier && fresh.upkeepTier==tier,"snapshot restores upkeep and cooldown tiers together");
+   if(tier==2)Need(fresh.BatchRecoveryDuration(1)==3600,"fresh advanced bank advertises 60 seconds of recovery");
+   MyAPIGateway.Multiplayer.IsServer=true;
+  }
   var advanced=Drive(grid);c.RequestSurge();for(int i=0;i<30 && c.gameplay.SurgeTicks>0;i++){c.UpdateBank();c.UpdateSurge();}Need(advanced.CurrentStoredPower==3,"advanced surge fills in five seconds");
   c.gameplay.RecoveryTicks=0;c.RequestBurst();Near(c.outputLimit,(c.block.CurrentStoredPower-100)*2160,"burst respects energy-backed native interval bound");
   var left=Cell(grid,new Vector3I(-2,0,0),"ArcanePower_EnergyCapacity",10000,Base6Directions.Direction.Right);

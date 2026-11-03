@@ -144,7 +144,8 @@ namespace ArcanePower {
 }
  enum VentCommand {Sync}
  static class VentSession {public static void SendCommand(long id,VentCommand command){}}
- static class MyAPIGateway {
+ static class PowerNetwork {public static bool NeedsRemoteRefresh(object entity){return false;}}
+static class MyAPIGateway {
   public static class Multiplayer {public static bool IsServer=true;}
   public static class Utilities {public static bool IsDedicated=true;}
   public static class Physics {
@@ -182,7 +183,7 @@ harness = r'''
   bool CanPrepareContainment{get{return false;}}
   readonly List<ContainmentController> powerControllers=new List<ContainmentController>();
   bool thermalStartRequested,ThermalVariant;bool CanOperate{get{return reactor.IsFunctional;}}
-  const double ThermalHeatMW=5000;const float CooldownHeat=.15f;int controllerRingCapacity=4,appearanceRefresh,networkTick;
+  const double ThermalHeatMW=5000;const float CooldownHeat=.15f;int controllerRingCapacity=4,appearanceRefresh,networkTick,stateAge;
   const int PlasmaStartTick=1038;Random ejectRandom=new Random(1);
   Matrix Rest(string name){var m=Matrix.Identity;m.Translation=name=="Plasma"?AnimationGeometry.Center:Vector3.Zero;return m;}
   Matrix MaintenancePose(TilePose tile,Matrix pose){return pose;}

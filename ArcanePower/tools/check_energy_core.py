@@ -13,6 +13,8 @@ def method(source,name):
 
 source=(MOD/'Data/Scripts/ArcanePower/EnergyCore.cs').read_text()
 methods=''.join(method(source,n) for n in ('IsPillar','BaseSubtype','Healthy','Socket','AttachedModules','HighestTier','IsModuleRunning','StoredFieldPose','Tier','FindController','UpdateBank','Disconnect','ApplyLimits','RequiredInput','ClampNativeOutput'))
+replication=(MOD/'Data/Scripts/ArcanePower/EnergyCore.Replication.cs').read_text()
+methods+=''.join(method(replication,n) for n in ('CaptureBank','ReceiveBank','UpdateReplication'))
 gameplay=(MOD/'Data/Scripts/ArcanePower/EnergyCore.Gameplay.cs').read_text()
 policy=gameplay.split('    // The drive owns')[0]
 gameplay_methods=''.join(method(policy,n) for n in ('InitializeGameplay','UpkeepPower','UpdateUpkeep','ReceiveGameplay','SaveGameplay','EligibleDrive','GetJumpDrives','AffordableDrives','SurgePower','ChargeTicks','BatchRecoveryDuration','HoldSurgeRecovery','RequestSurge','RequestBurst','RecoveryDuration','AvailableEnergy','SpendableEnergy','DebitEnergy','UpdateSurge','EndSurge','ReleaseDrives','UpdateRecovery','AppendGameplayInfo'))

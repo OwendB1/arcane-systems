@@ -23,6 +23,8 @@ namespace ArcanePower
         private int tick;
         private const ushort RotorChannel = 49375;
         private static bool ready;
+        private readonly Dictionary<long, int> replicaTicks = new Dictionary<long, int>();
+        private readonly Dictionary<long, long> replicaSequences = new Dictionary<long, long>();
         internal static void Add(ThermalBlock block)
         {
             Blocks[block.Entity.EntityId] = block;
@@ -72,18 +74,17 @@ namespace ArcanePower
 
         private static void RequestRotor(ThermalBlock block)
         {
-            MyAPIGateway.Multiplayer.SendMessageToServer(RotorChannel, MyAPIGateway.Utilities.SerializeToBinary(
-                new ThermalRotorPacket { EntityId = block.Entity.EntityId }));
+            PowerNetwork.Send(RotorChannel, new ThermalRotorPacket { EntityId = block.Entity.EntityId }, 0);
         }
 
         private void ReceiveRotor(ushort channel, byte[] bytes, ulong sender, bool fromServer)
         {
-            if (bytes == null || bytes.Length == 0 || bytes.Length > 1024) return;
+            if (bytes == null || bytes.Length == 0 || bytes.Length > PowerNetwork.MaxPacketBytes) return;
             try
             {
                 var packet = MyAPIGateway.Utilities.SerializeFromBinary<ThermalRotorPacket>(bytes);
                 if (packet == null) return;
-                MyAPIGateway.Utilities.InvokeOnGameThread(() =>
+                PowerNetwork.OnGameThread(() =>
                 {
                     ThermalBlock block;
                     if (!ready || !Blocks.TryGetValue(packet.EntityId, out block) || !HasTelemetry(block)) return;
@@ -92,10 +93,20 @@ namespace ArcanePower
                         // Clients may ask for a read-only pose; they can never
                         // submit drive, pressure, inventory or speed state.
                         if (fromServer || packet.State != null || packet.Radiator != null || packet.Cooling != null) return;
-                        MyAPIGateway.Multiplayer.SendMessageTo(RotorChannel, MyAPIGateway.Utilities.SerializeToBinary(
-                            MotionPacket(block)), sender);
+                        if (PowerNetwork.CanRequest(RotorChannel, sender, block.Entity.EntityId) && PowerNetwork.Observe(sender, block.Entity))
+                            PowerNetwork.Send(RotorChannel, MotionPacket(block), sender);
                     }
-                    else if (fromServer) { block.ReceiveRotor(packet.State); block.ReceiveRadiator(packet.Radiator); block.ReceiveCooling(packet.Cooling); }
+                    else if (fromServer)
+                    {
+                        long id = block.Entity.EntityId, previous;
+                        if (packet.State != null && !packet.State.Valid(id) || packet.Radiator != null && !packet.Radiator.Valid(id)
+                            || packet.Cooling != null && !packet.Cooling.Valid(id)) return;
+                        if (block.Spec.Kind == ThermalKind.Train ? packet.State == null : packet.Cooling == null) return;
+                        long sequence = packet.State == null ? packet.Cooling.Sequence : packet.State.Sequence;
+                        if (replicaSequences.TryGetValue(id, out previous) && sequence <= previous) return;
+                        replicaSequences[id] = sequence; replicaTicks[id] = tick;
+                        block.ReceiveRotor(packet.State); block.ReceiveRadiator(packet.Radiator); block.ReceiveCooling(packet.Cooling);
+                    }
                 });
             }
             catch (Exception error) { VRage.Utils.MyLog.Default.WriteLine("ArcanePower: ignored invalid rotor packet: " + error.Message); }
@@ -119,12 +130,18 @@ namespace ArcanePower
                 if (block.Spec.Kind == ThermalKind.Radiator) block.AdvanceRadiator();
             foreach (var block in Blocks.Values)
             {
+                if (!server)
+                {
+                    int updated;
+                    bool stale = !replicaTicks.TryGetValue(block.Entity.EntityId, out updated) || tick - updated > 180;
+                    if (stale) block.ExpireTelemetry();
+                    if (tick % 120 == 0 && HasTelemetry(block) && (stale || PowerNetwork.NeedsRemoteRefresh(block.Entity))) RequestRotor(block);
+                }
                 block.AdvanceRotor();
                 if (block.Spec.Kind != ThermalKind.Radiator) block.AdvanceRadiator();
                 if (server && ready && tick % 30 == 0 && HasTelemetry(block))
                 {
-                    MyAPIGateway.Multiplayer.SendMessageToOthers(RotorChannel, MyAPIGateway.Utilities.SerializeToBinary(
-                        MotionPacket(block)));
+                    PowerNetwork.Broadcast(RotorChannel, MotionPacket(block), block.Entity);
                     if (block.IsCooling) block.Block.RefreshCustomInfo();
                 }
             }
@@ -225,6 +242,7 @@ namespace ArcanePower
             ThermalPipeJoint.Unload();
             ready = false;
             Blocks.Clear(); circuitGraphs.Clear();
+            replicaTicks.Clear(); replicaSequences.Clear();
         }
     }
 }

@@ -21,6 +21,7 @@ namespace ArcanePower
         [ProtoMember(4)] public float Value;
         [ProtoMember(5)] public EnergyGameplayState State;
         [ProtoMember(6)] public float Stored;
+        [ProtoMember(7)] public EnergyBankState Bank;
     }
 
     [MySessionComponentDescriptor(MyUpdateOrder.NoUpdate)]
@@ -74,7 +75,7 @@ namespace ArcanePower
             action.Icon = @"Textures\GUI\Icons\Actions\Toggle.dds";
             action.ValidForGroups = true;
             action.Enabled = control.Enabled;
-            action.Action = b => Send(b.EntityId, command);
+            action.Action = b => Send(b.EntityId, command, 0, true);
             action.Writer = (b, text) => { var core = Find(b.EntityId); if (core != null) text.Append(core.Ready ? "Ready" : (core.Gameplay.RecoveryTicks / 60f).ToString("N0") + " s / unavailable"); };
             actions.Add(action);
         }
@@ -97,8 +98,9 @@ namespace ArcanePower
             if (ready && !MyAPIGateway.Multiplayer.IsServer) Send(cell.Block.EntityId, EnergyCommand.Sync);
         }
         internal static void Remove(EnergyCore cell) { if (cell.Block != null) Cells.Remove(cell.Block.EntityId); }
+        internal static void RequestSync(EnergyCore cell) { Send(cell.Block.EntityId, EnergyCommand.Sync); }
 
-        private static void Send(long id, EnergyCommand command, float value = 0)
+        private static void Send(long id, EnergyCommand command, float value = 0, bool nativeAction = false)
         {
             if (!ready) return;
             var core = Find(id);
@@ -107,9 +109,9 @@ namespace ArcanePower
             if (MyAPIGateway.Multiplayer.IsServer)
             {
                 var player = MyAPIGateway.Session.Player;
-                if (player == null || core.Block.HasPlayerAccess(player.IdentityId)) Apply(core, packet);
+                if (nativeAction || player == null || core.Block.HasPlayerAccess(player.IdentityId)) Apply(core, packet);
             }
-            else MyAPIGateway.Multiplayer.SendMessageToServer(Channel, MyAPIGateway.Utilities.SerializeToBinary(packet));
+            else PowerNetwork.Send(Channel, packet, 0);
         }
 
         private static void Apply(EnergyCore core, EnergyPacket packet)
@@ -125,35 +127,41 @@ namespace ArcanePower
 
         private static EnergyPacket Snapshot(EnergyCore core)
         {
-            return new EnergyPacket { EntityId = core.Block.EntityId, State = core.Gameplay, Stored = core.Block.CurrentStoredPower };
+            return new EnergyPacket { EntityId = core.Block.EntityId, State = core.Gameplay, Stored = core.Block.CurrentStoredPower, Bank = core.CaptureBank() };
         }
         internal static void Broadcast(EnergyCore core)
         {
             if (ready && MyAPIGateway.Multiplayer.IsServer)
-                MyAPIGateway.Multiplayer.SendMessageToOthers(Channel, MyAPIGateway.Utilities.SerializeToBinary(Snapshot(core)));
+                PowerNetwork.Broadcast(Channel, Snapshot(core), core.Block);
         }
         private void Receive(ushort channel, byte[] bytes, ulong sender, bool fromServer)
         {
-            if (bytes == null || bytes.Length == 0 || bytes.Length > 4096) return;
+            if (bytes == null || bytes.Length == 0 || bytes.Length > PowerNetwork.MaxPacketBytes) return;
             try
             {
                 var packet = MyAPIGateway.Utilities.SerializeFromBinary<EnergyPacket>(bytes);
                 if (packet == null) return;
-                MyAPIGateway.Utilities.InvokeOnGameThread(() =>
+                PowerNetwork.OnGameThread(() =>
                 {
                     if (!ready) return;
                     var core = Find(packet.EntityId);
                     if (core == null) return;
                     if (MyAPIGateway.Multiplayer.IsServer)
                     {
-                        if (fromServer || packet.Command < EnergyCommand.Sync || packet.Command > EnergyCommand.EmergencyOff) return;
+                        if (fromServer || packet.State != null || packet.Bank != null || packet.Command < EnergyCommand.Sync || packet.Command > EnergyCommand.EmergencyOff) return;
                         long identity = MyAPIGateway.Players.TryGetIdentityId(sender);
                         if (identity == 0 || !core.Block.HasPlayerAccess(identity)) return;
                         if (packet.Command == EnergyCommand.Sync)
-                            MyAPIGateway.Multiplayer.SendMessageTo(Channel, MyAPIGateway.Utilities.SerializeToBinary(Snapshot(core)), sender);
-                        else Apply(core, packet);
+                        {
+                            if (PowerNetwork.CanRequest(Channel, sender, core.Block.EntityId) && PowerNetwork.Observe(sender, core.Block))
+                                PowerNetwork.Send(Channel, Snapshot(core), sender);
+                        }
+                        else if (PowerNetwork.CanRequest(Channel, sender, core.Block.EntityId, true))
+                        { PowerNetwork.Observe(sender, core.Block); Apply(core, packet); }
                     }
-                    else if (fromServer) core.ReceiveGameplay(packet.State, packet.Stored);
+                    else if (fromServer && packet.Bank != null && packet.Bank.Valid() && packet.State != null && packet.State.Valid(packet.EntityId)
+                        && packet.Stored >= 0 && packet.Stored <= core.Block.MaxStoredPower && core.CanReceiveBank(packet.Bank))
+                    { core.ReceiveGameplay(packet.State, packet.Stored); core.ReceiveBank(packet.Bank); }
                 });
             }
             catch (Exception error) { MyLog.Default.WriteLine("ArcanePower: ignored invalid energy packet: " + error.Message); }

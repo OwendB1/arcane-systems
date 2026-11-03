@@ -72,7 +72,7 @@ class ThermalBlock {
      r.AdvanceRadiator();r.AdvanceRadiator();
      Need(existingBody ? !part.Physics.Enabled : part.Physics==null,"animated subpart never has an active independent collision body");
      Need(gridBody.Enabled && gridBody.LinearVelocity==linear && gridBody.AngularVelocity==angular,"native ship collision and motion are untouched");
-     Need(part.PositionComp.Pose!=Matrix.Identity,"radiator still tracks using the production pose");
+     Need(dedicated ? part.PositionComp.Pose==Matrix.Identity : part.PositionComp.Pose!=Matrix.Identity,"only clients apply the visual radiator pose");
      Need(r.glowUpdates==(dedicated?0:2),"client glow and dedicated-server rendering rules are preserved");
      // A recreated native subpart must not reintroduce pushing physics.
      part=new MyEntitySubpart{Physics=new Body()};r.Entity.Subparts[ThermalRadiators.Subpart]=part;

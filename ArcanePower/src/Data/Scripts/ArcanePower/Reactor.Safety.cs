@@ -20,6 +20,7 @@ namespace ArcanePower
 
         internal bool HasAdvancedController()
         {
+            if (!MyAPIGateway.Multiplayer.IsServer) return Motion.Telemetry != null && Motion.Telemetry.AdvancedController;
             if (!IsLive) return false;
             var attached = ((MyCubeBlock)Entity).CurrentAttachedUpgradeModules;
             if (attached == null) return false;
@@ -31,6 +32,7 @@ namespace ArcanePower
 
         private bool HasIntactControllers()
         {
+            if (!MyAPIGateway.Multiplayer.IsServer) return Motion.ControllersReady;
             var attached = ((MyCubeBlock)Entity).CurrentAttachedUpgradeModules;
             if (attached == null) return false;
             long first = 0;

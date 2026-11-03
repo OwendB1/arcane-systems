@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sound = (ROOT / "src/Data/Scripts/ArcanePower/Reactor.Sound.cs").read_text()
 motion = (ROOT / "src/Data/Scripts/ArcanePower/Reactor.Motion.cs").read_text()
 threshold = re.search(r"private const float CooldownHeat = [^;]+;", motion).group()
+threshold = re.search(r'public const float CooldownHeat = [^;]+;', (ROOT / 'src/Data/Scripts/ArcanePower/ThermalPlant.cs').read_text()).group().replace('public ', 'private ')
 gain = sound[sound.index("        private static float FieldSoundGain("):
              sound.index("        private void MixHum(")]
 mix = sound[sound.index("        private void MixLoop("):

@@ -26,7 +26,8 @@ namespace ArcanePower
 
         private void UpdateSound()
         {
-            if (MyAPIGateway.Utilities.IsDedicated || !receivedState) return;
+            if (MyAPIGateway.Utilities.IsDedicated) return;
+            if (!receivedState) { CloseSound(); soundStateKnown = false; return; }
             var camera = MyAPIGateway.Session.Camera;
             bool nearby = camera != null && Vector3D.DistanceSquared(camera.Position, Entity.GetPosition()) < 160 * 160;
             // Remember transitions even outside earshot. Approaching or loading an

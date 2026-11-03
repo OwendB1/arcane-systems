@@ -15,6 +15,8 @@ GAME = Path.home() / '.local/share/Steam/steamapps/common/SpaceEngineers/Bin64'
 
 def method(file, name):
     source = (SRC / file).read_text()
+    if file == 'Reactor.Motion.cs' and name == 'Valid':
+        source = source[source.index('    public sealed partial class Reactor'):]
     start = re.search(r'^        (?:private|internal|public) [^{\n]*?\b' + name + r'\(', source, re.M).start()
     opening = source.index('{', start)
     depth, end = 1, opening + 1
@@ -43,6 +45,9 @@ class GatewayUtilities {
  public bool IsDedicated=true;
  public string SerializeToXML<T>(T value){using(var w=new StringWriter()){new XmlSerializer(typeof(T)).Serialize(w,value);return w.ToString();}}
 }
+enum VentCommand {Sync}
+static class VentSession {public static void SendCommand(long id,VentCommand command){}}
+static class PowerNetwork {public static bool NeedsRemoteRefresh(object entity){return false;}}
 static class MyAPIGateway {
  public static GatewayRole Multiplayer=new GatewayRole();
  public static GatewayUtilities Utilities=new GatewayUtilities();
@@ -77,7 +82,7 @@ class Check {
  void UpdateSafety(){} void UpdateFuel(){} void UpdatePower(){} void UpdateTiles(){} void UpdateMotion(){}
  void UpdateAppearance(){} void UpdateSound(){} void DrawMotion(){} void DrawVentOutlet(){}
  void RefreshRestPoses(){}
- void UpdateThermalMode(){} void UpdateCriticalCore(){}
+ void UpdateThermalMode(){} void UpdateCriticalCore(){} void TryReleaseFailedHousing(){}
  bool HasIntactControllers(){return reactor.UpgradeValues["ArcaneControllerCount"]>=2;}
 ''' + ''.join(method(file, name) for file, name in (
     ('Reactor.Motion.cs', 'RestoreMotionState'), ('Reactor.Motion.cs', 'Valid'),

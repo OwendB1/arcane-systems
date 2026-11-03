@@ -50,6 +50,7 @@ using VRage;
 class GatewayRole { public bool IsServer=true; }
 class GatewaySession { public bool CreativeMode; }
 class GatewayUtilities { public bool IsDedicated=true; }
+static class PowerNetwork {public static bool NeedsRemoteRefresh(object entity){return false;}}
 static class MyAPIGateway {
  public static GatewayRole Multiplayer=new GatewayRole();
  public static GatewaySession Session=new GatewaySession();
@@ -107,7 +108,8 @@ class MyReactor : IMyReactor {
 }
 class MyLight {}
 static class MyLights {public static int Removed;public static void RemoveLight(MyLight light){Removed++;}}
-static class VentSession {public static int Removed;public static void Remove(Reactor r){Removed++;}}
+enum VentCommand {Sync}
+static class VentSession {public static void SendCommand(long id,VentCommand command){}public static int Removed;public static void Remove(Reactor r){Removed++;}}
 static class ThermalSession {public static int Removed;public static void Remove(Reactor r){Removed++;}}
 enum MyEntityUpdateEnum {NONE,EACH_FRAME}
 enum CorePhase {Off,Starting,Running,Cooling,Stopping}
@@ -135,6 +137,7 @@ class Reactor {
  MyLight coreGlow=new MyLight();
  State Motion=new State();
  int initializationFrames,controllerRingCapacity=2,networkTick=1,controllerDiscoveryFrames=600,reloadPowerFrames;
+ long Id {get{return Entity.EntityId;}}
  float previousControllers=2;
  bool HasIntactControllers(){return true;}
  void UpdateCriticalCore(){}
@@ -159,7 +162,7 @@ class Reactor {
  void AppendInfo(IMyTerminalBlock b,StringBuilder s){}
  void RefreshRestPoses(){steps++;} void CheckVentRoute(){steps++;} void UpdatePower(){steps++;}
  void UpdateSafety(){steps++;} void UpdateThermalMode(){steps++;} void UpdateTiles(){steps++;}
- void UpdateMotion(){steps++;} void UpdateAppearance(){steps++;} void UpdateSound(){steps++;}
+ void UpdateMotion(){steps++;} void UpdateAppearance(){steps++;} void UpdateSound(){steps++;} void TryReleaseFailedHousing(){steps++;}
  void DrawMotion(){steps++;} void DrawVentOutlet(){steps++;}
  void CloseSound(){soundStops++;} void SaveMotion(){saves++;}
  void PullTiles(VRage.Game.Entity.MyInventoryBase source,VRage.Game.Entity.MyInventoryBase target){}

@@ -40,8 +40,15 @@ static class MyAPIGateway {
   public static T SerializeFromBinary<T>(byte[] bytes){using(var s=new MemoryStream(bytes))return (T)model.Deserialize(s,null,typeof(T));}
  }
 }
+static class PowerNetwork {
+ public const int MaxPacketBytes=65536;
+ public static bool CanRequest(ushort channel,ulong sender,long target){return true;}
+ public static bool Observe(ulong sender,object entity){return true;}
+ public static void OnGameThread(Action action){action();}
+ public static void Send<T>(ushort channel,T packet,ulong target){MyAPIGateway.Multiplayer.SendMessageTo(channel,MyAPIGateway.Utilities.SerializeToBinary(packet),target);}
+}
 namespace ArcanePower {
- [ProtoContract] public class ThermalRotorState {public bool Valid(long id){return true;}}
+ [ProtoContract] public class ThermalRotorState {public long Sequence;public bool Valid(long id){return true;}}
  public class Slim {public float BuildLevelRatio=1;}
  public class EngineBlock {
   public long EntityId=1;public bool Enabled=true,IsFunctional=true;public Slim SlimBlock=new Slim();public int Refreshes;
@@ -65,7 +72,8 @@ namespace ArcanePower {
  public class CoolingProbe:ThermalBlock {}
  // PACKET
  public class ThermalSession {
-  static bool ready=true;const ushort RotorChannel=49375;
+  static bool ready=true;const ushort RotorChannel=49375;int tick;
+  Dictionary<long,int> replicaTicks=new Dictionary<long,int>();Dictionary<long,long> replicaSequences=new Dictionary<long,long>();
   internal static Dictionary<long,ThermalBlock> Blocks=new Dictionary<long,ThermalBlock>();
   internal static ThermalRotorPacket Packet(ThermalBlock b){return MotionPacket(b);}
   internal static bool Eligible(ThermalBlock b){return HasTelemetry(b);}

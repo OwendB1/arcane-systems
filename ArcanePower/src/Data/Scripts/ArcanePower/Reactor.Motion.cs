@@ -18,6 +18,26 @@ namespace ArcanePower
     public enum ReactorStatus { ShutOff, Incomplete, OutOfFuel, Active }
 
     [ProtoContract]
+    public sealed class ReactorTelemetry
+    {
+        [ProtoMember(1)] public double Fuel;
+        [ProtoMember(2, OverwriteList = true)] public int[] TileQuartets = new int[3];
+        [ProtoMember(3)] public double Residuum;
+        [ProtoMember(4)] public float Controllers;
+        [ProtoMember(5)] public int RingCapacity = 2;
+        [ProtoMember(6)] public bool AdvancedController;
+        [ProtoMember(7)] public bool FuelReady;
+
+        public bool Valid()
+        {
+            return Fuel >= 0 && Fuel <= 1e12 && Residuum >= 0 && Residuum <= 1e12
+                && Controllers >= 0 && Controllers <= 4 && RingCapacity >= 2 && RingCapacity <= 4
+                && TileQuartets != null && TileQuartets.Length == 3
+                && Array.TrueForAll(TileQuartets, n => n >= 0 && n <= 100000000);
+        }
+    }
+
+    [ProtoContract]
     public sealed class MotionState
     {
         [ProtoMember(1)] public long EntityId;
@@ -84,6 +104,7 @@ namespace ArcanePower
         [ProtoMember(61)] public float ForecastCooldownSeconds = -1;
         [ProtoMember(62)] public float EjectSubtick;
         [ProtoMember(63)] public ShieldTestPhase ShieldTest;
+        [ProtoMember(64)] public ReactorTelemetry Telemetry;
 
         // Timing is decided on the server; clients display the same confirmed
         // warning throughout its recovery hold instead of toggling independently.
@@ -110,7 +131,7 @@ namespace ArcanePower
         internal MotionState Motion = new MotionState();
         private readonly Dictionary<string, Matrix> restPoses = new Dictionary<string, Matrix>();
         private IMyModel restModel;
-        private int networkTick;
+        private int networkTick, stateAge;
         private bool receivedState;
         private bool restoreLegacyHardware;
         internal long Id { get { return Entity.EntityId; } }
@@ -194,7 +215,7 @@ namespace ArcanePower
         {
             // Native withdrawals round to the nearest millionth, leaving up to
             // half a quantum of credit. Keep it, with tolerance for double arithmetic.
-            return state != null && state.Core >= CorePhase.Off && state.Core <= CorePhase.Cooling
+            return state != null && state.Sequence >= 0 && state.Core >= CorePhase.Off && state.Core <= CorePhase.Cooling
                 && state.Vent >= VentPhase.Idle && state.Vent <= VentPhase.Ejecting
                 && state.ShieldTest >= ShieldTestPhase.Idle && state.ShieldTest <= ShieldTestPhase.Retracting
                 && (state.ShieldTest == ShieldTestPhase.Idle || (state.Vent == VentPhase.Idle && state.Intake == 0))
@@ -235,6 +256,7 @@ namespace ArcanePower
                 && state.FuelDebt >= -(double)VRage.MyFixedPoint.SmallestPossibleValue * .5 - 1e-12 && state.FuelDebt < 1
                 && state.ResiduumMicroUnits >= 0 && state.ResiduumMicroUnits <= 1000000000000000L
                 && state.Status >= ReactorStatus.ShutOff && state.Status <= ReactorStatus.Active
+                && (state.Telemetry == null || state.Telemetry.Valid())
                 // Retain the old per-tier saved-heat bounds across the 10:1 rebalance.
                 && (state.Thermal == null || (state.Thermal.Valid(state.EntityId)
                     && state.Thermal.Store.Valid(state.EntityId, PowerMW[state.FuelTier - 1] * 10 / .40 * 8)
@@ -243,9 +265,10 @@ namespace ArcanePower
 
         internal void ReceiveState(MotionState state)
         {
-            if (!Valid(state) || (receivedState && state.Sequence <= Motion.Sequence)) return;
+            if (!Valid(state) || state.EntityId != Id || state.Sequence < Motion.Sequence) return;
             Motion = state;
             receivedState = true;
+            stateAge = 0;
             appearanceRefresh = 0;
             reactor.RefreshCustomInfo();
         }
@@ -365,9 +388,10 @@ namespace ArcanePower
                     Motion.PowerRamp = 0;
                 }
             }
+            if (!server && ++stateAge > 180) receivedState = false;
             if (receivedState)
             {
-                UpdateThermal();
+                if (server) UpdateThermal();
                 if (!Motion.Paused) AdvanceMotion();
             }
             if (server)
@@ -393,7 +417,8 @@ namespace ArcanePower
             networkTick++;
             if (server && (oldCore != Motion.Core || oldVent != Motion.Vent || oldStatus != Motion.Status
                 || oldShieldTest != Motion.ShieldTest || networkTick % 30 == 0)) PublishMotion();
-            else if (!server && !receivedState && networkTick % 120 == 0) VentSession.SendCommand(Id, VentCommand.Sync);
+            else if (!server && networkTick % 120 == 0 && (!receivedState || PowerNetwork.NeedsRemoteRefresh(Entity)))
+                VentSession.SendCommand(Id, VentCommand.Sync);
         }
 
         private void AdvanceMotion()
@@ -519,10 +544,24 @@ namespace ArcanePower
 
         private void PublishMotion()
         {
+            Snapshot();
             Motion.Sequence++;
             SaveMotion();
             VentSession.Broadcast(Motion);
             reactor.RefreshCustomInfo();
+        }
+
+        internal MotionState Snapshot()
+        {
+            if (MyAPIGateway.Multiplayer.IsServer && IsLive)
+                Motion.Telemetry = new ReactorTelemetry {
+                    Fuel = (double)reactor.GetInventory().GetItemAmount(VRage.Game.ModAPI.Ingame.MyItemType.MakeIngot(Fuels[Motion.FuelTier - 1])),
+                    TileQuartets = SpareTileQuartets(),
+                    Residuum = (double)reactor.GetInventory().GetItemAmount(VRage.Game.ModAPI.Ingame.MyItemType.MakeComponent(ResiduumSubtype)),
+                    Controllers = Math.Max(0, previousControllers), RingCapacity = controllerRingCapacity,
+                    AdvancedController = HasAdvancedController(), FuelReady = HasUsableFuel()
+                };
+            return Motion;
         }
 
         internal void SaveMotion()
@@ -546,14 +585,10 @@ namespace ArcanePower
             return restPoses.TryGetValue(name, out pose) ? pose : Matrix.Identity;
         }
 
-        private void Part(string name, Matrix pose, bool visible = true)
-        {
-            MyEntitySubpart part;
-            if (!restPoses.ContainsKey(name) || !((MyEntity)Entity).Subparts.TryGetValue(name, out part)) return;
-            part.PositionComp.SetLocalMatrix(ref pose);
-            if (part.Render.Visible != visible) part.Render.Visible = visible;
-        }
 
+
+        // Shared physical pose math: the server samples it for hazard location
+        // and payload handoff; only client presentation applies it to subparts.
         private Matrix RingOrientation(int index, float age)
         {
             return RingMotion.Orientation(Rest("Ring" + (index + 1)), index, Span(age, 1060, 1150),
@@ -702,52 +737,7 @@ namespace ArcanePower
             return plasma;
         }
 
-        private void DrawMotion()
-        {
-            float age = Motion.Core == CorePhase.Off ? 0 : Motion.CoreTick + Motion.CoreSubtick;
-            float alive = Motion.PayloadReleased ? 0 : 1;
-            Matrix fieldRotation = ContainmentRotation(age);
-            for (int i = 0; i < 4; i++)
-            {
-                string name = "Floor" + (i + 1);
-                Matrix floor = Rest(name);
-                float drop = Span(age, 0, 24) - Span(age, 274, 298);
-                float slide = Span(age, 26, 76) - Span(age, 220, 270);
-                floor.Translation += new Vector3(0, -.32f * drop, 0) + AnimationGeometry.FloorSlides[i] * slide;
-                Part(name, floor);
-                name = "Ring" + (i + 1);
-                Matrix ring = PayloadRingPose(i, age);
-                Part(name, ring, i < Motion.RingCount && alive > 0);
-            }
-            foreach (var tile in AnimationGeometry.Tiles)
-            {
-                float t = age - (320 + 36 * tile.Batch);
-                Matrix pose = PayloadTilePose(tile, age, fieldRotation);
-                Part(tile.Name, pose, t >= 0 && alive > 0);
-            }
-            Matrix plasma = PayloadPlasmaPose(age);
-            Part("Plasma", plasma, PlasmaScale(age) > 0);
-            for (int i = 0; i < 6; i++)
-            {
-                string name = "BlastShield" + (i + 1);
-                Matrix pose = Rest(name);
-                pose.Translation -= new Vector3(0, AnimationGeometry.ShieldTravel[i] * Ease(Motion.Shield), 0);
-                Part(name, pose);
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                string name = "VentHatch" + (i + 1);
-                Matrix pose = Rest(name);
-                pose.Translation += Vector3.Down * AnimationGeometry.HatchDrop * Span(Motion.Intake, 0, .3f)
-                    + AnimationGeometry.HatchSlides[i] * Span(Motion.Intake, .3f, 1);
-                Part(name, pose);
-                name = "CeilingHatch" + (i + 1);
-                pose = Rest(name);
-                pose.Translation += Vector3.Up * AnimationGeometry.CeilingHatchLift * Span(Motion.Intake, 0, .3f)
-                    + AnimationGeometry.CeilingHatchSlides[i] * Span(Motion.Intake, .3f, 1);
-                Part(name, pose);
-            }
-        }
+
 
     }
 }

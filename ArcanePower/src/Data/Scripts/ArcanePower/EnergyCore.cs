@@ -40,6 +40,8 @@ namespace ArcanePower
         private float outputLimit, inputLimit, stored, capacity, transfer, chargeCeiling;
         private int tick;
         private string status = "Connecting storage";
+        private EnergyBankState bankReplica;
+        private long bankControllerId;
         private Matrix rotorRest;
         private MyEntitySubpart rotor;
         private readonly MyEntitySubpart[] rings = new MyEntitySubpart[2];
@@ -152,6 +154,8 @@ namespace ArcanePower
         internal bool IsModuleRunning(IMyCubeBlock module)
         {
             if (!initialized || !IsController || !Healthy(block) || !Healthy(module)) return false;
+            if (!MyAPIGateway.Multiplayer.IsServer)
+                return bankReplica != null && Array.IndexOf(bankReplica.ActiveModules, module.EntityId) >= 0;
             var modules = AttachedModules();
             if (Array.IndexOf(modules, module) < 0) return false;
             if (Tier(module, "ArcanePower_EnergyTransfer") > 0)
@@ -185,15 +189,20 @@ namespace ArcanePower
         public override void UpdateBeforeSimulation()
         {
             if (!initialized) return;
+            UpdateReplication();
             tick = (tick + 1) % 7200;
+            if (!MyAPIGateway.Multiplayer.IsServer && tick % 120 == 1 && PowerNetwork.NeedsRemoteRefresh(Entity))
+                EnergySession.RequestSync(this);
             if (tick % 10 == 1)
             {
-                if (IsController) UpdateBank();
-                else
+                if (MyAPIGateway.Multiplayer.IsServer)
                 {
-                    var controller = FindController();
-                    if (controller == null || !controller.cells.Contains(this))
-                        Disconnect();
+                    if (IsController) UpdateBank();
+                    else
+                    {
+                        var controller = FindController();
+                        if (controller == null || !controller.cells.Contains(this)) Disconnect();
+                    }
                 }
                 UpdateUpkeep();
                 if (IsController) UpdateSurge();
@@ -222,6 +231,7 @@ namespace ArcanePower
 
         private void UpdateBank()
         {
+            if (!MyAPIGateway.Multiplayer.IsServer) return;
             ReadSettings();
             previousCells.Clear(); previousCells.AddRange(cells);
             cells.Clear(); cells.Add(this);
@@ -269,6 +279,7 @@ namespace ArcanePower
                 float fraction = capacity > 0 ? cell.block.MaxStoredPower / capacity : 0;
                 float share = transfer * fraction;
                 cell.upkeepTier = stabilizationTier;
+                cell.bankControllerId = Entity.EntityId;
                 float protectedEnergy = emergency ? 0 : reserve * cell.block.MaxStoredPower;
                 // Native batteries account every 100 ticks. Bound each interval
                 // by energy above reserve instead of overshooting a threshold.
@@ -280,6 +291,7 @@ namespace ArcanePower
 
         private void Disconnect()
         {
+            bankControllerId = 0;
             status = "Disconnected or unsupported capacity module";
             upkeepTier = 0;
             ApplyLimits(0, 0);
@@ -390,7 +402,7 @@ namespace ArcanePower
             if (IsController)
             {
                 text.Append("Bank: ").Append(stored.ToString("N1")).Append(" / ").Append(capacity.ToString("N1")).Append(" MWh\n");
-                text.Append("Charge / discharge ceilings: ").Append(chargeCeiling.ToString("N0")).Append(" / ").Append(transfer.ToString("N0")).Append(" MW\nCapacity modules: ").Append(Math.Max(0, cells.Count - 1)).Append('\n');
+                text.Append("Charge / discharge ceilings: ").Append(chargeCeiling.ToString("N0")).Append(" / ").Append(transfer.ToString("N0")).Append(" MW\nCapacity modules: ").Append(Math.Max(0, (bankReplica == null ? cells.Count : bankReplica.Members.Length) - 1)).Append('\n');
                 text.Append("Reserve: ").Append((reserve * 100).ToString("N0")).Append("%; emergency support ").Append(emergencyEnabled ? "on" : "off").Append('\n');
                 text.Append("Recharge changes to Auto for reactor startup/cooldown/venting and stays Auto.\n");
                 text.Append("Custom Data [ArcaneEnergyCore]: ReservePercent=10, EmergencySupport=true\n");
