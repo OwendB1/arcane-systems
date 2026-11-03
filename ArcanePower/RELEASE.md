@@ -3,7 +3,7 @@
 Workshop item: [3819727962](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962).
 The publishing source of truth is `workshop/title.txt`, `workshop/version.txt`,
 `workshop/description.bbcode`, `src/modinfo.sbmi.main` and `src/thumb.gif`.
-The title is generated as **Arcane Power (0.3.0)** from the two text files.
+The title is generated as **Arcane Power (0.4.0)** from the two text files.
 The animated preview uses the 480×270 GIF below 1 MB.
 
 `.github/workflows/arcane-power-workshop-upload.yml` calls the existing shared
@@ -203,7 +203,7 @@ python3 ArcanePower/tools/package_release.py
 python3 ArcanePower/tools/check_thermal_delivery.py
 ```
 
-The output is `.cache/release/ArcanePower-0.3.0.zip` under ArcanePower.
+The output is `.cache/release/ArcanePower-0.4.0.zip` under ArcanePower.
 Manifold pipe variants now use fully enclosed, airtight casings. Radiators use
 an airtight 1×1×1 rotor base and up to three separate panels. Existing combined
 radiators are replaced by the base; rebuild their panels and reconnect the

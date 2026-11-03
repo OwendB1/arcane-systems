@@ -1,8 +1,8 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "published": false,
-  "archive": "ArcanePower-0.3.0.zip",
-  "sha256": "fa93457ac356938a4c74d994f0e28966a57635ba8af6bebc184b702ae6fc6ffc",
+  "archive": "ArcanePower-0.4.0.zip",
+  "sha256": "f3526115dbb74101c4346cc45d95e03e2fa81dd310ee0ed3ab3484942e3f36c1",
   "bytes": 444418013,
   "files": [
     {
@@ -3488,7 +3488,7 @@
     {
       "path": "metadata.mod",
       "bytes": 200,
-      "sha256": "33e3a980963bf461d3fa2861f00ed1bc934dee980b14519840795f2a0fe49169"
+      "sha256": "07c815e670903380972a6a807ad8c23ae6ce8f5cc1b0915bf90992e0230e5465"
     }
   ],
   "native_assets": [
