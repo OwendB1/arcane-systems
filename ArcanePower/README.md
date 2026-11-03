@@ -3,7 +3,13 @@
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962)
 · [Publishing workflow and gallery sources](RELEASE.md)
 
-Version **0.3.0** adds sealed 1×1×1 pipe rotors with a real rotating cuff,
+Version **0.4.0** adds server-owned reactor telemetry and energy-bank
+synchronization, supports distant antenna terminals, and keeps cosmetic
+animation work off dedicated servers. See the
+[multiplayer checklist and validation](../docs/arcane-power-multiplayer.md).
+Live multiplayer validation remains pending.
+
+Version **0.3.0** added sealed 1×1×1 pipe rotors with a real rotating cuff,
 native Advanced Rotor mechanics and a 10–30 cm adjustable casing gap. The head
 carries a real subgrid and a duplex thermal connection. The radiator tracking
 base remains a separate same-grid mechanism with up to three panels. See
