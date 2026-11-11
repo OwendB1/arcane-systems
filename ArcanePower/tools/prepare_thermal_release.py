@@ -242,7 +242,8 @@ def write_catalog(root,write=True):
         if ' / ' in name:
             shape=name.split(' / ')[1].removesuffix(' bare')
             style='Bare' if name in CONTRACT['BARE_PIPES'] else 'Manifold'
-            set_text(block,'DisplayName','Arcane '+shape+' Pipe ('+style+')')
+            label=shape.removesuffix(' reversed')+' Pipe'+(' Reversed' if shape.endswith(' reversed') else '')
+            set_text(block,'DisplayName','Arcane '+label+' ('+style+')')
     for alias,target in CONTRACT['PIPE_ALIASES'].items():
         ident=CONTRACT['subtype'](alias)
         block=copy.deepcopy(canonical[CONTRACT['subtype'](target)])
@@ -362,7 +363,20 @@ def description(name):
             'Use the opposite end for normal duplex pipes.\n\n'
             'Align H with H and C with C.\n'
             'Keep each reactor manifold circuit separate and cap unused pipe mouths.')
+    fitting = name.removesuffix(' bare')
+    routing = ('Reversed riser: H follows the outside of the bend; C follows the inside.\n'
+               if fitting == 'PRIMARY / Riser reversed' else
+               'Reversed elbow: opposite horizontal turn with the same H/C roll.\n'
+               if fitting == 'PRIMARY / Elbow reversed' else '')
+    shape = fitting.split(' / ')[-1]
+    if shape in CONTRACT['ROUTED_PIPES']:
+        routing = ('180-degree H/C crossover. The channels stay separate while exchanging sides.\n'
+                   if shape == 'Crossover' else
+                   'Opposite-handed 90-degree H/C roll adapter.\n'
+                   if shape == 'Roll adapter reversed' else
+                   'Combined elbow and 90-degree H/C roll. Match the marked H bore at both ends.\n')
     return (
+        routing+
         'CO2 supply/return pipe for one independent reactor manifold circuit.\n'
         'Use an Arcane pipe rotor to cross to a subgrid.\n'+('Fully enclosed, airtight on all six faces.\n\n' if name not in CONTRACT['BARE_PIPES'] else '\n')+
         'Align H to H and C to C.\n'
@@ -376,6 +390,11 @@ def variant_groups(blocks):
     installed={block.findtext('Id/SubtypeId') for block in blocks}
     bare=[block.findtext('Id/SubtypeId') for block in blocks
           if block.findtext('Id/SubtypeId').endswith('Bare') and block.findtext('Public')=='true']
+    families=('Straight','RollAdapter','Crossover','Elbow','Riser','Tee','Cross','ReactorAdapter','EndCap')
+    def pipe_order(ident):
+        shape=ident.removeprefix('ArcanePower_Thermal_Primary').removesuffix('Bare')
+        return next((i for i,family in enumerate(families) if shape.startswith(family)),len(families)),shape
+    bare.sort(key=pipe_order)
     framed=[subtype.removesuffix('Bare') for subtype in bare]
     assert set(framed)<=installed, 'Bare pipe is missing its manifold counterpart'
     groups=[]

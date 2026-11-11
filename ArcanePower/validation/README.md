@@ -24,6 +24,20 @@ The retained JSON files are inputs to current tools or preservation baselines:
 Refresh it after relevant changes; do not accumulate dated copies. A retained
 report only covers its recorded checks and does not establish an in-game test.
 
+`assets/thermal-flow-paths.json` is a retained authoring contract, not a temporary
+report. The builders record the fitted pipe centrelines there;
+`tools/build_thermal_runtime_contract.py` uses them to generate
+`ThermalFlowModels.cs`, and the Blender preview and pipe checks read them too.
+Keep it with the maintained builders and the other source contracts.
+
+`.cache/native-thermal-motion.json` contains disposable mesh/pose samples for
+visual review. Regenerate it with `python3 ArcanePower/tools/check_native_thermal_motion.py`
+from the repository root before using `assets/review_native_thermal_motion.py`.
+The retained `thermal-models/native-motion.json` is the compact validation
+summary required by delivery checks. Old release ZIPs, completed review captures,
+logs, Python bytecode and `bin`/`obj` build outputs can also be removed; retain
+the current release ZIP and named Blender checkpoints.
+
 Do not regenerate a preservation baseline from a changed asset merely to pass
 an audit. Inspect report readers and writers before changing retention rules;
 some files named like reports are required build inputs. Documentation links alone

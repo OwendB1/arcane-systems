@@ -4292,5 +4292,1061 @@
         "hull_only": true
       }
     ]
+  },
+  "PRIMARY / Riser reversed": {
+    "subtype": "ArcanePower_Thermal_PrimaryRiserReversed",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 82,
+    "triangles": 18730,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          -0.0,
+          -0.0,
+          -1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          1.0,
+          -0.0,
+          -0.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
+  },
+  "PRIMARY / Elbow reversed": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowReversed",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 83,
+    "triangles": 15914,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
+  },
+  "PRIMARY / Riser reversed bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryRiserReversedBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 25,
+    "triangles": 15660,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          -0.0,
+          -0.0,
+          -1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          0.0,
+          1.25
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "hot_axis": [
+          1.0,
+          -0.0,
+          -0.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Riser reversed",
+    "style": "bare"
+  },
+  "PRIMARY / Elbow reversed bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowReversedBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 26,
+    "triangles": 12844,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ],
+    "visibility_revision": 1,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Elbow reversed",
+    "style": "bare"
+  },
+  "PRIMARY / Elbow roll clockwise": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowRollClockwise",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 84,
+    "triangles": 43818,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
+  },
+  "PRIMARY / Elbow roll clockwise bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowRollClockwiseBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 27,
+    "triangles": 40748,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Elbow roll clockwise",
+    "style": "bare"
+  },
+  "PRIMARY / Roll adapter reversed": {
+    "subtype": "ArcanePower_Thermal_PrimaryRollAdapterReversed",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 83,
+    "triangles": 42538,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
+  },
+  "PRIMARY / Roll adapter reversed bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryRollAdapterReversedBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 26,
+    "triangles": 39468,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          -1.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Roll adapter reversed",
+    "style": "bare"
+  },
+  "PRIMARY / Crossover": {
+    "subtype": "ArcanePower_Thermal_PrimaryCrossover",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 85,
+    "triangles": 43050,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
+  },
+  "PRIMARY / Crossover bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryCrossoverBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 28,
+    "triangles": 39980,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Crossover",
+    "style": "bare"
+  },
+  "PRIMARY / Elbow roll counterclockwise": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowRollCounterclockwise",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 84,
+    "triangles": 43818,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
+  },
+  "PRIMARY / Elbow roll counterclockwise bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 27,
+    "triangles": 40748,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Elbow roll counterclockwise",
+    "style": "bare"
+  },
+  "PRIMARY / Elbow roll clockwise reversed": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowRollClockwiseReversed",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 84,
+    "triangles": 43818,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
+  },
+  "PRIMARY / Elbow roll clockwise reversed bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowRollClockwiseReversedBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 27,
+    "triangles": 40748,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Elbow roll clockwise reversed",
+    "style": "bare"
+  },
+  "PRIMARY / Elbow roll counterclockwise reversed": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversed",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 84,
+    "triangles": 43818,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1
+  },
+  "PRIMARY / Elbow roll counterclockwise reversed bare": {
+    "subtype": "ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversedBare",
+    "cells_blender": [
+      1,
+      1,
+      1
+    ],
+    "cells_se": [
+      1,
+      1,
+      1
+    ],
+    "metres_blender": [
+      2.5,
+      2.5,
+      2.5
+    ],
+    "phase": "textures",
+    "meshes": 27,
+    "triangles": 40748,
+    "ports": [
+      {
+        "id": "socket 1",
+        "type": "PRIMARY",
+        "position": [
+          -1.25,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "hot_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "id": "socket 2",
+        "type": "PRIMARY",
+        "position": [
+          0.0,
+          -1.25,
+          0.0
+        ],
+        "normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "hot_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "visibility_revision": 2,
+    "transparent_pressure_tubes": 2,
+    "rotors": [],
+    "flow_revision": 1,
+    "variant_of": "PRIMARY / Elbow roll counterclockwise reversed",
+    "style": "bare"
   }
 }

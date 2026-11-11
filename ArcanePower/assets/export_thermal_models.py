@@ -43,7 +43,7 @@ def tris(col):
 
 
 def native_id(identifier):
-    value='APT_'+identifier.removeprefix('ArcanePower_Thermal_').replace('Thermal_','').replace('Mirrored','Mir')+'_M'
+    value='APT_'+identifier.removeprefix('ArcanePower_Thermal_').replace('Thermal_','').replace('Mirrored','Mir').replace('CounterclockwiseReversed','CCWReversed')+'_M'
     assert len(value)<=45,value
     return value
 

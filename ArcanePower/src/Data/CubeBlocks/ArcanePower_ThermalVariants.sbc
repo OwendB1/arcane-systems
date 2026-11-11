@@ -8,13 +8,21 @@
       <Description>Scroll through bare thermal pipes and fittings. Connect the shared supply/return network; align H/C on every socket face.</Description>
       <Blocks>
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryStraightBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRollAdapterBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRollAdapterReversedBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryCrossoverBare" />
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowReversedBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowRollClockwiseBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowRollClockwiseReversedBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversedBare" />
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRiserBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRiserReversedBare" />
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryTeeBare" />
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryCrossBare" />
-        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRollAdapterBare" />
-        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryEndCapBare" />
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryReactorAdapterBare" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryEndCapBare" />
       </Blocks>
     </BlockVariantGroup>
     <BlockVariantGroup>
@@ -24,13 +32,21 @@
       <Description>Scroll through manifold thermal pipes and fittings. Connect the shared supply/return network; align H/C on every socket face.</Description>
       <Blocks>
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryStraight" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRollAdapter" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRollAdapterReversed" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryCrossover" />
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbow" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowReversed" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowRollClockwise" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowRollClockwiseReversed" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowRollCounterclockwise" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversed" />
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRiser" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRiserReversed" />
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryTee" />
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryCross" />
-        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryRollAdapter" />
-        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryEndCap" />
         <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryReactorAdapter" />
+        <Block Type="MyObjectBuilder_UpgradeModule" Subtype="ArcanePower_Thermal_PrimaryEndCap" />
       </Blocks>
     </BlockVariantGroup>
     <BlockVariantGroup>

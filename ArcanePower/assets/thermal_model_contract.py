@@ -67,8 +67,64 @@ PIPE_PORTS = {
     'Roll adapter': (((-1, 0, 0), (0, 0, 1)), ((1, 0, 0), (0, 1, 0))),
     'End cap': (((-1, 0, 0), (0, 0, 1)),),
 }
+# New fittings belong only to the unified family; HP/LP IDs are legacy aliases.
+LEGACY_PIPE_SHAPES = tuple(PIPE_PORTS)
+PIPE_PORTS.update({
+    'Elbow reversed': (((-1, 0, 0), (0, 0, 1)), ((0, -1, 0), (0, 0, 1))),
+    'Riser reversed': (((-1, 0, 0), (0, 0, -1)), ((0, 0, 1), (1, 0, 0))),
+})
+REVERSED_PIPES = {'PRIMARY / '+shape+' reversed': 'PRIMARY / '+shape for shape in ('Elbow', 'Riser')}
+# (horizontal bend direction, H/C roll). These are distinct socket layouts,
+# not additional legacy circuit IDs. Clockwise is viewed along pipe travel.
+ROUTED_PIPES = {
+    'Roll adapter reversed': (0, -1),
+    'Crossover': (0, 2),
+    'Elbow roll clockwise': (1, 1),
+    'Elbow roll counterclockwise': (1, -1),
+    'Elbow roll clockwise reversed': (-1, 1),
+    'Elbow roll counterclockwise reversed': (-1, -1),
+}
+for shape, (turn, roll) in ROUTED_PIPES.items():
+    normal = (0, turn, 0) if turn else (1, 0, 0)
+    hot = (turn*roll, 0, 0) if turn else ((0, -1, 0) if roll == -1 else (0, 0, -1))
+    PIPE_PORTS[shape] = (((-1, 0, 0), (0, 0, 1)), (normal, hot))
+
+
+def routed_paths(shape):
+    """Full-size duplex walls with straight 200 mm socket seats.
+
+    Separate bend control lengths let the outer channel pass around the inner
+    channel without shrinking either bore. A constant-offset twisted elbow
+    pinches its inner wall; these cubic routes retain at least 395 mm bend radius.
+    """
+    turn, roll = ROUTED_PIPES[shape]
+    paths = []
+    for sign in (-1, 1):
+        if not turn:
+            path = []
+            for i in range(129):
+                t = i/128
+                u = max(0, min(1, (2.5*t-.25)/2))
+                angle = roll*math.pi/2*(u*u*(3-2*u))
+                path.append((-1.25+2.5*t, sign*.46*math.sin(angle), sign*.46*math.cos(angle)))
+        else:
+            side = sign*turn*roll
+            a, b = (.825, 1.8) if side > 0 else (.525, .375)
+            control = ((-1.05, 0, sign*.46), (-1.05+a, 0, sign*.46),
+                       (side*.46, turn*(1.05-b), 0), (side*.46, turn*1.05, 0))
+            path = [(-1.25, 0, sign*.46)]
+            for i in range(129):
+                t = i/128
+                weights = ((1-t)**3, 3*t*(1-t)**2, 3*t*t*(1-t), t**3)
+                path.append(tuple(sum(w*p[j] for w, p in zip(weights, control)) for j in range(3)))
+            path.append((side*.46, turn*1.25, 0))
+        paths.append(path)
+    return paths
+
+
 SPECS = dict(MACHINES)
-SPECS.update({c+' / '+shape: (1, 1, 1) for c in CIRCUITS for shape in PIPE_PORTS})
+SPECS.update({c+' / '+shape: (1, 1, 1) for c in CIRCUITS
+              for shape in (PIPE_PORTS if c == 'PRIMARY' else LEGACY_PIPE_SHAPES)})
 SPECS['PRIMARY / Reactor adapter'] = (1, 1, 1)
 BARE_PIPES = {name + ' bare': name for name in SPECS if ' / ' in name}
 SPECS.update({name: SPECS[base] for name, base in BARE_PIPES.items()})
@@ -159,7 +215,9 @@ def route(start, end, blocked):
     neighbouring pipes meet by matching both face normals and H offset vectors.
     """
     options = {}
-    for shape in ('Straight', 'Elbow', 'Riser', 'Roll adapter'):
+    for shape, shape_ports in PIPE_PORTS.items():
+        if len(shape_ports) != 2:
+            continue
         for m in ROTATIONS:
             ports = [(rotate(m, n), rotate(m, up)) for n, up in PIPE_PORTS[shape]]
             for i in (0, 1):
@@ -210,8 +268,8 @@ def route(start, end, blocked):
 
 def self_check():
     assert len(ROTATIONS) == 24 and len(SPECS) == len(MACHINES) + 2*len(BARE_PIPES)
-    assert len(BARE_PIPES) == 22
-    assert len(PLAYABLE) == 27 and len(PIPE_ALIASES) == 28
+    assert len(BARE_PIPES) == 30
+    assert len(PLAYABLE) == 47 and len(PIPE_ALIASES) == 28
     assert all(target in PLAYABLE and SPECS[name] == SPECS[target] for name, target in PIPE_ALIASES.items())
     assert all(SPECS[name] == SPECS[base] == (1, 1, 1) for name, base in BARE_PIPES.items())
     assert len({subtype(n) for n in SPECS}) == len(SPECS)

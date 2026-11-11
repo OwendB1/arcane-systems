@@ -5918,5 +5918,1605 @@
     "authored_triangles": 16053,
     "reference": null,
     "distance": null
+  },
+  "APT_PrimaryRiserReversed_M_BS2_LOD1": {
+    "block": "PRIMARY / Riser reversed",
+    "scene": "APT_PrimaryRiserReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9370,
+    "authored_triangles": 9370,
+    "reference": "APT_PrimaryRiserReversed_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryRiserReversed_M_BS2_LOD2": {
+    "block": "PRIMARY / Riser reversed",
+    "scene": "APT_PrimaryRiserReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4566,
+    "authored_triangles": 4566,
+    "reference": "APT_PrimaryRiserReversed_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryRiserReversed_M_BS3_LOD1": {
+    "block": "PRIMARY / Riser reversed",
+    "scene": "APT_PrimaryRiserReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 9630,
+    "authored_triangles": 9630,
+    "reference": "APT_PrimaryRiserReversed_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryRiserReversed_M_BS3_LOD2": {
+    "block": "PRIMARY / Riser reversed",
+    "scene": "APT_PrimaryRiserReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4826,
+    "authored_triangles": 4826,
+    "reference": "APT_PrimaryRiserReversed_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryRiserReversed_M_LOD1": {
+    "block": "PRIMARY / Riser reversed",
+    "scene": "APT_PrimaryRiserReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 15520,
+    "authored_triangles": 15520,
+    "reference": "APT_PrimaryRiserReversed_M",
+    "distance": 35
+  },
+  "APT_PrimaryRiserReversed_M_LOD2": {
+    "block": "PRIMARY / Riser reversed",
+    "scene": "APT_PrimaryRiserReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 14047,
+    "authored_triangles": 14047,
+    "reference": "APT_PrimaryRiserReversed_M",
+    "distance": 90
+  },
+  "APT_PrimaryRiserReversed_M_BS1": {
+    "block": "PRIMARY / Riser reversed",
+    "scene": "APT_PrimaryRiserReversed_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserReversed_M_BS2": {
+    "block": "PRIMARY / Riser reversed",
+    "scene": "APT_PrimaryRiserReversed_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 17578,
+    "authored_triangles": 17578,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserReversed_M_BS3": {
+    "block": "PRIMARY / Riser reversed",
+    "scene": "APT_PrimaryRiserReversed_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 17838,
+    "authored_triangles": 17838,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserReversed_M": {
+    "block": "PRIMARY / Riser reversed",
+    "scene": "APT_PrimaryRiserReversed_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 18730,
+    "authored_triangles": 18730,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserReversedBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Riser reversed bare",
+    "scene": "APT_PrimaryRiserReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7692,
+    "authored_triangles": 7692,
+    "reference": "APT_PrimaryRiserReversedBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryRiserReversedBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Riser reversed bare",
+    "scene": "APT_PrimaryRiserReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3584,
+    "authored_triangles": 3584,
+    "reference": "APT_PrimaryRiserReversedBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryRiserReversedBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Riser reversed bare",
+    "scene": "APT_PrimaryRiserReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7692,
+    "authored_triangles": 7692,
+    "reference": "APT_PrimaryRiserReversedBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryRiserReversedBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Riser reversed bare",
+    "scene": "APT_PrimaryRiserReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3584,
+    "authored_triangles": 3584,
+    "reference": "APT_PrimaryRiserReversedBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryRiserReversedBare_M_LOD1": {
+    "block": "PRIMARY / Riser reversed bare",
+    "scene": "APT_PrimaryRiserReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 13696,
+    "authored_triangles": 13696,
+    "reference": "APT_PrimaryRiserReversedBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryRiserReversedBare_M_LOD2": {
+    "block": "PRIMARY / Riser reversed bare",
+    "scene": "APT_PrimaryRiserReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 12736,
+    "authored_triangles": 12736,
+    "reference": "APT_PrimaryRiserReversedBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryRiserReversedBare_M_BS1": {
+    "block": "PRIMARY / Riser reversed bare",
+    "scene": "APT_PrimaryRiserReversedBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2304,
+    "authored_triangles": 2304,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserReversedBare_M_BS2": {
+    "block": "PRIMARY / Riser reversed bare",
+    "scene": "APT_PrimaryRiserReversedBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 14336,
+    "authored_triangles": 14336,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserReversedBare_M_BS3": {
+    "block": "PRIMARY / Riser reversed bare",
+    "scene": "APT_PrimaryRiserReversedBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 14376,
+    "authored_triangles": 14376,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRiserReversedBare_M": {
+    "block": "PRIMARY / Riser reversed bare",
+    "scene": "APT_PrimaryRiserReversedBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 15660,
+    "authored_triangles": 15660,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowReversed_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow reversed",
+    "scene": "APT_PrimaryElbowReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 7810,
+    "authored_triangles": 7810,
+    "reference": "APT_PrimaryElbowReversed_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowReversed_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow reversed",
+    "scene": "APT_PrimaryElbowReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 3862,
+    "authored_triangles": 3862,
+    "reference": "APT_PrimaryElbowReversed_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowReversed_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow reversed",
+    "scene": "APT_PrimaryElbowReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 8050,
+    "authored_triangles": 8050,
+    "reference": "APT_PrimaryElbowReversed_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowReversed_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow reversed",
+    "scene": "APT_PrimaryElbowReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 4102,
+    "authored_triangles": 4102,
+    "reference": "APT_PrimaryElbowReversed_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowReversed_M_LOD1": {
+    "block": "PRIMARY / Elbow reversed",
+    "scene": "APT_PrimaryElbowReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 12576,
+    "authored_triangles": 12576,
+    "reference": "APT_PrimaryElbowReversed_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowReversed_M_LOD2": {
+    "block": "PRIMARY / Elbow reversed",
+    "scene": "APT_PrimaryElbowReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11039,
+    "authored_triangles": 11039,
+    "reference": "APT_PrimaryElbowReversed_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowReversed_M_BS1": {
+    "block": "PRIMARY / Elbow reversed",
+    "scene": "APT_PrimaryElbowReversed_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowReversed_M_BS2": {
+    "block": "PRIMARY / Elbow reversed",
+    "scene": "APT_PrimaryElbowReversed_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 14762,
+    "authored_triangles": 14762,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowReversed_M_BS3": {
+    "block": "PRIMARY / Elbow reversed",
+    "scene": "APT_PrimaryElbowReversed_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 15002,
+    "authored_triangles": 15002,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowReversed_M": {
+    "block": "PRIMARY / Elbow reversed",
+    "scene": "APT_PrimaryElbowReversed_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 15914,
+    "authored_triangles": 15914,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowReversedBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow reversed bare",
+    "scene": "APT_PrimaryElbowReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 6130,
+    "authored_triangles": 6130,
+    "reference": "APT_PrimaryElbowReversedBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowReversedBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow reversed bare",
+    "scene": "APT_PrimaryElbowReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2880,
+    "authored_triangles": 2880,
+    "reference": "APT_PrimaryElbowReversedBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowReversedBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow reversed bare",
+    "scene": "APT_PrimaryElbowReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 6130,
+    "authored_triangles": 6130,
+    "reference": "APT_PrimaryElbowReversedBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowReversedBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow reversed bare",
+    "scene": "APT_PrimaryElbowReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 2880,
+    "authored_triangles": 2880,
+    "reference": "APT_PrimaryElbowReversedBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowReversedBare_M_LOD1": {
+    "block": "PRIMARY / Elbow reversed bare",
+    "scene": "APT_PrimaryElbowReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 10752,
+    "authored_triangles": 10752,
+    "reference": "APT_PrimaryElbowReversedBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowReversedBare_M_LOD2": {
+    "block": "PRIMARY / Elbow reversed bare",
+    "scene": "APT_PrimaryElbowReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9728,
+    "authored_triangles": 9728,
+    "reference": "APT_PrimaryElbowReversedBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowReversedBare_M_BS1": {
+    "block": "PRIMARY / Elbow reversed bare",
+    "scene": "APT_PrimaryElbowReversedBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2560,
+    "authored_triangles": 2560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowReversedBare_M_BS2": {
+    "block": "PRIMARY / Elbow reversed bare",
+    "scene": "APT_PrimaryElbowReversedBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 11520,
+    "authored_triangles": 11520,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowReversedBare_M_BS3": {
+    "block": "PRIMARY / Elbow reversed bare",
+    "scene": "APT_PrimaryElbowReversedBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 11560,
+    "authored_triangles": 11560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowReversedBare_M": {
+    "block": "PRIMARY / Elbow reversed bare",
+    "scene": "APT_PrimaryElbowReversedBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 12844,
+    "authored_triangles": 12844,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterReversed_M_BS2_LOD1": {
+    "block": "PRIMARY / Roll adapter reversed",
+    "scene": "APT_PrimaryRollAdapterReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 22452,
+    "authored_triangles": 22452,
+    "reference": "APT_PrimaryRollAdapterReversed_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapterReversed_M_BS2_LOD2": {
+    "block": "PRIMARY / Roll adapter reversed",
+    "scene": "APT_PrimaryRollAdapterReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 10518,
+    "authored_triangles": 10518,
+    "reference": "APT_PrimaryRollAdapterReversed_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapterReversed_M_BS3_LOD1": {
+    "block": "PRIMARY / Roll adapter reversed",
+    "scene": "APT_PrimaryRollAdapterReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 22624,
+    "authored_triangles": 22624,
+    "reference": "APT_PrimaryRollAdapterReversed_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapterReversed_M_BS3_LOD2": {
+    "block": "PRIMARY / Roll adapter reversed",
+    "scene": "APT_PrimaryRollAdapterReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 10690,
+    "authored_triangles": 10690,
+    "reference": "APT_PrimaryRollAdapterReversed_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapterReversed_M_LOD1": {
+    "block": "PRIMARY / Roll adapter reversed",
+    "scene": "APT_PrimaryRollAdapterReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 39200,
+    "authored_triangles": 39200,
+    "reference": "APT_PrimaryRollAdapterReversed_M",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapterReversed_M_LOD2": {
+    "block": "PRIMARY / Roll adapter reversed",
+    "scene": "APT_PrimaryRollAdapterReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37663,
+    "authored_triangles": 37663,
+    "reference": "APT_PrimaryRollAdapterReversed_M",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapterReversed_M_BS1": {
+    "block": "PRIMARY / Roll adapter reversed",
+    "scene": "APT_PrimaryRollAdapterReversed_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterReversed_M_BS2": {
+    "block": "PRIMARY / Roll adapter reversed",
+    "scene": "APT_PrimaryRollAdapterReversed_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 41386,
+    "authored_triangles": 41386,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterReversed_M_BS3": {
+    "block": "PRIMARY / Roll adapter reversed",
+    "scene": "APT_PrimaryRollAdapterReversed_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 41558,
+    "authored_triangles": 41558,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterReversed_M": {
+    "block": "PRIMARY / Roll adapter reversed",
+    "scene": "APT_PrimaryRollAdapterReversed_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 42538,
+    "authored_triangles": 42538,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterReversedBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Roll adapter reversed bare",
+    "scene": "APT_PrimaryRollAdapterReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 20774,
+    "authored_triangles": 20774,
+    "reference": "APT_PrimaryRollAdapterReversedBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapterReversedBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Roll adapter reversed bare",
+    "scene": "APT_PrimaryRollAdapterReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9536,
+    "authored_triangles": 9536,
+    "reference": "APT_PrimaryRollAdapterReversedBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapterReversedBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Roll adapter reversed bare",
+    "scene": "APT_PrimaryRollAdapterReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 20774,
+    "authored_triangles": 20774,
+    "reference": "APT_PrimaryRollAdapterReversedBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapterReversedBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Roll adapter reversed bare",
+    "scene": "APT_PrimaryRollAdapterReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9536,
+    "authored_triangles": 9536,
+    "reference": "APT_PrimaryRollAdapterReversedBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapterReversedBare_M_LOD1": {
+    "block": "PRIMARY / Roll adapter reversed bare",
+    "scene": "APT_PrimaryRollAdapterReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 37376,
+    "authored_triangles": 37376,
+    "reference": "APT_PrimaryRollAdapterReversedBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryRollAdapterReversedBare_M_LOD2": {
+    "block": "PRIMARY / Roll adapter reversed bare",
+    "scene": "APT_PrimaryRollAdapterReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 36352,
+    "authored_triangles": 36352,
+    "reference": "APT_PrimaryRollAdapterReversedBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryRollAdapterReversedBare_M_BS1": {
+    "block": "PRIMARY / Roll adapter reversed bare",
+    "scene": "APT_PrimaryRollAdapterReversedBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2560,
+    "authored_triangles": 2560,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterReversedBare_M_BS2": {
+    "block": "PRIMARY / Roll adapter reversed bare",
+    "scene": "APT_PrimaryRollAdapterReversedBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 38144,
+    "authored_triangles": 38144,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterReversedBare_M_BS3": {
+    "block": "PRIMARY / Roll adapter reversed bare",
+    "scene": "APT_PrimaryRollAdapterReversedBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 38184,
+    "authored_triangles": 38184,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryRollAdapterReversedBare_M": {
+    "block": "PRIMARY / Roll adapter reversed bare",
+    "scene": "APT_PrimaryRollAdapterReversedBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 39468,
+    "authored_triangles": 39468,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossover_M_BS2_LOD1": {
+    "block": "PRIMARY / Crossover",
+    "scene": "APT_PrimaryCrossover_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 22708,
+    "authored_triangles": 22708,
+    "reference": "APT_PrimaryCrossover_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryCrossover_M_BS2_LOD2": {
+    "block": "PRIMARY / Crossover",
+    "scene": "APT_PrimaryCrossover_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 10646,
+    "authored_triangles": 10646,
+    "reference": "APT_PrimaryCrossover_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryCrossover_M_BS3_LOD1": {
+    "block": "PRIMARY / Crossover",
+    "scene": "APT_PrimaryCrossover_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 22948,
+    "authored_triangles": 22948,
+    "reference": "APT_PrimaryCrossover_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryCrossover_M_BS3_LOD2": {
+    "block": "PRIMARY / Crossover",
+    "scene": "APT_PrimaryCrossover_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 10886,
+    "authored_triangles": 10886,
+    "reference": "APT_PrimaryCrossover_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryCrossover_M_LOD1": {
+    "block": "PRIMARY / Crossover",
+    "scene": "APT_PrimaryCrossover_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 39456,
+    "authored_triangles": 39456,
+    "reference": "APT_PrimaryCrossover_M",
+    "distance": 35
+  },
+  "APT_PrimaryCrossover_M_LOD2": {
+    "block": "PRIMARY / Crossover",
+    "scene": "APT_PrimaryCrossover_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37791,
+    "authored_triangles": 37791,
+    "reference": "APT_PrimaryCrossover_M",
+    "distance": 90
+  },
+  "APT_PrimaryCrossover_M_BS1": {
+    "block": "PRIMARY / Crossover",
+    "scene": "APT_PrimaryCrossover_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossover_M_BS2": {
+    "block": "PRIMARY / Crossover",
+    "scene": "APT_PrimaryCrossover_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 41898,
+    "authored_triangles": 41898,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossover_M_BS3": {
+    "block": "PRIMARY / Crossover",
+    "scene": "APT_PrimaryCrossover_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 42138,
+    "authored_triangles": 42138,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossover_M": {
+    "block": "PRIMARY / Crossover",
+    "scene": "APT_PrimaryCrossover_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 43050,
+    "authored_triangles": 43050,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossoverBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Crossover bare",
+    "scene": "APT_PrimaryCrossoverBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 21030,
+    "authored_triangles": 21030,
+    "reference": "APT_PrimaryCrossoverBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryCrossoverBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Crossover bare",
+    "scene": "APT_PrimaryCrossoverBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9664,
+    "authored_triangles": 9664,
+    "reference": "APT_PrimaryCrossoverBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryCrossoverBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Crossover bare",
+    "scene": "APT_PrimaryCrossoverBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 21030,
+    "authored_triangles": 21030,
+    "reference": "APT_PrimaryCrossoverBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryCrossoverBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Crossover bare",
+    "scene": "APT_PrimaryCrossoverBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9664,
+    "authored_triangles": 9664,
+    "reference": "APT_PrimaryCrossoverBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryCrossoverBare_M_LOD1": {
+    "block": "PRIMARY / Crossover bare",
+    "scene": "APT_PrimaryCrossoverBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 37632,
+    "authored_triangles": 37632,
+    "reference": "APT_PrimaryCrossoverBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryCrossoverBare_M_LOD2": {
+    "block": "PRIMARY / Crossover bare",
+    "scene": "APT_PrimaryCrossoverBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 36480,
+    "authored_triangles": 36480,
+    "reference": "APT_PrimaryCrossoverBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryCrossoverBare_M_BS1": {
+    "block": "PRIMARY / Crossover bare",
+    "scene": "APT_PrimaryCrossoverBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 3072,
+    "authored_triangles": 3072,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossoverBare_M_BS2": {
+    "block": "PRIMARY / Crossover bare",
+    "scene": "APT_PrimaryCrossoverBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 38656,
+    "authored_triangles": 38656,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossoverBare_M_BS3": {
+    "block": "PRIMARY / Crossover bare",
+    "scene": "APT_PrimaryCrossoverBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 38696,
+    "authored_triangles": 38696,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryCrossoverBare_M": {
+    "block": "PRIMARY / Crossover bare",
+    "scene": "APT_PrimaryCrossoverBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 39980,
+    "authored_triangles": 39980,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwise_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise",
+    "scene": "APT_PrimaryElbowRollClockwise_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 23144,
+    "authored_triangles": 23144,
+    "reference": "APT_PrimaryElbowRollClockwise_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwise_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise",
+    "scene": "APT_PrimaryElbowRollClockwise_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 10838,
+    "authored_triangles": 10838,
+    "reference": "APT_PrimaryElbowRollClockwise_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwise_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise",
+    "scene": "APT_PrimaryElbowRollClockwise_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 23384,
+    "authored_triangles": 23384,
+    "reference": "APT_PrimaryElbowRollClockwise_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwise_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise",
+    "scene": "APT_PrimaryElbowRollClockwise_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11078,
+    "authored_triangles": 11078,
+    "reference": "APT_PrimaryElbowRollClockwise_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwise_M_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise",
+    "scene": "APT_PrimaryElbowRollClockwise_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 40352,
+    "authored_triangles": 40352,
+    "reference": "APT_PrimaryElbowRollClockwise_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwise_M_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise",
+    "scene": "APT_PrimaryElbowRollClockwise_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 38751,
+    "authored_triangles": 38751,
+    "reference": "APT_PrimaryElbowRollClockwise_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwise_M_BS1": {
+    "block": "PRIMARY / Elbow roll clockwise",
+    "scene": "APT_PrimaryElbowRollClockwise_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwise_M_BS2": {
+    "block": "PRIMARY / Elbow roll clockwise",
+    "scene": "APT_PrimaryElbowRollClockwise_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 42666,
+    "authored_triangles": 42666,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwise_M_BS3": {
+    "block": "PRIMARY / Elbow roll clockwise",
+    "scene": "APT_PrimaryElbowRollClockwise_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 42906,
+    "authored_triangles": 42906,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwise_M": {
+    "block": "PRIMARY / Elbow roll clockwise",
+    "scene": "APT_PrimaryElbowRollClockwise_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 43818,
+    "authored_triangles": 43818,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise bare",
+    "scene": "APT_PrimaryElbowRollClockwiseBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 21464,
+    "authored_triangles": 21464,
+    "reference": "APT_PrimaryElbowRollClockwiseBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwiseBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise bare",
+    "scene": "APT_PrimaryElbowRollClockwiseBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9856,
+    "authored_triangles": 9856,
+    "reference": "APT_PrimaryElbowRollClockwiseBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwiseBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise bare",
+    "scene": "APT_PrimaryElbowRollClockwiseBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 21464,
+    "authored_triangles": 21464,
+    "reference": "APT_PrimaryElbowRollClockwiseBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwiseBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise bare",
+    "scene": "APT_PrimaryElbowRollClockwiseBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9856,
+    "authored_triangles": 9856,
+    "reference": "APT_PrimaryElbowRollClockwiseBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwiseBare_M_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise bare",
+    "scene": "APT_PrimaryElbowRollClockwiseBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 38528,
+    "authored_triangles": 38528,
+    "reference": "APT_PrimaryElbowRollClockwiseBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwiseBare_M_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise bare",
+    "scene": "APT_PrimaryElbowRollClockwiseBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37440,
+    "authored_triangles": 37440,
+    "reference": "APT_PrimaryElbowRollClockwiseBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwiseBare_M_BS1": {
+    "block": "PRIMARY / Elbow roll clockwise bare",
+    "scene": "APT_PrimaryElbowRollClockwiseBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2816,
+    "authored_triangles": 2816,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseBare_M_BS2": {
+    "block": "PRIMARY / Elbow roll clockwise bare",
+    "scene": "APT_PrimaryElbowRollClockwiseBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 39424,
+    "authored_triangles": 39424,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseBare_M_BS3": {
+    "block": "PRIMARY / Elbow roll clockwise bare",
+    "scene": "APT_PrimaryElbowRollClockwiseBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 39464,
+    "authored_triangles": 39464,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseBare_M": {
+    "block": "PRIMARY / Elbow roll clockwise bare",
+    "scene": "APT_PrimaryElbowRollClockwiseBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 40748,
+    "authored_triangles": 40748,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCounterclockwise_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise",
+    "scene": "APT_PrimaryElbowRollCounterclockwise_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 23144,
+    "authored_triangles": 23144,
+    "reference": "APT_PrimaryElbowRollCounterclockwise_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCounterclockwise_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise",
+    "scene": "APT_PrimaryElbowRollCounterclockwise_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 10838,
+    "authored_triangles": 10838,
+    "reference": "APT_PrimaryElbowRollCounterclockwise_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCounterclockwise_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise",
+    "scene": "APT_PrimaryElbowRollCounterclockwise_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 23448,
+    "authored_triangles": 23448,
+    "reference": "APT_PrimaryElbowRollCounterclockwise_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCounterclockwise_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise",
+    "scene": "APT_PrimaryElbowRollCounterclockwise_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11142,
+    "authored_triangles": 11142,
+    "reference": "APT_PrimaryElbowRollCounterclockwise_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCounterclockwise_M_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise",
+    "scene": "APT_PrimaryElbowRollCounterclockwise_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 40352,
+    "authored_triangles": 40352,
+    "reference": "APT_PrimaryElbowRollCounterclockwise_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCounterclockwise_M_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise",
+    "scene": "APT_PrimaryElbowRollCounterclockwise_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 38751,
+    "authored_triangles": 38751,
+    "reference": "APT_PrimaryElbowRollCounterclockwise_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCounterclockwise_M_BS1": {
+    "block": "PRIMARY / Elbow roll counterclockwise",
+    "scene": "APT_PrimaryElbowRollCounterclockwise_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCounterclockwise_M_BS2": {
+    "block": "PRIMARY / Elbow roll counterclockwise",
+    "scene": "APT_PrimaryElbowRollCounterclockwise_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 42666,
+    "authored_triangles": 42666,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCounterclockwise_M_BS3": {
+    "block": "PRIMARY / Elbow roll counterclockwise",
+    "scene": "APT_PrimaryElbowRollCounterclockwise_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 42970,
+    "authored_triangles": 42970,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCounterclockwise_M": {
+    "block": "PRIMARY / Elbow roll counterclockwise",
+    "scene": "APT_PrimaryElbowRollCounterclockwise_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 43818,
+    "authored_triangles": 43818,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCounterclockwiseBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise bare",
+    "scene": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 21464,
+    "authored_triangles": 21464,
+    "reference": "APT_PrimaryElbowRollCounterclockwiseBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCounterclockwiseBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise bare",
+    "scene": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9856,
+    "authored_triangles": 9856,
+    "reference": "APT_PrimaryElbowRollCounterclockwiseBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCounterclockwiseBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise bare",
+    "scene": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 21464,
+    "authored_triangles": 21464,
+    "reference": "APT_PrimaryElbowRollCounterclockwiseBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCounterclockwiseBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise bare",
+    "scene": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9856,
+    "authored_triangles": 9856,
+    "reference": "APT_PrimaryElbowRollCounterclockwiseBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCounterclockwiseBare_M_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise bare",
+    "scene": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 38528,
+    "authored_triangles": 38528,
+    "reference": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCounterclockwiseBare_M_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise bare",
+    "scene": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37440,
+    "authored_triangles": 37440,
+    "reference": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCounterclockwiseBare_M_BS1": {
+    "block": "PRIMARY / Elbow roll counterclockwise bare",
+    "scene": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2816,
+    "authored_triangles": 2816,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCounterclockwiseBare_M_BS2": {
+    "block": "PRIMARY / Elbow roll counterclockwise bare",
+    "scene": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 39424,
+    "authored_triangles": 39424,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCounterclockwiseBare_M_BS3": {
+    "block": "PRIMARY / Elbow roll counterclockwise bare",
+    "scene": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 39464,
+    "authored_triangles": 39464,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCounterclockwiseBare_M": {
+    "block": "PRIMARY / Elbow roll counterclockwise bare",
+    "scene": "APT_PrimaryElbowRollCounterclockwiseBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 40748,
+    "authored_triangles": 40748,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseReversed_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise reversed",
+    "scene": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 23144,
+    "authored_triangles": 23144,
+    "reference": "APT_PrimaryElbowRollClockwiseReversed_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwiseReversed_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise reversed",
+    "scene": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 10838,
+    "authored_triangles": 10838,
+    "reference": "APT_PrimaryElbowRollClockwiseReversed_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwiseReversed_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise reversed",
+    "scene": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 23340,
+    "authored_triangles": 23340,
+    "reference": "APT_PrimaryElbowRollClockwiseReversed_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwiseReversed_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise reversed",
+    "scene": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11034,
+    "authored_triangles": 11034,
+    "reference": "APT_PrimaryElbowRollClockwiseReversed_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwiseReversed_M_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise reversed",
+    "scene": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 40352,
+    "authored_triangles": 40352,
+    "reference": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwiseReversed_M_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise reversed",
+    "scene": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 38751,
+    "authored_triangles": 38751,
+    "reference": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwiseReversed_M_BS1": {
+    "block": "PRIMARY / Elbow roll clockwise reversed",
+    "scene": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseReversed_M_BS2": {
+    "block": "PRIMARY / Elbow roll clockwise reversed",
+    "scene": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 42666,
+    "authored_triangles": 42666,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseReversed_M_BS3": {
+    "block": "PRIMARY / Elbow roll clockwise reversed",
+    "scene": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 42862,
+    "authored_triangles": 42862,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseReversed_M": {
+    "block": "PRIMARY / Elbow roll clockwise reversed",
+    "scene": "APT_PrimaryElbowRollClockwiseReversed_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 43818,
+    "authored_triangles": 43818,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseReversedBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 21464,
+    "authored_triangles": 21464,
+    "reference": "APT_PrimaryElbowRollClockwiseReversedBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwiseReversedBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9856,
+    "authored_triangles": 9856,
+    "reference": "APT_PrimaryElbowRollClockwiseReversedBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwiseReversedBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 21464,
+    "authored_triangles": 21464,
+    "reference": "APT_PrimaryElbowRollClockwiseReversedBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwiseReversedBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9856,
+    "authored_triangles": 9856,
+    "reference": "APT_PrimaryElbowRollClockwiseReversedBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwiseReversedBare_M_LOD1": {
+    "block": "PRIMARY / Elbow roll clockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 38528,
+    "authored_triangles": 38528,
+    "reference": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollClockwiseReversedBare_M_LOD2": {
+    "block": "PRIMARY / Elbow roll clockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37440,
+    "authored_triangles": 37440,
+    "reference": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollClockwiseReversedBare_M_BS1": {
+    "block": "PRIMARY / Elbow roll clockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2816,
+    "authored_triangles": 2816,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseReversedBare_M_BS2": {
+    "block": "PRIMARY / Elbow roll clockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 39424,
+    "authored_triangles": 39424,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseReversedBare_M_BS3": {
+    "block": "PRIMARY / Elbow roll clockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 39464,
+    "authored_triangles": 39464,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollClockwiseReversedBare_M": {
+    "block": "PRIMARY / Elbow roll clockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollClockwiseReversedBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 40748,
+    "authored_triangles": 40748,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCCWReversed_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed",
+    "scene": "APT_PrimaryElbowRollCCWReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 23144,
+    "authored_triangles": 23144,
+    "reference": "APT_PrimaryElbowRollCCWReversed_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCCWReversed_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed",
+    "scene": "APT_PrimaryElbowRollCCWReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 10838,
+    "authored_triangles": 10838,
+    "reference": "APT_PrimaryElbowRollCCWReversed_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCCWReversed_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed",
+    "scene": "APT_PrimaryElbowRollCCWReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 23404,
+    "authored_triangles": 23404,
+    "reference": "APT_PrimaryElbowRollCCWReversed_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCCWReversed_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed",
+    "scene": "APT_PrimaryElbowRollCCWReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 11098,
+    "authored_triangles": 11098,
+    "reference": "APT_PrimaryElbowRollCCWReversed_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCCWReversed_M_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed",
+    "scene": "APT_PrimaryElbowRollCCWReversed_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 40352,
+    "authored_triangles": 40352,
+    "reference": "APT_PrimaryElbowRollCCWReversed_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCCWReversed_M_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed",
+    "scene": "APT_PrimaryElbowRollCCWReversed_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 38751,
+    "authored_triangles": 38751,
+    "reference": "APT_PrimaryElbowRollCCWReversed_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCCWReversed_M_BS1": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed",
+    "scene": "APT_PrimaryElbowRollCCWReversed_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 608,
+    "authored_triangles": 608,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCCWReversed_M_BS2": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed",
+    "scene": "APT_PrimaryElbowRollCCWReversed_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 42666,
+    "authored_triangles": 42666,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCCWReversed_M_BS3": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed",
+    "scene": "APT_PrimaryElbowRollCCWReversed_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 42926,
+    "authored_triangles": 42926,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCCWReversed_M": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed",
+    "scene": "APT_PrimaryElbowRollCCWReversed_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 43818,
+    "authored_triangles": 43818,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCCWReversedBare_M_BS2_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 21464,
+    "authored_triangles": 21464,
+    "reference": "APT_PrimaryElbowRollCCWReversedBare_M_BS2",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCCWReversedBare_M_BS2_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9856,
+    "authored_triangles": 9856,
+    "reference": "APT_PrimaryElbowRollCCWReversedBare_M_BS2",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCCWReversedBare_M_BS3_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 21464,
+    "authored_triangles": 21464,
+    "reference": "APT_PrimaryElbowRollCCWReversedBare_M_BS3",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCCWReversedBare_M_BS3_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 9856,
+    "authored_triangles": 9856,
+    "reference": "APT_PrimaryElbowRollCCWReversedBare_M_BS3",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCCWReversedBare_M_LOD1": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "type": "lod",
+    "index": 1,
+    "triangles": 38528,
+    "authored_triangles": 38528,
+    "reference": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "distance": 35
+  },
+  "APT_PrimaryElbowRollCCWReversedBare_M_LOD2": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "type": "lod",
+    "index": 2,
+    "triangles": 37440,
+    "authored_triangles": 37440,
+    "reference": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "distance": 90
+  },
+  "APT_PrimaryElbowRollCCWReversedBare_M_BS1": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "type": "bs",
+    "index": 1,
+    "triangles": 2816,
+    "authored_triangles": 2816,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCCWReversedBare_M_BS2": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "type": "bs",
+    "index": 2,
+    "triangles": 39424,
+    "authored_triangles": 39424,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCCWReversedBare_M_BS3": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "type": "bs",
+    "index": 3,
+    "triangles": 39464,
+    "authored_triangles": 39464,
+    "reference": null,
+    "distance": null
+  },
+  "APT_PrimaryElbowRollCCWReversedBare_M": {
+    "block": "PRIMARY / Elbow roll counterclockwise reversed bare",
+    "scene": "APT_PrimaryElbowRollCCWReversedBare_M",
+    "type": "main",
+    "index": 0,
+    "triangles": 40748,
+    "authored_triangles": 40748,
+    "reference": null,
+    "distance": null
   }
 }

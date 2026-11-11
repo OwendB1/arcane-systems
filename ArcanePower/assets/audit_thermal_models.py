@@ -587,12 +587,36 @@ def audit(names=None):
                 if any(tree(a).overlap(tree(b)) for a, b in itertools.combinations(channels, 2)):
                     fail(name, 'separate pressure channels without intersections', scene.name)
         if scene.get('thermal_detail_revision', 0) >= 2:
-            reference = json.loads((OUT/'tight-fit-before-interfaces.json').read_text())[C['BARE_PIPES'].get(name, name).replace(' mirrored', '')]
+            base = C['BARE_PIPES'].get(name, name)
+            shape = base.split(' / ')[-1]
             if name.startswith('Brayton train'):
                 if tuple(cells) != (5, 2, 2) or ports != C['train_ports'](name):
                     fail(name, 'compact train envelope and standard duplex sockets', scene.name)
-            elif ports != reference['ports'] or list(cells) != reference['cells']:
-                fail(name, 'preserved pre-refinement cells and sockets', scene.name)
+            elif base in C['REVERSED_PIPES'] or shape in C['ROUTED_PIPES']:
+                expected = [dict(id='socket '+str(i+1), type='PRIMARY', position=[v*1.25 for v in n],
+                                 normal=list(n), hot_axis=list(up))
+                            for i, (n, up) in enumerate(C['PIPE_PORTS'][shape])]
+                if tuple(cells) != (1, 1, 1) or ports != expected:
+                    fail(name, 'new fitting matches its explicit duplex contract', scene.name)
+                channels = [o for o in col.objects if o.get('thermal_pipe_end_revision')]
+                if len(channels) != 2 or tree(channels[0]).overlap(tree(channels[1])):
+                    fail(name, 'two separate full-bore channels', scene.name)
+                for channel in channels:
+                    path = list(map(Vector, json.loads(channel['pipe_path'])))
+                    sign = 1 if ' H channel' in channel.name else -1
+                    for port in ports:
+                        mouth = Vector(port['position']) + sign*.46*Vector(port['hot_axis']) - .056*Vector(port['normal'])
+                        if min((mouth-path[i]).length for i in (0,-1)) > 1e-5:
+                            fail(name, 'physical tube follows H/C at both mouths', channel.name)
+                    if abs(channel['pipe_radius']-.355) > 1e-6:
+                        fail(name, 'full-size pressure tube radius', channel.name)
+                for clamp in (o for o in col.objects if o.type == 'MESH' and 'clamp' in o.name):
+                    if sum(bool(tree(clamp).overlap(tree(o))) for o in channels) > 1:
+                        fail(name, 'clamp clears the other pressure channel', clamp.name)
+            else:
+                reference = json.loads((OUT/'tight-fit-before-interfaces.json').read_text())[base.replace(' mirrored', '')]
+                if ports != reference['ports'] or list(cells) != reference['cells']:
+                    fail(name, 'preserved pre-refinement cells and sockets', scene.name)
             stats['max_chamfer_mm'] = max((o.get('thermal_chamfer_m', 0)*1000 for o in col.objects), default=0)
             stats['flat_hardware'] = sum(bool(o.get('thermal_faceted_hardware')) for o in col.objects)
             flow = [o for o in col.objects if o.type == 'MESH' and

@@ -1,4 +1,7 @@
-"""Disposable Blender review of actual MWM vertices under compiled runtime poses."""
+"""Disposable Blender review of actual MWM vertices under compiled runtime poses.
+
+Run tools/check_native_thermal_motion.py first to regenerate the review cache.
+"""
 import json
 from pathlib import Path
 import runpy
@@ -10,7 +13,15 @@ SCENE='Native manifold motion / runtime review'
 AXES=Matrix(((-1,0,0,0),(0,0,1,0),(0,1,0,0),(0,0,0,1)))
 
 
+def load_motion():
+    path=ROOT/'.cache/native-thermal-motion.json'
+    if not path.is_file():
+        raise RuntimeError('Native motion review cache was cleaned. Run python3 ArcanePower/tools/check_native_thermal_motion.py from the repository root first.')
+    return json.loads(path.read_text())
+
+
 def build():
+    data=load_motion()
     export=runpy.run_path(str(ROOT/'assets/export_thermal_models.py'))
     source=export['M']['scene_for']('Reactor housing')
     old=bpy.data.scenes.get(SCENE)
@@ -27,7 +38,6 @@ def build():
         copy=obj.copy();copy.animation_data_clear();copy.parent=None
         scene.collection.objects.link(copy);copy.matrix_world=obj.matrix_world.copy()
         copy.name='Native review static / '+obj.name
-    data=json.loads((ROOT/'.cache/native-thermal-motion.json').read_text())
     for row in data['parts']:
         if row['model']!='Reactor housing':continue
         faces=[];materials=[]
@@ -62,9 +72,9 @@ def build():
 
 
 def pose(index):
+    data=load_motion()
     scene=bpy.data.scenes[SCENE]
     bpy.context.window.scene=scene
-    data=json.loads((ROOT/'.cache/native-thermal-motion.json').read_text())
     rows={r['name']:r for r in data['parts'] if r['model']=='Reactor housing'}
     for obj in scene.objects:
         if obj.get('native_motion_part'):

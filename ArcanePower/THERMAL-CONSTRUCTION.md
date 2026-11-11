@@ -1,6 +1,6 @@
 # Building and verifying a Brayton plant
 
-The construction guide, 31 public thermal blocks and 28 hidden pipe compatibility definitions and native models are
+The construction guide, 47 public thermal blocks and 28 hidden pipe compatibility definitions and native models are
 included in the local alpha package. Live SE validation of these instructions
 remains pending. Construction verification is separate from server permission
 to start the reactor.
@@ -55,6 +55,26 @@ are visible in the current view.
   side. Rotate the preview, or rebuild an incorrectly oriented placed block.
 - Orange bore: H. Cyan bore: C. Both channels belong to the **same duplex socket**;
   align H with H and C with C, including through elbows, risers and roll adapters.
+- **Riser reversed** puts the red/H channel on the outside of the curve and C
+  on the inside. Its H/C socket orientation differs from the standard riser;
+  use the socket markers to choose the bend that matches your route.
+- **Elbow reversed** turns the opposite horizontal direction in its default
+  placement, keeping the same H/C roll. Both reversed fittings are available
+  in the Bare and Manifold pipe scroll groups. They retain the 1×1×1 size and
+  standard pipe costs. Manifold versions remain airtight.
+- **Roll adapter reversed** rolls the pair 90° in the opposite direction.
+  **Crossover** rolls it 180° in one cell while keeping H and C separate.
+  Together with the straight pipe and original roll adapter, these cover all
+  four straight-through socket roll states.
+- **Elbow roll clockwise/counterclockwise**, each with a **reversed** turn,
+  combine a 90° bend with a quarter-turn of the duplex pair. These four fittings
+  avoid a separate roll-adapter block at a corner. All six additional shapes
+  have Bare and Manifold variants in their respective scroll groups.
+- Hot/cold alignment is enforced by the server. A joint must share a socket
+  position, face in opposite directions and align H to H. A reversed or
+  quarter-turned H/C pair stays closed and carries no flow; the placement guide
+  reports the same mismatch. The crossover changes the pair's physical route,
+  not this connection rule.
 - Solid red pipe rings/status lamps mark a disconnected block or invalid circuit.
   Check open ends, H/C alignment and the rest of its circuit. A valid idle circuit keeps amber status; a pumping circuit shows green status.
   Each complete circuit clears its own warning, including capped ends and unused
@@ -70,6 +90,25 @@ are visible in the current view.
 
 Text HUD API is optional. Without it, the guide uses a native HUD notification;
 socket markers and arrows remain available. SCF is not required.
+
+The reversed fittings derive from the accepted mains through
+`assets/build_reversed_pipes.py`; bare versions use the existing bare-pipe builder.
+The riser's socket axes, H/C labels, indicator materials and flow paths are changed
+together. The elbow's reflection preserves readable markings and correct winding.
+Live Blender inspection covered socket and side/top views at 1.8, 2.4 and 3.0 m,
+then construction stages and LOD transitions. `tools/check_reversed_pipes.py`
+checks channel endpoints, outer-hot routing, catalog assets and generated runtime
+data. The compiled runtime suite also mates both sockets to real straight pipes
+in all 24 grid orientations. The six additional routed shapes use
+`routed_paths()` in `assets/thermal_model_contract.py` and the existing builder.
+`tools/check_pipe_configurations.py` verifies the four straight roll states,
+seven distinct bend states, full-bore channel clearance, flow endpoints and exact
+scroll-group membership. The live geometry audit checks actual tube intersections,
+clamp clearance and physical H/C mouths. Runtime regressions reject ±90°/180°
+H/C roll and wrong facing at both mouths, keep both ends of the faulty joint
+closed, stop server flow and restore it after correction. Live Blender review
+covers all twelve additional variants and their derived models. In-game review
+of these sixteen new bare/framed variants remains pending.
 
 ## Build four independent circuits
 

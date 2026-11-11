@@ -781,5 +781,197 @@
       2
     ],
     "moving_parts": []
+  },
+  "PRIMARY / Riser reversed": {
+    "source": "ArcanePower_Thermal_PrimaryRiserReversed",
+    "scenes": [
+      "APT_PrimaryRiserReversed_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Riser reversed bare": {
+    "source": "ArcanePower_Thermal_PrimaryRiserReversedBare",
+    "scenes": [
+      "APT_PrimaryRiserReversedBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow reversed": {
+    "source": "ArcanePower_Thermal_PrimaryElbowReversed",
+    "scenes": [
+      "APT_PrimaryElbowReversed_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow reversed bare": {
+    "source": "ArcanePower_Thermal_PrimaryElbowReversedBare",
+    "scenes": [
+      "APT_PrimaryElbowReversedBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Roll adapter reversed": {
+    "source": "ArcanePower_Thermal_PrimaryRollAdapterReversed",
+    "scenes": [
+      "APT_PrimaryRollAdapterReversed_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Roll adapter reversed bare": {
+    "source": "ArcanePower_Thermal_PrimaryRollAdapterReversedBare",
+    "scenes": [
+      "APT_PrimaryRollAdapterReversedBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Crossover": {
+    "source": "ArcanePower_Thermal_PrimaryCrossover",
+    "scenes": [
+      "APT_PrimaryCrossover_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Crossover bare": {
+    "source": "ArcanePower_Thermal_PrimaryCrossoverBare",
+    "scenes": [
+      "APT_PrimaryCrossoverBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow roll clockwise": {
+    "source": "ArcanePower_Thermal_PrimaryElbowRollClockwise",
+    "scenes": [
+      "APT_PrimaryElbowRollClockwise_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow roll clockwise bare": {
+    "source": "ArcanePower_Thermal_PrimaryElbowRollClockwiseBare",
+    "scenes": [
+      "APT_PrimaryElbowRollClockwiseBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow roll counterclockwise": {
+    "source": "ArcanePower_Thermal_PrimaryElbowRollCounterclockwise",
+    "scenes": [
+      "APT_PrimaryElbowRollCounterclockwise_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow roll counterclockwise bare": {
+    "source": "ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseBare",
+    "scenes": [
+      "APT_PrimaryElbowRollCounterclockwiseBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow roll clockwise reversed": {
+    "source": "ArcanePower_Thermal_PrimaryElbowRollClockwiseReversed",
+    "scenes": [
+      "APT_PrimaryElbowRollClockwiseReversed_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow roll clockwise reversed bare": {
+    "source": "ArcanePower_Thermal_PrimaryElbowRollClockwiseReversedBare",
+    "scenes": [
+      "APT_PrimaryElbowRollClockwiseReversedBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow roll counterclockwise reversed": {
+    "source": "ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversed",
+    "scenes": [
+      "APT_PrimaryElbowRollCCWReversed_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
+  },
+  "PRIMARY / Elbow roll counterclockwise reversed bare": {
+    "source": "ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversedBare",
+    "scenes": [
+      "APT_PrimaryElbowRollCCWReversedBare_M"
+    ],
+    "cells": [
+      1,
+      1,
+      1
+    ],
+    "moving_parts": []
   }
 }

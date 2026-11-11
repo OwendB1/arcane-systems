@@ -81,6 +81,10 @@ def render(subtype):
         for obj in meshes:
             obj.location -= centre
         direction = Vector((-1.2, -1.7, 1.1) if ' / ' in name else (1.2, -1.7, 1.0))
+        shape = name.split(' / ')[-1].removesuffix(' bare')
+        if shape in CONTRACT['ROUTED_PIPES'] and CONTRACT['ROUTED_PIPES'][shape][0] > 0:
+            # Show both mouths of left-turn fittings, including their H/C roll.
+            direction.y = -direction.y
         if 'mirrored' in name:
             direction = Vector((1.2, 1.7, 1.0))
         if name == 'Reactor housing':
@@ -98,9 +102,15 @@ def render(subtype):
             obj.location = Vector(position)*span
             obj.rotation_euler = (-obj.location).to_track_quat('-Z', 'Y').to_euler()
         if ' / ' in name:
-            if name not in CONTRACT['BARE_PIPES']:
+            shape=name.split(' / ')[1].removesuffix(' bare')
+            routed_badges={'Roll adapter reversed':'90-', 'Crossover':'180',
+                'Elbow roll clockwise':'L+', 'Elbow roll counterclockwise':'L-',
+                'Elbow roll clockwise reversed':'R+', 'Elbow roll counterclockwise reversed':'R-'}
+            if shape in routed_badges:
+                badge(scene, routed_badges[shape], (.8,.9,1), .24)
+            elif name not in CONTRACT['BARE_PIPES']:
                 shape=name.split(' / ')[1]
-                badge(scene, {'Straight':'I','Elbow':'L','Riser':'UP','Tee':'T','Cross':'+',
+                badge(scene, {'Straight':'I','Elbow':'L','Elbow reversed':'R','Riser':'UP','Riser reversed':'OUT','Tee':'T','Cross':'+',
                               'Roll adapter':'90','End cap':'CAP','Reactor adapter':'R'}[shape], (.8,.9,1), .24)
             elif 'Roll adapter' in name:
                 badge(scene, '90', (.8, .9, 1), .24)

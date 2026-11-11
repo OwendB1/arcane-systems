@@ -213,7 +213,9 @@ def pipe_base(p, circuit, shape):
     for i, (n, up) in enumerate(CONTRACT['PIPE_PORTS'][shape]):
         p.port('socket '+str(i+1), Vector(n)*1.25, n, circuit, up)
     paths = []
-    if shape in ('Straight', 'Roll adapter', 'End cap'):
+    if shape in CONTRACT['ROUTED_PIPES']:
+        paths = CONTRACT['routed_paths'](shape)
+    elif shape in ('Straight', 'Roll adapter', 'End cap'):
         for sign in (-1, 1):
             if shape == 'Roll adapter':
                 path = []
@@ -283,6 +285,8 @@ def build_base(name):
         return runpy.run_path(str(ROOT/'assets/build_tracking_radiator.py'))['extension']()
     if name in CONTRACT['BARE_PIPES']:
         return build_bare_pipe(name)
+    if name in CONTRACT['REVERSED_PIPES']:
+        return runpy.run_path(str(ROOT/'assets/build_reversed_pipes.py'))['build'](name)
     p = Parts(name)
     if name == 'Space radiator':
         p.finish()
@@ -399,7 +403,7 @@ def rebuild_base(name):
     row = build_base(name)
     for obj in users:
         obj.instance_collection = main_for(name)
-    if phase != 'base' and name not in CONTRACT['BARE_PIPES'] and 'mirrored' not in name:
+    if phase != 'base' and name not in CONTRACT['BARE_PIPES'] and name not in CONTRACT['REVERSED_PIPES'] and 'mirrored' not in name:
         refine = runpy.run_path(str(ROOT/'assets/refine_thermal_models.py'))
         row = refine['geometry'](name)
         if phase == 'textures':

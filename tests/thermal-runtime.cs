@@ -433,7 +433,87 @@ public static partial class ThermalRuntimeChecks
         Check(!plant.Ready && !plant.Nodes.Contains(detached), "detached machinery cannot commission a legacy shared plant");
         reactor.Healthy = false;
         Check(!new ThermalNetwork(layout).Plant(reactor).Ready, "projected or incomplete source cannot run");
-        Check(ThermalModels.All.Count == 59, "all model contracts generated");
+        Check(ThermalModels.All.Count == 75, "all model contracts generated");
+    }
+
+    private static void ReversedPipes()
+    {
+        foreach (var shape in new[] { "Elbow", "Riser" })
+        foreach (var style in new[] { "", "Bare" })
+        {
+            string subtype = "ArcanePower_Thermal_Primary" + shape + "Reversed" + style;
+            var model = ThermalModels.All[subtype];
+            var original = ThermalModels.All[subtype.Replace("Reversed", "")];
+            Check(model.Cells == original.Cells && model.Ports.Length == 2, "reversed fitting keeps one-cell duplex footprint");
+            for (int i = 0; i < 2; i++)
+            {
+                var a = model.Ports[i]; var b = original.Ports[i];
+                if (shape == "Riser")
+                    Check(a.Position == b.Position && a.Normal == b.Normal && a.HotAxis == -b.HotAxis,
+                        "outer-hot riser changes both channel orientations together");
+                else
+                    Check(a.Position == new Vector3(b.Position.X, b.Position.Y, -b.Position.Z)
+                        && a.Normal == new Vector3(b.Normal.X, b.Normal.Y, -b.Normal.Z) && a.HotAxis == b.HotAxis,
+                        "reversed elbow turns the opposite way with unchanged H/C roll");
+            }
+        }
+    }
+
+    private static void PipeConfigurationConnections()
+    {
+        foreach (var shape in new[] { "ElbowReversed", "RiserReversed", "RollAdapterReversed", "Crossover",
+            "ElbowRollClockwise", "ElbowRollCounterclockwise", "ElbowRollClockwiseReversed", "ElbowRollCounterclockwiseReversed" })
+        foreach (var style in new[] { "", "Bare" })
+        foreach (var rotation in Orientations())
+        {
+            var pipe = Node(1, "ArcanePower_Thermal_Primary" + shape + style, rotation);
+            var peers = new List<ThermalEndpoint>();
+            foreach (var port in pipe.Ports)
+            {
+                ThermalEndpoint mate = null;
+                foreach (var facing in Orientations())
+                {
+                    var pose = facing;
+                    pose.Translation = port.Normal * 2.5f;
+                    var candidate = Node(2 + peers.Count, "ArcanePower_Thermal_PrimaryStraight" + style, pose);
+                    if (ThermalConstruction.Matches(pipe, new[] { candidate }) == 1) { mate = candidate; break; }
+                }
+                Check(mate != null, "each configuration mates with a real straight pipe in every grid orientation");
+                peers.Add(mate);
+            }
+            Check(ThermalConstruction.Matches(pipe, peers) == 2, "both configuration sockets connect simultaneously");
+            var layout = new List<ThermalEndpoint> { pipe, peers[0], peers[1] };
+            var from = new HashSet<long> { peers[0].Id };
+            var to = new HashSet<long> { peers[1].Id };
+            var healthy = new ThermalNetwork(layout);
+            Check(healthy.OpenPorts(pipe) == 3 && healthy.FlowDirections(from, to).ContainsKey(pipe.Id),
+                "server opens aligned sockets and routes through fitting");
+            for (int i = 0; i < 2; i++)
+            {
+                var port = pipe.Ports[i];
+                var peer = peers[i];
+                var joint = Array.Find(peer.Ports, p => Vector3.DistanceSquared(p.Position, port.Position) < .000001f);
+                Check(joint != null, "physical straight socket is at fitting mouth");
+                var normal = joint.Normal; var hot = joint.HotAxis;
+                for (int fault = 0; fault < 4; fault++)
+                {
+                    joint.Normal = fault == 3 ? -normal : normal;
+                    joint.HotAxis = fault == 0 ? -hot : fault == 1 ? Vector3.Cross(normal, hot)
+                        : fault == 2 ? -Vector3.Cross(normal, hot) : hot;
+                    Check(ThermalNetwork.Match(pipe, port, peer, joint) ==
+                        (fault == 3 ? ThermalJointStatus.Facing : ThermalJointStatus.Roll),
+                        "socket rejects 180/90/-90 degree H/C roll and wrong facing");
+                    Check(ThermalConstruction.Matches(pipe, peers) == 1, "placement advice uses server socket rule");
+                    var rejected = new ThermalNetwork(layout);
+                    Check(rejected.OpenPorts(pipe) == (3 & ~(1 << i)) && rejected.OpenPorts(peer) == 0,
+                        "server keeps faulty joint closed at both ends");
+                    Check(rejected.FlowDirections(from, to).Count == 0, "server cannot route flow across faulty joint");
+                }
+                joint.Normal = normal; joint.HotAxis = hot;
+                Check(new ThermalNetwork(layout).FlowDirections(from, to).ContainsKey(pipe.Id),
+                    "correcting socket alignment restores server flow");
+            }
+        }
     }
 
     private static void UniversalPipes()
@@ -614,7 +694,7 @@ public static partial class ThermalRuntimeChecks
                 for (int j = 0; j < a.Points.Length; j++) Check(a.Points[j] == b.Points[j], "bare flow stays inside unchanged glass");
             }
         }
-        Check(variants == 22, "public and compatibility bare pipe contracts");
+        Check(variants == 30, "public and compatibility bare pipe contracts");
         var layout = BareLayout();
         var reactor = layout.Find(n => n.Model.Kind == ThermalKind.Reactor);
         Check(!new ThermalNetwork(layout).Plant(reactor).Ready, "bare pipes obey independent circuit rules on old shared layouts");
@@ -1780,7 +1860,7 @@ public static partial class ThermalRuntimeChecks
 
     public static void Main(string[] args)
     {
-        PipeRotors(); HullRadiators();
+        PipeRotors(); HullRadiators(); ReversedPipes(); PipeConfigurationConnections();
         Isolation(); Registrations(); Budgets(); Stores(); CoolingFailure(); ModesAndStartup(); Topology(); UniversalPipes(); ReactorAdapters(); BarePipes(); Rotors(); Radiators(); LoopEnergy(); Construction(); ThermalForecasts(); CooldownForecasts(); MeltdownCountdown(); Flow(args.Length > 0 ? args[0] : null);
         Console.WriteLine("Thermal runtime: " + checks + " checks passed (registrations/channels, budget, conservation, reload, modes, 47 manifold poses, linear load rotors, construction/orientation guide and authored topology)");
     }

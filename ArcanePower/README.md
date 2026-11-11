@@ -3,8 +3,14 @@
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962)
 · [Publishing workflow and gallery sources](RELEASE.md)
 
-Version **0.4.0** adds server-owned reactor telemetry and energy-bank
-synchronization, supports distant antenna terminals, and keeps cosmetic
+Version **0.5.0** adds eight pipe configurations in bare and manifold forms:
+reversed elbows and risers, a reversed roll adapter, a 180° crossover and four
+rolled elbows. All are available in the pipe scroll groups, with server-enforced
+hot/cold alignment. See the [construction guide](THERMAL-CONSTRUCTION.md).
+Live game validation of the new fittings remains pending.
+
+Version **0.4.0** added server-owned reactor telemetry and energy-bank
+synchronization, supported distant antenna terminals, and kept cosmetic
 animation work off dedicated servers. See the
 [multiplayer checklist and validation](../docs/arcane-power-multiplayer.md).
 Live multiplayer validation remains pending.

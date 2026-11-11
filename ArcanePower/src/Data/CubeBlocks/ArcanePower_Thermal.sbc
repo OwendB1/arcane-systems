@@ -1529,6 +1529,782 @@ Shade: 100% cooling; front in full sun: 50%.</Description>
     <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
       <Id>
         <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryRiserReversed</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Riser Pipe Reversed (Manifold)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiserReversed.dds</Icon>
+      <Description>Reversed riser: H follows the outside of the bend; C follows the inside.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryRiserReversed_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryRiserReversed</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryRiserReversed_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryRiserReversed_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryRiserReversed_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbowReversed</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Elbow Pipe Reversed (Manifold)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowReversed.dds</Icon>
+      <Description>Reversed elbow: opposite horizontal turn with the same H/C roll.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryElbowReversed_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbowReversed</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryElbowReversed_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryElbowReversed_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryElbowReversed_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryRiserReversedBare</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Riser Pipe Reversed (Bare)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRiserReversedBare.dds</Icon>
+      <Description>Reversed riser: H follows the outside of the bend; C follows the inside.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryRiserReversedBare_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryRiserReversedBare</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryRiserReversedBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryRiserReversedBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryRiserReversedBare_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbowReversedBare</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Elbow Pipe Reversed (Bare)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowReversedBare.dds</Icon>
+      <Description>Reversed elbow: opposite horizontal turn with the same H/C roll.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryElbowReversedBare_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbowReversedBare</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryElbowReversedBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryElbowReversedBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_8a6f785ece03/APT_PrimaryElbowReversedBare_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbowRollClockwise</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Elbow roll clockwise Pipe (Manifold)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowRollClockwise.dds</Icon>
+      <Description>Combined elbow and 90-degree H/C roll. Match the marked H bore at both ends.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwise_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbowRollClockwise</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwise_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwise_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwise_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbowRollClockwiseBare</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Elbow roll clockwise Pipe (Bare)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowRollClockwiseBare.dds</Icon>
+      <Description>Combined elbow and 90-degree H/C roll. Match the marked H bore at both ends.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseBare_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbowRollClockwiseBare</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseBare_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryRollAdapterReversed</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Roll adapter Pipe Reversed (Manifold)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapterReversed.dds</Icon>
+      <Description>Opposite-handed 90-degree H/C roll adapter.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryRollAdapterReversed_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryRollAdapterReversed</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryRollAdapterReversed_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryRollAdapterReversed_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryRollAdapterReversed_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryRollAdapterReversedBare</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Roll adapter Pipe Reversed (Bare)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryRollAdapterReversedBare.dds</Icon>
+      <Description>Opposite-handed 90-degree H/C roll adapter.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryRollAdapterReversedBare_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryRollAdapterReversedBare</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryRollAdapterReversedBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryRollAdapterReversedBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryRollAdapterReversedBare_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryCrossover</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Crossover Pipe (Manifold)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCrossover.dds</Icon>
+      <Description>180-degree H/C crossover. The channels stay separate while exchanging sides.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryCrossover_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryCrossover</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryCrossover_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryCrossover_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryCrossover_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryCrossoverBare</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Crossover Pipe (Bare)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryCrossoverBare.dds</Icon>
+      <Description>180-degree H/C crossover. The channels stay separate while exchanging sides.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryCrossoverBare_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryCrossoverBare</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryCrossoverBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryCrossoverBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryCrossoverBare_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbowRollCounterclockwise</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Elbow roll counterclockwise Pipe (Manifold)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowRollCounterclockwise.dds</Icon>
+      <Description>Combined elbow and 90-degree H/C roll. Match the marked H bore at both ends.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCounterclockwise_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbowRollCounterclockwise</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCounterclockwise_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCounterclockwise_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCounterclockwise_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseBare</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Elbow roll counterclockwise Pipe (Bare)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseBare.dds</Icon>
+      <Description>Combined elbow and 90-degree H/C roll. Match the marked H bore at both ends.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCounterclockwiseBare_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseBare</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCounterclockwiseBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCounterclockwiseBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCounterclockwiseBare_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbowRollClockwiseReversed</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Elbow roll clockwise Pipe Reversed (Manifold)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowRollClockwiseReversed.dds</Icon>
+      <Description>Combined elbow and 90-degree H/C roll. Match the marked H bore at both ends.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseReversed_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbowRollClockwiseReversed</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseReversed_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseReversed_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseReversed_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbowRollClockwiseReversedBare</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Elbow roll clockwise Pipe Reversed (Bare)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowRollClockwiseReversedBare.dds</Icon>
+      <Description>Combined elbow and 90-degree H/C roll. Match the marked H bore at both ends.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseReversedBare_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbowRollClockwiseReversedBare</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseReversedBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseReversedBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollClockwiseReversedBare_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversed</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Elbow roll counterclockwise Pipe Reversed (Manifold)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversed.dds</Icon>
+      <Description>Combined elbow and 90-degree H/C roll. Match the marked H bore at both ends.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+Fully enclosed, airtight on all six faces.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCCWReversed_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversed</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>true</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCCWReversed_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCCWReversed_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCCWReversed_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
+        <SubtypeId>ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversedBare</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Elbow roll counterclockwise Pipe Reversed (Bare)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcanePower/Thermal/ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversedBare.dds</Icon>
+      <Description>Combined elbow and 90-degree H/C roll. Match the marked H bore at both ends.
+CO2 supply/return pipe for one independent reactor manifold circuit.
+Use an Arcane pipe rotor to cross to a subgrid.
+
+Align H to H and C to C.
+Cap unused pipe mouths; a breach closes this circuit at the reactor.
+Ordinary conveyors do not replace thermal pipes.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="1" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCCWReversedBare_M.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="6" />
+        <Component Subtype="Construction" Count="4" />
+        <Component Subtype="LargeTube" Count="2" />
+        <Component Subtype="Motor" Count="2" />
+        <Component Subtype="Computer" Count="2" />
+        <Component Subtype="SteelPlate" Count="4" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <BlockPairName>ArcanePower_Thermal_PrimaryElbowRollCounterclockwiseReversedBare</BlockPairName>
+      <EdgeType>Light</EdgeType>
+      <Upgrades />
+      <PrimarySound />
+      <DamageEffectName>Damage_Electrical_Damaged</DamageEffectName>
+      <DamagedSound>ParticleElectrical</DamagedSound>
+      <EmissiveColorPreset>Default</EmissiveColorPreset>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>2</PCU>
+      <IsAirTight>false</IsAirTight>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCCWReversedBare_M_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCCWReversedBare_M_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/Thermal/thermal_6bad3956c899/APT_PrimaryElbowRollCCWReversedBare_M_BS3.mwm" />
+      </BuildProgressModels>
+      <Public>true</Public>
+      <AvailableInSurvival>true</AvailableInSurvival>
+      <BuildTimeSeconds>8</BuildTimeSeconds>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_UpgradeModuleDefinition">
+      <Id>
+        <TypeId>UpgradeModule</TypeId>
         <SubtypeId>ArcanePower_Thermal_AtmosphericCoolerUpgraded</SubtypeId>
       </Id>
       <DisplayName>Arcane Atmospheric cooler upgraded</DisplayName>

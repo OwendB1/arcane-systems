@@ -1,10 +1,10 @@
 {
   "status": "passed",
-  "revision": "Models/Cubes/large/Thermal/thermal_413b1b89812e",
-  "blocks": 27,
-  "native_meshes": 300,
-  "construction_models": 81,
-  "lod_models": 158,
+  "revision": "Models/Cubes/large/Thermal/thermal_6bad3956c899",
+  "blocks": 43,
+  "native_meshes": 460,
+  "construction_models": 129,
+  "lod_models": 254,
   "native_models": {
     "APT_PipeRotor_M_BS3_LOD1": {
       "sha256": "ced81346d229cca0dc79e75fa4b07bc0ac25300f2ab48d8247ba530fbe3351c6",
@@ -2484,6 +2484,1270 @@
       "lods": [
         "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapterBare_M_LOD1_r4ac5504629f5.mwm",
         "Models/Cubes/large/Thermal/LOD/APT_PrimaryReactorAdapterBare_M_LOD2_rfaf9748bb307.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversed_M_BS2_LOD1": {
+      "sha256": "af9cc07195627d570ed87eb7e1dbe9a1aea48084f4354c69f963184d817f2745",
+      "triangles": 9370,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversed_M_BS2_LOD2": {
+      "sha256": "760ed276767fd0ac99e783a0999a717a8b4912c63e7e0dd99fa61bb08adf0133",
+      "triangles": 4566,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversed_M_BS3_LOD1": {
+      "sha256": "566de3b81c7de828f2cc493dc04d9d348ee12a3c876433e34f274baccff40f80",
+      "triangles": 9630,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversed_M_BS3_LOD2": {
+      "sha256": "1f234941f2b302775a01da783e6c81682c459b54cab2af381285487712f0de13",
+      "triangles": 4826,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversed_M_LOD1": {
+      "sha256": "10e6e28f2ddf881f06204d2d4332eacc9033d004afa297b17cd2a5a1490454f8",
+      "triangles": 15520,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversed_M_LOD2": {
+      "sha256": "b2dfb086f05ff876123f1d4a5893cd59428b91d709103a92d61bc473626eeb42",
+      "triangles": 14047,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversed_M_BS1": {
+      "sha256": "af8fd2d3cd68742b9e8a144667d869f54369d491bfc33a77a558c3a1e88b8c60",
+      "triangles": 608,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversed_M_BS2": {
+      "sha256": "a67d09e685b5be1e23015b7716016b1eb6ca2e7f1b327dc80754f104557adcfe",
+      "triangles": 17578,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversed_M_BS2_LOD1_raf9cc0719562.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversed_M_BS2_LOD2_r760ed276767f.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversed_M_BS3": {
+      "sha256": "bff519be5327af924d26bc02fbaeeda64cb9f33befb7894131cc2c6da59f34f4",
+      "triangles": 17838,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversed_M_BS3_LOD1_r566de3b81c7d.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversed_M_BS3_LOD2_r1f234941f2b3.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversed_M": {
+      "sha256": "b57eb96e333974ca98aab9a0e63033edeafaa339f93baa64bac00d51ddad8b8a",
+      "triangles": 18730,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversed_M_LOD1_r10e6e28f2ddf.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversed_M_LOD2_rb2dfb086f05f.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversedBare_M_BS2_LOD1": {
+      "sha256": "e13b6dc4f12c84143b17d67ab84d1046b5c53d03d6203360206f1eada4e032a3",
+      "triangles": 7692,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversedBare_M_BS2_LOD2": {
+      "sha256": "912d3c0583037f03ca62c12009cc4d236983e6e7c965fa031cbc7fd680df96bd",
+      "triangles": 3584,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversedBare_M_BS3_LOD1": {
+      "sha256": "f00e7e23b9aa06ef2b384b73a4fe1650e7afc85c8796556e0a01ad699d6e301a",
+      "triangles": 7692,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversedBare_M_BS3_LOD2": {
+      "sha256": "28148531e720f66861dd5ef18c0cdfd61039ac3ece1a35d0212e3340eb1ac738",
+      "triangles": 3584,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversedBare_M_LOD1": {
+      "sha256": "a4d2d3e652516dc79f359be82cee48d99570df03194168919f172e9287d966f1",
+      "triangles": 13696,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversedBare_M_LOD2": {
+      "sha256": "ce950450da5a31d90765b3a0d278a8412644a37e876beb642ae785b243d516f9",
+      "triangles": 12736,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversedBare_M_BS1": {
+      "sha256": "d96a703c734b50de703431225dd7847529dc363cc4070c188c4132d3b4193349",
+      "triangles": 2304,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversedBare_M_BS2": {
+      "sha256": "2b9a294ddd0916e17fd304dbb446a1b2fafeaa9340ca9566c3f89524358f97f5",
+      "triangles": 14336,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversedBare_M_BS2_LOD1_re13b6dc4f12c.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversedBare_M_BS2_LOD2_r912d3c058303.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversedBare_M_BS3": {
+      "sha256": "b561ec7e75a176fe79d6f67d97fc4c70fce6bc7decacb81ae864a1f3069f2107",
+      "triangles": 14376,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversedBare_M_BS3_LOD1_rf00e7e23b9aa.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversedBare_M_BS3_LOD2_r28148531e720.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRiserReversedBare_M": {
+      "sha256": "e3a03a39152d465ddb7f2c41321bf05c9cabaf7349c98ddf0c99506d0ecf5e12",
+      "triangles": 15660,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversedBare_M_LOD1_ra4d2d3e65251.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRiserReversedBare_M_LOD2_rce950450da5a.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversed_M_BS2_LOD1": {
+      "sha256": "4e2bae587296bada2b3a02cc43301b88602f695c5808274443174c16103a8a7c",
+      "triangles": 7810,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversed_M_BS2_LOD2": {
+      "sha256": "94e455c82de3591eb8d252ae9204a5897d19c487eefa30ab9dd05268e3a7384d",
+      "triangles": 3862,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversed_M_BS3_LOD1": {
+      "sha256": "bb339144fb3cc9ee7f2937cbba2f39f2434ae1aba738b5e4981b79e0187a679e",
+      "triangles": 8050,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversed_M_BS3_LOD2": {
+      "sha256": "158cbadd24a11284f1e7e363002ecd01206bc0af0a288fd884473b8f52c7a076",
+      "triangles": 4102,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversed_M_LOD1": {
+      "sha256": "852dfdbea4d1102280c7329807ea60bd9a9f0fe9031698719c12cd891b6ebc07",
+      "triangles": 12576,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversed_M_LOD2": {
+      "sha256": "d0291990a3d76902d5fdb5267023320a2d6307d5a1a5e16d19e2213bb7ea69dd",
+      "triangles": 11039,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversed_M_BS1": {
+      "sha256": "76fa48aefde16903a36ea1fce88c68b92ca798004a665f7ff1a03d73330a3cba",
+      "triangles": 608,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversed_M_BS2": {
+      "sha256": "9466e86c700cf49d859105468022b329831b1ee23bc4ab55667421f3d9a1df9c",
+      "triangles": 14762,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversed_M_BS2_LOD1_r4e2bae587296.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversed_M_BS2_LOD2_r94e455c82de3.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversed_M_BS3": {
+      "sha256": "05d00650be72cb536bf79bd173c8abcd47ef98e1c3afdbfe07f1b14d02b65053",
+      "triangles": 15002,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversed_M_BS3_LOD1_rbb339144fb3c.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversed_M_BS3_LOD2_r158cbadd24a1.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversed_M": {
+      "sha256": "6fafa0d913bdbbf716fbf54154e60047275b8cd77a1a4f887cc54438c46428d6",
+      "triangles": 15914,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversed_M_LOD1_r852dfdbea4d1.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversed_M_LOD2_rd0291990a3d7.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversedBare_M_BS2_LOD1": {
+      "sha256": "54b2ffe16accc0c2f9a0f768114be2581ae79c3ce98b708079ce0d9bf9c443e1",
+      "triangles": 6130,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversedBare_M_BS2_LOD2": {
+      "sha256": "f220be90cc3f9907768249b8086f3c35ee789dfa1cdcc3c6404129daa03bb3c9",
+      "triangles": 2880,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversedBare_M_BS3_LOD1": {
+      "sha256": "3fbec526ac07f85457af1b6c0c934e24db35a41af3c27eabf8d373031c0bf380",
+      "triangles": 6130,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversedBare_M_BS3_LOD2": {
+      "sha256": "e03aa10eb1318fa4ee5ce5e04de8f31a369498db69c3f72aa43141478cbc6c50",
+      "triangles": 2880,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversedBare_M_LOD1": {
+      "sha256": "88ac9e14841eca07c00f3c155e17c033b6d98bd702f95daae8519609644d4752",
+      "triangles": 10752,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversedBare_M_LOD2": {
+      "sha256": "61cbbfbac67bf7ca34b9bee5015fd68bc5af60c4063cd85713ad847fef0f89d2",
+      "triangles": 9728,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversedBare_M_BS1": {
+      "sha256": "5637e9b65a2bbc16eb12af9530746021a9f3751659f55710a22f5f7a79a92cce",
+      "triangles": 2560,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversedBare_M_BS2": {
+      "sha256": "49da6f7925e3b38bf8b10050cfdc410650d291eda7aa2e22c8184705af3d2ed0",
+      "triangles": 11520,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversedBare_M_BS2_LOD1_r54b2ffe16acc.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversedBare_M_BS2_LOD2_rf220be90cc3f.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversedBare_M_BS3": {
+      "sha256": "73f229abf961f975a099a1f581986fd10c861e371c61ab4b5d214148542a0b6b",
+      "triangles": 11560,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversedBare_M_BS3_LOD1_r3fbec526ac07.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversedBare_M_BS3_LOD2_re03aa10eb131.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowReversedBare_M": {
+      "sha256": "cc2c1b5ef7a7e94c011bbbfcb5da09dead086dc72c43d89e56070618dff8884b",
+      "triangles": 12844,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversedBare_M_LOD1_r88ac9e14841e.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowReversedBare_M_LOD2_r61cbbfbac67b.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversed_M_BS2_LOD1": {
+      "sha256": "3b68b00f5e3da1ad0a1be329f7905266bd51cfa914429b77754e1cb0fb51e6c4",
+      "triangles": 22452,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversed_M_BS2_LOD2": {
+      "sha256": "3961a5e717307a910122aba6c0b008672ee937e2e34ceff70a91987ae85659b3",
+      "triangles": 10518,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversed_M_BS3_LOD1": {
+      "sha256": "6849597475513c7191681f3dfbd836f8f73191ffbb19fb145313da9d564e5ffb",
+      "triangles": 22624,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversed_M_BS3_LOD2": {
+      "sha256": "9ad449762ee66352755e68ba413b80c25eeb397429692df92ff3ec63ca630359",
+      "triangles": 10690,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversed_M_LOD1": {
+      "sha256": "9be70b224ec826e228e4c15982c8e3f085aac0294cdab585229bf04f5f7c81a7",
+      "triangles": 39200,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversed_M_LOD2": {
+      "sha256": "b7c33b64248f10c6961b99aec7903c45c98643d4e1e36ccd69f654b8d4251889",
+      "triangles": 37663,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversed_M_BS1": {
+      "sha256": "b5d87b3e870d5c0906202c42ebfe6f3204d31909195aa6d76eda002020bc66be",
+      "triangles": 608,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversed_M_BS2": {
+      "sha256": "63161b24c85f5200a22608d58de2730abceeca592e0afbf2dfdc64e5ca8190ca",
+      "triangles": 41386,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversed_M_BS2_LOD1_r3b68b00f5e3d.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversed_M_BS2_LOD2_r3961a5e71730.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversed_M_BS3": {
+      "sha256": "1e93dbc39eb5445c133c77b3e98e11c03ae5da02f2402f85fb0456fed018db25",
+      "triangles": 41558,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversed_M_BS3_LOD1_r684959747551.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversed_M_BS3_LOD2_r9ad449762ee6.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversed_M": {
+      "sha256": "3bd591f1a9c491d0446b870a5a5a4988907d6c9320c4645721d16e502e2567cc",
+      "triangles": 42538,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversed_M_LOD1_r9be70b224ec8.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversed_M_LOD2_rb7c33b64248f.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversedBare_M_BS2_LOD1": {
+      "sha256": "cd99b6718aa5e3dde94a0169a8e4e07e3c75fb44d003e9c89cb366f1c15df50d",
+      "triangles": 20774,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversedBare_M_BS2_LOD2": {
+      "sha256": "f89dd0174ba6100719d0714a2a7e72f4fd05a0403f7bd55211e7d5e306c80ac2",
+      "triangles": 9536,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversedBare_M_BS3_LOD1": {
+      "sha256": "efb6135cc8aeed57aa39d3dd30c6513e3ff4611925fad3251b4c8db36320be58",
+      "triangles": 20774,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversedBare_M_BS3_LOD2": {
+      "sha256": "b84b65895abf2f0a140d28ba672d46d3a99f9f62206294f13699b88f5850fcdb",
+      "triangles": 9536,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversedBare_M_LOD1": {
+      "sha256": "e2f55a0e5430cb6c164ed7e8c050ec8ee3af485d31610f9ce726c8ae1368bf13",
+      "triangles": 37376,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversedBare_M_LOD2": {
+      "sha256": "3b38cf84741cc82148aea2b4836a64efb2740c805e5fe6b3d31075749f657d65",
+      "triangles": 36352,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversedBare_M_BS1": {
+      "sha256": "2a0b79952892083cc829783deaefb5796cb8193dc7e4f131688d826002def2d3",
+      "triangles": 2560,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversedBare_M_BS2": {
+      "sha256": "d99a2062b60c3ed6f5ec585a1c62d46f8c0c53e347f8dc3d3a18faf2b9b99a27",
+      "triangles": 38144,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversedBare_M_BS2_LOD1_rcd99b6718aa5.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversedBare_M_BS2_LOD2_rf89dd0174ba6.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversedBare_M_BS3": {
+      "sha256": "b3e2f760bdd4b6fcf624b56d2c6df7d55602d5821886b37dc7a5f81a24a10947",
+      "triangles": 38184,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversedBare_M_BS3_LOD1_refb6135cc8ae.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversedBare_M_BS3_LOD2_rb84b65895abf.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryRollAdapterReversedBare_M": {
+      "sha256": "eb32becacf294e56903cc162d3752e4bd52439cbedb4f5050cdffabe3e4f8ff0",
+      "triangles": 39468,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversedBare_M_LOD1_re2f55a0e5430.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryRollAdapterReversedBare_M_LOD2_r3b38cf84741c.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryCrossover_M_BS2_LOD1": {
+      "sha256": "88e84b70de4feafdcbaf1b8985ea4465a49b71ff60c8d3691642e049180383fa",
+      "triangles": 22708,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossover_M_BS2_LOD2": {
+      "sha256": "159ea103e7a3a5e97872aba5b50ee9191544fd4496e7f24b61d21155893842ab",
+      "triangles": 10646,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossover_M_BS3_LOD1": {
+      "sha256": "e563cc70bf5c40720c005933b8fab54c265744e8fa285e6580faa4c7bb652343",
+      "triangles": 22948,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossover_M_BS3_LOD2": {
+      "sha256": "0d092a256f17c40d041ed8e767d41f1616264f222b8f2336b09ec0bfdeac7f78",
+      "triangles": 10886,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossover_M_LOD1": {
+      "sha256": "47c42aab4526f685b16467db53e24556ff1d113da4c1e5da44fafc374d6194c6",
+      "triangles": 39456,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossover_M_LOD2": {
+      "sha256": "3c9f75241a93ae5b87c253b9173843cf50294de143c384a07449157791c7c701",
+      "triangles": 37791,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossover_M_BS1": {
+      "sha256": "eaee54fe6f7c56af623144b2d5b25a9dbfea411c437db7b319e4e9935db120d3",
+      "triangles": 608,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossover_M_BS2": {
+      "sha256": "026116d3e96f44ce89d94d1c4ecc51e6690acea8611693a37899575f42d1f600",
+      "triangles": 41898,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossover_M_BS2_LOD1_r88e84b70de4f.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossover_M_BS2_LOD2_r159ea103e7a3.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryCrossover_M_BS3": {
+      "sha256": "9365bfbba02f8064eebdfe89747dc9c2c307b0e982845b22fac1b7245d7d9fd2",
+      "triangles": 42138,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossover_M_BS3_LOD1_re563cc70bf5c.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossover_M_BS3_LOD2_r0d092a256f17.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryCrossover_M": {
+      "sha256": "092987c71c66bd6427e52484e3c4445e175ed9f4d060651d835dc7d03cea830a",
+      "triangles": 43050,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossover_M_LOD1_r47c42aab4526.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossover_M_LOD2_r3c9f75241a93.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryCrossoverBare_M_BS2_LOD1": {
+      "sha256": "c9a512afe09f9db900762f61ab304e4d9b097071788bbdf24cf01b13fb637985",
+      "triangles": 21030,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossoverBare_M_BS2_LOD2": {
+      "sha256": "39d2a245a1cee94bfd0bc05661e6c31df57354921801fb5eeb28a96d29c402e4",
+      "triangles": 9664,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossoverBare_M_BS3_LOD1": {
+      "sha256": "ccf11d79bcdeef822439ad0211702b6d379a626d64cbd91df1af70b5bc772dcb",
+      "triangles": 21030,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossoverBare_M_BS3_LOD2": {
+      "sha256": "f3982563d3abd4d71cdce746dc79cb6e87051229126f3f50ebd1da260d25338e",
+      "triangles": 9664,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossoverBare_M_LOD1": {
+      "sha256": "164193f5351ae956bdb67bbbcae163bb643c5ec88a9c4e3786e5195d4f780118",
+      "triangles": 37632,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossoverBare_M_LOD2": {
+      "sha256": "fb8768b9041f588579faca6e1226f5414ca3a78dfdc0c2939a584913d9900010",
+      "triangles": 36480,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossoverBare_M_BS1": {
+      "sha256": "f7954fcf98c8a7bb2a190fd0cd4d35e1ca03f5c278bdb16039711e9c4360fb50",
+      "triangles": 3072,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryCrossoverBare_M_BS2": {
+      "sha256": "ce25beb69f6c4d6da465d3f66f9459797d37a6e67e483cd31899f9a4955187da",
+      "triangles": 38656,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossoverBare_M_BS2_LOD1_rc9a512afe09f.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossoverBare_M_BS2_LOD2_r39d2a245a1ce.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryCrossoverBare_M_BS3": {
+      "sha256": "66d190fc7cf2df8b05ea7adcc219485785d183d72df289801265b8265889fbce",
+      "triangles": 38696,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossoverBare_M_BS3_LOD1_rccf11d79bcde.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossoverBare_M_BS3_LOD2_rf3982563d3ab.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryCrossoverBare_M": {
+      "sha256": "bba2c8adfc1138d4b92438cb3dade7e745e122b8b9b02744d78dc29b37099871",
+      "triangles": 39980,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossoverBare_M_LOD1_r164193f5351a.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryCrossoverBare_M_LOD2_rfb8768b9041f.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwise_M_BS2_LOD1": {
+      "sha256": "b2f2ffd352bc8e4e2d5842dcdd3f67b019eecbb9ec5c9403c0c3eb6482101081",
+      "triangles": 23144,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwise_M_BS2_LOD2": {
+      "sha256": "6258aaceefb6a7d86a98a753e0904e45f8745c1eb1b00ec249ba291b9b755c76",
+      "triangles": 10838,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwise_M_BS3_LOD1": {
+      "sha256": "b02e06276c9c9410bdec20f6b733fe679ce6b1ac15b36df285987297ea6df703",
+      "triangles": 23384,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwise_M_BS3_LOD2": {
+      "sha256": "316e8c87d7bbd0066c41f1f873d926a9a4c3e8de13ec6f3977a6f1049c135f62",
+      "triangles": 11078,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwise_M_LOD1": {
+      "sha256": "0a7e1e79866dbe1c0393c22125bea4da36d14c12c520f07c1f236b296c63f276",
+      "triangles": 40352,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwise_M_LOD2": {
+      "sha256": "a17718c8ef3524683701bb6a1a840c7229eb7c99ad70fa9a7c6e52688dc49e99",
+      "triangles": 38751,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwise_M_BS1": {
+      "sha256": "79460cf5f427189663650b8bd29f3b0a78355b5abc825f3bfeaa34242935f0bc",
+      "triangles": 608,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwise_M_BS2": {
+      "sha256": "f712ce3f07b031ef862b9b6884aa7ab8d95ff648210295bda26f1ebb5798c091",
+      "triangles": 42666,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwise_M_BS2_LOD1_rb2f2ffd352bc.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwise_M_BS2_LOD2_r6258aaceefb6.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwise_M_BS3": {
+      "sha256": "19e64988cafcf94d2c8c02851393a7d5b49c4d30cc80b1f0b18bc9b50285c678",
+      "triangles": 42906,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwise_M_BS3_LOD1_rb02e06276c9c.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwise_M_BS3_LOD2_r316e8c87d7bb.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwise_M": {
+      "sha256": "8b243a78f90458e1214a6c0276f325cb428d71a3f54425ecc0b742021a7b9b3c",
+      "triangles": 43818,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwise_M_LOD1_r0a7e1e79866d.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwise_M_LOD2_ra17718c8ef35.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseBare_M_BS2_LOD1": {
+      "sha256": "c7c0d21002bd21022432de6b0e14b1a985359cd12552e1ef4f7942190ad0f2e8",
+      "triangles": 21464,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseBare_M_BS2_LOD2": {
+      "sha256": "76249598880ce19f73f8bbb7de4d352d608284fcf50312dcef665b433e1c99b2",
+      "triangles": 9856,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseBare_M_BS3_LOD1": {
+      "sha256": "0238210078d51b7832247f1f0e1a989864c439b1acd4d861c60816fe8ee026c8",
+      "triangles": 21464,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseBare_M_BS3_LOD2": {
+      "sha256": "f56dc3b0c1cd504d6eb0059722864aa4db61ef8283fd7f7a2c40b06fd2f419fa",
+      "triangles": 9856,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseBare_M_LOD1": {
+      "sha256": "886b31cc30b445c1032ecb6e407756cc656f5c46d3d6fe9e7d31f7447d8db377",
+      "triangles": 38528,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseBare_M_LOD2": {
+      "sha256": "e2cfd6daa3a3abae551f275b63e456936e793ebd304904836e89d1f4a28a26ab",
+      "triangles": 37440,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseBare_M_BS1": {
+      "sha256": "eb90812d71095cad34cc8b66cf2df77faa46d94bb27a01e11dc155b78a6582c1",
+      "triangles": 2816,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseBare_M_BS2": {
+      "sha256": "600d815d6c66a93002ddeb8b5488b1e9a5d53907d33cd517ffe74182200eadbc",
+      "triangles": 39424,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseBare_M_BS2_LOD1_rc7c0d21002bd.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseBare_M_BS2_LOD2_r76249598880c.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseBare_M_BS3": {
+      "sha256": "34caa1a9d52cd6bfa66f3470c1ea7d06fe5b90863078fd60015d262755cd0277",
+      "triangles": 39464,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseBare_M_BS3_LOD1_r0238210078d5.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseBare_M_BS3_LOD2_rf56dc3b0c1cd.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseBare_M": {
+      "sha256": "6de3e30e81da42a3be445fa8358e5ed70a3a06856675c5bc8d9ad2a5ebf52f95",
+      "triangles": 40748,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseBare_M_LOD1_r886b31cc30b4.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseBare_M_LOD2_re2cfd6daa3a3.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwise_M_BS2_LOD1": {
+      "sha256": "493ed0e27ecfc99a1765d5a9b78f1225076cf8a9ab11a8cbb35d6d3b3980f906",
+      "triangles": 23144,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwise_M_BS2_LOD2": {
+      "sha256": "391831f16122a32bd9d808bf3144588c2d27deb640a705be9cd164fdfed809ae",
+      "triangles": 10838,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwise_M_BS3_LOD1": {
+      "sha256": "9f0fe48a564936afc7cbc3192c059cd10c5129e39eb80e1e807f7edd04a0f805",
+      "triangles": 23448,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwise_M_BS3_LOD2": {
+      "sha256": "42760d6b4538697cbdff9d4240eb6ec3571cf4ed5678117801e53c705f1709e1",
+      "triangles": 11142,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwise_M_LOD1": {
+      "sha256": "0aa1012601a1bf28fe477d6a886e5a7375989de4ed89fcf4628cfc436b681a1e",
+      "triangles": 40352,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwise_M_LOD2": {
+      "sha256": "7006cf0f79f0896bd5a94c3e38f54aa8a44ab72fcb7de20fabe63f486d0728fd",
+      "triangles": 38751,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwise_M_BS1": {
+      "sha256": "22af2563bbd82cbe2194dbed9252c3f2e95a510cdf80667f71140cb8611a850a",
+      "triangles": 608,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwise_M_BS2": {
+      "sha256": "887c8d77f0d05e6c27a1805a327a83f0d45bbeeefd2104b6c7a0a6b1a7af9940",
+      "triangles": 42666,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwise_M_BS2_LOD1_r493ed0e27ecf.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwise_M_BS2_LOD2_r391831f16122.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwise_M_BS3": {
+      "sha256": "1faae6bce24e764c05951a80fa536768fdee1ff79fa759f769c3dd3ccb25f01d",
+      "triangles": 42970,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwise_M_BS3_LOD1_r9f0fe48a5649.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwise_M_BS3_LOD2_r42760d6b4538.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwise_M": {
+      "sha256": "6e0516da7cb2674d0740824d0a62f1dcd38be0d8c102890fa78c85e7f3ae4da0",
+      "triangles": 43818,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwise_M_LOD1_r0aa1012601a1.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwise_M_LOD2_r7006cf0f79f0.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwiseBare_M_BS2_LOD1": {
+      "sha256": "5a03c1801a42ee47cf89b561a55e2d01fc7016ec20358b5698dfbd8b3400a898",
+      "triangles": 21464,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwiseBare_M_BS2_LOD2": {
+      "sha256": "a9dbdf732acbc9e10ad26089d56585450b3f4c852fc4c03563d1712e12f3c1b7",
+      "triangles": 9856,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwiseBare_M_BS3_LOD1": {
+      "sha256": "386d3909c9ccbee1ffae449306cd089192458024ea5a5796124ffc9077eaa70b",
+      "triangles": 21464,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwiseBare_M_BS3_LOD2": {
+      "sha256": "409a143bc58f262cdb795e92434a22900be4fa7558d30e49dc54d9d91145718c",
+      "triangles": 9856,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwiseBare_M_LOD1": {
+      "sha256": "6c0fc9cc1c4f4cc5edce0dfa242cba49b751b12678aa7e44754827604938d0ce",
+      "triangles": 38528,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwiseBare_M_LOD2": {
+      "sha256": "cb2b7c7cad412a7bdc6d1662a905f6f3dceaaa4728227bd64c50de418b60fa32",
+      "triangles": 37440,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwiseBare_M_BS1": {
+      "sha256": "81b3af14710e0d2faf2ab959af73506d3c9f217f469273eed0a1d237c6b53c4c",
+      "triangles": 2816,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwiseBare_M_BS2": {
+      "sha256": "bd00868fd428681949d07b17c738253c91387210910115b4700242bce1b9deac",
+      "triangles": 39424,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwiseBare_M_BS2_LOD1_r5a03c1801a42.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwiseBare_M_BS2_LOD2_ra9dbdf732acb.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwiseBare_M_BS3": {
+      "sha256": "b72c37c02a498458a4b20368f4c80f706ed56510f5c235de8297bbb7683a2faf",
+      "triangles": 39464,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwiseBare_M_BS3_LOD1_r386d3909c9cc.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwiseBare_M_BS3_LOD2_r409a143bc58f.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCounterclockwiseBare_M": {
+      "sha256": "11dc325d270a995cb6a0e5a83f9711853881716e11523ee7f2d001d8d3c7cab2",
+      "triangles": 40748,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwiseBare_M_LOD1_r6c0fc9cc1c4f.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCounterclockwiseBare_M_LOD2_rcb2b7c7cad41.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversed_M_BS2_LOD1": {
+      "sha256": "63b383cc147632bb3a2f82e7e6f87c58182a20316d70a3c06270310477dd6007",
+      "triangles": 23144,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversed_M_BS2_LOD2": {
+      "sha256": "0450b863bb32c6612de992ca2a3ed6bd4bdfde99e7fa71d26f5dc376e928f2f8",
+      "triangles": 10838,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversed_M_BS3_LOD1": {
+      "sha256": "8731a3efdccbcd39efe903cf28b41cfaa791950106130627e09a2920d0503936",
+      "triangles": 23340,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversed_M_BS3_LOD2": {
+      "sha256": "93b9c3298b1f9f6d2ccda4947062c249e4133a3e8aad1f1de616b8caf6e03abe",
+      "triangles": 11034,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversed_M_LOD1": {
+      "sha256": "2a267dc294d0e3b799fb3837e566edb0b24ab825fff996615b28ce71b8042ec4",
+      "triangles": 40352,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversed_M_LOD2": {
+      "sha256": "e53d36543fc66a73134088d1da6de13013ca0f643f2864e435d574ca0dcdcf0a",
+      "triangles": 38751,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversed_M_BS1": {
+      "sha256": "53e1deb9a296682ff01aa46922c2956edf64515ad73d1d3a0cf180854eddbe25",
+      "triangles": 608,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversed_M_BS2": {
+      "sha256": "b54af1f25fe754a71c3d642025b971f92fd083a0510f5122c4c70ba24f784fc7",
+      "triangles": 42666,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversed_M_BS2_LOD1_r63b383cc1476.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversed_M_BS2_LOD2_r0450b863bb32.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversed_M_BS3": {
+      "sha256": "f5a22f72aa4d99d3d47614d119089f8048e478c141fd561f2ece104667ca8fe9",
+      "triangles": 42862,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversed_M_BS3_LOD1_r8731a3efdccb.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversed_M_BS3_LOD2_r93b9c3298b1f.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversed_M": {
+      "sha256": "06346d94b6803549dfe146fe844700b6c7ea79d7c60bfdbd788090f8575bd2c5",
+      "triangles": 43818,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversed_M_LOD1_r2a267dc294d0.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversed_M_LOD2_re53d36543fc6.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversedBare_M_BS2_LOD1": {
+      "sha256": "e869d399e9ce9ffb2c4a525d595f8642e934402b8e1547c340fd54808a647774",
+      "triangles": 21464,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversedBare_M_BS2_LOD2": {
+      "sha256": "4d7aa943dddf17f99f2b305c143abba49fbd001d51990ee7f617b6fb37cb03dd",
+      "triangles": 9856,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversedBare_M_BS3_LOD1": {
+      "sha256": "7f774bb36a85e74a1a6d34518e4ba46d6e5307b4b2976bef6396b7235e910f0f",
+      "triangles": 21464,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversedBare_M_BS3_LOD2": {
+      "sha256": "cdf15e25e762573f100b4a53f9dc4e61b8172c0bda06e2971b17b6d8bd88b45d",
+      "triangles": 9856,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversedBare_M_LOD1": {
+      "sha256": "d552311453cc8c55f7e66c4404019f2692de2b84c64f081dccda700da25d3527",
+      "triangles": 38528,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversedBare_M_LOD2": {
+      "sha256": "3099e013b9a918ae11ec9683ccb0c9a410abf204c961bca8882dccf1fb49bc19",
+      "triangles": 37440,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversedBare_M_BS1": {
+      "sha256": "af0a3c1348383b6fef31fb15c48324f42570d7a7154e94306571a9293ed778b1",
+      "triangles": 2816,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversedBare_M_BS2": {
+      "sha256": "78636c827c8f7da28f7762ee6ed27b8ab4dd076150d7dc36a43a1522e62604cf",
+      "triangles": 39424,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversedBare_M_BS2_LOD1_re869d399e9ce.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversedBare_M_BS2_LOD2_r4d7aa943dddf.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversedBare_M_BS3": {
+      "sha256": "b4de872ebbe2ac887984a508d62bdcc615219c57ffdd487ae1d36c090b9ef24d",
+      "triangles": 39464,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversedBare_M_BS3_LOD1_r7f774bb36a85.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversedBare_M_BS3_LOD2_rcdf15e25e762.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollClockwiseReversedBare_M": {
+      "sha256": "7c28c352d625926835e9199abd99ab14dd739b94734b1a22bba78696dee08af7",
+      "triangles": 40748,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversedBare_M_LOD1_rd552311453cc.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollClockwiseReversedBare_M_LOD2_r3099e013b9a9.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversed_M_BS2_LOD1": {
+      "sha256": "354918eb79d4cb2df5236971334013df0c1d84af1d60e4a6cb5272295fe8e572",
+      "triangles": 23144,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversed_M_BS2_LOD2": {
+      "sha256": "5a259f96c748d043f6d6897dd256dffb485118cf6eec95de338fade64950ef46",
+      "triangles": 10838,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversed_M_BS3_LOD1": {
+      "sha256": "870c64182e7cb28bb50493edb3169600dd13abd237b29be9eaf08b26401989e8",
+      "triangles": 23404,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversed_M_BS3_LOD2": {
+      "sha256": "439acc427cd735a014df72a383c4cc00399a703fef22a973972ea85c9751ff2b",
+      "triangles": 11098,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversed_M_LOD1": {
+      "sha256": "8f129c80193916c16b2c4a5920081b6e04a2163b7030a0d24cc1b561b8a3efdb",
+      "triangles": 40352,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversed_M_LOD2": {
+      "sha256": "814581b6551b3100ad2e93eef5d866907943c4552fd0b2f719183b155c852a1d",
+      "triangles": 38751,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversed_M_BS1": {
+      "sha256": "5d9a08bca098858f58f293378e8d7a0da34730008df79918bb6c46dc361616a0",
+      "triangles": 608,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversed_M_BS2": {
+      "sha256": "ec24c879201dbb8ba0364122fdd753cd916fae9a9c5e74abd36c541c2fbbfb93",
+      "triangles": 42666,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversed_M_BS2_LOD1_r354918eb79d4.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversed_M_BS2_LOD2_r5a259f96c748.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversed_M_BS3": {
+      "sha256": "fb80564c2aefe214b0fc4b0a0e6ebeda67c9c937fa91bc348ae8bc171ff5ba64",
+      "triangles": 42926,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversed_M_BS3_LOD1_r870c64182e7c.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversed_M_BS3_LOD2_r439acc427cd7.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversed_M": {
+      "sha256": "b175f08ab06114c9cb72a2f0da5d14033c198861bfaeb9553b6660debdea2451",
+      "triangles": 43818,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversed_M_LOD1_r8f129c801939.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversed_M_LOD2_r814581b6551b.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversedBare_M_BS2_LOD1": {
+      "sha256": "304f242378e928554413a6a0c277beed2b2803296786c62dc30a06bee70e2637",
+      "triangles": 21464,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversedBare_M_BS2_LOD2": {
+      "sha256": "9cf08a6e6a39a408a6cf07128d72245f0609a927ae2f5deed7e5b78f995fb07b",
+      "triangles": 9856,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversedBare_M_BS3_LOD1": {
+      "sha256": "3ae35ff12cbda0850e0916c77598cbc8da852988dfcef43d43fadaa0e4c4116d",
+      "triangles": 21464,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversedBare_M_BS3_LOD2": {
+      "sha256": "1f0cecbf33dbe425bd050a3d6f3e95402e101df346eb0986de10e6fbacf9b241",
+      "triangles": 9856,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversedBare_M_LOD1": {
+      "sha256": "84cb0975d3f22123e91c874e88df0355170d5a038bbcb0174521164250bc1e98",
+      "triangles": 38528,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversedBare_M_LOD2": {
+      "sha256": "0ea87bac1197b4fa76fc60ab7d071b3f5e1b8c40b3283dc50411e8f4e63c8f7b",
+      "triangles": 37440,
+      "type": "lod",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversedBare_M_BS1": {
+      "sha256": "dd1caad9df41d13b893ced62117a2b07872cf8d9d93a24f3f129be143fa0afaf",
+      "triangles": 2816,
+      "type": "bs",
+      "lods": [],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversedBare_M_BS2": {
+      "sha256": "034a40b49c72d82ba52df5c259fb839b90a7a03feccd2931ff9c694dec438e23",
+      "triangles": 39424,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversedBare_M_BS2_LOD1_r304f242378e9.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversedBare_M_BS2_LOD2_r9cf08a6e6a39.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversedBare_M_BS3": {
+      "sha256": "342c04e18205d8884d05b77d9d594034c7517a90dcfed5edafba589f18ebf362",
+      "triangles": 39464,
+      "type": "bs",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversedBare_M_BS3_LOD1_r3ae35ff12cbd.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversedBare_M_BS3_LOD2_r1f0cecbf33db.mwm"
+      ],
+      "subparts": []
+    },
+    "APT_PrimaryElbowRollCCWReversedBare_M": {
+      "sha256": "6fd57a738d55916754ff43d844093d1f37ea59fb7bd8193f9d806547f21e4afd",
+      "triangles": 40748,
+      "type": "main",
+      "lods": [
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversedBare_M_LOD1_r84cb0975d3f2.mwm",
+        "Models/Cubes/large/Thermal/LOD/APT_PrimaryElbowRollCCWReversedBare_M_LOD2_r0ea87bac1197.mwm"
       ],
       "subparts": []
     }
