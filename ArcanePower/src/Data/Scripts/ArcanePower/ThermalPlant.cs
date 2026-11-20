@@ -48,7 +48,7 @@ namespace ArcanePower
         [ProtoMember(17)] public double AttachedHeatMJ;
         [ProtoMember(18)] public double CoolingMW;
         [ProtoMember(19)] public double RequiredCoolingMW;
-        [ProtoMember(20)] public ThermalLoopState[] Loops = ThermalLoops.Empty();
+        [ProtoMember(20, OverwriteList = true)] public ThermalLoopState[] Loops = ThermalLoops.Empty();
         [ProtoMember(21)] public int LoopVersion;
         [ProtoMember(22)] public bool LoopTrip;
         // ProtoMember(23) was duplicate full-load cooling telemetry; never reuse.

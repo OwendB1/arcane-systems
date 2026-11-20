@@ -111,24 +111,37 @@ def generate_flow():
     rows = ['// Generated from the authored pressure-pipe centrelines.',
             'using System.Collections.Generic;', 'using VRageMath;', 'namespace ArcanePower {',
             'public static class ThermalFlowModels {',
-            'public static readonly Dictionary<string, ThermalFlowPath[]> All = new Dictionary<string, ThermalFlowPath[]> {']
+            'public static readonly Dictionary<string, ThermalFlowPath[]> All = Create();',
+            'private static Dictionary<string, ThermalFlowPath[]> Create() {',
+            '    var models = new Dictionary<string, ThermalFlowPath[]>();',
+            '    ThermalFlowPath[] paths;']
+    emitted = {}
     for name, model in models.items():
         subtype = model['subtype']
         source = models[contract['PIPE_ALIASES'].get(name, contract['COOLER_UPGRADES'].get(name, name))]
         paths = data['models'][source['subtype']]
         if not model['ports']: continue
         assert paths, subtype
-        rows.append('{"' + subtype + '", new ThermalFlowPath[] {')
+        entries = []
         for path in paths:
             assert len(path['points']) >= 2 and 0 < path['radius'] <= .25
             assert all(math.isfinite(v) for p in path['points'] for v in p)
             assert path['internal'] or 0 <= path['port'] < len(model['ports'])
             coords = ', '.join(vector(point) for point in path['points'])
-            rows.append('new ThermalFlowPath("%s", %s, %d, %sf, %s, new Vector3[] { %s }),' % (
+            entries.append('new ThermalFlowPath("%s", %s, %d, %sf, %s, new Vector3[] { %s })' % (
                 path['circuit'] if path['internal'] else contract['runtime_circuit'](name, path['circuit']), str(path['hot']).lower(), path['port'], str(path['radius']),
                 str(path['internal']).lower(), coords))
-        rows.append('}},')
-    rows += ['};', '}', '}']
+        # These are read-only model paths. Emit identical geometry once and keep
+        # each path a separate statement for the game's Roslyn script checks.
+        key = tuple(entries)
+        if key in emitted:
+            rows.append(f'    models.Add("{subtype}", models["{emitted[key]}"]);')
+            continue
+        emitted[key] = subtype
+        rows.append(f'    paths = new ThermalFlowPath[{len(entries)}];')
+        rows.extend(f'    paths[{i}] = {entry};' for i, entry in enumerate(entries))
+        rows.append(f'    models.Add("{subtype}", paths);')
+    rows += ['    return models;', '}', '}', '}']
     return '\n'.join(rows) + '\n'
 
 

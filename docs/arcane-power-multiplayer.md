@@ -169,4 +169,55 @@ dedicated server and repeat the automation rows on a listen host:
 | Remove/detonate the final core | Both clients remove warnings, sound, light and shell visuals |
 | Interrupt state delivery and restore it | Prediction pauses, stale state is explicit, retries recover the current baseline |
 
-Live multiplayer validation was **not run** in this environment.
+The 3 November audit used engine doubles. The first live dedicated-server result follows.
+
+### 20 November 2026 — tier I reactor on Magnetar
+
+**On released 0.5.0, dedicated startup and shutdown passed. Client reactor telemetry failed.** One
+SE 1.211.017 client joined a Quasar-managed Magnetar server running Arcane Power
+0.5.0 (Workshop item 3819727962). The server and client copies matched the 56 C#
+scripts and 25 definition files at commit `aab13436`. The test used a copy of
+`Arcane Power - Prototype Lab` with the reactor's fuel stack changed to tier I.
+
+| Check | Live result |
+| --- | --- |
+| Join and inspect the reactor on Build Platform | SE Remote read 19.517291 units of Aether from the client inventory. The dashboard stayed on `WAITING FOR REACTOR STATE`, reporting zero fuel and zero circuits. The server save recorded the same inventory, two controllers and four ready circuits. |
+| Switch the reactor on from the client | Server saves recorded `Starting`, then `Running` with 1,786.66 MW net Brayton output. The client dashboard still reported zero output. |
+| Switch the reactor off from the client | The server saved `Off`, zero output and 19.490770 units of Aether remaining. |
+
+Round-tripping the running server's saved motion state inside a `VentPacket`
+with the game's protobuf library reproduced the failure. Field 20 of
+`ThermalReactorState` appends four received loops to the four created by its
+field initializer. The resulting eight loops fail validation and the receiver
+discards the reactor state. Setting that field to overwrite its array in the
+offline serializer preserved four loops and passed validation.
+
+**The patched client passed the live retest against the same 0.5.0 server.**
+Before opening inventory, SE Remote read 19.491 Aether canisters, 80/80 tiles,
+advanced controller access and four ready Brayton circuits on the dashboard.
+On tier I Aether the dashboard showed containment deploying, then the reactor
+running at 246.67 MW output (246.57 MW net). After shutdown it showed zero
+output and still listed all four circuits. The saved running packet remains
+731 bytes. An automated regression now sends a four-circuit snapshot through
+the multiplayer receiver and checks circuit count, output and fuel.
+
+The two-client and listen-host rows above still need live coverage.
+
+### Lab load times on 20 November 2026
+
+The Linux client spent most of the original load in the script compiler. A
+singleplayer stack sample showed Roslyn binding nested collection, array and
+object initializers. The Arcane flow-path generator now emits a separate
+assignment for each path and reuses matching geometry across block variants.
+
+| Live measurement | Before | After |
+| --- | ---: | ---: |
+| Singleplayer loading screen | 287.7 s | 28.0 s |
+| Singleplayer mod scripts | 280.2 s | 20.1 s |
+| Multiplayer join to loading screen closing | 303.7 s | 32.8 s |
+| Multiplayer client mod scripts | 289.8 s | 19.4 s |
+
+Each run used a fresh headless Pulsar client with the lab's nine Workshop
+mods already installed. Singleplayer used an offline copy of the lab save.
+Multiplayer joined the running local Magnetar server on released 0.5.0.
+SE Remote confirmed both optimized sessions were ready.

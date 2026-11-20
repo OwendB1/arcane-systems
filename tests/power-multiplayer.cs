@@ -194,9 +194,23 @@ namespace Acceptance {
   }
   static void Replicas(){
    Reset();MyAPIGateway.Multiplayer.IsServer=false;var r=new Reactor();r.reactor.EntityId=7;r.Motion.EntityId=7;VentSession.Reactors[7]=r;var receiver=new VentSession();
-   var state=new MotionState{EntityId=7,Sequence=5,Core=CorePhase.Running,Telemetry=new ReactorTelemetry{Controllers=2,RingCapacity=4,FuelReady=true}};
+   var state = new MotionState {
+    EntityId = r.Id, Sequence = 5, Core = CorePhase.Running,
+    Telemetry = new ReactorTelemetry { Controllers = 2, RingCapacity = 4, FuelReady = true, Fuel = 19.5 },
+    Thermal = new ThermalReactorState {
+     Mode = ThermalMode.Brayton, Requested = ThermalMode.Brayton, Deployment = 1,
+     Store = new ThermalStore { EntityId = r.Id }, LoopVersion = 2
+    }
+   };
+   for (int i = 0; i < ThermalLoops.Count; i++) {
+    state.Thermal.Loops[i].Connected = true;
+    state.Thermal.Loops[i].NetMW = 100 + i;
+   }
    var packet=new VentPacket{EntityId=7,State=state};receiver.Receive(49371,Raw(packet),11,false);MyAPIGateway.Utilities.Drain();Need(!r.receivedState,"peer cannot forge server snapshot");
    receiver.Receive(49371,Raw(packet),0,true);MyAPIGateway.Utilities.Drain();Need(r.receivedState && r.Motion.Sequence==5,"late join consumes server snapshot");
+   Need(r.Motion.Thermal.Loops.Length == ThermalLoops.Count && r.Motion.Thermal.ConnectedLoops == 4
+    && r.Motion.Thermal.Loops[3].NetMW == 103 && r.Motion.Telemetry.Fuel == 19.5,
+    "late join restores the four Brayton circuits and fuel stock from the server");
    state.Sequence=4;state.Core=CorePhase.Off;receiver.Receive(49371,Raw(packet),0,true);MyAPIGateway.Utilities.Drain();Need(r.Motion.Core==CorePhase.Running,"older reactor packet rejected");
    r.receivedState=false;r.stateAge=200;state.Sequence=5;state.Core=CorePhase.Running;receiver.Receive(49371,Raw(packet),0,true);MyAPIGateway.Utilities.Drain();Need(r.receivedState && r.stateAge==0,"equal authoritative baseline can recover stale prediction");
    var cell=new EnergyCore();cell.Block.EntityId=8;EnergySession.Cells[8]=cell;var er=new EnergySession();
