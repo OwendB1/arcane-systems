@@ -3,7 +3,11 @@
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962)
 · [Publishing workflow and gallery sources](RELEASE.md)
 
-Version **0.5.0** adds eight pipe configurations in bare and manifold forms:
+Version **0.6.0** fixes the multiplayer reactor dashboard getting stuck on
+`WAITING FOR REACTOR STATE` and speeds up world loading in singleplayer and
+multiplayer. [Lab measurements](../docs/arcane-power-multiplayer.md#lab-load-times-on-20-november-2026)
+
+Version **0.5.0** added eight pipe configurations in bare and manifold forms:
 reversed elbows and risers, a reversed roll adapter, a 180° crossover and four
 rolled elbows. All are available in the pipe scroll groups, with server-enforced
 hot/cold alignment. See the [construction guide](THERMAL-CONSTRUCTION.md).
