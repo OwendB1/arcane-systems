@@ -1,9 +1,9 @@
 {
-  "version": "0.5.0",
+  "version": "0.6.0",
   "published": false,
-  "archive": "ArcanePower-0.5.0.zip",
-  "sha256": "b40ab1eddea83efe07b3c0f9bded8dfda7fe4d8b0ccea82320772f6514ddcf9b",
-  "bytes": 523863232,
+  "archive": "ArcanePower-0.6.0.zip",
+  "sha256": "bd1f1a3efdb3eb30f6109110b732d635ceb13a5235b4242bc82324940156644e",
+  "bytes": 523859732,
   "files": [
     {
       "path": "Audio/ArcanePower/Assembly.wav",
@@ -362,8 +362,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalFlowModels.cs",
-      "bytes": 249180,
-      "sha256": "3ee39aed5a449c1b148c9dabc181e579c79fa8f315403110f18da60b3df146c9"
+      "bytes": 109281,
+      "sha256": "2a389e0e86643891b90301eb0ab3814a37be75cc2c967e90300965be6607d609"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalFlowVisuals.cs",
@@ -412,8 +412,8 @@
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalPlant.cs",
-      "bytes": 15818,
-      "sha256": "f786acb003cf97a262a438f9fc91b309c2d5517f6986d1e282baa9ab7607776b"
+      "bytes": 15840,
+      "sha256": "1ecd827b6d087fe640611041951de441f8daed299903d5fd67377b8f4ed98da3"
     },
     {
       "path": "Data/Scripts/ArcanePower/ThermalRadiators.cs",
@@ -4368,7 +4368,7 @@
     {
       "path": "metadata.mod",
       "bytes": 200,
-      "sha256": "7624a7a336a5071824e7977cd392e97ded76765bd8ffdfa14044a2bdc5759193"
+      "sha256": "1cefed7059362e2f029597dd11954d792b61bfbf5bf15da2abf1b9ec00f2cfe2"
     }
   ],
   "native_assets": [
