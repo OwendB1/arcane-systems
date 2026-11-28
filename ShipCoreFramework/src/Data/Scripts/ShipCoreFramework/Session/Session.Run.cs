@@ -120,6 +120,7 @@ namespace ShipCoreFramework
 
             RevertAmmoSpeedAdjustments();
             ModAPI.Close();
+            PbAPI.Unload();
             Networking?.Unregister();
             Networking = null;
             ResetConfigSyncState();

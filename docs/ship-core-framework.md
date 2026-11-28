@@ -654,6 +654,46 @@ Recommended integration path:
 - use `ShipCoreFrameworkServerApi` for authoritative server queries and mutations
 - wait for config/runtime readiness and inspect `ApiReadResult<T>` instead of trusting fallback values
 
+## Programmable block API
+
+Programmable blocks can read their own grid group's core state (read-only) through terminal
+properties on the PB itself. Values describe the whole mechanical grid group the PB is part of.
+
+```csharp
+float maxSpeed = Me.GetValue<float>("SCF.MaxSpeed");      // current cap in m/s, boost included
+bool boosting  = Me.GetValue<bool>("SCF.BoostActive");
+var limits = Me.GetValue<Dictionary<string, MyTuple<double, double>>>("SCF.BlockLimits");
+foreach (var limit in limits)
+    Echo($"{limit.Key}: {limit.Value.Item1}/{limit.Value.Item2}");
+```
+
+`GetValue<T>` must use the exact type listed below. Check `SCF.Available` first: it is `false`
+while the framework has no state for the grid yet, and every other property then returns its
+default (0, `false`, `""` or an empty dictionary).
+
+| Property | Type | Meaning |
+| --- | --- | --- |
+| `SCF.Available` | `bool` | Framework state exists for this grid group |
+| `SCF.HasCore` | `bool` | Group has at least one ship core |
+| `SCF.CoreName` / `SCF.CoreSubtype` | `string` | Active core class (`UniqueName`, `SubtypeId`); the no-core class when `HasCore` is false |
+| `SCF.Deactivated` / `SCF.Ignored` | `bool` | Core deactivated / group ignored by enforcement |
+| `SCF.MaxSpeed` | `float` | Effective max speed in m/s, including boost |
+| `SCF.BaseMaxSpeed` | `float` | Max speed in m/s without boost |
+| `SCF.MaxBoost` | `float` | Boost multiplier |
+| `SCF.Blocks` / `SCF.MaxBlocks` | `int` | Block count / effective cap (`<= 0` = no cap) |
+| `SCF.Mass` / `SCF.MaxMass` | `float` | Mass in kg / effective cap (`<= 0` = no cap) |
+| `SCF.PCU` / `SCF.MaxPCU` | `int` | PCU / effective cap (`<= 0` = no cap) |
+| `SCF.PunishSpeed` / `SCF.PunishModifiers` / `SCF.PunishBlocks` | `bool` | Which punishments are active |
+| `SCF.BoostEnabled` / `SCF.DefenseEnabled` | `bool` | Core class supports the ability |
+| `SCF.BoostActive` / `SCF.DefenseActive` / `SCF.OverclockActive` | `bool` | Ability is running |
+| `SCF.BoostTimeLeft` / `SCF.DefenseTimeLeft` / `SCF.OverclockTimeLeft` | `float` | Seconds of the active ability left |
+| `SCF.BoostCooldown` / `SCF.DefenseCooldown` / `SCF.OverclockCooldown` | `float` | Seconds of cooldown left |
+| `SCF.BlockLimits` | `Dictionary<string, MyTuple<double, double>>` | Limit name -> (current, effective max) |
+| `SCF.Modifiers` | `Dictionary<string, float>` | Active grid modifiers by display name |
+
+The properties are registered once the first programmable block in the world has loaded.
+Setting them has no effect.
+
 ## XML configurator
 
 The web editor uses sidebar navigation for ship cores, reusable block groups, shared core
