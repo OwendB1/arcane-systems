@@ -670,7 +670,22 @@ coolers, removal, access, projections, repaired and missing stack panels, saved
 connection history, client state and thermal runaway. These are offline checks;
 a running game remains the final integration check.
 
-Validation passes: 1,407,974 thermal runtime checks, 152,405 production
+Validation passes: 1,468,925 thermal runtime checks, 152,407 production
 fuel/mode/dispatcher checks, 3,715 cooling-integrity checks and 56 cooling
 terminal/telemetry checks. The solution and SE compatibility/whitelist builds
 pass. Temporary test logs are pruned after recording these results.
+
+### Arcane Thrusters integration
+
+A recovery charger attaches to one Brayton circuit through its duplex flange.
+The server offers up to 250 MJ/s from that circuit’s cooling backlog before
+radiator rejection. The charger returns the energy used for accepted plasma.
+Unused heat stays in the circuit, including during shutdown. The circuit
+reports the recovered MW separately from radiator rejection.
+
+Drive Priority draws from a running circuit’s paid reactor allocation before
+the turbine receives its grant. The engine spends only the share it can use
+with connected hydrogen and thrust override. The turbine can use the balance.
+At full demand the tested drive diverted 1 GW, reducing measured plant output
+by 0.8 GW. Direct propulsion creates no turbine cooling demand. [Flight and
+plant measurements](../ArcaneThrusters/README.md#propulsion-acceptance)

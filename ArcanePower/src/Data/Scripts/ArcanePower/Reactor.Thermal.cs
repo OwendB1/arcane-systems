@@ -8,7 +8,7 @@ namespace ArcanePower
     {
         private bool thermalRestoreFault;
         private bool thermalStartRequested;
-        private double reservedThermalMJ;
+        private double reservedThermalMJ, spentPropulsionMJ;
         private ThermalOutputGrant standaloneGrant;
         private int thermalAccountedAt = -1;
         internal void FailThermalRuntime()
@@ -213,7 +213,7 @@ namespace ArcanePower
         internal void BeginThermalFrame()
         {
             Motion.Thermal.BeginFrame();
-            reservedThermalMJ = 0;
+            reservedThermalMJ = spentPropulsionMJ = 0;
         }
 
         internal void AccountThermalOutput()
@@ -234,11 +234,20 @@ namespace ArcanePower
                 ThermalHeatMW / 60 - reservedThermalMJ));
             // Refill only a one-interval paid reserve. Unused credit stays saved;
             // no-demand operation stops buying fuel once this small reserve is full.
-            ProduceThermal(Math.Max(0, reservedThermalMJ + wanted - Motion.Thermal.Store.HotMJ) * 60);
+            ProduceThermal(Math.Max(0, reservedThermalMJ - spentPropulsionMJ + wanted - Motion.Thermal.Store.HotMJ) * 60);
             PayFuel(false);
-            double available = Math.Max(0, Math.Min(wanted, Motion.Thermal.Store.HotMJ - reservedThermalMJ));
+            double available = Math.Max(0, Math.Min(wanted, Motion.Thermal.Store.HotMJ - (reservedThermalMJ - spentPropulsionMJ)));
             reservedThermalMJ += available;
             return new ThermalOutputGrant(Motion.Thermal, loop, available, efficiency);
+        }
+
+        internal ThermalOutputGrant DivertPropulsion(ThermalOutputGrant grant, System.Func<double, double> deliver)
+        {
+            // Keep this heat in the frame's allocation ceiling, but exclude it from
+            // outstanding turbine credit once the drive has physically consumed it.
+            var remaining = grant.Divert(deliver);
+            spentPropulsionMJ += grant.HeatMJ - remaining.HeatMJ;
+            return remaining;
         }
 
         internal void GrantStandaloneOutput()

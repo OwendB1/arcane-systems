@@ -34,13 +34,13 @@
         <BlockVariantGroup>
             <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="Utility Cores" />
             <Icon>Textures\LargeGridCore.png</Icon>
-            <DisplayName>Warship Cores</DisplayName>
-            <Description>Warship Cores, the necessary componets for the ultimate fleet.</Description>
+            <DisplayName>Utility Cores</DisplayName>
+            <Description>Scroll through the utility, mining and courier ship cores.</Description>
             <Blocks>
-                <Block Type="MyObjectBuilder_FunctionalBlock" Subtype="Utility_Core" />
+                <Block Type="MyObjectBuilder_FunctionalBlock" Subtype="Harvester_Core" />
                 <Block Type="MyObjectBuilder_FunctionalBlock" Subtype="Extractor_Core" />
+                <Block Type="MyObjectBuilder_FunctionalBlock" Subtype="Utility_Core" />
                 <Block Type="MyObjectBuilder_FunctionalBlock" Subtype="Courier_Core" />
-                <Block Type="MyObjectBuilder_FunctionalBlock" Subtype="Harvester_Core" />               
             </Blocks>
         </BlockVariantGroup>
         

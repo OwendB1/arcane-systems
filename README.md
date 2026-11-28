@@ -9,27 +9,17 @@ Arcane Systems is an ecosystem of Space Engineers mods, developed together in th
 | Ship Core Framework | Core-driven ship classes, block limits, grid modifiers, abilities, and server configuration. | [Ship Core Framework](docs/ship-core-framework.md) |
 | Arcane Ship Cores | Core profiles and upgrade modules for combat ships, utility vessels, and stations, built on Ship Core Framework. | [Arcane Ship Cores](docs/arcane-ship-cores.md) |
 | Arcane Power | Arcane reactor, containment controllers, and vent hardware. | [Arcane Power](ArcanePower/README.md) |
+| Arcane Thrusters | Hydrogen plasma propulsion and reactor heat recovery. In development. | [Design and milestones](ArcaneThrusters/README.md) |
 
 As new mods join the ecosystem, they will be listed here with their own documentation.
 
 ## Shared build menu
 
-Power and Ship Cores contribute to one **Arcane Systems** section in the G menu.
-Either mod works independently; together the section contains 36 block definitions
-(12 Power blocks, 14 cores, and 10 upgrades). Debug and internal blocks are excluded.
+Arcane Power, Thrusters and Ship Cores share one **Arcane Systems** category in the G menu. Power contributes ten tiles, including separate bare and manifold pipe groups. Thrusters adds one engine group, a grid-size-paired plasma tank and a recovery charger. Ship Cores adds four groups for station cores, warship cores, utility cores and upgrades.
 
-Future mods can join through their own `Data/BlockCategories.sbc`: use a unique
-category `Id/SubtypeId` such as `ArcaneSystems_MyMod`, with
-`<Name>ArcaneSystems</Name>` and `<DisplayName>Arcane Systems</DisplayName>`.
-List that mod's blocks in `ItemIds` as exact `TypeId/SubtypeId` strings, following
-[Power's contribution](ArcanePower/src/Data/BlockCategories.sbc) or
-[Ship Cores' contribution](ArcaneShipCores/src/Data/BlockCategories.sbc).
-Space Engineers merges item lists by `Name`; distinct definition IDs preserve
-each contribution regardless of load order. No shared runtime dependency is needed.
+Each pack declares a unique category definition ID with the same `Name`, `ArcaneSystems`. SE merges the item IDs by name and uses the first contribution’s category settings. Set `StrictSearch` to `true` on every contribution and list just the group heads and standalone blocks. Players can scroll through the other variants after selecting a group. [Power menu](ArcanePower/src/Data/BlockCategories.sbc) · [Thruster menu](ArcaneThrusters/src/Data/BlockCategories.sbc) · [Ship Core menu](ArcaneShipCores/src/Data/BlockCategories.sbc)
 
-`python3 tests/check_arcane_categories.py` checks block coverage and the installed
-game's native merge/filter behavior for either mod, both load orders, and duplicate
-contributions (requires Mono and the local Steam installation).
+Run `python3 tests/check_arcane_categories.py` with Mono and the local SE1 installation to verify shared-category merging and per-grid scroll lists.
 
 ## Tools and development
 

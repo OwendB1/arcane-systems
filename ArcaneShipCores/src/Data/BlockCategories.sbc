@@ -8,31 +8,12 @@
       </Id>
       <DisplayName>Arcane Systems</DisplayName>
       <Name>ArcaneSystems</Name>
+      <StrictSearch>true</StrictSearch>
       <ItemIds>
-        <string>FunctionalBlock/Battleship_Core</string>
-        <string>FunctionalBlock/Citadel_Core</string>
-        <string>FunctionalBlock/Courier_Core</string>
-        <string>FunctionalBlock/Cruiser_Core</string>
-        <string>FunctionalBlock/Destroyer_Core</string>
-        <string>FunctionalBlock/Extractor_Core</string>
-        <string>FunctionalBlock/Fighter_Core</string>
-        <string>FunctionalBlock/Frigate_Core</string>
-        <string>FunctionalBlock/Gunship_Core</string>
-        <string>FunctionalBlock/Harvester_Core</string>
-        <string>FunctionalBlock/Interceptor_Core</string>
         <string>FunctionalBlock/Outpost_Core</string>
-        <string>FunctionalBlock/Stronghold_Core</string>
-        <string>FunctionalBlock/Utility_Core</string>
+        <string>FunctionalBlock/Frigate_Core</string>
+        <string>FunctionalBlock/Harvester_Core</string>
         <string>UpgradeModule/GridCore_Module_Combat</string>
-        <string>UpgradeModule/GridCore_Module_Economy</string>
-        <string>UpgradeModule/GridCore_Module_Handling</string>
-        <string>UpgradeModule/GridCore_Module_Harvester</string>
-        <string>UpgradeModule/GridCore_Module_OverDrive</string>
-        <string>UpgradeModule/SG_GridCore_Module_Combat</string>
-        <string>UpgradeModule/SG_GridCore_Module_Economy</string>
-        <string>UpgradeModule/SG_GridCore_Module_Handling</string>
-        <string>UpgradeModule/SG_GridCore_Module_Harvester</string>
-        <string>UpgradeModule/SG_GridCore_Module_OverDrive</string>
       </ItemIds>
     </Category>
   </CategoryClasses>

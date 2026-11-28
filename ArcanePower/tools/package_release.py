@@ -1,4 +1,5 @@
 """Prepare an unpublished runtime ZIP, checking native model/asset dependencies."""
+import argparse
 import hashlib
 import json
 import os
@@ -72,6 +73,10 @@ def prune_model_exports(runtime_files):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--preview', action='store_true',
+        help='Write a separate development archive and manifest, preserving release and authoring files')
+    preview = parser.parse_args().preview
     files = set(MOD.glob('Data/**/*.sbc')) | set(MOD.glob('Data/**/*.cs'))
     files.add(MOD/'metadata.mod')
     models = set()
@@ -117,7 +122,8 @@ def main():
     version = (ROOT/'workshop/version.txt').read_text().strip()
     if ET.parse(MOD/'metadata.mod').findtext('ModVersion') != version:
         raise ValueError('Mod metadata and Workshop version must match')
-    archive = output/('ArcanePower-'+version+'.zip')
+    suffix = '-preview' if preview else ''
+    archive = output/('ArcanePower-'+version+suffix+'.zip')
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as package:
         for path in sorted(files):
             relative = path.relative_to(MOD).as_posix()
@@ -127,8 +133,10 @@ def main():
     manifest = dict(version=version, published=False, archive=archive.name,
         sha256=hashlib.sha256(archive.read_bytes()).hexdigest(), bytes=archive.stat().st_size,
         files=entries, native_assets=sorted(native))
-    (ROOT/'validation/release-manifest.json').write_text(json.dumps(manifest, indent=2)+'\n')
-    prune_model_exports(files)
+    manifest_path = archive.with_suffix('.json') if preview else ROOT/'validation/release-manifest.json'
+    manifest_path.write_text(json.dumps(manifest, indent=2)+'\n')
+    if not preview:
+        prune_model_exports(files)
     print(str(archive)+': '+str(len(entries))+' files, '+str(manifest['bytes'])+' bytes; dependencies resolved')
 
 

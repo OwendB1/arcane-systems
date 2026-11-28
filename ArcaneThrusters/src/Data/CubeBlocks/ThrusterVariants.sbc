@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions>
+  <BlockVariantGroups>
+    <BlockVariantGroup>
+      <Id Type="MyObjectBuilder_BlockVariantGroup" Subtype="ArcaneThrusters_Engines" />
+      <DisplayName>Arcane Thrusters</DisplayName>
+      <Description>Scroll through exposed and hull-mounted engines for the selected grid size.</Description>
+      <Icon>Textures/GUI/Icons/ArcaneThrusters/ArcaneThrusters_DualModeThrusterLG.dds</Icon>
+      <Blocks>
+        <Block Type="MyObjectBuilder_Thrust" Subtype="ArcaneThrusters_DualModeThrusterLG" />
+        <Block Type="MyObjectBuilder_Thrust" Subtype="ArcaneThrusters_DualModeThrusterSG" />
+        <Block Type="MyObjectBuilder_Thrust" Subtype="ArcaneThrusters_DualModeThrusterLG_Hull" />
+        <Block Type="MyObjectBuilder_Thrust" Subtype="ArcaneThrusters_DualModeThrusterSG_Hull" />
+        <Block Type="MyObjectBuilder_Thrust" Subtype="ArcaneThrusters_AtmosphericLG" />
+        <Block Type="MyObjectBuilder_Thrust" Subtype="ArcaneThrusters_AtmosphericLG_Hull" />
+        <Block Type="MyObjectBuilder_Thrust" Subtype="ArcaneThrusters_VacuumLG" />
+        <Block Type="MyObjectBuilder_Thrust" Subtype="ArcaneThrusters_VacuumLG_Hull" />
+        <Block Type="MyObjectBuilder_Thrust" Subtype="ArcaneThrusters_DrivePriorityLG" />
+        <Block Type="MyObjectBuilder_Thrust" Subtype="ArcaneThrusters_DrivePriorityLG_Hull" />
+      </Blocks>
+    </BlockVariantGroup>
+  </BlockVariantGroups>
+</Definitions>

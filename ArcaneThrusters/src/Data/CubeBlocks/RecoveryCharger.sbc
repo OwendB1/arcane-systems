@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_GasTankDefinition">
+      <Id>
+        <TypeId>OxygenTank</TypeId>
+        <SubtypeId>ArcaneThrusters_RecoveryChargerLG</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Plasma Recovery Charger</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneThrusters/ArcaneThrusters_RecoveryChargerLG.dds</Icon>
+      <Description>Connect the duplex flange to a sealed Brayton circuit and the conveyor to hydrogen and a powered plasma tank. Stored hydrogen is the feed buffer. Stockpile draws hydrogen into the charger.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/ArcaneThrusters_RecoveryChargerLG.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="60" />
+        <Component Subtype="LargeTube" Count="40" />
+        <Component Subtype="SmallTube" Count="60" />
+        <Component Subtype="Computer" Count="8" />
+        <Component Subtype="Construction" Count="40" />
+        <Component Subtype="SteelPlate" Count="20" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Left" StartX="0.04" StartY="0.04" EndX="0.96" EndY="0.96" />
+        <MountPoint Side="Right" StartX="0.04" StartY="0.04" EndX="0.96" EndY="0.96" />
+        <MountPoint Side="Bottom" StartX="0.03" StartY="0.02" EndX="2.97" EndY="0.24" />
+        <MountPoint Side="Bottom" StartX="0.03" StartY="0.76" EndX="2.97" EndY="0.98" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/ArcaneThrusters_RecoveryChargerLG_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/ArcaneThrusters_RecoveryChargerLG_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.0" File="Models/Cubes/large/ArcaneThrusters_RecoveryChargerLG_BS3.mwm" />
+      </BuildProgressModels>
+      <BlockPairName>ArcaneThrusters_RecoveryCharger</BlockPairName>
+      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
+      <ResourceSinkGroup>Factory</ResourceSinkGroup>
+      <OperationalPowerConsumption>0.001</OperationalPowerConsumption>
+      <StandbyPowerConsumption>0.000001</StandbyPowerConsumption>
+      <Capacity>10000</Capacity>
+      <StoredGasId>
+        <TypeId>GasProperties</TypeId>
+        <SubtypeId>Hydrogen</SubtypeId>
+      </StoredGasId>
+      <BuildTimeSeconds>32</BuildTimeSeconds>
+      <PCU>25</PCU>
+    </Definition>
+  </CubeBlocks>
+</Definitions>

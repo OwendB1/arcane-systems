@@ -13,7 +13,7 @@ namespace ArcanePower
         [ProtoMember(4)] public double NetMW;
         [ProtoMember(5)] public double CoolingMW;
         // ProtoMember(6) was duplicate cooling-load telemetry; never reuse.
-        public double RequiredCoolingMW { get { return OutputMW; } }
+        public double RequiredCoolingMW { get { return Math.Max(0, OutputMW - RecoveredMW); } }
         [ProtoMember(7)] public string Diagnostic = "Connect one turbine and cooling; cap unused pipe mouths";
         [ProtoMember(8)] public double ExcessMJ;
         [ProtoMember(9)] public double OutputMW;
@@ -22,9 +22,12 @@ namespace ArcanePower
         [ProtoMember(12)] public double RejectedMW;
         [ProtoMember(13)] public double PotentialCoolingMW;
 
+        [ProtoMember(14)] public double RecoveredMW;
+        [ProtoMember(15)] public double DriveInputMW;
+
         public bool Valid()
         {
-            return ThermalMath.Finite(NetMW) && NetMW >= 0 && NetMW <= 487500
+            return ThermalMath.Finite(DriveInputMW) && DriveInputMW >= 0 && ThermalMath.Finite(RecoveredMW) && RecoveredMW >= 0 && ThermalMath.Finite(NetMW) && NetMW >= 0 && NetMW <= 487500
                 && ThermalMath.Finite(CoolingMW) && CoolingMW >= 0
                 && ThermalMath.Finite(ExcessMJ) && ExcessMJ >= 0
                 && ThermalMath.Finite(OutputMW) && OutputMW >= 0 && OutputMW <= 487500.1

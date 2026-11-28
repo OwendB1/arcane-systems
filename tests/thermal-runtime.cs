@@ -218,8 +218,24 @@ public static partial class ThermalRuntimeChecks
             Near(circuit.ExcessMJ, 75, "saved cooling backlog survives without rescaling");
             Near(circuit.RequiredCoolingMW, 20, "cooling load derives from output instead of stale saved duplicates");
         }
+        foreach (double fraction in new[] { 0.0, .25, .5, 1.0 })
+        {
+            var state = new ThermalReactorState { Mode = ThermalMode.Brayton, Store = new ThermalStore { HotMJ = 100 } };
+            var grant = new ThermalOutputGrant(state, state.Loops[0], 100, .8);
+            var turbine = grant.Divert(offered => offered * fraction);
+            Check(!grant.Settle(0), "original credit cannot be reused after diversion");
+            Near(state.Store.HotMJ, 100 * (1 - fraction), "drive draws only paid input");
+            Near(turbine.MaximumMW, grant.MaximumMW * (1 - fraction), "diversion reduces native turbine capacity");
+            Check(turbine.Settle(turbine.MaximumMW), "remaining electricity is fuel backed");
+            Near(state.Store.HotMJ + state.ProducedMW / 60, 100, "diverted and generated heat settle once");
+            Near(state.Loops[0].ExcessMJ, state.NetOutputMW / 60, "only turbine output enters the recovery backlog");
+        }
         var standalone = new ThermalReactorState { Store = new ThermalStore { EntityId = 1, HotMJ = 100 } };
         var standaloneGrant = new ThermalOutputGrant(standalone, null, 100, ThermalMath.StandaloneEfficiency);
+        bool denied = false;
+        try { standaloneGrant.Divert(offered => offered); }
+        catch (InvalidOperationException) { denied = true; }
+        Check(denied && standalone.Store.HotMJ == 100, "drive cannot reserve a standalone grant");
         Check(standaloneGrant.Settle(standaloneGrant.MaximumMW), "standalone output stays fuel-backed");
         Near(standalone.Store.HotMJ + standalone.Store.WasteMJ + standalone.NetOutputMW / 60, 100,
             "standalone retains integrated cooling and its original energy accounting");

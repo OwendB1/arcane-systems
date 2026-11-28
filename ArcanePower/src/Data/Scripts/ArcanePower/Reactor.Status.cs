@@ -95,7 +95,7 @@ namespace ArcanePower
                 double coolingMargin = thermal.CoolingMW - thermal.RequiredCoolingMW;
                 if (text.Brayton)
                     foreach (var loop in thermal.Loops)
-                        if (loop.Connected) coolingMargin = Math.Min(coolingMargin, loop.CoolingMW - loop.OutputMW);
+                        if (loop.Connected) coolingMargin = Math.Min(coolingMargin, loop.CoolingMW - loop.RequiredCoolingMW);
                 Row(text, "Cooling margin", Power(coolingMargin) + (text.Brayton ? " / weakest circuit" : ""), shortfall ? "yellow" : "white");
                 Row(text, "Cooling rate", Power(thermal.RejectedMW));
                 if (text.CoolingDown)
@@ -109,6 +109,8 @@ namespace ArcanePower
                         Row(text, "Circuit " + (i + 1), (loop.Connected ? "Ready" : "Unavailable")
                             + " / valve " + ((valves & (1 << i)) != 0 ? "open" : "closed"),
                             loop.Connected ? "white" : "yellow");
+                        if (loop.RecoveredMW > .001) Row(text, "Recovered for plasma", Power(loop.RecoveredMW));
+                        if (loop.DriveInputMW > .001) Row(text, "Diverted to Drive Priority", Power(loop.DriveInputMW) + " thermal");
                         Line(text, "muted", loop.Diagnostic + " / output " + Power(loop.OutputMW) + " / " + Power(loop.NetMW) + " / cooling " + Power(loop.CoolingMW) + " / backlog " + Energy(loop.ExcessMJ));
                     }
                 }

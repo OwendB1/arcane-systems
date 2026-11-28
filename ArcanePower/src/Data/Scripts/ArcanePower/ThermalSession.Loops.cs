@@ -22,6 +22,7 @@ namespace ArcanePower
                     endpoints.Add(other.ThermalEndpoint());
             foreach (var joint in rotary)
                 if (grids.Contains(joint.GridId)) endpoints.Add(joint);
+            AddPropulsionPorts(endpoints, grids, source.Block.OwnerId);
             ThermalCircuitCache graph;
             bool rebuilt = !circuitGraphs.TryGetValue(source.Id, out graph) || !graph.Matches(endpoints);
             var previous = graph;
@@ -108,6 +109,8 @@ namespace ArcanePower
                     loop.PotentialCoolingMW += potential;
                     if (cooler.CoolingPowered) loop.CoolingMW += potential;
                 }
+                RecoverHeat(circuit, loop);
+                state.RequiredCoolingMW -= Math.Min(loop.OutputMW, loop.RecoveredMW);
                 double rejected = ThermalMath.CoolCircuit(loop, loop.CoolingMW);
                 state.CoolingMW += loop.CoolingMW;
                 state.RejectedMW += rejected;
@@ -123,7 +126,9 @@ namespace ArcanePower
                     ? "Ready at current load; cooling below maximum output" : plan.Limit;
                 if (running)
                 {
-                    host.OutputGrant = source.ReserveThermalOutput(loop, plan.AcceptedMW, plan.Efficiency);
+                    var grant = source.ReserveThermalOutput(loop, plan.AcceptedMW, plan.Efficiency);
+                    AllocateDrive(source, circuit, ref grant);
+                    host.OutputGrant = grant;
                     host.OutputGrantMW = host.OutputGrant == null ? 0 : host.OutputGrant.MaximumMW;
                 }
                 if (captureFlow)

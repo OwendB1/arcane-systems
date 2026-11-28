@@ -59,6 +59,7 @@ namespace ArcanePower
         public override void BeforeStart()
         {
             MyAPIGateway.Multiplayer.RegisterSecureMessageHandler(RotorChannel, ReceiveRotor);
+            if (MyAPIGateway.Multiplayer.IsServer) MyAPIGateway.Utilities.RegisterMessageHandler(PropulsionChannel, RegisterPropulsion);
             InitializeFlow();
             ready = true;
             if (!MyAPIGateway.Multiplayer.IsServer)
@@ -238,6 +239,8 @@ namespace ArcanePower
         protected override void UnloadData()
         {
             if (ready) MyAPIGateway.Multiplayer.UnregisterSecureMessageHandler(RotorChannel, ReceiveRotor);
+            if (ready && MyAPIGateway.Multiplayer.IsServer) MyAPIGateway.Utilities.UnregisterMessageHandler(PropulsionChannel, RegisterPropulsion);
+            propulsion.Clear();
             UnloadFlow();
             ThermalPipeJoint.Unload();
             ready = false;

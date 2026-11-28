@@ -8,6 +8,7 @@
       </Id>
       <DisplayName>Arcane Systems</DisplayName>
       <Name>ArcaneSystems</Name>
+      <StrictSearch>true</StrictSearch>
       <ItemIds>
         <string>BatteryBlock/ArcanePower_EnergyCore_Pillar</string>
         <string>BatteryBlock/ArcanePower_EnergyCapacity_Pillar</string>

@@ -8,6 +8,7 @@
       </Id>
       <DisplayName>Arcane Systems</DisplayName>
       <Name>ArcaneSystems</Name>
+      <StrictSearch>true</StrictSearch>
       <ItemIds>
         <string>Reactor/ArcanePower_Thermal_BraytonTrain</string>
         <string>UpgradeModule/ArcanePower_Thermal_SpaceRadiator</string>

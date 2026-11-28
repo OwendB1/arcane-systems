@@ -39,7 +39,7 @@ members = ''.join(member(file, signature) for file, signatures in {
                           'internal string ThermalModeTransitionHint', 'internal void RequestThermalMode(',
                           'private void UpdateThermalMode()', 'internal void ProduceThermal(',
                           'private void RefreshThermalCapacity()', 'internal ThermalOutputGrant ReserveThermalOutput(', 'internal bool ThermalAuxiliaryReady', 'internal void BeginThermalFrame()', 'internal void GrantStandaloneOutput()', 'internal void StopForLoopLoss()',
-                          'private void ThermalEnabledChanged(', 'internal void CheckLoopSafety()',
+                          'internal ThermalOutputGrant DivertPropulsion(', 'private void ThermalEnabledChanged(', 'internal void CheckLoopSafety()',
                           'private void InitializeThermalRuntime()', 'internal void RecheckThermalFault()', 'internal void FailThermalRuntime()'],
 }.items() for signature in signatures)
 # Engine interface replacement only; all predicates and state changes are shipped code.
@@ -59,6 +59,8 @@ fixture = fixture.replace('// PRODUCTION_MEMBERS', members).replace('// PRODUCTI
 fixture = fixture.replace('/* TERMINAL_GATE */', gate)
 fixture = fixture.replace('// PRODUCTION_LOOPS', ''.join(member('ThermalSession.Loops.cs', signature)
     for signature in ('private void AdvanceLoops(', 'private static void MigrateMachineHeat('))
+    + member('ThermalSession.Propulsion.cs', 'private void AllocateDrive(')
+    + member('ThermalSession.Propulsion.cs', 'private void RecoverHeat(')
     + member('ThermalSession.cs', 'private static void InvalidateCircuits(')
     + member('ThermalSession.Radiators.cs', 'private static void LinkRadiators()')
     + member('ThermalFlowVisuals.cs', 'private void CapturePlantFlow('))

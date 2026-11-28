@@ -1,0 +1,403 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_ThrustDefinition">
+      <Id>
+        <TypeId>Thrust</TypeId>
+        <SubtypeId>ArcaneThrusters_DualModeThrusterLG</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Ship Main (Exposed)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneThrusters/ArcaneThrusters_DualModeThrusterLG.dds</Icon>
+      <Description>Ship main. Hydrogen supplies 7.2 MN through the aft conveyor. Connected plasma storage raises peak thrust to 10.8 MN. Exposed rear mount.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/ArcaneThrusters_DualModeThrusterLG.mwm</Model>
+      <ThrusterType>Hydrogen</ThrusterType>
+      <SilenceableByShipSoundSystem>true</SilenceableByShipSoundSystem>
+      <Components>
+        <Component Subtype="SteelPlate" Count="100" />
+        <Component Subtype="Construction" Count="150" />
+        <Component Subtype="MetalGrid" Count="250" />
+        <Component Subtype="LargeTube" Count="40" />
+        <Component Subtype="Construction" Count="30" />
+        <Component Subtype="SteelPlate" Count="50" />
+      </Components>
+      <CriticalComponent Subtype="LargeTube" Index="0" />
+      <Center x="1" y="1" z="1" />
+      <MountPoints>
+        <MountPoint Side="Back" StartX="0.35" StartY="1.15" EndX="2.65" EndY="1.85" Default="true" />
+        <MountPoint Side="Back" StartX="1.15" StartY="0.35" EndX="1.85" EndY="1.15" Default="true" />
+        <MountPoint Side="Back" StartX="1.15" StartY="1.85" EndX="1.85" EndY="2.65" Default="true" />
+        <!-- A disabled second face releases SE1's single-face rotation lock. -->
+        <MountPoint Side="Front" StartX="1" StartY="1" EndX="2" EndY="2" Enabled="false" PressurizedWhenOpen="false" PressurizedWhenClosed="false" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcaneThrusters_DualModeThrusterLG_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.66" File="Models/Cubes/large/ArcaneThrusters_DualModeThrusterLG_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcaneThrusters_DualModeThrusterLG_BS3.mwm" />
+      </BuildProgressModels>
+      <VoxelPlacement>
+        <StaticMode>
+          <PlacementMode>OutsideVoxel</PlacementMode>
+          <MaxAllowed>0.2</MaxAllowed>
+          <MinAllowed>0</MinAllowed>
+        </StaticMode>
+        <DynamicMode>
+          <PlacementMode>OutsideVoxel</PlacementMode>
+          <MaxAllowed>0.2</MaxAllowed>
+          <MinAllowed>0</MinAllowed>
+        </DynamicMode>
+      </VoxelPlacement>
+      <BlockPairName>ArcaneThrusters_DualModeThrusterLG</BlockPairName>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>50</BuildTimeSeconds>
+      <FuelConverter>
+        <FuelId>
+          <TypeId>GasProperties</TypeId>
+          <SubtypeId>Hydrogen</SubtypeId>
+        </FuelId>
+        <Efficiency>1</Efficiency>
+      </FuelConverter>
+      <MaxPowerConsumption>7.5</MaxPowerConsumption>
+      <MinPowerConsumption>0.000000001</MinPowerConsumption>
+      <ResourceSinkGroup>Thrust</ResourceSinkGroup>
+      <ForceMagnitude>7200000</ForceMagnitude>
+      <SlowdownFactor>1</SlowdownFactor>
+      <FlameDamageLengthScale>0.6</FlameDamageLengthScale>
+      <FlameLengthScale>1.15</FlameLengthScale>
+      <FlameIdleColor>
+        <X>1</X>
+        <Y>0.85</Y>
+        <Z>0.3</Z>
+        <W>0.75</W>
+      </FlameIdleColor>
+      <FlameFullColor>
+        <X>1</X>
+        <Y>0.75</Y>
+        <Z>0.2</Z>
+        <W>0.75</W>
+      </FlameFullColor>
+      <FlamePointMaterial>EngineThrustMiddle</FlamePointMaterial>
+      <FlameLengthMaterial>EngineThrustMiddle</FlameLengthMaterial>
+      <FlameFlare>LargeGridLargeThruster</FlameFlare>
+      <FlameVisibilityDistance>0</FlameVisibilityDistance>
+      <FlameGlareQuerySize>1.5</FlameGlareQuerySize>
+      <PrimarySound>LrgShipLrgJetHydrogen</PrimarySound>
+      <DamageEffectName>Damage_WeapExpl_Damaged</DamageEffectName>
+      <DamagedSound>ParticleWeapExpl</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>12</PCU>
+      <TieredUpdateTimes>
+        <unsignedInt>100</unsignedInt>
+        <unsignedInt>3600</unsignedInt>
+        <unsignedInt>0</unsignedInt>
+      </TieredUpdateTimes>
+      <TargetingGroups>
+        <string>Propulsion</string>
+      </TargetingGroups>
+      <GuiVisible>true</GuiVisible>
+      <IsAirTight>false</IsAirTight>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_ThrustDefinition">
+      <Id>
+        <TypeId>Thrust</TypeId>
+        <SubtypeId>ArcaneThrusters_DualModeThrusterLG_Hull</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Ship Main (Hull Mount)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneThrusters/ArcaneThrusters_DualModeThrusterLG_Hull.dds</Icon>
+      <Description>Ship main. Hydrogen supplies 7.2 MN through the aft conveyor. Connected plasma storage raises peak thrust to 10.8 MN. Fully welded casing seals against adjacent armor.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/ArcaneThrusters_DualModeThrusterLG_Hull.mwm</Model>
+      <ThrusterType>Hydrogen</ThrusterType>
+      <SilenceableByShipSoundSystem>true</SilenceableByShipSoundSystem>
+      <Components>
+        <Component Subtype="SteelPlate" Count="200" />
+        <Component Subtype="Construction" Count="150" />
+        <Component Subtype="MetalGrid" Count="250" />
+        <Component Subtype="LargeTube" Count="40" />
+        <Component Subtype="Construction" Count="30" />
+        <Component Subtype="SteelPlate" Count="50" />
+      </Components>
+      <CriticalComponent Subtype="LargeTube" Index="0" />
+      <Center x="1" y="1" z="1" />
+      <MountPoints>
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="3" EndY="3" Default="true" />
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="3" EndY="3" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="3" EndY="3" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="3" EndY="3" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="3" EndY="3" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcaneThrusters_DualModeThrusterLG_Hull_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.66" File="Models/Cubes/large/ArcaneThrusters_DualModeThrusterLG_Hull_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcaneThrusters_DualModeThrusterLG_Hull_BS3.mwm" />
+      </BuildProgressModels>
+      <VoxelPlacement>
+        <StaticMode>
+          <PlacementMode>OutsideVoxel</PlacementMode>
+          <MaxAllowed>0.2</MaxAllowed>
+          <MinAllowed>0</MinAllowed>
+        </StaticMode>
+        <DynamicMode>
+          <PlacementMode>OutsideVoxel</PlacementMode>
+          <MaxAllowed>0.2</MaxAllowed>
+          <MinAllowed>0</MinAllowed>
+        </DynamicMode>
+      </VoxelPlacement>
+      <BlockPairName>ArcaneThrusters_DualModeThrusterLG_Hull</BlockPairName>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>60</BuildTimeSeconds>
+      <FuelConverter>
+        <FuelId>
+          <TypeId>GasProperties</TypeId>
+          <SubtypeId>Hydrogen</SubtypeId>
+        </FuelId>
+        <Efficiency>1</Efficiency>
+      </FuelConverter>
+      <MaxPowerConsumption>7.5</MaxPowerConsumption>
+      <MinPowerConsumption>0.000000001</MinPowerConsumption>
+      <ResourceSinkGroup>Thrust</ResourceSinkGroup>
+      <ForceMagnitude>7200000</ForceMagnitude>
+      <SlowdownFactor>1</SlowdownFactor>
+      <FlameDamageLengthScale>0.6</FlameDamageLengthScale>
+      <FlameLengthScale>1.15</FlameLengthScale>
+      <FlameIdleColor>
+        <X>1</X>
+        <Y>0.85</Y>
+        <Z>0.3</Z>
+        <W>0.75</W>
+      </FlameIdleColor>
+      <FlameFullColor>
+        <X>1</X>
+        <Y>0.75</Y>
+        <Z>0.2</Z>
+        <W>0.75</W>
+      </FlameFullColor>
+      <FlamePointMaterial>EngineThrustMiddle</FlamePointMaterial>
+      <FlameLengthMaterial>EngineThrustMiddle</FlameLengthMaterial>
+      <FlameFlare>LargeGridLargeThruster</FlameFlare>
+      <FlameVisibilityDistance>0</FlameVisibilityDistance>
+      <FlameGlareQuerySize>1.5</FlameGlareQuerySize>
+      <PrimarySound>LrgShipLrgJetHydrogen</PrimarySound>
+      <DamageEffectName>Damage_WeapExpl_Damaged</DamageEffectName>
+      <DamagedSound>ParticleWeapExpl</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>12</PCU>
+      <TieredUpdateTimes>
+        <unsignedInt>100</unsignedInt>
+        <unsignedInt>3600</unsignedInt>
+        <unsignedInt>0</unsignedInt>
+      </TieredUpdateTimes>
+      <TargetingGroups>
+        <string>Propulsion</string>
+      </TargetingGroups>
+      <GuiVisible>true</GuiVisible>
+      <IsAirTight>true</IsAirTight>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_ThrustDefinition">
+      <Id>
+        <TypeId>Thrust</TypeId>
+        <SubtypeId>ArcaneThrusters_DrivePriorityLG</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Drive Priority (Exposed)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneThrusters/ArcaneThrusters_DrivePriorityLG.dds</Icon>
+      <Description>Drive Priority. Use thrust override with hydrogen and a running Brayton circuit to divert up to 1 GW of reactor heat for 12 MN of thrust. Exposed rear mount.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/ArcaneThrusters_DrivePriorityLG.mwm</Model>
+      <ThrusterType>Hydrogen</ThrusterType>
+      <SilenceableByShipSoundSystem>true</SilenceableByShipSoundSystem>
+      <Components>
+        <Component Subtype="SteelPlate" Count="100" />
+        <Component Subtype="Construction" Count="150" />
+        <Component Subtype="MetalGrid" Count="250" />
+        <Component Subtype="LargeTube" Count="40" />
+        <Component Subtype="Construction" Count="30" />
+        <Component Subtype="SteelPlate" Count="50" />
+      </Components>
+      <CriticalComponent Subtype="LargeTube" Index="0" />
+      <Center x="1" y="1" z="1" />
+      <MountPoints>
+        <MountPoint Side="Back" StartX="0.35" StartY="1.15" EndX="2.65" EndY="1.85" Default="true" />
+        <MountPoint Side="Back" StartX="1.15" StartY="0.35" EndX="1.85" EndY="1.15" Default="true" />
+        <MountPoint Side="Back" StartX="1.15" StartY="1.85" EndX="1.85" EndY="2.65" Default="true" />
+        <!-- A disabled second face releases SE1's single-face rotation lock. -->
+        <MountPoint Side="Front" StartX="1" StartY="1" EndX="2" EndY="2" Enabled="false" PressurizedWhenOpen="false" PressurizedWhenClosed="false" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcaneThrusters_DrivePriorityLG_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.66" File="Models/Cubes/large/ArcaneThrusters_DrivePriorityLG_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcaneThrusters_DrivePriorityLG_BS3.mwm" />
+      </BuildProgressModels>
+      <VoxelPlacement>
+        <StaticMode>
+          <PlacementMode>OutsideVoxel</PlacementMode>
+          <MaxAllowed>0.2</MaxAllowed>
+          <MinAllowed>0</MinAllowed>
+        </StaticMode>
+        <DynamicMode>
+          <PlacementMode>OutsideVoxel</PlacementMode>
+          <MaxAllowed>0.2</MaxAllowed>
+          <MinAllowed>0</MinAllowed>
+        </DynamicMode>
+      </VoxelPlacement>
+      <BlockPairName>ArcaneThrusters_DrivePriorityLG</BlockPairName>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>50</BuildTimeSeconds>
+      <MaxPowerConsumption>0.000001</MaxPowerConsumption>
+      <MinPowerConsumption>0.000000001</MinPowerConsumption>
+      <ResourceSinkGroup>Thrust</ResourceSinkGroup>
+      <ForceMagnitude>1</ForceMagnitude>
+      <SlowdownFactor>1</SlowdownFactor>
+      <FlameDamageLengthScale>0</FlameDamageLengthScale>
+      <FlameLengthScale>0</FlameLengthScale>
+      <FlameIdleColor>
+        <X>1</X>
+        <Y>0.85</Y>
+        <Z>0.3</Z>
+        <W>0</W>
+      </FlameIdleColor>
+      <FlameFullColor>
+        <X>1</X>
+        <Y>0.75</Y>
+        <Z>0.2</Z>
+        <W>0</W>
+      </FlameFullColor>
+      <FlamePointMaterial>EngineThrustMiddle</FlamePointMaterial>
+      <FlameLengthMaterial>EngineThrustMiddle</FlameLengthMaterial>
+      <FlameVisibilityDistance>0</FlameVisibilityDistance>
+      <FlameGlareQuerySize>0</FlameGlareQuerySize>
+      <DamageEffectName>Damage_WeapExpl_Damaged</DamageEffectName>
+      <DamagedSound>ParticleWeapExpl</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>12</PCU>
+      <TieredUpdateTimes>
+        <unsignedInt>100</unsignedInt>
+        <unsignedInt>3600</unsignedInt>
+        <unsignedInt>0</unsignedInt>
+      </TieredUpdateTimes>
+      <TargetingGroups>
+        <string>Propulsion</string>
+      </TargetingGroups>
+      <GuiVisible>true</GuiVisible>
+      <IsAirTight>false</IsAirTight>
+      <MinPlanetaryInfluence>0</MinPlanetaryInfluence>
+      <MaxPlanetaryInfluence>1</MaxPlanetaryInfluence>
+      <EffectivenessAtMinInfluence>0</EffectivenessAtMinInfluence>
+      <EffectivenessAtMaxInfluence>0</EffectivenessAtMaxInfluence>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_ThrustDefinition">
+      <Id>
+        <TypeId>Thrust</TypeId>
+        <SubtypeId>ArcaneThrusters_DrivePriorityLG_Hull</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Drive Priority (Hull Mount)</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneThrusters/ArcaneThrusters_DrivePriorityLG_Hull.dds</Icon>
+      <Description>Drive Priority. Use thrust override with hydrogen and a running Brayton circuit to divert up to 1 GW of reactor heat for 12 MN of thrust. Fully welded casing seals against adjacent armor.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="3" z="4" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/ArcaneThrusters_DrivePriorityLG_Hull.mwm</Model>
+      <ThrusterType>Hydrogen</ThrusterType>
+      <SilenceableByShipSoundSystem>true</SilenceableByShipSoundSystem>
+      <Components>
+        <Component Subtype="SteelPlate" Count="200" />
+        <Component Subtype="Construction" Count="150" />
+        <Component Subtype="MetalGrid" Count="250" />
+        <Component Subtype="LargeTube" Count="40" />
+        <Component Subtype="Construction" Count="30" />
+        <Component Subtype="SteelPlate" Count="50" />
+      </Components>
+      <CriticalComponent Subtype="LargeTube" Index="0" />
+      <Center x="1" y="1" z="2" />
+      <MountPoints>
+        <MountPoint Side="Back" StartX="0" StartY="0" EndX="3" EndY="3" Default="true" />
+        <MountPoint Side="Top" StartX="0" StartY="0" EndX="3" EndY="4" />
+        <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="3" EndY="4" />
+        <MountPoint Side="Left" StartX="0" StartY="0" EndX="4" EndY="3" />
+        <MountPoint Side="Right" StartX="0" StartY="0" EndX="4" EndY="3" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcaneThrusters_DrivePriorityLG_Hull_BS1.mwm" />
+        <Model BuildPercentUpperBound="0.66" File="Models/Cubes/large/ArcaneThrusters_DrivePriorityLG_Hull_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcaneThrusters_DrivePriorityLG_Hull_BS3.mwm" />
+      </BuildProgressModels>
+      <VoxelPlacement>
+        <StaticMode>
+          <PlacementMode>OutsideVoxel</PlacementMode>
+          <MaxAllowed>0.2</MaxAllowed>
+          <MinAllowed>0</MinAllowed>
+        </StaticMode>
+        <DynamicMode>
+          <PlacementMode>OutsideVoxel</PlacementMode>
+          <MaxAllowed>0.2</MaxAllowed>
+          <MinAllowed>0</MinAllowed>
+        </DynamicMode>
+      </VoxelPlacement>
+      <BlockPairName>ArcaneThrusters_DrivePriorityLG_Hull</BlockPairName>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
+      <EdgeType>Light</EdgeType>
+      <BuildTimeSeconds>60</BuildTimeSeconds>
+      <MaxPowerConsumption>0.000001</MaxPowerConsumption>
+      <MinPowerConsumption>0.000000001</MinPowerConsumption>
+      <ResourceSinkGroup>Thrust</ResourceSinkGroup>
+      <ForceMagnitude>1</ForceMagnitude>
+      <SlowdownFactor>1</SlowdownFactor>
+      <FlameDamageLengthScale>0</FlameDamageLengthScale>
+      <FlameLengthScale>0</FlameLengthScale>
+      <FlameIdleColor>
+        <X>1</X>
+        <Y>0.85</Y>
+        <Z>0.3</Z>
+        <W>0</W>
+      </FlameIdleColor>
+      <FlameFullColor>
+        <X>1</X>
+        <Y>0.75</Y>
+        <Z>0.2</Z>
+        <W>0</W>
+      </FlameFullColor>
+      <FlamePointMaterial>EngineThrustMiddle</FlamePointMaterial>
+      <FlameLengthMaterial>EngineThrustMiddle</FlameLengthMaterial>
+      <FlameVisibilityDistance>0</FlameVisibilityDistance>
+      <FlameGlareQuerySize>0</FlameGlareQuerySize>
+      <DamageEffectName>Damage_WeapExpl_Damaged</DamageEffectName>
+      <DamagedSound>ParticleWeapExpl</DamagedSound>
+      <DestroyEffect>BlockDestroyedExplosion_Large</DestroyEffect>
+      <DestroySound>WepSmallWarheadExpl</DestroySound>
+      <PCU>12</PCU>
+      <TieredUpdateTimes>
+        <unsignedInt>100</unsignedInt>
+        <unsignedInt>3600</unsignedInt>
+        <unsignedInt>0</unsignedInt>
+      </TieredUpdateTimes>
+      <TargetingGroups>
+        <string>Propulsion</string>
+      </TargetingGroups>
+      <GuiVisible>true</GuiVisible>
+      <IsAirTight>true</IsAirTight>
+      <MinPlanetaryInfluence>0</MinPlanetaryInfluence>
+      <MaxPlanetaryInfluence>1</MaxPlanetaryInfluence>
+      <EffectivenessAtMinInfluence>0</EffectivenessAtMinInfluence>
+      <EffectivenessAtMaxInfluence>0</EffectivenessAtMaxInfluence>
+    </Definition>
+  </CubeBlocks>
+</Definitions>

@@ -1,0 +1,32 @@
+name: Package Arcane Thrusters
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ArcaneThrusters/**'
+      - '.github/workflows/arcane-thrusters.yml'
+  pull_request:
+    paths:
+      - 'ArcaneThrusters/**'
+      - '.github/workflows/arcane-thrusters.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: ArcaneThrusters
+          lfs: true
+      - name: Validate definitions and package mod
+        run: python3 ArcaneThrusters/tools/package_mod.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ArcaneThrusters
+          path: ArcaneThrusters/artifacts/ArcaneThrusters.zip
+          if-no-files-found: error

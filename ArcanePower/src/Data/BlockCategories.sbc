@@ -8,6 +8,7 @@
       </Id>
       <DisplayName>Arcane Systems</DisplayName>
       <Name>ArcaneSystems</Name>
+      <StrictSearch>true</StrictSearch>
       <ItemIds>
         <string>UpgradeModule/ArcanePower_ContainmentController</string>
         <string>Conveyor/ArcanePower_VentDuct</string>

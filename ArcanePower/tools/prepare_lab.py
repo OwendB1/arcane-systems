@@ -55,7 +55,7 @@ def write_block_menu(blocks, family, groups, mod):
     categories=E.Element('Definitions')
     category=E.SubElement(E.SubElement(categories,'CategoryClasses'),'Category',{'{'+XSI+'}type':'MyObjectBuilder_GuiBlockCategoryDefinition'})
     for path,value in {'Id/TypeId':'GuiBlockCategoryDefinition','Id/SubtypeId':'ArcaneSystems_'+family,
-                       'DisplayName':'Arcane Systems','Name':'ArcaneSystems'}.items():set_text(category,path,value)
+                       'DisplayName':'Arcane Systems','Name':'ArcaneSystems','StrictSearch':'true'}.items():set_text(category,path,value)
     items=E.SubElement(category,'ItemIds')
     for subtype,block in public.items():
         if subtype not in secondary:E.SubElement(items,'string').text=block.findtext('Id/TypeId')+'/'+subtype

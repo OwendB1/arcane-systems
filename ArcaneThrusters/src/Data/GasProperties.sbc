@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions>
+  <GasProperties>
+    <Gas>
+      <Id>
+        <TypeId>MyObjectBuilder_GasProperties</TypeId>
+        <SubtypeId>ArcaneThrusters_HydrogenPlasma</SubtypeId>
+      </Id>
+      <DisplayName>Hydrogen Plasma</DisplayName>
+      <Icon>Textures\GUI\Icons\HydrogenIcon.dds</Icon>
+      <!-- Hydrogen baseline in MWh/L for the transport prototype. -->
+      <EnergyDensity>0.001556</EnergyDensity>
+    </Gas>
+  </GasProperties>
+</Definitions>

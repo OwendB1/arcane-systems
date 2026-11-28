@@ -72,7 +72,7 @@ namespace ArcanePower
             CoolingMW = RequiredCoolingMW = AttachedHeatMJ = 0;
             DutyTrains = 0;
             foreach (var loop in Loops)
-                loop.OutputMW = loop.RejectedMW = 0;
+                loop.OutputMW = loop.RejectedMW = loop.RecoveredMW = loop.DriveInputMW = 0;
         }
 
         public void MigrateHeat()
@@ -163,7 +163,8 @@ namespace ArcanePower
     }
 
     // A one-interval claim on paid source energy. Reservations never create heat;
-    // only delivered electricity consumes fuel credit and creates cooling load.
+    // Electricity and direct propulsion consume fuel credit. Only electricity
+    // creates a Brayton cooling load.
     // Brayton cooling is a gameplay budget separate from fuel-energy accounting.
     // The source's saved HotMJ retains unused credit across reloads. Claims are
     // rebuilt, never replayed, and the sum of claims cannot exceed that credit.
@@ -178,6 +179,22 @@ namespace ArcanePower
             Source = source; Loop = loop; HeatMJ = heatMJ; Efficiency = efficiency;
             MaximumMW = heatMJ * efficiency * 60 * .999999;
         }
+        public ThermalOutputGrant Divert(Func<double, double> deliver)
+        {
+            if (deliver == null) throw new ArgumentNullException("deliver");
+            if (Loop == null) throw new InvalidOperationException("Drive requires a Brayton circuit");
+            if (settled || HeatMJ > Source.Store.HotMJ) throw new InvalidOperationException("Thermal allocation already spent");
+            settled = true;
+            Source.Store.HotMJ -= HeatMJ;
+            double spent = deliver(HeatMJ);
+            if (!ThermalMath.Finite(spent) || spent < 0 || spent > HeatMJ)
+                throw new InvalidOperationException("Drive exceeded its reactor allocation");
+            Source.Store.HotMJ += HeatMJ - spent;
+            Source.ProducedMW += spent * 60;
+            Loop.DriveInputMW += spent * 60;
+            return new ThermalOutputGrant(Source, Loop, HeatMJ - spent, Efficiency);
+        }
+
         public bool Settle(double outputMW)
         {
             if (settled) return false;

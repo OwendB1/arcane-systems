@@ -122,7 +122,7 @@ static class ThermalRadiators {
 }
 // PRODUCTION_STATE
 class Reactor {
- double reservedThermalMJ; ThermalOutputGrant standaloneGrant;
+ double reservedThermalMJ,spentPropulsionMJ; ThermalOutputGrant standaloneGrant;
  internal ReactorBlock reactor=new ReactorBlock();
  internal ReactorBlock Block {get{return reactor;}}
  internal ThermalEndpoint CircuitEndpoint;
@@ -450,6 +450,12 @@ class Reactor {
   Need(r.Stock(1)<1 && r.Motion.Thermal.FuelHeatMJ==0,"fuel is debited before a native grant becomes available");
   r.Stock(1,0);Need(grant.Settle(grant.MaximumMW),"removing remaining fuel cannot make the issued grant unpaid");
   r.BeginThermalFrame();Need(r.ReserveThermalOutput(r.Motion.Thermal.Loops[0],r.ThermalHeatMW,.4)==null,"exhausted stock cannot fund another grant");
+  r.Stock(1,1);r.BeginThermalFrame();
+  var first=r.ReserveThermalOutput(r.Motion.Thermal.Loops[0],r.ThermalHeatMW/2,.8);
+  var reduced=r.DivertPropulsion(first,heat=>heat/2);
+  var second=r.ReserveThermalOutput(r.Motion.Thermal.Loops[1],r.ThermalHeatMW,.8);
+  Near(second.HeatMJ,first.HeatMJ,"drive spending preserves other circuit's allocation and the frame ceiling");
+  Need(second.Settle(second.MaximumMW) && reduced.Settle(reduced.MaximumMW),"both outstanding turbine grants remain backed after diversion");
  }
  static void FixedElectricalDemand(){
   foreach(var mode in new[]{ThermalMode.Standalone,ThermalMode.Brayton}){
@@ -795,6 +801,10 @@ class ThermalBlock {
 }
 static class ThermalPipeJoint {internal static List<ThermalEndpoint> Snapshot(long owner){return new List<ThermalEndpoint>();}}
 class ThermalSession {
+ // This fixture runs the base mod with no registered propulsion blocks.
+ readonly Dictionary<long,Tuple<Block,Func<double,double>>> propulsion=new Dictionary<long,Tuple<Block,Func<double,double>>>();
+ readonly ThermalModel Charger=new ThermalModel(),OpenDrive=new ThermalModel(),HullDrive=new ThermalModel();
+ void AddPropulsionPorts(List<ThermalEndpoint> nodes,HashSet<long> grids,long owner){}
  internal static Dictionary<long,ThermalBlock> Blocks=new Dictionary<long,ThermalBlock>();
  internal static Dictionary<long,ThermalCircuitCache> circuitGraphs=new Dictionary<long,ThermalCircuitCache>();
  internal void Changed(long grid){InvalidateCircuits(grid);}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <EntityComponents>
+    <EntityComponent xsi:type="MyObjectBuilder_ModStorageComponentDefinition">
+      <Id><TypeId>ModStorageComponent</TypeId><SubtypeId>ArcaneThrustersConfinement</SubtypeId></Id>
+      <RegisteredStorageGuids><guid>b24b3fe3-5ac6-4505-8acf-7de778537bad</guid></RegisteredStorageGuids>
+    </EntityComponent>
+  </EntityComponents>
+</Definitions>

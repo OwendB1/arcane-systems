@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CubeBlocks>
+    <Definition xsi:type="MyObjectBuilder_GasTankDefinition">
+      <Id>
+        <TypeId>OxygenTank</TypeId>
+        <SubtypeId>ArcaneThrusters_PlasmaTankLG</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Plasma Charge Tank</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneThrusters/ArcaneThrusters_PlasmaTankLG.dds</Icon>
+      <Description>Stores hydrogen plasma under a powered field. Use Stockpile to fill through either end port. After 10 seconds without field power, plasma cools into hydrogen. Working hydrogen tanks on the conveyor network catch it until full. Excess gas vents.</Description>
+      <CubeSize>Large</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="3" y="1" z="1" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/large/ArcaneThrusters_PlasmaTankLG.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="60" />
+        <Component Subtype="LargeTube" Count="40" />
+        <Component Subtype="SmallTube" Count="60" />
+        <Component Subtype="Computer" Count="8" />
+        <Component Subtype="Construction" Count="40" />
+        <Component Subtype="SteelPlate" Count="20" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Left" StartX="0.04" StartY="0.04" EndX="0.96" EndY="0.96" />
+        <MountPoint Side="Right" StartX="0.04" StartY="0.04" EndX="0.96" EndY="0.96" />
+        <MountPoint Side="Bottom" StartX="0.03" StartY="0.02" EndX="2.97" EndY="0.24" />
+        <MountPoint Side="Bottom" StartX="0.03" StartY="0.76" EndX="2.97" EndY="0.98" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/large/ArcaneThrusters_PlasmaTankLG_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/large/ArcaneThrusters_PlasmaTankLG_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.0" File="Models/Cubes/large/ArcaneThrusters_PlasmaTankLG_BS3.mwm" />
+      </BuildProgressModels>
+      <BlockPairName>ArcaneThrusters_PlasmaTank</BlockPairName>
+      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
+      <ResourceSinkGroup>Factory</ResourceSinkGroup>
+      <OperationalPowerConsumption>0.001</OperationalPowerConsumption>
+      <StandbyPowerConsumption>0.000001</StandbyPowerConsumption>
+      <Capacity>500000</Capacity>
+      <StoredGasId>
+        <TypeId>GasProperties</TypeId>
+        <SubtypeId>ArcaneThrusters_HydrogenPlasma</SubtypeId>
+      </StoredGasId>
+      <BuildTimeSeconds>32</BuildTimeSeconds>
+      <PCU>25</PCU>
+    </Definition>
+    <Definition xsi:type="MyObjectBuilder_GasTankDefinition">
+      <Id>
+        <TypeId>OxygenTank</TypeId>
+        <SubtypeId>ArcaneThrusters_PlasmaTankSG</SubtypeId>
+      </Id>
+      <DisplayName>Arcane Plasma Charge Tank</DisplayName>
+      <Icon>Textures/GUI/Icons/ArcaneThrusters/ArcaneThrusters_PlasmaTankSG.dds</Icon>
+      <Description>Stores hydrogen plasma under a powered field. Use Stockpile to fill through either end port. After 10 seconds without field power, plasma cools into hydrogen. Working hydrogen tanks on the conveyor network catch it until full. Excess gas vents.</Description>
+      <CubeSize>Small</CubeSize>
+      <BlockTopology>TriangleMesh</BlockTopology>
+      <Size x="5" y="3" z="3" />
+      <ModelOffset x="0" y="0" z="0" />
+      <Model>Models/Cubes/small/ArcaneThrusters_PlasmaTankSG.mwm</Model>
+      <Components>
+        <Component Subtype="SteelPlate" Count="30" />
+        <Component Subtype="LargeTube" Count="20" />
+        <Component Subtype="SmallTube" Count="30" />
+        <Component Subtype="Computer" Count="4" />
+        <Component Subtype="Construction" Count="20" />
+        <Component Subtype="SteelPlate" Count="10" />
+      </Components>
+      <CriticalComponent Subtype="Computer" Index="0" />
+      <MountPoints>
+        <MountPoint Side="Left" StartX="0.04" StartY="0.04" EndX="2.96" EndY="2.96" />
+        <MountPoint Side="Right" StartX="0.04" StartY="0.04" EndX="2.96" EndY="2.96" />
+        <MountPoint Side="Bottom" StartX="0.03" StartY="0.06" EndX="4.97" EndY="0.72" />
+        <MountPoint Side="Bottom" StartX="0.03" StartY="2.28" EndX="4.97" EndY="2.94" />
+      </MountPoints>
+      <BuildProgressModels>
+        <Model BuildPercentUpperBound=".33" File="Models/Cubes/small/ArcaneThrusters_PlasmaTankSG_BS1.mwm" />
+        <Model BuildPercentUpperBound=".67" File="Models/Cubes/small/ArcaneThrusters_PlasmaTankSG_BS2.mwm" />
+        <Model BuildPercentUpperBound="1.0" File="Models/Cubes/small/ArcaneThrusters_PlasmaTankSG_BS3.mwm" />
+      </BuildProgressModels>
+      <BlockPairName>ArcaneThrusters_PlasmaTank</BlockPairName>
+      <ResourceSourceGroup>Reactors</ResourceSourceGroup>
+      <ResourceSinkGroup>Factory</ResourceSinkGroup>
+      <OperationalPowerConsumption>0.001</OperationalPowerConsumption>
+      <StandbyPowerConsumption>0.000001</StandbyPowerConsumption>
+      <Capacity>50000</Capacity>
+      <StoredGasId>
+        <TypeId>GasProperties</TypeId>
+        <SubtypeId>ArcaneThrusters_HydrogenPlasma</SubtypeId>
+      </StoredGasId>
+      <BuildTimeSeconds>30</BuildTimeSeconds>
+      <PCU>25</PCU>
+    </Definition>
+  </CubeBlocks>
+</Definitions>

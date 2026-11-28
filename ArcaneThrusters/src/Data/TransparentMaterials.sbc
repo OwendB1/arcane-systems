@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Definitions>
+  <TransparentMaterials>
+    <TransparentMaterial>
+      <Id><TypeId>TransparentMaterialDefinition</TypeId><SubtypeId>ArcaneThrusters_Envelope</SubtypeId></Id>
+      <Texture>Textures/Particles/ArcaneThrusters/Envelope.dds</Texture>
+      <UseAtlas>false</UseAtlas>
+      <AlphaSaturation>1</AlphaSaturation>
+      <CanBeAffectedByOtherLights>false</CanBeAffectedByOtherLights>
+      <IgnoreDepth>false</IgnoreDepth>
+      <SoftParticleDistanceScale>0.1</SoftParticleDistanceScale>
+    </TransparentMaterial>
+    <TransparentMaterial>
+      <Id><TypeId>TransparentMaterialDefinition</TypeId><SubtypeId>ArcaneThrusters_Cells</SubtypeId></Id>
+      <Texture>Textures/Particles/ArcaneThrusters/Cells.dds</Texture>
+      <UseAtlas>false</UseAtlas>
+      <AlphaSaturation>1</AlphaSaturation>
+      <CanBeAffectedByOtherLights>false</CanBeAffectedByOtherLights>
+      <IgnoreDepth>false</IgnoreDepth>
+      <SoftParticleDistanceScale>0.1</SoftParticleDistanceScale>
+    </TransparentMaterial>
+    <TransparentMaterial>
+      <Id><TypeId>TransparentMaterialDefinition</TypeId><SubtypeId>ArcaneThrusters_Mouth</SubtypeId></Id>
+      <Texture>Textures/Particles/ArcaneThrusters/Mouth.dds</Texture>
+      <UseAtlas>false</UseAtlas>
+      <AlphaSaturation>1</AlphaSaturation>
+      <CanBeAffectedByOtherLights>false</CanBeAffectedByOtherLights>
+      <IgnoreDepth>false</IgnoreDepth>
+      <SoftParticleDistanceScale>0.1</SoftParticleDistanceScale>
+    </TransparentMaterial>
+  </TransparentMaterials>
+</Definitions>
