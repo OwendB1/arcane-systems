@@ -70,10 +70,11 @@ def setup(labels=None):
     if any(job[0] == 'pipe-rotor-assembly' for job in active):
         thermal_names.add(CONTRACT['subtype']('Pipe rotor head'))
     hardware_names = {job[1] for job in active if job in JOBS[1:5]}
+    if any(job[0] == 'outlet' for job in active):
+        # The outlet's paintable leaves live only in the prototype blend.
+        hardware_names.add('ArcanePower_VentOutletHatch')
     energy = any(job[1].startswith('ArcanePower_Energy') for job in active)
     common = set()
-    if any(job[0] == 'outlet' for job in active):
-        common.add('ArcanePower_VentHatch')
     if any(job[0] == 'reactor' for job in active):
         common.update({'ArcanePower_Ring1', 'ArcanePower_Ring2', 'ArcanePower_Ring3',
                        'ArcanePower_Ring4', 'ArcanePower_FloorLeaf', 'ArcanePower_VentHatch'})

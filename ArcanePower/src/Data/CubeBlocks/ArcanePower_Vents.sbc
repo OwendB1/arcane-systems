@@ -25,7 +25,7 @@ Security mode selects shutdown or warning on vent loss after startup.</Descripti
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="1" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_VentDuct.mwm</Model>
+      <Model>Models/Cubes/large/ArcanePower_VentDuct_rcf0ff5ab2e90.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="180" />
         <Component Subtype="InteriorPlate" Count="40" />
@@ -65,9 +65,9 @@ Security mode selects shutdown or warning on vent loss after startup.</Descripti
         <MountPoint Side="Right" StartX="0" StartY="0" EndX="3" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_VentDuct_BS1_rd5d87bcc32b5.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_VentDuct_BS2_r306deb89d120.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_VentDuct_BS3_rb2fae94b400b.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_VentDuct_BS1_r817e57c65e59.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_VentDuct_BS2_r769173503605.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_VentDuct_BS3_r987d2d095ef8.mwm" />
       </BuildProgressModels>
     </Definition>
     <Definition>
@@ -94,7 +94,7 @@ Security mode selects shutdown or warning on vent loss after startup.</Descripti
       <BlockTopology>TriangleMesh</BlockTopology>
       <Size x="3" y="1" z="3" />
       <ModelOffset x="0" y="0" z="0" />
-      <Model>Models/Cubes/large/reactor_1f5ea788d1ef/ArcanePower_VentOutlet.mwm</Model>
+      <Model>Models/Cubes/large/ArcanePower_VentOutlet_rb5ecb9ffc695.mwm</Model>
       <Components>
         <Component Subtype="SteelPlate" Count="280" />
         <Component Subtype="InteriorPlate" Count="60" />
@@ -134,9 +134,9 @@ Security mode selects shutdown or warning on vent loss after startup.</Descripti
         <MountPoint Side="Right" StartX="0" StartY="0" EndX="3" EndY="1" />
       </MountPoints>
       <BuildProgressModels>
-        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_VentOutlet_BS1_r6cde5eb475ed.mwm" />
-        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_VentOutlet_BS2_r5787ea2034b7.mwm" />
-        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_VentOutlet_BS3_r7e97998c21f5.mwm" />
+        <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_VentOutlet_BS1_r212b774d0871.mwm" />
+        <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_VentOutlet_BS2_rf13572141826.mwm" />
+        <Model BuildPercentUpperBound="1.00" File="Models/Cubes/large/ArcanePower_VentOutlet_BS3_rf7bdac8c2f29.mwm" />
       </BuildProgressModels>
     </Definition>
   </CubeBlocks>

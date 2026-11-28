@@ -231,6 +231,10 @@ def definitions():
     mount=E.SubElement(module,'MountPoints')
     for side in ['Front','Back','Left','Right','Top','Bottom']:
         E.SubElement(mount,'MountPoint',Side=side,StartX='0',StartY='0',EndX='1',EndY='1')
+    # The pack hangs on the block's Forward face, raised 0.17 m. Mirror across
+    # that face by turning about Up, and across Up by turning about Forward.
+    E.SubElement(module,'MirroringY').text='Z'
+    E.SubElement(module,'MirroringZ').text='Y'
     hardware_components(module)
     root=E.Element('Definitions');E.SubElement(root,'CubeBlocks').append(module)
     count=copy.deepcopy(module.find('Upgrades/MyUpgradeModuleInfo'))

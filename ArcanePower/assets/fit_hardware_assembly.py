@@ -103,7 +103,7 @@ instance('Mounted / straight vent duct','ArcanePower_VentDuct',Matrix.Translatio
 instance('Mounted / terminal vent outlet','ArcanePower_VentOutlet',Matrix.Translation((0,0,7.5)))
 # Collection instances do not resolve exported subpart dummies automatically.
 for i in range(4):
- instance('Mounted / outlet leaf '+str(i+1),'ArcanePower_VentHatch',Matrix.Translation((0,0,8.58))@Matrix.Rotation(i*math.pi/2,4,'Z'))
+ instance('Mounted / outlet leaf '+str(i+1),'ArcanePower_VentOutletHatch',Matrix.Translation((0,0,8.58))@Matrix.Rotation(i*math.pi/2,4,'Z'))
 s['ap_mounted_hardware']='Non-exported source collection instances; controller centres +/-7.5,0,-2.5; duct Z5,outletZ7.5'
 for a in bpy.context.screen.areas:
  if a.type=='VIEW_3D':

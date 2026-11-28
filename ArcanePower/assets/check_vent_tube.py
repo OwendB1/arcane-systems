@@ -51,7 +51,7 @@ for name in ('ArcanePower_VentDuct', 'ArcanePower_VentOutlet'):
     leaves = [o for o in main.objects if o.name.startswith('subpart_OutletHatch')]
     assert len(leaves) == (4 if name.endswith('Outlet') else 0)
     for i, leaf in enumerate(sorted(leaves, key=lambda o: o.name)):
-        assert leaf['file'] == 'ArcanePower_VentHatch'
+        assert leaf['file'] == 'ArcanePower_VentOutletHatch'
         expected = Matrix.Translation((0, 0, 1.08)) @ Matrix.Rotation(i * math.pi / 2, 4, 'Z')
         assert max(abs(leaf.matrix_world[r][c]-expected[r][c]) for r in range(4) for c in range(4)) < .0001
     report[name] = {'bodies': bodies, 'bore_probes': 384, 'platform_probes': 256,

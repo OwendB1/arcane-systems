@@ -61,6 +61,8 @@ Two rings / 1x tile deployment speed.
         <MountPoint Side="Top" StartX="0" StartY="0" EndX="1" EndY="1" />
         <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
       <BuildProgressModels>
         <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_ContainmentController_BS1_ra1007c695e05.mwm" />
         <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_ContainmentController_BS2_r9b5be5d2da21.mwm" />
@@ -131,6 +133,8 @@ Supports all fuels.</Description>
         <MountPoint Side="Top" StartX="0" StartY="0" EndX="1" EndY="1" />
         <MountPoint Side="Bottom" StartX="0" StartY="0" EndX="1" EndY="1" />
       </MountPoints>
+      <MirroringY>Z</MirroringY>
+      <MirroringZ>Y</MirroringZ>
       <BuildProgressModels>
         <Model BuildPercentUpperBound="0.33" File="Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS1_r0952d4f25e1e.mwm" />
         <Model BuildPercentUpperBound="0.67" File="Models/Cubes/large/ArcanePower_AdvancedContainmentController_BS2_rb27aecc294e9.mwm" />

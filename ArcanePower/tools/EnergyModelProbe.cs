@@ -8,6 +8,10 @@ using VRageRender.Import;
 // Validate the compiled main mesh and emit its actual native dependencies.
 class EnergyModelProbe
 {
+    // Deliberate subpart splits. The vent outlet owns a paintable hatch copy;
+    // the reactor roof keeps the unpainted ArcanePower_VentHatch.
+    static readonly HashSet<string> AcceptedRetargets = new HashSet<string> {
+        "ArcanePower_VentHatch>ArcanePower_VentOutletHatch" };
     static MyModelImporter Read(string path, params string[] fields)
     {
         var importer = new MyModelImporter();
@@ -172,7 +176,8 @@ class EnergyModelProbe
             {
                 if (Elements(previous[key].Matrix).Zip(Elements(current[key].Matrix), (a,b) => Math.Abs(a-b)).Max() > .00001f)
                     throw new Exception("Native interface pose changed: " + key);
-                if (key.StartsWith("subpart_") && (string)previous[key].CustomData["file"] != (string)current[key].CustomData["file"])
+                if (key.StartsWith("subpart_") && (string)previous[key].CustomData["file"] != (string)current[key].CustomData["file"]
+                    && !AcceptedRetargets.Contains((string)previous[key].CustomData["file"] + ">" + (string)current[key].CustomData["file"]))
                     throw new Exception("Native subpart target changed: " + key);
             }
             Console.WriteLine("INTERFACES\tunchanged");

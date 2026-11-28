@@ -44,7 +44,7 @@ def main(prototype=False, update=False):
     names = sorted(p.name.removesuffix('-source.json') for p in staging.glob('*-source.json')) if prototype else ['ArcanePower_EnergyFan', 'ArcanePower_EnergyRotor'] + list(BLOCKS)
     if prototype:
         assert names, 'No prototype source exports'
-        if not update:assert len(names)==23, 'Incomplete prototype source export'
+        if not update:assert len(names)==24, 'Incomplete prototype source export'
     specs = {name: json.loads((staging/(name+'-source.json')).read_text()) for name in names}
     stems = [stem for spec in specs.values() for stem in spec['collections']]
     setup = Path.home()/'.local/share/blender-se1-setup'
