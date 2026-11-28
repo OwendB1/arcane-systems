@@ -3,6 +3,12 @@
 [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3819727962)
 · [Publishing workflow and gallery sources](RELEASE.md)
 
+Version **0.6.1** makes the vent duct and vent outlet paintable on their main grey
+metal; the reactor's roof hatch keeps its finish. Containment controllers now
+mirror onto the opposite reactor socket instead of floating off the grid.
+Brayton circuits can also supply Arcane Thrusters recovery chargers and
+Drive Priority engines; see [the Thrusters integration](THERMAL-RUNTIME.md#arcane-thrusters-integration).
+
 Version **0.6.0** fixes the multiplayer reactor dashboard getting stuck on
 `WAITING FOR REACTOR STATE` and speeds up world loading in singleplayer and
 multiplayer. [Lab measurements](../docs/arcane-power-multiplayer.md#lab-load-times-on-20-november-2026)
@@ -85,6 +91,10 @@ skins. While holding a block, open the paint menu (default **P**), select a colo
 and skin, then paint the installed block (default middle mouse button). Clean,
 Battered, Carbon Fibre and camouflage skins target the native painted materials;
 the game carries the finish onto moving subparts and matching LOD surfaces.
+The vent duct, vent outlet and the outlet's hatch leaves paint the same way on
+their main grey metal; darker trim, hazard markings and lights keep their
+finishes. The outlet uses its own `ArcanePower_VentOutletHatch` model, so the
+reactor's roof hatch (`ArcanePower_VentHatch`) stays unpainted.
 Bare silver metal, glass, seals and indicator materials retain their own finishes.
 Some vanilla skins only define replacements for armor-block materials, so their
 coverage on machinery can differ. No separate Arcane texture setting is needed.
